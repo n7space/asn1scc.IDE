@@ -1,14 +1,14 @@
-DEFINES += ASN1SCCPLUGIN_LIBRARY
+DEFINES += ASN1ACN_LIBRARY
 
-# asn1sccplugin files
+# asn1acn plugin files
 
 SOURCES += \
-    asn1sccplugin.cpp
+    asn1acn.cpp
 
 HEADERS += \
-    asn1sccplugin_global.h \
-    asn1sccpluginconstants.h \
-    asn1sccplugin.h
+    asn1acn_global.h \
+    asn1acnconstants.h \
+    asn1acn.h
 
 DISTFILES += \
     LICENSE \
@@ -38,7 +38,7 @@ isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = "/opt/qt-creator-dev/build-debug"
 ###### <dirname>_dependencies.pri, where <dirname> is the name of the directory containing the
 ###### plugin's sources.
 
-QTC_PLUGIN_NAME = asn1sccplugin
+QTC_PLUGIN_NAME = asn1acn
 QTC_LIB_DEPENDS += \
     # nothing here at this time
 

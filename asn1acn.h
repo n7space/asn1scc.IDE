@@ -1,20 +1,20 @@
 #pragma once
 
-#include "asn1sccplugin_global.h"
+#include "asn1acn_global.h"
 
 #include <extensionsystem/iplugin.h>
 
-namespace asn1sccplugin {
+namespace asn1acn {
 namespace Internal {
 
-class asn1sccPlugin : public ExtensionSystem::IPlugin
+class asn1acnPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QtCreatorPlugin" FILE "asn1sccplugin.json")
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QtCreatorPlugin" FILE "asn1acn.json")
 
 public:
-    asn1sccPlugin();
-    ~asn1sccPlugin();
+    asn1acnPlugin();
+    ~asn1acnPlugin();
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
@@ -25,4 +25,4 @@ private:
 };
 
 } // namespace Internal
-} // namespace asn1sccplugin
+} // namespace asn1acn
