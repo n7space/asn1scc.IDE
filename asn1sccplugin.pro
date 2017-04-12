@@ -10,6 +10,10 @@ HEADERS += \
     asn1sccpluginconstants.h \
     asn1sccplugin.h
 
+DISTFILES += \
+    LICENSE \
+    README.md
+
 # Qt Creator linking
 
 ## Either set the IDE_SOURCE_TREE when running qmake,
