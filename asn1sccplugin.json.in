@@ -1,0 +1,11 @@
+{
+    \"Name\" : \"asn1sccplugin\",
+    \"Version\" : \"0.0.1\",
+    \"CompatVersion\" : \"0.0.1\",
+    \"Vendor\" : \"N7 Mobile sp. z o.o.\",
+    \"Copyright\" : \"\",
+    \"License\" : \"LGPL v3.0\",
+    \"Description\" : \"Plugin for asn1scc - ASN.1/ACN compiler for embedded systems \",
+    \"Url\" : \"http://n7mobile.com/Space\",
+    $$dependencyList
+}
