@@ -76,4 +76,4 @@ void Asn1AcnPlugin::triggerAction()
 }
 
 } // namespace Internal
-} // namespace asn1acn
+} // namespace Asn1Acn

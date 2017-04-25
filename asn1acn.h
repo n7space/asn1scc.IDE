@@ -25,4 +25,4 @@ private:
 };
 
 } // namespace Internal
-} // namespace asn1acn
+} // namespace Asn1Acn
