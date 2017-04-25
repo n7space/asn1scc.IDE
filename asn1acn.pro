@@ -1,3 +1,28 @@
+#############################################################################
+##
+## Copyright (C) 2017 N7 Mobile sp. z o. o.
+## Contact: http://n7mobile.com/Space
+##
+## This file is part of ASN.1/ACN Plugin for QtCreator.
+##
+## Plugin was developed under a programme and funded by
+## European Space Agency.
+##
+## This Plugin is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This Plugin is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##
+#############################################################################
+
 DEFINES += ASN1ACN_LIBRARY
 
 # asn1acn plugin files
@@ -25,14 +50,6 @@ isEmpty(IDE_SOURCE_TREE): IDE_SOURCE_TREE = "/opt/qt-creator-dev/src"
 ## or set the QTC_BUILD environment variable, to override the default setting
 isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = $$(QTC_BUILD)
 isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = "/opt/qt-creator-dev/build-debug"
-
-## uncomment to build plugin into user config directory
-## <localappdata>/plugins/<ideversion>
-##    where <localappdata> is e.g.
-##    "%LOCALAPPDATA%\QtProject\qtcreator" on Windows Vista and later
-##    "$XDG_DATA_HOME/data/QtProject/qtcreator" or "~/.local/share/data/QtProject/qtcreator" on Linux
-##    "~/Library/Application Support/QtProject/Qt Creator" on OS X
-# USE_USER_DESTDIR = yes
 
 ###### If the plugin can be depended upon by other plugins, this code needs to be outsourced to
 ###### <dirname>_dependencies.pri, where <dirname> is the name of the directory containing the
