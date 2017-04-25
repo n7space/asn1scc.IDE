@@ -55,7 +55,7 @@ isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = "/opt/qt-creator-dev/build-debug"
 ###### <dirname>_dependencies.pri, where <dirname> is the name of the directory containing the
 ###### plugin's sources.
 
-QTC_PLUGIN_NAME = asn1acn
+QTC_PLUGIN_NAME = Asn1Acn
 QTC_LIB_DEPENDS += \
     # nothing here at this time
 
