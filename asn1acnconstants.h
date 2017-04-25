@@ -1,6 +1,6 @@
 #pragma once
 
-namespace asn1acn {
+namespace Asn1Acn {
 namespace Constants {
 
 const char ACTION_ID[] = "asn1acn.Action";

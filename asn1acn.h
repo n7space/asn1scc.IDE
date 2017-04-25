@@ -4,17 +4,17 @@
 
 #include <extensionsystem/iplugin.h>
 
-namespace asn1acn {
+namespace Asn1Acn {
 namespace Internal {
 
-class asn1acnPlugin : public ExtensionSystem::IPlugin
+class Asn1AcnPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QtCreatorPlugin" FILE "asn1acn.json")
 
 public:
-    asn1acnPlugin();
-    ~asn1acnPlugin();
+    Asn1AcnPlugin();
+    ~Asn1AcnPlugin();
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();

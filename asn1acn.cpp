@@ -13,21 +13,21 @@
 #include <QMainWindow>
 #include <QMenu>
 
-namespace asn1acn {
+namespace Asn1Acn {
 namespace Internal {
 
-asn1acnPlugin::asn1acnPlugin()
+Asn1AcnPlugin::Asn1AcnPlugin()
 {
     // Create your members
 }
 
-asn1acnPlugin::~asn1acnPlugin()
+Asn1AcnPlugin::~Asn1AcnPlugin()
 {
     // Unregister objects from the plugin manager's object pool
     // Delete members
 }
 
-bool asn1acnPlugin::initialize(const QStringList &arguments, QString *errorString)
+bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
     // Register objects in the plugin manager's object pool
     // Load settings
@@ -43,7 +43,7 @@ bool asn1acnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     Core::Command *cmd = Core::ActionManager::registerAction(action, Constants::ACTION_ID,
                                                              Core::Context(Core::Constants::C_GLOBAL));
     cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Alt+Meta+A")));
-    connect(action, &QAction::triggered, this, &asn1acnPlugin::triggerAction);
+    connect(action, &QAction::triggered, this, &Asn1AcnPlugin::triggerAction);
 
     Core::ActionContainer *menu = Core::ActionManager::createMenu(Constants::MENU_ID);
     menu->menu()->setTitle(tr("asn1acnplugin"));
@@ -53,14 +53,14 @@ bool asn1acnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     return true;
 }
 
-void asn1acnPlugin::extensionsInitialized()
+void Asn1AcnPlugin::extensionsInitialized()
 {
     // Retrieve objects from the plugin manager's object pool
     // In the extensionsInitialized function, a plugin can be sure that all
     // plugins that depend on it are completely initialized.
 }
 
-ExtensionSystem::IPlugin::ShutdownFlag asn1acnPlugin::aboutToShutdown()
+ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
 {
     // Save settings
     // Disconnect from signals that are not needed during shutdown
@@ -68,7 +68,7 @@ ExtensionSystem::IPlugin::ShutdownFlag asn1acnPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-void asn1acnPlugin::triggerAction()
+void Asn1AcnPlugin::triggerAction()
 {
     QMessageBox::information(Core::ICore::mainWindow(),
                              tr("Action Triggered"),
