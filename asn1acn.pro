@@ -28,12 +28,16 @@ DEFINES += ASN1ACN_LIBRARY
 # asn1acn plugin files
 
 SOURCES += \
-    asn1acn.cpp
+    asn1acn.cpp \
+    asneditor.cpp \
+    asndocument.cpp
 
 HEADERS += \
     asn1acn_global.h \
     asn1acnconstants.h \
-    asn1acn.h
+    asn1acn.h \
+    asneditor.h \
+    asndocument.h
 
 DISTFILES += \
     LICENSE \
@@ -57,9 +61,10 @@ isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = "/opt/qt-creator-dev/build-debug"
 
 QTC_PLUGIN_NAME = Asn1Acn
 QTC_LIB_DEPENDS += \
-    # nothing here at this time
+    utils
 
 QTC_PLUGIN_DEPENDS += \
+    texteditor \
     coreplugin
 
 QTC_PLUGIN_RECOMMENDS += \
@@ -68,3 +73,6 @@ QTC_PLUGIN_RECOMMENDS += \
 ###### End _dependencies.pri contents ######
 
 include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
+
+RESOURCES += \
+    asn1acn.qrc

@@ -23,17 +23,20 @@
 **
 ****************************************************************************/
 
+#include <texteditor/textdocument.h>
+
 #pragma once
 
 namespace Asn1Acn {
-namespace Constants {
+namespace Internal {
 
-const char LANG_ASN1[] = "ASN.1";
+class AsnDocument : public TextEditor::TextDocument
+{
+    Q_OBJECT
 
-const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
-const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
+public:
+    explicit AsnDocument();
+};
 
-const char ASN1_MIMETYPE[] = "text/x-asn1";
-
+} // namespace Internal
 } // namespace Asn1Acn
-} // namespace Constants

@@ -25,15 +25,39 @@
 
 #pragma once
 
+#include <texteditor/texteditor.h>
+
+#include <utils/uncommentselection.h>
+
 namespace Asn1Acn {
-namespace Constants {
+namespace Internal {
 
-const char LANG_ASN1[] = "ASN.1";
+class AsnEditor : public TextEditor::BaseTextEditor
+{
+    Q_OBJECT
 
-const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
-const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
+public:
+    explicit AsnEditor();
+};
 
-const char ASN1_MIMETYPE[] = "text/x-asn1";
+class AsnEditorFactory : public TextEditor::TextEditorFactory
+{
+public:
+    explicit AsnEditorFactory();
+};
 
+class AsnEditorWidget : public TextEditor::TextEditorWidget
+{
+    Q_OBJECT
+
+public:
+    explicit AsnEditorWidget();
+
+    void unCommentSelection() override;
+
+private:
+    Utils::CommentDefinition m_commentDefinition;
+};
+
+} // namespace Internal
 } // namespace Asn1Acn
-} // namespace Constants
