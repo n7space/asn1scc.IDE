@@ -30,14 +30,16 @@ DEFINES += ASN1ACN_LIBRARY
 SOURCES += \
     asn1acn.cpp \
     asneditor.cpp \
-    asndocument.cpp
+    asndocument.cpp \
+    asnautocompleter.cpp
 
 HEADERS += \
     asn1acn_global.h \
     asn1acnconstants.h \
     asn1acn.h \
     asneditor.h \
-    asndocument.h
+    asndocument.h \
+    asnautocompleter.h
 
 DISTFILES += \
     LICENSE \
