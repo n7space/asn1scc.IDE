@@ -33,6 +33,10 @@
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/coreconstants.h>
 
+#include <utils/mimetypes/mimedatabase.h>
+
+#include "asneditor.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -58,6 +62,10 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
+
+    Utils::MimeDatabase::addMimeTypes(":/asn1acn/asn1acn.mimetypes.xml");
+
+    addAutoReleasedObject(new AsnEditorFactory);
 
     return true;
 }

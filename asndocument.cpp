@@ -23,17 +23,30 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "asndocument.h"
 
-namespace Asn1Acn {
-namespace Constants {
+#include "asn1acnconstants.h"
 
-const char LANG_ASN1[] = "ASN.1";
+using namespace Asn1Acn::Internal;
 
-const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
-const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
+AsnDocument::AsnDocument()
+{
+    setId(Constants::ASNEDITOR_ID);
 
-const char ASN1_MIMETYPE[] = "text/x-asn1";
+    /*
+     * setSyntaxHighlighter(new CppHighlighter);
+    setIndenter(new CppTools::CppQtStyleIndenter);
 
-} // namespace Asn1Acn
-} // namespace Constants
+    connect(this, &TextEditor::TextDocument::tabSettingsChanged,
+            this, &CppEditorDocument::invalidateFormatterCache);
+    connect(this, &Core::IDocument::mimeTypeChanged,
+            this, &CppEditorDocument::onMimeTypeChanged);
+
+    connect(this, &Core::IDocument::aboutToReload,
+            this, &CppEditorDocument::onAboutToReload);
+    connect(this, &Core::IDocument::reloadFinished,
+            this, &CppEditorDocument::onReloadFinished);
+    connect(this, &IDocument::filePathChanged,
+            this, &CppEditorDocument::onFilePathChanged);
+     * **/
+}

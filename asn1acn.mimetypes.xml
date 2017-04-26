@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+    <mime-type type="text/x-asn1">
+        <sub-class-of type="text/plain"/>
+        <comment>ASN.1 Data Model</comment>
+        <glob pattern="*.asn"/>
+        <glob pattern="*.asn1"/>
+    </mime-type>
+</mime-info>
