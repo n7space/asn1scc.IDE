@@ -25,17 +25,38 @@
 
 #pragma once
 
+#include <QIcon>
+
+#include <texteditor/codeassist/assistinterface.h>
+#include <texteditor/codeassist/completionassistprovider.h>
+#include <texteditor/codeassist/iassistprocessor.h>
+
 namespace Asn1Acn {
-namespace Constants {
+namespace Internal {
 
-const char LANG_ASN1[] = "ASN.1";
+class AsnCompletionAssistProcessor : public TextEditor::IAssistProcessor
+{
+public:
+    AsnCompletionAssistProcessor();
 
-const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
-const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
+    TextEditor::IAssistProposal *perform(const TextEditor::AssistInterface *interface) override;
 
-const char ASN1_MIMETYPE[] = "text/x-asn1";
+private:
+    int findStartOfName(const TextEditor::AssistInterface *interface) const;
 
-const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
+    QIcon m_memberIcon;
+};
 
-} // namespace Asn1Acn
-} // namespace Constants
+class AsnCompletionAssistProvider : public TextEditor::CompletionAssistProvider
+{
+    Q_OBJECT
+
+public:
+    bool supportsEditor(Core::Id editorId) const override;
+    TextEditor::IAssistProcessor *createProcessor() const override;
+
+    bool isContinuationChar(const QChar &c) const override;
+};
+
+} // Internal
+} // Asn1Acn

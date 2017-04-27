@@ -31,6 +31,8 @@
 
 #include "asn1acnconstants.h"
 #include "asndocument.h"
+#include "asnautocompleter.h"
+#include "asncompletionassist.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -48,12 +50,15 @@ AsnEditorFactory::AsnEditorFactory()
     setDocumentCreator([]() { return new AsnDocument; });
     setEditorWidgetCreator([]() { return new AsnEditorWidget; });
     setEditorCreator([]() { return new AsnEditor; });
-        // TODO setAutoCompleterCreator([]() { return new CppAutoCompleter; });
+
+    setCompletionAssistProvider(new AsnCompletionAssistProvider);
+    setAutoCompleterCreator([]() { return new AsnAutoCompleter; });
+
     setCodeFoldingSupported(true);
     setMarksVisible(true);
     setParenthesesMatchingEnabled(true);
 
-    using namespace TextEditor;
+    using TextEditorActionHandler = TextEditor::TextEditorActionHandler;
     setEditorActionHandlers(TextEditorActionHandler::Format
                           | TextEditorActionHandler::UnCommentSelection
                           | TextEditorActionHandler::UnCollapseAll
