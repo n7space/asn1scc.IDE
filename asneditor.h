@@ -55,6 +55,12 @@ public:
 
     void unCommentSelection() override;
 
+protected:
+    void contextMenuEvent(QContextMenuEvent *) override;
+    Link findLinkAt(const QTextCursor &,
+                    bool resolveTarget = true,
+                    bool inNextSplit = false) override;
+
 private:
     Utils::CommentDefinition m_commentDefinition;
 };

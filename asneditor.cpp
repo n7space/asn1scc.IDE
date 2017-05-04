@@ -26,6 +26,12 @@
 #include "asneditor.h"
 
 #include <QApplication>
+#include <QMenu>
+#include <QTextDocumentFragment>
+
+#include <coreplugin/actionmanager/actioncontainer.h>
+#include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/editormanager/documentmodel.h>
 
 #include <texteditor/texteditoractionhandler.h>
 
@@ -35,6 +41,9 @@
 #include "asncompletionassist.h"
 
 using namespace Asn1Acn::Internal;
+
+using namespace Core;
+using namespace TextEditor;
 
 AsnEditor::AsnEditor()
 {
@@ -80,4 +89,59 @@ AsnEditorWidget::AsnEditorWidget()
 void AsnEditorWidget::unCommentSelection()
 {
     Utils::unCommentSelection(this, m_commentDefinition);
+}
+
+void AsnEditorWidget::contextMenuEvent(QContextMenuEvent *e)
+{
+    QPointer<QMenu> menu(new QMenu(this));
+
+    ActionContainer *mcontext = ActionManager::actionContainer(Constants::M_CONTEXT);
+    QMenu *contextMenu = mcontext->menu();
+
+    foreach (QAction *action, contextMenu->actions()) {
+        menu->addAction(action);
+    }
+
+    appendStandardContextMenuActions(menu);
+
+    menu->exec(e->globalPos());
+    if (!menu)
+        return;
+    delete menu;
+}
+
+AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
+                                                  bool resolveTarget,
+                                                  bool inNextSplit)
+{
+    Q_UNUSED(inNextSplit);
+
+    TextDocument *document = textDocument();
+    Link link(document->filePath().toString());
+
+    if (document->characterAt(cursor.position()).isSpace())
+        return link;
+
+    QTextCursor tc = cursor;
+    tc.select(QTextCursor::WordUnderCursor);
+    if (!tc.hasSelection())
+        return link;
+
+    if (resolveTarget) {
+        QTextDocumentFragment selectedText(tc);
+        if (selectedText.isEmpty())
+            return link;
+
+        QString docText = document->plainText();
+        int targetPos = docText.indexOf(selectedText.toPlainText());
+        if (targetPos == -1)
+            return link;
+
+        convertPosition(targetPos, &link.targetLine, &link.targetColumn);
+    } else {
+        link.linkTextStart = tc.selectionStart();
+        link.linkTextEnd = tc.selectionEnd();
+    }
+
+    return link;
 }
