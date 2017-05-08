@@ -32,7 +32,8 @@ SOURCES += \
     asneditor.cpp \
     asndocument.cpp \
     asnautocompleter.cpp \
-    asncompletionassist.cpp
+    asncompletionassist.cpp \
+    asnoutline.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -41,7 +42,8 @@ HEADERS += \
     asneditor.h \
     asndocument.h \
     asnautocompleter.h \
-    asncompletionassist.h
+    asncompletionassist.h \
+    asnoutline.h
 
 DISTFILES += \
     LICENSE \
