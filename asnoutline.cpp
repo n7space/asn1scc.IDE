@@ -187,9 +187,7 @@ void AsnOutlineWidget::updateModel()
 
 bool AsnOutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const
 {
-    if (qobject_cast<AsnEditor *>(editor))
-        return true;
-    return false;
+    return qobject_cast<AsnEditor *>(editor) != nullptr;
 }
 
 TextEditor::IOutlineWidget *AsnOutlineWidgetFactory::createWidget(Core::IEditor *editor)
