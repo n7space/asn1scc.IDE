@@ -23,32 +23,37 @@
 **
 ****************************************************************************/
 
-#include "asndocument.h"
+#pragma once
 
-#include "asnhighlighter.h"
-#include "asn1acnconstants.h"
+#include <texteditor/syntaxhighlighter.h>
 
-using namespace Asn1Acn::Internal;
+#include <QTextCharFormat>
+#include <QRegularExpression>
 
-AsnDocument::AsnDocument()
+namespace Asn1Acn {
+namespace Internal {
+
+enum AsnFormats {
+    AsnTypeFormat,
+    AsnCommentFormat
+};
+
+class AsnEditorWidget;
+
+class AsnHighlighter : public TextEditor::SyntaxHighlighter
 {
-    setId(Constants::ASNEDITOR_ID);
-    setSyntaxHighlighter(new AsnHighlighter);
+    Q_OBJECT
 
-    /*
-     * setSyntaxHighlighter(new CppHighlighter);
-    setIndenter(new CppTools::CppQtStyleIndenter);
+public:
+    AsnHighlighter(QTextDocument *document = 0);
+    void highlightBlock(const QString &text) override;
 
-    connect(this, &TextEditor::TextDocument::tabSettingsChanged,
-            this, &CppEditorDocument::invalidateFormatterCache);
-    connect(this, &Core::IDocument::mimeTypeChanged,
-            this, &CppEditorDocument::onMimeTypeChanged);
+private:
+    int highlightComment(const QString &text, int offset);
 
-    connect(this, &Core::IDocument::aboutToReload,
-            this, &CppEditorDocument::onAboutToReload);
-    connect(this, &Core::IDocument::reloadFinished,
-            this, &CppEditorDocument::onReloadFinished);
-    connect(this, &IDocument::filePathChanged,
-            this, &CppEditorDocument::onFilePathChanged);
-     * **/
-}
+    QVector<QRegularExpression> m_keywordPatterns;
+    QRegularExpression m_commentPattern;
+};
+
+} // namespace Internal
+} // namespace AsnEditor
