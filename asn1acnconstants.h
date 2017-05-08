@@ -30,7 +30,7 @@ namespace Constants {
 
 const char LANG_ASN1[] = "ASN.1";
 
-const char M_CONTEXT[] = "Asn1Acn.ContextMenu";
+const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
 const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
 const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
 

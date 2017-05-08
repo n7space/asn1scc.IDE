@@ -95,7 +95,7 @@ void AsnEditorWidget::contextMenuEvent(QContextMenuEvent *e)
 {
     QPointer<QMenu> menu(new QMenu(this));
 
-    ActionContainer *mcontext = ActionManager::actionContainer(Constants::M_CONTEXT);
+    ActionContainer *mcontext = ActionManager::actionContainer(Constants::CONTEXT_MENU);
     QMenu *contextMenu = mcontext->menu();
 
     foreach (QAction *action, contextMenu->actions()) {
