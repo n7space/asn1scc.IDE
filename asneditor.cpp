@@ -117,25 +117,24 @@ AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
     Q_UNUSED(inNextSplit);
 
     TextDocument *document = textDocument();
-    Link link(document->filePath().toString());
-
     if (document->characterAt(cursor.position()).isSpace())
-        return link;
+        return Link();
 
     QTextCursor tc = cursor;
     tc.select(QTextCursor::WordUnderCursor);
     if (!tc.hasSelection())
-        return link;
+        return Link();
 
+    Link link(document->filePath().toString());
     if (resolveTarget) {
         QTextDocumentFragment selectedText(tc);
         if (selectedText.isEmpty())
-            return link;
+            return Link();
 
         QString docText = document->plainText();
         int targetPos = docText.indexOf(selectedText.toPlainText());
         if (targetPos == -1)
-            return link;
+            return Link();
 
         convertPosition(targetPos, &link.targetLine, &link.targetColumn);
     } else {
