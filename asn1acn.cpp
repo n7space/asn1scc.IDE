@@ -33,9 +33,12 @@
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/coreconstants.h>
 
+#include <texteditor/texteditorconstants.h>
+
 #include <utils/mimetypes/mimedatabase.h>
 
 #include "asneditor.h"
+#include "asnoutline.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -66,6 +69,12 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     Utils::MimeDatabase::addMimeTypes(":/asn1acn/asn1acn.mimetypes.xml");
 
     addAutoReleasedObject(new AsnEditorFactory);
+    addAutoReleasedObject(new AsnOutlineWidgetFactory);
+
+    Core::ActionContainer *contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
+
+    Core::Command *cmd = Core::ActionManager::ActionManager::command(TextEditor::Constants::FOLLOW_SYMBOL_UNDER_CURSOR);
+    contextMenu->addAction(cmd);
 
     return true;
 }

@@ -35,7 +35,7 @@ namespace Internal {
 class Asn1AcnPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QtCreatorPlugin" FILE "asn1acn.json")
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QtCreatorPlugin" FILE "Asn1Acn.json")
 
 public:
     Asn1AcnPlugin();
