@@ -25,39 +25,21 @@
 
 #pragma once
 
-#include <QIcon>
-
-#include <texteditor/codeassist/assistinterface.h>
-#include <texteditor/codeassist/completionassistprovider.h>
-#include <texteditor/codeassist/iassistprocessor.h>
-#include <texteditor/snippets/snippetassistcollector.h>
+#include <texteditor/snippets/isnippetprovider.h>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnCompletionAssistProcessor : public TextEditor::IAssistProcessor
-{
-public:
-    AsnCompletionAssistProcessor();
-
-    TextEditor::IAssistProposal *perform(const TextEditor::AssistInterface *interface) override;
-
-private:
-    int findStartOfName(const TextEditor::AssistInterface *interface) const;
-
-    QIcon m_memberIcon;
-    TextEditor::SnippetAssistCollector m_snippetCollector;
-};
-
-class AsnCompletionAssistProvider : public TextEditor::CompletionAssistProvider
+class AsnSnippetProvider : public TextEditor::ISnippetProvider
 {
     Q_OBJECT
 
 public:
-    bool supportsEditor(Core::Id editorId) const override;
-    TextEditor::IAssistProcessor *createProcessor() const override;
+    ~AsnSnippetProvider() final = default;
 
-    bool isContinuationChar(const QChar &c) const override;
+    QString groupId() const override final;
+    QString displayName() const override final;
+    void decorateEditor(TextEditor::SnippetEditorWidget *editor) const override final;
 };
 
 } // Internal

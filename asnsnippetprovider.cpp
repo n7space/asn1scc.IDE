@@ -23,42 +23,33 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "asnsnippetprovider.h"
 
-#include <QIcon>
+#include "asnhighlighter.h"
+#include "asnautocompleter.h"
+#include "asn1acnconstants.h"
 
-#include <texteditor/codeassist/assistinterface.h>
-#include <texteditor/codeassist/completionassistprovider.h>
-#include <texteditor/codeassist/iassistprocessor.h>
-#include <texteditor/snippets/snippetassistcollector.h>
+#include <texteditor/snippets/snippeteditor.h>
+#include <texteditor/textdocument.h>
 
-namespace Asn1Acn {
-namespace Internal {
+#include <QLatin1String>
+#include <QCoreApplication>
 
-class AsnCompletionAssistProcessor : public TextEditor::IAssistProcessor
+using namespace Asn1Acn;
+using namespace Internal;
+
+QString AsnSnippetProvider::groupId() const
 {
-public:
-    AsnCompletionAssistProcessor();
+    return QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID);
+}
 
-    TextEditor::IAssistProposal *perform(const TextEditor::AssistInterface *interface) override;
-
-private:
-    int findStartOfName(const TextEditor::AssistInterface *interface) const;
-
-    QIcon m_memberIcon;
-    TextEditor::SnippetAssistCollector m_snippetCollector;
-};
-
-class AsnCompletionAssistProvider : public TextEditor::CompletionAssistProvider
+QString AsnSnippetProvider::displayName() const
 {
-    Q_OBJECT
+    return QCoreApplication::translate("Asn1Acn::Internal::AsnSnippetProvider", "ASN.1");
+}
 
-public:
-    bool supportsEditor(Core::Id editorId) const override;
-    TextEditor::IAssistProcessor *createProcessor() const override;
-
-    bool isContinuationChar(const QChar &c) const override;
-};
-
-} // Internal
-} // Asn1Acn
+void AsnSnippetProvider::decorateEditor(TextEditor::SnippetEditorWidget *editor) const
+{
+    editor->textDocument()->setSyntaxHighlighter(new AsnHighlighter);
+    editor->setAutoCompleter(new AsnAutoCompleter);
+}

@@ -35,15 +35,14 @@
 using namespace Asn1Acn::Internal;
 
 AsnCompletionAssistProcessor::AsnCompletionAssistProcessor()
-  : m_memberIcon(QLatin1String(":/codemodel/images/member.png")) // TODO in C++ mode somehow icons are colored
+  : m_memberIcon(QLatin1String(":/codemodel/images/member.png")), // TODO in C++ mode somehow icons are colored
+    m_snippetCollector(QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID), QIcon(":/texteditor/images/snippet.png"))
 {
-    // TODO snippets setSnippetGroup(Constants::ASN1_SNIPPETS_GROUP_ID);
 }
 
 /*
-    : m_snippetCollector(QString(), QIcon(":/texteditor/images/snippet.png"))
-    , m_variableIcon(QLatin1String(":/codemodel/images/keyword.png"))
- * */
+ * m_variableIcon(QLatin1String(":/codemodel/images/keyword.png"))
+ */
 
 TextEditor::IAssistProposal *AsnCompletionAssistProcessor::perform(const TextEditor::AssistInterface *interface)
 {
@@ -70,6 +69,8 @@ TextEditor::IAssistProposal *AsnCompletionAssistProcessor::perform(const TextEdi
     proposalItem->setText(interface->fileName());
     proposalItem->setIcon(m_memberIcon);
     proposals << proposalItem;
+
+    proposals.append(m_snippetCollector.collect());
 
     TextEditor::GenericProposalModel *model = new TextEditor::GenericProposalModel;
     model->loadContent(proposals);

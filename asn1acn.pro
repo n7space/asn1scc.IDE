@@ -34,7 +34,8 @@ SOURCES += \
     asnautocompleter.cpp \
     asncompletionassist.cpp \
     asnoutline.cpp \
-    asnhighlighter.cpp
+    asnhighlighter.cpp \
+    asnsnippetprovider.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -45,7 +46,8 @@ HEADERS += \
     asnautocompleter.h \
     asncompletionassist.h \
     asnoutline.h \
-    asnhighlighter.h
+    asnhighlighter.h \
+    asnsnippetprovider.h
 
 DISTFILES += \
     LICENSE \
@@ -84,3 +86,9 @@ include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
 
 RESOURCES += \
     asn1acn.qrc
+
+SNIPPETS_FILE_NAME = asn.xml
+SNIPPETS_FILE_PATH = $${IDE_BUILD_TREE}/share/qtcreator/snippets
+
+QMAKE_DISTCLEAN += $${SNIPPETS_FILE_PATH}/$${SNIPPETS_FILE_NAME}
+QMAKE_POST_LINK += @test -f $${SNIPPETS_FILE_PATH}/$${SNIPPETS_FILE_NAME} || $(COPY) $${PWD}/$${SNIPPETS_FILE_NAME} $${SNIPPETS_FILE_PATH}
