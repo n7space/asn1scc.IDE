@@ -6,10 +6,15 @@ matrix:
       dist: trusty
       sudo: false
       compiler: gcc
-      env: ENV_QTC_SOURCE="$TRAVIS_BUILD_DIR/build/downloads/qt-creator-opensource-src-4.2.2" ENV_QTC_BUILD="$TRAVIS_BUILD_DIR/build/downloads/qtcbuild/4.2.2" ENV_QTC_VERSION="4.2.2" ENV_QMAKE_PARAMS="-spec linux-g++"
+      env: ENV_QMAKE_PARAMS="-spec linux-g++"
     - os: osx
       compiler: clang
-      env: ENV_QTC_SOURCE="$TRAVIS_BUILD_DIR/build/downloads/qt-creator-opensource-src-4.2.2" ENV_QTC_BUILD="$TRAVIS_BUILD_DIR/build/downloads/qtcbuild/4.2.2" ENV_QTC_VERSION="4.2.2" ENV_QMAKE_PARAMS=""
+      env: ENV_QMAKE_PARAMS=""
+
+env:
+  global:
+    - ENV_QTC_VERSION="4.2.2"
+    - ENV_QTC_VERSION_SHORT="4.2"
 
 addons:
   apt:

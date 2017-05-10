@@ -6,16 +6,14 @@ if [[ $CI == "true" && $BUILD_OS_NAME == 'linux' ]]; then
   . /opt/qt58/bin/qt58-env.sh
 fi
 
-echo "Creating build directory ${BUILD_DIR}"
-mkdir -p "${BUILD_DIR}" && cd "${BUILD_DIR}"
-mkdir -p "${PLUGIN_OUT_PATH}"
-
 echo "Building..."
+cd "${BUILD_DIR}"
 echo "Executing qmake..."
-qmake "${PROJECT_DIR}"/asn1acn.pro -r ${ENV_QMAKE_PARAMS} CONFIG+=release \
-      QTC_SOURCE="${ENV_QTC_SOURCE}"\
-      QTC_BUILD="${ENV_QTC_BUILD}"\
-      OUTPUT_PATH="${PLUGIN_OUT_PATH}"\
+qmake "${PROJECT_DIR}"/asn1acn.pro -r ${ENV_QMAKE_PARAMS} \
+      CONFIG+=release \
+      QTC_SOURCE="${DOWNLOAD_DIR}/qt-creator-opensource-src-${ENV_QTC_VERSION}"\
+      QTC_BUILD="${DOWNLOAD_DIR}/qtcbuild/${ENV_QTC_VERSION}"\
+      OUTPUT_PATH="${PLUGIN_OUT_DIR}"\
       SET_VERSION_MINOR="${ENV_QTC_MV}"
 echo "Executing make..."
 make
