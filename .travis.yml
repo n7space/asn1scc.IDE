@@ -1,0 +1,29 @@
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: false
+      compiler: gcc
+      env: ENV_QTC_SOURCE="$TRAVIS_BUILD_DIR/build/downloads/qt-creator-opensource-src-4.2.2" ENV_QTC_BUILD="$TRAVIS_BUILD_DIR/build/downloads/qtcbuild/4.2.2" ENV_QTC_VERSION="4.2.2" ENV_QMAKE_PARAMS="-spec linux-g++"
+    - os: osx
+      compiler: clang
+      env: ENV_QTC_SOURCE="$TRAVIS_BUILD_DIR/build/downloads/qt-creator-opensource-src-4.2.2" ENV_QTC_BUILD="$TRAVIS_BUILD_DIR/build/downloads/qtcbuild/4.2.2" ENV_QTC_VERSION="4.2.2" ENV_QMAKE_PARAMS=""
+
+addons:
+  apt:
+    sources:
+    - sourceline: "ppa:beineri/opt-qt58-trusty"
+    packages:
+    - qt58-meta-minimal
+    - p7zip
+
+before_install:
+  - build/before_install.sh
+
+install:
+  - build/install.sh
+
+script:
+  - build/script.sh
