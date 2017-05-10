@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <snippets>
-<snippet group="ASN.1" trigger="snippet" id="sample_snippet_definition">Sample DEFINITIONS ::= BEGIN
+<snippet group="ASN.1" trigger="sequence" id="sample_snippet_definition">Sample DEFINITIONS ::= BEGIN
 
-    Question ::= SEQUENCE {
+    $name$ ::= SEQUENCE {
         trackingNumber INTEGER,
         question       IA5String
     }
 
-    Answer ::= SEQUENCE {
-        questionNumber INTEGER,
-        answer         BOOLEAN
+    Test ::= SEQUENCE {
+        other $name$
     }
 
 END
