@@ -34,7 +34,8 @@ SOURCES += \
     asnautocompleter.cpp \
     asncompletionassist.cpp \
     asnoutline.cpp \
-    asnhighlighter.cpp
+    asnhighlighter.cpp \
+    asnsnippetprovider.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -45,11 +46,15 @@ HEADERS += \
     asnautocompleter.h \
     asncompletionassist.h \
     asnoutline.h \
-    asnhighlighter.h
+    asnhighlighter.h \
+    asnsnippetprovider.h
 
 DISTFILES += \
     LICENSE \
     README.md
+
+RESOURCES += \
+    asn1acn.qrc
 
 # Qt Creator linking
 
@@ -82,5 +87,11 @@ QTC_PLUGIN_RECOMMENDS += \
 
 include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
 
-RESOURCES += \
-    asn1acn.qrc
+### Static files ###
+
+STATIC_FILES += snippets/asn.xml
+STATIC_BASE = $$PWD
+STATIC_OUTPUT_BASE = $$IDE_DATA_PATH
+STATIC_INSTALL_BASE = $$INSTALL_DATA_PATH
+
+include($$IDE_SOURCE_TREE/qtcreatordata.pri)

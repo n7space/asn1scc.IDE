@@ -39,6 +39,7 @@
 
 #include "asneditor.h"
 #include "asnoutline.h"
+#include "asnsnippetprovider.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -70,6 +71,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new AsnEditorFactory);
     addAutoReleasedObject(new AsnOutlineWidgetFactory);
+    addAutoReleasedObject(new AsnSnippetProvider);
 
     Core::ActionContainer *contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
 
