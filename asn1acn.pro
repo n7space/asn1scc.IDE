@@ -53,6 +53,9 @@ DISTFILES += \
     LICENSE \
     README.md
 
+RESOURCES += \
+    asn1acn.qrc
+
 # Qt Creator linking
 
 ## Either set the IDE_SOURCE_TREE when running qmake,
@@ -84,11 +87,11 @@ QTC_PLUGIN_RECOMMENDS += \
 
 include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
 
-RESOURCES += \
-    asn1acn.qrc
+### Static files ###
 
-SNIPPETS_FILE_NAME = asn.xml
-SNIPPETS_FILE_PATH = $${IDE_BUILD_TREE}/share/qtcreator/snippets
+STATIC_FILES += snippets/asn.xml
+STATIC_BASE = $$PWD
+STATIC_OUTPUT_BASE = $$IDE_DATA_PATH
+STATIC_INSTALL_BASE = $$INSTALL_DATA_PATH
 
-QMAKE_DISTCLEAN += $${SNIPPETS_FILE_PATH}/$${SNIPPETS_FILE_NAME}
-QMAKE_POST_LINK += @test -f $${SNIPPETS_FILE_PATH}/$${SNIPPETS_FILE_NAME} || $(COPY) $${PWD}/$${SNIPPETS_FILE_NAME} $${SNIPPETS_FILE_PATH}
+include($$IDE_SOURCE_TREE/qtcreatordata.pri)
