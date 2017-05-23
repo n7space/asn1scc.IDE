@@ -34,13 +34,7 @@ addons:
     - sourceline: "ppa:beineri/opt-qt58-trusty"
     packages:
     - qt58-meta-minimal
-    - qt58script
-    - qt58tools
     - p7zip
-
-cache:
-  directories:
-  - $HOME/qtcbuild
 
 install:
   - travis/install.sh
