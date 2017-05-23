@@ -41,6 +41,10 @@
 #include "asnoutline.h"
 #include "asnsnippetprovider.h"
 
+#ifdef WITH_TESTS
+#include "tests/sanity_test.h"
+#endif
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -95,6 +99,15 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
     // Hide UI (if you add UI that is not in the main window directly)
     return SynchronousShutdown;
 }
+
+#ifdef WITH_TESTS
+QList<QObject *> Asn1AcnPlugin::createTestObjects() const
+{
+    return QList<QObject *>()
+            << new Tests::SanityTests
+               ;
+}
+#endif
 
 } // namespace Internal
 } // namespace Asn1Acn
