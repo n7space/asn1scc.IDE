@@ -14,6 +14,8 @@ matrix:
     compiler: clang
   - os: osx
     compiler: gcc
+  - os: osx
+    env: ENV_WITH_TESTS=1
 
 dist: trusty
 sudo: false
@@ -32,10 +34,13 @@ addons:
     - sourceline: "ppa:beineri/opt-qt58-trusty"
     packages:
     - qt58-meta-minimal
+    - qt58script
+    - qt58tools
     - p7zip
 
-before_install:
-  - travis/before_install.sh
+cache:
+  directories:
+  - $HOME/qtcbuild
 
 install:
   - travis/install.sh
