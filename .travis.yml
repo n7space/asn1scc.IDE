@@ -1,20 +1,32 @@
 language: cpp
 
+os:
+  - linux
+  - osx
+
+compiler:
+  - gcc
+  - clang
+
 matrix:
-  include:
-    - os: linux
-      dist: trusty
-      sudo: false
-      compiler: gcc
-      env: ENV_QMAKE_PARAMS="-spec linux-g++"
-    - os: osx
-      compiler: clang
-      env: ENV_QMAKE_PARAMS=""
+  exclude:
+  - os: linux
+    compiler: clang
+  - os: osx
+    compiler: gcc
+  - os: osx
+    env: ENV_WITH_TESTS=1
+
+dist: trusty
+sudo: false
 
 env:
   global:
     - ENV_QTC_VERSION="4.2.2"
     - ENV_QTC_VERSION_SHORT="4.2"
+  matrix:
+    - ENV_WITH_TESTS=1
+    - ENV_WITH_TESTS=0
 
 addons:
   apt:
@@ -23,9 +35,6 @@ addons:
     packages:
     - qt58-meta-minimal
     - p7zip
-
-before_install:
-  - travis/before_install.sh
 
 install:
   - travis/install.sh

@@ -25,31 +25,22 @@
 
 #pragma once
 
-#include "asn1acn_global.h"
+#include <QObject>
 
-#include <extensionsystem/iplugin.h>
+// TODO to be remove, when proper unit tests are introduced to the project
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class Asn1AcnPlugin : public ExtensionSystem::IPlugin
+class SanityTests : public QObject
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QtCreatorPlugin" FILE "Asn1Acn.json")
 
-public:
-    Asn1AcnPlugin();
-    ~Asn1AcnPlugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-#ifdef WITH_TESTS
-private:
-    QList<QObject *> createTestObjects() const override;
-#endif
+private slots:
+    void testSanityCheck();
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

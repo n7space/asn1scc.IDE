@@ -23,33 +23,13 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "sanity_test.h"
 
-#include "asn1acn_global.h"
+#include <QtTest>
 
-#include <extensionsystem/iplugin.h>
+using namespace Asn1Acn::Internal::Tests;
 
-namespace Asn1Acn {
-namespace Internal {
-
-class Asn1AcnPlugin : public ExtensionSystem::IPlugin
+void SanityTests::testSanityCheck()
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QtCreatorPlugin" FILE "Asn1Acn.json")
-
-public:
-    Asn1AcnPlugin();
-    ~Asn1AcnPlugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
-
-#ifdef WITH_TESTS
-private:
-    QList<QObject *> createTestObjects() const override;
-#endif
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+    QCOMPARE(2 + 2, 4);
+}

@@ -23,6 +23,29 @@
 ##
 #############################################################################
 
+# Qt Creator linking
+
+IDE_SOURCE_TREE = $$QTC_SOURCE
+isEmpty(IDE_SOURCE_TREE): IDE_SOURCE_TREE = "/opt/qt-creator-dev/src"
+
+IDE_BUILD_TREE = $$QTC_BUILD
+isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = "/opt/qt-creator-dev/build-debug"
+
+QTC_PLUGIN_NAME = Asn1Acn
+QTC_LIB_DEPENDS += \
+    utils
+
+QTC_PLUGIN_DEPENDS += \
+    texteditor \
+    coreplugin
+
+QTC_PLUGIN_RECOMMENDS += \
+    # optional plugin dependencies. nothing here at this time
+
+include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
+
+### Plugin ###
+
 DEFINES += ASN1ACN_LIBRARY
 
 # asn1acn plugin files
@@ -56,36 +79,17 @@ DISTFILES += \
 RESOURCES += \
     asn1acn.qrc
 
-# Qt Creator linking
+# test files
 
-## Either set the IDE_SOURCE_TREE when running qmake,
-## or set the QTC_SOURCE environment variable, to override the default setting
-IDE_SOURCE_TREE = $$QTC_SOURCE
-isEmpty(IDE_SOURCE_TREE): IDE_SOURCE_TREE = "/opt/qt-creator-dev/src"
+equals(TEST, 1) {
 
-## Either set the IDE_BUILD_TREE when running qmake,
-## or set the QTC_BUILD environment variable, to override the default setting
-IDE_BUILD_TREE = $$QTC_BUILD
-isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = "/opt/qt-creator-dev/build-debug"
+SOURCES += \
+    tests/sanity_test.cpp
 
-###### If the plugin can be depended upon by other plugins, this code needs to be outsourced to
-###### <dirname>_dependencies.pri, where <dirname> is the name of the directory containing the
-###### plugin's sources.
+HEADERS += \
+    tests/sanity_test.h
 
-QTC_PLUGIN_NAME = Asn1Acn
-QTC_LIB_DEPENDS += \
-    utils
-
-QTC_PLUGIN_DEPENDS += \
-    texteditor \
-    coreplugin
-
-QTC_PLUGIN_RECOMMENDS += \
-    # optional plugin dependencies. nothing here at this time
-
-###### End _dependencies.pri contents ######
-
-include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
+}
 
 ### Static files ###
 
