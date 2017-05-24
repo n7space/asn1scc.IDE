@@ -37,94 +37,6 @@
 namespace Asn1Acn {
 namespace Internal {
 
-AsnOutlineItemModel::AsnOutlineItemModel(QObject *parent)
-    : QAbstractItemModel(parent),
-      m_rootItem(new QVariant())
-{
-}
-
-AsnOutlineItemModel::~AsnOutlineItemModel()
-{
-    qDeleteAll(m_itemsData);
-    delete m_rootItem;
-}
-
-int AsnOutlineItemModel::columnCount(const QModelIndex &parent) const
-{
-    Q_UNUSED(parent);
-    return 1;
-}
-
-QVariant AsnOutlineItemModel::data(const QModelIndex &index, int role) const
-{
-    if (!index.isValid() || role != Qt::DisplayRole)
-        return QVariant();
-
-    QVariant *item = static_cast<QVariant *>(index.internalPointer());
-
-    return *item;
-}
-
-Qt::ItemFlags AsnOutlineItemModel::flags(const QModelIndex &index) const
-{
-    if (!index.isValid())
-        return 0;
-
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
-}
-
-QVariant AsnOutlineItemModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    Q_UNUSED(section);
-    Q_UNUSED(orientation);
-    Q_UNUSED(role);
-
-    return *m_rootItem;
-}
-
-QModelIndex AsnOutlineItemModel::index(int row, int column, const QModelIndex &parent) const
-{
-    if (!hasIndex(row, column, parent))
-        return QModelIndex();
-
-    if (!parent.isValid()) {
-        QVariant *childItem = m_itemsData.value(row);
-        return createIndex(row, column, childItem);
-    }
-
-    return QModelIndex();
-}
-
-QModelIndex AsnOutlineItemModel::parent(const QModelIndex &index) const
-{
-    Q_UNUSED(index);
-    return QModelIndex();
-}
-
-int AsnOutlineItemModel::rowCount(const QModelIndex &parent) const
-{
-    if (!parent.isValid())
-        return m_itemsData.count();
-
-    return 0;
-}
-
-void AsnOutlineItemModel::addEntry(const QString &entry)
-{
-    beginInsertRows(QModelIndex(), m_itemsData.count(), m_itemsData.count() + 1);
-    QVariant *item = new QVariant(entry);
-    m_itemsData.append(item);
-    endInsertRows();
-}
-
-void AsnOutlineItemModel::flushEntries()
-{
-    beginResetModel();
-    qDeleteAll(m_itemsData);
-    m_itemsData.clear();
-    endResetModel();
-}
-
 AsnOutlineTreeView::AsnOutlineTreeView(QWidget *parent) :
     Utils::NavigationTreeView(parent)
 {
@@ -154,7 +66,7 @@ AsnOutlineWidget::AsnOutlineWidget(AsnEditorWidget *editor) :
     TextEditor::IOutlineWidget(),
     m_editor(editor),
     m_treeView(new AsnOutlineTreeView(this)),
-    m_model(new AsnOutlineItemModel(this))
+    m_model(m_editor->getOverviewModel())
 {
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
@@ -163,7 +75,6 @@ AsnOutlineWidget::AsnOutlineWidget(AsnEditorWidget *editor) :
     setLayout(layout);
 
     m_treeView->setModel(m_model);
-    updateModel();
 }
 
 QList<QAction *> AsnOutlineWidget::filterMenuActions() const
@@ -174,15 +85,6 @@ QList<QAction *> AsnOutlineWidget::filterMenuActions() const
 void AsnOutlineWidget::setCursorSynchronization(bool syncWithCursor)
 {
     Q_UNUSED(syncWithCursor);
-}
-
-void AsnOutlineWidget::updateModel()
-{
-    m_model->flushEntries();
-
-    TextEditor::TextDocument *currentDoc = m_editor->textDocument();
-    const Utils::FileName fileName = currentDoc->filePath();
-    m_model->addEntry(fileName.fileName());
 }
 
 bool AsnOutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const

@@ -29,6 +29,8 @@
 
 #include <utils/uncommentselection.h>
 
+#include "asnoverviewmodel.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -54,6 +56,9 @@ public:
     explicit AsnEditorWidget();
 
     void unCommentSelection() override;
+    void finalizeInitialization() override;
+
+    AsnOverviewModel *getOverviewModel() const;
 
 protected:
     void contextMenuEvent(QContextMenuEvent *) override;
@@ -62,7 +67,10 @@ protected:
                     bool inNextSplit = false) override;
 
 private:
+    void onAsnDocumentUpdated(const QTextDocument &document);
+
     Utils::CommentDefinition m_commentDefinition;
+    AsnOverviewModel *m_model;
 };
 
 } // namespace Internal

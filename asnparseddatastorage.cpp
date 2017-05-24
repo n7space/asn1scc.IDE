@@ -23,34 +23,35 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "asnparseddatastorage.h"
 
-#include <QTimer>
+using namespace Asn1Acn::Internal;
 
-#include <texteditor/textdocument.h>
+static AsnParsedDataStorage *m_instance;
 
-#include <utils/fileutils.h>
-
-namespace Asn1Acn {
-namespace Internal {
-
-class AsnDocument : public TextEditor::TextDocument
+AsnParsedDataStorage *AsnParsedDataStorage::instance()
 {
-    Q_OBJECT
+    if (m_instance)
+        return m_instance;
 
-public:
-    explicit AsnDocument();
-    void scheduleProcessDocument();
+    m_instance = new AsnParsedDataStorage;
+    return m_instance;
+}
 
-signals:
-    void documentUpdated(const QTextDocument &doc);
+std::shared_ptr<AsnParsedDocument> AsnParsedDataStorage::getDataForFile(const QString &filePath)
+const
+{
+    return m_items.contains(filePath) ? m_items.value(filePath) : nullptr;
+}
 
-private:
-    void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
-    void processDocument();
+void AsnParsedDataStorage::update(const QString &filePath,
+                                  std::unique_ptr<AsnParsedDocument> newFile)
+{
+    if (m_items.contains(filePath) == true) {
+        std::shared_ptr<AsnParsedDocument> oldFile = m_items.value(filePath);
+        if (oldFile->getRevision() == newFile->getRevision())
+            return;
+    }
 
-    QTimer m_processorTimer;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+    m_items.insert(filePath, std::move(newFile));
+}

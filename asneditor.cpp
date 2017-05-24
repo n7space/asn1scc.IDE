@@ -39,6 +39,8 @@
 #include "asndocument.h"
 #include "asnautocompleter.h"
 #include "asncompletionassist.h"
+#include "asnparseddocument.h"
+#include "asnparseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -84,11 +86,20 @@ AsnEditorWidget::AsnEditorWidget()
     m_commentDefinition.multiLineStart.clear();
     m_commentDefinition.multiLineEnd.clear();
     m_commentDefinition.singleLine = QLatin1Literal("--");
+
+    m_model = new AsnOverviewModel(this);
 }
 
 void AsnEditorWidget::unCommentSelection()
 {
     Utils::unCommentSelection(this, m_commentDefinition);
+}
+
+void AsnEditorWidget::finalizeInitialization()
+{
+    AsnDocument *doc = qobject_cast<AsnDocument *>(textDocument());
+    connect(doc, &AsnDocument::documentUpdated,
+            this, &AsnEditorWidget::onAsnDocumentUpdated);
 }
 
 void AsnEditorWidget::contextMenuEvent(QContextMenuEvent *e)
@@ -143,4 +154,23 @@ AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
     }
 
     return link;
+}
+
+void AsnEditorWidget::onAsnDocumentUpdated(const QTextDocument &document)
+{
+    Q_UNUSED(document);
+
+    QString filePath = textDocument()->filePath().fileName();
+    AsnParsedDataStorage *storage = AsnParsedDataStorage::instance();
+
+    std::shared_ptr<AsnParsedDocument> parsedDocument = storage->getDataForFile(filePath);
+    if (parsedDocument == nullptr)
+        return;
+
+    m_model->setDocument(parsedDocument);
+}
+
+AsnOverviewModel *AsnEditorWidget::getOverviewModel() const
+{
+    return m_model;
 }

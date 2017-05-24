@@ -25,31 +25,37 @@
 
 #pragma once
 
-#include <QTimer>
+#include <utils/navigationtreeview.h>
 
-#include <texteditor/textdocument.h>
+#include <memory>
 
-#include <utils/fileutils.h>
+#include "asnparseddocument.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnDocument : public TextEditor::TextDocument
+class AsnOverviewModel : public QAbstractItemModel
 {
     Q_OBJECT
-
 public:
-    explicit AsnDocument();
-    void scheduleProcessDocument();
+    explicit AsnOverviewModel(QObject *parent = 0);
+    ~AsnOverviewModel();
 
-signals:
-    void documentUpdated(const QTextDocument &doc);
+    QVariant data(const QModelIndex &index, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const override;
+    QModelIndex index(int row, int column,
+                      const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+
+    void setDocument(std::shared_ptr<AsnParsedDocument> file);
 
 private:
-    void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
-    void processDocument();
-
-    QTimer m_processorTimer;
+    QVariant *m_rootItem;
+    std::shared_ptr<AsnParsedDocument> m_asnParsedDocument;
 };
 
 } // namespace Internal

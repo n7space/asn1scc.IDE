@@ -34,33 +34,6 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnOutlineItemModel : public QAbstractItemModel
-{
-    Q_OBJECT
-public:
-    explicit AsnOutlineItemModel(QObject *parent = 0);
-    ~AsnOutlineItemModel();
-
-    QVariant data(const QModelIndex &index, int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QVariant headerData(int section,
-                        Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const override;
-    QModelIndex index(int row,
-                      int column,
-                      const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-
-    void addEntry(const QString &entry);
-    void flushEntries(void);
-
-private:
-    QVariant *m_rootItem;
-    QList<QVariant *> m_itemsData;
-};
-
 class AsnOutlineTreeView : public Utils::NavigationTreeView
 {
     Q_OBJECT
@@ -80,12 +53,9 @@ public:
     void setCursorSynchronization(bool syncWithCursor) override;
 
 private:
-    void updateModel();
-
-private:
     AsnEditorWidget *m_editor;
     AsnOutlineTreeView *m_treeView;
-    AsnOutlineItemModel *m_model;
+    AsnOverviewModel *m_model;
 };
 
 class AsnOutlineWidgetFactory : public TextEditor::IOutlineWidgetFactory

@@ -25,31 +25,29 @@
 
 #pragma once
 
-#include <QTimer>
+#include <QHash>
+#include <QString>
 
-#include <texteditor/textdocument.h>
+#include <memory>
 
-#include <utils/fileutils.h>
+#include "asnparseddocument.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnDocument : public TextEditor::TextDocument
+class AsnParsedDataStorage
 {
-    Q_OBJECT
+    AsnParsedDataStorage() = default;
+    ~AsnParsedDataStorage() = default;
 
 public:
-    explicit AsnDocument();
-    void scheduleProcessDocument();
+    static AsnParsedDataStorage *instance();
 
-signals:
-    void documentUpdated(const QTextDocument &doc);
+    std::shared_ptr<AsnParsedDocument> getDataForFile(const QString &filePath) const;
+    void update(const QString &fPath, std::unique_ptr<AsnParsedDocument> fileData);
 
 private:
-    void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
-    void processDocument();
-
-    QTimer m_processorTimer;
+    QHash<QString, std::shared_ptr<AsnParsedDocument> > m_items;
 };
 
 } // namespace Internal
