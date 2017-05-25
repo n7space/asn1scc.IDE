@@ -47,7 +47,7 @@ void AsnDocumentProcessor::run() const
 
     std::shared_ptr<AsnParsedDocument> doc = model->getDataForFile(m_filePath);
     if (!doc || doc->getRevision() != m_textDocument->revision()) {
-        std::unique_ptr<AsnParsedDocument> asnFile(parse());
+        auto asnFile = parse();
         model->update(m_filePath, std::move(asnFile));
     }
 
