@@ -31,7 +31,9 @@
 
 using namespace Asn1Acn::Internal;
 
-const int PROCESS_DOCUMENT_INTERVAL_MS = 1000;
+namespace {
+    const int PROCESS_DOCUMENT_INTERVAL_MS = 1000;
+} // Anonymous namespace
 
 AsnDocument::AsnDocument()
 {
