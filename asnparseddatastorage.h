@@ -26,6 +26,7 @@
 #pragma once
 
 #include <QHash>
+#include <QMutex>
 #include <QString>
 
 #include <memory>
@@ -48,6 +49,7 @@ public:
 
 private:
     QHash<QString, std::shared_ptr<AsnParsedDocument> > m_items;
+    mutable QMutex m_itemsMutex;
 };
 
 } // namespace Internal

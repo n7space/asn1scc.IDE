@@ -28,25 +28,34 @@
 using namespace Asn1Acn::Internal;
 
 static AsnParsedDataStorage *m_instance;
+static QMutex m_instanceMutex;
 
 AsnParsedDataStorage *AsnParsedDataStorage::instance()
 {
     if (m_instance)
         return m_instance;
 
-    m_instance = new AsnParsedDataStorage;
+    QMutexLocker locker(&m_instanceMutex);
+
+    if (!m_instance)
+        m_instance = new AsnParsedDataStorage;
+
     return m_instance;
 }
 
-std::shared_ptr<AsnParsedDocument> AsnParsedDataStorage::getDataForFile(const QString &filePath)
-const
+std::shared_ptr<AsnParsedDocument>
+AsnParsedDataStorage::getDataForFile(const QString &filePath) const
 {
+    QMutexLocker locker(&m_itemsMutex);
+
     return m_items.contains(filePath) ? m_items.value(filePath) : nullptr;
 }
 
 void AsnParsedDataStorage::update(const QString &filePath,
                                   std::unique_ptr<AsnParsedDocument> newFile)
 {
+    QMutexLocker locker(&m_itemsMutex);
+
     if (m_items.contains(filePath) == true) {
         std::shared_ptr<AsnParsedDocument> oldFile = m_items.value(filePath);
         if (oldFile->getRevision() == newFile->getRevision())
