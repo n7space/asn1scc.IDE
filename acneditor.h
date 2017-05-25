@@ -29,7 +29,7 @@
 
 #include <utils/uncommentselection.h>
 
-#include "asn1acneditor.h"
+#include "editor.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -48,7 +48,7 @@ public:
     explicit AcnEditorFactory();
 };
 
-class AcnEditorWidget : public Asn1AcnEditorWidget
+class AcnEditorWidget : public EditorWidget
 {
     Q_OBJECT
 

@@ -27,7 +27,7 @@
 
 #include <texteditor/texteditor.h>
 
-#include "asn1acneditor.h"
+#include "editor.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -46,7 +46,7 @@ public:
     explicit AsnEditorFactory();
 };
 
-class AsnEditorWidget : public Asn1AcnEditorWidget
+class AsnEditorWidget : public EditorWidget
 {
     Q_OBJECT
 

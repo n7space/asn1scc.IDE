@@ -61,7 +61,7 @@ SOURCES += \
     asnsnippetprovider.cpp \
     acneditor.cpp \
     acndocument.cpp \
-    asn1acneditor.cpp
+    editor.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -76,7 +76,7 @@ HEADERS += \
     asnsnippetprovider.h \
     acneditor.h \
     acndocument.h \
-    asn1acneditor.h
+    editor.h
 
 DISTFILES += \
     LICENSE \

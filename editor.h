@@ -32,12 +32,12 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class Asn1AcnEditorWidget : public TextEditor::TextEditorWidget
+class EditorWidget : public TextEditor::TextEditorWidget
 {
     Q_OBJECT
 
 public:
-    explicit Asn1AcnEditorWidget();
+    explicit EditorWidget();
 
     void unCommentSelection() override;
 

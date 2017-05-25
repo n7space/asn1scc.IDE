@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "asn1acneditor.h"
+#include "editor.h"
 
 #include <QMenu>
 #include <QString>
@@ -36,7 +36,7 @@
 using namespace Asn1Acn::Internal;
 using namespace Core;
 
-Asn1AcnEditorWidget::Asn1AcnEditorWidget()
+EditorWidget::EditorWidget()
 {
     // TODO ? setLanguageSettingsId(Constants::SettingsId);
 
@@ -45,12 +45,12 @@ Asn1AcnEditorWidget::Asn1AcnEditorWidget()
     m_commentDefinition.singleLine = QLatin1Literal("--");
 }
 
-void Asn1AcnEditorWidget::unCommentSelection()
+void EditorWidget::unCommentSelection()
 {
     Utils::unCommentSelection(this, m_commentDefinition);
 }
 
-void Asn1AcnEditorWidget::contextMenuEvent(QContextMenuEvent *e)
+void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
 {
     QPointer<QMenu> menu(new QMenu(this));
 
