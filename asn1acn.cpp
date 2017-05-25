@@ -41,6 +41,8 @@
 #include "asnoutline.h"
 #include "asnsnippetprovider.h"
 
+#include "acneditor.h"
+
 #ifdef WITH_TESTS
 #include "tests/sanity_test.h"
 #endif
@@ -76,6 +78,8 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(new AsnEditorFactory);
     addAutoReleasedObject(new AsnOutlineWidgetFactory);
     addAutoReleasedObject(new AsnSnippetProvider);
+
+    addAutoReleasedObject(new AcnEditorFactory);
 
     Core::ActionContainer *contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
 

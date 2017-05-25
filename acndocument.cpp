@@ -23,41 +23,30 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "acndocument.h"
 
-#include <texteditor/texteditor.h>
+#include "asn1acnconstants.h"
 
-#include "asn1acneditor.h"
+using namespace Asn1Acn::Internal;
 
-namespace Asn1Acn {
-namespace Internal {
-
-class AsnEditor : public TextEditor::BaseTextEditor
+AcnDocument::AcnDocument()
 {
-    Q_OBJECT
+    setId(Constants::ACNEDITOR_ID);
 
-public:
-    explicit AsnEditor();
-};
+    /*
+    setSyntaxHighlighter(new CppHighlighter);
+    setIndenter(new CppTools::CppQtStyleIndenter);
 
-class AsnEditorFactory : public TextEditor::TextEditorFactory
-{
-public:
-    explicit AsnEditorFactory();
-};
+    connect(this, &TextEditor::TextDocument::tabSettingsChanged,
+            this, &CppEditorDocument::invalidateFormatterCache);
+    connect(this, &Core::IDocument::mimeTypeChanged,
+            this, &CppEditorDocument::onMimeTypeChanged);
 
-class AsnEditorWidget : public Asn1AcnEditorWidget
-{
-    Q_OBJECT
-
-public:
-    explicit AsnEditorWidget() = default;
-
-protected:
-    Link findLinkAt(const QTextCursor &,
-                    bool resolveTarget = true,
-                    bool inNextSplit = false) override;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+    connect(this, &Core::IDocument::aboutToReload,
+            this, &CppEditorDocument::onAboutToReload);
+    connect(this, &Core::IDocument::reloadFinished,
+            this, &CppEditorDocument::onReloadFinished);
+    connect(this, &IDocument::filePathChanged,
+            this, &CppEditorDocument::onFilePathChanged);
+    */
+}

@@ -27,36 +27,33 @@
 
 #include <texteditor/texteditor.h>
 
+#include <utils/uncommentselection.h>
+
 #include "asn1acneditor.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnEditor : public TextEditor::BaseTextEditor
+class AcnEditor : public TextEditor::BaseTextEditor
 {
     Q_OBJECT
 
 public:
-    explicit AsnEditor();
+    explicit AcnEditor();
 };
 
-class AsnEditorFactory : public TextEditor::TextEditorFactory
+class AcnEditorFactory : public TextEditor::TextEditorFactory
 {
 public:
-    explicit AsnEditorFactory();
+    explicit AcnEditorFactory();
 };
 
-class AsnEditorWidget : public Asn1AcnEditorWidget
+class AcnEditorWidget : public Asn1AcnEditorWidget
 {
     Q_OBJECT
 
 public:
-    explicit AsnEditorWidget() = default;
-
-protected:
-    Link findLinkAt(const QTextCursor &,
-                    bool resolveTarget = true,
-                    bool inNextSplit = false) override;
+    explicit AcnEditorWidget() = default;
 };
 
 } // namespace Internal

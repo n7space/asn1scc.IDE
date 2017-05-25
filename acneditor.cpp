@@ -23,41 +23,39 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "acneditor.h"
 
-#include <texteditor/texteditor.h>
+#include <QCoreApplication>
 
-#include "asn1acneditor.h"
+#include <texteditor/texteditoractionhandler.h>
 
-namespace Asn1Acn {
-namespace Internal {
+#include "asn1acnconstants.h"
+#include "acndocument.h"
 
-class AsnEditor : public TextEditor::BaseTextEditor
+using namespace Asn1Acn::Internal;
+
+using namespace Core;
+using namespace TextEditor;
+
+AcnEditor::AcnEditor()
 {
-    Q_OBJECT
+    addContext(Constants::LANG_ACN);
+}
 
-public:
-    explicit AsnEditor();
-};
-
-class AsnEditorFactory : public TextEditor::TextEditorFactory
+AcnEditorFactory::AcnEditorFactory()
 {
-public:
-    explicit AsnEditorFactory();
-};
+    setId(Constants::ACNEDITOR_ID);
+    setDisplayName(QCoreApplication::translate("OpenWith::Editors", Constants::ACNEDITOR_DISPLAY_NAME));
+    addMimeType(Constants::ACN_MIMETYPE);
 
-class AsnEditorWidget : public Asn1AcnEditorWidget
-{
-    Q_OBJECT
+    setDocumentCreator([]() { return new AcnDocument; });
+    setEditorWidgetCreator([]() { return new AcnEditorWidget; });
+    setEditorCreator([]() { return new AcnEditor; });
 
-public:
-    explicit AsnEditorWidget() = default;
+    setEditorActionHandlers(TextEditorActionHandler::Format
+                            | TextEditorActionHandler::UnCommentSelection
+                            | TextEditorActionHandler::UnCollapseAll
+                            | TextEditorActionHandler::FollowSymbolUnderCursor);
 
-protected:
-    Link findLinkAt(const QTextCursor &,
-                    bool resolveTarget = true,
-                    bool inNextSplit = false) override;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+    // TODO addHoverHandler(new CppHoverHandler);
+}

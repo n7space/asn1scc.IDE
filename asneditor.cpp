@@ -26,11 +26,8 @@
 #include "asneditor.h"
 
 #include <QApplication>
-#include <QMenu>
 #include <QTextDocumentFragment>
 
-#include <coreplugin/actionmanager/actioncontainer.h>
-#include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/editormanager/documentmodel.h>
 
 #include <texteditor/texteditoractionhandler.h>
@@ -67,47 +64,12 @@ AsnEditorFactory::AsnEditorFactory()
     setMarksVisible(true);
     setParenthesesMatchingEnabled(true);
 
-    using TextEditorActionHandler = TextEditor::TextEditorActionHandler;
     setEditorActionHandlers(TextEditorActionHandler::Format
                           | TextEditorActionHandler::UnCommentSelection
                           | TextEditorActionHandler::UnCollapseAll
                           | TextEditorActionHandler::FollowSymbolUnderCursor);
 
   // TODO      addHoverHandler(new CppHoverHandler);
-}
-
-AsnEditorWidget::AsnEditorWidget()
-{
- // TODO ? setLanguageSettingsId(Constants::SettingsId);
-
-    // TODO will probably be extracted to some asnacn base class
-    m_commentDefinition.multiLineStart.clear();
-    m_commentDefinition.multiLineEnd.clear();
-    m_commentDefinition.singleLine = QLatin1Literal("--");
-}
-
-void AsnEditorWidget::unCommentSelection()
-{
-    Utils::unCommentSelection(this, m_commentDefinition);
-}
-
-void AsnEditorWidget::contextMenuEvent(QContextMenuEvent *e)
-{
-    QPointer<QMenu> menu(new QMenu(this));
-
-    ActionContainer *mcontext = ActionManager::actionContainer(Constants::CONTEXT_MENU);
-    QMenu *contextMenu = mcontext->menu();
-
-    foreach (QAction *action, contextMenu->actions()) {
-        menu->addAction(action);
-    }
-
-    appendStandardContextMenuActions(menu);
-
-    menu->exec(e->globalPos());
-    if (!menu)
-        return;
-    delete menu;
 }
 
 AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,

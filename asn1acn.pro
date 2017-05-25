@@ -58,7 +58,10 @@ SOURCES += \
     asncompletionassist.cpp \
     asnoutline.cpp \
     asnhighlighter.cpp \
-    asnsnippetprovider.cpp
+    asnsnippetprovider.cpp \
+    acneditor.cpp \
+    acndocument.cpp \
+    asn1acneditor.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -70,7 +73,10 @@ HEADERS += \
     asncompletionassist.h \
     asnoutline.h \
     asnhighlighter.h \
-    asnsnippetprovider.h
+    asnsnippetprovider.h \
+    acneditor.h \
+    acndocument.h \
+    asn1acneditor.h
 
 DISTFILES += \
     LICENSE \

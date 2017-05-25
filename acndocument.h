@@ -23,40 +23,19 @@
 **
 ****************************************************************************/
 
+#include <texteditor/textdocument.h>
+
 #pragma once
-
-#include <texteditor/texteditor.h>
-
-#include "asn1acneditor.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnEditor : public TextEditor::BaseTextEditor
+class AcnDocument : public TextEditor::TextDocument
 {
     Q_OBJECT
 
 public:
-    explicit AsnEditor();
-};
-
-class AsnEditorFactory : public TextEditor::TextEditorFactory
-{
-public:
-    explicit AsnEditorFactory();
-};
-
-class AsnEditorWidget : public Asn1AcnEditorWidget
-{
-    Q_OBJECT
-
-public:
-    explicit AsnEditorWidget() = default;
-
-protected:
-    Link findLinkAt(const QTextCursor &,
-                    bool resolveTarget = true,
-                    bool inNextSplit = false) override;
+    explicit AcnDocument();
 };
 
 } // namespace Internal
