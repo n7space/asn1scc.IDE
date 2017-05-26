@@ -59,6 +59,9 @@ SOURCES += \
     asnoutline.cpp \
     asnhighlighter.cpp \
     asnsnippetprovider.cpp \
+    acneditor.cpp \
+    acndocument.cpp \
+    editor.cpp \
     asnoverviewmodel.cpp \
     asndocumentprocessor.cpp \
     asnparseddatastorage.cpp \
@@ -75,6 +78,9 @@ HEADERS += \
     asnoutline.h \
     asnhighlighter.h \
     asnsnippetprovider.h \
+    acneditor.h \
+    acndocument.h \
+    editor.h \
     asnoverviewmodel.h \
     asndocumentprocessor.h \
     asnparseddatastorage.h \

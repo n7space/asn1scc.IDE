@@ -25,32 +25,36 @@
 
 #pragma once
 
+#include <texteditor/texteditor.h>
+
+#include <utils/uncommentselection.h>
+
+#include "editor.h"
+
 namespace Asn1Acn {
-namespace Constants {
+namespace Internal {
 
-// Shared constants
+class AcnEditor : public TextEditor::BaseTextEditor
+{
+    Q_OBJECT
 
-const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
+public:
+    explicit AcnEditor();
+};
 
-// ASN1 constants
+class AcnEditorFactory : public TextEditor::TextEditorFactory
+{
+public:
+    explicit AcnEditorFactory();
+};
 
-const char LANG_ASN1[] = "ASN.1";
+class AcnEditorWidget : public EditorWidget
+{
+    Q_OBJECT
 
-const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
-const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
+public:
+    explicit AcnEditorWidget() = default;
+};
 
-const char ASN1_MIMETYPE[] = "text/x-asn1";
-
-const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
-
-// ACN constants
-
-const char LANG_ACN[] = "ACN";
-
-const char ACNEDITOR_ID[] = "Asn1Acn.AcnEditor";
-const char ACNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ACN Editor");
-
-const char ACN_MIMETYPE[] = "text/x-acn";
-
+} // namespace Internal
 } // namespace Asn1Acn
-} // namespace Constants

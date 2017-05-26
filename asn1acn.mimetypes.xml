@@ -6,4 +6,9 @@
         <glob pattern="*.asn"/>
         <glob pattern="*.asn1"/>
     </mime-type>
+    <mime-type type="text/x-acn">
+        <sub-class-of type="text/plain"/>
+        <comment>ACN Data Model</comment>
+        <glob pattern="*.acn"/>
+    </mime-type>
 </mime-info>

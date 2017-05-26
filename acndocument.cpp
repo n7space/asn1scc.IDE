@@ -23,34 +23,30 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "acndocument.h"
 
-namespace Asn1Acn {
-namespace Constants {
+#include "asn1acnconstants.h"
 
-// Shared constants
+using namespace Asn1Acn::Internal;
 
-const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
+AcnDocument::AcnDocument()
+{
+    setId(Constants::ACNEDITOR_ID);
 
-// ASN1 constants
+    /*
+    setSyntaxHighlighter(new CppHighlighter);
+    setIndenter(new CppTools::CppQtStyleIndenter);
 
-const char LANG_ASN1[] = "ASN.1";
+    connect(this, &TextEditor::TextDocument::tabSettingsChanged,
+            this, &CppEditorDocument::invalidateFormatterCache);
+    connect(this, &Core::IDocument::mimeTypeChanged,
+            this, &CppEditorDocument::onMimeTypeChanged);
 
-const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
-const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
-
-const char ASN1_MIMETYPE[] = "text/x-asn1";
-
-const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
-
-// ACN constants
-
-const char LANG_ACN[] = "ACN";
-
-const char ACNEDITOR_ID[] = "Asn1Acn.AcnEditor";
-const char ACNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ACN Editor");
-
-const char ACN_MIMETYPE[] = "text/x-acn";
-
-} // namespace Asn1Acn
-} // namespace Constants
+    connect(this, &Core::IDocument::aboutToReload,
+            this, &CppEditorDocument::onAboutToReload);
+    connect(this, &Core::IDocument::reloadFinished,
+            this, &CppEditorDocument::onReloadFinished);
+    connect(this, &IDocument::filePathChanged,
+            this, &CppEditorDocument::onFilePathChanged);
+    */
+}

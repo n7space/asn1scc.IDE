@@ -23,34 +23,39 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "acneditor.h"
 
-namespace Asn1Acn {
-namespace Constants {
+#include <QCoreApplication>
 
-// Shared constants
+#include <texteditor/texteditoractionhandler.h>
 
-const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
+#include "asn1acnconstants.h"
+#include "acndocument.h"
 
-// ASN1 constants
+using namespace Asn1Acn::Internal;
 
-const char LANG_ASN1[] = "ASN.1";
+using namespace Core;
+using namespace TextEditor;
 
-const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
-const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
+AcnEditor::AcnEditor()
+{
+    addContext(Constants::LANG_ACN);
+}
 
-const char ASN1_MIMETYPE[] = "text/x-asn1";
+AcnEditorFactory::AcnEditorFactory()
+{
+    setId(Constants::ACNEDITOR_ID);
+    setDisplayName(QCoreApplication::translate("OpenWith::Editors", Constants::ACNEDITOR_DISPLAY_NAME));
+    addMimeType(Constants::ACN_MIMETYPE);
 
-const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
+    setDocumentCreator([]() { return new AcnDocument; });
+    setEditorWidgetCreator([]() { return new AcnEditorWidget; });
+    setEditorCreator([]() { return new AcnEditor; });
 
-// ACN constants
+    setEditorActionHandlers(TextEditorActionHandler::Format
+                            | TextEditorActionHandler::UnCommentSelection
+                            | TextEditorActionHandler::UnCollapseAll
+                            | TextEditorActionHandler::FollowSymbolUnderCursor);
 
-const char LANG_ACN[] = "ACN";
-
-const char ACNEDITOR_ID[] = "Asn1Acn.AcnEditor";
-const char ACNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ACN Editor");
-
-const char ACN_MIMETYPE[] = "text/x-acn";
-
-} // namespace Asn1Acn
-} // namespace Constants
+    // TODO addHoverHandler(new CppHoverHandler);
+}

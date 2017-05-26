@@ -23,52 +23,48 @@
 **
 ****************************************************************************/
 
-#pragma once
-
-#include <texteditor/texteditor.h>
-
 #include "editor.h"
 
-#include "asnoverviewmodel.h"
+#include <QMenu>
+#include <QString>
 
-namespace Asn1Acn {
-namespace Internal {
+#include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 
-class AsnEditor : public TextEditor::BaseTextEditor
+#include "asn1acnconstants.h"
+
+using namespace Asn1Acn::Internal;
+using namespace Core;
+
+EditorWidget::EditorWidget()
 {
-    Q_OBJECT
+    // TODO ? setLanguageSettingsId(Constants::SettingsId);
 
-public:
-    explicit AsnEditor();
-};
+    m_commentDefinition.multiLineStart.clear();
+    m_commentDefinition.multiLineEnd.clear();
+    m_commentDefinition.singleLine = QLatin1Literal("--");
+}
 
-class AsnEditorFactory : public TextEditor::TextEditorFactory
+void EditorWidget::unCommentSelection()
 {
-public:
-    explicit AsnEditorFactory();
-};
+    Utils::unCommentSelection(this, m_commentDefinition);
+}
 
-class AsnEditorWidget : public EditorWidget
+void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
 {
-    Q_OBJECT
+    QPointer<QMenu> menu(new QMenu(this));
 
-public:
-    explicit AsnEditorWidget();
+    ActionContainer *mcontext = ActionManager::actionContainer(Constants::CONTEXT_MENU);
+    QMenu *contextMenu = mcontext->menu();
 
-    void finalizeInitialization() override;
+    foreach (QAction *action, contextMenu->actions()) {
+        menu->addAction(action);
+    }
 
-    AsnOverviewModel *getOverviewModel() const;
+    appendStandardContextMenuActions(menu);
 
-protected:
-    Link findLinkAt(const QTextCursor &,
-                    bool resolveTarget = true,
-                    bool inNextSplit = false) override;
-
-private:
-    void onAsnDocumentUpdated(const QTextDocument &document);
-
-    AsnOverviewModel *m_model;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+    menu->exec(e->globalPos());
+    if (!menu)
+        return;
+    delete menu;
+}
