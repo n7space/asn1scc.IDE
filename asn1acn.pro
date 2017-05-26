@@ -65,7 +65,9 @@ SOURCES += \
     asnoverviewmodel.cpp \
     asndocumentprocessor.cpp \
     asnparseddatastorage.cpp \
-    asnparseddocument.cpp
+    asnparseddocument.cpp \
+    acnhighlighter.cpp \
+    highlighter.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -84,7 +86,9 @@ HEADERS += \
     asnoverviewmodel.h \
     asndocumentprocessor.h \
     asnparseddatastorage.h \
-    asnparseddocument.h
+    asnparseddocument.h \
+    acnhighlighter.h \
+    highlighter.h
 
 DISTFILES += \
     LICENSE \

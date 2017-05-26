@@ -23,39 +23,38 @@
 **
 ****************************************************************************/
 
+#pragma once
+
 #include <QVector>
 #include <QString>
-#include <QStringList>
 #include <QTextDocument>
 #include <QRegularExpression>
 
-#include "asnhighlighter.h"
+#include <texteditor/syntaxhighlighter.h>
 
-using namespace Asn1Acn::Internal;
-using namespace TextEditor;
+namespace Asn1Acn {
+namespace Internal {
 
-AsnHighlighter::AsnHighlighter(QTextDocument *document) :
-    Highlighter(document)
+enum class Asn1AcnFormats {
+    Type,
+    Comment
+};
+
+class Highlighter : public TextEditor::SyntaxHighlighter
 {
-    static const QVector<TextStyle> categories({
-        C_TYPE,
-        C_COMMENT,
-    });
-    setTextFormatCategories(categories);
+    Q_OBJECT
 
-    QStringList keywords;
-    keywords << "\\bSEQUENCE OF\\b"
-             << "\\bCHOICE\\b"
-             << "\\bSEQUENCE\\b"
-             << "\\bOPTIONAL\\b"
-             << "\\bOCTET STRING\\b"
-             << "\\bENUMERATED\\b"
-             << "\\bBIT STRING\\b"
-             << "\\bBOOLEAN\\b"
-             << "\\bINTEGER\\b"
-             << "\\bIA5String\\b"
-             << "\\bNULL\\b";
+public:
+    Highlighter(QTextDocument *document = 0);
+    void highlightBlock(const QString &text) override;
 
-    foreach (const QString &pattern, keywords)
-        m_keywordPatterns.append(QRegularExpression(pattern));
-}
+protected:
+    QVector<QRegularExpression> m_keywordPatterns;
+    QRegularExpression m_commentPattern;
+
+private:
+    int highlightComment(const QString &text, int offset);
+};
+
+} // namespace Internal
+} // namespace AsnEditor

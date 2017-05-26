@@ -23,39 +23,22 @@
 **
 ****************************************************************************/
 
-#include <QVector>
-#include <QString>
-#include <QStringList>
+#pragma once
+
 #include <QTextDocument>
-#include <QRegularExpression>
 
-#include "asnhighlighter.h"
+#include "highlighter.h"
 
-using namespace Asn1Acn::Internal;
-using namespace TextEditor;
+namespace Asn1Acn {
+namespace Internal {
 
-AsnHighlighter::AsnHighlighter(QTextDocument *document) :
-    Highlighter(document)
+class AcnHighlighter : public Highlighter
 {
-    static const QVector<TextStyle> categories({
-        C_TYPE,
-        C_COMMENT,
-    });
-    setTextFormatCategories(categories);
+    Q_OBJECT
 
-    QStringList keywords;
-    keywords << "\\bSEQUENCE OF\\b"
-             << "\\bCHOICE\\b"
-             << "\\bSEQUENCE\\b"
-             << "\\bOPTIONAL\\b"
-             << "\\bOCTET STRING\\b"
-             << "\\bENUMERATED\\b"
-             << "\\bBIT STRING\\b"
-             << "\\bBOOLEAN\\b"
-             << "\\bINTEGER\\b"
-             << "\\bIA5String\\b"
-             << "\\bNULL\\b";
+public:
+    AcnHighlighter(QTextDocument *document = 0);
+};
 
-    foreach (const QString &pattern, keywords)
-        m_keywordPatterns.append(QRegularExpression(pattern));
-}
+} // namespace Internal
+} // namespace AsnEditor

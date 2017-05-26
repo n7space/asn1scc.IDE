@@ -29,32 +29,31 @@
 #include <QTextDocument>
 #include <QRegularExpression>
 
-#include "asnhighlighter.h"
+#include "acnhighlighter.h"
 
 using namespace Asn1Acn::Internal;
 using namespace TextEditor;
 
-AsnHighlighter::AsnHighlighter(QTextDocument *document) :
+AcnHighlighter::AcnHighlighter(QTextDocument *document) :
     Highlighter(document)
 {
     static const QVector<TextStyle> categories({
-        C_TYPE,
+        C_KEYWORD,
         C_COMMENT,
     });
     setTextFormatCategories(categories);
 
     QStringList keywords;
-    keywords << "\\bSEQUENCE OF\\b"
-             << "\\bCHOICE\\b"
-             << "\\bSEQUENCE\\b"
-             << "\\bOPTIONAL\\b"
-             << "\\bOCTET STRING\\b"
-             << "\\bENUMERATED\\b"
-             << "\\bBIT STRING\\b"
-             << "\\bBOOLEAN\\b"
-             << "\\bINTEGER\\b"
-             << "\\bIA5String\\b"
-             << "\\bNULL\\b";
+    keywords << "\\bsize\\b"
+             << "\\bencoding\\b"
+             << "\\bendianness\\b"
+             << "\\balign-to-next\\b"
+             << "\\bencode-values\\b"
+             << "\\btrue-value\\b"
+             << "\\bfalse-value\\b"
+             << "\\bpresent-when\\b"
+             << "\\bdeterminant\\b"
+             << "\\bmapping-function\\b";
 
     foreach (const QString &pattern, keywords)
         m_keywordPatterns.append(QRegularExpression(pattern));
