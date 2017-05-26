@@ -23,55 +23,44 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "asnparseddatastorage.h"
 
-#include <texteditor/texteditor.h>
+using namespace Asn1Acn::Internal;
 
-#include <utils/uncommentselection.h>
+static AsnParsedDataStorage *m_instance;
+static QMutex m_instanceMutex;
 
-#include "asnoverviewmodel.h"
-
-namespace Asn1Acn {
-namespace Internal {
-
-class AsnEditor : public TextEditor::BaseTextEditor
+AsnParsedDataStorage *AsnParsedDataStorage::instance()
 {
-    Q_OBJECT
+    if (m_instance)
+        return m_instance;
 
-public:
-    explicit AsnEditor();
-};
+    QMutexLocker locker(&m_instanceMutex);
 
-class AsnEditorFactory : public TextEditor::TextEditorFactory
+    if (!m_instance)
+        m_instance = new AsnParsedDataStorage;
+
+    return m_instance;
+}
+
+std::shared_ptr<AsnParsedDocument>
+AsnParsedDataStorage::getDataForFile(const QString &filePath) const
 {
-public:
-    explicit AsnEditorFactory();
-};
+    QMutexLocker locker(&m_itemsMutex);
 
-class AsnEditorWidget : public TextEditor::TextEditorWidget
+    return m_items.contains(filePath) ? m_items.value(filePath) : nullptr;
+}
+
+void AsnParsedDataStorage::update(const QString &filePath,
+                                  std::unique_ptr<AsnParsedDocument> newFile)
 {
-    Q_OBJECT
+    QMutexLocker locker(&m_itemsMutex);
 
-public:
-    explicit AsnEditorWidget();
+    if (m_items.contains(filePath) == true) {
+        std::shared_ptr<AsnParsedDocument> oldFile = m_items.value(filePath);
+        if (oldFile->getRevision() == newFile->getRevision())
+            return;
+    }
 
-    void unCommentSelection() override;
-    void finalizeInitialization() override;
-
-    AsnOverviewModel *getOverviewModel() const;
-
-protected:
-    void contextMenuEvent(QContextMenuEvent *) override;
-    Link findLinkAt(const QTextCursor &,
-                    bool resolveTarget = true,
-                    bool inNextSplit = false) override;
-
-private:
-    void onAsnDocumentUpdated(const QTextDocument &document);
-
-    Utils::CommentDefinition m_commentDefinition;
-    AsnOverviewModel *m_model;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+    m_items.insert(filePath, std::move(newFile));
+}

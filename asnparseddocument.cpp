@@ -23,34 +23,41 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "asnparseddocument.h"
 
-#include <QTimer>
+using namespace Asn1Acn::Internal;
 
-#include <texteditor/textdocument.h>
-
-#include <utils/fileutils.h>
-
-namespace Asn1Acn {
-namespace Internal {
-
-class AsnDocument : public TextEditor::TextDocument
+AsnParsedDocument::AsnParsedDocument() :
+    m_filePath(QString()),
+    m_revision(-1)
 {
-    Q_OBJECT
+}
 
-public:
-    explicit AsnDocument();
-    void scheduleProcessDocument();
+AsnParsedDocument::AsnParsedDocument(const QString &filePath, int revision,
+                                     const QStringList &wordList) :
+    m_filePath(filePath),
+    m_revision(revision)
+{
+    foreach (const QString &entry, wordList)
+        m_dataItems.push_back(new QVariant(entry));
+}
 
-signals:
-    void documentUpdated(const QTextDocument &doc);
+AsnParsedDocument::~AsnParsedDocument()
+{
+    qDeleteAll(m_dataItems);
+}
 
-private:
-    void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
-    void processDocument();
+QVariant *AsnParsedDocument::at(int idx) const
+{
+    return idx < m_dataItems.size() ? m_dataItems[idx] : nullptr;
+}
 
-    QTimer m_processorTimer;
-};
+size_t AsnParsedDocument::getCount() const
+{
+    return m_dataItems.size();
+}
 
-} // namespace Internal
-} // namespace Asn1Acn
+int AsnParsedDocument::getRevision() const
+{
+    return m_revision;
+}
