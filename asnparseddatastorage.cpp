@@ -23,48 +23,44 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "asnparseddatastorage.h"
 
-#include "asneditor.h"
+using namespace Asn1Acn::Internal;
 
-#include <texteditor/ioutlinewidget.h>
+static AsnParsedDataStorage *m_instance;
+static QMutex m_instanceMutex;
 
-#include <utils/navigationtreeview.h>
-
-namespace Asn1Acn {
-namespace Internal {
-
-class AsnOutlineTreeView : public Utils::NavigationTreeView
+AsnParsedDataStorage *AsnParsedDataStorage::instance()
 {
-    Q_OBJECT
-public:
-    AsnOutlineTreeView(QWidget *parent);
+    if (m_instance)
+        return m_instance;
 
-    void contextMenuEvent(QContextMenuEvent *event) override;
-};
+    QMutexLocker locker(&m_instanceMutex);
 
-class AsnOutlineWidget : public TextEditor::IOutlineWidget
+    if (!m_instance)
+        m_instance = new AsnParsedDataStorage;
+
+    return m_instance;
+}
+
+std::shared_ptr<AsnParsedDocument>
+AsnParsedDataStorage::getDataForFile(const QString &filePath) const
 {
-    Q_OBJECT
-public:
-    AsnOutlineWidget(AsnEditorWidget *editor);
+    QMutexLocker locker(&m_itemsMutex);
 
-    QList<QAction *> filterMenuActions() const override;
-    void setCursorSynchronization(bool syncWithCursor) override;
+    return m_items.contains(filePath) ? m_items.value(filePath) : nullptr;
+}
 
-private:
-    AsnEditorWidget *m_editor;
-    AsnOutlineTreeView *m_treeView;
-    AsnOverviewModel *m_model;
-};
-
-class AsnOutlineWidgetFactory : public TextEditor::IOutlineWidgetFactory
+void AsnParsedDataStorage::update(const QString &filePath,
+                                  std::unique_ptr<AsnParsedDocument> newFile)
 {
-    Q_OBJECT
-public:
-    bool supportsEditor(Core::IEditor *editor) const override;
-    TextEditor::IOutlineWidget *createWidget(Core::IEditor *editor) override;
-};
+    QMutexLocker locker(&m_itemsMutex);
 
-} // namespace Internal
-} // namespace Asn1Acn
+    if (m_items.contains(filePath) == true) {
+        std::shared_ptr<AsnParsedDocument> oldFile = m_items.value(filePath);
+        if (oldFile->getRevision() == newFile->getRevision())
+            return;
+    }
+
+    m_items.insert(filePath, std::move(newFile));
+}
