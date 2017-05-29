@@ -42,8 +42,6 @@ public:
     QVariant *at(int idx) const;
 
     size_t getCount() const;
-    void addEntry(const QString &entry);
-
     int getRevision() const;
 
 private:
