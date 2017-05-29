@@ -10,8 +10,6 @@ compiler:
 
 matrix:
   exclude:
-  - os: linux
-    compiler: clang
   - os: osx
     compiler: gcc
   - os: osx
