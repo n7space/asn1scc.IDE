@@ -22,25 +22,42 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QObject>
+#include <map>
 
-// TODO to be remove, when proper unit tests are introduced to the project
+#include <QString>
+
+#include "typeassignment.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Tests {
+namespace Data {
 
-class SanityTests : public QObject
+class Definitions
 {
-    Q_OBJECT
+public:
+    Definitions(const QString& name, const SourceLocation& location)
+        : m_name(name), m_location(location)
+    {}
 
-private slots:
-    void testSanityCheck();
+    const QString& name() const { return m_name; }
+    const SourceLocation& location() const { return m_location; }
+
+    void add(const TypeAssignment& type)
+    {
+        m_types.insert(std::make_pair(type.name(), type));
+    }
+
+    using Types = std::map<QString, TypeAssignment>;
+    const Types& types() const { return m_types; }
+
+private:
+    QString m_name;
+    SourceLocation m_location;
+    Types m_types;
 };
 
-} // namespace Tests
+} // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn

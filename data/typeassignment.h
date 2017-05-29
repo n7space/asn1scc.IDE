@@ -22,14 +22,31 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#pragma once
 
-#include "sanity_test.h"
+#include <QString>
 
-#include <QtTest>
+#include "sourcelocation.h"
 
-using namespace Asn1Acn::Internal::Tests;
+namespace Asn1Acn {
+namespace Internal {
+namespace Data {
 
-void SanityTests::testSanityCheck()
+class TypeAssignment
 {
-    QCOMPARE(2 + 2, 4);
-}
+public:
+    TypeAssignment(const QString& name, const SourceLocation& location)
+        : m_name(name), m_location(location)
+    {}
+
+    const QString& name() const { return m_name; }
+    const SourceLocation& location() const { return m_location; }
+
+private:
+    QString m_name;
+    SourceLocation m_location;
+};
+
+} // namespace Data
+} // namespace Internal
+} // namespace Asn1Acn

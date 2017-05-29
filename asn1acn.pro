@@ -68,7 +68,8 @@ SOURCES += \
     asnparseddocument.cpp \
     acnhighlighter.cpp \
     highlighter.cpp \
-    asnstructuresview.cpp
+    asnstructuresview.cpp \
+    astxmlparser.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -90,7 +91,12 @@ HEADERS += \
     asnparseddocument.h \
     acnhighlighter.h \
     highlighter.h \
-    asnstructuresview.h
+    asnstructuresview.h \
+    astxmlparser.h \
+    data/sourcelocation.h \
+    data/typeassignment.h \
+    data/definitions.h \
+    data/modules.h
 
 DISTFILES += \
     LICENSE \
@@ -104,10 +110,10 @@ RESOURCES += \
 equals(TEST, 1) {
 
 SOURCES += \
-    tests/sanity_test.cpp
+    tests/astxmlparser_tests.cpp
 
 HEADERS += \
-    tests/sanity_test.h
+    tests/astxmlparser_tests.h
 
 }
 
