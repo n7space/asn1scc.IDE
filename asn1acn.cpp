@@ -40,6 +40,7 @@
 #include "asneditor.h"
 #include "asnoutline.h"
 #include "asnsnippetprovider.h"
+#include "asnstructuresview.h"
 
 #include "acneditor.h"
 
@@ -77,6 +78,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new AsnEditorFactory);
     addAutoReleasedObject(new AsnOutlineWidgetFactory);
+    addAutoReleasedObject(new AsnStructuresViewFactory);
     addAutoReleasedObject(new AsnSnippetProvider);
 
     addAutoReleasedObject(new AcnEditorFactory);

@@ -25,29 +25,47 @@
 
 #pragma once
 
-#include <QString>
-#include <QVariant>
-#include <QList>
+#include <QWidget>
+
+#include <coreplugin/inavigationwidgetfactory.h>
+#include <coreplugin/editormanager/ieditor.h>
+
+#include <utils/navigationtreeview.h>
+
+#include "asnoverviewmodel.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnParsedDocument
+class AsnStructuresTreeView : public Utils::NavigationTreeView
 {
+    Q_OBJECT
 public:
-    AsnParsedDocument();
-    AsnParsedDocument(const QString &filePath, int revision, const QStringList &list);
-    ~AsnParsedDocument();
+    AsnStructuresTreeView(QWidget *parent);
+};
 
-    QVariant *at(int idx) const;
-
-    size_t getCount() const;
-    int getRevision() const;
+// TODO: AsnStructuresViewWidget class should share base class with AsnOverview
+class AsnStructuresViewWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    AsnStructuresViewWidget();
 
 private:
-    QString m_filePath;
-    QList<QVariant *> m_dataItems;
-    int m_revision;
+    void onCurrentEditorChanged(Core::IEditor *editor);
+    void refreshModel();
+
+    Utils::NavigationTreeView *m_treeView;
+    AsnOverviewModel *m_model;
+};
+
+class AsnStructuresViewFactory : public Core::INavigationWidgetFactory
+{
+    Q_OBJECT
+public:
+    AsnStructuresViewFactory();
+
+    Core::NavigationView createWidget() override;
 };
 
 } // namespace Internal

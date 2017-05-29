@@ -39,6 +39,8 @@ const char LANG_ASN1[] = "ASN.1";
 const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
 const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
 
+const char ASN_STRUCTURES_VIEW_ID[] = "Asn1Acn.StructuresView";
+
 const char ASN1_MIMETYPE[] = "text/x-asn1";
 
 const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
