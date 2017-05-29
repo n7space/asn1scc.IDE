@@ -35,16 +35,16 @@
 namespace Asn1Acn {
 namespace Internal {
 
-enum class Asn1AcnFormats {
-    Type,
-    Comment
-};
-
 class Highlighter : public TextEditor::SyntaxHighlighter
 {
     Q_OBJECT
 
 public:
+    enum class Format {
+        Type,
+        Comment
+    };
+
     Highlighter(QTextDocument *document = 0);
     void highlightBlock(const QString &text) override;
 

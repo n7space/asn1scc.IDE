@@ -45,7 +45,7 @@ void Highlighter::highlightBlock(const QString &text)
                 break;
 
             setFormat(regExpMatch.capturedStart(), regExpMatch.capturedLength(),
-                      formatForCategory(static_cast<int>(Asn1AcnFormats::Type)));
+                      formatForCategory(static_cast<int>(Format::Type)));
             offset = regExpMatch.capturedEnd();
         }
     }
@@ -72,13 +72,13 @@ int Highlighter::highlightComment(const QString &text, int offset)
     if (!endComment.hasMatch()) {
         setFormat(beginComment.capturedStart(),
                   text.length() - beginComment.capturedStart(),
-                  formatForCategory(static_cast<int>(Asn1AcnFormats::Comment)));
+                  formatForCategory(static_cast<int>(Format::Comment)));
         return 0;
     }
 
     setFormat(beginComment.capturedStart(),
               endComment.capturedEnd() - beginComment.capturedStart(),
-              formatForCategory(static_cast<int>(Asn1AcnFormats::Comment)));
+              formatForCategory(static_cast<int>(Format::Comment)));
 
     return endComment.capturedEnd();
 }
