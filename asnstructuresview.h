@@ -25,34 +25,48 @@
 
 #pragma once
 
+#include <QWidget>
+
+#include <coreplugin/inavigationwidgetfactory.h>
+#include <coreplugin/editormanager/ieditor.h>
+
+#include <utils/navigationtreeview.h>
+
+#include "asnoverviewmodel.h"
+
 namespace Asn1Acn {
-namespace Constants {
+namespace Internal {
 
-// Shared constants
+class AsnStructuresTreeView : public Utils::NavigationTreeView
+{
+    Q_OBJECT
+public:
+    AsnStructuresTreeView(QWidget *parent);
+};
 
-const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
+// TODO: AsnStructuresViewWidget class should share base class with AsnOverview
+class AsnStructuresViewWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    AsnStructuresViewWidget();
 
-// ASN1 constants
+private:
+    void onCurrentEditorChanged(Core::IEditor *editor);
+    void refreshModel();
 
-const char LANG_ASN1[] = "ASN.1";
+    Utils::NavigationTreeView *m_treeView;
+    AsnOverviewModel *m_model;
+};
 
-const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
-const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
+class AsnStructuresViewFactory : public Core::INavigationWidgetFactory
+{
+    Q_OBJECT
+public:
+    AsnStructuresViewFactory();
 
-const char ASN_STRUCTURES_VIEW_ID[] = "Asn1Acn.StructuresView";
+    Core::NavigationView createWidget() override;
+};
 
-const char ASN1_MIMETYPE[] = "text/x-asn1";
-
-const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
-
-// ACN constants
-
-const char LANG_ACN[] = "ACN";
-
-const char ACNEDITOR_ID[] = "Asn1Acn.AcnEditor";
-const char ACNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ACN Editor");
-
-const char ACN_MIMETYPE[] = "text/x-acn";
-
+} // namespace Internal
 } // namespace Asn1Acn
-} // namespace Constants
