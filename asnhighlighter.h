@@ -25,34 +25,19 @@
 
 #pragma once
 
-#include <texteditor/syntaxhighlighter.h>
+#include <QTextDocument>
 
-#include <QTextCharFormat>
-#include <QRegularExpression>
+#include "highlighter.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-enum AsnFormats {
-    AsnTypeFormat,
-    AsnCommentFormat
-};
-
-class AsnEditorWidget;
-
-class AsnHighlighter : public TextEditor::SyntaxHighlighter
+class AsnHighlighter : public Highlighter
 {
     Q_OBJECT
 
 public:
     AsnHighlighter(QTextDocument *document = 0);
-    void highlightBlock(const QString &text) override;
-
-private:
-    int highlightComment(const QString &text, int offset);
-
-    QVector<QRegularExpression> m_keywordPatterns;
-    QRegularExpression m_commentPattern;
 };
 
 } // namespace Internal
