@@ -45,7 +45,7 @@
 #include "acneditor.h"
 
 #ifdef WITH_TESTS
-#include "tests/sanity_test.h"
+#include "tests/astxmlparser_tests.h"
 #endif
 
 namespace Asn1Acn {
@@ -110,7 +110,7 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
 QList<QObject *> Asn1AcnPlugin::createTestObjects() const
 {
     return QList<QObject *>()
-            << new Tests::SanityTests
+            << new Tests::AstXmlParserTests
                ;
 }
 #endif
