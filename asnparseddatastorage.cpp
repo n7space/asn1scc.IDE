@@ -51,6 +51,14 @@ AsnParsedDataStorage::getDataForFile(const QString &filePath) const
     return m_items.contains(filePath) ? m_items.value(filePath) : nullptr;
 }
 
+QList<std::shared_ptr<AsnParsedDocument> >
+AsnParsedDataStorage::getAllParsedFiles() const
+{
+    QMutexLocker locker(&m_itemsMutex);
+
+    return m_items.values();
+}
+
 void AsnParsedDataStorage::update(const QString &filePath,
                                   std::unique_ptr<AsnParsedDocument> newFile)
 {

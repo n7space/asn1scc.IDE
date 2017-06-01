@@ -25,34 +25,36 @@
 
 #pragma once
 
-#include <QString>
-#include <QTextDocument>
-
-#include <texteditor/textdocument.h>
-
 #include <memory>
 
-#include "asnparseddocument.h"
+#include <QVariant>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnDocumentProcessor : public QObject
+class AsnParsedObject
 {
-    Q_OBJECT
 public:
-    AsnDocumentProcessor(const TextEditor::TextDocument &doc);
-    void run() const;
+    AsnParsedObject() = default;
+    AsnParsedObject(const QVariant &data);
+    ~AsnParsedObject();
 
-signals:
-    void asnDocumentUpdated(const QTextDocument &doc) const;
+    int childrenCount() const;
+    AsnParsedObject *childAt(int idx) const;
+    void addChild(std::shared_ptr<AsnParsedObject> child);
+    void detachChildren();
 
-private:
-    std::unique_ptr<AsnParsedDocument> parse() const;
-    std::unique_ptr<AsnParsedDocument> parseFromXml() const;
+    const QVariant &data() const;
 
-    QTextDocument *m_textDocument;
-    QString m_filePath;
+    const AsnParsedObject *parent() const;
+
+    int columnCount() const;
+    int row() const;
+
+protected:
+    QVariant m_data;
+    AsnParsedObject *m_parent;
+    QList<std::shared_ptr<AsnParsedObject> > m_children;
 };
 
 } // namespace Internal

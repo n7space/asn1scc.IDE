@@ -132,7 +132,7 @@ void AsnEditorWidget::onAsnDocumentUpdated(const QTextDocument &document)
     if (parsedDocument == nullptr)
         return;
 
-    m_model->setDocument(parsedDocument);
+    m_model->setRootNode(parsedDocument->getTreeRoot());
 }
 
 AsnOverviewModel *AsnEditorWidget::getOverviewModel() const

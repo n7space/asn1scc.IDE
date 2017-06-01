@@ -69,7 +69,8 @@ SOURCES += \
     acnhighlighter.cpp \
     highlighter.cpp \
     asnstructuresview.cpp \
-    astxmlparser.cpp
+    astxmlparser.cpp \
+    asnparsedobject.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -96,7 +97,8 @@ HEADERS += \
     data/sourcelocation.h \
     data/typeassignment.h \
     data/definitions.h \
-    data/modules.h
+    data/modules.h \
+    asnparsedobject.h
 
 DISTFILES += \
     LICENSE \

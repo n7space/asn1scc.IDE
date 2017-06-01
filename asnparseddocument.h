@@ -26,8 +26,12 @@
 #pragma once
 
 #include <QString>
-#include <QVariant>
 #include <QList>
+
+#include "data/modules.h"
+#include "data/definitions.h"
+
+#include "asnparsedobject.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -37,17 +41,20 @@ class AsnParsedDocument
 public:
     AsnParsedDocument();
     AsnParsedDocument(const QString &filePath, int revision, const QStringList &list);
-    ~AsnParsedDocument();
+    AsnParsedDocument(const QString &filePath,
+                      int revision,
+                      std::unique_ptr<Data::Modules> parsedData);
 
-    QVariant *at(int idx) const;
+    std::shared_ptr<AsnParsedObject> getTreeRoot();
 
-    size_t getCount() const;
     int getRevision() const;
 
 private:
     QString m_filePath;
-    QList<QVariant *> m_dataItems;
     int m_revision;
+
+    std::shared_ptr<AsnParsedObject> m_parsedTreeRoot;
+    std::unique_ptr<Data::Modules> parsedData;
 };
 
 } // namespace Internal

@@ -45,6 +45,8 @@ public:
     static AsnParsedDataStorage *instance();
 
     std::shared_ptr<AsnParsedDocument> getDataForFile(const QString &filePath) const;
+    QList<std::shared_ptr<AsnParsedDocument> > getAllParsedFiles() const;
+
     void update(const QString &fPath, std::unique_ptr<AsnParsedDocument> fileData);
 
 private:

@@ -50,13 +50,16 @@ class AsnStructuresViewWidget : public QWidget
     Q_OBJECT
 public:
     AsnStructuresViewWidget();
+    ~AsnStructuresViewWidget();
 
 private:
     void onCurrentEditorChanged(Core::IEditor *editor);
     void refreshModel();
 
     Utils::NavigationTreeView *m_treeView;
+
     AsnOverviewModel *m_model;
+    std::shared_ptr<AsnParsedObject> m_modelRoot;
 };
 
 class AsnStructuresViewFactory : public Core::INavigationWidgetFactory

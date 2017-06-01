@@ -25,15 +25,22 @@
 
 #include "asndocumentprocessor.h"
 
+#include <QTextCursor>
+#include <QXmlStreamReader>
 #include <QRegularExpression>
 
 #include <utils/fileutils.h>
 
+#include "data/modules.h"
+#include "data/definitions.h"
+
 #include "asnparseddatastorage.h"
+#include "astxmlparser.h"
 
 using namespace Asn1Acn::Internal;
 
-const QString SEPARATOR_REG_EXP("\\s");
+static const QString SEPARATOR_REG_EXP("\\s");
+static const QString XML_VERSION_TAG("?xml version=\"1.0\"");
 
 AsnDocumentProcessor::AsnDocumentProcessor(const TextEditor::TextDocument &doc) :
     m_textDocument(doc.document()),
@@ -47,8 +54,15 @@ void AsnDocumentProcessor::run() const
 
     std::shared_ptr<AsnParsedDocument> doc = model->getDataForFile(m_filePath);
     if (!doc || doc->getRevision() != m_textDocument->revision()) {
-        auto asnFile = parse();
-        model->update(m_filePath, std::move(asnFile));
+        std::unique_ptr<AsnParsedDocument> file;
+
+        QTextCursor coursor = m_textDocument->find(XML_VERSION_TAG);
+        if (coursor.isNull())
+            file = parse();
+        else
+            file = parseFromXml();
+
+        model->update(m_filePath, std::move(file));
     }
 
     // emit after parsing is finished
@@ -65,4 +79,19 @@ std::unique_ptr<AsnParsedDocument> AsnDocumentProcessor::parse() const
     return std::unique_ptr<AsnParsedDocument>(new AsnParsedDocument(m_filePath,
                                                                     m_textDocument->revision(),
                                                                     splittedDoc));
+}
+
+std::unique_ptr<AsnParsedDocument> AsnDocumentProcessor::parseFromXml() const
+{
+    QXmlStreamReader reader;
+    reader.addData(m_textDocument->toPlainText());
+
+    AstXmlParser parser(reader);
+    parser.parse();
+
+    std::unique_ptr<Data::Modules> parsedData = parser.takeData();
+
+    return std::unique_ptr<AsnParsedDocument>(new AsnParsedDocument(m_filePath,
+                                                                    m_textDocument->revision(),
+                                                                    std::move(parsedData)));
 }

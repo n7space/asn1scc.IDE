@@ -31,7 +31,9 @@
 #include <coreplugin/find/itemviewfind.h>
 #include <coreplugin/editormanager/editormanager.h>
 
+#include "asnparseddatastorage.h"
 #include "asn1acnconstants.h"
+#include "asnparsedobject.h"
 #include "asneditor.h"
 
 using namespace Asn1Acn::Internal;
@@ -43,18 +45,14 @@ AsnStructuresTreeView::AsnStructuresTreeView(QWidget *parent) :
 
 void AsnStructuresViewWidget::refreshModel()
 {
-    // TODO: this is stubbed implementation, to be replaced by real one
-    Core::IDocument *currentDoc = Core::EditorManager::currentDocument();
-    if (currentDoc == nullptr)
-        return;
+    m_modelRoot->detachChildren();
 
-    QString fileName = currentDoc->filePath().toString();
+    AsnParsedDataStorage *instance = AsnParsedDataStorage::instance();
+    auto documents = instance->getAllParsedFiles();
+    for (const auto &document : documents)
+        m_modelRoot->addChild(document->getTreeRoot());
 
-    std::shared_ptr<AsnParsedDocument> docPtr(new AsnParsedDocument(fileName,
-                                                                    -1,
-                                                                    QStringList(fileName)));
-
-    m_model->setDocument(docPtr);
+    m_model->setRootNode(m_modelRoot);
 }
 
 void AsnStructuresViewWidget::onCurrentEditorChanged(Core::IEditor *editor)
@@ -66,7 +64,8 @@ void AsnStructuresViewWidget::onCurrentEditorChanged(Core::IEditor *editor)
 
 AsnStructuresViewWidget::AsnStructuresViewWidget() :
     m_treeView(new AsnStructuresTreeView(this)),
-    m_model(new AsnOverviewModel)
+    m_model(new AsnOverviewModel),
+    m_modelRoot(std::shared_ptr<AsnParsedObject>(new AsnParsedObject))
 {
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
@@ -79,6 +78,11 @@ AsnStructuresViewWidget::AsnStructuresViewWidget() :
 
     connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
             this, &AsnStructuresViewWidget::onCurrentEditorChanged);
+}
+
+AsnStructuresViewWidget::~AsnStructuresViewWidget()
+{
+    delete m_model;
 }
 
 AsnStructuresViewFactory::AsnStructuresViewFactory()
