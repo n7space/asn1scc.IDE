@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/asn1acn">
-        <file>asn1acn.mimetypes.xml</file>
-    </qresource>
-</RCC>
