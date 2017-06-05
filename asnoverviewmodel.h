@@ -51,11 +51,12 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    void setDocument(std::shared_ptr<AsnParsedDocument> file);
+    void setRootNode(std::shared_ptr<AsnParsedObject> root);
 
 private:
-    QVariant *m_rootItem;
-    std::shared_ptr<AsnParsedDocument> m_asnParsedDocument;
+    const AsnParsedObject *getValidNode(const QModelIndex &index) const;
+
+    std::shared_ptr<AsnParsedObject> m_rootItem;
 };
 
 } // namespace Internal

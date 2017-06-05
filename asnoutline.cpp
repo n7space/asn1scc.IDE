@@ -62,6 +62,11 @@ void AsnOutlineTreeView::contextMenuEvent(QContextMenuEvent *event)
     event->accept(); */
 }
 
+void AsnOutlineWidget::modelUpdated()
+{
+    m_treeView->expandAll();
+}
+
 AsnOutlineWidget::AsnOutlineWidget(AsnEditorWidget *editor) :
     TextEditor::IOutlineWidget(),
     m_editor(editor),
@@ -75,6 +80,9 @@ AsnOutlineWidget::AsnOutlineWidget(AsnEditorWidget *editor) :
     setLayout(layout);
 
     m_treeView->setModel(m_model);
+
+    connect(m_model, &QAbstractItemModel::modelReset, this, &AsnOutlineWidget::modelUpdated);
+    modelUpdated();
 }
 
 QList<QAction *> AsnOutlineWidget::filterMenuActions() const

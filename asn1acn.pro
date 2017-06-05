@@ -37,7 +37,8 @@ QTC_LIB_DEPENDS += \
 
 QTC_PLUGIN_DEPENDS += \
     texteditor \
-    coreplugin
+    coreplugin \
+    projectexplorer
 
 QTC_PLUGIN_RECOMMENDS += \
     # optional plugin dependencies. nothing here at this time
@@ -69,7 +70,9 @@ SOURCES += \
     acnhighlighter.cpp \
     highlighter.cpp \
     asnstructuresview.cpp \
-    astxmlparser.cpp
+    astxmlparser.cpp \
+    asnparsedobject.cpp \
+    projectwatcher.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -96,7 +99,9 @@ HEADERS += \
     data/sourcelocation.h \
     data/typeassignment.h \
     data/definitions.h \
-    data/modules.h
+    data/modules.h \
+    asnparsedobject.h \
+    projectwatcher.h
 
 DISTFILES += \
     LICENSE \

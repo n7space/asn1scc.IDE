@@ -53,6 +53,8 @@ public:
     void setCursorSynchronization(bool syncWithCursor) override;
 
 private:
+    void modelUpdated();
+
     AsnEditorWidget *m_editor;
     AsnOutlineTreeView *m_treeView;
     AsnOverviewModel *m_model;

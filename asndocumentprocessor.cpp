@@ -25,19 +25,29 @@
 
 #include "asndocumentprocessor.h"
 
+#include <QTextCursor>
+#include <QXmlStreamReader>
 #include <QRegularExpression>
 
 #include <utils/fileutils.h>
 
+#include "data/modules.h"
+#include "data/definitions.h"
+
 #include "asnparseddatastorage.h"
+#include "astxmlparser.h"
 
 using namespace Asn1Acn::Internal;
 
-const QString SEPARATOR_REG_EXP("\\s");
+static const QString SEPARATOR_REG_EXP("\\s");
+static const QString XML_VERSION_TAG("?xml version=\"1.0\"");
 
-AsnDocumentProcessor::AsnDocumentProcessor(const TextEditor::TextDocument &doc) :
-    m_textDocument(doc.document()),
-    m_filePath((doc.filePath()).fileName())
+AsnDocumentProcessor::AsnDocumentProcessor(const QTextDocument *doc,
+                                           const QString &filePath,
+                                           int revision) :
+    m_textDocument(doc),
+    m_filePath(filePath),
+    m_revision(revision)
 {
 }
 
@@ -45,12 +55,13 @@ void AsnDocumentProcessor::run() const
 {
     AsnParsedDataStorage *model = AsnParsedDataStorage::instance();
 
-    std::shared_ptr<AsnParsedDocument> doc = model->getDataForFile(m_filePath);
-    if (!doc || doc->getRevision() != m_textDocument->revision()) {
-        auto asnFile = parse();
-        model->update(m_filePath, std::move(asnFile));
+    std::shared_ptr<AsnParsedDocument> oldDoc = model->getDataForFile(m_filePath);
+    if (!oldDoc || oldDoc->getRevision() != m_revision) {
+        std::unique_ptr<AsnParsedDocument> newDoc = parse();
+        model->addFile(m_filePath, std::move(newDoc));
     }
 
+    // TODO: emit in AsnParsedDataStorage could be used?
     // emit after parsing is finished
     emit asnDocumentUpdated(*m_textDocument);
 }
@@ -58,6 +69,31 @@ void AsnDocumentProcessor::run() const
 std::unique_ptr<AsnParsedDocument> AsnDocumentProcessor::parse() const
 {
     // In this place parsing procedure should be executed
+    QTextCursor coursor = m_textDocument->find(XML_VERSION_TAG);
+
+    if (!coursor.isNull())
+        return parseFromXml();
+
+    return parseStubbed();
+}
+
+std::unique_ptr<AsnParsedDocument> AsnDocumentProcessor::parseFromXml() const
+{
+    QXmlStreamReader reader;
+    reader.addData(m_textDocument->toPlainText());
+
+    AstXmlParser parser(reader);
+    parser.parse();
+
+    std::unique_ptr<Data::Modules> parsedData = parser.takeData();
+
+    return std::unique_ptr<AsnParsedDocument>(new AsnParsedDocument(m_filePath,
+                                                                    m_textDocument->revision(),
+                                                                    std::move(parsedData)));
+}
+
+std::unique_ptr<AsnParsedDocument> AsnDocumentProcessor::parseStubbed() const
+{
     QString docPlainText = m_textDocument->toPlainText();
     QStringList splittedDoc = docPlainText.split(QRegularExpression(SEPARATOR_REG_EXP),
                                                  QString::SkipEmptyParts);

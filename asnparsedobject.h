@@ -25,39 +25,36 @@
 
 #pragma once
 
-#include <QHash>
-#include <QMutex>
-#include <QString>
-
 #include <memory>
 
-#include "asnparseddocument.h"
+#include <QVariant>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnParsedDataStorage : public QObject
+class AsnParsedObject
 {
-    Q_OBJECT
-
-    AsnParsedDataStorage() = default;
-    ~AsnParsedDataStorage() = default;
-
 public:
-    static AsnParsedDataStorage *instance();
+    AsnParsedObject() = default;
+    AsnParsedObject(const QVariant &data);
+    ~AsnParsedObject();
 
-    std::shared_ptr<AsnParsedDocument> getDataForFile(const QString &filePath) const;
-    QList<std::shared_ptr<AsnParsedDocument> > getAllParsedFiles() const;
+    int childrenCount() const;
+    AsnParsedObject *childAt(int idx) const;
+    void addChild(std::shared_ptr<AsnParsedObject> child);
+    void detachChildren();
 
-    void addFile(const QString &filePath, std::unique_ptr<AsnParsedDocument> fileData);
-    void removeFile(const QString &filePath);
+    const QVariant &data() const;
 
-signals:
-    void storageUpdated();
+    const AsnParsedObject *parent() const;
 
-private:
-    QHash<QString, std::shared_ptr<AsnParsedDocument> > m_items;
-    mutable QMutex m_itemsMutex;
+    int columnCount() const;
+    int row() const;
+
+protected:
+    QVariant m_data;
+    AsnParsedObject *m_parent;
+    QList<std::shared_ptr<AsnParsedObject> > m_children;
 };
 
 } // namespace Internal

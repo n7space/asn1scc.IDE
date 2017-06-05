@@ -46,7 +46,7 @@ AsnDocument::AsnDocument()
     connect(&m_processorTimer, &QTimer::timeout,
             this, &AsnDocument::processDocument, Qt::UniqueConnection);
 
-    connect(this, &IDocument::filePathChanged,
+    connect(this, &Core::IDocument::filePathChanged,
             this, &AsnDocument::onFilePathChanged);
 
     /*
@@ -75,14 +75,20 @@ void AsnDocument::onFilePathChanged(const Utils::FileName &oldPath, const Utils:
     if (newPath.isEmpty() || newPath == oldPath)
         return;
 
+    emit documentUpdated(*document());
+
     connect(this, &Core::IDocument::contentsChanged, this, &AsnDocument::scheduleProcessDocument);
-    scheduleProcessDocument();
 }
 
 void AsnDocument::processDocument()
 {
-    AsnDocumentProcessor docProcessor(*this);
+    QTextDocument *currentDocument = document();
+    AsnDocumentProcessor docProcessor(currentDocument,
+                                      filePath().toString(),
+                                      currentDocument->revision());
+
     connect(&docProcessor, &AsnDocumentProcessor::asnDocumentUpdated,
             this, &AsnDocument::documentUpdated);
+
     docProcessor.run();
 }
