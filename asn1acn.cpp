@@ -41,6 +41,7 @@
 #include "asnoutline.h"
 #include "asnsnippetprovider.h"
 #include "asnstructuresview.h"
+#include "projectwatcher.h"
 
 #include "acneditor.h"
 
@@ -82,6 +83,8 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(new AsnSnippetProvider);
 
     addAutoReleasedObject(new AcnEditorFactory);
+
+    addAutoReleasedObject(new ProjectWatcher);
 
     Core::ActionContainer *contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
 

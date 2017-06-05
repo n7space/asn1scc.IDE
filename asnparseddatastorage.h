@@ -36,8 +36,10 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnParsedDataStorage
+class AsnParsedDataStorage : public QObject
 {
+    Q_OBJECT
+
     AsnParsedDataStorage() = default;
     ~AsnParsedDataStorage() = default;
 
@@ -47,7 +49,11 @@ public:
     std::shared_ptr<AsnParsedDocument> getDataForFile(const QString &filePath) const;
     QList<std::shared_ptr<AsnParsedDocument> > getAllParsedFiles() const;
 
-    void update(const QString &fPath, std::unique_ptr<AsnParsedDocument> fileData);
+    void addFile(const QString &filePath, std::unique_ptr<AsnParsedDocument> fileData);
+    void removeFile(const QString &filePath);
+
+signals:
+    void storageUpdated();
 
 private:
     QHash<QString, std::shared_ptr<AsnParsedDocument> > m_items;

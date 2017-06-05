@@ -125,7 +125,7 @@ void AsnEditorWidget::onAsnDocumentUpdated(const QTextDocument &document)
 {
     Q_UNUSED(document);
 
-    QString filePath = textDocument()->filePath().fileName();
+    QString filePath = textDocument()->filePath().toString();
     AsnParsedDataStorage *storage = AsnParsedDataStorage::instance();
 
     std::shared_ptr<AsnParsedDocument> parsedDocument = storage->getDataForFile(filePath);

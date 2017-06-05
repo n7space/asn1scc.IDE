@@ -55,11 +55,10 @@ void AsnStructuresViewWidget::refreshModel()
     m_model->setRootNode(m_modelRoot);
 }
 
-void AsnStructuresViewWidget::onCurrentEditorChanged(Core::IEditor *editor)
+void AsnStructuresViewWidget::dataModelUpdated()
 {
-    Q_UNUSED(editor);
-
     refreshModel();
+    m_treeView->expandAll();
 }
 
 AsnStructuresViewWidget::AsnStructuresViewWidget() :
@@ -76,8 +75,10 @@ AsnStructuresViewWidget::AsnStructuresViewWidget() :
     refreshModel();
     m_treeView->setModel(m_model);
 
-    connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
-            this, &AsnStructuresViewWidget::onCurrentEditorChanged);
+    connect(AsnParsedDataStorage::instance(), &AsnParsedDataStorage::storageUpdated,
+            this, &AsnStructuresViewWidget::dataModelUpdated);
+
+    m_treeView->expandAll();
 }
 
 AsnStructuresViewWidget::~AsnStructuresViewWidget()

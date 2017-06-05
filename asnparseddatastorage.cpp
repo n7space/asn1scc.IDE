@@ -59,8 +59,8 @@ AsnParsedDataStorage::getAllParsedFiles() const
     return m_items.values();
 }
 
-void AsnParsedDataStorage::update(const QString &filePath,
-                                  std::unique_ptr<AsnParsedDocument> newFile)
+void AsnParsedDataStorage::addFile(const QString &filePath,
+                                   std::unique_ptr<AsnParsedDocument> newFile)
 {
     QMutexLocker locker(&m_itemsMutex);
 
@@ -71,4 +71,21 @@ void AsnParsedDataStorage::update(const QString &filePath,
     }
 
     m_items.insert(filePath, std::move(newFile));
+
+    locker.unlock();
+
+    emit storageUpdated();
+}
+
+void AsnParsedDataStorage::removeFile(const QString &filePath)
+{
+    QMutexLocker locker(&m_itemsMutex);
+    if (m_items.contains(filePath) == false)
+        return;
+
+    m_items.remove(filePath);
+
+    locker.unlock();
+
+    emit storageUpdated();
 }

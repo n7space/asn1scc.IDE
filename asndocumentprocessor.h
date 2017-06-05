@@ -41,7 +41,7 @@ class AsnDocumentProcessor : public QObject
 {
     Q_OBJECT
 public:
-    AsnDocumentProcessor(const TextEditor::TextDocument &doc);
+    AsnDocumentProcessor(const QTextDocument *doc, const QString &filePath, int revision);
     void run() const;
 
 signals:
@@ -50,9 +50,11 @@ signals:
 private:
     std::unique_ptr<AsnParsedDocument> parse() const;
     std::unique_ptr<AsnParsedDocument> parseFromXml() const;
+    std::unique_ptr<AsnParsedDocument> parseStubbed() const;
 
-    QTextDocument *m_textDocument;
-    QString m_filePath;
+    const QTextDocument *m_textDocument;
+    const QString m_filePath;
+    const int m_revision;
 };
 
 } // namespace Internal

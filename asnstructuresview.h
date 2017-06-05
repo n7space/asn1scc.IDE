@@ -55,6 +55,7 @@ public:
 private:
     void onCurrentEditorChanged(Core::IEditor *editor);
     void refreshModel();
+    void dataModelUpdated();
 
     Utils::NavigationTreeView *m_treeView;
 
