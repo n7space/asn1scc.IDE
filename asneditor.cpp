@@ -79,6 +79,11 @@ AsnEditorWidget::AsnEditorWidget()
     m_model = new AsnOverviewModel(this);
 }
 
+AsnEditorWidget::~AsnEditorWidget()
+{
+    delete m_model;
+}
+
 void AsnEditorWidget::finalizeInitialization()
 {
     AsnDocument *doc = qobject_cast<AsnDocument *>(textDocument());

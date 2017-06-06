@@ -54,6 +54,7 @@ class AsnEditorWidget : public EditorWidget
 
 public:
     explicit AsnEditorWidget();
+    ~AsnEditorWidget();
 
     void finalizeInitialization() override;
 
