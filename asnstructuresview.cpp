@@ -25,22 +25,25 @@
 
 #include "asnstructuresview.h"
 
-#include <QVBoxLayout>
-
-#include <coreplugin/idocument.h>
-#include <coreplugin/find/itemviewfind.h>
-#include <coreplugin/editormanager/editormanager.h>
-
 #include "asnparseddatastorage.h"
 #include "asn1acnconstants.h"
 #include "asnparsedobject.h"
-#include "asneditor.h"
 
 using namespace Asn1Acn::Internal;
 
-AsnStructuresTreeView::AsnStructuresTreeView(QWidget *parent) :
-    Utils::NavigationTreeView(parent)
+AsnStructuresViewWidget::AsnStructuresViewWidget() :
+    DataStructuresWidget(new AsnOverviewModel),
+    m_modelRoot(std::shared_ptr<AsnParsedObject>(new AsnParsedObject))
 {
+    connect(AsnParsedDataStorage::instance(), &AsnParsedDataStorage::storageUpdated,
+            this, &AsnStructuresViewWidget::modelUpdated);
+
+    modelUpdated();
+}
+
+AsnStructuresViewWidget::~AsnStructuresViewWidget()
+{
+    delete m_model;
 }
 
 void AsnStructuresViewWidget::refreshModel()
@@ -55,35 +58,10 @@ void AsnStructuresViewWidget::refreshModel()
     m_model->setRootNode(m_modelRoot);
 }
 
-void AsnStructuresViewWidget::dataModelUpdated()
+void AsnStructuresViewWidget::modelUpdated()
 {
     refreshModel();
-    m_treeView->expandAll();
-}
-
-AsnStructuresViewWidget::AsnStructuresViewWidget() :
-    m_treeView(new AsnStructuresTreeView(this)),
-    m_model(new AsnOverviewModel),
-    m_modelRoot(std::shared_ptr<AsnParsedObject>(new AsnParsedObject))
-{
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    layout->addWidget(Core::ItemViewFind::createSearchableWrapper(m_treeView));
-    setLayout(layout);
-
-    refreshModel();
-    m_treeView->setModel(m_model);
-
-    connect(AsnParsedDataStorage::instance(), &AsnParsedDataStorage::storageUpdated,
-            this, &AsnStructuresViewWidget::dataModelUpdated);
-
-    m_treeView->expandAll();
-}
-
-AsnStructuresViewWidget::~AsnStructuresViewWidget()
-{
-    delete m_model;
+    DataStructuresWidget::modelUpdated();
 }
 
 AsnStructuresViewFactory::AsnStructuresViewFactory()

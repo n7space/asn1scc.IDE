@@ -25,27 +25,15 @@
 
 #pragma once
 
-#include <QWidget>
-
 #include <coreplugin/inavigationwidgetfactory.h>
-#include <coreplugin/editormanager/ieditor.h>
 
-#include <utils/navigationtreeview.h>
-
-#include "asnoverviewmodel.h"
+#include "asnparsedobject.h"
+#include "datastructureswidget.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnStructuresTreeView : public Utils::NavigationTreeView
-{
-    Q_OBJECT
-public:
-    AsnStructuresTreeView(QWidget *parent);
-};
-
-// TODO: AsnStructuresViewWidget class should share base class with AsnOverview
-class AsnStructuresViewWidget : public QWidget
+class AsnStructuresViewWidget : public DataStructuresWidget
 {
     Q_OBJECT
 public:
@@ -53,13 +41,9 @@ public:
     ~AsnStructuresViewWidget();
 
 private:
-    void onCurrentEditorChanged(Core::IEditor *editor);
+    void modelUpdated();
     void refreshModel();
-    void dataModelUpdated();
 
-    Utils::NavigationTreeView *m_treeView;
-
-    AsnOverviewModel *m_model;
     std::shared_ptr<AsnParsedObject> m_modelRoot;
 };
 

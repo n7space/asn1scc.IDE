@@ -25,33 +25,40 @@
 
 #pragma once
 
-#include <coreplugin/editormanager/ieditor.h>
-
 #include <texteditor/ioutlinewidget.h>
 
-#include "datastructureswidget.h"
-#include "asneditor.h"
+#include <utils/navigationtreeview.h>
+
+#include "asnoverviewmodel.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnOutlineWidget : public DataStructuresWidget
+class DataStructuresTreeView : public Utils::NavigationTreeView
 {
     Q_OBJECT
 public:
-    AsnOutlineWidget(AsnEditorWidget *editor);
+    DataStructuresTreeView(QWidget *parent);
 
-private:
-    AsnEditorWidget *m_editor;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 };
 
-class AsnOutlineWidgetFactory : public TextEditor::IOutlineWidgetFactory
+class DataStructuresWidget : public TextEditor::IOutlineWidget
 {
     Q_OBJECT
 public:
-    bool supportsEditor(Core::IEditor *editor) const override;
-    TextEditor::IOutlineWidget *createWidget(Core::IEditor *editor) override;
+    DataStructuresWidget(AsnOverviewModel *model);
+
+    QList<QAction *> filterMenuActions() const override;
+    void setCursorSynchronization(bool syncWithCursor) override;
+
+protected:
+    void modelUpdated();
+    DataStructuresTreeView *m_treeView;
+    AsnOverviewModel *m_model;
 };
+
+
 
 } // namespace Internal
 } // namespace Asn1Acn

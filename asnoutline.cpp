@@ -25,74 +25,20 @@
 
 #include "asnoutline.h"
 
-#include <texteditor/textdocument.h>
+#include <QAbstractItemModel>
 
-#include <coreplugin/find/itemviewfind.h>
-#include <coreplugin/editormanager/editormanager.h>
 #include <utils/qtcassert.h>
 
-#include <QVBoxLayout>
-#include <QMenu>
-
-namespace Asn1Acn {
-namespace Internal {
-
-AsnOutlineTreeView::AsnOutlineTreeView(QWidget *parent) :
-    Utils::NavigationTreeView(parent)
-{
-}
-
-void AsnOutlineTreeView::contextMenuEvent(QContextMenuEvent *event)
-{
-    Q_UNUSED(event);
-
-    // TODO: no need to handle events until the data is stubbed
-    /* if (!event)
-        return;
-
-    QMenu contextMenu;
-
-    QAction *action = contextMenu.addAction(tr("Expand All"));
-    connect(action, &QAction::triggered, this, &QTreeView::expandAll);
-    action = contextMenu.addAction(tr("Collapse All"));
-    connect(action, &QAction::triggered, this, &QTreeView::collapseAll);
-
-    contextMenu.exec(event->globalPos());
-
-    event->accept(); */
-}
-
-void AsnOutlineWidget::modelUpdated()
-{
-    m_treeView->expandAll();
-}
+using namespace Asn1Acn::Internal;
 
 AsnOutlineWidget::AsnOutlineWidget(AsnEditorWidget *editor) :
-    TextEditor::IOutlineWidget(),
-    m_editor(editor),
-    m_treeView(new AsnOutlineTreeView(this)),
-    m_model(m_editor->getOverviewModel())
+    DataStructuresWidget(editor->getOverviewModel()),
+    m_editor(editor)
 {
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    layout->addWidget(Core::ItemViewFind::createSearchableWrapper(m_treeView));
-    setLayout(layout);
+    connect(m_model, &QAbstractItemModel::modelReset,
+            this, &AsnOutlineWidget::modelUpdated);
 
-    m_treeView->setModel(m_model);
-
-    connect(m_model, &QAbstractItemModel::modelReset, this, &AsnOutlineWidget::modelUpdated);
     modelUpdated();
-}
-
-QList<QAction *> AsnOutlineWidget::filterMenuActions() const
-{
-    return QList<QAction *>();
-}
-
-void AsnOutlineWidget::setCursorSynchronization(bool syncWithCursor)
-{
-    Q_UNUSED(syncWithCursor);
 }
 
 bool AsnOutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const
@@ -111,6 +57,3 @@ TextEditor::IOutlineWidget *AsnOutlineWidgetFactory::createWidget(Core::IEditor 
     AsnOutlineWidget *widget = new AsnOutlineWidget(asnEditorWidget);
     return widget;
 }
-
-} // namespace Internal
-} // namespace Asn1Acn
