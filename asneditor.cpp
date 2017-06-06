@@ -36,8 +36,6 @@
 #include "asndocument.h"
 #include "asnautocompleter.h"
 #include "asncompletionassist.h"
-#include "asnparseddocument.h"
-#include "asnparseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -74,23 +72,6 @@ AsnEditorFactory::AsnEditorFactory()
   // TODO      addHoverHandler(new CppHoverHandler);
 }
 
-AsnEditorWidget::AsnEditorWidget()
-{
-    m_model = new AsnOverviewModel(this);
-}
-
-AsnEditorWidget::~AsnEditorWidget()
-{
-    delete m_model;
-}
-
-void AsnEditorWidget::finalizeInitialization()
-{
-    AsnDocument *doc = qobject_cast<AsnDocument *>(textDocument());
-    connect(doc, &AsnDocument::documentUpdated,
-            this, &AsnEditorWidget::onAsnDocumentUpdated);
-}
-
 AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
                                                   bool resolveTarget,
                                                   bool inNextSplit)
@@ -124,23 +105,4 @@ AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
     }
 
     return link;
-}
-
-void AsnEditorWidget::onAsnDocumentUpdated(const QTextDocument &document)
-{
-    Q_UNUSED(document);
-
-    QString filePath = textDocument()->filePath().toString();
-    AsnParsedDataStorage *storage = AsnParsedDataStorage::instance();
-
-    std::shared_ptr<AsnParsedDocument> parsedDocument = storage->getDataForFile(filePath);
-    if (parsedDocument == nullptr)
-        return;
-
-    m_model->setRootNode(parsedDocument->getTreeRoot());
-}
-
-AsnOverviewModel *AsnEditorWidget::getOverviewModel() const
-{
-    return m_model;
 }
