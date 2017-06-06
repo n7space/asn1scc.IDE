@@ -25,31 +25,17 @@
 
 #pragma once
 
-#include <QTimer>
-
-#include <texteditor/textdocument.h>
-
-#include <utils/fileutils.h>
+#include "document.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnDocument : public TextEditor::TextDocument
+class AsnDocument : public Document
 {
     Q_OBJECT
 
 public:
     explicit AsnDocument();
-    void scheduleProcessDocument();
-
-signals:
-    void documentUpdated(const QTextDocument &doc);
-
-private:
-    void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
-    void processDocument();
-
-    QTimer m_processorTimer;
 };
 
 } // namespace Internal

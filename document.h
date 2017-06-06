@@ -23,29 +23,35 @@
 **
 ****************************************************************************/
 
-#include "acndocument.h"
+#pragma once
 
-#include "asn1acnconstants.h"
-#include "acnhighlighter.h"
+#include <QTimer>
 
-using namespace Asn1Acn::Internal;
+#include <texteditor/textdocument.h>
 
-AcnDocument::AcnDocument()
+#include <utils/fileutils.h>
+
+namespace Asn1Acn {
+namespace Internal {
+
+class Document : public TextEditor::TextDocument
 {
-    setId(Constants::ACNEDITOR_ID);
-    setSyntaxHighlighter(new AcnHighlighter);
+    Q_OBJECT
 
-    /*
-    setIndenter(new CppTools::CppQtStyleIndenter);
+public:
+    explicit Document();
+    void scheduleProcessDocument();
 
-    connect(this, &TextEditor::TextDocument::tabSettingsChanged,
-            this, &CppEditorDocument::invalidateFormatterCache);
-    connect(this, &Core::IDocument::mimeTypeChanged,
-            this, &CppEditorDocument::onMimeTypeChanged);
+signals:
+    void documentUpdated(const QTextDocument &doc);
 
-    connect(this, &Core::IDocument::aboutToReload,
-            this, &CppEditorDocument::onAboutToReload);
-    connect(this, &Core::IDocument::reloadFinished,
-            this, &CppEditorDocument::onReloadFinished);
-    */
-}
+private:
+    void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
+    void processDocument();
+
+    QTimer m_processorTimer;
+
+};
+
+} // namespace Internal
+} // namespace Asn1Acn

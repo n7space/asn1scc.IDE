@@ -27,27 +27,13 @@
 
 #include "asnhighlighter.h"
 #include "asn1acnconstants.h"
-#include "asndocumentprocessor.h"
 
 using namespace Asn1Acn::Internal;
-
-namespace {
-    const int PROCESS_DOCUMENT_INTERVAL_MS = 1000;
-} // Anonymous namespace
 
 AsnDocument::AsnDocument()
 {
     setId(Constants::ASNEDITOR_ID);
     setSyntaxHighlighter(new AsnHighlighter);
-
-    m_processorTimer.setSingleShot(true);
-    m_processorTimer.setInterval(PROCESS_DOCUMENT_INTERVAL_MS);
-
-    connect(&m_processorTimer, &QTimer::timeout,
-            this, &AsnDocument::processDocument, Qt::UniqueConnection);
-
-    connect(this, &Core::IDocument::filePathChanged,
-            this, &AsnDocument::onFilePathChanged);
 
     /*
      * setSyntaxHighlighter(new CppHighlighter);
@@ -63,32 +49,4 @@ AsnDocument::AsnDocument()
     connect(this, &Core::IDocument::reloadFinished,
             this, &CppEditorDocument::onReloadFinished);
      * **/
-}
-
-void AsnDocument::scheduleProcessDocument()
-{
-    m_processorTimer.start();
-}
-
-void AsnDocument::onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath)
-{
-    if (newPath.isEmpty() || newPath == oldPath)
-        return;
-
-    emit documentUpdated(*document());
-
-    connect(this, &Core::IDocument::contentsChanged, this, &AsnDocument::scheduleProcessDocument);
-}
-
-void AsnDocument::processDocument()
-{
-    QTextDocument *currentDocument = document();
-    AsnDocumentProcessor docProcessor(currentDocument,
-                                      filePath().toString(),
-                                      currentDocument->revision());
-
-    connect(&docProcessor, &AsnDocumentProcessor::asnDocumentUpdated,
-            this, &AsnDocument::documentUpdated);
-
-    docProcessor.run();
 }

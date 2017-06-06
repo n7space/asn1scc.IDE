@@ -23,14 +23,14 @@
 **
 ****************************************************************************/
 
-#include <texteditor/textdocument.h>
+#include "document.h"
 
 #pragma once
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AcnDocument : public TextEditor::TextDocument
+class AcnDocument : public Document
 {
     Q_OBJECT
 

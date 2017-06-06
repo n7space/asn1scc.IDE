@@ -73,7 +73,8 @@ SOURCES += \
     astxmlparser.cpp \
     asnparsedobject.cpp \
     projectwatcher.cpp \
-    datastructureswidget.cpp
+    datastructureswidget.cpp \
+    document.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -103,7 +104,8 @@ HEADERS += \
     data/modules.h \
     asnparsedobject.h \
     projectwatcher.h \
-    datastructureswidget.h
+    datastructureswidget.h \
+    document.h
 
 DISTFILES += \
     LICENSE \
