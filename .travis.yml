@@ -20,8 +20,8 @@ sudo: false
 
 env:
   global:
-    - ENV_QTC_VERSION="4.2.2"
-    - ENV_QTC_VERSION_SHORT="4.2"
+    - ENV_QTC_VERSION="4.3.0"
+    - ENV_QTC_VERSION_SHORT="4.3"
   matrix:
     - ENV_WITH_TESTS=1
     - ENV_WITH_TESTS=0
