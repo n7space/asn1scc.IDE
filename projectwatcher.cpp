@@ -37,6 +37,8 @@
 
 using namespace Asn1Acn::Internal;
 
+static const QString DOCUMENT_FILTER_EXTENSIONS_REGEXP("\\.acn$|\\.asn1?$");
+
 ProjectWatcher::ProjectWatcher()
 {
     ProjectExplorer::SessionManager *sessionManager = ProjectExplorer::SessionManager::instance();
@@ -93,7 +95,7 @@ QStringList ProjectWatcher::getFilePaths(const QList<ProjectExplorer::FileNode *
 QStringList ProjectWatcher::filterValidFiles(const QStringList &allFiles) const
 {
     // TODO: filtering should be performed using mimetypes?
-    return allFiles.filter(".asn");
+    return allFiles.filter(QRegularExpression(DOCUMENT_FILTER_EXTENSIONS_REGEXP));
 }
 
 void ProjectWatcher::processFiles(const QStringList &filePaths) const

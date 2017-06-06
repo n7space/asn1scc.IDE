@@ -23,35 +23,43 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "outline.h"
 
-#include <coreplugin/editormanager/ieditor.h>
+#include <QAbstractItemModel>
 
-#include <texteditor/ioutlinewidget.h>
+#include <texteditor/texteditor.h>
 
-#include "datastructureswidget.h"
+#include <utils/qtcassert.h>
+
 #include "asneditor.h"
+#include "acneditor.h"
 
-namespace Asn1Acn {
-namespace Internal {
+using namespace Asn1Acn::Internal;
 
-class AsnOutlineWidget : public DataStructuresWidget
+OutlineWidget::OutlineWidget(EditorWidget *editor) :
+    DataStructuresWidget(editor->getOverviewModel()),
+    m_editor(editor)
 {
-    Q_OBJECT
-public:
-    AsnOutlineWidget(AsnEditorWidget *editor);
+    connect(m_model, &QAbstractItemModel::modelReset,
+            this, &OutlineWidget::modelUpdated);
 
-private:
-    AsnEditorWidget *m_editor;
-};
+    modelUpdated();
+}
 
-class AsnOutlineWidgetFactory : public TextEditor::IOutlineWidgetFactory
+bool OutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const
 {
-    Q_OBJECT
-public:
-    bool supportsEditor(Core::IEditor *editor) const override;
-    TextEditor::IOutlineWidget *createWidget(Core::IEditor *editor) override;
-};
+    return qobject_cast<AcnEditor *>(editor) != nullptr
+            || qobject_cast<AsnEditor *>(editor) != nullptr;
+}
 
-} // namespace Internal
-} // namespace Asn1Acn
+TextEditor::IOutlineWidget *OutlineWidgetFactory::createWidget(Core::IEditor *editor)
+{
+    TextEditor::BaseTextEditor *baseEditor = qobject_cast<TextEditor::BaseTextEditor *>(editor);
+    QTC_ASSERT(baseEditor, return 0);
+
+    EditorWidget *editorWidget = qobject_cast<EditorWidget *>(baseEditor->widget());
+    QTC_ASSERT(editorWidget, return 0);
+
+    OutlineWidget *widget = new OutlineWidget(editorWidget);
+    return widget;
+}

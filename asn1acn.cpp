@@ -38,7 +38,7 @@
 #include <utils/mimetypes/mimedatabase.h>
 
 #include "asneditor.h"
-#include "asnoutline.h"
+#include "outline.h"
 #include "asnsnippetprovider.h"
 #include "asnstructuresview.h"
 #include "projectwatcher.h"
@@ -78,12 +78,12 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     Utils::MimeDatabase::addMimeTypes(":/asn1acn/asn1acn.mimetypes.xml");
 
     addAutoReleasedObject(new AsnEditorFactory);
-    addAutoReleasedObject(new AsnOutlineWidgetFactory);
     addAutoReleasedObject(new AsnStructuresViewFactory);
     addAutoReleasedObject(new AsnSnippetProvider);
 
     addAutoReleasedObject(new AcnEditorFactory);
 
+    addAutoReleasedObject(new OutlineWidgetFactory);
     addAutoReleasedObject(new ProjectWatcher);
 
     Core::ActionContainer *contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);

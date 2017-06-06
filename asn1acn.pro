@@ -57,7 +57,7 @@ SOURCES += \
     asndocument.cpp \
     asnautocompleter.cpp \
     asncompletionassist.cpp \
-    asnoutline.cpp \
+    outline.cpp \
     asnhighlighter.cpp \
     asnsnippetprovider.cpp \
     acneditor.cpp \
@@ -84,7 +84,7 @@ HEADERS += \
     asndocument.h \
     asnautocompleter.h \
     asncompletionassist.h \
-    asnoutline.h \
+    outline.h \
     asnhighlighter.h \
     asnsnippetprovider.h \
     acneditor.h \
