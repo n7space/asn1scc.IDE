@@ -32,8 +32,8 @@
 
 #include <projectexplorer/session.h>
 
-#include "asndocumentprocessor.h"
-#include "asnparseddatastorage.h"
+#include "documentprocessor.h"
+#include "parseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -102,14 +102,14 @@ void ProjectWatcher::processFiles(const QStringList &filePaths) const
 {
     foreach (const QString &path, filePaths) {
         auto doc = textDocumentFromPath(path);
-        AsnDocumentProcessor dp(doc.get(), path, -1);
+        DocumentProcessor dp(doc.get(), path, -1);
         dp.run();
     }
 }
 
 void ProjectWatcher::removeFiles(const QStringList &filePaths) const
 {
-    AsnParsedDataStorage *storage = AsnParsedDataStorage::instance();
+    ParsedDataStorage *storage = ParsedDataStorage::instance();
     foreach (const QString &path, filePaths)
         storage->removeFile(path);
 }

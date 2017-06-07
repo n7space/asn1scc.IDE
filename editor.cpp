@@ -35,9 +35,9 @@
 
 #include "asn1acnconstants.h"
 #include "document.h"
-#include "asnparseddocument.h"
-#include "asnparseddatastorage.h"
-#include "asnoverviewmodel.h"
+#include "parseddocument.h"
+#include "parseddatastorage.h"
+#include "overviewmodel.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Core;
@@ -50,7 +50,7 @@ EditorWidget::EditorWidget()
     m_commentDefinition.multiLineEnd.clear();
     m_commentDefinition.singleLine = QLatin1Literal("--");
 
-    m_model = new AsnOverviewModel(this);
+    m_model = new OverviewModel(this);
 }
 
 EditorWidget::~EditorWidget()
@@ -70,7 +70,7 @@ void EditorWidget::unCommentSelection()
     Utils::unCommentSelection(this, m_commentDefinition);
 }
 
-AsnOverviewModel *EditorWidget::getOverviewModel() const
+OverviewModel *EditorWidget::getOverviewModel() const
 {
     return m_model;
 }
@@ -99,9 +99,9 @@ void EditorWidget::onAsnDocumentUpdated(const QTextDocument &document)
     Q_UNUSED(document);
 
     QString filePath = textDocument()->filePath().toString();
-    AsnParsedDataStorage *storage = AsnParsedDataStorage::instance();
+    ParsedDataStorage *storage = ParsedDataStorage::instance();
 
-    std::shared_ptr<AsnParsedDocument> parsedDocument = storage->getDataForFile(filePath);
+    std::shared_ptr<ParsedDocument> parsedDocument = storage->getDataForFile(filePath);
     if (parsedDocument == nullptr)
         return;
 

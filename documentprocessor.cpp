@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "asndocumentprocessor.h"
+#include "documentprocessor.h"
 
 #include <QTextCursor>
 #include <QXmlStreamReader>
@@ -34,7 +34,7 @@
 #include "data/modules.h"
 #include "data/definitions.h"
 
-#include "asnparseddatastorage.h"
+#include "parseddatastorage.h"
 #include "astxmlparser.h"
 
 using namespace Asn1Acn::Internal;
@@ -42,31 +42,31 @@ using namespace Asn1Acn::Internal;
 static const QString SEPARATOR_REG_EXP("\\s");
 static const QString XML_VERSION_TAG("?xml version=\"1.0\"");
 
-AsnDocumentProcessor::AsnDocumentProcessor(const QTextDocument *doc,
-                                           const QString &filePath,
-                                           int revision) :
+DocumentProcessor::DocumentProcessor(const QTextDocument *doc,
+                                     const QString &filePath,
+                                     int revision) :
     m_textDocument(doc),
     m_filePath(filePath),
     m_revision(revision)
 {
 }
 
-void AsnDocumentProcessor::run() const
+void DocumentProcessor::run() const
 {
-    AsnParsedDataStorage *model = AsnParsedDataStorage::instance();
+    ParsedDataStorage *model = ParsedDataStorage::instance();
 
-    std::shared_ptr<AsnParsedDocument> oldDoc = model->getDataForFile(m_filePath);
+    std::shared_ptr<ParsedDocument> oldDoc = model->getDataForFile(m_filePath);
     if (!oldDoc || oldDoc->getRevision() != m_revision) {
-        std::unique_ptr<AsnParsedDocument> newDoc = parse();
+        std::unique_ptr<ParsedDocument> newDoc = parse();
         model->addFile(m_filePath, std::move(newDoc));
     }
 
-    // TODO: emit in AsnParsedDataStorage could be used?
+    // TODO: emit in ParsedDataStorage could be used?
     // emit after parsing is finished
     emit asnDocumentUpdated(*m_textDocument);
 }
 
-std::unique_ptr<AsnParsedDocument> AsnDocumentProcessor::parse() const
+std::unique_ptr<ParsedDocument> DocumentProcessor::parse() const
 {
     // In this place parsing procedure should be executed
     QTextCursor coursor = m_textDocument->find(XML_VERSION_TAG);
@@ -77,7 +77,7 @@ std::unique_ptr<AsnParsedDocument> AsnDocumentProcessor::parse() const
     return parseStubbed();
 }
 
-std::unique_ptr<AsnParsedDocument> AsnDocumentProcessor::parseFromXml() const
+std::unique_ptr<ParsedDocument> DocumentProcessor::parseFromXml() const
 {
     QXmlStreamReader reader;
     reader.addData(m_textDocument->toPlainText());
@@ -87,18 +87,18 @@ std::unique_ptr<AsnParsedDocument> AsnDocumentProcessor::parseFromXml() const
 
     std::unique_ptr<Data::Modules> parsedData = parser.takeData();
 
-    return std::unique_ptr<AsnParsedDocument>(new AsnParsedDocument(m_filePath,
-                                                                    m_textDocument->revision(),
-                                                                    std::move(parsedData)));
+    return std::unique_ptr<ParsedDocument>(new ParsedDocument(m_filePath,
+                                                              m_textDocument->revision(),
+                                                              std::move(parsedData)));
 }
 
-std::unique_ptr<AsnParsedDocument> AsnDocumentProcessor::parseStubbed() const
+std::unique_ptr<ParsedDocument> DocumentProcessor::parseStubbed() const
 {
     QString docPlainText = m_textDocument->toPlainText();
     QStringList splittedDoc = docPlainText.split(QRegularExpression(SEPARATOR_REG_EXP),
                                                  QString::SkipEmptyParts);
 
-    return std::unique_ptr<AsnParsedDocument>(new AsnParsedDocument(m_filePath,
-                                                                    m_textDocument->revision(),
-                                                                    splittedDoc));
+    return std::unique_ptr<ParsedDocument>(new ParsedDocument(m_filePath,
+                                                              m_textDocument->revision(),
+                                                              splittedDoc));
 }

@@ -25,35 +25,33 @@
 
 #include <memory>
 
-#include "asnparseddocument.h"
+#include "parseddocument.h"
 
 using namespace Asn1Acn::Internal;
 
-AsnParsedDocument::AsnParsedDocument() :
+ParsedDocument::ParsedDocument() :
     m_filePath(QString()),
     m_revision(-1)
 {
 }
 
-AsnParsedDocument::AsnParsedDocument(const QString &filePath,
-                                     int revision,
-                                     const QStringList &wordList) :
+ParsedDocument::ParsedDocument(const QString &filePath, int revision, const QStringList &wordList) :
     m_filePath(filePath),
     m_revision(revision)
 {
-    m_parsedTreeRoot = std::shared_ptr<AsnParsedObject>(new AsnParsedObject(m_filePath));
+    m_parsedTreeRoot = std::shared_ptr<ParsedObject>(new ParsedObject(m_filePath));
 
     foreach (const QString &entry, wordList)
-        m_parsedTreeRoot->addChild(std::shared_ptr<AsnParsedObject>(new AsnParsedObject(QVariant(entry))));
+        m_parsedTreeRoot->addChild(std::shared_ptr<ParsedObject>(new ParsedObject(QVariant(entry))));
 }
 
-AsnParsedDocument::AsnParsedDocument(const QString &filePath,
-                                     int revision,
-                                     std::unique_ptr<Data::Modules> parsedData) :
+ParsedDocument::ParsedDocument(const QString &filePath,
+                               int revision,
+                               std::unique_ptr<Data::Modules> parsedData) :
     m_filePath(filePath),
     m_revision(revision)
 {
-    m_parsedTreeRoot = std::shared_ptr<AsnParsedObject>(new AsnParsedObject(m_filePath));
+    m_parsedTreeRoot = std::shared_ptr<ParsedObject>(new ParsedObject(m_filePath));
 
     using DefinitionsMap = Data::Modules::DefinitionsMap;
     using Types = Data::Definitions::Types;
@@ -61,13 +59,13 @@ AsnParsedDocument::AsnParsedDocument(const QString &filePath,
     DefinitionsMap::const_iterator defIt = parsedData->definitions().begin();
     while (defIt != parsedData->definitions().end()) {
         QString definitionName = defIt->first;
-        auto definition = std::shared_ptr<AsnParsedObject>(new AsnParsedObject(definitionName));
+        auto definition = std::shared_ptr<ParsedObject>(new ParsedObject(definitionName));
 
         const Types &types = defIt->second->types();
         Types::const_iterator typeIt = types.begin();
         while (typeIt != types.end()) {
             QString typeName = typeIt->first;
-            definition->addChild(std::shared_ptr<AsnParsedObject>(new AsnParsedObject(typeName)));
+            definition->addChild(std::shared_ptr<ParsedObject>(new ParsedObject(typeName)));
             typeIt++;
         }
 
@@ -76,12 +74,12 @@ AsnParsedDocument::AsnParsedDocument(const QString &filePath,
     }
 }
 
-int AsnParsedDocument::getRevision() const
+int ParsedDocument::getRevision() const
 {
     return m_revision;
 }
 
-std::shared_ptr<AsnParsedObject> AsnParsedDocument::getTreeRoot()
+std::shared_ptr<ParsedObject> ParsedDocument::getTreeRoot()
 {
     return m_parsedTreeRoot;
 }

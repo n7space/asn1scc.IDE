@@ -63,17 +63,17 @@ SOURCES += \
     acneditor.cpp \
     acndocument.cpp \
     editor.cpp \
-    asnoverviewmodel.cpp \
-    asndocumentprocessor.cpp \
-    asnparseddatastorage.cpp \
-    asnparseddocument.cpp \
+    overviewmodel.cpp \
+    documentprocessor.cpp \
+    parseddatastorage.cpp \
+    parseddocument.cpp \
     acnhighlighter.cpp \
     highlighter.cpp \
-    asnstructuresview.cpp \
+    structuresview.cpp \
     astxmlparser.cpp \
-    asnparsedobject.cpp \
+    parsedobject.cpp \
     projectwatcher.cpp \
-    datastructureswidget.cpp \
+    overviewwidget.cpp \
     document.cpp
 
 HEADERS += \
@@ -90,21 +90,21 @@ HEADERS += \
     acneditor.h \
     acndocument.h \
     editor.h \
-    asnoverviewmodel.h \
-    asndocumentprocessor.h \
-    asnparseddatastorage.h \
-    asnparseddocument.h \
+    overviewmodel.h \
+    documentprocessor.h \
+    parseddatastorage.h \
+    parseddocument.h \
     acnhighlighter.h \
     highlighter.h \
-    asnstructuresview.h \
+    structuresview.h \
     astxmlparser.h \
     data/sourcelocation.h \
     data/typeassignment.h \
     data/definitions.h \
     data/modules.h \
-    asnparsedobject.h \
+    parsedobject.h \
     projectwatcher.h \
-    datastructureswidget.h \
+    overviewwidget.h \
     document.h
 
 DISTFILES += \

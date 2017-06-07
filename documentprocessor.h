@@ -25,35 +25,36 @@
 
 #pragma once
 
-#include <coreplugin/inavigationwidgetfactory.h>
+#include <QString>
+#include <QTextDocument>
 
-#include "asnparsedobject.h"
-#include "datastructureswidget.h"
+#include <texteditor/textdocument.h>
+
+#include <memory>
+
+#include "parseddocument.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnStructuresViewWidget : public DataStructuresWidget
+class DocumentProcessor : public QObject
 {
     Q_OBJECT
 public:
-    AsnStructuresViewWidget();
-    ~AsnStructuresViewWidget();
+    DocumentProcessor(const QTextDocument *doc, const QString &filePath, int revision);
+    void run() const;
+
+signals:
+    void asnDocumentUpdated(const QTextDocument &doc) const;
 
 private:
-    void modelUpdated();
-    void refreshModel();
+    std::unique_ptr<ParsedDocument> parse() const;
+    std::unique_ptr<ParsedDocument> parseFromXml() const;
+    std::unique_ptr<ParsedDocument> parseStubbed() const;
 
-    std::shared_ptr<AsnParsedObject> m_modelRoot;
-};
-
-class AsnStructuresViewFactory : public Core::INavigationWidgetFactory
-{
-    Q_OBJECT
-public:
-    AsnStructuresViewFactory();
-
-    Core::NavigationView createWidget() override;
+    const QTextDocument *m_textDocument;
+    const QString m_filePath;
+    const int m_revision;
 };
 
 } // namespace Internal

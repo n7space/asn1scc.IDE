@@ -29,13 +29,13 @@
 
 #include <texteditor/ioutlinewidget.h>
 
-#include "datastructureswidget.h"
+#include "overviewwidget.h"
 #include "editor.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class OutlineWidget : public DataStructuresWidget
+class OutlineWidget : public OverviewWidget
 {
     Q_OBJECT
 public:

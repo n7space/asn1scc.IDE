@@ -23,34 +23,34 @@
 **
 ****************************************************************************/
 
-#include "asnstructuresview.h"
+#include "structuresview.h"
 
-#include "asnparseddatastorage.h"
+#include "parseddatastorage.h"
 #include "asn1acnconstants.h"
-#include "asnparsedobject.h"
+#include "parsedobject.h"
 
 using namespace Asn1Acn::Internal;
 
-AsnStructuresViewWidget::AsnStructuresViewWidget() :
-    DataStructuresWidget(new AsnOverviewModel),
-    m_modelRoot(std::shared_ptr<AsnParsedObject>(new AsnParsedObject))
+StructuresViewWidget::StructuresViewWidget() :
+    OverviewWidget(new OverviewModel),
+    m_modelRoot(std::shared_ptr<ParsedObject>(new ParsedObject))
 {
-    connect(AsnParsedDataStorage::instance(), &AsnParsedDataStorage::storageUpdated,
-            this, &AsnStructuresViewWidget::modelUpdated);
+    connect(ParsedDataStorage::instance(), &ParsedDataStorage::storageUpdated,
+            this, &StructuresViewWidget::modelUpdated);
 
     modelUpdated();
 }
 
-AsnStructuresViewWidget::~AsnStructuresViewWidget()
+StructuresViewWidget::~StructuresViewWidget()
 {
     delete m_model;
 }
 
-void AsnStructuresViewWidget::refreshModel()
+void StructuresViewWidget::refreshModel()
 {
     m_modelRoot->detachChildren();
 
-    AsnParsedDataStorage *instance = AsnParsedDataStorage::instance();
+    ParsedDataStorage *instance = ParsedDataStorage::instance();
     auto documents = instance->getAllParsedFiles();
     for (const auto &document : documents)
         m_modelRoot->addChild(document->getTreeRoot());
@@ -58,20 +58,20 @@ void AsnStructuresViewWidget::refreshModel()
     m_model->setRootNode(m_modelRoot);
 }
 
-void AsnStructuresViewWidget::modelUpdated()
+void StructuresViewWidget::modelUpdated()
 {
     refreshModel();
-    DataStructuresWidget::modelUpdated();
+    OverviewWidget::modelUpdated();
 }
 
-AsnStructuresViewFactory::AsnStructuresViewFactory()
+StructuresViewFactory::StructuresViewFactory()
 {
     setDisplayName(tr("Structures View"));
     setPriority(500);
     setId(Constants::ASN_STRUCTURES_VIEW_ID);
 }
 
-Core::NavigationView AsnStructuresViewFactory::createWidget()
+Core::NavigationView StructuresViewFactory::createWidget()
 {
-    return Core::NavigationView(new AsnStructuresViewWidget);
+    return Core::NavigationView(new StructuresViewWidget);
 }

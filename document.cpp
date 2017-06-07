@@ -28,7 +28,7 @@
 #include <coreplugin/idocument.h>
 
 #include "asn1acnconstants.h"
-#include "asndocumentprocessor.h"
+#include "documentprocessor.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -65,11 +65,11 @@ void Document::onFilePathChanged(const Utils::FileName &oldPath, const Utils::Fi
 void Document::processDocument()
 {
     QTextDocument *currentDocument = document();
-    AsnDocumentProcessor docProcessor(currentDocument,
-                                      filePath().toString(),
-                                      currentDocument->revision());
+    DocumentProcessor docProcessor(currentDocument,
+                                   filePath().toString(),
+                                   currentDocument->revision());
 
-    connect(&docProcessor, &AsnDocumentProcessor::asnDocumentUpdated,
+    connect(&docProcessor, &DocumentProcessor::asnDocumentUpdated,
             this, &Document::documentUpdated);
 
     docProcessor.run();

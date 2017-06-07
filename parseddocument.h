@@ -25,38 +25,36 @@
 
 #pragma once
 
-#include <utils/navigationtreeview.h>
+#include <QString>
+#include <QList>
 
-#include <memory>
+#include "data/modules.h"
+#include "data/definitions.h"
 
-#include "asnparseddocument.h"
+#include "parsedobject.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnOverviewModel : public QAbstractItemModel
+class ParsedDocument
 {
-    Q_OBJECT
 public:
-    explicit AsnOverviewModel(QObject *parent = 0);
-    ~AsnOverviewModel();
+    ParsedDocument();
+    ParsedDocument(const QString &filePath, int revision, const QStringList &list);
+    ParsedDocument(const QString &filePath,
+                   int revision,
+                   std::unique_ptr<Data::Modules> parsedData);
 
-    QVariant data(const QModelIndex &index, int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const override;
-    QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    std::shared_ptr<ParsedObject> getTreeRoot();
 
-    void setRootNode(std::shared_ptr<AsnParsedObject> root);
+    int getRevision() const;
 
 private:
-    const AsnParsedObject *getValidNode(const QModelIndex &index) const;
+    QString m_filePath;
+    int m_revision;
 
-    std::shared_ptr<AsnParsedObject> m_rootItem;
+    std::shared_ptr<ParsedObject> m_parsedTreeRoot;
+    std::unique_ptr<Data::Modules> parsedData;
 };
 
 } // namespace Internal

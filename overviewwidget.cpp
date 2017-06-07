@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "datastructureswidget.h"
+#include "overviewwidget.h"
 
 #include <QVBoxLayout>
 #include <QTreeView>
@@ -37,12 +37,12 @@
 
 using namespace Asn1Acn::Internal;
 
-DataStructuresTreeView::DataStructuresTreeView(QWidget *parent) :
+OverviewTreeView::OverviewTreeView(QWidget *parent) :
     Utils::NavigationTreeView(parent)
 {
 }
 
-void DataStructuresTreeView::contextMenuEvent(QContextMenuEvent *event)
+void OverviewTreeView::contextMenuEvent(QContextMenuEvent *event)
 {
     Q_UNUSED(event);
 
@@ -61,8 +61,8 @@ void DataStructuresTreeView::contextMenuEvent(QContextMenuEvent *event)
     event->accept();
 }
 
-DataStructuresWidget::DataStructuresWidget(AsnOverviewModel *model) :
-    m_treeView(new DataStructuresTreeView(this)),
+OverviewWidget::OverviewWidget(OverviewModel *model) :
+    m_treeView(new OverviewTreeView(this)),
     m_model(model)
 {
     QVBoxLayout *layout = new QVBoxLayout;
@@ -74,17 +74,17 @@ DataStructuresWidget::DataStructuresWidget(AsnOverviewModel *model) :
     m_treeView->setModel(m_model);
 }
 
-QList<QAction *> DataStructuresWidget::filterMenuActions() const
+QList<QAction *> OverviewWidget::filterMenuActions() const
 {
     return QList<QAction *>();
 }
 
-void DataStructuresWidget::setCursorSynchronization(bool syncWithCursor)
+void OverviewWidget::setCursorSynchronization(bool syncWithCursor)
 {
     Q_UNUSED(syncWithCursor);
 }
 
-void DataStructuresWidget::modelUpdated()
+void OverviewWidget::modelUpdated()
 {
     m_treeView->expandAll();
 }

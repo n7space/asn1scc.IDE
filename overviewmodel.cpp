@@ -23,50 +23,50 @@
 **
 ****************************************************************************/
 
-#include "asnoverviewmodel.h"
-#include "asnparsedobject.h"
+#include "overviewmodel.h"
+#include "parsedobject.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-AsnOverviewModel::AsnOverviewModel(QObject *parent) :
+OverviewModel::OverviewModel(QObject *parent) :
     QAbstractItemModel(parent),
     m_rootItem(nullptr)
 {
 }
 
-AsnOverviewModel::~AsnOverviewModel()
+OverviewModel::~OverviewModel()
 {
 }
 
-int AsnOverviewModel::columnCount(const QModelIndex &parent) const
+int OverviewModel::columnCount(const QModelIndex &parent) const
 {
-    const AsnParsedObject *symbol = getValidNode(parent);
+    const ParsedObject *symbol = getValidNode(parent);
 
     return symbol != nullptr ? symbol->columnCount() : 0;
 }
 
-int AsnOverviewModel::rowCount(const QModelIndex &parent) const
+int OverviewModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.column() > 0)
         return 0;
 
-    const AsnParsedObject *symbol = getValidNode(parent);
+    const ParsedObject *symbol = getValidNode(parent);
 
     return symbol != nullptr ? symbol->childrenCount() : 0;
 }
 
-QVariant AsnOverviewModel::data(const QModelIndex &index, int role) const
+QVariant OverviewModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || role != Qt::DisplayRole)
         return QVariant();
 
-    AsnParsedObject *item = static_cast<AsnParsedObject *>(index.internalPointer());
+    ParsedObject *item = static_cast<ParsedObject *>(index.internalPointer());
 
     return item->data();
 }
 
-Qt::ItemFlags AsnOverviewModel::flags(const QModelIndex &index) const
+Qt::ItemFlags OverviewModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
@@ -74,7 +74,7 @@ Qt::ItemFlags AsnOverviewModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
 }
 
-QVariant AsnOverviewModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant OverviewModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(section);
     Q_UNUSED(orientation);
@@ -83,37 +83,37 @@ QVariant AsnOverviewModel::headerData(int section, Qt::Orientation orientation, 
     return QVariant();
 }
 
-QModelIndex AsnOverviewModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex OverviewModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    const AsnParsedObject *parentItem = getValidNode(parent);
+    const ParsedObject *parentItem = getValidNode(parent);
     if (parentItem == nullptr)
         return QModelIndex();
 
-    AsnParsedObject *childItem = parentItem->childAt(row);
+    ParsedObject *childItem = parentItem->childAt(row);
     if (childItem == nullptr)
         return QModelIndex();
 
     return createIndex(row, column, childItem);
 }
 
-QModelIndex AsnOverviewModel::parent(const QModelIndex &index) const
+QModelIndex OverviewModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid())
         return QModelIndex();
 
-    AsnParsedObject *child = static_cast<AsnParsedObject *>(index.internalPointer());
-    const AsnParsedObject *parent = child->parent();
+    ParsedObject *child = static_cast<ParsedObject *>(index.internalPointer());
+    const ParsedObject *parent = child->parent();
 
     if (parent == nullptr || parent == m_rootItem.get())
         return QModelIndex();
 
-    return createIndex(parent->row(), 0, const_cast<AsnParsedObject *>(parent));
+    return createIndex(parent->row(), 0, const_cast<ParsedObject *>(parent));
 }
 
-void AsnOverviewModel::setRootNode(std::shared_ptr<AsnParsedObject> root)
+void OverviewModel::setRootNode(std::shared_ptr<ParsedObject> root)
 {
     beginResetModel();
 
@@ -122,14 +122,14 @@ void AsnOverviewModel::setRootNode(std::shared_ptr<AsnParsedObject> root)
     endResetModel();
 }
 
-const AsnParsedObject *AsnOverviewModel::getValidNode(const QModelIndex &index) const
+const ParsedObject *OverviewModel::getValidNode(const QModelIndex &index) const
 {
-    AsnParsedObject *node = nullptr;
+    ParsedObject *node = nullptr;
 
     if (!index.isValid())
         node = m_rootItem.get();
     else
-        node = static_cast<AsnParsedObject *>(index.internalPointer());
+        node = static_cast<ParsedObject *>(index.internalPointer());
 
     return node;
 }

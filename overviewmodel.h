@@ -25,40 +25,39 @@
 
 #pragma once
 
-#include <texteditor/ioutlinewidget.h>
-
 #include <utils/navigationtreeview.h>
 
-#include "asnoverviewmodel.h"
+#include <memory>
+
+#include "parseddocument.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class DataStructuresTreeView : public Utils::NavigationTreeView
+class OverviewModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    DataStructuresTreeView(QWidget *parent);
+    explicit OverviewModel(QObject *parent = 0);
+    ~OverviewModel();
 
-    void contextMenuEvent(QContextMenuEvent *event) override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const override;
+    QModelIndex index(int row, int column,
+                      const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+
+    void setRootNode(std::shared_ptr<ParsedObject> root);
+
+private:
+    const ParsedObject *getValidNode(const QModelIndex &index) const;
+
+    std::shared_ptr<ParsedObject> m_rootItem;
 };
-
-class DataStructuresWidget : public TextEditor::IOutlineWidget
-{
-    Q_OBJECT
-public:
-    DataStructuresWidget(AsnOverviewModel *model);
-
-    QList<QAction *> filterMenuActions() const override;
-    void setCursorSynchronization(bool syncWithCursor) override;
-
-protected:
-    void modelUpdated();
-    DataStructuresTreeView *m_treeView;
-    AsnOverviewModel *m_model;
-};
-
-
 
 } // namespace Internal
 } // namespace Asn1Acn

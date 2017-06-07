@@ -25,36 +25,37 @@
 
 #pragma once
 
-#include <QString>
-#include <QTextDocument>
+#include <texteditor/ioutlinewidget.h>
 
-#include <texteditor/textdocument.h>
+#include <utils/navigationtreeview.h>
 
-#include <memory>
-
-#include "asnparseddocument.h"
+#include "overviewmodel.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnDocumentProcessor : public QObject
+class OverviewTreeView : public Utils::NavigationTreeView
 {
     Q_OBJECT
 public:
-    AsnDocumentProcessor(const QTextDocument *doc, const QString &filePath, int revision);
-    void run() const;
+    OverviewTreeView(QWidget *parent);
 
-signals:
-    void asnDocumentUpdated(const QTextDocument &doc) const;
+    void contextMenuEvent(QContextMenuEvent *event) override;
+};
 
-private:
-    std::unique_ptr<AsnParsedDocument> parse() const;
-    std::unique_ptr<AsnParsedDocument> parseFromXml() const;
-    std::unique_ptr<AsnParsedDocument> parseStubbed() const;
+class OverviewWidget : public TextEditor::IOutlineWidget
+{
+    Q_OBJECT
+public:
+    OverviewWidget(OverviewModel *model);
 
-    const QTextDocument *m_textDocument;
-    const QString m_filePath;
-    const int m_revision;
+    QList<QAction *> filterMenuActions() const override;
+    void setCursorSynchronization(bool syncWithCursor) override;
+
+protected:
+    void modelUpdated();
+    OverviewTreeView *m_treeView;
+    OverviewModel *m_model;
 };
 
 } // namespace Internal

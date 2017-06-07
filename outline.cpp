@@ -37,7 +37,7 @@
 using namespace Asn1Acn::Internal;
 
 OutlineWidget::OutlineWidget(EditorWidget *editor) :
-    DataStructuresWidget(editor->getOverviewModel()),
+    OverviewWidget(editor->getOverviewModel()),
     m_editor(editor)
 {
     connect(m_model, &QAbstractItemModel::modelReset,

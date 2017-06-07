@@ -23,14 +23,14 @@
 **
 ****************************************************************************/
 
-#include "asnparseddatastorage.h"
+#include "parseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
 
-static AsnParsedDataStorage *m_instance;
+static ParsedDataStorage *m_instance;
 static QMutex m_instanceMutex;
 
-AsnParsedDataStorage *AsnParsedDataStorage::instance()
+ParsedDataStorage *ParsedDataStorage::instance()
 {
     if (m_instance)
         return m_instance;
@@ -38,34 +38,33 @@ AsnParsedDataStorage *AsnParsedDataStorage::instance()
     QMutexLocker locker(&m_instanceMutex);
 
     if (!m_instance)
-        m_instance = new AsnParsedDataStorage;
+        m_instance = new ParsedDataStorage;
 
     return m_instance;
 }
 
-std::shared_ptr<AsnParsedDocument>
-AsnParsedDataStorage::getDataForFile(const QString &filePath) const
+std::shared_ptr<ParsedDocument>
+ParsedDataStorage::getDataForFile(const QString &filePath) const
 {
     QMutexLocker locker(&m_itemsMutex);
 
     return m_items.contains(filePath) ? m_items.value(filePath) : nullptr;
 }
 
-QList<std::shared_ptr<AsnParsedDocument> >
-AsnParsedDataStorage::getAllParsedFiles() const
+QList<std::shared_ptr<ParsedDocument> >
+ParsedDataStorage::getAllParsedFiles() const
 {
     QMutexLocker locker(&m_itemsMutex);
 
     return m_items.values();
 }
 
-void AsnParsedDataStorage::addFile(const QString &filePath,
-                                   std::unique_ptr<AsnParsedDocument> newFile)
+void ParsedDataStorage::addFile(const QString &filePath, std::unique_ptr<ParsedDocument> newFile)
 {
     QMutexLocker locker(&m_itemsMutex);
 
     if (m_items.contains(filePath) == true) {
-        std::shared_ptr<AsnParsedDocument> oldFile = m_items.value(filePath);
+        std::shared_ptr<ParsedDocument> oldFile = m_items.value(filePath);
         if (oldFile->getRevision() == newFile->getRevision())
             return;
     }
@@ -77,7 +76,7 @@ void AsnParsedDataStorage::addFile(const QString &filePath,
     emit storageUpdated();
 }
 
-void AsnParsedDataStorage::removeFile(const QString &filePath)
+void ParsedDataStorage::removeFile(const QString &filePath)
 {
     QMutexLocker locker(&m_itemsMutex);
     if (m_items.contains(filePath) == false)

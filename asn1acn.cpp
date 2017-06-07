@@ -40,7 +40,7 @@
 #include "asneditor.h"
 #include "outline.h"
 #include "asnsnippetprovider.h"
-#include "asnstructuresview.h"
+#include "structuresview.h"
 #include "projectwatcher.h"
 
 #include "acneditor.h"
@@ -78,7 +78,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     Utils::MimeDatabase::addMimeTypes(":/asn1acn/asn1acn.mimetypes.xml");
 
     addAutoReleasedObject(new AsnEditorFactory);
-    addAutoReleasedObject(new AsnStructuresViewFactory);
+    addAutoReleasedObject(new StructuresViewFactory);
     addAutoReleasedObject(new AsnSnippetProvider);
 
     addAutoReleasedObject(new AcnEditorFactory);

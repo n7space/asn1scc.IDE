@@ -25,36 +25,35 @@
 
 #pragma once
 
-#include <memory>
+#include <coreplugin/inavigationwidgetfactory.h>
 
-#include <QVariant>
+#include "parsedobject.h"
+#include "overviewwidget.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnParsedObject
+class StructuresViewWidget : public OverviewWidget
 {
+    Q_OBJECT
 public:
-    AsnParsedObject() = default;
-    AsnParsedObject(const QVariant &data);
-    ~AsnParsedObject();
+    StructuresViewWidget();
+    ~StructuresViewWidget();
 
-    int childrenCount() const;
-    AsnParsedObject *childAt(int idx) const;
-    void addChild(std::shared_ptr<AsnParsedObject> child);
-    void detachChildren();
+private:
+    void modelUpdated();
+    void refreshModel();
 
-    const QVariant &data() const;
+    std::shared_ptr<ParsedObject> m_modelRoot;
+};
 
-    const AsnParsedObject *parent() const;
+class StructuresViewFactory : public Core::INavigationWidgetFactory
+{
+    Q_OBJECT
+public:
+    StructuresViewFactory();
 
-    int columnCount() const;
-    int row() const;
-
-protected:
-    QVariant m_data;
-    AsnParsedObject *m_parent;
-    QList<std::shared_ptr<AsnParsedObject> > m_children;
+    Core::NavigationView createWidget() override;
 };
 
 } // namespace Internal

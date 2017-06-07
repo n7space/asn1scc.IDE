@@ -29,7 +29,7 @@
 
 #include <utils/uncommentselection.h>
 
-#include "asnoverviewmodel.h"
+#include "overviewmodel.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -46,13 +46,13 @@ public:
 
     void unCommentSelection() override;
 
-    AsnOverviewModel *getOverviewModel() const;
+    OverviewModel *getOverviewModel() const;
 
 protected:
     void contextMenuEvent(QContextMenuEvent *) override;
     void onAsnDocumentUpdated(const QTextDocument &document);
 
-    AsnOverviewModel *m_model;
+    OverviewModel *m_model;
     Utils::CommentDefinition m_commentDefinition;
 };
 
