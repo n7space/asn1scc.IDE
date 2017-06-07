@@ -23,34 +23,34 @@
 **
 ****************************************************************************/
 
-#include "asnparsedobject.h"
+#include "parsedobject.h"
 
 #include "utils/qtcassert.h"
 
 using namespace Asn1Acn::Internal;
 
-AsnParsedObject::AsnParsedObject(const QVariant& data) :
+ParsedObject::ParsedObject(const QVariant& data) :
     m_data(data),
     m_parent(nullptr)
 {
 }
 
-AsnParsedObject::~AsnParsedObject()
+ParsedObject::~ParsedObject()
 {
     detachChildren();
 }
 
-int AsnParsedObject::childrenCount() const
+int ParsedObject::childrenCount() const
 {
     return m_children.count();
 }
 
-AsnParsedObject* AsnParsedObject::childAt(int idx) const
+ParsedObject* ParsedObject::childAt(int idx) const
 {
     return idx < m_children.size() ? m_children[idx].get() : nullptr;
 }
 
-void AsnParsedObject::addChild(std::shared_ptr<AsnParsedObject> child)
+void ParsedObject::addChild(std::shared_ptr<ParsedObject> child)
 {
     QTC_ASSERT(child->m_parent == this || child->m_parent == nullptr, return);
 
@@ -58,33 +58,33 @@ void AsnParsedObject::addChild(std::shared_ptr<AsnParsedObject> child)
     child->m_parent = this;
 }
 
-void AsnParsedObject::detachChildren()
+void ParsedObject::detachChildren()
 {
-    foreach (std::shared_ptr<AsnParsedObject> child, m_children)
+    foreach (std::shared_ptr<ParsedObject> child, m_children)
         child->m_parent = nullptr;
 
     m_children.clear();
 }
 
-const QVariant &AsnParsedObject::data() const
+const QVariant &ParsedObject::data() const
 {
     return m_data;
 }
 
-const AsnParsedObject* AsnParsedObject::parent() const
+const ParsedObject* ParsedObject::parent() const
 {
     return m_parent;
 }
 
-int AsnParsedObject::columnCount() const
+int ParsedObject::columnCount() const
 {
     return 1;
 }
 
-int AsnParsedObject::row() const
+int ParsedObject::row() const
 {
     int idx = 0;
-    foreach (const std::shared_ptr<AsnParsedObject> &obj, m_parent->m_children) {
+    foreach (const std::shared_ptr<ParsedObject> &obj, m_parent->m_children) {
         if (obj.get() == this)
             return idx;
 

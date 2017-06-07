@@ -25,47 +25,35 @@
 
 #pragma once
 
-#include "asneditor.h"
+#include <coreplugin/inavigationwidgetfactory.h>
 
-#include <texteditor/ioutlinewidget.h>
-
-#include <utils/navigationtreeview.h>
+#include "parsedobject.h"
+#include "overviewwidget.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnOutlineTreeView : public Utils::NavigationTreeView
+class StructuresViewWidget : public OverviewWidget
 {
     Q_OBJECT
 public:
-    AsnOutlineTreeView(QWidget *parent);
-
-    void contextMenuEvent(QContextMenuEvent *event) override;
-};
-
-class AsnOutlineWidget : public TextEditor::IOutlineWidget
-{
-    Q_OBJECT
-public:
-    AsnOutlineWidget(AsnEditorWidget *editor);
-
-    QList<QAction *> filterMenuActions() const override;
-    void setCursorSynchronization(bool syncWithCursor) override;
+    StructuresViewWidget();
+    ~StructuresViewWidget();
 
 private:
     void modelUpdated();
+    void refreshModel();
 
-    AsnEditorWidget *m_editor;
-    AsnOutlineTreeView *m_treeView;
-    AsnOverviewModel *m_model;
+    std::shared_ptr<ParsedObject> m_modelRoot;
 };
 
-class AsnOutlineWidgetFactory : public TextEditor::IOutlineWidgetFactory
+class StructuresViewFactory : public Core::INavigationWidgetFactory
 {
     Q_OBJECT
 public:
-    bool supportsEditor(Core::IEditor *editor) const override;
-    TextEditor::IOutlineWidget *createWidget(Core::IEditor *editor) override;
+    StructuresViewFactory();
+
+    Core::NavigationView createWidget() override;
 };
 
 } // namespace Internal

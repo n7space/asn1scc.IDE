@@ -23,31 +23,34 @@
 **
 ****************************************************************************/
 
-#include "asnstructuresview.h"
+#include "structuresview.h"
 
-#include <QVBoxLayout>
-
-#include <coreplugin/idocument.h>
-#include <coreplugin/find/itemviewfind.h>
-#include <coreplugin/editormanager/editormanager.h>
-
-#include "asnparseddatastorage.h"
+#include "parseddatastorage.h"
 #include "asn1acnconstants.h"
-#include "asnparsedobject.h"
-#include "asneditor.h"
+#include "parsedobject.h"
 
 using namespace Asn1Acn::Internal;
 
-AsnStructuresTreeView::AsnStructuresTreeView(QWidget *parent) :
-    Utils::NavigationTreeView(parent)
+StructuresViewWidget::StructuresViewWidget() :
+    OverviewWidget(new OverviewModel),
+    m_modelRoot(std::shared_ptr<ParsedObject>(new ParsedObject))
 {
+    connect(ParsedDataStorage::instance(), &ParsedDataStorage::storageUpdated,
+            this, &StructuresViewWidget::modelUpdated);
+
+    modelUpdated();
 }
 
-void AsnStructuresViewWidget::refreshModel()
+StructuresViewWidget::~StructuresViewWidget()
+{
+    delete m_model;
+}
+
+void StructuresViewWidget::refreshModel()
 {
     m_modelRoot->detachChildren();
 
-    AsnParsedDataStorage *instance = AsnParsedDataStorage::instance();
+    ParsedDataStorage *instance = ParsedDataStorage::instance();
     auto documents = instance->getAllParsedFiles();
     for (const auto &document : documents)
         m_modelRoot->addChild(document->getTreeRoot());
@@ -55,45 +58,20 @@ void AsnStructuresViewWidget::refreshModel()
     m_model->setRootNode(m_modelRoot);
 }
 
-void AsnStructuresViewWidget::dataModelUpdated()
+void StructuresViewWidget::modelUpdated()
 {
     refreshModel();
-    m_treeView->expandAll();
+    OverviewWidget::modelUpdated();
 }
 
-AsnStructuresViewWidget::AsnStructuresViewWidget() :
-    m_treeView(new AsnStructuresTreeView(this)),
-    m_model(new AsnOverviewModel),
-    m_modelRoot(std::shared_ptr<AsnParsedObject>(new AsnParsedObject))
-{
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    layout->addWidget(Core::ItemViewFind::createSearchableWrapper(m_treeView));
-    setLayout(layout);
-
-    refreshModel();
-    m_treeView->setModel(m_model);
-
-    connect(AsnParsedDataStorage::instance(), &AsnParsedDataStorage::storageUpdated,
-            this, &AsnStructuresViewWidget::dataModelUpdated);
-
-    m_treeView->expandAll();
-}
-
-AsnStructuresViewWidget::~AsnStructuresViewWidget()
-{
-    delete m_model;
-}
-
-AsnStructuresViewFactory::AsnStructuresViewFactory()
+StructuresViewFactory::StructuresViewFactory()
 {
     setDisplayName(tr("Structures View"));
     setPriority(500);
     setId(Constants::ASN_STRUCTURES_VIEW_ID);
 }
 
-Core::NavigationView AsnStructuresViewFactory::createWidget()
+Core::NavigationView StructuresViewFactory::createWidget()
 {
-    return Core::NavigationView(new AsnStructuresViewWidget);
+    return Core::NavigationView(new StructuresViewWidget);
 }

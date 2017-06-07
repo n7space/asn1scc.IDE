@@ -23,31 +23,30 @@
 **
 ****************************************************************************/
 
-#include "asnoutline.h"
-
-#include <texteditor/textdocument.h>
-
-#include <coreplugin/find/itemviewfind.h>
-#include <coreplugin/editormanager/editormanager.h>
-#include <utils/qtcassert.h>
+#include "overviewwidget.h"
 
 #include <QVBoxLayout>
+#include <QTreeView>
 #include <QMenu>
+#include <QEvent>
+#include <QAction>
+#include <QList>
 
-namespace Asn1Acn {
-namespace Internal {
 
-AsnOutlineTreeView::AsnOutlineTreeView(QWidget *parent) :
+#include <coreplugin/find/itemviewfind.h>
+
+using namespace Asn1Acn::Internal;
+
+OverviewTreeView::OverviewTreeView(QWidget *parent) :
     Utils::NavigationTreeView(parent)
 {
 }
 
-void AsnOutlineTreeView::contextMenuEvent(QContextMenuEvent *event)
+void OverviewTreeView::contextMenuEvent(QContextMenuEvent *event)
 {
     Q_UNUSED(event);
 
-    // TODO: no need to handle events until the data is stubbed
-    /* if (!event)
+    if (!event)
         return;
 
     QMenu contextMenu;
@@ -59,19 +58,12 @@ void AsnOutlineTreeView::contextMenuEvent(QContextMenuEvent *event)
 
     contextMenu.exec(event->globalPos());
 
-    event->accept(); */
+    event->accept();
 }
 
-void AsnOutlineWidget::modelUpdated()
-{
-    m_treeView->expandAll();
-}
-
-AsnOutlineWidget::AsnOutlineWidget(AsnEditorWidget *editor) :
-    TextEditor::IOutlineWidget(),
-    m_editor(editor),
-    m_treeView(new AsnOutlineTreeView(this)),
-    m_model(m_editor->getOverviewModel())
+OverviewWidget::OverviewWidget(OverviewModel *model) :
+    m_treeView(new OverviewTreeView(this)),
+    m_model(model)
 {
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
@@ -80,37 +72,19 @@ AsnOutlineWidget::AsnOutlineWidget(AsnEditorWidget *editor) :
     setLayout(layout);
 
     m_treeView->setModel(m_model);
-
-    connect(m_model, &QAbstractItemModel::modelReset, this, &AsnOutlineWidget::modelUpdated);
-    modelUpdated();
 }
 
-QList<QAction *> AsnOutlineWidget::filterMenuActions() const
+QList<QAction *> OverviewWidget::filterMenuActions() const
 {
     return QList<QAction *>();
 }
 
-void AsnOutlineWidget::setCursorSynchronization(bool syncWithCursor)
+void OverviewWidget::setCursorSynchronization(bool syncWithCursor)
 {
     Q_UNUSED(syncWithCursor);
 }
 
-bool AsnOutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const
+void OverviewWidget::modelUpdated()
 {
-    return qobject_cast<AsnEditor *>(editor) != nullptr;
+    m_treeView->expandAll();
 }
-
-TextEditor::IOutlineWidget *AsnOutlineWidgetFactory::createWidget(Core::IEditor *editor)
-{
-    AsnEditor *asnEditor = qobject_cast<AsnEditor *>(editor);
-    QTC_ASSERT(asnEditor, return 0);
-
-    AsnEditorWidget *asnEditorWidget = qobject_cast<AsnEditorWidget *>(asnEditor->widget());
-    QTC_ASSERT(asnEditorWidget, return 0);
-
-    AsnOutlineWidget *widget = new AsnOutlineWidget(asnEditorWidget);
-    return widget;
-}
-
-} // namespace Internal
-} // namespace Asn1Acn

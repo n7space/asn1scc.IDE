@@ -25,36 +25,37 @@
 
 #pragma once
 
-#include <memory>
+#include <texteditor/ioutlinewidget.h>
 
-#include <QVariant>
+#include <utils/navigationtreeview.h>
+
+#include "overviewmodel.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnParsedObject
+class OverviewTreeView : public Utils::NavigationTreeView
 {
+    Q_OBJECT
 public:
-    AsnParsedObject() = default;
-    AsnParsedObject(const QVariant &data);
-    ~AsnParsedObject();
+    OverviewTreeView(QWidget *parent);
 
-    int childrenCount() const;
-    AsnParsedObject *childAt(int idx) const;
-    void addChild(std::shared_ptr<AsnParsedObject> child);
-    void detachChildren();
+    void contextMenuEvent(QContextMenuEvent *event) override;
+};
 
-    const QVariant &data() const;
+class OverviewWidget : public TextEditor::IOutlineWidget
+{
+    Q_OBJECT
+public:
+    OverviewWidget(OverviewModel *model);
 
-    const AsnParsedObject *parent() const;
-
-    int columnCount() const;
-    int row() const;
+    QList<QAction *> filterMenuActions() const override;
+    void setCursorSynchronization(bool syncWithCursor) override;
 
 protected:
-    QVariant m_data;
-    AsnParsedObject *m_parent;
-    QList<std::shared_ptr<AsnParsedObject> > m_children;
+    void modelUpdated();
+    OverviewTreeView *m_treeView;
+    OverviewModel *m_model;
 };
 
 } // namespace Internal

@@ -23,29 +23,43 @@
 **
 ****************************************************************************/
 
-#include "acndocument.h"
+#include "outline.h"
 
-#include "asn1acnconstants.h"
-#include "acnhighlighter.h"
+#include <QAbstractItemModel>
+
+#include <texteditor/texteditor.h>
+
+#include <utils/qtcassert.h>
+
+#include "asneditor.h"
+#include "acneditor.h"
 
 using namespace Asn1Acn::Internal;
 
-AcnDocument::AcnDocument()
+OutlineWidget::OutlineWidget(EditorWidget *editor) :
+    OverviewWidget(editor->getOverviewModel()),
+    m_editor(editor)
 {
-    setId(Constants::ACNEDITOR_ID);
-    setSyntaxHighlighter(new AcnHighlighter);
+    connect(m_model, &QAbstractItemModel::modelReset,
+            this, &OutlineWidget::modelUpdated);
 
-    /*
-    setIndenter(new CppTools::CppQtStyleIndenter);
+    modelUpdated();
+}
 
-    connect(this, &TextEditor::TextDocument::tabSettingsChanged,
-            this, &CppEditorDocument::invalidateFormatterCache);
-    connect(this, &Core::IDocument::mimeTypeChanged,
-            this, &CppEditorDocument::onMimeTypeChanged);
+bool OutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const
+{
+    return qobject_cast<AcnEditor *>(editor) != nullptr
+            || qobject_cast<AsnEditor *>(editor) != nullptr;
+}
 
-    connect(this, &Core::IDocument::aboutToReload,
-            this, &CppEditorDocument::onAboutToReload);
-    connect(this, &Core::IDocument::reloadFinished,
-            this, &CppEditorDocument::onReloadFinished);
-    */
+TextEditor::IOutlineWidget *OutlineWidgetFactory::createWidget(Core::IEditor *editor)
+{
+    TextEditor::BaseTextEditor *baseEditor = qobject_cast<TextEditor::BaseTextEditor *>(editor);
+    QTC_ASSERT(baseEditor, return 0);
+
+    EditorWidget *editorWidget = qobject_cast<EditorWidget *>(baseEditor->widget());
+    QTC_ASSERT(editorWidget, return 0);
+
+    OutlineWidget *widget = new OutlineWidget(editorWidget);
+    return widget;
 }

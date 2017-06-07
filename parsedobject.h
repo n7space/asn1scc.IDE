@@ -25,51 +25,36 @@
 
 #pragma once
 
-#include <QWidget>
+#include <memory>
 
-#include <coreplugin/inavigationwidgetfactory.h>
-#include <coreplugin/editormanager/ieditor.h>
-
-#include <utils/navigationtreeview.h>
-
-#include "asnoverviewmodel.h"
+#include <QVariant>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnStructuresTreeView : public Utils::NavigationTreeView
+class ParsedObject
 {
-    Q_OBJECT
 public:
-    AsnStructuresTreeView(QWidget *parent);
-};
+    ParsedObject() = default;
+    ParsedObject(const QVariant &data);
+    ~ParsedObject();
 
-// TODO: AsnStructuresViewWidget class should share base class with AsnOverview
-class AsnStructuresViewWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    AsnStructuresViewWidget();
-    ~AsnStructuresViewWidget();
+    int childrenCount() const;
+    ParsedObject *childAt(int idx) const;
+    void addChild(std::shared_ptr<ParsedObject> child);
+    void detachChildren();
 
-private:
-    void onCurrentEditorChanged(Core::IEditor *editor);
-    void refreshModel();
-    void dataModelUpdated();
+    const QVariant &data() const;
 
-    Utils::NavigationTreeView *m_treeView;
+    const ParsedObject *parent() const;
 
-    AsnOverviewModel *m_model;
-    std::shared_ptr<AsnParsedObject> m_modelRoot;
-};
+    int columnCount() const;
+    int row() const;
 
-class AsnStructuresViewFactory : public Core::INavigationWidgetFactory
-{
-    Q_OBJECT
-public:
-    AsnStructuresViewFactory();
-
-    Core::NavigationView createWidget() override;
+protected:
+    QVariant m_data;
+    ParsedObject *m_parent;
+    QList<std::shared_ptr<ParsedObject> > m_children;
 };
 
 } // namespace Internal

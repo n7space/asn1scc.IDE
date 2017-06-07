@@ -31,32 +31,32 @@
 
 #include <memory>
 
-#include "asnparseddocument.h"
+#include "parseddocument.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnParsedDataStorage : public QObject
+class ParsedDataStorage : public QObject
 {
     Q_OBJECT
 
-    AsnParsedDataStorage() = default;
-    ~AsnParsedDataStorage() = default;
+    ParsedDataStorage() = default;
+    ~ParsedDataStorage() = default;
 
 public:
-    static AsnParsedDataStorage *instance();
+    static ParsedDataStorage *instance();
 
-    std::shared_ptr<AsnParsedDocument> getDataForFile(const QString &filePath) const;
-    QList<std::shared_ptr<AsnParsedDocument> > getAllParsedFiles() const;
+    std::shared_ptr<ParsedDocument> getDataForFile(const QString &filePath) const;
+    QList<std::shared_ptr<ParsedDocument> > getAllParsedFiles() const;
 
-    void addFile(const QString &filePath, std::unique_ptr<AsnParsedDocument> fileData);
+    void addFile(const QString &filePath, std::unique_ptr<ParsedDocument> fileData);
     void removeFile(const QString &filePath);
 
 signals:
     void storageUpdated();
 
 private:
-    QHash<QString, std::shared_ptr<AsnParsedDocument> > m_items;
+    QHash<QString, std::shared_ptr<ParsedDocument> > m_items;
     mutable QMutex m_itemsMutex;
 };
 

@@ -25,6 +25,8 @@
 
 #include "editor.h"
 
+#include <memory>
+
 #include <QMenu>
 #include <QString>
 
@@ -32,6 +34,10 @@
 #include <coreplugin/actionmanager/actioncontainer.h>
 
 #include "asn1acnconstants.h"
+#include "document.h"
+#include "parseddocument.h"
+#include "parseddatastorage.h"
+#include "overviewmodel.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Core;
@@ -43,11 +49,30 @@ EditorWidget::EditorWidget()
     m_commentDefinition.multiLineStart.clear();
     m_commentDefinition.multiLineEnd.clear();
     m_commentDefinition.singleLine = QLatin1Literal("--");
+
+    m_model = new OverviewModel(this);
+}
+
+EditorWidget::~EditorWidget()
+{
+    delete m_model;
+}
+
+void EditorWidget::finalizeInitialization()
+{
+    Document *doc = qobject_cast<Document *>(textDocument());
+    connect(doc, &Document::documentUpdated,
+            this, &EditorWidget::onAsnDocumentUpdated);
 }
 
 void EditorWidget::unCommentSelection()
 {
     Utils::unCommentSelection(this, m_commentDefinition);
+}
+
+OverviewModel *EditorWidget::getOverviewModel() const
+{
+    return m_model;
 }
 
 void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
@@ -68,3 +93,19 @@ void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
         return;
     delete menu;
 }
+
+void EditorWidget::onAsnDocumentUpdated(const QTextDocument &document)
+{
+    Q_UNUSED(document);
+
+    QString filePath = textDocument()->filePath().toString();
+    ParsedDataStorage *storage = ParsedDataStorage::instance();
+
+    std::shared_ptr<ParsedDocument> parsedDocument = storage->getDataForFile(filePath);
+    if (parsedDocument == nullptr)
+        return;
+
+    m_model->setRootNode(parsedDocument->getTreeRoot());
+}
+
+

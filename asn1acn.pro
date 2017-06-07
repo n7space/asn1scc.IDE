@@ -57,22 +57,24 @@ SOURCES += \
     asndocument.cpp \
     asnautocompleter.cpp \
     asncompletionassist.cpp \
-    asnoutline.cpp \
+    outline.cpp \
     asnhighlighter.cpp \
     asnsnippetprovider.cpp \
     acneditor.cpp \
     acndocument.cpp \
     editor.cpp \
-    asnoverviewmodel.cpp \
-    asndocumentprocessor.cpp \
-    asnparseddatastorage.cpp \
-    asnparseddocument.cpp \
+    overviewmodel.cpp \
+    documentprocessor.cpp \
+    parseddatastorage.cpp \
+    parseddocument.cpp \
     acnhighlighter.cpp \
     highlighter.cpp \
-    asnstructuresview.cpp \
+    structuresview.cpp \
     astxmlparser.cpp \
-    asnparsedobject.cpp \
-    projectwatcher.cpp
+    parsedobject.cpp \
+    projectwatcher.cpp \
+    overviewwidget.cpp \
+    document.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -82,26 +84,28 @@ HEADERS += \
     asndocument.h \
     asnautocompleter.h \
     asncompletionassist.h \
-    asnoutline.h \
+    outline.h \
     asnhighlighter.h \
     asnsnippetprovider.h \
     acneditor.h \
     acndocument.h \
     editor.h \
-    asnoverviewmodel.h \
-    asndocumentprocessor.h \
-    asnparseddatastorage.h \
-    asnparseddocument.h \
+    overviewmodel.h \
+    documentprocessor.h \
+    parseddatastorage.h \
+    parseddocument.h \
     acnhighlighter.h \
     highlighter.h \
-    asnstructuresview.h \
+    structuresview.h \
     astxmlparser.h \
     data/sourcelocation.h \
     data/typeassignment.h \
     data/definitions.h \
     data/modules.h \
-    asnparsedobject.h \
-    projectwatcher.h
+    parsedobject.h \
+    projectwatcher.h \
+    overviewwidget.h \
+    document.h
 
 DISTFILES += \
     LICENSE \

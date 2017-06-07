@@ -32,10 +32,12 @@
 
 #include <projectexplorer/session.h>
 
-#include "asndocumentprocessor.h"
-#include "asnparseddatastorage.h"
+#include "documentprocessor.h"
+#include "parseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
+
+static const QString DOCUMENT_FILTER_EXTENSIONS_REGEXP("\\.acn$|\\.asn1?$");
 
 ProjectWatcher::ProjectWatcher()
 {
@@ -93,21 +95,21 @@ QStringList ProjectWatcher::getFilePaths(const QList<ProjectExplorer::FileNode *
 QStringList ProjectWatcher::filterValidFiles(const QStringList &allFiles) const
 {
     // TODO: filtering should be performed using mimetypes?
-    return allFiles.filter(".asn");
+    return allFiles.filter(QRegularExpression(DOCUMENT_FILTER_EXTENSIONS_REGEXP));
 }
 
 void ProjectWatcher::processFiles(const QStringList &filePaths) const
 {
     foreach (const QString &path, filePaths) {
         auto doc = textDocumentFromPath(path);
-        AsnDocumentProcessor dp(doc.get(), path, -1);
+        DocumentProcessor dp(doc.get(), path, -1);
         dp.run();
     }
 }
 
 void ProjectWatcher::removeFiles(const QStringList &filePaths) const
 {
-    AsnParsedDataStorage *storage = AsnParsedDataStorage::instance();
+    ParsedDataStorage *storage = ParsedDataStorage::instance();
     foreach (const QString &path, filePaths)
         storage->removeFile(path);
 }

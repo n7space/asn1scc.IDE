@@ -25,36 +25,38 @@
 
 #pragma once
 
-#include <QString>
-#include <QTextDocument>
-
-#include <texteditor/textdocument.h>
+#include <utils/navigationtreeview.h>
 
 #include <memory>
 
-#include "asnparseddocument.h"
+#include "parseddocument.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnDocumentProcessor : public QObject
+class OverviewModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    AsnDocumentProcessor(const QTextDocument *doc, const QString &filePath, int revision);
-    void run() const;
+    explicit OverviewModel(QObject *parent = 0);
+    ~OverviewModel();
 
-signals:
-    void asnDocumentUpdated(const QTextDocument &doc) const;
+    QVariant data(const QModelIndex &index, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const override;
+    QModelIndex index(int row, int column,
+                      const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+
+    void setRootNode(std::shared_ptr<ParsedObject> root);
 
 private:
-    std::unique_ptr<AsnParsedDocument> parse() const;
-    std::unique_ptr<AsnParsedDocument> parseFromXml() const;
-    std::unique_ptr<AsnParsedDocument> parseStubbed() const;
+    const ParsedObject *getValidNode(const QModelIndex &index) const;
 
-    const QTextDocument *m_textDocument;
-    const QString m_filePath;
-    const int m_revision;
+    std::shared_ptr<ParsedObject> m_rootItem;
 };
 
 } // namespace Internal

@@ -25,11 +25,11 @@
 
 #pragma once
 
+#include <QTextCursor>
+
 #include <texteditor/texteditor.h>
 
 #include "editor.h"
-
-#include "asnoverviewmodel.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -53,21 +53,12 @@ class AsnEditorWidget : public EditorWidget
     Q_OBJECT
 
 public:
-    explicit AsnEditorWidget();
-
-    void finalizeInitialization() override;
-
-    AsnOverviewModel *getOverviewModel() const;
+    explicit AsnEditorWidget() = default;
 
 protected:
     Link findLinkAt(const QTextCursor &,
                     bool resolveTarget = true,
                     bool inNextSplit = false) override;
-
-private:
-    void onAsnDocumentUpdated(const QTextDocument &document);
-
-    AsnOverviewModel *m_model;
 };
 
 } // namespace Internal

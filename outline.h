@@ -23,29 +23,35 @@
 **
 ****************************************************************************/
 
-#include "acndocument.h"
+#pragma once
 
-#include "asn1acnconstants.h"
-#include "acnhighlighter.h"
+#include <coreplugin/editormanager/ieditor.h>
 
-using namespace Asn1Acn::Internal;
+#include <texteditor/ioutlinewidget.h>
 
-AcnDocument::AcnDocument()
+#include "overviewwidget.h"
+#include "editor.h"
+
+namespace Asn1Acn {
+namespace Internal {
+
+class OutlineWidget : public OverviewWidget
 {
-    setId(Constants::ACNEDITOR_ID);
-    setSyntaxHighlighter(new AcnHighlighter);
+    Q_OBJECT
+public:
+    OutlineWidget(EditorWidget *editor);
 
-    /*
-    setIndenter(new CppTools::CppQtStyleIndenter);
+private:
+    EditorWidget *m_editor;
+};
 
-    connect(this, &TextEditor::TextDocument::tabSettingsChanged,
-            this, &CppEditorDocument::invalidateFormatterCache);
-    connect(this, &Core::IDocument::mimeTypeChanged,
-            this, &CppEditorDocument::onMimeTypeChanged);
+class OutlineWidgetFactory : public TextEditor::IOutlineWidgetFactory
+{
+    Q_OBJECT
+public:
+    bool supportsEditor(Core::IEditor *editor) const override;
+    TextEditor::IOutlineWidget *createWidget(Core::IEditor *editor) override;
+};
 
-    connect(this, &Core::IDocument::aboutToReload,
-            this, &CppEditorDocument::onAboutToReload);
-    connect(this, &Core::IDocument::reloadFinished,
-            this, &CppEditorDocument::onReloadFinished);
-    */
-}
+} // namespace Internal
+} // namespace Asn1Acn

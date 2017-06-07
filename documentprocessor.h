@@ -23,29 +23,39 @@
 **
 ****************************************************************************/
 
-#include "acndocument.h"
+#pragma once
 
-#include "asn1acnconstants.h"
-#include "acnhighlighter.h"
+#include <QString>
+#include <QTextDocument>
 
-using namespace Asn1Acn::Internal;
+#include <texteditor/textdocument.h>
 
-AcnDocument::AcnDocument()
+#include <memory>
+
+#include "parseddocument.h"
+
+namespace Asn1Acn {
+namespace Internal {
+
+class DocumentProcessor : public QObject
 {
-    setId(Constants::ACNEDITOR_ID);
-    setSyntaxHighlighter(new AcnHighlighter);
+    Q_OBJECT
+public:
+    DocumentProcessor(const QTextDocument *doc, const QString &filePath, int revision);
+    void run() const;
 
-    /*
-    setIndenter(new CppTools::CppQtStyleIndenter);
+signals:
+    void asnDocumentUpdated(const QTextDocument &doc) const;
 
-    connect(this, &TextEditor::TextDocument::tabSettingsChanged,
-            this, &CppEditorDocument::invalidateFormatterCache);
-    connect(this, &Core::IDocument::mimeTypeChanged,
-            this, &CppEditorDocument::onMimeTypeChanged);
+private:
+    std::unique_ptr<ParsedDocument> parse() const;
+    std::unique_ptr<ParsedDocument> parseFromXml() const;
+    std::unique_ptr<ParsedDocument> parseStubbed() const;
 
-    connect(this, &Core::IDocument::aboutToReload,
-            this, &CppEditorDocument::onAboutToReload);
-    connect(this, &Core::IDocument::reloadFinished,
-            this, &CppEditorDocument::onReloadFinished);
-    */
-}
+    const QTextDocument *m_textDocument;
+    const QString m_filePath;
+    const int m_revision;
+};
+
+} // namespace Internal
+} // namespace Asn1Acn
