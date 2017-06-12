@@ -27,34 +27,44 @@
 
 #include <memory>
 
+#include <QString>
 #include <QVariant>
+#include <QList>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedObject
+class ParsedTreeNode
 {
 public:
-    ParsedObject() = default;
-    ParsedObject(const QVariant &data);
-    ~ParsedObject();
+
+    using ParsedTreeNodePtr = std::shared_ptr<ParsedTreeNode>;
+
+    ParsedTreeNode() = default;
+    ParsedTreeNode(const QString &id);
 
     int childrenCount() const;
-    ParsedObject *childAt(int idx) const;
-    void addChild(std::shared_ptr<ParsedObject> child);
-    void detachChildren();
 
-    const QVariant &data() const;
+    ParsedTreeNodePtr childAt(int idx) const;
+    ParsedTreeNodePtr getChildByName(const QString &name) const;
 
-    const ParsedObject *parent() const;
+    void addChild(ParsedTreeNodePtr child);
+
+    void removeChildByName(const QString &name);
+    void removeChildren();
+
+    QVariant data() const;
+    QString id() const;
+    const ParsedTreeNode *parent() const;
 
     int columnCount() const;
     int row() const;
 
 protected:
-    QVariant m_data;
-    ParsedObject *m_parent;
-    QList<std::shared_ptr<ParsedObject> > m_children;
+    QString m_id;
+
+    ParsedTreeNode *m_parent;
+    QList<ParsedTreeNodePtr> m_children;
 };
 
 } // namespace Internal

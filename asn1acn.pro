@@ -71,10 +71,11 @@ SOURCES += \
     highlighter.cpp \
     structuresview.cpp \
     astxmlparser.cpp \
-    parsedobject.cpp \
+    parsedtreenode.cpp \
     projectwatcher.cpp \
     overviewwidget.cpp \
-    document.cpp
+    document.cpp \
+    parsedtree.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -102,10 +103,11 @@ HEADERS += \
     data/typeassignment.h \
     data/definitions.h \
     data/modules.h \
-    parsedobject.h \
+    parsedtreenode.h \
     projectwatcher.h \
     overviewwidget.h \
-    document.h
+    document.h \
+    parsedtree.h
 
 DISTFILES += \
     LICENSE \

@@ -55,7 +55,7 @@ void DocumentProcessor::run() const
 {
     ParsedDataStorage *model = ParsedDataStorage::instance();
 
-    std::shared_ptr<ParsedDocument> oldDoc = model->getDataForFile(m_filePath);
+    std::shared_ptr<ParsedDocument> oldDoc = model->getFileForPath(m_filePath);
     if (!oldDoc || oldDoc->getRevision() != m_revision) {
         std::unique_ptr<ParsedDocument> newDoc = parse();
         model->addFile(m_filePath, std::move(newDoc));

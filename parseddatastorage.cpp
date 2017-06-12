@@ -25,6 +25,8 @@
 
 #include "parseddatastorage.h"
 
+#include "utils/qtcassert.h"
+
 using namespace Asn1Acn::Internal;
 
 static ParsedDataStorage *m_instance;
@@ -44,47 +46,38 @@ ParsedDataStorage *ParsedDataStorage::instance()
 }
 
 std::shared_ptr<ParsedDocument>
-ParsedDataStorage::getDataForFile(const QString &filePath) const
+ParsedDataStorage::getFileForPath(const QString &filePath) const
 {
-    QMutexLocker locker(&m_itemsMutex);
+    QMutexLocker locker(&m_documentsMutex);
 
-    return m_items.contains(filePath) ? m_items.value(filePath) : nullptr;
-}
-
-QList<std::shared_ptr<ParsedDocument> >
-ParsedDataStorage::getAllParsedFiles() const
-{
-    QMutexLocker locker(&m_itemsMutex);
-
-    return m_items.values();
+    return m_documents.contains(filePath) ? m_documents.value(filePath) : nullptr;
 }
 
 void ParsedDataStorage::addFile(const QString &filePath, std::unique_ptr<ParsedDocument> newFile)
 {
-    QMutexLocker locker(&m_itemsMutex);
+    QMutexLocker locker(&m_documentsMutex);
 
-    if (m_items.contains(filePath) == true) {
-        std::shared_ptr<ParsedDocument> oldFile = m_items.value(filePath);
+    if (m_documents.contains(filePath) == true) {
+        std::shared_ptr<ParsedDocument> oldFile = m_documents.value(filePath);
         if (oldFile->getRevision() == newFile->getRevision())
             return;
     }
 
-    m_items.insert(filePath, std::move(newFile));
-
+    std::shared_ptr<ParsedDocument> sharedDoc = std::move(newFile);
+    m_documents.insert(filePath, sharedDoc);
     locker.unlock();
 
-    emit storageUpdated();
+    emit fileUpdated(filePath, sharedDoc);
 }
 
 void ParsedDataStorage::removeFile(const QString &filePath)
 {
-    QMutexLocker locker(&m_itemsMutex);
-    if (m_items.contains(filePath) == false)
+    QMutexLocker locker(&m_documentsMutex);
+    if (m_documents.contains(filePath) == false) {
         return;
+    }
 
-    m_items.remove(filePath);
+    m_documents.remove(filePath);
 
     locker.unlock();
-
-    emit storageUpdated();
 }

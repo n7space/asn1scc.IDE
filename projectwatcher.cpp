@@ -33,34 +33,43 @@
 #include <projectexplorer/session.h>
 
 #include "documentprocessor.h"
-#include "parseddatastorage.h"
+#include "parsedtreenode.h"
 
 using namespace Asn1Acn::Internal;
 
-static const QString DOCUMENT_FILTER_EXTENSIONS_REGEXP("\\.acn$|\\.asn1?$");
+static const QRegularExpression DOCUMENT_FILTER_EXTENSIONS_REGEXP("\\.acn$|\\.asn1?$");
 
 ProjectWatcher::ProjectWatcher()
 {
     ProjectExplorer::SessionManager *sessionManager = ProjectExplorer::SessionManager::instance();
     connect(sessionManager, &ProjectExplorer::SessionManager::projectRemoved,
             this, &ProjectWatcher::onProjectRemoved);
+    connect(sessionManager, &ProjectExplorer::SessionManager::projectAdded,
+            this, &ProjectWatcher::onProjectAdded);
 
-    ProjectExplorer::ProjectTree *projectTree = ProjectExplorer::ProjectTree::instance();
-    connect(projectTree, &ProjectExplorer::ProjectTree::filesAboutToBeAdded,
+    ProjectExplorer::ProjectTree *projectParsedTree = ProjectExplorer::ProjectTree::instance();
+    connect(projectParsedTree, &ProjectExplorer::ProjectTree::filesAboutToBeAdded,
             this, &ProjectWatcher::onFilesAdded);
-
-    connect(projectTree, &ProjectExplorer::ProjectTree::filesAboutToBeRemoved,
+    connect(projectParsedTree, &ProjectExplorer::ProjectTree::filesAboutToBeRemoved,
             this, &ProjectWatcher::onFilesRemoved);
+    connect(projectParsedTree, &ProjectExplorer::ProjectTree::foldersAboutToBeRemoved,
+            this, &ProjectWatcher::onFolderRemoved);
+
+    m_storage = ParsedDataStorage::instance();
+    m_tree = ParsedTree::instance();
+}
+
+void ProjectWatcher::onProjectAdded(ProjectExplorer::Project *project)
+{
+    QString projectName = project->displayName();
+
+    auto node = ParsedTreeNode::ParsedTreeNodePtr(new ParsedTreeNode(projectName));
+    m_tree->addProjectNode(node);
 }
 
 void ProjectWatcher::onProjectRemoved(ProjectExplorer::Project *project)
 {
-    if (project == nullptr)
-        return;
-
-    QStringList validFilePaths = filterValidFiles(project->files(ProjectExplorer::Project::AllFiles));
-
-    removeFiles(validFilePaths);
+    m_tree->removeProjectNode(project->displayName());
 }
 
 void ProjectWatcher::onFilesAdded(ProjectExplorer::FolderNode *folder,
@@ -68,9 +77,15 @@ void ProjectWatcher::onFilesAdded(ProjectExplorer::FolderNode *folder,
 {
     Q_UNUSED(folder);
 
-    QStringList filePaths = getFilePaths(newFiles);
-    QStringList validFilePaths = filterValidFiles(filePaths);
-    processFiles(validFilePaths);
+    Utils::FileNameList validPaths = filterValidPaths(newFiles);
+    ProjectExplorer::Project *project = ProjectExplorer::SessionManager::projectForNode(folder);
+
+    foreach (const Utils::FileName &path, validPaths) {
+        auto node = ParsedTreeNode::ParsedTreeNodePtr(new ParsedTreeNode(path.toString()));
+        m_tree->addNodeToProject(project->displayName(), node);
+    }
+
+    processFiles(validPaths);
 }
 
 void ProjectWatcher::onFilesRemoved(ProjectExplorer::FolderNode *folder,
@@ -78,40 +93,62 @@ void ProjectWatcher::onFilesRemoved(ProjectExplorer::FolderNode *folder,
 {
     Q_UNUSED(folder);
 
-    QStringList filePaths = getFilePaths(staleFiles);
-    QStringList validFilePaths = filterValidFiles(filePaths);
-    removeFiles(validFilePaths);
+    Utils::FileNameList validPaths = filterValidPaths(staleFiles);
+    ProjectExplorer::Project *project = ProjectExplorer::SessionManager::projectForNode(folder);
+
+    foreach (const Utils::FileName &path, validPaths)
+        m_tree->removeNodeFromProject(project->displayName(), path.toString());
+
+    tryRemoveFiles(validPaths);
 }
 
-QStringList ProjectWatcher::getFilePaths(const QList<ProjectExplorer::FileNode *> &fileNodes) const
+void ProjectWatcher::onFolderRemoved(ProjectExplorer::FolderNode *parentFolder,
+                                     const QList<ProjectExplorer::FolderNode*> &staleFolders)
 {
-    QStringList filePaths;
-    foreach (const ProjectExplorer::FileNode *file, fileNodes)
-        filePaths << file->filePath().toString();
+    Q_UNUSED(parentFolder);
 
-    return filePaths;
+    // If removed file is the last one in folder, than filesAboutToBeRemoved notification is not sent,
+    // so replacement is produced here.
+
+    foreach (ProjectExplorer::FolderNode* folder, staleFolders) {
+        const QList<ProjectExplorer::FileNode *> staleFiles = folder->fileNodes();
+        onFilesRemoved(folder, staleFiles);
+    }
 }
 
-QStringList ProjectWatcher::filterValidFiles(const QStringList &allFiles) const
+Utils::FileNameList ProjectWatcher::filterValidPaths(QList<ProjectExplorer::FileNode *> fileNodes)
 {
-    // TODO: filtering should be performed using mimetypes?
-    return allFiles.filter(QRegularExpression(DOCUMENT_FILTER_EXTENSIONS_REGEXP));
+    Utils::FileNameList result;
+
+    // TODO: filtering should be performed using mimetypes
+    QRegularExpression docFilter(DOCUMENT_FILTER_EXTENSIONS_REGEXP);
+
+    foreach (const ProjectExplorer::FileNode *file, fileNodes) {
+        QString displayPath = file->filePath().toString();
+        if(docFilter.match(displayPath).hasMatch() == true)
+            result.append(file->filePath());
+    }
+
+    return result;
 }
 
-void ProjectWatcher::processFiles(const QStringList &filePaths) const
+void ProjectWatcher::processFiles(const Utils::FileNameList &filePaths) const
 {
-    foreach (const QString &path, filePaths) {
-        auto doc = textDocumentFromPath(path);
-        DocumentProcessor dp(doc.get(), path, -1);
+    foreach (const Utils::FileName &path, filePaths) {
+        auto doc = textDocumentFromPath(path.toString());
+        DocumentProcessor dp(doc.get(), path.toString(), -1);
         dp.run();
     }
 }
 
-void ProjectWatcher::removeFiles(const QStringList &filePaths) const
+void ProjectWatcher::tryRemoveFiles(const Utils::FileNameList &filePaths) const
 {
-    ParsedDataStorage *storage = ParsedDataStorage::instance();
-    foreach (const QString &path, filePaths)
-        storage->removeFile(path);
+    foreach (const Utils::FileName &path, filePaths) {
+        QList<ProjectExplorer::Node *> nodes = ProjectExplorer::SessionManager::nodesForFile(path);
+        // File should be removed from storage if it is present in one project only
+        if (nodes.size() == 1)
+            m_storage->removeFile(path.toString());
+    }
 }
 
 std::unique_ptr<QTextDocument>

@@ -27,7 +27,6 @@
 
 #include <coreplugin/inavigationwidgetfactory.h>
 
-#include "parsedobject.h"
 #include "overviewwidget.h"
 
 namespace Asn1Acn {
@@ -43,8 +42,6 @@ public:
 private:
     void modelUpdated();
     void refreshModel();
-
-    std::shared_ptr<ParsedObject> m_modelRoot;
 };
 
 class StructuresViewFactory : public Core::INavigationWidgetFactory

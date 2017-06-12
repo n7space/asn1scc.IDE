@@ -30,6 +30,7 @@
 #include <memory>
 
 #include "parseddocument.h"
+#include "parsedtreenode.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -51,12 +52,12 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    void setRootNode(std::shared_ptr<ParsedObject> root);
+    void setRootNode(ParsedTreeNode::ParsedTreeNodePtr root);
 
 private:
-    const ParsedObject *getValidNode(const QModelIndex &index) const;
+    const ParsedTreeNode *getValidNode(const QModelIndex &index) const;
 
-    std::shared_ptr<ParsedObject> m_rootItem;
+    ParsedTreeNode::ParsedTreeNodePtr m_rootItem;
 };
 
 } // namespace Internal

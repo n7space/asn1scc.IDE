@@ -23,55 +23,34 @@
 **
 ****************************************************************************/
 
-#include <memory>
-
 #include "parseddocument.h"
+
+#include <memory>
 
 using namespace Asn1Acn::Internal;
 
 ParsedDocument::ParsedDocument() :
     m_filePath(QString()),
-    m_revision(-1)
+    m_revision(-1),
+    m_parsedData(nullptr)
 {
 }
 
 ParsedDocument::ParsedDocument(const QString &filePath, int revision, const QStringList &wordList) :
     m_filePath(filePath),
-    m_revision(revision)
+    m_revision(revision),
+    m_wordList(wordList),
+    m_parsedData(nullptr)
 {
-    m_parsedTreeRoot = std::shared_ptr<ParsedObject>(new ParsedObject(m_filePath));
-
-    foreach (const QString &entry, wordList)
-        m_parsedTreeRoot->addChild(std::shared_ptr<ParsedObject>(new ParsedObject(QVariant(entry))));
 }
 
 ParsedDocument::ParsedDocument(const QString &filePath,
                                int revision,
                                std::unique_ptr<Data::Modules> parsedData) :
     m_filePath(filePath),
-    m_revision(revision)
+    m_revision(revision),
+    m_parsedData(std::move(parsedData))
 {
-    m_parsedTreeRoot = std::shared_ptr<ParsedObject>(new ParsedObject(m_filePath));
-
-    using DefinitionsMap = Data::Modules::DefinitionsMap;
-    using Types = Data::Definitions::Types;
-
-    DefinitionsMap::const_iterator defIt = parsedData->definitions().begin();
-    while (defIt != parsedData->definitions().end()) {
-        QString definitionName = defIt->first;
-        auto definition = std::shared_ptr<ParsedObject>(new ParsedObject(definitionName));
-
-        const Types &types = defIt->second->types();
-        Types::const_iterator typeIt = types.begin();
-        while (typeIt != types.end()) {
-            QString typeName = typeIt->first;
-            definition->addChild(std::shared_ptr<ParsedObject>(new ParsedObject(typeName)));
-            typeIt++;
-        }
-
-        m_parsedTreeRoot->addChild(definition);
-        defIt++;
-    }
 }
 
 int ParsedDocument::getRevision() const
@@ -79,7 +58,40 @@ int ParsedDocument::getRevision() const
     return m_revision;
 }
 
-std::shared_ptr<ParsedObject> ParsedDocument::getTreeRoot()
+void ParsedDocument::bindParsedTreeNode(ParsedTreeNode::ParsedTreeNodePtr node)
 {
-    return m_parsedTreeRoot;
+    if (m_parsedData != nullptr) {
+        bindParsedTreeNodeWithParsedData(node);
+    } else if (m_wordList.empty() == false) {
+        bindParsedTreeNodeWithStubbedData(node);
+    }
+}
+
+void ParsedDocument::bindParsedTreeNodeWithStubbedData(ParsedTreeNode::ParsedTreeNodePtr node)
+{
+    foreach (const QString &entry, m_wordList)
+        node->addChild(ParsedTreeNode::ParsedTreeNodePtr(new ParsedTreeNode(entry)));
+}
+
+void ParsedDocument::bindParsedTreeNodeWithParsedData(ParsedTreeNode::ParsedTreeNodePtr node)
+{
+    using DefinitionsMap = Data::Modules::DefinitionsMap;
+    using Types = Data::Definitions::Types;
+
+    DefinitionsMap::const_iterator defIt = m_parsedData->definitions().begin();
+    while (defIt != m_parsedData->definitions().end()) {
+        QString definitionName = defIt->first;
+        auto definition = ParsedTreeNode::ParsedTreeNodePtr(new ParsedTreeNode(definitionName));
+
+        const Types &types = defIt->second->types();
+        Types::const_iterator typeIt = types.begin();
+        while (typeIt != types.end()) {
+            QString typeName = typeIt->first;
+            definition->addChild(ParsedTreeNode::ParsedTreeNodePtr(new ParsedTreeNode(typeName)));
+            typeIt++;
+        }
+
+        node->addChild(definition);
+        defIt++;
+    }
 }
