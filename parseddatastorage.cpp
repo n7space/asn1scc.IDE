@@ -53,31 +53,30 @@ ParsedDataStorage::getFileForPath(const QString &filePath) const
     return m_documents.contains(filePath) ? m_documents.value(filePath) : nullptr;
 }
 
-void ParsedDataStorage::addFile(const QString &filePath, std::unique_ptr<ParsedDocument> newFile)
+void ParsedDataStorage::addFile(const QString &filePath, std::unique_ptr<ParsedDocument> file)
 {
-    QMutexLocker locker(&m_documentsMutex);
+    std::shared_ptr<ParsedDocument> newFile = std::move(file);
 
-    if (m_documents.contains(filePath) == true) {
-        std::shared_ptr<ParsedDocument> oldFile = m_documents.value(filePath);
-        if (oldFile->getRevision() == newFile->getRevision())
-            return;
+    {
+        QMutexLocker locker(&m_documentsMutex);
+
+        if (m_documents.contains(filePath) == true) {
+            std::shared_ptr<ParsedDocument> oldFile = m_documents.value(filePath);
+            if (oldFile->getRevision() == newFile->getRevision())
+                return;
+        }
+
+        m_documents.insert(filePath, newFile);
     }
 
-    std::shared_ptr<ParsedDocument> sharedDoc = std::move(newFile);
-    m_documents.insert(filePath, sharedDoc);
-    locker.unlock();
-
-    emit fileUpdated(filePath, sharedDoc);
+    emit fileUpdated(filePath, newFile);
 }
 
 void ParsedDataStorage::removeFile(const QString &filePath)
 {
     QMutexLocker locker(&m_documentsMutex);
-    if (m_documents.contains(filePath) == false) {
+    if (m_documents.contains(filePath) == false)
         return;
-    }
 
     m_documents.remove(filePath);
-
-    locker.unlock();
 }

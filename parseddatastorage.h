@@ -49,7 +49,7 @@ public:
 
     std::shared_ptr<ParsedDocument> getFileForPath(const QString &filePath) const;
 
-    void addFile(const QString &filePath, std::unique_ptr<ParsedDocument> fileData);
+    void addFile(const QString &filePath, std::unique_ptr<ParsedDocument> file);
     void removeFile(const QString &filePath);
 
 signals:
