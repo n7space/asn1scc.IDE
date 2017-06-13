@@ -32,7 +32,7 @@
 #include <memory>
 
 #include "parseddocument.h"
-#include "parsedtreenode.h"
+#include "modeltreenode.h"
 
 namespace Asn1Acn {
 namespace Internal {

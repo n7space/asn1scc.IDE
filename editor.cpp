@@ -35,7 +35,7 @@
 
 #include "asn1acnconstants.h"
 #include "document.h"
-#include "parsedtree.h"
+#include "modeltree.h"
 #include "overviewmodel.h"
 
 using namespace Asn1Acn::Internal;
@@ -98,9 +98,9 @@ void EditorWidget::onAsnDocumentUpdated(const QTextDocument &document)
     Q_UNUSED(document);
 
     QString filePath = textDocument()->filePath().toString();
-    ParsedTree *tree = ParsedTree::instance();
+    ModelTree *tree = ModelTree::instance();
 
-    ParsedTreeNode::ParsedTreeNodePtr documentNode = tree->getNodeForFilepath(filePath);
+    ModelTreeNode::ModelTreeNodePtr documentNode = tree->getNodeForFilepath(filePath);
     if (documentNode == nullptr)
         return;
 

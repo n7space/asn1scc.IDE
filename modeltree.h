@@ -30,38 +30,38 @@
 #include <QMutex>
 #include <QString>
 
-#include "parsedtreenode.h"
+#include "modeltreenode.h"
 #include "parseddocument.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedTree : public QObject
+class ModelTree : public QObject
 {
     Q_OBJECT
 
-    ParsedTree();
-    ~ParsedTree() = default;
+    ModelTree();
+    ~ModelTree() = default;
 
 public:
-    static ParsedTree *instance();
+    static ModelTree *instance();
 
-    ParsedTreeNode::ParsedTreeNodePtr getParsedTreeRoot() const;
-    ParsedTreeNode::ParsedTreeNodePtr getNodeForFilepath(const QString &filePath) const;
+    ModelTreeNode::ModelTreeNodePtr getModelTreeRoot() const;
+    ModelTreeNode::ModelTreeNodePtr getNodeForFilepath(const QString &filePath) const;
 
-    void addProjectNode(ParsedTreeNode::ParsedTreeNodePtr projectNode);
+    void addProjectNode(ModelTreeNode::ModelTreeNodePtr projectNode);
     void removeProjectNode(const QString &projectName);
 
-    void addNodeToProject(const QString &projectName, ParsedTreeNode::ParsedTreeNodePtr node);
+    void addNodeToProject(const QString &projectName, ModelTreeNode::ModelTreeNodePtr node);
     void removeNodeFromProject(const QString &projectName, const QString &fileName);
 
 signals:
     void treeUpdated();
 
 private:
-    void updateParsedTreeNode(const QString &filePath, std::shared_ptr<ParsedDocument> document);
+    void updateModelTreeNode(const QString &filePath, std::shared_ptr<ParsedDocument> document);
 
-    ParsedTreeNode::ParsedTreeNodePtr m_treeRoot;
+    ModelTreeNode::ModelTreeNodePtr m_treeRoot;
     mutable QMutex m_dataMutex;
 };
 

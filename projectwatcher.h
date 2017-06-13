@@ -33,7 +33,7 @@
 #include <projectexplorer/projecttree.h>
 #include <projectexplorer/project.h>
 
-#include "parsedtree.h"
+#include "modeltree.h"
 #include "parseddatastorage.h"
 
 namespace Asn1Acn {
@@ -66,7 +66,7 @@ private:
     std::unique_ptr<QTextDocument> textDocumentFromPath(const QString &fileName) const;
 
     ParsedDataStorage *m_storage;
-    ParsedTree *m_tree;
+    ModelTree *m_tree;
 };
 
 } // namespace Internal

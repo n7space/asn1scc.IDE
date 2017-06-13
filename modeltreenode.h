@@ -34,28 +34,28 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedTreeNode
+class ModelTreeNode
 {
 public:
 
-    using ParsedTreeNodePtr = std::shared_ptr<ParsedTreeNode>;
+    using ModelTreeNodePtr = std::shared_ptr<ModelTreeNode>;
 
-    ParsedTreeNode() = default;
-    ParsedTreeNode(const QString &id);
+    ModelTreeNode() = default;
+    ModelTreeNode(const QString &id);
 
     int childrenCount() const;
 
-    ParsedTreeNodePtr childAt(int idx) const;
-    ParsedTreeNodePtr getChildByName(const QString &name) const;
+    ModelTreeNodePtr childAt(int idx) const;
+    ModelTreeNodePtr getChildByName(const QString &name) const;
 
-    void addChild(ParsedTreeNodePtr child);
+    void addChild(ModelTreeNodePtr child);
 
     void removeChildByName(const QString &name);
     void removeChildren();
 
     QVariant data() const;
     QString id() const;
-    const ParsedTreeNode *parent() const;
+    const ModelTreeNode *parent() const;
 
     int columnCount() const;
     int row() const;
@@ -63,8 +63,8 @@ public:
 protected:
     QString m_id;
 
-    ParsedTreeNode *m_parent;
-    QList<ParsedTreeNodePtr> m_children;
+    ModelTreeNode *m_parent;
+    QList<ModelTreeNodePtr> m_children;
 };
 
 } // namespace Internal

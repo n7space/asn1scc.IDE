@@ -25,7 +25,7 @@
 
 #include "structuresview.h"
 
-#include "parsedtree.h"
+#include "modeltree.h"
 #include "asn1acnconstants.h"
 
 using namespace Asn1Acn::Internal;
@@ -33,7 +33,7 @@ using namespace Asn1Acn::Internal;
 StructuresViewWidget::StructuresViewWidget() :
     OverviewWidget(new OverviewModel)
 {
-    connect(ParsedTree::instance(), &ParsedTree::treeUpdated,
+    connect(ModelTree::instance(), &ModelTree::treeUpdated,
             this, &StructuresViewWidget::modelUpdated);
 
     modelUpdated();
@@ -46,8 +46,8 @@ StructuresViewWidget::~StructuresViewWidget()
 
 void StructuresViewWidget::refreshModel()
 {
-    ParsedTree *instance = ParsedTree::instance();
-    auto modelRoot = instance->getParsedTreeRoot();
+    ModelTree *instance = ModelTree::instance();
+    auto modelRoot = instance->getModelTreeRoot();
 
     m_model->setRootNode(modelRoot);
 }

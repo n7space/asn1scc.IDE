@@ -31,7 +31,7 @@
 #include "data/modules.h"
 #include "data/definitions.h"
 
-#include "parsedtreenode.h"
+#include "modeltreenode.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -46,11 +46,11 @@ public:
                    std::unique_ptr<Data::Modules> parsedData);
 
     int getRevision() const;
-    void bindParsedTreeNode(ParsedTreeNode::ParsedTreeNodePtr node);
+    void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr node);
 
 private:
-    void bindParsedTreeNodeWithStubbedData(ParsedTreeNode::ParsedTreeNodePtr node);
-    void bindParsedTreeNodeWithParsedData(ParsedTreeNode::ParsedTreeNodePtr node);
+    void bindModelTreeNodeWithStubbedData(ModelTreeNode::ModelTreeNodePtr node);
+    void bindModelTreeNodeWithParsedData(ModelTreeNode::ModelTreeNodePtr node);
 
     QString m_filePath;
     int m_revision;

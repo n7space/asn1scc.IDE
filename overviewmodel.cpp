@@ -40,7 +40,7 @@ OverviewModel::~OverviewModel()
 
 int OverviewModel::columnCount(const QModelIndex &parent) const
 {
-    const ParsedTreeNode *symbol = getValidNode(parent);
+    const ModelTreeNode *symbol = getValidNode(parent);
 
     return symbol != nullptr ? symbol->columnCount() : 0;
 }
@@ -50,7 +50,7 @@ int OverviewModel::rowCount(const QModelIndex &parent) const
     if (parent.column() > 0)
         return 0;
 
-    const ParsedTreeNode *symbol = getValidNode(parent);
+    const ModelTreeNode *symbol = getValidNode(parent);
 
     return symbol != nullptr ? symbol->childrenCount() : 0;
 }
@@ -60,7 +60,7 @@ QVariant OverviewModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || role != Qt::DisplayRole)
         return QVariant();
 
-    ParsedTreeNode *item = static_cast<ParsedTreeNode *>(index.internalPointer());
+    ModelTreeNode *item = static_cast<ModelTreeNode *>(index.internalPointer());
 
     return item->data();
 }
@@ -87,11 +87,11 @@ QModelIndex OverviewModel::index(int row, int column, const QModelIndex &parent)
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    const ParsedTreeNode *parentItem = getValidNode(parent);
+    const ModelTreeNode *parentItem = getValidNode(parent);
     if (parentItem == nullptr)
         return QModelIndex();
 
-    ParsedTreeNode::ParsedTreeNodePtr childItem = parentItem->childAt(row);
+    ModelTreeNode::ModelTreeNodePtr childItem = parentItem->childAt(row);
     if (childItem == nullptr)
         return QModelIndex();
 
@@ -103,16 +103,16 @@ QModelIndex OverviewModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    ParsedTreeNode *child = static_cast<ParsedTreeNode *>(index.internalPointer());
-    const ParsedTreeNode *parent = child->parent();
+    ModelTreeNode *child = static_cast<ModelTreeNode *>(index.internalPointer());
+    const ModelTreeNode *parent = child->parent();
 
     if (parent == nullptr || parent == m_rootItem.get())
         return QModelIndex();
 
-    return createIndex(parent->row(), 0, const_cast<ParsedTreeNode *>(parent));
+    return createIndex(parent->row(), 0, const_cast<ModelTreeNode *>(parent));
 }
 
-void OverviewModel::setRootNode(ParsedTreeNode::ParsedTreeNodePtr root)
+void OverviewModel::setRootNode(ModelTreeNode::ModelTreeNodePtr root)
 {
     beginResetModel();
 
@@ -121,14 +121,14 @@ void OverviewModel::setRootNode(ParsedTreeNode::ParsedTreeNodePtr root)
     endResetModel();
 }
 
-const ParsedTreeNode *OverviewModel::getValidNode(const QModelIndex &index) const
+const ModelTreeNode *OverviewModel::getValidNode(const QModelIndex &index) const
 {
-    ParsedTreeNode *node = nullptr;
+    ModelTreeNode *node = nullptr;
 
     if (!index.isValid())
         node = m_rootItem.get();
     else
-        node = static_cast<ParsedTreeNode *>(index.internalPointer());
+        node = static_cast<ModelTreeNode *>(index.internalPointer());
 
     return node;
 }

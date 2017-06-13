@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "parsedtree.h"
+#include "modeltree.h"
 
 #include "utils/qtcassert.h"
 
@@ -31,10 +31,10 @@
 
 using namespace Asn1Acn::Internal;
 
-static ParsedTree *m_instance;
+static ModelTree *m_instance;
 static QMutex m_instanceMutex;
 
-ParsedTree *ParsedTree::instance()
+ModelTree *ModelTree::instance()
 {
     if (m_instance)
         return m_instance;
@@ -42,21 +42,21 @@ ParsedTree *ParsedTree::instance()
     QMutexLocker locker(&m_instanceMutex);
 
     if (!m_instance)
-        m_instance = new ParsedTree;
+        m_instance = new ModelTree;
 
     return m_instance;
 }
 
-ParsedTree::ParsedTree()
+ModelTree::ModelTree()
 {
-    m_treeRoot = ParsedTreeNode::ParsedTreeNodePtr(new ParsedTreeNode);
+    m_treeRoot = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode);
 
     ParsedDataStorage *storage = ParsedDataStorage::instance();
     connect(storage, &ParsedDataStorage::fileUpdated,
-            this, &ParsedTree::updateParsedTreeNode);
+            this, &ModelTree::updateModelTreeNode);
 }
 
-void ParsedTree::addProjectNode(ParsedTreeNode::ParsedTreeNodePtr projectNode)
+void ModelTree::addProjectNode(ModelTreeNode::ModelTreeNodePtr projectNode)
 {
     {
         QMutexLocker locker(&m_dataMutex);
@@ -67,7 +67,7 @@ void ParsedTree::addProjectNode(ParsedTreeNode::ParsedTreeNodePtr projectNode)
     emit treeUpdated();
 }
 
-void ParsedTree::removeProjectNode(const QString &projectName)
+void ModelTree::removeProjectNode(const QString &projectName)
 {
     {
         QMutexLocker locker(&m_dataMutex);
@@ -78,13 +78,13 @@ void ParsedTree::removeProjectNode(const QString &projectName)
     emit treeUpdated();
 }
 
-void ParsedTree::addNodeToProject(const QString &projectName,
-                                  ParsedTreeNode::ParsedTreeNodePtr node)
+void ModelTree::addNodeToProject(const QString &projectName,
+                                  ModelTreeNode::ModelTreeNodePtr node)
 {
     {
         QMutexLocker locker(&m_dataMutex);
 
-        ParsedTreeNode::ParsedTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
+        ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
         QTC_ASSERT(projectNode != nullptr, return );
 
         projectNode->addChild(node);
@@ -92,18 +92,18 @@ void ParsedTree::addNodeToProject(const QString &projectName,
         ParsedDataStorage *storage = ParsedDataStorage::instance();
         std::shared_ptr<ParsedDocument> document = storage->getFileForPath(node->id());
         if (document != nullptr)
-            document->bindParsedTreeNode(node);
+            document->bindModelTreeNode(node);
     }
 
     emit treeUpdated();
 }
 
-void ParsedTree::removeNodeFromProject(const QString &projectName, const QString &fileName)
+void ModelTree::removeNodeFromProject(const QString &projectName, const QString &fileName)
 {
     {
         QMutexLocker locker(&m_dataMutex);
 
-        ParsedTreeNode::ParsedTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
+        ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
         QTC_ASSERT(projectNode != nullptr, return );
 
         projectNode->removeChildByName(fileName);
@@ -112,20 +112,20 @@ void ParsedTree::removeNodeFromProject(const QString &projectName, const QString
     emit treeUpdated();
 }
 
-ParsedTreeNode::ParsedTreeNodePtr ParsedTree::getParsedTreeRoot() const
+ModelTreeNode::ModelTreeNodePtr ModelTree::getModelTreeRoot() const
 {
     return m_treeRoot;
 }
 
-ParsedTreeNode::ParsedTreeNodePtr
-ParsedTree::getNodeForFilepath(const QString &filePath) const
+ModelTreeNode::ModelTreeNodePtr
+ModelTree::getNodeForFilepath(const QString &filePath) const
 {
     QMutexLocker locker(&m_dataMutex);
 
     int projectCnt = m_treeRoot->childrenCount();
     for (int i = 0; i < projectCnt; i++) {
-        ParsedTreeNode::ParsedTreeNodePtr projectNode = m_treeRoot->childAt(i);
-        ParsedTreeNode::ParsedTreeNodePtr fileNode = projectNode->getChildByName(filePath);
+        ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->childAt(i);
+        ModelTreeNode::ModelTreeNodePtr fileNode = projectNode->getChildByName(filePath);
         if (fileNode != nullptr)
             return fileNode;
     }
@@ -133,7 +133,7 @@ ParsedTree::getNodeForFilepath(const QString &filePath) const
     return nullptr;
 }
 
-void ParsedTree::updateParsedTreeNode(const QString &filePath,
+void ModelTree::updateModelTreeNode(const QString &filePath,
                                       std::shared_ptr<ParsedDocument> document)
 {
     {
@@ -141,11 +141,11 @@ void ParsedTree::updateParsedTreeNode(const QString &filePath,
 
         int projectCnt = m_treeRoot->childrenCount();
         for (int i = 0; i < projectCnt; i++) {
-            ParsedTreeNode::ParsedTreeNodePtr projectNode = m_treeRoot->childAt(i);
-            ParsedTreeNode::ParsedTreeNodePtr fileNode = projectNode->getChildByName(filePath);
+            ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->childAt(i);
+            ModelTreeNode::ModelTreeNodePtr fileNode = projectNode->getChildByName(filePath);
             if (fileNode != nullptr) {
                 fileNode->removeChildren();
-                document->bindParsedTreeNode(fileNode);
+                document->bindModelTreeNode(fileNode);
             }
         }
     }

@@ -33,7 +33,7 @@
 #include <projectexplorer/session.h>
 
 #include "documentprocessor.h"
-#include "parsedtreenode.h"
+#include "modeltreenode.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -47,23 +47,23 @@ ProjectWatcher::ProjectWatcher()
     connect(sessionManager, &ProjectExplorer::SessionManager::projectAdded,
             this, &ProjectWatcher::onProjectAdded);
 
-    ProjectExplorer::ProjectTree *projectParsedTree = ProjectExplorer::ProjectTree::instance();
-    connect(projectParsedTree, &ProjectExplorer::ProjectTree::filesAboutToBeAdded,
+    ProjectExplorer::ProjectTree *projectModelTree = ProjectExplorer::ProjectTree::instance();
+    connect(projectModelTree, &ProjectExplorer::ProjectTree::filesAboutToBeAdded,
             this, &ProjectWatcher::onFilesAdded);
-    connect(projectParsedTree, &ProjectExplorer::ProjectTree::filesAboutToBeRemoved,
+    connect(projectModelTree, &ProjectExplorer::ProjectTree::filesAboutToBeRemoved,
             this, &ProjectWatcher::onFilesRemoved);
-    connect(projectParsedTree, &ProjectExplorer::ProjectTree::foldersAboutToBeRemoved,
+    connect(projectModelTree, &ProjectExplorer::ProjectTree::foldersAboutToBeRemoved,
             this, &ProjectWatcher::onFolderRemoved);
 
     m_storage = ParsedDataStorage::instance();
-    m_tree = ParsedTree::instance();
+    m_tree = ModelTree::instance();
 }
 
 void ProjectWatcher::onProjectAdded(ProjectExplorer::Project *project)
 {
     QString projectName = project->displayName();
 
-    auto node = ParsedTreeNode::ParsedTreeNodePtr(new ParsedTreeNode(projectName));
+    auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(projectName));
     m_tree->addProjectNode(node);
 }
 
@@ -81,7 +81,7 @@ void ProjectWatcher::onFilesAdded(ProjectExplorer::FolderNode *folder,
     ProjectExplorer::Project *project = ProjectExplorer::SessionManager::projectForNode(folder);
 
     foreach (const Utils::FileName &path, validPaths) {
-        auto node = ParsedTreeNode::ParsedTreeNodePtr(new ParsedTreeNode(path.toString()));
+        auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(path.toString()));
         m_tree->addNodeToProject(project->displayName(), node);
     }
 

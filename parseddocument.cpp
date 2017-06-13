@@ -58,21 +58,21 @@ int ParsedDocument::getRevision() const
     return m_revision;
 }
 
-void ParsedDocument::bindParsedTreeNode(ParsedTreeNode::ParsedTreeNodePtr node)
+void ParsedDocument::bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr node)
 {
     if (m_parsedData != nullptr)
-        bindParsedTreeNodeWithParsedData(node);
+        bindModelTreeNodeWithParsedData(node);
     else if (m_wordList.empty() == false)
-        bindParsedTreeNodeWithStubbedData(node);
+        bindModelTreeNodeWithStubbedData(node);
 }
 
-void ParsedDocument::bindParsedTreeNodeWithStubbedData(ParsedTreeNode::ParsedTreeNodePtr node)
+void ParsedDocument::bindModelTreeNodeWithStubbedData(ModelTreeNode::ModelTreeNodePtr node)
 {
     foreach (const QString &entry, m_wordList)
-        node->addChild(ParsedTreeNode::ParsedTreeNodePtr(new ParsedTreeNode(entry)));
+        node->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(entry)));
 }
 
-void ParsedDocument::bindParsedTreeNodeWithParsedData(ParsedTreeNode::ParsedTreeNodePtr node)
+void ParsedDocument::bindModelTreeNodeWithParsedData(ModelTreeNode::ModelTreeNodePtr node)
 {
     using DefinitionsMap = Data::Modules::DefinitionsMap;
     using Types = Data::Definitions::Types;
@@ -80,13 +80,13 @@ void ParsedDocument::bindParsedTreeNodeWithParsedData(ParsedTreeNode::ParsedTree
     DefinitionsMap::const_iterator defIt = m_parsedData->definitions().begin();
     while (defIt != m_parsedData->definitions().end()) {
         QString definitionName = defIt->first;
-        auto definition = ParsedTreeNode::ParsedTreeNodePtr(new ParsedTreeNode(definitionName));
+        auto definition = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(definitionName));
 
         const Types &types = defIt->second->types();
         Types::const_iterator typeIt = types.begin();
         while (typeIt != types.end()) {
             QString typeName = typeIt->first;
-            definition->addChild(ParsedTreeNode::ParsedTreeNodePtr(new ParsedTreeNode(typeName)));
+            definition->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(typeName)));
             typeIt++;
         }
 

@@ -23,31 +23,31 @@
 **
 ****************************************************************************/
 
-#include "parsedtreenode.h"
+#include "modeltreenode.h"
 
 #include "utils/qtcassert.h"
 
 using namespace Asn1Acn::Internal;
 
-ParsedTreeNode::ParsedTreeNode(const QString &id) :
+ModelTreeNode::ModelTreeNode(const QString &id) :
     m_id(id),
     m_parent(nullptr)
 {
 }
 
-int ParsedTreeNode::childrenCount() const
+int ModelTreeNode::childrenCount() const
 {
     return m_children.count();
 }
 
-ParsedTreeNode::ParsedTreeNodePtr ParsedTreeNode::childAt(int idx) const
+ModelTreeNode::ModelTreeNodePtr ModelTreeNode::childAt(int idx) const
 {
     return idx < m_children.size() ? m_children[idx] : nullptr;
 }
 
-ParsedTreeNode::ParsedTreeNodePtr ParsedTreeNode::getChildByName(const QString &name) const
+ModelTreeNode::ModelTreeNodePtr ModelTreeNode::getChildByName(const QString &name) const
 {
-    QList<ParsedTreeNode::ParsedTreeNodePtr>::const_iterator it;
+    QList<ModelTreeNode::ModelTreeNodePtr>::const_iterator it;
     for (it = m_children.begin(); it != m_children.end(); ++it) {
         if ((*it)->m_id == name)
             return *it;
@@ -56,7 +56,7 @@ ParsedTreeNode::ParsedTreeNodePtr ParsedTreeNode::getChildByName(const QString &
     return nullptr;
 }
 
-void ParsedTreeNode::addChild(ParsedTreeNode::ParsedTreeNodePtr child)
+void ModelTreeNode::addChild(ModelTreeNode::ModelTreeNodePtr child)
 {
     QTC_ASSERT(child->m_parent == this || child->m_parent == nullptr, return );
 
@@ -64,9 +64,9 @@ void ParsedTreeNode::addChild(ParsedTreeNode::ParsedTreeNodePtr child)
     child->m_parent = this;
 }
 
-void ParsedTreeNode::removeChildByName(const QString &name)
+void ModelTreeNode::removeChildByName(const QString &name)
 {
-    QList<ParsedTreeNode::ParsedTreeNodePtr>::iterator it;
+    QList<ModelTreeNode::ModelTreeNodePtr>::iterator it;
     for (it = m_children.begin(); it != m_children.end(); ++it) {
         if ((*it)->m_id == name) {
             m_children.erase(it);
@@ -75,35 +75,35 @@ void ParsedTreeNode::removeChildByName(const QString &name)
     }
 }
 
-void ParsedTreeNode::removeChildren()
+void ModelTreeNode::removeChildren()
 {
     m_children.clear();
 }
 
-QVariant ParsedTreeNode::data() const
+QVariant ModelTreeNode::data() const
 {
     return QVariant(m_id);
 }
 
-QString ParsedTreeNode::id() const
+QString ModelTreeNode::id() const
 {
     return m_id;
 }
 
-const ParsedTreeNode *ParsedTreeNode::parent() const
+const ModelTreeNode *ModelTreeNode::parent() const
 {
     return m_parent;
 }
 
-int ParsedTreeNode::columnCount() const
+int ModelTreeNode::columnCount() const
 {
     return 1;
 }
 
-int ParsedTreeNode::row() const
+int ModelTreeNode::row() const
 {
     int idx = 0;
-    foreach (const ParsedTreeNode::ParsedTreeNodePtr &obj, m_parent->m_children) {
+    foreach (const ModelTreeNode::ModelTreeNodePtr &obj, m_parent->m_children) {
         if (obj.get() == this)
             return idx;
 
