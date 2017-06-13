@@ -60,11 +60,10 @@ int ParsedDocument::getRevision() const
 
 void ParsedDocument::bindParsedTreeNode(ParsedTreeNode::ParsedTreeNodePtr node)
 {
-    if (m_parsedData != nullptr) {
+    if (m_parsedData != nullptr)
         bindParsedTreeNodeWithParsedData(node);
-    } else if (m_wordList.empty() == false) {
+    else if (m_wordList.empty() == false)
         bindParsedTreeNodeWithStubbedData(node);
-    }
 }
 
 void ParsedDocument::bindParsedTreeNodeWithStubbedData(ParsedTreeNode::ParsedTreeNodePtr node)

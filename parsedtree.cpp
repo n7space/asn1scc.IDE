@@ -78,8 +78,8 @@ void ParsedTree::removeProjectNode(const QString &projectName)
     emit treeUpdated();
 }
 
-void
-ParsedTree::addNodeToProject(const QString &projectName, ParsedTreeNode::ParsedTreeNodePtr node)
+void ParsedTree::addNodeToProject(const QString &projectName,
+                                  ParsedTreeNode::ParsedTreeNodePtr node)
 {
     QMutexLocker locker(&m_dataMutex);
 
