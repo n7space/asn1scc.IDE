@@ -32,6 +32,7 @@
 #include <memory>
 
 #include "parseddocument.h"
+#include "modeltreenode.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -46,18 +47,17 @@ class ParsedDataStorage : public QObject
 public:
     static ParsedDataStorage *instance();
 
-    std::shared_ptr<ParsedDocument> getDataForFile(const QString &filePath) const;
-    QList<std::shared_ptr<ParsedDocument> > getAllParsedFiles() const;
+    std::shared_ptr<ParsedDocument> getFileForPath(const QString &filePath) const;
 
-    void addFile(const QString &filePath, std::unique_ptr<ParsedDocument> fileData);
+    void addFile(const QString &filePath, std::unique_ptr<ParsedDocument> file);
     void removeFile(const QString &filePath);
 
 signals:
-    void storageUpdated();
+    void fileUpdated(const QString &filePath, std::shared_ptr<ParsedDocument> newFile);
 
 private:
-    QHash<QString, std::shared_ptr<ParsedDocument> > m_items;
-    mutable QMutex m_itemsMutex;
+    QHash<QString, std::shared_ptr<ParsedDocument>> m_documents;
+    mutable QMutex m_documentsMutex;
 };
 
 } // namespace Internal

@@ -25,39 +25,44 @@
 
 #pragma once
 
-#include <QString>
-#include <QList>
+#include <memory>
 
-#include "data/modules.h"
-#include "data/definitions.h"
+#include <QMutex>
+#include <QString>
 
 #include "modeltreenode.h"
+#include "parseddocument.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedDocument
+class ModelTree : public QObject
 {
-public:
-    ParsedDocument();
-    ParsedDocument(const QString &filePath, int revision, const QStringList &list);
-    ParsedDocument(const QString &filePath,
-                   int revision,
-                   std::unique_ptr<Data::Modules> parsedData);
+    Q_OBJECT
 
-    int getRevision() const;
-    void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr node);
+    ModelTree();
+    ~ModelTree() = default;
+
+public:
+    static ModelTree *instance();
+
+    ModelTreeNode::ModelTreeNodePtr getModelTreeRoot() const;
+    ModelTreeNode::ModelTreeNodePtr getNodeForFilepath(const QString &filePath) const;
+
+    void addProjectNode(ModelTreeNode::ModelTreeNodePtr projectNode);
+    void removeProjectNode(const QString &projectName);
+
+    void addNodeToProject(const QString &projectName, ModelTreeNode::ModelTreeNodePtr node);
+    void removeNodeFromProject(const QString &projectName, const QString &fileName);
+
+signals:
+    void treeUpdated();
 
 private:
-    void bindModelTreeNodeWithStubbedData(ModelTreeNode::ModelTreeNodePtr node);
-    void bindModelTreeNodeWithParsedData(ModelTreeNode::ModelTreeNodePtr node);
+    void updateModelTreeNode(const QString &filePath, std::shared_ptr<ParsedDocument> document);
 
-    QString m_filePath;
-    int m_revision;
-
-    // TODO: m_wordList is temporal, as single words are used as data stubs
-    QStringList m_wordList;
-    std::unique_ptr<Data::Modules> m_parsedData;
+    ModelTreeNode::ModelTreeNodePtr m_treeRoot;
+    mutable QMutex m_dataMutex;
 };
 
 } // namespace Internal

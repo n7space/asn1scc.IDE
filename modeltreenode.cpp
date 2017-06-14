@@ -23,68 +23,87 @@
 **
 ****************************************************************************/
 
-#include "parsedobject.h"
+#include "modeltreenode.h"
 
 #include "utils/qtcassert.h"
 
 using namespace Asn1Acn::Internal;
 
-ParsedObject::ParsedObject(const QVariant& data) :
-    m_data(data),
+ModelTreeNode::ModelTreeNode(const QString &id) :
+    m_id(id),
     m_parent(nullptr)
 {
 }
 
-ParsedObject::~ParsedObject()
-{
-    detachChildren();
-}
-
-int ParsedObject::childrenCount() const
+int ModelTreeNode::childrenCount() const
 {
     return m_children.count();
 }
 
-ParsedObject* ParsedObject::childAt(int idx) const
+ModelTreeNode::ModelTreeNodePtr ModelTreeNode::childAt(int idx) const
 {
-    return idx < m_children.size() ? m_children[idx].get() : nullptr;
+    return idx < m_children.size() ? m_children[idx] : nullptr;
 }
 
-void ParsedObject::addChild(std::shared_ptr<ParsedObject> child)
+ModelTreeNode::ModelTreeNodePtr ModelTreeNode::getChildByName(const QString &name) const
 {
-    QTC_ASSERT(child->m_parent == this || child->m_parent == nullptr, return);
+    QList<ModelTreeNode::ModelTreeNodePtr>::const_iterator it;
+    for (it = m_children.begin(); it != m_children.end(); ++it) {
+        if ((*it)->m_id == name)
+            return *it;
+    }
+
+    return nullptr;
+}
+
+void ModelTreeNode::addChild(ModelTreeNode::ModelTreeNodePtr child)
+{
+    QTC_ASSERT(child->m_parent == this || child->m_parent == nullptr, return );
 
     m_children.push_back(child);
     child->m_parent = this;
 }
 
-void ParsedObject::detachChildren()
+void ModelTreeNode::removeChildByName(const QString &name)
 {
-    foreach (std::shared_ptr<ParsedObject> child, m_children)
-        child->m_parent = nullptr;
+    QList<ModelTreeNode::ModelTreeNodePtr>::iterator it;
+    for (it = m_children.begin(); it != m_children.end(); ++it) {
+        if ((*it)->m_id == name) {
+            m_children.erase(it);
+            return;
+        }
+    }
+}
 
+void ModelTreeNode::removeChildren()
+{
     m_children.clear();
 }
 
-const QVariant &ParsedObject::data() const
+QVariant ModelTreeNode::data() const
 {
-    return m_data;
+    return QVariant(m_id);
 }
 
-const ParsedObject* ParsedObject::parent() const
+QString ModelTreeNode::id() const
+{
+    return m_id;
+}
+
+const ModelTreeNode *ModelTreeNode::parent() const
 {
     return m_parent;
 }
 
-int ParsedObject::columnCount() const
+int ModelTreeNode::columnCount() const
 {
     return 1;
 }
 
-int ParsedObject::row() const
+int ModelTreeNode::row() const
 {
     int idx = 0;
-    foreach (const std::shared_ptr<ParsedObject> &obj, m_parent->m_children) {
+    foreach (const ModelTreeNode::ModelTreeNodePtr &obj, m_parent->m_children) {
         if (obj.get() == this)
             return idx;
 

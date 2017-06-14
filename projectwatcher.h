@@ -33,6 +33,9 @@
 #include <projectexplorer/projecttree.h>
 #include <projectexplorer/project.h>
 
+#include "modeltree.h"
+#include "parseddatastorage.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -43,6 +46,7 @@ public:
     ProjectWatcher();
 
 private slots:
+    void onProjectAdded(ProjectExplorer::Project *project);
     void onProjectRemoved(ProjectExplorer::Project *project);
 
     void onFilesAdded(ProjectExplorer::FolderNode *folder,
@@ -50,14 +54,19 @@ private slots:
     void onFilesRemoved(ProjectExplorer::FolderNode *folder,
                         const QList<ProjectExplorer::FileNode *> &staleFiles);
 
-private:
-    QStringList getFilePaths(const QList<ProjectExplorer::FileNode *> &fileNodes) const;
+    void onFolderRemoved(ProjectExplorer::FolderNode *parentFolder,
+                         const QList<ProjectExplorer::FolderNode *> &staleFolders);
 
-    void processFiles(const QStringList &filePaths) const;
-    void removeFiles(const QStringList &filePaths) const;
+private:
+    Utils::FileNameList filterValidPaths(QList<ProjectExplorer::FileNode *> fileNodes);
+
+    void processFiles(const Utils::FileNameList &filePaths) const;
+    void tryRemoveFiles(const Utils::FileNameList &filePaths) const;
 
     std::unique_ptr<QTextDocument> textDocumentFromPath(const QString &fileName) const;
-    QStringList filterValidFiles(const QStringList &allFiles) const;
+
+    ParsedDataStorage *m_storage;
+    ModelTree *m_tree;
 };
 
 } // namespace Internal

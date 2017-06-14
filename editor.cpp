@@ -35,8 +35,7 @@
 
 #include "asn1acnconstants.h"
 #include "document.h"
-#include "parseddocument.h"
-#include "parseddatastorage.h"
+#include "modeltree.h"
 #include "overviewmodel.h"
 
 using namespace Asn1Acn::Internal;
@@ -99,13 +98,13 @@ void EditorWidget::onAsnDocumentUpdated(const QTextDocument &document)
     Q_UNUSED(document);
 
     QString filePath = textDocument()->filePath().toString();
-    ParsedDataStorage *storage = ParsedDataStorage::instance();
+    ModelTree *tree = ModelTree::instance();
 
-    std::shared_ptr<ParsedDocument> parsedDocument = storage->getDataForFile(filePath);
-    if (parsedDocument == nullptr)
+    ModelTreeNode::ModelTreeNodePtr documentNode = tree->getNodeForFilepath(filePath);
+    if (documentNode == nullptr)
         return;
 
-    m_model->setRootNode(parsedDocument->getTreeRoot());
+    m_model->setRootNode(documentNode);
 }
 
 

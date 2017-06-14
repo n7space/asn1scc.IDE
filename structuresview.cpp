@@ -25,17 +25,15 @@
 
 #include "structuresview.h"
 
-#include "parseddatastorage.h"
+#include "modeltree.h"
 #include "asn1acnconstants.h"
-#include "parsedobject.h"
 
 using namespace Asn1Acn::Internal;
 
 StructuresViewWidget::StructuresViewWidget() :
-    OverviewWidget(new OverviewModel),
-    m_modelRoot(std::shared_ptr<ParsedObject>(new ParsedObject))
+    OverviewWidget(new OverviewModel)
 {
-    connect(ParsedDataStorage::instance(), &ParsedDataStorage::storageUpdated,
+    connect(ModelTree::instance(), &ModelTree::treeUpdated,
             this, &StructuresViewWidget::modelUpdated);
 
     modelUpdated();
@@ -48,14 +46,10 @@ StructuresViewWidget::~StructuresViewWidget()
 
 void StructuresViewWidget::refreshModel()
 {
-    m_modelRoot->detachChildren();
+    ModelTree *instance = ModelTree::instance();
+    auto modelRoot = instance->getModelTreeRoot();
 
-    ParsedDataStorage *instance = ParsedDataStorage::instance();
-    auto documents = instance->getAllParsedFiles();
-    for (const auto &document : documents)
-        m_modelRoot->addChild(document->getTreeRoot());
-
-    m_model->setRootNode(m_modelRoot);
+    m_model->setRootNode(modelRoot);
 }
 
 void StructuresViewWidget::modelUpdated()

@@ -25,6 +25,8 @@
 
 #include "parseddatastorage.h"
 
+#include "utils/qtcassert.h"
+
 using namespace Asn1Acn::Internal;
 
 static ParsedDataStorage *m_instance;
@@ -44,47 +46,37 @@ ParsedDataStorage *ParsedDataStorage::instance()
 }
 
 std::shared_ptr<ParsedDocument>
-ParsedDataStorage::getDataForFile(const QString &filePath) const
+ParsedDataStorage::getFileForPath(const QString &filePath) const
 {
-    QMutexLocker locker(&m_itemsMutex);
+    QMutexLocker locker(&m_documentsMutex);
 
-    return m_items.contains(filePath) ? m_items.value(filePath) : nullptr;
+    return m_documents.contains(filePath) ? m_documents.value(filePath) : nullptr;
 }
 
-QList<std::shared_ptr<ParsedDocument> >
-ParsedDataStorage::getAllParsedFiles() const
+void ParsedDataStorage::addFile(const QString &filePath, std::unique_ptr<ParsedDocument> file)
 {
-    QMutexLocker locker(&m_itemsMutex);
+    std::shared_ptr<ParsedDocument> newFile = std::move(file);
 
-    return m_items.values();
-}
+    {
+        QMutexLocker locker(&m_documentsMutex);
 
-void ParsedDataStorage::addFile(const QString &filePath, std::unique_ptr<ParsedDocument> newFile)
-{
-    QMutexLocker locker(&m_itemsMutex);
+        if (m_documents.contains(filePath) == true) {
+            std::shared_ptr<ParsedDocument> oldFile = m_documents.value(filePath);
+            if (oldFile->getRevision() == newFile->getRevision())
+                return;
+        }
 
-    if (m_items.contains(filePath) == true) {
-        std::shared_ptr<ParsedDocument> oldFile = m_items.value(filePath);
-        if (oldFile->getRevision() == newFile->getRevision())
-            return;
+        m_documents.insert(filePath, newFile);
     }
 
-    m_items.insert(filePath, std::move(newFile));
-
-    locker.unlock();
-
-    emit storageUpdated();
+    emit fileUpdated(filePath, newFile);
 }
 
 void ParsedDataStorage::removeFile(const QString &filePath)
 {
-    QMutexLocker locker(&m_itemsMutex);
-    if (m_items.contains(filePath) == false)
+    QMutexLocker locker(&m_documentsMutex);
+    if (m_documents.contains(filePath) == false)
         return;
 
-    m_items.remove(filePath);
-
-    locker.unlock();
-
-    emit storageUpdated();
+    m_documents.remove(filePath);
 }
