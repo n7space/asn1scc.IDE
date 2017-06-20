@@ -8,7 +8,7 @@ image: Visual Studio 2015
 clone_folder: c:\projects\asn1scc.IDE\src
 
 environment:
-  QTDIR: C:\Qt\5.8\msvc2015
+  QTDIR: C:\Qt\5.9\msvc2015
   ENV_QTC_VERSION: 4.2.2
   ENV_QTC_VERSION_SHORT: 4.2
   ENV_QTC_PLATFORM: vs2015_32
