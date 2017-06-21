@@ -98,27 +98,13 @@ void ModelTree::addNodeToProject(const QString &projectName,
     emit treeUpdated();
 }
 
-void ModelTree::removeNodeFromProject(const QString &projectName, const QString &fileName)
-{
-    {
-        QMutexLocker locker(&m_dataMutex);
-
-        ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
-        QTC_ASSERT(projectNode != nullptr, return );
-
-        projectNode->removeChildByName(fileName);
-    }
-
-    emit treeUpdated();
-}
-
 ModelTreeNode::ModelTreeNodePtr ModelTree::getModelTreeRoot() const
 {
     return m_treeRoot;
 }
 
 ModelTreeNode::ModelTreeNodePtr
-ModelTree::getNodeForFilepath(const QString &filePath) const
+ModelTree::getAnyNodeForFilepath(const QString &filePath) const
 {
     QMutexLocker locker(&m_dataMutex);
 
@@ -131,6 +117,51 @@ ModelTree::getNodeForFilepath(const QString &filePath) const
     }
 
     return nullptr;
+}
+
+ModelTreeNode::ModelTreeNodePtr
+ModelTree::getNodeForFilepathFromProject(const QString &projectName, const QString &filePath) const
+{
+    QMutexLocker locker(&m_dataMutex);
+
+    ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
+    if (projectNode == nullptr)
+        return nullptr;
+
+    return projectNode->getChildByName(filePath);
+}
+
+int ModelTree::getProjectFilesCnt(const QString &projectName) const
+{
+    QMutexLocker locker(&m_dataMutex);
+
+    ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
+    if (projectNode == nullptr)
+        return 0;
+
+    return projectNode->childrenCount();
+}
+
+void ModelTree::removeStaleNodesFromProject(const QString &projectName, const QStringList &currentPaths)
+{
+    {
+        QMutexLocker locker(&m_dataMutex);
+
+        ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
+        if (projectNode == nullptr)
+            return;
+
+        QList<QString> stalePaths;
+        for (int i = 0; i < projectNode->childrenCount(); i++)
+            stalePaths.push_back(projectNode->childAt(i)->id());
+
+        QSet<QString> pathsToRemove = stalePaths.toSet().subtract(currentPaths.toSet());
+
+        foreach(const QString &stalePath, pathsToRemove)
+            projectNode->removeChildByName(stalePath);
+    }
+
+    emit treeUpdated();
 }
 
 void ModelTree::updateModelTreeNode(const QString &filePath,

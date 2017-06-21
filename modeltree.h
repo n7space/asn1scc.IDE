@@ -47,13 +47,18 @@ public:
     static ModelTree *instance();
 
     ModelTreeNode::ModelTreeNodePtr getModelTreeRoot() const;
-    ModelTreeNode::ModelTreeNodePtr getNodeForFilepath(const QString &filePath) const;
+
+    ModelTreeNode::ModelTreeNodePtr getAnyNodeForFilepath(const QString &filePath) const;
+    ModelTreeNode::ModelTreeNodePtr getNodeForFilepathFromProject(const QString &projectName, const QString &filePath) const;
+
+    int getProjectFilesCnt(const QString &projectName) const;
 
     void addProjectNode(ModelTreeNode::ModelTreeNodePtr projectNode);
     void removeProjectNode(const QString &projectName);
 
     void addNodeToProject(const QString &projectName, ModelTreeNode::ModelTreeNodePtr node);
-    void removeNodeFromProject(const QString &projectName, const QString &fileName);
+
+    void removeStaleNodesFromProject(const QString &projectName, const QStringList &currentPaths);
 
 signals:
     void treeUpdated();
