@@ -26,11 +26,9 @@
 #pragma once
 
 #include <QFile>
+#include <QStringList>
 #include <QTextDocument>
 
-#include <projectexplorer/projectexplorer.h>
-#include <projectexplorer/projectnodes.h>
-#include <projectexplorer/projecttree.h>
 #include <projectexplorer/project.h>
 
 #include "modeltree.h"
@@ -48,20 +46,16 @@ public:
 private slots:
     void onProjectAdded(ProjectExplorer::Project *project);
     void onProjectRemoved(ProjectExplorer::Project *project);
-
-    void onFilesAdded(ProjectExplorer::FolderNode *folder,
-                      const QList<ProjectExplorer::FileNode *> &newFiles);
-    void onFilesRemoved(ProjectExplorer::FolderNode *folder,
-                        const QList<ProjectExplorer::FileNode *> &staleFiles);
-
-    void onFolderRemoved(ProjectExplorer::FolderNode *parentFolder,
-                         const QList<ProjectExplorer::FolderNode *> &staleFolders);
+    void onProjectFileListChanged();
 
 private:
-    Utils::FileNameList filterValidPaths(QList<ProjectExplorer::FileNode *> fileNodes);
+    QStringList filterValidPaths(const QStringList &paths);
 
-    void processFiles(const Utils::FileNameList &filePaths) const;
-    void tryRemoveFiles(const Utils::FileNameList &filePaths) const;
+    void handleFilesAdded(const QString &projectName, const QStringList &filePaths);
+    void handleFilesRemoved(const QString &projectName, const QStringList &filePaths);
+
+    void tryProcessFiles(const QStringList &filePaths) const;
+    void tryRemoveFiles(const QStringList &filePaths) const;
 
     std::unique_ptr<QTextDocument> textDocumentFromPath(const QString &fileName) const;
 
