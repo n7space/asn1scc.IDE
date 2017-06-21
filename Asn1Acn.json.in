@@ -8,5 +8,22 @@
     \"Description\" : \"Plugin for asn1scc - ASN.1/ACN compiler for embedded systems \",
     \"Url\" : \"http://n7mobile.com/Space\",
     \"Category\" : \"Modeling\",
-    $$dependencyList
+    $$dependencyList,
+
+    \"Mimetypes\" : \"
+    <?xml version=\'1.0\'?>
+    <mime-info xmlns=\'http://www.freedesktop.org/standards/shared-mime-info\'>
+        <mime-type type=\'text/x-asn1\'>
+            <sub-class-of type=\'text/plain\'/>
+            <comment>ASN.1 Data Model</comment>
+            <glob pattern=\'*.asn\'/>
+            <glob pattern=\'*.asn1\'/>
+        </mime-type>
+        <mime-type type=\'text/x-acn\'>
+            <sub-class-of type=\'text/plain\'/>
+            <comment>ACN Data Encoding</comment>
+            <glob pattern=\'*.acn\'/>
+        </mime-type>
+    </mime-info>
+    \"
 }

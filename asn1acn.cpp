@@ -35,8 +35,6 @@
 
 #include <texteditor/texteditorconstants.h>
 
-#include <utils/mimetypes/mimedatabase.h>
-
 #include "asneditor.h"
 #include "outline.h"
 #include "asnsnippetprovider.h"
@@ -74,8 +72,6 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
-
-    Utils::MimeDatabase::addMimeTypes(":/asn1acn/asn1acn.mimetypes.xml");
 
     addAutoReleasedObject(new AsnEditorFactory);
     addAutoReleasedObject(new StructuresViewFactory);

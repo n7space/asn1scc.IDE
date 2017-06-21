@@ -113,9 +113,6 @@ DISTFILES += \
     LICENSE \
     README.md
 
-RESOURCES += \
-    asn1acn.qrc
-
 # test files
 
 equals(TEST, 1) {

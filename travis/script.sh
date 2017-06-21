@@ -3,7 +3,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "${DIR}/setup-env.sh"
 
 if [[ $CI == "true" && $BUILD_OS_NAME == 'linux' ]]; then
-    . /opt/qt58/bin/qt58-env.sh
+    . /opt/qt59/bin/qt59-env.sh
     QMAKE_PARAMS="-spec linux-g++"
 fi
 

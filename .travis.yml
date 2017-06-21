@@ -20,8 +20,8 @@ sudo: false
 
 env:
   global:
-    - ENV_QTC_VERSION="4.2.2"
-    - ENV_QTC_VERSION_SHORT="4.2"
+    - ENV_QTC_VERSION="4.3.0"
+    - ENV_QTC_VERSION_SHORT="4.3"
   matrix:
     - ENV_WITH_TESTS=1
     - ENV_WITH_TESTS=0
@@ -29,10 +29,13 @@ env:
 addons:
   apt:
     sources:
-    - sourceline: "ppa:beineri/opt-qt58-trusty"
+    - sourceline: "ppa:beineri/opt-qt59-trusty"
+    - ubuntu-toolchain-r-test
     packages:
-    - qt58-meta-minimal
+    - qt59-meta-minimal
     - p7zip
+    - libstdc++6
+    - libgl1-mesa-dev
 
 install:
   - travis/install.sh

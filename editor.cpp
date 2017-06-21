@@ -100,7 +100,7 @@ void EditorWidget::onAsnDocumentUpdated(const QTextDocument &document)
     QString filePath = textDocument()->filePath().toString();
     ModelTree *tree = ModelTree::instance();
 
-    ModelTreeNode::ModelTreeNodePtr documentNode = tree->getNodeForFilepath(filePath);
+    ModelTreeNode::ModelTreeNodePtr documentNode = tree->getAnyNodeForFilepath(filePath);
     if (documentNode == nullptr)
         return;
 

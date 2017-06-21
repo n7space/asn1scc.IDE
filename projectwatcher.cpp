@@ -32,6 +32,8 @@
 
 #include <projectexplorer/session.h>
 
+#include <utils/qtcassert.h>
+
 #include "documentprocessor.h"
 #include "modeltreenode.h"
 
@@ -47,14 +49,6 @@ ProjectWatcher::ProjectWatcher()
     connect(sessionManager, &ProjectExplorer::SessionManager::projectAdded,
             this, &ProjectWatcher::onProjectAdded);
 
-    ProjectExplorer::ProjectTree *projectModelTree = ProjectExplorer::ProjectTree::instance();
-    connect(projectModelTree, &ProjectExplorer::ProjectTree::filesAboutToBeAdded,
-            this, &ProjectWatcher::onFilesAdded);
-    connect(projectModelTree, &ProjectExplorer::ProjectTree::filesAboutToBeRemoved,
-            this, &ProjectWatcher::onFilesRemoved);
-    connect(projectModelTree, &ProjectExplorer::ProjectTree::foldersAboutToBeRemoved,
-            this, &ProjectWatcher::onFolderRemoved);
-
     m_storage = ParsedDataStorage::instance();
     m_tree = ModelTree::instance();
 }
@@ -65,89 +59,80 @@ void ProjectWatcher::onProjectAdded(ProjectExplorer::Project *project)
 
     auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(projectName));
     m_tree->addProjectNode(node);
+
+    connect(project, &ProjectExplorer::Project::fileListChanged,
+            this, &ProjectWatcher::onProjectFileListChanged);
 }
 
 void ProjectWatcher::onProjectRemoved(ProjectExplorer::Project *project)
 {
     m_tree->removeProjectNode(project->displayName());
+
+    disconnect(project, &ProjectExplorer::Project::fileListChanged,
+               this, &ProjectWatcher::onProjectFileListChanged);
 }
 
-void ProjectWatcher::onFilesAdded(ProjectExplorer::FolderNode *folder,
-                                  const QList<ProjectExplorer::FileNode *> &newFiles)
+void ProjectWatcher::onProjectFileListChanged()
 {
-    Q_UNUSED(folder);
+    ProjectExplorer::Project *project = qobject_cast<ProjectExplorer::Project *>(sender());
+    QTC_ASSERT(project != nullptr, return);
 
-    Utils::FileNameList validPaths = filterValidPaths(newFiles);
-    ProjectExplorer::Project *project = ProjectExplorer::SessionManager::projectForNode(folder);
+    QString projectName = project->displayName();
+    int storedFilesCnt = m_tree->getProjectFilesCnt(projectName);
 
-    foreach (const Utils::FileName &path, validPaths) {
-        auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(path.toString()));
-        m_tree->addNodeToProject(project->displayName(), node);
-    }
+    QStringList validFiles = filterValidPaths(project->files(ProjectExplorer::Project::AllFiles));
+    int currentFilesCnt = validFiles.count();
 
-    processFiles(validPaths);
+    if (currentFilesCnt > storedFilesCnt)
+        handleFilesAdded(projectName, validFiles);
+    else if (currentFilesCnt < storedFilesCnt)
+        handleFilesRemoved(projectName, validFiles);
 }
 
-void ProjectWatcher::onFilesRemoved(ProjectExplorer::FolderNode *folder,
-                                    const QList<ProjectExplorer::FileNode *> &staleFiles)
+QStringList ProjectWatcher::filterValidPaths(const QStringList &paths)
 {
-    Q_UNUSED(folder);
-
-    Utils::FileNameList validPaths = filterValidPaths(staleFiles);
-    ProjectExplorer::Project *project = ProjectExplorer::SessionManager::projectForNode(folder);
-
-    foreach (const Utils::FileName &path, validPaths)
-        m_tree->removeNodeFromProject(project->displayName(), path.toString());
-
-    tryRemoveFiles(validPaths);
-}
-
-void ProjectWatcher::onFolderRemoved(ProjectExplorer::FolderNode *parentFolder,
-                                     const QList<ProjectExplorer::FolderNode*> &staleFolders)
-{
-    Q_UNUSED(parentFolder);
-
-    // If removed file is the last one in folder, than filesAboutToBeRemoved notification is not sent,
-    // so replacement is produced here.
-
-    foreach (ProjectExplorer::FolderNode* folder, staleFolders) {
-        const QList<ProjectExplorer::FileNode *> staleFiles = folder->fileNodes();
-        onFilesRemoved(folder, staleFiles);
-    }
-}
-
-Utils::FileNameList ProjectWatcher::filterValidPaths(QList<ProjectExplorer::FileNode *> fileNodes)
-{
-    Utils::FileNameList result;
-
     // TODO: filtering should be performed using mimetypes
-    QRegularExpression docFilter(DOCUMENT_FILTER_EXTENSIONS_REGEXP);
-
-    foreach (const ProjectExplorer::FileNode *file, fileNodes) {
-        QString displayPath = file->filePath().toString();
-        if(docFilter.match(displayPath).hasMatch() == true)
-            result.append(file->filePath());
-    }
-
-    return result;
+    return paths.filter(QRegularExpression(DOCUMENT_FILTER_EXTENSIONS_REGEXP));
 }
 
-void ProjectWatcher::processFiles(const Utils::FileNameList &filePaths) const
+void ProjectWatcher::handleFilesAdded(const QString &projectName, const QStringList &filePaths)
 {
-    foreach (const Utils::FileName &path, filePaths) {
-        auto doc = textDocumentFromPath(path.toString());
-        DocumentProcessor dp(doc.get(), path.toString(), -1);
+    foreach(const QString &path, filePaths) {
+        if (m_tree->getNodeForFilepathFromProject(projectName, path) != nullptr)
+            continue;
+
+        auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(path));
+        m_tree->addNodeToProject(projectName, node);
+    }
+
+    tryProcessFiles(filePaths);
+}
+
+void ProjectWatcher::handleFilesRemoved(const QString &projectName, const QStringList &filePaths)
+{
+    m_tree->removeStaleNodesFromProject(projectName, filePaths);
+    tryRemoveFiles(filePaths);
+}
+
+void ProjectWatcher::tryProcessFiles(const QStringList &filePaths) const
+{
+    foreach (const QString &path, filePaths) {
+        if (m_storage->getFileForPath(path) != nullptr)
+            continue;
+
+        auto doc = textDocumentFromPath(path);
+        DocumentProcessor dp(doc.get(), path, -1);
         dp.run();
     }
 }
 
-void ProjectWatcher::tryRemoveFiles(const Utils::FileNameList &filePaths) const
+void ProjectWatcher::tryRemoveFiles(const QStringList &filePaths) const
 {
-    foreach (const Utils::FileName &path, filePaths) {
-        QList<ProjectExplorer::Node *> nodes = ProjectExplorer::SessionManager::nodesForFile(path);
-        // File should be removed from storage if it is present in one project only
-        if (nodes.size() == 1)
-            m_storage->removeFile(path.toString());
+    Q_UNUSED(filePaths);
+
+    foreach(const QString &path, filePaths) {
+        if (m_tree->getAnyNodeForFilepath(path))
+            m_storage->removeFile(path);
     }
 }
 
