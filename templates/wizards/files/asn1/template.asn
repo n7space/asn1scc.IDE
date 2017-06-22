@@ -1,0 +1,4 @@
+%{JS: Util.fileName('%{TargetPath}')} DEFINITIONS ::= BEGIN
+
+END
+

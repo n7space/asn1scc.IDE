@@ -31,6 +31,7 @@ namespace Constants {
 // Shared constants
 
 const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
+const char WIZARD_CATEGORY[] = "O.Asn1Acn";
 
 // ASN1 constants
 

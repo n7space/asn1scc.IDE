@@ -127,7 +127,13 @@ HEADERS += \
 
 ### Static files ###
 
-STATIC_FILES += snippets/asn.xml
+STATIC_FILES += \
+    snippets/asn.xml \
+    templates/wizards/files/acn/wizard.json \
+    templates/wizards/files/acn/template.acn \
+    templates/wizards/files/asn1/wizard.json \
+    templates/wizards/files/asn1/template.asn
+
 STATIC_BASE = $$PWD
 STATIC_OUTPUT_BASE = $$IDE_DATA_PATH
 STATIC_INSTALL_BASE = $$INSTALL_DATA_PATH
