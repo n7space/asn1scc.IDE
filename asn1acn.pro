@@ -75,7 +75,8 @@ SOURCES += \
     projectwatcher.cpp \
     overviewwidget.cpp \
     document.cpp \
-    modeltree.cpp
+    modeltree.cpp \
+    asn1acnjsextension.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -107,7 +108,8 @@ HEADERS += \
     projectwatcher.h \
     overviewwidget.h \
     document.h \
-    modeltree.h
+    modeltree.h \
+    asn1acnjsextension.h
 
 DISTFILES += \
     LICENSE \

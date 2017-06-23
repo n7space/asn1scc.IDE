@@ -1,3 +1,3 @@
-%{JS: Util.fileName('%{TargetPath}')} DEFINITIONS ::= BEGIN
+%{JS: Asn1Acn.firstLetterToUpper(Util.fileName('%{TargetPath}'))} DEFINITIONS ::= BEGIN
 
 END
