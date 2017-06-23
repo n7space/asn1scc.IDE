@@ -5,7 +5,7 @@
     "category": "O.Asn1Acn",
     "trDescription": "Creates an ASN.1 model.",
     "trDisplayName": "ASN.1 Model",
-    "trDisplayCategory": "ASN1/ACN",
+    "trDisplayCategory": "ASN.1/ACN",
     "enabled": "%{JS: [ %{Plugins} ].indexOf('ASN.1/ACN') >= 0}",
 
     "pages" :

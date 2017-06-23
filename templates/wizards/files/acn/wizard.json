@@ -3,9 +3,9 @@
     "supportedProjectTypes": [ ],
     "id": "Z.ACN",
     "category": "O.Asn1Acn",
-    "trDescription": "Creates an ACN model.",
+    "trDescription": "Creates an ACN encoding model.",
     "trDisplayName": "ACN Model",
-    "trDisplayCategory": "ASN1/ACN",
+    "trDisplayCategory": "ASN.1/ACN",
     "enabled": "%{JS: [ %{Plugins} ].indexOf('ASN.1/ACN') >= 0}",
 
     "pages" :
