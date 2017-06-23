@@ -1,0 +1,36 @@
+{
+    "version": 1,
+    "supportedProjectTypes": [ ],
+    "id": "Z.ACN",
+    "category": "O.Asn1Acn",
+    "trDescription": "Creates an ACN encoding model.",
+    "trDisplayName": "ACN Model",
+    "trDisplayCategory": "ASN.1/ACN",
+    "enabled": "%{JS: [ %{Plugins} ].indexOf('ASN.1/ACN') >= 0}",
+
+    "pages" :
+    [
+        {
+            "trDisplayName": "Location",
+            "trShortTitle": "Location",
+            "typeId": "File"
+        },
+        {
+            "trDisplayName": "Project Management",
+            "trShortTitle": "Summary",
+            "typeId": "Summary"
+        }
+    ],
+    "generators" :
+    [
+        {
+            "typeId": "File",
+            "data":
+            {
+                "source": "template.acn",
+                "target": "%{JS: Util.fileName('%{TargetPath}', '%{JS: Util.preferredSuffix('text/x-acn')}')}",
+                "openInEditor": true
+            }
+        }
+    ]
+}

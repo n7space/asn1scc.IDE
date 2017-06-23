@@ -28,6 +28,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/icontext.h>
+#include <coreplugin/jsexpander.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
@@ -40,6 +41,7 @@
 #include "asnsnippetprovider.h"
 #include "structuresview.h"
 #include "projectwatcher.h"
+#include "asn1acnjsextension.h"
 
 #include "acneditor.h"
 
@@ -86,6 +88,8 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     Core::Command *cmd = Core::ActionManager::ActionManager::command(TextEditor::Constants::FOLLOW_SYMBOL_UNDER_CURSOR);
     contextMenu->addAction(cmd);
+
+    Core::JsExpander::registerQObjectForJs(QLatin1String("Asn1Acn"), new Asn1AcnJsExtension);
 
     return true;
 }

@@ -75,7 +75,8 @@ SOURCES += \
     projectwatcher.cpp \
     overviewwidget.cpp \
     document.cpp \
-    modeltree.cpp
+    modeltree.cpp \
+    asn1acnjsextension.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -107,7 +108,8 @@ HEADERS += \
     projectwatcher.h \
     overviewwidget.h \
     document.h \
-    modeltree.h
+    modeltree.h \
+    asn1acnjsextension.h
 
 DISTFILES += \
     LICENSE \
@@ -127,7 +129,13 @@ HEADERS += \
 
 ### Static files ###
 
-STATIC_FILES += snippets/asn.xml
+STATIC_FILES += \
+    snippets/asn.xml \
+    templates/wizards/files/acn/wizard.json \
+    templates/wizards/files/acn/template.acn \
+    templates/wizards/files/asn1/wizard.json \
+    templates/wizards/files/asn1/template.asn
+
 STATIC_BASE = $$PWD
 STATIC_OUTPUT_BASE = $$IDE_DATA_PATH
 STATIC_INSTALL_BASE = $$INSTALL_DATA_PATH

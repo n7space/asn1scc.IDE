@@ -1,0 +1,54 @@
+{
+    "version": 1,
+    "supportedProjectTypes": [ ],
+    "id": "Z.ASN1",
+    "category": "O.Asn1Acn",
+    "trDescription": "Creates an ASN.1 model.",
+    "trDisplayName": "ASN.1 Model",
+    "trDisplayCategory": "ASN.1/ACN",
+    "enabled": "%{JS: [ %{Plugins} ].indexOf('ASN.1/ACN') >= 0}",
+
+    "pages" :
+    [
+        {
+            "trDisplayName": "Location",
+            "trShortTitle": "Location",
+            "typeId": "File"
+        },
+        {
+            "trDisplayName": "File Extension",
+            "trShortTitle": "Extension",
+            "typeId": "Fields",
+            "data":
+            {
+                "name": "FileExtensionType",
+                "type": "ComboBox",
+                "data" :
+                {
+                    "items" :
+                    [
+                        { "trKey": "asn", "value": ".asn" },
+                        { "trKey": "asn1", "value": ".asn1" }
+                    ]
+                 }
+            }
+        },
+        {
+            "trDisplayName": "Project Management",
+            "trShortTitle": "Summary",
+            "typeId": "Summary"
+        }
+    ],
+    "generators" :
+    [
+        {
+            "typeId": "File",
+            "data":
+            {
+                "source": "template.asn",
+                "target": "%{JS: Util.fileName('%{TargetPath}', '%{FileExtensionType}')}",
+                "openInEditor": true
+            }
+        }
+    ]
+}
