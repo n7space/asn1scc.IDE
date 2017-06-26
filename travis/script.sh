@@ -9,6 +9,7 @@ fi
 
 echo "Building..."
 cd "${BUILD_DIR}"
+$CXX --version
 echo "Executing qmake..."
 set -x
 qmake "${PROJECT_DIR}"/asn1acn.pro -r ${QMAKE_PARAMS} \
