@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+<language name="ASN.1" section="Modeling"
+          version="1" kateversion="2.3"
+          extensions="*.asn;*.asn1"
+          mimetype="text/x-asn1"
+          author="N7 Mobile sp. z o.o."
+          license="GPLv3"
+          >
+  <highlighting>
+    <list name="keywords">
+      <item> PLUS-INFINITY </item>
+      <item> MINUS-INFINITY </item>
+      <item> AUTOMATIC </item>
+      <item> TAGS </item>
+      <item> BEGIN </item>
+      <item> END </item>
+      <item> ALL </item>
+      <item> EXPORTS </item>
+      <item> IMPORTS </item>
+      <item> DEFINITIONS </item>
+      <item> FROM </item>
+      <item> APPLICATION </item>
+      <item> PRIVATE </item>
+      <item> UNIVERSAL </item>
+    </list>
+
+    <list name="types">
+      <item> STRING </item>
+      <item> ENUMERATED </item>
+      <item> INTEGER </item>
+      <item> REAL </item>
+      <item> BOOLEAN </item>
+      <item> CHOICE </item>
+      <item> SET </item>
+      <item> SEQUENCE </item>
+      <item> OCTET </item>
+
+      <item> OF </item>
+
+      <item> NumericString </item>
+      <item> PrintableString </item>
+      <item> VisibleString </item>
+      <item> IA5String </item>
+      <item> TeletexString </item>
+      <item> VideotexString </item>
+      <item> GraphicString </item>
+      <item> GeneralString </item>
+      <item> UniversalString </item>
+      <item> BMPString </item>
+      <item> UTF8String </item>
+    </list>
+    
+    <list name="builtin">
+      <item> NULL </item>
+      <item> FALSE </item>
+      <item> TRUE </item>
+    </list>
+    
+    <list name="attributes">
+      <item> SIZE </item>
+      <item> OPTIONAL </item>
+      <item> MIN </item>
+      <item> MAX </item>
+      <item> DEFAULT </item>
+    </list>
+
+    <contexts>
+      <context name="Normal Text" attribute="Normal Text" lineEndContext="#stay">
+        <keyword attribute="Keyword" context="#stay" String="keywords" />
+        <keyword attribute="Data Type" context="#stay" String="types" />
+        <keyword attribute="Built In" context="#stay" String="builtin" />
+        <keyword attribute="Attributes" context="#stay" String="attributes" />
+        <Detect2Chars attribute="Comment" context="Comment" char="-" char1="-" />
+      </context>
+      
+      <context attribute="Comment" lineEndContext="#pop" name="Comment" />
+    </contexts>
+    
+    <itemDatas>
+      <itemData name="Normal Text" defStyleNum="dsNormal" />
+      <itemData name="Keyword"     defStyleNum="dsKeyword" />
+      <itemData name="Comment"     defStyleNum="dsComment" />
+      <itemData name="Data Type"   defStyleNum="dsDataType" />
+      <itemData name="Built In"    defStyleNum="dsBuiltIn" />
+      <itemData name="Attributes"  defStyleNum="dsAttribute" />
+    </itemDatas>
+  </highlighting>
+</language>
+
+<!--
+    m_ids.insert(QLatin1String("dsNormal"), Highlighter::Normal);
+    m_ids.insert(QLatin1String("dsKeyword"), Highlighter::Keyword);
+    m_ids.insert(QLatin1String("dsDataType"), Highlighter::DataType);
+    m_ids.insert(QLatin1String("dsComment"), Highlighter::Comment);
+    m_ids.insert(QLatin1String("dsDecVal"), Highlighter::Decimal);
+    m_ids.insert(QLatin1String("dsBaseN"), Highlighter::BaseN);
+    m_ids.insert(QLatin1String("dsFloat"), Highlighter::Float);
+    m_ids.insert(QLatin1String("dsChar"), Highlighter::Char);
+    m_ids.insert(QLatin1String("dsSpecialChar"), Highlighter::SpecialChar);
+    m_ids.insert(QLatin1String("dsString"), Highlighter::String);
+    m_ids.insert(QLatin1String("dsAlert"), Highlighter::Alert);
+    m_ids.insert(QLatin1String("dsInformation"), Highlighter::Information);
+    m_ids.insert(QLatin1String("dsWarning"), Highlighter::Warning);
+    m_ids.insert(QLatin1String("dsError"), Highlighter::Error);
+    m_ids.insert(QLatin1String("dsFunction"), Highlighter::Function);
+    m_ids.insert(QLatin1String("dsRegionMarker"), Highlighter::RegionMarker);
+    m_ids.insert(QLatin1String("dsBuiltIn"), Highlighter::BuiltIn);
+    m_ids.insert(QLatin1String("dsExtension"), Highlighter::Extension);
+    m_ids.insert(QLatin1String("dsOperator"), Highlighter::Operator);
+    m_ids.insert(QLatin1String("dsVariable"), Highlighter::Variable);
+    m_ids.insert(QLatin1String("dsAttribute"), Highlighter::Attribute);
+    m_ids.insert(QLatin1String("dsAnnotation"), Highlighter::Annotation);
+    m_ids.insert(QLatin1String("dsCommentVar"), Highlighter::CommentVar);
+    m_ids.insert(QLatin1String("dsImport"), Highlighter::Import);
+    m_ids.insert(QLatin1String("dsOthers"), Highlighter::Others);
+    m_ids.insert(QLatin1String("dsIdentifier"), Highlighter::Identifier);
+    m_ids.insert(QLatin1String("dsDocumentation"), Highlighter::Documentation);
+
+GeneralizedTime  :	'GeneralizedTime';
+UTCTime  :	'UTCTime';
+MANTISSA	: 'mantissa';
+BASE		: 'base';
+EXPONENT	: 'exponent';
+UnionMark  :  '|'|'UNION';
+IntersectionMark  :	'^' | 'INTERSECTION';
+EXPLICIT:	 'EXPLICIT';
+IMPLICIT:	'IMPLICIT';
+EXTENSIBILITY	:	'EXTENSIBILITY';
+IMPLIED :	'IMPLIED';
+
+BIT	: 'BIT';
+ABSENT	:	'ABSENT';
+PRESENT	:	'PRESENT';
+WITH 	:	'WITH';
+COMPONENT	: 'COMPONENT';
+COMPONENTS 	: 'COMPONENTS';
+PATTERN		:'PATTERN';
+OBJECT 		:'OBJECT';
+IDENTIFIER	:'IDENTIFIER';
+RELATIVE_OID	:'RELATIVE-OID';
+
+INCLUDES	:'INCLUDES';
+EXCEPT		:'EXCEPT';
+ASSIG_OP		: '::=';
+L_BRACKET	:	'{';
+R_BRACKET	:	'}';
+L_PAREN		:	'(';
+R_PAREN		:	')';
+COMMA		:	',';
+
+EXT_MARK	: '...';
+DOUBLE_DOT  : '..';
+
+
+LESS_THAN			: '<';
+
+
+BitStringLiteral	:
+        '\'' ('0'|'1'|' ' | '\t' | '\r' | '\n')* '\'B'
+        ;
+
+
+
+
+OctectStringLiteral	:
+        '\'' ('0'..'9'|'a'..'f'|'A'..'F'|' ' | '\t' | '\r' | '\n')* '\'H'
+        ;
+
+StringLiteral 	: 	STR+ ;
+
+fragment
+STR 	:	'"' ( options {greedy=false;} : .)* '"' ;
+
+UID  :   ('A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9'|'-')* {if (Text.Contains("--"))
+                {
+                        MismatchedSetException mse = new MismatchedSetException(null, input);
+                        Recover(mse);
+                        throw mse;
+                }}
+    ;
+
+LID  :   ('a'..'z') ('a'..'z'|'A'..'Z'|'0'..'9'|'-')* {if (Text.Contains("--"))
+                {
+                        MismatchedSetException mse = new MismatchedSetException(null, input);
+                        Recover(mse);
+                        throw mse;
+                }}
+    ;
+
+
+fragment
+INT	:	('+'|'-')? ( '0' | ('1'..'9') ('0'..'9')*);
+
+
+
+fragment
+DIGITS
+        :	('0'..'9')+;
+
+FloatingPointLiteral
+    :
+    d=INT r=DOUBLE_DOT
+          {
+          $d.Type = INT;
+          Emit($d);$d.Line = input.Line;
+          $r.Type = DOUBLE_DOT;
+          Emit($r);$r.Line = input.Line;
+          }
+    |	  INT DOT (DIGITS)? (Exponent)?
+    | 	d = INT { $d.Type = INT; Emit($d);$d.Line = input.Line;}
+    ;
+
+
+
+DOT	:	 '.';
+
+
+
+
+
+fragment
+Exponent : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
+
+
+WS  :   (' ' | '\t' | '\r' | '\n')+ {$channel=HIDDEN;}
+    ;
+
+COMMENT
+    :   '/*' ( options {greedy=false;} : . )* '*/' {$channel=HIDDEN;}
+    ;
+/*
+COMMENT2
+    :   '--' ( options {greedy=false;} : . )* ('--'|'\r'?'\n') {$channel=HIDDEN;}
+    ;
+*/
+COMMENT2
+    : '--' ~('\n'|'\r')* '\r'? '\n' {$channel=HIDDEN;}
+    ;
+
+
+
+
+
+
+-->

@@ -26,14 +26,12 @@
 #include "acndocument.h"
 
 #include "asn1acnconstants.h"
-#include "acnhighlighter.h"
 
 using namespace Asn1Acn::Internal;
 
 AcnDocument::AcnDocument()
 {
     setId(Constants::ACNEDITOR_ID);
-    setSyntaxHighlighter(new AcnHighlighter);
 
     /*
     setIndenter(new CppTools::CppQtStyleIndenter);

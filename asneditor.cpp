@@ -63,6 +63,7 @@ AsnEditorFactory::AsnEditorFactory()
     setCodeFoldingSupported(true);
     setMarksVisible(true);
     setParenthesesMatchingEnabled(true);
+    setUseGenericHighlighter(true);
 
     setEditorActionHandlers(TextEditorActionHandler::Format
                           | TextEditorActionHandler::UnCommentSelection

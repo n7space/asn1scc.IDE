@@ -25,7 +25,6 @@
 
 #include "asndocument.h"
 
-#include "asnhighlighter.h"
 #include "asn1acnconstants.h"
 
 using namespace Asn1Acn::Internal;
@@ -33,7 +32,6 @@ using namespace Asn1Acn::Internal;
 AsnDocument::AsnDocument()
 {
     setId(Constants::ASNEDITOR_ID);
-    setSyntaxHighlighter(new AsnHighlighter);
 
     /*
      * setSyntaxHighlighter(new CppHighlighter);
