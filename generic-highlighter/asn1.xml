@@ -89,6 +89,9 @@
 
         <DetectChar attribute="Number String" context="Number String" char="'" />
 
+        <RegExpr attribute="Lower-Case ID" context="#stay" String="[a-z]([a-zA-Z0-9]|-)*" />
+        <RegExpr attribute="Upper-Case ID" context="#stay" String="[A-Z]([a-zA-Z0-9]|-)*" />
+
       </context>
 
       <context attribute="Comment" lineEndContext="#pop" name="Comment" />
@@ -120,6 +123,8 @@
       <itemData name="Float"          defStyleNum="dsFloat" />
       <itemData name="String"         defStyleNum="dsString" />
       <itemData name="Number String"  defStyleNum="dsBaseN" />
+      <itemData name="Lower-Case ID"  defStyleNum="dsVariable" />
+      <itemData name="Upper-Case ID"  defStyleNum="dsFunction" />
     </itemDatas>
 
     <general>
@@ -196,22 +201,5 @@ DOUBLE_DOT  : '..';
 
 
 LESS_THAN			: '<';
-
-
-UID  :   ('A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9'|'-')* {if (Text.Contains("--"))
-                {
-                        MismatchedSetException mse = new MismatchedSetException(null, input);
-                        Recover(mse);
-                        throw mse;
-                }}
-    ;
-
-LID  :   ('a'..'z') ('a'..'z'|'A'..'Z'|'0'..'9'|'-')* {if (Text.Contains("--"))
-                {
-                        MismatchedSetException mse = new MismatchedSetException(null, input);
-                        Recover(mse);
-                        throw mse;
-                }}
-    ;
 
 -->
