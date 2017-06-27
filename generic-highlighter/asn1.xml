@@ -82,9 +82,16 @@
 
         <Float attribute="Float" context="#stay" />
 
+        <DetectChar attribute="String" context="String" char="&quot;" />
+
       </context>
 
       <context attribute="Comment" lineEndContext="#pop" name="Comment" />
+
+      <context name="String" attribute="String" lineEndContext="#stay">
+        <DetectChar attribute="String" context="#pop" char="&quot;" />
+      </context>
+
     </contexts>
 
     <itemDatas>
@@ -96,6 +103,7 @@
       <itemData name="Attributes"  defStyleNum="dsAttribute" />
       <itemData name="Decimal"     defStyleNum="dsDecVal" />
       <itemData name="Float"       defStyleNum="dsFloat" />
+      <itemData name="String"      defStyleNum="dsString" />
     </itemDatas>
 
     <general>
