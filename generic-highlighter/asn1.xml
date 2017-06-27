@@ -87,6 +87,8 @@
 
         <DetectChar attribute="String" context="String" char="&quot;" />
 
+        <DetectChar attribute="Number String" context="Number String" char="'" />
+
       </context>
 
       <context attribute="Comment" lineEndContext="#pop" name="Comment" />
@@ -100,18 +102,24 @@
                       endRegion="Comment Region" />
       </context>
 
+      <context name="Number String" attribute="Number String" lineEndContext="#stay">
+        <Detect2Chars attribute="Number String" context="#pop" char="'" char1="H" />
+        <Detect2Chars attribute="Number String" context="#pop" char="'" char1="B" />
+      </context>
+
     </contexts>
 
     <itemDatas>
-      <itemData name="Normal Text" defStyleNum="dsNormal" />
-      <itemData name="Keyword"     defStyleNum="dsKeyword" />
-      <itemData name="Comment"     defStyleNum="dsComment" />
-      <itemData name="Data Type"   defStyleNum="dsDataType" />
-      <itemData name="Built In"    defStyleNum="dsBuiltIn" />
-      <itemData name="Attributes"  defStyleNum="dsAttribute" />
-      <itemData name="Decimal"     defStyleNum="dsDecVal" />
-      <itemData name="Float"       defStyleNum="dsFloat" />
-      <itemData name="String"      defStyleNum="dsString" />
+      <itemData name="Normal Text"    defStyleNum="dsNormal" />
+      <itemData name="Keyword"        defStyleNum="dsKeyword" />
+      <itemData name="Comment"        defStyleNum="dsComment" />
+      <itemData name="Data Type"      defStyleNum="dsDataType" />
+      <itemData name="Built In"       defStyleNum="dsBuiltIn" />
+      <itemData name="Attributes"     defStyleNum="dsAttribute" />
+      <itemData name="Decimal"        defStyleNum="dsDecVal" />
+      <itemData name="Float"          defStyleNum="dsFloat" />
+      <itemData name="String"         defStyleNum="dsString" />
+      <itemData name="Number String"  defStyleNum="dsBaseN" />
     </itemDatas>
 
     <general>
@@ -190,22 +198,6 @@ DOUBLE_DOT  : '..';
 LESS_THAN			: '<';
 
 
-BitStringLiteral	:
-        '\'' ('0'|'1'|' ' | '\t' | '\r' | '\n')* '\'B'
-        ;
-
-
-
-
-OctectStringLiteral	:
-        '\'' ('0'..'9'|'a'..'f'|'A'..'F'|' ' | '\t' | '\r' | '\n')* '\'H'
-        ;
-
-StringLiteral 	: 	STR+ ;
-
-fragment
-STR 	:	'"' ( options {greedy=false;} : .)* '"' ;
-
 UID  :   ('A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9'|'-')* {if (Text.Contains("--"))
                 {
                         MismatchedSetException mse = new MismatchedSetException(null, input);
@@ -221,60 +213,5 @@ LID  :   ('a'..'z') ('a'..'z'|'A'..'Z'|'0'..'9'|'-')* {if (Text.Contains("--"))
                         throw mse;
                 }}
     ;
-
-
-fragment
-INT	:	('+'|'-')? ( '0' | ('1'..'9') ('0'..'9')*);
-
-
-
-fragment
-DIGITS
-        :	('0'..'9')+;
-
-FloatingPointLiteral
-    :
-    d=INT r=DOUBLE_DOT
-          {
-          $d.Type = INT;
-          Emit($d);$d.Line = input.Line;
-          $r.Type = DOUBLE_DOT;
-          Emit($r);$r.Line = input.Line;
-          }
-    |	  INT DOT (DIGITS)? (Exponent)?
-    | 	d = INT { $d.Type = INT; Emit($d);$d.Line = input.Line;}
-    ;
-
-
-
-DOT	:	 '.';
-
-
-
-
-
-fragment
-Exponent : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
-
-
-WS  :   (' ' | '\t' | '\r' | '\n')+ {$channel=HIDDEN;}
-    ;
-
-COMMENT
-    :   '/*' ( options {greedy=false;} : . )* '*/' {$channel=HIDDEN;}
-    ;
-/*
-COMMENT2
-    :   '--' ( options {greedy=false;} : . )* ('--'|'\r'?'\n') {$channel=HIDDEN;}
-    ;
-*/
-COMMENT2
-    : '--' ~('\n'|'\r')* '\r'? '\n' {$channel=HIDDEN;}
-    ;
-
-
-
-
-
 
 -->
