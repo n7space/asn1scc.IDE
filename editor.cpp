@@ -45,10 +45,6 @@ EditorWidget::EditorWidget()
 {
     // TODO ? setLanguageSettingsId(Constants::SettingsId);
 
-    m_commentDefinition.multiLineStart.clear();
-    m_commentDefinition.multiLineEnd.clear();
-    m_commentDefinition.singleLine = QLatin1Literal("--");
-
     m_model = new OverviewModel(this);
 }
 
@@ -62,11 +58,6 @@ void EditorWidget::finalizeInitialization()
     Document *doc = qobject_cast<Document *>(textDocument());
     connect(doc, &Document::documentUpdated,
             this, &EditorWidget::onAsnDocumentUpdated);
-}
-
-void EditorWidget::unCommentSelection()
-{
-    Utils::unCommentSelection(this, m_commentDefinition);
 }
 
 OverviewModel *EditorWidget::getOverviewModel() const
@@ -106,5 +97,3 @@ void EditorWidget::onAsnDocumentUpdated(const QTextDocument &document)
 
     m_model->setRootNode(documentNode);
 }
-
-

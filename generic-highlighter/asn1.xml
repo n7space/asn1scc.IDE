@@ -50,13 +50,13 @@
       <item> BMPString </item>
       <item> UTF8String </item>
     </list>
-    
+
     <list name="builtin">
       <item> NULL </item>
       <item> FALSE </item>
       <item> TRUE </item>
     </list>
-    
+
     <list name="attributes">
       <item> SIZE </item>
       <item> OPTIONAL </item>
@@ -73,10 +73,10 @@
         <keyword attribute="Attributes" context="#stay" String="attributes" />
         <Detect2Chars attribute="Comment" context="Comment" char="-" char1="-" />
       </context>
-      
+
       <context attribute="Comment" lineEndContext="#pop" name="Comment" />
     </contexts>
-    
+
     <itemDatas>
       <itemData name="Normal Text" defStyleNum="dsNormal" />
       <itemData name="Keyword"     defStyleNum="dsKeyword" />
@@ -85,6 +85,14 @@
       <itemData name="Built In"    defStyleNum="dsBuiltIn" />
       <itemData name="Attributes"  defStyleNum="dsAttribute" />
     </itemDatas>
+
+    <general>
+      <comments>
+        <comment name="singleLine" start="--" />
+      </comments>
+      <keywords casesensitive="1" />
+    </general>
+
   </highlighting>
 </language>
 
