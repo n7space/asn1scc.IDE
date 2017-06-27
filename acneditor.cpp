@@ -48,6 +48,8 @@ AcnEditorFactory::AcnEditorFactory()
     setDisplayName(QCoreApplication::translate("OpenWith::Editors", Constants::ACNEDITOR_DISPLAY_NAME));
     addMimeType(Constants::ACN_MIMETYPE);
 
+    setUseGenericHighlighter(true);
+
     setDocumentCreator([]() { return new AcnDocument; });
     setEditorWidgetCreator([]() { return new AcnEditorWidget; });
     setEditorCreator([]() { return new AcnEditor; });

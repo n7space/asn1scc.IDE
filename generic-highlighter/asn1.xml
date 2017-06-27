@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+<language name="ASN.1" section="Modeling"
+          version="1" kateversion="2.3"
+          extensions="*.asn;*.asn1"
+          mimetype="text/x-asn1"
+          author="N7 Mobile sp. z o.o."
+          license="GPLv3"
+          >
+  <highlighting>
+
+    <list name="keywords">
+      <item> PLUS-INFINITY </item>
+      <item> MINUS-INFINITY </item>
+      <item> AUTOMATIC </item>
+      <item> TAGS </item>
+      <item> EXPLICIT </item>
+      <item> IMPLICIT </item>
+      <item> EXTENSIBILITY </item>
+      <item> IMPLIED </item>
+      <item> BEGIN </item>
+      <item> END </item>
+      <item> ALL </item>
+      <item> EXPORTS </item>
+      <item> IMPORTS </item>
+      <item> DEFINITIONS </item>
+      <item> FROM </item>
+      <item> APPLICATION </item>
+      <item> PRIVATE </item>
+      <item> UNIVERSAL </item>
+      <item> EXCEPT </item>
+      <item> UNION </item>
+      <item> INTERSECTION </item>
+    </list>
+
+    <list name="types">
+      <item> STRING </item>
+      <item> ENUMERATED </item>
+      <item> INTEGER </item>
+      <item> REAL </item>
+      <item> BOOLEAN </item>
+      <item> CHOICE </item>
+      <item> SET </item>
+      <item> SEQUENCE </item>
+      <item> OCTET </item>
+      <item> BIT </item>
+      <item> OF </item>
+      <item> NumericString </item>
+      <item> PrintableString </item>
+      <item> VisibleString </item>
+      <item> IA5String </item>
+      <item> TeletexString </item>
+      <item> VideotexString </item>
+      <item> GraphicString </item>
+      <item> GeneralString </item>
+      <item> UniversalString </item>
+      <item> BMPString </item>
+      <item> UTF8String </item>
+      <item> GeneralizedTime </item>
+      <item> UTCTime </item>
+      <item> OBJECT </item>
+      <item> IDENTIFIER </item>
+      <item> RELATIVE-OID </item>
+    </list>
+
+    <list name="builtin">
+      <item> NULL </item>
+      <item> FALSE </item>
+      <item> TRUE </item>
+    </list>
+
+    <list name="attributes">
+      <item> SIZE </item>
+      <item> OPTIONAL </item>
+      <item> MIN </item>
+      <item> MAX </item>
+      <item> DEFAULT </item>
+      <item> WITH </item>
+      <item> COMPONENT </item>
+      <item> COMPONENTS </item>
+      <item> INCLUDES </item>
+      <item> ABSENT </item>
+      <item> PRESENT </item>
+      <item> PATTERN </item>
+    </list>
+
+    <list name="float-builders">
+      <item> mantissa </item>
+      <item> base </item>
+      <item> exponent </item>
+    </list>
+
+    <contexts>
+      <context name="Normal Text" attribute="Normal Text" lineEndContext="#stay">
+        <keyword attribute="Keyword" context="#stay" String="keywords" />
+        <keyword attribute="Data Type" context="#stay" String="types" />
+        <keyword attribute="Built In" context="#stay" String="builtin" />
+        <keyword attribute="Attributes" context="#stay" String="attributes" />
+
+        <Detect2Chars attribute="Comment" context="Comment" char="-" char1="-" />
+        <Detect2Chars attribute="Comment" context="Multi-Line Comment" char="/" char1="*"
+                      beginRegion="Comment Region" />
+
+        <Int attribute="Decimal" context="#stay" />
+        <AnyChar attribute="Decimal" context="#stay" String="+-0" />
+
+        <Float attribute="Float" context="#stay" />
+        <keyword attribute="Float" context="#stay" String="float-builders" />
+
+        <DetectChar attribute="String" context="String" char="&quot;" />
+
+        <DetectChar attribute="Number String" context="Number String" char="'" />
+
+        <RegExpr attribute="Lower-Case ID" context="#stay" String="[a-z]([a-zA-Z0-9]|-)*" />
+        <RegExpr attribute="Upper-Case ID" context="#stay" String="[A-Z]([a-zA-Z0-9]|-)*" />
+
+      </context>
+
+      <context attribute="Comment" lineEndContext="#pop" name="Comment" />
+
+      <context name="String" attribute="String" lineEndContext="#stay">
+        <DetectChar attribute="String" context="#pop" char="&quot;" />
+      </context>
+
+      <context name="Multi-Line Comment" attribute="Comment" lineEndContext="#stay">
+        <Detect2Chars attribute="Comment" context="#pop" char="*" char1="/"
+                      endRegion="Comment Region" />
+      </context>
+
+      <context name="Number String" attribute="Number String" lineEndContext="#stay">
+        <Detect2Chars attribute="Number String" context="#pop" char="'" char1="H" />
+        <Detect2Chars attribute="Number String" context="#pop" char="'" char1="B" />
+      </context>
+
+    </contexts>
+
+    <itemDatas>
+      <itemData name="Normal Text"    defStyleNum="dsNormal" />
+      <itemData name="Keyword"        defStyleNum="dsKeyword" />
+      <itemData name="Comment"        defStyleNum="dsComment" />
+      <itemData name="Data Type"      defStyleNum="dsDataType" />
+      <itemData name="Built In"       defStyleNum="dsBuiltIn" />
+      <itemData name="Attributes"     defStyleNum="dsAttribute" />
+      <itemData name="Decimal"        defStyleNum="dsDecVal" />
+      <itemData name="Float"          defStyleNum="dsFloat" />
+      <itemData name="String"         defStyleNum="dsString" />
+      <itemData name="Number String"  defStyleNum="dsBaseN" />
+      <itemData name="Lower-Case ID"  defStyleNum="dsVariable" />
+      <itemData name="Upper-Case ID"  defStyleNum="dsFunction" />
+    </itemDatas>
+
+    <general>
+      <comments>
+        <comment name="singleLine" start="--" />
+        <comment name="multiline" start="/*" end="*/" region="Comment Region" />
+      </comments>
+      <keywords casesensitive="1" />
+    </general>
+
+  </highlighting>
+</language>

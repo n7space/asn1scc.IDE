@@ -26,7 +26,7 @@
 # Qt Creator linking
 
 IDE_SOURCE_TREE = $$QTC_SOURCE
-isEmpty(IDE_SOURCE_TREE): IDE_SOURCE_TREE = "/opt/qt-creator-dev/src"
+isEmpty(IDE_SOURCE_TREE): IDE_SOURCE_TREE = "/opt/qt-creator-dev/qt-creator"
 
 IDE_BUILD_TREE = $$QTC_BUILD
 isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = "/opt/qt-creator-dev/build-debug"
@@ -58,7 +58,6 @@ SOURCES += \
     asnautocompleter.cpp \
     asncompletionassist.cpp \
     outline.cpp \
-    asnhighlighter.cpp \
     asnsnippetprovider.cpp \
     acneditor.cpp \
     acndocument.cpp \
@@ -67,8 +66,6 @@ SOURCES += \
     documentprocessor.cpp \
     parseddatastorage.cpp \
     parseddocument.cpp \
-    acnhighlighter.cpp \
-    highlighter.cpp \
     structuresview.cpp \
     astxmlparser.cpp \
     modeltreenode.cpp \
@@ -87,7 +84,6 @@ HEADERS += \
     asnautocompleter.h \
     asncompletionassist.h \
     outline.h \
-    asnhighlighter.h \
     asnsnippetprovider.h \
     acneditor.h \
     acndocument.h \
@@ -96,8 +92,6 @@ HEADERS += \
     documentprocessor.h \
     parseddatastorage.h \
     parseddocument.h \
-    acnhighlighter.h \
-    highlighter.h \
     structuresview.h \
     astxmlparser.h \
     data/sourcelocation.h \
@@ -131,6 +125,8 @@ HEADERS += \
 
 STATIC_FILES += \
     snippets/asn.xml \
+    generic-highlighter/asn1.xml \
+    generic-highlighter/acn.xml \
     templates/wizards/files/acn/wizard.json \
     templates/wizards/files/acn/template.acn \
     templates/wizards/files/asn1/wizard.json \

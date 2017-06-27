@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+<language name="ACN" section="Modeling"
+          version="1" kateversion="2.3"
+          extensions="*.acn"
+          mimetype="text/x-acn"
+          author="N7 Mobile sp. z o.o."
+          license="GPLv3"
+          >
+  <highlighting>
+
+    <list name="keywords">
+      <item> BEGIN </item>
+      <item> END </item>
+      <item> DEFINITIONS </item>
+      <item> CONSTANT </item>
+    </list>
+
+    <list name="types">
+      <item> INTEGER </item>
+      <item> BOOLEAN </item>
+    </list>
+
+    <list name="builtin">
+      <item> NULL </item>
+      <item> big </item>
+      <item> little </item>
+      <item> pos-int </item>
+      <item> twos-complement </item>
+      <item> BCD </item>
+      <item> ASCII </item>
+      <item> IEEE754-1985-32 </item>
+      <item> IEEE754-1985-64 </item>
+      <item> byte </item>
+      <item> word </item>
+      <item> dword </item>
+    </list>
+
+    <list name="attributes">
+      <item> endianness </item>
+      <item> encoding </item>
+      <item> size </item>
+      <item> null-terminated </item>
+      <item> termination-pattern </item>
+      <item> align-to-next </item>
+      <item> encode-values </item>
+      <item> true-value </item>
+      <item> false-value </item>
+      <item> pattern </item>
+      <item> mapping-function </item>
+      <item> present-when </item>
+      <item> determinant </item>
+    </list>
+
+    <contexts>
+      <context name="Normal Text" attribute="Normal Text" lineEndContext="#stay">
+        <keyword attribute="Keyword" context="#stay" String="keywords" />
+        <keyword attribute="Data Type" context="#stay" String="types" />
+        <keyword attribute="Built In" context="#stay" String="builtin" />
+        <keyword attribute="Attributes" context="#stay" String="attributes" />
+
+        <Detect2Chars attribute="Comment" context="Comment" char="-" char1="-" />
+        <Detect2Chars attribute="Comment" context="Multi-Line Comment" char="/" char1="*"
+                      beginRegion="Comment Region" />
+
+        <Int attribute="Decimal" context="#stay" />
+        <AnyChar attribute="Decimal" context="#stay" String="+-0" />
+
+        <DetectChar attribute="String" context="String" char="&quot;" />
+
+        <DetectChar attribute="Number String" context="Number String" char="'" />
+
+        <RegExpr attribute="Lower-Case ID" context="#stay" String="[a-z]([a-zA-Z0-9]|-)*" />
+        <RegExpr attribute="Upper-Case ID" context="#stay" String="[A-Z]([a-zA-Z0-9]|-)*" />
+
+      </context>
+
+      <context attribute="Comment" lineEndContext="#pop" name="Comment" />
+
+      <context name="String" attribute="String" lineEndContext="#stay">
+        <DetectChar attribute="String" context="#pop" char="&quot;" />
+      </context>
+
+      <context name="Multi-Line Comment" attribute="Comment" lineEndContext="#stay">
+        <Detect2Chars attribute="Comment" context="#pop" char="*" char1="/"
+                      endRegion="Comment Region" />
+      </context>
+
+      <context name="Number String" attribute="Number String" lineEndContext="#stay">
+        <Detect2Chars attribute="Number String" context="#pop" char="'" char1="H" />
+        <Detect2Chars attribute="Number String" context="#pop" char="'" char1="B" />
+      </context>
+
+    </contexts>
+
+    <itemDatas>
+      <itemData name="Normal Text"    defStyleNum="dsNormal" />
+      <itemData name="Keyword"        defStyleNum="dsKeyword" />
+      <itemData name="Comment"        defStyleNum="dsComment" />
+      <itemData name="Data Type"      defStyleNum="dsDataType" />
+      <itemData name="Built In"       defStyleNum="dsBuiltIn" />
+      <itemData name="Attributes"     defStyleNum="dsAttribute" />
+      <itemData name="Decimal"        defStyleNum="dsDecVal" />
+      <itemData name="String"         defStyleNum="dsString" />
+      <itemData name="Number String"  defStyleNum="dsBaseN" />
+      <itemData name="Lower-Case ID"  defStyleNum="dsVariable" />
+      <itemData name="Upper-Case ID"  defStyleNum="dsFunction" />
+    </itemDatas>
+
+    <general>
+      <comments>
+        <comment name="singleLine" start="--" />
+        <comment name="multiline" start="/*" end="*/" region="Comment Region" />
+      </comments>
+      <keywords casesensitive="1" weakDeliminator="-" />
+    </general>
+
+  </highlighting>
+</language>

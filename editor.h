@@ -44,8 +44,6 @@ public:
 
     void finalizeInitialization() override;
 
-    void unCommentSelection() override;
-
     OverviewModel *getOverviewModel() const;
 
 protected:
