@@ -50,4 +50,6 @@ QString AsnSnippetProvider::displayName() const
 void AsnSnippetProvider::decorateEditor(TextEditor::SnippetEditorWidget *editor) const
 {
     editor->setAutoCompleter(new AsnAutoCompleter);
+    editor->textDocument()->setMimeType(Constants::ASN1_MIMETYPE);
+    editor->configureGenericHighlighter();
 }
