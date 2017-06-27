@@ -74,7 +74,14 @@
         <keyword attribute="Data Type" context="#stay" String="types" />
         <keyword attribute="Built In" context="#stay" String="builtin" />
         <keyword attribute="Attributes" context="#stay" String="attributes" />
+
         <Detect2Chars attribute="Comment" context="Comment" char="-" char1="-" />
+
+        <Int attribute="Decimal" context="#stay" />
+        <AnyChar attribute="Decimal" context="#stay" String="+-0" />
+
+        <Float attribute="Float" context="#stay" />
+
       </context>
 
       <context attribute="Comment" lineEndContext="#pop" name="Comment" />
@@ -87,6 +94,8 @@
       <itemData name="Data Type"   defStyleNum="dsDataType" />
       <itemData name="Built In"    defStyleNum="dsBuiltIn" />
       <itemData name="Attributes"  defStyleNum="dsAttribute" />
+      <itemData name="Decimal"     defStyleNum="dsDecVal" />
+      <itemData name="Float"       defStyleNum="dsFloat" />
     </itemDatas>
 
     <general>
