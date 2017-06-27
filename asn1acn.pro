@@ -126,6 +126,7 @@ HEADERS += \
 STATIC_FILES += \
     snippets/asn.xml \
     generic-highlighter/asn1.xml \
+    generic-highlighter/acn.xml \
     templates/wizards/files/acn/wizard.json \
     templates/wizards/files/acn/template.acn \
     templates/wizards/files/asn1/wizard.json \
