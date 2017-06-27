@@ -63,6 +63,9 @@
       <item> MIN </item>
       <item> MAX </item>
       <item> DEFAULT </item>
+      <item> WITH </item>
+      <item> COMPONENT </item>
+      <item> COMPONENTS </item>
     </list>
 
     <contexts>
@@ -140,9 +143,6 @@ IMPLIED :	'IMPLIED';
 BIT	: 'BIT';
 ABSENT	:	'ABSENT';
 PRESENT	:	'PRESENT';
-WITH 	:	'WITH';
-COMPONENT	: 'COMPONENT';
-COMPONENTS 	: 'COMPONENTS';
 PATTERN		:'PATTERN';
 OBJECT 		:'OBJECT';
 IDENTIFIER	:'IDENTIFIER';
