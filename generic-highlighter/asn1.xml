@@ -8,6 +8,7 @@
           license="GPLv3"
           >
   <highlighting>
+
     <list name="keywords">
       <item> PLUS-INFINITY </item>
       <item> MINUS-INFINITY </item>
@@ -76,6 +77,8 @@
         <keyword attribute="Attributes" context="#stay" String="attributes" />
 
         <Detect2Chars attribute="Comment" context="Comment" char="-" char1="-" />
+        <Detect2Chars attribute="Comment" context="Multi-Line Comment" char="/" char1="*"
+                      beginRegion="Comment Region" />
 
         <Int attribute="Decimal" context="#stay" />
         <AnyChar attribute="Decimal" context="#stay" String="+-0" />
@@ -90,6 +93,11 @@
 
       <context name="String" attribute="String" lineEndContext="#stay">
         <DetectChar attribute="String" context="#pop" char="&quot;" />
+      </context>
+
+      <context name="Multi-Line Comment" attribute="Comment" lineEndContext="#stay">
+        <Detect2Chars attribute="Comment" context="#pop" char="*" char1="/"
+                      endRegion="Comment Region" />
       </context>
 
     </contexts>
@@ -109,6 +117,7 @@
     <general>
       <comments>
         <comment name="singleLine" start="--" />
+        <comment name="multiline" start="/*" end="*/" region="Comment Region" />
       </comments>
       <keywords casesensitive="1" />
     </general>
