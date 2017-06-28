@@ -25,7 +25,7 @@ set +x
 echo "Executing make..."
 make || exit 1
 
-if [[ $ENV_WITH_TESTS == "1" ]]; then
+if [[ $ENV_WITH_TESTS == "1" && $BUILD_OS_NAME == 'linux' ]]; then
     echo "Starting xvfb..."
     export DISPLAY=:99.0
     sh -e /etc/init.d/xvfb start

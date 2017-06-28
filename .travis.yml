@@ -12,8 +12,6 @@ matrix:
   exclude:
   - os: osx
     compiler: gcc
-  - os: osx
-    env: ENV_WITH_TESTS=1
   - os: linux
     compiler: clang
 
