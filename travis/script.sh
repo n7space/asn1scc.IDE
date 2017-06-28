@@ -7,6 +7,10 @@ if [[ $CI == "true" && $BUILD_OS_NAME == 'linux' ]]; then
     QMAKE_PARAMS="-spec linux-g++"
 fi
 
+if [[ $ENV_WITH_TESTS == "1" ]]; then
+    BUILD_TESTS="BUILD_TESTS=1"
+fi
+
 echo "Building..."
 cd "${BUILD_DIR}"
 $CXX --version
@@ -14,7 +18,7 @@ echo "Executing qmake..."
 set -x
 qmake "${PROJECT_DIR}"/asn1acn.pro -r ${QMAKE_PARAMS} \
       CONFIG+=release \
-      BUILD_TESTS="${ENV_WITH_TESTS}" \
+      ${BUILD_TESTS} \
       QTC_SOURCE="${DOWNLOAD_DIR}/qt-creator-opensource-src-${ENV_QTC_VERSION}" \
       QTC_BUILD="${QTC_BUILD_DIR}" || exit 1
 set +x
