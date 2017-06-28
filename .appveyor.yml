@@ -16,6 +16,9 @@ environment:
   BUILD_DIR: c:\projects\asn1scc.IDE\build
   DOWNLOAD_DIR: c:\projects\asn1scc.IDE\downloads
   VSVER: 14.0
+  matrix:
+  - ENV_WITH_TESTS: BUILD_TESTS=1
+  - ENV_WITH_TESTS:
 
 configuration:
   - Release
@@ -39,5 +42,5 @@ before_build:
 build_script:
   - cmd: mkdir %BUILD_DIR%
   - cmd: cd %BUILD_DIR%
-  - cmd: qmake %APPVEYOR_BUILD_FOLDER%/asn1acn.pro -r "CONFIG+=%configuration%" "QTC_SOURCE=%DOWNLOAD_DIR%\qt-src\qt-creator-opensource-src-%ENV_QTC_VERSION%" "QTC_BUILD=%DOWNLOAD_DIR%\qt-bin\bin" "LIBS+=-L%DOWNLOAD_DIR%\qt-libs" "OUTPUT_PATH=%APPVEYOR_BUILD_FOLDER%\..\artifacts"
+  - cmd: qmake %APPVEYOR_BUILD_FOLDER%/asn1acn.pro -r "CONFIG+=%configuration%" %ENV_WITH_TESTS% "QTC_SOURCE=%DOWNLOAD_DIR%\qt-src\qt-creator-opensource-src-%ENV_QTC_VERSION%" "QTC_BUILD=%DOWNLOAD_DIR%\qt-bin\bin" "LIBS+=-L%DOWNLOAD_DIR%\qt-libs"
   - cmd: nmake.exe
