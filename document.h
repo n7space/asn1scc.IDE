@@ -43,7 +43,7 @@ public:
     void scheduleProcessDocument();
 
 signals:
-    void documentUpdated(const QTextDocument &doc);
+    void documentUpdated();
 
 private:
     void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);

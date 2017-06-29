@@ -48,7 +48,7 @@ public:
 
 protected:
     void contextMenuEvent(QContextMenuEvent *) override;
-    void onAsnDocumentUpdated(const QTextDocument &document);
+    void onAsnDocumentUpdated();
 
     OverviewModel *m_model;
     Utils::CommentDefinition m_commentDefinition;

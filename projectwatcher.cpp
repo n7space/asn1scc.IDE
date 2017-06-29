@@ -121,8 +121,12 @@ void ProjectWatcher::tryProcessFiles(const QStringList &filePaths) const
             continue;
 
         auto doc = textDocumentFromPath(path);
-        DocumentProcessor dp(doc.get(), path, -1);
-        dp.run();
+        DocumentProcessor *dp = new DocumentProcessor(doc.get(), path, -1);
+
+        connect(dp, &DocumentProcessor::processingFinished,
+                [dp](){dp->deleteLater();});
+
+        dp->run();
     }
 }
 
@@ -147,6 +151,8 @@ ProjectWatcher::textDocumentFromPath(const QString &fileName) const
 
     QString docContent = QString::fromLatin1(file.readAll().data());
     textDocument->setPlainText(docContent);
+
+    file.close();
 
     return std::move(textDocument);
 }

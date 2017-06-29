@@ -29,6 +29,11 @@
 #include <QXmlStreamReader>
 #include <QRegularExpression>
 
+#include <QNetworkRequest>
+
+#include <QJsonArray>
+#include <QJsonObject>
+
 #include <utils/fileutils.h>
 
 #include "data/modules.h"
@@ -41,6 +46,7 @@ using namespace Asn1Acn::Internal;
 
 static const QString SEPARATOR_REG_EXP("\\s");
 static const QString XML_VERSION_TAG("?xml version=\"1.0\"");
+static const QString BASE_URL("http://localhost:9749/");
 
 DocumentProcessor::DocumentProcessor(const QTextDocument *doc,
                                      const QString &filePath,
@@ -51,36 +57,68 @@ DocumentProcessor::DocumentProcessor(const QTextDocument *doc,
 {
 }
 
-void DocumentProcessor::run() const
+void DocumentProcessor::run()
 {
     ParsedDataStorage *model = ParsedDataStorage::instance();
-
     std::shared_ptr<ParsedDocument> oldDoc = model->getFileForPath(m_filePath);
-    if (!oldDoc || oldDoc->getRevision() != m_revision) {
-        std::unique_ptr<ParsedDocument> newDoc = parse();
-        model->addFile(m_filePath, std::move(newDoc));
+
+    if (oldDoc && oldDoc->getRevision() == m_revision) {
+        runFinished();
+        return;
     }
 
-    // TODO: emit in ParsedDataStorage could be used?
-    // emit after parsing is finished
-    emit asnDocumentUpdated(*m_textDocument);
+    requestAst();
 }
 
-std::unique_ptr<ParsedDocument> DocumentProcessor::parse() const
+void DocumentProcessor::requestAst()
 {
-    // In this place parsing procedure should be executed
-    QTextCursor coursor = m_textDocument->find(XML_VERSION_TAG);
+    QObject::connect(&m_networkAccessManager, &QNetworkAccessManager::finished,
+                     this, &DocumentProcessor::requestFinished);
 
-    if (!coursor.isNull())
-        return parseFromXml();
+    auto astRequest = QNetworkRequest(QUrl(BASE_URL + "ast"));
+    astRequest.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
 
-    return parseStubbed();
+    QByteArray jsonRequestData = buildAstRequestData().toJson();
+    m_networkAccessManager.post(astRequest, jsonRequestData);
 }
 
-std::unique_ptr<ParsedDocument> DocumentProcessor::parseFromXml() const
+QJsonDocument DocumentProcessor::buildAstRequestData() const
 {
+    QJsonObject asnFileData;
+
+    // TODO: this should be based on m_filePath but server keeps rewriting the file if full valid path is passed.
+    asnFileData["Name"] = "Test.asn";
+    asnFileData["Contents"] = m_textDocument->toPlainText().toStdString().c_str();
+
+    QJsonObject files;
+    files["AsnFiles"] = QJsonArray { asnFileData };
+    files["AcnFiles"] = QJsonArray();
+
+    return QJsonDocument(files);
+}
+
+void DocumentProcessor::requestFinished(QNetworkReply *reply)
+{
+    const QByteArray &replyString = reply->readAll();
+
+    if (reply->error() != QNetworkReply::NoError) {
+        qWarning("Error Msg: %s", qUtf8Printable(QString::fromLatin1(replyString.data())));
+        runFinished();
+        return;
+    }
+
+    std::unique_ptr<ParsedDocument> newDoc = parseXML(replyString);
+
+    ParsedDataStorage *model = ParsedDataStorage::instance();
+    model->addFile(m_filePath, std::move(newDoc));
+
+    runFinished();
+}
+
+std::unique_ptr<ParsedDocument> DocumentProcessor::parseXML(const QByteArray &textData) const
+{    
     QXmlStreamReader reader;
-    reader.addData(m_textDocument->toPlainText());
+    reader.addData(textData);
 
     AstXmlParser parser(reader);
     parser.parse();
@@ -92,13 +130,7 @@ std::unique_ptr<ParsedDocument> DocumentProcessor::parseFromXml() const
                                                               std::move(parsedData)));
 }
 
-std::unique_ptr<ParsedDocument> DocumentProcessor::parseStubbed() const
+void DocumentProcessor::runFinished() const
 {
-    QString docPlainText = m_textDocument->toPlainText();
-    QStringList splittedDoc = docPlainText.split(QRegularExpression(SEPARATOR_REG_EXP),
-                                                 QString::SkipEmptyParts);
-
-    return std::unique_ptr<ParsedDocument>(new ParsedDocument(m_filePath,
-                                                              m_textDocument->revision(),
-                                                              splittedDoc));
+    emit processingFinished();
 }

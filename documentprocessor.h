@@ -28,6 +28,11 @@
 #include <QString>
 #include <QTextDocument>
 
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
+
+#include <QJsonDocument>
+
 #include <texteditor/textdocument.h>
 
 #include <memory>
@@ -42,19 +47,26 @@ class DocumentProcessor : public QObject
     Q_OBJECT
 public:
     DocumentProcessor(const QTextDocument *doc, const QString &filePath, int revision);
-    void run() const;
+
+    void run();
 
 signals:
-    void asnDocumentUpdated(const QTextDocument &doc) const;
+    void processingFinished() const;
+
+private slots:
+    void requestFinished(QNetworkReply *reply);
 
 private:
-    std::unique_ptr<ParsedDocument> parse() const;
-    std::unique_ptr<ParsedDocument> parseFromXml() const;
-    std::unique_ptr<ParsedDocument> parseStubbed() const;
+    void requestAst();
+    QJsonDocument buildAstRequestData() const;
+    std::unique_ptr<ParsedDocument> parseXML(const QByteArray &textData) const;
+    void runFinished() const;
 
     const QTextDocument *m_textDocument;
     const QString m_filePath;
     const int m_revision;
+
+    QNetworkAccessManager m_networkAccessManager;
 };
 
 } // namespace Internal
