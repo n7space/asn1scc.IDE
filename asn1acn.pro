@@ -73,7 +73,8 @@ SOURCES += \
     overviewwidget.cpp \
     document.cpp \
     modeltree.cpp \
-    asn1acnjsextension.cpp
+    asn1acnjsextension.cpp \
+    asn1sccserviceprovider.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -103,7 +104,8 @@ HEADERS += \
     overviewwidget.h \
     document.h \
     modeltree.h \
-    asn1acnjsextension.h
+    asn1acnjsextension.h \
+    asn1sccserviceprovider.h
 
 DISTFILES += \
     LICENSE \

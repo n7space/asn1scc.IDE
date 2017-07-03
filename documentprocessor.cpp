@@ -25,14 +25,19 @@
 
 #include "documentprocessor.h"
 
+#include <QFileInfo>
 #include <QTextCursor>
 #include <QXmlStreamReader>
 #include <QRegularExpression>
 
-#include <QNetworkRequest>
-
 #include <QJsonArray>
 #include <QJsonObject>
+
+#include <QGlobalStatic>
+
+#include <extensionsystem/pluginmanager.h>
+
+#include <coreplugin/icore.h>
 
 #include <utils/fileutils.h>
 
@@ -44,8 +49,6 @@
 
 using namespace Asn1Acn::Internal;
 
-static const QString SEPARATOR_REG_EXP("\\s");
-static const QString XML_VERSION_TAG("?xml version=\"1.0\"");
 static const QString BASE_URL("http://localhost:9749/");
 
 DocumentProcessor::DocumentProcessor(const QTextDocument *doc,
@@ -55,6 +58,7 @@ DocumentProcessor::DocumentProcessor(const QTextDocument *doc,
     m_filePath(filePath),
     m_revision(revision)
 {
+    m_serviceProvider = ExtensionSystem::PluginManager::getObject<Asn1SccServiceProvider>();
 }
 
 void DocumentProcessor::run()
@@ -72,22 +76,25 @@ void DocumentProcessor::run()
 
 void DocumentProcessor::requestAst()
 {
-    QObject::connect(&m_networkAccessManager, &QNetworkAccessManager::finished,
+    QNetworkRequest astRequest(QUrl(m_serviceProvider->getBaseURL() + "ast"));
+    astRequest.setOriginatingObject(this);
+
+    astRequest.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
+    QByteArray jsonRequestData = buildAstRequestData().toJson();
+
+    QNetworkAccessManager *networkManager = m_serviceProvider->getNetworkManager();
+    QObject::connect(networkManager, &QNetworkAccessManager::finished,
                      this, &DocumentProcessor::requestFinished);
 
-    auto astRequest = QNetworkRequest(QUrl(BASE_URL + "ast"));
-    astRequest.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
-
-    QByteArray jsonRequestData = buildAstRequestData().toJson();
-    m_networkAccessManager.post(astRequest, jsonRequestData);
+    networkManager->post(astRequest, jsonRequestData);
 }
 
 QJsonDocument DocumentProcessor::buildAstRequestData() const
 {
     QJsonObject asnFileData;
 
-    // TODO: this should be based on m_filePath but server keeps rewriting the file if full valid path is passed.
-    asnFileData["Name"] = "Test.asn";
+    QFileInfo fi(m_filePath);
+    asnFileData["Name"] = fi.fileName().toStdString().c_str();
     asnFileData["Contents"] = m_textDocument->toPlainText().toStdString().c_str();
 
     QJsonObject files;
@@ -99,34 +106,37 @@ QJsonDocument DocumentProcessor::buildAstRequestData() const
 
 void DocumentProcessor::requestFinished(QNetworkReply *reply)
 {
+    if (this != reply->request().originatingObject())
+        return;
+
     const QByteArray &replyString = reply->readAll();
 
     if (reply->error() != QNetworkReply::NoError) {
-        qWarning("Error Msg: %s", qUtf8Printable(QString::fromLatin1(replyString.data())));
         runFinished();
         return;
     }
 
     std::unique_ptr<ParsedDocument> newDoc = parseXML(replyString);
-
     ParsedDataStorage *model = ParsedDataStorage::instance();
     model->addFile(m_filePath, std::move(newDoc));
+
+    reply->deleteLater();
 
     runFinished();
 }
 
 std::unique_ptr<ParsedDocument> DocumentProcessor::parseXML(const QByteArray &textData) const
-{    
+{
     QXmlStreamReader reader;
     reader.addData(textData);
 
     AstXmlParser parser(reader);
+
     parser.parse();
 
     std::unique_ptr<Data::Modules> parsedData = parser.takeData();
-
     return std::unique_ptr<ParsedDocument>(new ParsedDocument(m_filePath,
-                                                              m_textDocument->revision(),
+                                                              m_revision,
                                                               std::move(parsedData)));
 }
 

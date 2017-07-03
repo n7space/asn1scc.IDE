@@ -25,50 +25,32 @@
 
 #pragma once
 
-#include <QString>
-#include <QTextDocument>
+#include <QNetworkAccessManager>
 
-#include <QNetworkReply>
-#include <QNetworkRequest>
-
-#include <QJsonDocument>
-
-#include <texteditor/textdocument.h>
-
-#include <memory>
-
-#include "parseddocument.h"
-#include "asn1sccserviceprovider.h"
+#include <QProcess>
+#include <QObject>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class DocumentProcessor : public QObject
+class Asn1SccServiceProvider : public QObject
 {
     Q_OBJECT
+
 public:
-    DocumentProcessor(const QTextDocument *doc, const QString &filePath, int revision);
+    Asn1SccServiceProvider();
+    ~Asn1SccServiceProvider();
 
-    void run();
-
-signals:
-    void processingFinished() const;
+    QNetworkAccessManager* getNetworkManager();
+    QString getBaseURL();
 
 private slots:
-    void requestFinished(QNetworkReply *reply);
+    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
-    void requestAst();
-    QJsonDocument buildAstRequestData() const;
-    std::unique_ptr<ParsedDocument> parseXML(const QByteArray &textData) const;
-    void runFinished() const;
-
-    const QTextDocument *m_textDocument;
-    const QString m_filePath;
-    const int m_revision;
-
-    Asn1SccServiceProvider *m_serviceProvider;
+    void finalize();
+    QProcess *m_asn1sccService;
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Asn1Acn */
+} /* namespace Internal */

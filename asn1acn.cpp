@@ -34,6 +34,8 @@
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/coreconstants.h>
 
+#include <extensionsystem/pluginmanager.h>
+
 #include <texteditor/texteditorconstants.h>
 
 #include "asneditor.h"
@@ -42,6 +44,7 @@
 #include "structuresview.h"
 #include "projectwatcher.h"
 #include "asn1acnjsextension.h"
+#include "asn1sccserviceprovider.h"
 
 #include "acneditor.h"
 
@@ -82,7 +85,9 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(new AcnEditorFactory);
 
     addAutoReleasedObject(new OutlineWidgetFactory);
+
     addAutoReleasedObject(new ProjectWatcher);
+    addAutoReleasedObject(new Asn1SccServiceProvider);
 
     Core::ActionContainer *contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
 
