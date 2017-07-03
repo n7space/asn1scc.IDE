@@ -27,8 +27,10 @@
 
 #include <QNetworkAccessManager>
 
-#include <QProcess>
 #include <QObject>
+#include <QProcess>
+#include <QTimer>
+
 
 namespace Asn1Acn {
 namespace Internal {
@@ -44,12 +46,19 @@ public:
     QNetworkAccessManager* getNetworkManager();
     QString getBaseURL();
 
+    void start();
+    void finalize();
+
 private slots:
     void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void stayAliveTimeout();
 
 private:
-    void finalize();
+    QStringList additionalArguments();
+
     QProcess *m_asn1sccService;
+    QTimer m_stayAliveTimer;
+    bool m_terminating;
 };
 
 } /* namespace Asn1Acn */

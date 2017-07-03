@@ -29,21 +29,28 @@
 
 using namespace Asn1Acn::Internal;
 
+const int STAY_ALIVE_PERIOD_MS = 500;
+const int STAY_ALIVE_SERVICE_RUN_PARAM_MS = 1000;
+
+const QString PROGRAM_URL("/opt/asn1sccDeamon-2/asn1scc/Daemon/bin/Debug/Daemon.exe"); // TODO: remove hard coded path
+const QString BASE_URL("http://localhost:9749/"); // TODO: remove hard coded value
+
 Q_GLOBAL_STATIC(QNetworkAccessManager, networkManagerInstance)
 
-const QString PROGRAM_URL("/opt/asn1sccDeamon/asn1scc/Daemon/bin/Debug/Daemon.exe"); // TODO: remove hard coded path
-QString BASE_URL("http://localhost:9749/"); // TODO: remove hard coded value
-
-Asn1SccServiceProvider::Asn1SccServiceProvider()
+Asn1SccServiceProvider::Asn1SccServiceProvider() :
+    m_asn1sccService(new QProcess(this)),
+    m_terminating(false)
 {
-    m_asn1sccService = new QProcess(this);
-
     m_asn1sccService->setProgram(PROGRAM_URL);
-    m_asn1sccService->start();
-    m_asn1sccService->waitForStarted();
+    m_asn1sccService->setArguments(additionalArguments());
 
     connect(m_asn1sccService, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             this, &Asn1SccServiceProvider::onProcessFinished);
+
+    m_stayAliveTimer.setInterval(STAY_ALIVE_PERIOD_MS);
+
+    connect(&m_stayAliveTimer, &QTimer::timeout,
+            this, &Asn1SccServiceProvider::stayAliveTimeout, Qt::UniqueConnection);
 }
 
 Asn1SccServiceProvider::~Asn1SccServiceProvider()
@@ -62,18 +69,40 @@ QString Asn1SccServiceProvider::getBaseURL()
     return BASE_URL;
 }
 
+void Asn1SccServiceProvider::start()
+{
+    m_asn1sccService->start();
+    m_asn1sccService->waitForStarted();
+    m_stayAliveTimer.start();
+}
+
 void Asn1SccServiceProvider::finalize()
 {
-    networkManagerInstance->get(QNetworkRequest(QUrl(BASE_URL + "close")));
+    m_terminating = true;
+    m_stayAliveTimer.stop();
+
+    m_asn1sccService->terminate();
     m_asn1sccService->waitForFinished();
+}
+
+QStringList Asn1SccServiceProvider::additionalArguments()
+{
+    QStringList arguments;
+    arguments.append(QString("-w ") + QString::number(STAY_ALIVE_SERVICE_RUN_PARAM_MS));
+    return arguments;
 }
 
 void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_UNUSED(exitCode);
 
-    if (exitStatus != QProcess::NormalExit) {
+    if (!m_terminating && exitStatus != QProcess::NormalExit) {
         m_asn1sccService->start();
         m_asn1sccService->waitForStarted();
     }
+}
+
+void Asn1SccServiceProvider::stayAliveTimeout()
+{
+    networkManagerInstance->get(QNetworkRequest(QUrl(BASE_URL + "stayAlive")));
 }

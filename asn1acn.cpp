@@ -87,7 +87,10 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(new OutlineWidgetFactory);
 
     addAutoReleasedObject(new ProjectWatcher);
-    addAutoReleasedObject(new Asn1SccServiceProvider);
+
+    Asn1SccServiceProvider *sp = new Asn1SccServiceProvider;
+    addAutoReleasedObject(sp);
+    sp->start();
 
     Core::ActionContainer *contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
 
