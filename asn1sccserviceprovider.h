@@ -31,7 +31,6 @@
 #include <QProcess>
 #include <QTimer>
 
-
 namespace Asn1Acn {
 namespace Internal {
 
@@ -43,8 +42,8 @@ public:
     Asn1SccServiceProvider();
     ~Asn1SccServiceProvider();
 
-    QNetworkAccessManager* getNetworkManager();
-    QString getBaseURL();
+    QNetworkAccessManager *getNetworkManager() const;
+    QString getBaseURL() const;
 
     void start();
     void finalize();
@@ -54,11 +53,16 @@ private slots:
     void stayAliveTimeout();
 
 private:
-    QStringList additionalArguments();
+    QStringList additionalArguments() const;
+    void loadServiceParams();
 
     QProcess *m_asn1sccService;
     QTimer m_stayAliveTimer;
     bool m_terminating;
+
+    QString m_serviceBaseUrl;
+    QString m_serviceBinaryPath;
+    int m_serviceStayAlivePeriod;
 };
 
 } /* namespace Asn1Acn */

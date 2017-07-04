@@ -75,6 +75,8 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     // In the initialize function, a plugin can be sure that the plugins it
     // depends on have initialized their members.
 
+    loadSettings();
+
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
@@ -115,6 +117,29 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
     return SynchronousShutdown;
+}
+
+void Asn1AcnPlugin::loadSettings()
+{
+    // TODO: loading of settings needs to be more sophisticated.
+    // Now on Linux OS settings can be found in ~/.config/QtProject/QtCreator.ini
+
+    QSettings *s = Core::ICore::settings();
+
+    s->beginGroup(Constants::ASN1ACN_GROUP_NAME);
+
+    if (!s->contains(Constants::ASN1ACN_SERVICE_PATH))
+        s->setValue(Constants::ASN1ACN_SERVICE_PATH,
+                    "/opt/asn1sccDaemon/asn1scc/Daemon/bin/Debug/Daemon.exe");
+
+    if (!s->contains(Constants::ASN1ACN_SERVICE_PORT))
+        s->setValue(Constants::ASN1ACN_SERVICE_PORT, 9749);
+
+    if (!s->contains(Constants::ASN1ACN_SERVICE_WATCHDOG))
+        s->setValue(Constants::ASN1ACN_SERVICE_WATCHDOG, 1000);
+
+    s->endGroup();
+    s->sync();
 }
 
 #ifdef WITH_TESTS

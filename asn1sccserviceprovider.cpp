@@ -23,17 +23,18 @@
 **
 ****************************************************************************/
 
-#include <QString>
-
 #include "asn1sccserviceprovider.h"
+
+#include <QString>
+#include <QSettings>
+
+#include <coreplugin/icore.h>
+
+#include "asn1acnconstants.h"
 
 using namespace Asn1Acn::Internal;
 
 const int STAY_ALIVE_PERIOD_MS = 500;
-const int STAY_ALIVE_SERVICE_RUN_PARAM_MS = 1000;
-
-const QString PROGRAM_URL("/opt/asn1sccDeamon-2/asn1scc/Daemon/bin/Debug/Daemon.exe"); // TODO: remove hard coded path
-const QString BASE_URL("http://localhost:9749/"); // TODO: remove hard coded value
 
 Q_GLOBAL_STATIC(QNetworkAccessManager, networkManagerInstance)
 
@@ -41,7 +42,9 @@ Asn1SccServiceProvider::Asn1SccServiceProvider() :
     m_asn1sccService(new QProcess(this)),
     m_terminating(false)
 {
-    m_asn1sccService->setProgram(PROGRAM_URL);
+    loadServiceParams();
+
+    m_asn1sccService->setProgram(m_serviceBinaryPath);
     m_asn1sccService->setArguments(additionalArguments());
 
     connect(m_asn1sccService, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
@@ -59,14 +62,14 @@ Asn1SccServiceProvider::~Asn1SccServiceProvider()
         finalize();
 }
 
-QNetworkAccessManager *Asn1SccServiceProvider::getNetworkManager()
+QNetworkAccessManager *Asn1SccServiceProvider::getNetworkManager() const
 {
     return networkManagerInstance;
 }
 
-QString Asn1SccServiceProvider::getBaseURL()
+QString Asn1SccServiceProvider::getBaseURL() const
 {
-    return BASE_URL;
+    return m_serviceBaseUrl;
 }
 
 void Asn1SccServiceProvider::start()
@@ -85,11 +88,34 @@ void Asn1SccServiceProvider::finalize()
     m_asn1sccService->waitForFinished();
 }
 
-QStringList Asn1SccServiceProvider::additionalArguments()
+QStringList Asn1SccServiceProvider::additionalArguments() const
 {
     QStringList arguments;
-    arguments.append(QString("-w ") + QString::number(STAY_ALIVE_SERVICE_RUN_PARAM_MS));
+
+    if (!m_serviceBaseUrl.isEmpty()) {
+        arguments.append(QString("--uri"));
+        arguments.append(m_serviceBaseUrl);
+    }
+
+    arguments.append(QString("--watchdog"));
+    arguments.append(QString::number(m_serviceStayAlivePeriod));
+
     return arguments;
+}
+
+void Asn1SccServiceProvider::loadServiceParams()
+{
+    QSettings *s = Core::ICore::settings();
+    s->beginGroup(Constants::ASN1ACN_GROUP_NAME);
+
+    m_serviceBinaryPath = s->value(Constants::ASN1ACN_SERVICE_PATH).toString();
+    m_serviceBaseUrl
+        = QString("http://localhost:"
+                  + QString::number(s->value(Constants::ASN1ACN_SERVICE_PORT).toInt())
+                  + "/");
+    m_serviceStayAlivePeriod = s->value(Constants::ASN1ACN_SERVICE_WATCHDOG).toInt();
+
+    s->endGroup();
 }
 
 void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
@@ -104,5 +130,5 @@ void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatu
 
 void Asn1SccServiceProvider::stayAliveTimeout()
 {
-    networkManagerInstance->get(QNetworkRequest(QUrl(BASE_URL + "stayAlive")));
+    networkManagerInstance->get(QNetworkRequest(QUrl(m_serviceBaseUrl + "stayAlive")));
 }

@@ -28,6 +28,14 @@
 namespace Asn1Acn {
 namespace Constants {
 
+// Settings keys
+
+const char ASN1ACN_GROUP_NAME[] = "Asn1Acn";
+
+const char ASN1ACN_SERVICE_PATH[] = "ServicePath";
+const char ASN1ACN_SERVICE_PORT[] = "ServicePort";
+const char ASN1ACN_SERVICE_WATCHDOG[] = "ServiceWatchdog";
+
 // Shared constants
 
 const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
