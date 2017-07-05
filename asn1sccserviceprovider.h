@@ -25,8 +25,12 @@
 
 #pragma once
 
+#include <QNetworkReply>
 #include <QNetworkAccessManager>
 
+#include <QJsonDocument>
+
+#include <QFileInfo>
 #include <QObject>
 #include <QProcess>
 #include <QTimer>
@@ -42,8 +46,7 @@ public:
     Asn1SccServiceProvider();
     ~Asn1SccServiceProvider();
 
-    QNetworkAccessManager *getNetworkManager() const;
-    QString getBaseURL() const;
+    QNetworkReply *requestAst(const QString &documentData, const QFileInfo &fileInfo) const;
 
     void start();
     void finalize();
@@ -55,6 +58,8 @@ private slots:
 private:
     QStringList additionalArguments() const;
     void loadServiceParams();
+
+    QJsonDocument buildAstRequestData(const QString &inputData, const QFileInfo &fileInfo) const;
 
     QProcess *m_asn1sccService;
     QTimer m_stayAliveTimer;

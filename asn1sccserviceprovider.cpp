@@ -28,6 +28,9 @@
 #include <QString>
 #include <QSettings>
 
+#include <QJsonArray>
+#include <QJsonObject>
+
 #include <coreplugin/icore.h>
 
 #include "asn1acnconstants.h"
@@ -47,6 +50,7 @@ Asn1SccServiceProvider::Asn1SccServiceProvider() :
     m_asn1sccService->setProgram(m_serviceBinaryPath);
     m_asn1sccService->setArguments(additionalArguments());
 
+    // QProcess::finished is overloaded, hence the cast
     connect(m_asn1sccService, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             this, &Asn1SccServiceProvider::onProcessFinished);
 
@@ -62,14 +66,14 @@ Asn1SccServiceProvider::~Asn1SccServiceProvider()
         finalize();
 }
 
-QNetworkAccessManager *Asn1SccServiceProvider::getNetworkManager() const
+QNetworkReply *Asn1SccServiceProvider::requestAst(const QString &documentData, const QFileInfo &fileInfo) const
 {
-    return networkManagerInstance;
-}
+    QNetworkRequest astRequest(QUrl(m_serviceBaseUrl + "ast"));
+    astRequest.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
 
-QString Asn1SccServiceProvider::getBaseURL() const
-{
-    return m_serviceBaseUrl;
+    QByteArray jsonRequestData = buildAstRequestData(documentData, fileInfo).toJson();
+
+    return networkManagerInstance->post(astRequest, jsonRequestData);
 }
 
 void Asn1SccServiceProvider::start()
@@ -101,6 +105,20 @@ QStringList Asn1SccServiceProvider::additionalArguments() const
     arguments.append(QString::number(m_serviceStayAlivePeriod));
 
     return arguments;
+}
+
+QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QString &inputData, const QFileInfo &fileInfo) const
+{
+    QJsonObject asnFileData;
+
+    asnFileData["Name"] = fileInfo.fileName().toStdString().c_str();
+    asnFileData["Contents"] = inputData.toStdString().c_str();
+
+    QJsonObject files;
+    files["AsnFiles"] = QJsonArray { asnFileData };
+    files["AcnFiles"] = QJsonArray();
+
+    return QJsonDocument(files);
 }
 
 void Asn1SccServiceProvider::loadServiceParams()

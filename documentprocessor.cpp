@@ -26,18 +26,10 @@
 #include "documentprocessor.h"
 
 #include <QFileInfo>
-#include <QTextCursor>
+#include <QNetworkReply>
 #include <QXmlStreamReader>
-#include <QRegularExpression>
-
-#include <QJsonArray>
-#include <QJsonObject>
-
-#include <QGlobalStatic>
 
 #include <extensionsystem/pluginmanager.h>
-
-#include <coreplugin/icore.h>
 
 #include <utils/fileutils.h>
 
@@ -48,8 +40,6 @@
 #include "astxmlparser.h"
 
 using namespace Asn1Acn::Internal;
-
-static const QString BASE_URL("http://localhost:9749/");
 
 DocumentProcessor::DocumentProcessor(const QTextDocument *doc,
                                      const QString &filePath,
@@ -71,53 +61,24 @@ void DocumentProcessor::run()
         return;
     }
 
-    requestAst();
-}
+    QNetworkReply *reply = m_serviceProvider->requestAst(m_textDocument->toPlainText(), QFileInfo(m_filePath));
 
-void DocumentProcessor::requestAst()
-{
-    QNetworkRequest astRequest(QUrl(m_serviceProvider->getBaseURL() + "ast"));
-    astRequest.setOriginatingObject(this);
-
-    astRequest.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
-    QByteArray jsonRequestData = buildAstRequestData().toJson();
-
-    QNetworkAccessManager *networkManager = m_serviceProvider->getNetworkManager();
-    QObject::connect(networkManager, &QNetworkAccessManager::finished,
+    QObject::connect(reply, &QNetworkReply::finished,
                      this, &DocumentProcessor::requestFinished);
-
-    networkManager->post(astRequest, jsonRequestData);
 }
 
-QJsonDocument DocumentProcessor::buildAstRequestData() const
+void DocumentProcessor::requestFinished()
 {
-    QJsonObject asnFileData;
-
-    QFileInfo fi(m_filePath);
-    asnFileData["Name"] = fi.fileName().toStdString().c_str();
-    asnFileData["Contents"] = m_textDocument->toPlainText().toStdString().c_str();
-
-    QJsonObject files;
-    files["AsnFiles"] = QJsonArray { asnFileData };
-    files["AcnFiles"] = QJsonArray();
-
-    return QJsonDocument(files);
-}
-
-void DocumentProcessor::requestFinished(QNetworkReply *reply)
-{
-    if (this != reply->request().originatingObject())
-        return;
-
-    const QByteArray &replyString = reply->readAll();
-
-    if (reply->error() != QNetworkReply::NoError) {
+    QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+    if (reply != nullptr && reply->error() != QNetworkReply::NoError) {
         runFinished();
         return;
     }
 
-    std::unique_ptr<ParsedDocument> newDoc = parseXML(replyString);
+    const QByteArray &replyString = reply->readAll();
     ParsedDataStorage *model = ParsedDataStorage::instance();
+
+    std::unique_ptr<ParsedDocument> newDoc = parseXML(replyString);
     model->addFile(m_filePath, std::move(newDoc));
 
     reply->deleteLater();

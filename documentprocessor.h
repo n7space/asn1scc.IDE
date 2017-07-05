@@ -26,14 +26,8 @@
 #pragma once
 
 #include <QString>
+#include <QByteArray>
 #include <QTextDocument>
-
-#include <QNetworkReply>
-#include <QNetworkRequest>
-
-#include <QJsonDocument>
-
-#include <texteditor/textdocument.h>
 
 #include <memory>
 
@@ -55,11 +49,9 @@ signals:
     void processingFinished() const;
 
 private slots:
-    void requestFinished(QNetworkReply *reply);
+    void requestFinished();
 
 private:
-    void requestAst();
-    QJsonDocument buildAstRequestData() const;
     std::unique_ptr<ParsedDocument> parseXML(const QByteArray &textData) const;
     void runFinished() const;
 
