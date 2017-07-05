@@ -75,7 +75,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     // In the initialize function, a plugin can be sure that the plugins it
     // depends on have initialized their members.
 
-    loadSettings();
+    setDefaultSettings();
 
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
@@ -119,7 +119,7 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-void Asn1AcnPlugin::loadSettings()
+void Asn1AcnPlugin::setDefaultSettings()
 {
     // TODO: loading of settings needs to be more sophisticated.
     // Now on Linux OS settings can be found in ~/.config/QtProject/QtCreator.ini

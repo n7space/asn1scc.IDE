@@ -46,7 +46,7 @@ public:
     ShutdownFlag aboutToShutdown() override;
 
 private:
-    void loadSettings();
+    void setDefaultSettings();
 
 #ifdef WITH_TESTS
 private:
