@@ -25,39 +25,40 @@
 
 #pragma once
 
-#include <QString>
-#include <QTextDocument>
-
 #include <memory>
 
-#include "parseddocumentbuilder.h"
+#include <QString>
+#include <QFileInfo>
+#include <QByteArray>
+
+#include "parseddocument.h"
+#include "asn1sccserviceprovider.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class DocumentProcessor : public QObject
+class ParsedDocumentBuilder : public QObject
 {
     Q_OBJECT
-public:
-    DocumentProcessor(const QTextDocument *doc, const QString &filePath, int revision);
-    ~DocumentProcessor();
 
-    void run();
+public:
+    ParsedDocumentBuilder(const QString &documentData, const QFileInfo &fileInfo, int revision);
+    std::unique_ptr<ParsedDocument> takeDocument();
 
 signals:
-    void processingFinished() const;
+    void finished();
 
 private slots:
-    void onBuilderFinished();
+    void requestFinished();
 
 private:
-    const QTextDocument *m_textDocument;
-    const QString m_filePath;
-    const int m_revision;
+    void parseXML(const QByteArray &textData);
 
-    ParsedDocumentBuilder *m_docBuilder;
+    QFileInfo m_fileInfo;
+    int m_revision;
 
+    std::unique_ptr<ParsedDocument> m_parsedDocument;
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Internal */
+} /* namespace Asn1Acn */

@@ -26,18 +26,11 @@
 #include "documentprocessor.h"
 
 #include <QFileInfo>
-#include <QNetworkReply>
-#include <QXmlStreamReader>
-
-#include <extensionsystem/pluginmanager.h>
 
 #include <utils/fileutils.h>
 
-#include "data/modules.h"
-#include "data/definitions.h"
-
+#include "parseddocument.h"
 #include "parseddatastorage.h"
-#include "astxmlparser.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -46,9 +39,15 @@ DocumentProcessor::DocumentProcessor(const QTextDocument *doc,
                                      int revision) :
     m_textDocument(doc),
     m_filePath(filePath),
-    m_revision(revision)
+    m_revision(revision),
+    m_docBuilder(nullptr)
+
 {
-    m_serviceProvider = ExtensionSystem::PluginManager::getObject<Asn1SccServiceProvider>();
+}
+
+DocumentProcessor::~DocumentProcessor()
+{
+    delete m_docBuilder;
 }
 
 void DocumentProcessor::run()
@@ -57,51 +56,23 @@ void DocumentProcessor::run()
     std::shared_ptr<ParsedDocument> oldDoc = model->getFileForPath(m_filePath);
 
     if (oldDoc && oldDoc->getRevision() == m_revision) {
-        runFinished();
+        emit processingFinished();
         return;
     }
 
-    QNetworkReply *reply = m_serviceProvider->requestAst(m_textDocument->toPlainText(), QFileInfo(m_filePath));
+    m_docBuilder = new ParsedDocumentBuilder(m_textDocument->toPlainText(), QFileInfo(m_filePath), m_revision);
 
-    QObject::connect(reply, &QNetworkReply::finished,
-                     this, &DocumentProcessor::requestFinished);
+    QObject::connect(m_docBuilder, &ParsedDocumentBuilder::finished,
+                     this, &DocumentProcessor::onBuilderFinished);
 }
 
-void DocumentProcessor::requestFinished()
+void DocumentProcessor::onBuilderFinished()
 {
-    QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
-    if (reply != nullptr && reply->error() != QNetworkReply::NoError) {
-        runFinished();
-        return;
+    std::unique_ptr<ParsedDocument> doc = m_docBuilder->takeDocument();
+    if (doc != nullptr) {
+        ParsedDataStorage *model = ParsedDataStorage::instance();
+        model->addFile(m_filePath, std::move(doc));
     }
 
-    const QByteArray &replyString = reply->readAll();
-    ParsedDataStorage *model = ParsedDataStorage::instance();
-
-    std::unique_ptr<ParsedDocument> newDoc = parseXML(replyString);
-    model->addFile(m_filePath, std::move(newDoc));
-
-    reply->deleteLater();
-
-    runFinished();
-}
-
-std::unique_ptr<ParsedDocument> DocumentProcessor::parseXML(const QByteArray &textData) const
-{
-    QXmlStreamReader reader;
-    reader.addData(textData);
-
-    AstXmlParser parser(reader);
-
-    parser.parse();
-
-    std::unique_ptr<Data::Modules> parsedData = parser.takeData();
-    return std::unique_ptr<ParsedDocument>(new ParsedDocument(m_filePath,
-                                                              m_revision,
-                                                              std::move(parsedData)));
-}
-
-void DocumentProcessor::runFinished() const
-{
     emit processingFinished();
 }
