@@ -29,9 +29,10 @@
 
 using namespace Asn1Acn::Internal;
 
-ModelTreeNode::ModelTreeNode(const QString &id) :
+ModelTreeNode::ModelTreeNode(const QString &id, const Data::SourceLocation location) :
     m_id(id),
-    m_parent(nullptr)
+    m_parent(nullptr),
+    m_location(location)
 {
 }
 
@@ -111,4 +112,9 @@ int ModelTreeNode::row() const
     }
 
     return 0;
+}
+
+const Data::SourceLocation &ModelTreeNode::getSourceLocation() const
+{
+    return m_location;
 }

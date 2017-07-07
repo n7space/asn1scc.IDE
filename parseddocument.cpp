@@ -27,6 +27,8 @@
 
 #include <memory>
 
+#include "data/definitions.h"
+
 using namespace Asn1Acn::Internal;
 
 ParsedDocument::ParsedDocument() :
@@ -50,25 +52,38 @@ int ParsedDocument::getRevision() const
     return m_revision;
 }
 
-void ParsedDocument::bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr node)
+void ParsedDocument::bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const
 {
-    using DefinitionsMap = Data::Modules::DefinitionsMap;
-    using Types = Data::Definitions::Types;
-
-    DefinitionsMap::const_iterator defIt = m_parsedData->definitions().begin();
+    Data::Modules::DefinitionsMap::const_iterator defIt = m_parsedData->definitions().begin();
     while (defIt != m_parsedData->definitions().end()) {
-        QString definitionName = defIt->first;
-        auto definition = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(definitionName));
-
-        const Types &types = defIt->second->types();
-        Types::const_iterator typeIt = types.begin();
-        while (typeIt != types.end()) {
-            QString typeName = typeIt->first;
-            definition->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(typeName)));
-            typeIt++;
-        }
-
-        node->addChild(definition);
+        auto definitionNode = createDefinition(defIt->second);
+        moduleNode->addChild(definitionNode);
         defIt++;
+    }
+}
+
+ModelTreeNode::ModelTreeNodePtr ParsedDocument::createDefinition(const std::unique_ptr<Data::Definitions> &definition) const
+{
+    auto definitionNode =
+            ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(definition->name(),
+                                                              Data::SourceLocation(m_filePath,
+                                                                                   definition->location().line(),
+                                                                                   definition->location().column())));
+    attachTypesToDefiniton(definition->types(), definitionNode);
+
+    return definitionNode;
+}
+
+void ParsedDocument::attachTypesToDefiniton(const Data::Definitions::Types types, ModelTreeNode::ModelTreeNodePtr definitionNode) const
+{
+    Data::Definitions::Types::const_iterator typeIt = types.begin();
+    while (typeIt != types.end()) {
+        auto typeNode =
+                ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(typeIt->second.name(),
+                                                                  Data::SourceLocation(m_filePath,
+                                                                                       typeIt->second.location().line(),
+                                                                                       typeIt->second.location().column())));
+        definitionNode->addChild(typeNode);
+        typeIt++;
     }
 }

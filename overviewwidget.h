@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <QModelIndex>
+
 #include <texteditor/ioutlinewidget.h>
 
 #include <utils/navigationtreeview.h>
@@ -56,6 +58,9 @@ protected:
     void modelUpdated();
     OverviewTreeView *m_treeView;
     OverviewModel *m_model;
+
+private slots:
+    void onItemActivated(const QModelIndex &index);
 };
 
 } // namespace Internal

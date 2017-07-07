@@ -100,6 +100,7 @@ HEADERS += \
     data/typeassignment.h \
     data/definitions.h \
     data/modules.h \
+    data/dataitem.h \
     modeltreenode.h \
     projectwatcher.h \
     overviewwidget.h \

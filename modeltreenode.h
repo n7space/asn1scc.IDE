@@ -31,6 +31,8 @@
 #include <QVariant>
 #include <QList>
 
+#include "data/sourcelocation.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -41,7 +43,7 @@ public:
     using ModelTreeNodePtr = std::shared_ptr<ModelTreeNode>;
 
     ModelTreeNode() = default;
-    ModelTreeNode(const QString &id);
+    ModelTreeNode(const QString &id, const Data::SourceLocation location = Data::SourceLocation());
 
     int childrenCount() const;
 
@@ -60,11 +62,15 @@ public:
     int columnCount() const;
     int row() const;
 
-protected:
+    const Data::SourceLocation &getSourceLocation() const;
+
+private:
     QString m_id;
 
     ModelTreeNode *m_parent;
     QList<ModelTreeNodePtr> m_children;
+
+    const Data::SourceLocation m_location;
 };
 
 } // namespace Internal

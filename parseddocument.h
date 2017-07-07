@@ -45,9 +45,14 @@ public:
                    std::unique_ptr<Data::Modules> parsedData);
 
     int getRevision() const;
-    void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr node);
+
+    void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const;
 
 private:
+    ModelTreeNode::ModelTreeNodePtr createDefinition(const std::unique_ptr<Data::Definitions> &definition) const;
+    void attachTypesToDefiniton(const Data::Definitions::Types types,
+                                ModelTreeNode::ModelTreeNodePtr definitionNode) const;
+
     QString m_filePath;
     int m_revision;
 
