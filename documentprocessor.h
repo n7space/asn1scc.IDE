@@ -28,11 +28,9 @@
 #include <QString>
 #include <QTextDocument>
 
-#include <texteditor/textdocument.h>
-
 #include <memory>
 
-#include "parseddocument.h"
+#include "parseddocumentbuilder.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -42,19 +40,23 @@ class DocumentProcessor : public QObject
     Q_OBJECT
 public:
     DocumentProcessor(const QTextDocument *doc, const QString &filePath, int revision);
-    void run() const;
+    ~DocumentProcessor();
+
+    void run();
 
 signals:
-    void asnDocumentUpdated(const QTextDocument &doc) const;
+    void processingFinished() const;
+
+private slots:
+    void onBuilderFinished();
 
 private:
-    std::unique_ptr<ParsedDocument> parse() const;
-    std::unique_ptr<ParsedDocument> parseFromXml() const;
-    std::unique_ptr<ParsedDocument> parseStubbed() const;
-
     const QTextDocument *m_textDocument;
     const QString m_filePath;
     const int m_revision;
+
+    ParsedDocumentBuilder *m_docBuilder;
+
 };
 
 } // namespace Internal

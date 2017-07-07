@@ -25,43 +25,40 @@
 
 #pragma once
 
+#include <memory>
+
+#include <QString>
+#include <QFileInfo>
+#include <QByteArray>
+
+#include "parseddocument.h"
+#include "asn1sccserviceprovider.h"
+
 namespace Asn1Acn {
-namespace Constants {
+namespace Internal {
 
-// Settings keys
+class ParsedDocumentBuilder : public QObject
+{
+    Q_OBJECT
 
-const char ASN1ACN_GROUP_NAME[] = "Asn1Acn";
+public:
+    ParsedDocumentBuilder(const QString &documentData, const QFileInfo &fileInfo, int revision);
+    std::unique_ptr<ParsedDocument> takeDocument();
 
-const char ASN1ACN_SERVICE_PATH[] = "ServicePath";
-const char ASN1ACN_SERVICE_PORT[] = "ServicePort";
-const char ASN1ACN_SERVICE_WATCHDOG[] = "ServiceWatchdog";
+signals:
+    void finished();
 
-// Shared constants
+private slots:
+    void requestFinished();
 
-const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
-const char WIZARD_CATEGORY[] = "O.Asn1Acn";
+private:
+    void parseXML(const QByteArray &textData);
 
-// ASN1 constants
+    QFileInfo m_fileInfo;
+    int m_revision;
 
-const char LANG_ASN1[] = "ASN.1";
+    std::unique_ptr<ParsedDocument> m_parsedDocument;
+};
 
-const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
-const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
-
-const char ASN_STRUCTURES_VIEW_ID[] = "Asn1Acn.StructuresView";
-
-const char ASN1_MIMETYPE[] = "text/x-asn1";
-
-const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
-
-// ACN constants
-
-const char LANG_ACN[] = "ACN";
-
-const char ACNEDITOR_ID[] = "Asn1Acn.AcnEditor";
-const char ACNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ACN Editor");
-
-const char ACN_MIMETYPE[] = "text/x-acn";
-
-} // namespace Asn1Acn
-} // namespace Constants
+} /* namespace Internal */
+} /* namespace Asn1Acn */

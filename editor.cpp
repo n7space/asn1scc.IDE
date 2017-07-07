@@ -84,10 +84,8 @@ void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
     delete menu;
 }
 
-void EditorWidget::onAsnDocumentUpdated(const QTextDocument &document)
+void EditorWidget::onAsnDocumentUpdated()
 {
-    Q_UNUSED(document);
-
     QString filePath = textDocument()->filePath().toString();
     ModelTree *tree = ModelTree::instance();
 

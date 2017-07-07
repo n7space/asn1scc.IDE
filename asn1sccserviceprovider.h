@@ -25,43 +25,50 @@
 
 #pragma once
 
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
+
+#include <QJsonDocument>
+
+#include <QFileInfo>
+#include <QObject>
+#include <QProcess>
+#include <QTimer>
+
 namespace Asn1Acn {
-namespace Constants {
+namespace Internal {
 
-// Settings keys
+class Asn1SccServiceProvider : public QObject
+{
+    Q_OBJECT
 
-const char ASN1ACN_GROUP_NAME[] = "Asn1Acn";
+public:
+    Asn1SccServiceProvider();
+    ~Asn1SccServiceProvider();
 
-const char ASN1ACN_SERVICE_PATH[] = "ServicePath";
-const char ASN1ACN_SERVICE_PORT[] = "ServicePort";
-const char ASN1ACN_SERVICE_WATCHDOG[] = "ServiceWatchdog";
+    QNetworkReply *requestAst(const QString &documentData, const QFileInfo &fileInfo) const;
 
-// Shared constants
+    void start();
+    void finalize();
 
-const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
-const char WIZARD_CATEGORY[] = "O.Asn1Acn";
+private slots:
+    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void stayAliveTimeout();
 
-// ASN1 constants
+private:
+    QStringList additionalArguments() const;
+    void loadServiceParams();
 
-const char LANG_ASN1[] = "ASN.1";
+    QJsonDocument buildAstRequestData(const QString &inputData, const QFileInfo &fileInfo) const;
 
-const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
-const char ASNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ASN.1 Editor");
+    QProcess *m_asn1sccService;
+    QTimer m_stayAliveTimer;
+    bool m_terminating;
 
-const char ASN_STRUCTURES_VIEW_ID[] = "Asn1Acn.StructuresView";
+    QString m_serviceBaseUrl;
+    QString m_serviceBinaryPath;
+    int m_serviceStayAlivePeriod;
+};
 
-const char ASN1_MIMETYPE[] = "text/x-asn1";
-
-const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
-
-// ACN constants
-
-const char LANG_ACN[] = "ACN";
-
-const char ACNEDITOR_ID[] = "Asn1Acn.AcnEditor";
-const char ACNEDITOR_DISPLAY_NAME[] = QT_TRANSLATE_NOOP("OpenWith::Editors", "ACN Editor");
-
-const char ACN_MIMETYPE[] = "text/x-acn";
-
-} // namespace Asn1Acn
-} // namespace Constants
+} /* namespace Asn1Acn */
+} /* namespace Internal */

@@ -25,80 +25,54 @@
 
 #include "documentprocessor.h"
 
-#include <QTextCursor>
-#include <QXmlStreamReader>
-#include <QRegularExpression>
+#include <QFileInfo>
 
 #include <utils/fileutils.h>
 
-#include "data/modules.h"
-#include "data/definitions.h"
-
+#include "parseddocument.h"
 #include "parseddatastorage.h"
-#include "astxmlparser.h"
 
 using namespace Asn1Acn::Internal;
-
-static const QString SEPARATOR_REG_EXP("\\s");
-static const QString XML_VERSION_TAG("?xml version=\"1.0\"");
 
 DocumentProcessor::DocumentProcessor(const QTextDocument *doc,
                                      const QString &filePath,
                                      int revision) :
     m_textDocument(doc),
     m_filePath(filePath),
-    m_revision(revision)
+    m_revision(revision),
+    m_docBuilder(nullptr)
+
 {
 }
 
-void DocumentProcessor::run() const
+DocumentProcessor::~DocumentProcessor()
+{
+    delete m_docBuilder;
+}
+
+void DocumentProcessor::run()
 {
     ParsedDataStorage *model = ParsedDataStorage::instance();
-
     std::shared_ptr<ParsedDocument> oldDoc = model->getFileForPath(m_filePath);
-    if (!oldDoc || oldDoc->getRevision() != m_revision) {
-        std::unique_ptr<ParsedDocument> newDoc = parse();
-        model->addFile(m_filePath, std::move(newDoc));
+
+    if (oldDoc && oldDoc->getRevision() == m_revision) {
+        emit processingFinished();
+        return;
     }
 
-    // TODO: emit in ParsedDataStorage could be used?
-    // emit after parsing is finished
-    emit asnDocumentUpdated(*m_textDocument);
+    m_docBuilder = new ParsedDocumentBuilder(m_textDocument->toPlainText(), QFileInfo(m_filePath), m_revision);
+
+    QObject::connect(m_docBuilder, &ParsedDocumentBuilder::finished,
+                     this, &DocumentProcessor::onBuilderFinished);
 }
 
-std::unique_ptr<ParsedDocument> DocumentProcessor::parse() const
+void DocumentProcessor::onBuilderFinished()
 {
-    // In this place parsing procedure should be executed
-    QTextCursor coursor = m_textDocument->find(XML_VERSION_TAG);
+    std::unique_ptr<ParsedDocument> doc = m_docBuilder->takeDocument();
+    if (doc != nullptr) {
+        ParsedDataStorage *model = ParsedDataStorage::instance();
+        model->addFile(m_filePath, std::move(doc));
+    }
 
-    if (!coursor.isNull())
-        return parseFromXml();
-
-    return parseStubbed();
-}
-
-std::unique_ptr<ParsedDocument> DocumentProcessor::parseFromXml() const
-{
-    QXmlStreamReader reader;
-    reader.addData(m_textDocument->toPlainText());
-
-    AstXmlParser parser(reader);
-    parser.parse();
-
-    std::unique_ptr<Data::Modules> parsedData = parser.takeData();
-
-    return std::unique_ptr<ParsedDocument>(new ParsedDocument(m_filePath,
-                                                              m_textDocument->revision(),
-                                                              std::move(parsedData)));
-}
-
-std::unique_ptr<ParsedDocument> DocumentProcessor::parseStubbed() const
-{
-    QString docPlainText = m_textDocument->toPlainText();
-    QStringList splittedDoc = docPlainText.split(QRegularExpression(SEPARATOR_REG_EXP),
-                                                 QString::SkipEmptyParts);
-
-    return std::unique_ptr<ParsedDocument>(new ParsedDocument(m_filePath,
-                                                              m_textDocument->revision(),
-                                                              splittedDoc));
+    emit processingFinished();
 }

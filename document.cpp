@@ -56,7 +56,7 @@ void Document::onFilePathChanged(const Utils::FileName &oldPath, const Utils::Fi
     if (newPath.isEmpty() || newPath == oldPath)
         return;
 
-    emit documentUpdated(*document());
+    emit documentUpdated();
 
     connect(this, &Core::IDocument::contentsChanged,
             this, &Document::scheduleProcessDocument);
@@ -65,12 +65,13 @@ void Document::onFilePathChanged(const Utils::FileName &oldPath, const Utils::Fi
 void Document::processDocument()
 {
     QTextDocument *currentDocument = document();
-    DocumentProcessor docProcessor(currentDocument,
-                                   filePath().toString(),
-                                   currentDocument->revision());
 
-    connect(&docProcessor, &DocumentProcessor::asnDocumentUpdated,
-            this, &Document::documentUpdated);
+    DocumentProcessor *docProcessor = new DocumentProcessor(currentDocument,
+                                                            filePath().toString(),
+                                                            currentDocument->revision());
 
-    docProcessor.run();
+    connect(docProcessor, &DocumentProcessor::processingFinished,
+            [this, docProcessor](){emit documentUpdated(); docProcessor->deleteLater();});
+
+    docProcessor->run();
 }
