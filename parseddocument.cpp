@@ -36,14 +36,6 @@ ParsedDocument::ParsedDocument() :
 {
 }
 
-ParsedDocument::ParsedDocument(const QString &filePath, int revision, const QStringList &wordList) :
-    m_filePath(filePath),
-    m_revision(revision),
-    m_wordList(wordList),
-    m_parsedData(nullptr)
-{
-}
-
 ParsedDocument::ParsedDocument(const QString &filePath,
                                int revision,
                                std::unique_ptr<Data::Modules> parsedData) :
@@ -59,20 +51,6 @@ int ParsedDocument::getRevision() const
 }
 
 void ParsedDocument::bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr node)
-{
-    if (m_parsedData != nullptr)
-        bindModelTreeNodeWithParsedData(node);
-    else if (m_wordList.empty() == false)
-        bindModelTreeNodeWithStubbedData(node);
-}
-
-void ParsedDocument::bindModelTreeNodeWithStubbedData(ModelTreeNode::ModelTreeNodePtr node)
-{
-    foreach (const QString &entry, m_wordList)
-        node->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(entry)));
-}
-
-void ParsedDocument::bindModelTreeNodeWithParsedData(ModelTreeNode::ModelTreeNodePtr node)
 {
     using DefinitionsMap = Data::Modules::DefinitionsMap;
     using Types = Data::Definitions::Types;

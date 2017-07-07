@@ -40,7 +40,6 @@ class ParsedDocument
 {
 public:
     ParsedDocument();
-    ParsedDocument(const QString &filePath, int revision, const QStringList &list);
     ParsedDocument(const QString &filePath,
                    int revision,
                    std::unique_ptr<Data::Modules> parsedData);
@@ -49,14 +48,9 @@ public:
     void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr node);
 
 private:
-    void bindModelTreeNodeWithStubbedData(ModelTreeNode::ModelTreeNodePtr node);
-    void bindModelTreeNodeWithParsedData(ModelTreeNode::ModelTreeNodePtr node);
-
     QString m_filePath;
     int m_revision;
 
-    // TODO: m_wordList is temporal, as single words are used as data stubs
-    QStringList m_wordList;
     std::unique_ptr<Data::Modules> m_parsedData;
 };
 
