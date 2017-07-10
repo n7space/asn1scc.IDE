@@ -30,9 +30,12 @@
 #include <QString>
 #include <QFileInfo>
 #include <QByteArray>
+#include <QStringList>
 
 #include "parseddocument.h"
 #include "asn1sccserviceprovider.h"
+
+class QJsonObject;
 
 namespace Asn1Acn {
 namespace Internal {
@@ -44,20 +47,28 @@ class ParsedDocumentBuilder : public QObject
 public:
     ParsedDocumentBuilder(const QString &documentData, const QFileInfo &fileInfo, int revision);
     std::unique_ptr<ParsedDocument> takeDocument();
+    const QStringList& errorMessages() const { return m_errorMessages; }
 
 signals:
     void finished();
+    void errored();
 
 private slots:
     void requestFinished();
 
 private:
-    void parseXML(const QByteArray &textData);
+    void parseResponse(const QByteArray &jsonData);
+    void parseXML(const QString &textData);
+    void storeErrorMessages(const QJsonObject &json);
+
+    bool responseContainsAst(const QJsonObject &json);
+    QString getAstXml(const QJsonObject &json);
 
     QFileInfo m_fileInfo;
     int m_revision;
 
     std::unique_ptr<ParsedDocument> m_parsedDocument;
+    QStringList m_errorMessages;
 };
 
 } /* namespace Internal */
