@@ -35,6 +35,7 @@ addons:
     - g++-6
     - gcc-6
     - qt59-meta-minimal
+    - qt59tools
     - p7zip
     - libstdc++6
     - libgl1-mesa-dev
