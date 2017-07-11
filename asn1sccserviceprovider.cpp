@@ -37,8 +37,6 @@
 
 using namespace Asn1Acn::Internal;
 
-const int STAY_ALIVE_PERIOD_MS = 500;
-
 Q_GLOBAL_STATIC(QNetworkAccessManager, networkManagerInstance)
 
 Asn1SccServiceProvider::Asn1SccServiceProvider() :
@@ -54,7 +52,7 @@ Asn1SccServiceProvider::Asn1SccServiceProvider() :
     connect(m_asn1sccService, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             this, &Asn1SccServiceProvider::onProcessFinished);
 
-    m_stayAliveTimer.setInterval(STAY_ALIVE_PERIOD_MS);
+    m_stayAliveTimer.setInterval(m_serviceStayAlivePeriod / 2);
 
     connect(&m_stayAliveTimer, &QTimer::timeout,
             this, &Asn1SccServiceProvider::stayAliveTimeout, Qt::UniqueConnection);
