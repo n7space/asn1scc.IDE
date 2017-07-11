@@ -76,9 +76,9 @@ QNetworkReply *Asn1SccServiceProvider::requestAst(const QString &documentData, c
 
 void Asn1SccServiceProvider::start()
 {
-    m_asn1sccService->start();
-    m_asn1sccService->waitForStarted();
     m_stayAliveTimer.start();
+    m_asn1sccService->start();
+    m_asn1sccService->waitForStarted(); // TODO check for error
 }
 
 void Asn1SccServiceProvider::finalize()
