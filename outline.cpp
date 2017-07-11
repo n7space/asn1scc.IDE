@@ -27,12 +27,16 @@
 
 #include <QAbstractItemModel>
 
+#include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
 
+#include <utils/fileutils.h>
 #include <utils/qtcassert.h>
 
 #include "asneditor.h"
 #include "acneditor.h"
+
+#include "modeltree.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -43,7 +47,18 @@ OutlineWidget::OutlineWidget(EditorWidget *editor) :
     connect(m_model, &QAbstractItemModel::modelReset,
             this, &OutlineWidget::modelUpdated);
 
-    modelUpdated();
+    if (ModelTree::instance()->isValid())
+        modelUpdated();
+}
+
+void OutlineWidget::modelUpdated()
+{
+    QString path = m_editor->textDocument()->filePath().toString();
+
+    ModelTreeNode::ModelTreeNodePtr documentNode = ModelTree::instance()->getAnyNodeForFilepath(path);
+    m_model->setRootNode(documentNode);
+
+    m_treeView->expandAll();
 }
 
 bool OutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const

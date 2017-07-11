@@ -47,7 +47,8 @@ ModelTree *ModelTree::instance()
     return m_instance;
 }
 
-ModelTree::ModelTree()
+ModelTree::ModelTree() :
+    m_modifiersCnt(0)
 {
     m_treeRoot = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode);
 
@@ -58,47 +59,35 @@ ModelTree::ModelTree()
 
 void ModelTree::addProjectNode(ModelTreeNode::ModelTreeNodePtr projectNode)
 {
-    {
-        QMutexLocker locker(&m_dataMutex);
+    QMutexLocker locker(&m_dataMutex);
 
-        m_treeRoot->addChild(projectNode);
-    }
-
-    emit treeUpdated();
+    m_treeRoot->addChild(projectNode);
 }
 
 void ModelTree::removeProjectNode(const QString &projectName)
 {
-    {
-        QMutexLocker locker(&m_dataMutex);
+    QMutexLocker locker(&m_dataMutex);
 
-        m_treeRoot->removeChildByName(projectName);
-    }
-
-    emit treeUpdated();
+    m_treeRoot->removeChildByName(projectName);
 }
 
 void ModelTree::addNodeToProject(const QString &projectName,
-                                  ModelTreeNode::ModelTreeNodePtr node)
+                                 ModelTreeNode::ModelTreeNodePtr node)
 {
-    {
-        QMutexLocker locker(&m_dataMutex);
+    QMutexLocker locker(&m_dataMutex);
 
-        ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
-        QTC_ASSERT(projectNode != nullptr, return );
+    ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
+    QTC_ASSERT(projectNode != nullptr, return );
 
-        projectNode->addChild(node);
+    projectNode->addChild(node);
 
-        ParsedDataStorage *storage = ParsedDataStorage::instance();
-        std::shared_ptr<ParsedDocument> document = storage->getFileForPath(node->id());
-        if (document != nullptr)
-            document->bindModelTreeNode(node);
-    }
-
-    emit treeUpdated();
+    ParsedDataStorage *storage = ParsedDataStorage::instance();
+    std::shared_ptr<ParsedDocument> document = storage->getFileForPath(node->id());
+    if (document != nullptr)
+        document->bindModelTreeNode(node);
 }
 
-ModelTreeNode::ModelTreeNodePtr ModelTree::getModelTreeRoot() const
+const ModelTreeNode::ModelTreeNodePtr ModelTree::getModelTreeRoot() const
 {
     return m_treeRoot;
 }
@@ -142,44 +131,63 @@ int ModelTree::getProjectFilesCnt(const QString &projectName) const
     return projectNode->childrenCount();
 }
 
+bool ModelTree::isValid()
+{
+    return m_modifiersCnt == 0;
+}
+
 void ModelTree::removeStaleNodesFromProject(const QString &projectName, const QStringList &currentPaths)
 {
-    {
-        QMutexLocker locker(&m_dataMutex);
+    QMutexLocker locker(&m_dataMutex);
 
-        ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
-        if (projectNode == nullptr)
-            return;
+    ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->getChildByName(projectName);
+    if (projectNode == nullptr)
+        return;
 
-        QList<QString> stalePaths;
-        for (int i = 0; i < projectNode->childrenCount(); i++)
-            stalePaths.push_back(projectNode->childAt(i)->id());
+    QList<QString> stalePaths;
+    for (int i = 0; i < projectNode->childrenCount(); i++)
+        stalePaths.push_back(projectNode->childAt(i)->id());
 
-        QSet<QString> pathsToRemove = stalePaths.toSet().subtract(currentPaths.toSet());
+    QSet<QString> pathsToRemove = stalePaths.toSet().subtract(currentPaths.toSet());
 
-        foreach(const QString &stalePath, pathsToRemove)
-            projectNode->removeChildByName(stalePath);
-    }
-
-    emit treeUpdated();
+    foreach (const QString &stalePath, pathsToRemove)
+        projectNode->removeChildByName(stalePath);
 }
 
 void ModelTree::updateModelTreeNode(const QString &filePath,
-                                      std::shared_ptr<ParsedDocument> document)
+                                    std::shared_ptr<ParsedDocument> document)
+{
+    QMutexLocker locker(&m_dataMutex);
+
+    int projectCnt = m_treeRoot->childrenCount();
+    for (int i = 0; i < projectCnt; i++) {
+        ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->childAt(i);
+        ModelTreeNode::ModelTreeNodePtr fileNode = projectNode->getChildByName(filePath);
+        if (fileNode != nullptr) {
+            fileNode->removeChildren();
+            document->bindModelTreeNode(fileNode);
+        }
+    }
+}
+
+void ModelTree::treeAboutToChange()
+{
+    QMutexLocker locker(&m_dataMutex);
+
+    m_modifiersCnt++;
+
+    emit modelAboutToUpdate();
+}
+
+void ModelTree::treeChanged()
 {
     {
         QMutexLocker locker(&m_dataMutex);
 
-        int projectCnt = m_treeRoot->childrenCount();
-        for (int i = 0; i < projectCnt; i++) {
-            ModelTreeNode::ModelTreeNodePtr projectNode = m_treeRoot->childAt(i);
-            ModelTreeNode::ModelTreeNodePtr fileNode = projectNode->getChildByName(filePath);
-            if (fileNode != nullptr) {
-                fileNode->removeChildren();
-                document->bindModelTreeNode(fileNode);
-            }
-        }
+        m_modifiersCnt--;
+        if (m_modifiersCnt != 0)
+            return;
     }
 
-    emit treeUpdated();
+    emit modelUpdated();
 }

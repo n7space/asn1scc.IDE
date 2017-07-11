@@ -25,8 +25,6 @@
 
 #include "editor.h"
 
-#include <memory>
-
 #include <QMenu>
 #include <QString>
 
@@ -46,18 +44,17 @@ EditorWidget::EditorWidget()
     // TODO ? setLanguageSettingsId(Constants::SettingsId);
 
     m_model = new OverviewModel(this);
+
+    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
+            m_model, &OverviewModel::invalidated);
+
+    connect(ModelTree::instance(), &ModelTree::modelUpdated,
+            m_model, &OverviewModel::validated);
 }
 
 EditorWidget::~EditorWidget()
 {
     delete m_model;
-}
-
-void EditorWidget::finalizeInitialization()
-{
-    Document *doc = qobject_cast<Document *>(textDocument());
-    connect(doc, &Document::documentUpdated,
-            this, &EditorWidget::onAsnDocumentUpdated);
 }
 
 OverviewModel *EditorWidget::getOverviewModel() const
@@ -82,16 +79,4 @@ void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
     if (!menu)
         return;
     delete menu;
-}
-
-void EditorWidget::onAsnDocumentUpdated()
-{
-    QString filePath = textDocument()->filePath().toString();
-    ModelTree *tree = ModelTree::instance();
-
-    ModelTreeNode::ModelTreeNodePtr documentNode = tree->getAnyNodeForFilepath(filePath);
-    if (documentNode == nullptr)
-        return;
-
-    m_model->setRootNode(documentNode);
 }

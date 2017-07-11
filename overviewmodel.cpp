@@ -112,13 +112,19 @@ QModelIndex OverviewModel::parent(const QModelIndex &index) const
     return createIndex(parent->row(), 0, const_cast<ModelTreeNode *>(parent));
 }
 
-void OverviewModel::setRootNode(ModelTreeNode::ModelTreeNodePtr root)
+void OverviewModel::invalidated()
 {
     beginResetModel();
+}
 
-    m_rootItem = root;
-
+void OverviewModel::validated()
+{
     endResetModel();
+}
+
+void OverviewModel::setRootNode(ModelTreeNode::ModelTreeNodePtr root)
+{
+    m_rootItem = root;
 }
 
 const ModelTreeNode *OverviewModel::getValidNode(const QModelIndex &index) const

@@ -32,6 +32,7 @@
 #include "data/definitions.h"
 
 #include "modeltreenode.h"
+#include "documentsourceinfo.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -39,12 +40,10 @@ namespace Internal {
 class ParsedDocument
 {
 public:
-    ParsedDocument();
-    ParsedDocument(const QString &filePath,
-                   int revision,
-                   std::unique_ptr<Data::Modules> parsedData);
 
-    int getRevision() const;
+    ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSourceInfo &source);
+
+    const DocumentSourceInfo &source() const;
 
     void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const;
 
@@ -53,9 +52,7 @@ private:
     void attachTypesToDefiniton(const Data::Definitions::Types types,
                                 ModelTreeNode::ModelTreeNodePtr definitionNode) const;
 
-    QString m_filePath;
-    int m_revision;
-
+    DocumentSourceInfo m_source;
     std::unique_ptr<Data::Modules> m_parsedData;
 };
 

@@ -52,6 +52,9 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
+    void invalidated();
+    void validated();
+
     void setRootNode(ModelTreeNode::ModelTreeNodePtr root);
 
 private:

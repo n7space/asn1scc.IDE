@@ -101,7 +101,7 @@ void OverviewWidget::onItemActivated(const QModelIndex &index)
 
     ModelTreeNode *node = static_cast<ModelTreeNode *>(index.internalPointer());
 
-    // it is assumed, that if item has children, user wants to expand it, even though it could be jumped to.
+    // it is assumed, that if item has children, user wants to expand it, even though sometimes it could be jumped to.
     if (node->childrenCount() > 0)
         return;
 

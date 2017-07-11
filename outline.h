@@ -41,6 +41,9 @@ class OutlineWidget : public OverviewWidget
 public:
     OutlineWidget(EditorWidget *editor);
 
+private slots:
+    void modelUpdated();
+
 private:
     EditorWidget *m_editor;
 };

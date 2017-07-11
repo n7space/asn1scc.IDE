@@ -23,31 +23,54 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "documentsourceinfo.h"
 
-#include <QFile>
-#include <QStringList>
-#include <QTextDocument>
+using namespace Asn1Acn::Internal;
 
-#include <projectexplorer/project.h>
-
-#include "modeltree.h"
-#include "parseddatastorage.h"
-
-namespace Asn1Acn {
-namespace Internal {
-
-class ProjectWatcher : public QObject
+DocumentSourceInfo::DocumentSourceInfo(int revision, const QString &content, const QString &path, const QString &name) :
+    m_revision(revision),
+    m_rawContent(content),
+    m_filePath(path),
+    m_fileName(name)
 {
-    Q_OBJECT
-public:
-    ProjectWatcher();
+}
 
-private slots:
-    void onProjectAdded(ProjectExplorer::Project *project);
-    void onProjectRemoved(ProjectExplorer::Project *project);
-    void onProjectFileListChanged();
-};
+int DocumentSourceInfo::getRevision() const
+{
+    return m_revision;
+}
 
-} // namespace Internal
-} // namespace Asn1Acn
+void DocumentSourceInfo::setRevision(int revision)
+{
+    m_revision = revision;
+}
+
+const QString &DocumentSourceInfo::getContent() const
+{
+    return m_rawContent;
+}
+
+void DocumentSourceInfo::setContent(QString content)
+{
+    m_rawContent = content;
+}
+
+const QString &DocumentSourceInfo::getName() const
+{
+    return m_fileName;
+}
+
+void DocumentSourceInfo::setName(QString name)
+{
+    m_fileName = name;
+}
+
+const QString &DocumentSourceInfo::getPath() const
+{
+    return m_filePath;
+}
+
+void DocumentSourceInfo::setPath(QString path)
+{
+    m_filePath = path;
+}

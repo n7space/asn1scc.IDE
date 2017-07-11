@@ -75,7 +75,9 @@ SOURCES += \
     modeltree.cpp \
     asn1acnjsextension.cpp \
     asn1sccserviceprovider.cpp \
-    parseddocumentbuilder.cpp
+    parseddocumentbuilder.cpp \
+    documentsourceinfo.cpp \
+    projectcontenthandler.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -100,7 +102,6 @@ HEADERS += \
     data/typeassignment.h \
     data/definitions.h \
     data/modules.h \
-    data/dataitem.h \
     modeltreenode.h \
     projectwatcher.h \
     overviewwidget.h \
@@ -108,7 +109,9 @@ HEADERS += \
     modeltree.h \
     asn1acnjsextension.h \
     asn1sccserviceprovider.h \
-    parseddocumentbuilder.h
+    parseddocumentbuilder.h \
+    documentsourceinfo.h \
+    projectcontenthandler.h
 
 DISTFILES += \
     LICENSE \

@@ -52,7 +52,7 @@ private:
     void parse(const QString& xmlData);
 
     QXmlStreamReader m_xmlReader;
-    std::unique_ptr<Data::Modules> m_parsedData;
+    std::map<QString, std::unique_ptr<Data::Modules>> m_parsedData;
 };
 
 } // namespace Tests

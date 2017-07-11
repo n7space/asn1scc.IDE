@@ -42,13 +42,10 @@ public:
     explicit EditorWidget();
     ~EditorWidget();
 
-    void finalizeInitialization() override;
-
     OverviewModel *getOverviewModel() const;
 
 protected:
     void contextMenuEvent(QContextMenuEvent *) override;
-    void onAsnDocumentUpdated();
 
     OverviewModel *m_model;
     Utils::CommentDefinition m_commentDefinition;

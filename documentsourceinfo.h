@@ -25,28 +25,36 @@
 
 #pragma once
 
-#include <QFile>
-#include <QStringList>
-#include <QTextDocument>
-
-#include <projectexplorer/project.h>
-
-#include "modeltree.h"
-#include "parseddatastorage.h"
+#include <QString>
+#include <QFileInfo>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ProjectWatcher : public QObject
+class DocumentSourceInfo
 {
-    Q_OBJECT
 public:
-    ProjectWatcher();
+    DocumentSourceInfo() = default;
+    DocumentSourceInfo(int revision, const QString &content, const QString &path, const QString &name);
 
-private slots:
-    void onProjectAdded(ProjectExplorer::Project *project);
-    void onProjectRemoved(ProjectExplorer::Project *project);
-    void onProjectFileListChanged();
+    int getRevision() const;
+    void setRevision(int revision);
+
+    const QString &getContent() const;
+    void setContent(QString content);
+
+    const QString &getPath() const;
+    void setPath(QString path);
+
+    const QString &getName() const;
+    void setName(QString name);
+
+private:
+    int m_revision;
+
+    QString m_rawContent;
+    QString m_filePath;
+    QString m_fileName;
 };
 
 } // namespace Internal

@@ -34,14 +34,16 @@
 #include "data/modules.h"
 #include "data/definitions.h"
 
+#include "documentsourceinfo.h"
+
 using namespace Asn1Acn::Internal;
 
-ParsedDocumentBuilder::ParsedDocumentBuilder(const QString &documentData, const QFileInfo &fileInfo, int revision)
-    : m_fileInfo(fileInfo), m_revision(revision)
+ParsedDocumentBuilder::ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents) :
+    m_rawDocuments(documents)
 {
     auto serviceProvider = ExtensionSystem::PluginManager::getObject<Asn1SccServiceProvider>();
 
-    QNetworkReply *reply = serviceProvider->requestAst(documentData, fileInfo);
+    QNetworkReply *reply = serviceProvider->requestAst(documents);
     QObject::connect(reply, &QNetworkReply::finished,
                      this, &ParsedDocumentBuilder::requestFinished);
 }
@@ -49,6 +51,7 @@ ParsedDocumentBuilder::ParsedDocumentBuilder(const QString &documentData, const 
 void ParsedDocumentBuilder::requestFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+
     if (reply->error() == QNetworkReply::NoError)
         parseXML(reply->readAll());
 
@@ -64,14 +67,21 @@ void ParsedDocumentBuilder::parseXML(const QByteArray &textData)
 
     AstXmlParser parser(reader);
     parser.parse();
-    std::unique_ptr<Data::Modules> parsedData = parser.takeData();
 
-    m_parsedDocument = std::unique_ptr<ParsedDocument>(new ParsedDocument(m_fileInfo.filePath(),
-                                                                          m_revision,
-                                                                          std::move(parsedData)));
+    std::map<QString, std::unique_ptr<Data::Modules> > parsedData = parser.takeData();
+    std::map<QString, std::unique_ptr<Data::Modules> >::iterator it;
+
+    for (it = parsedData.begin(); it != parsedData.end(); it++) {
+        QString fileName = it->first;
+        DocumentSourceInfo sourceInfo = m_rawDocuments[fileName];
+
+        std::unique_ptr<ParsedDocument> parsedDoc(new ParsedDocument(std::move(it->second), sourceInfo));
+
+        m_parsedDocuments.push_back(std::move(parsedDoc));
+    }
 }
 
-std::unique_ptr<ParsedDocument> ParsedDocumentBuilder::takeDocument()
+std::vector<std::unique_ptr<ParsedDocument> > ParsedDocumentBuilder::takeDocuments()
 {
-    return std::move(m_parsedDocument);
+    return std::move(m_parsedDocuments);
 }

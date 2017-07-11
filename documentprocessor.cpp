@@ -27,21 +27,14 @@
 
 #include <QFileInfo>
 
-#include <utils/fileutils.h>
-
 #include "parseddocument.h"
 #include "parseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
 
-DocumentProcessor::DocumentProcessor(const QTextDocument *doc,
-                                     const QString &filePath,
-                                     int revision) :
-    m_textDocument(doc),
-    m_filePath(filePath),
-    m_revision(revision),
+DocumentProcessor::DocumentProcessor(const QString &projectName) :
+    m_projectName(projectName),
     m_docBuilder(nullptr)
-
 {
 }
 
@@ -50,29 +43,28 @@ DocumentProcessor::~DocumentProcessor()
     delete m_docBuilder;
 }
 
+void DocumentProcessor::addToRun(const QString &docContent, const QString &filePath, int revision)
+{
+    QString fileName = QFileInfo(filePath).fileName();
+    DocumentSourceInfo fileInfo(revision, docContent, filePath, fileName);
+
+    m_documents.insert(fileName, fileInfo);
+}
+
 void DocumentProcessor::run()
 {
-    ParsedDataStorage *model = ParsedDataStorage::instance();
-    std::shared_ptr<ParsedDocument> oldDoc = model->getFileForPath(m_filePath);
-
-    if (oldDoc && oldDoc->getRevision() == m_revision) {
-        emit processingFinished();
-        return;
-    }
-
-    m_docBuilder = new ParsedDocumentBuilder(m_textDocument->toPlainText(), QFileInfo(m_filePath), m_revision);
-
+    m_docBuilder = new ParsedDocumentBuilder(m_documents);
     QObject::connect(m_docBuilder, &ParsedDocumentBuilder::finished,
                      this, &DocumentProcessor::onBuilderFinished);
 }
 
 void DocumentProcessor::onBuilderFinished()
 {
-    std::unique_ptr<ParsedDocument> doc = m_docBuilder->takeDocument();
-    if (doc != nullptr) {
-        ParsedDataStorage *model = ParsedDataStorage::instance();
-        model->addFile(m_filePath, std::move(doc));
-    }
+    std::vector<std::unique_ptr<ParsedDocument> > documents = m_docBuilder->takeDocuments();
+    ParsedDataStorage *model = ParsedDataStorage::instance();
+
+    for (size_t i = 0; i < documents.size(); i++)
+        model->addFileToProject(m_projectName, std::move(documents[i]));
 
     emit processingFinished();
 }

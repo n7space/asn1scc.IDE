@@ -23,41 +23,51 @@
 **
 ****************************************************************************/
 
-#pragma once
-
-#include <memory>
-
-#include <QHash>
+#include <QObject>
 #include <QString>
-#include <QFileInfo>
-#include <QByteArray>
+#include <QStringList>
 
-#include "parseddocument.h"
-#include "asn1sccserviceprovider.h"
+#include "modeltree.h"
+#include "parseddatastorage.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedDocumentBuilder : public QObject
+class ProjectContentHandler : public QObject
 {
     Q_OBJECT
 
 public:
-    ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents);
-    std::vector<std::unique_ptr<ParsedDocument> > takeDocuments();
+    ProjectContentHandler();
+
+    void handleProjectAdded(const QString &projectName);
+    void handleProjectRemoved(const QString &projectName);
+
+    void handleFileListChanged(const QString &projectName, const QStringList &fileList);
+    void handleFileContentChanged(const QString &path, const QString &content, int revision);
 
 signals:
-    void finished();
+    void processingFinished();
 
 private slots:
-    void requestFinished();
+    void onFilesProcessingFinished();
 
 private:
-    void parseXML(const QByteArray &textData);
-    const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
+    QStringList filterValidPaths(const QStringList &paths);
 
-    std::vector<std::unique_ptr<ParsedDocument> > m_parsedDocuments;
+    void handleFilesAdded(const QString &projectName, const QStringList &filePaths);
+    void handleFilesRemoved(const QString &projectName, const QStringList &filePaths);
+
+    void processFiles(const QString &projectName, const QStringList &filePaths);
+    QString readFileContent(const QString &fileName) const;
+
+    void allProcessingFinished();
+
+    ModelTree *m_tree;
+    ParsedDataStorage *m_storage;
+
+    unsigned m_projectsChanged;
 };
 
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+} // namespace Internal
+} // namespace Asn1Acn

@@ -53,18 +53,50 @@ ParsedDataStorage::getFileForPath(const QString &filePath) const
     return m_documents.contains(filePath) ? m_documents.value(filePath) : nullptr;
 }
 
-void ParsedDataStorage::addFile(const QString &filePath, std::unique_ptr<ParsedDocument> file)
+void ParsedDataStorage::addProject(const QString &projectName)
+{
+    QMutexLocker locker(&m_documentsMutex);
+
+    Project p;
+    m_projects.insert(projectName, p);
+}
+
+void ParsedDataStorage::removeProject(const QString &projectName)
+{
+    QMutexLocker locker(&m_documentsMutex);
+
+    QList<std::shared_ptr<ParsedDocument> > files = getFilesFromProjectInternal(projectName);
+    foreach (const std::shared_ptr<ParsedDocument> &file, files)
+        removeFileFromProjectInternal(projectName, file->source().getPath());
+
+    m_projects.remove(projectName);
+}
+
+QStringList ParsedDataStorage::getProjectsForFile(const QString &filePath) const
+{
+    QMutexLocker locker(&m_documentsMutex);
+    return getProjectsForFileInternal(filePath);
+}
+
+QList<std::shared_ptr<ParsedDocument> > ParsedDataStorage::getFilesFromProject(const QString &projectName) const
+{
+    QMutexLocker locker(&m_documentsMutex);
+    return getFilesFromProjectInternal(projectName);
+}
+
+void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique_ptr<ParsedDocument> file)
 {
     std::shared_ptr<ParsedDocument> newFile = std::move(file);
+    QString filePath = newFile->source().getPath();
 
     {
         QMutexLocker locker(&m_documentsMutex);
 
-        if (m_documents.contains(filePath) == true) {
-            std::shared_ptr<ParsedDocument> oldFile = m_documents.value(filePath);
-            if (oldFile->getRevision() == newFile->getRevision())
-                return;
-        }
+        refreshFileInProjects(newFile, filePath);
+
+        Project &p = m_projects[projectName];
+        if (!p.contains(filePath))
+            p.insert(filePath, newFile);
 
         m_documents.insert(filePath, newFile);
     }
@@ -72,11 +104,64 @@ void ParsedDataStorage::addFile(const QString &filePath, std::unique_ptr<ParsedD
     emit fileUpdated(filePath, newFile);
 }
 
-void ParsedDataStorage::removeFile(const QString &filePath)
+void ParsedDataStorage::cleanProject(const QString &projectName)
 {
     QMutexLocker locker(&m_documentsMutex);
-    if (m_documents.contains(filePath) == false)
-        return;
 
-    m_documents.remove(filePath);
+    Project &p = m_projects[projectName];
+    QMutableHashIterator<QString, std::shared_ptr<ParsedDocument> > it(p);
+
+    while (it.hasNext()) {
+        it.next();
+        removeFileFromProjectInternal(projectName, it.key());
+    }
+}
+
+void ParsedDataStorage::removeFileFromProject(const QString &projectName, const QString &filePath)
+{
+    QMutexLocker locker(&m_documentsMutex);
+    removeFileFromProjectInternal(projectName, filePath);
+}
+
+void ParsedDataStorage::refreshFileInProjects(std::shared_ptr<ParsedDocument> file, const QString &filePath)
+{
+    QStringList projects = getProjectsForFileInternal(filePath);
+    foreach (const QString &project, projects)
+        m_projects[project].insert(filePath, file);
+}
+
+void ParsedDataStorage::removeFileFromProjectInternal(const QString &projectName, const QString &filePath)
+{
+    Project &p = m_projects[projectName];
+    if (p.contains(filePath))
+        p.remove(filePath);
+
+    QStringList projects = getProjectsForFileInternal(filePath);
+    if (projects.empty())
+        m_documents.remove(filePath);
+}
+
+QStringList ParsedDataStorage::getProjectsForFileInternal(const QString &filePath) const
+{
+    QStringList res;
+
+    QHash<QString, Project>::const_iterator it = m_projects.begin();
+    while (it != m_projects.end()) {
+        if (it.value().contains(filePath))
+            res.append(it.key());
+
+        it++;
+    }
+
+    return res;
+}
+
+QList<std::shared_ptr<ParsedDocument> > ParsedDataStorage::getFilesFromProjectInternal(const QString &projectName) const
+{
+    if (!m_projects.contains(projectName))
+        return QList<std::shared_ptr<ParsedDocument> >();
+
+    Project p = m_projects.value(projectName);
+
+    return p.values();
 }

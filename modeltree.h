@@ -36,6 +36,8 @@
 namespace Asn1Acn {
 namespace Internal {
 
+class ProjectContentHandler;
+
 class ModelTree : public QObject
 {
     Q_OBJECT
@@ -43,16 +45,25 @@ class ModelTree : public QObject
     ModelTree();
     ~ModelTree() = default;
 
+    friend class ProjectContentHandler;
+
 public:
     static ModelTree *instance();
 
-    ModelTreeNode::ModelTreeNodePtr getModelTreeRoot() const;
+    const ModelTreeNode::ModelTreeNodePtr getModelTreeRoot() const;
 
     ModelTreeNode::ModelTreeNodePtr getAnyNodeForFilepath(const QString &filePath) const;
     ModelTreeNode::ModelTreeNodePtr getNodeForFilepathFromProject(const QString &projectName, const QString &filePath) const;
 
     int getProjectFilesCnt(const QString &projectName) const;
 
+    bool isValid();
+
+signals:
+    void modelUpdated();
+    void modelAboutToUpdate() const;
+
+private:
     void addProjectNode(ModelTreeNode::ModelTreeNodePtr projectNode);
     void removeProjectNode(const QString &projectName);
 
@@ -60,14 +71,15 @@ public:
 
     void removeStaleNodesFromProject(const QString &projectName, const QStringList &currentPaths);
 
-signals:
-    void treeUpdated();
+    void treeAboutToChange();
+    void treeChanged();
 
-private:
     void updateModelTreeNode(const QString &filePath, std::shared_ptr<ParsedDocument> document);
 
     ModelTreeNode::ModelTreeNodePtr m_treeRoot;
+
     mutable QMutex m_dataMutex;
+    int m_modifiersCnt;
 };
 
 } // namespace Internal
