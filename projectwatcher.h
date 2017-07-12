@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <QString>
 #include <QFile>
 #include <QStringList>
 #include <QTextDocument>
@@ -49,8 +50,6 @@ private slots:
     void onProjectFileListChanged();
 
 private:
-    QStringList filterValidPaths(const QStringList &paths);
-
     void handleFilesAdded(const QString &projectName, const QStringList &filePaths);
     void handleFilesRemoved(const QString &projectName, const QStringList &filePaths);
 
