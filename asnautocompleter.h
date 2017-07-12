@@ -47,6 +47,9 @@ public:
                                 QChar lookAhead,
                                 bool skipChars,
                                 int *skippedChars) const override;
+    QString insertParagraphSeparator(const QTextCursor &cursor) const override;
+    int paragraphSeparatorAboutToBeInserted(QTextCursor &cursor,
+                                            const TextEditor::TabSettings &tabSettings) override;
     bool contextAllowsAutoBrackets(const QTextCursor &cursor, const QString &textToInsert) const override;
     bool contextAllowsAutoQuotes(const QTextCursor &cursor, const QString &textToInsert) const override;
 };

@@ -36,6 +36,7 @@
 #include "asndocument.h"
 #include "asnautocompleter.h"
 #include "asncompletionassist.h"
+#include "indenter.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -59,6 +60,7 @@ AsnEditorFactory::AsnEditorFactory()
 
     setCompletionAssistProvider(new AsnCompletionAssistProvider);
     setAutoCompleterCreator([]() { return new AsnAutoCompleter; });
+    setIndenterCreator([]() { return new Indenter; });
 
     setCodeFoldingSupported(true);
     setMarksVisible(true);
