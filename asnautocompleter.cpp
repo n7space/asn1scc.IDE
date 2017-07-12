@@ -24,6 +24,8 @@
 ****************************************************************************/
 #include "asnautocompleter.h"
 
+#include <texteditor/textdocumentlayout.h>
+
 #include <QTextCursor>
 
 using namespace Asn1Acn::Internal;
@@ -70,7 +72,6 @@ QString AsnAutoCompleter::insertMatchingBrace(const QTextCursor &cursor,
                                               bool skipChars,
                                               int *skippedChars) const
 {
-    // TODO { } - probably in "paragraph about to end"
     Q_UNUSED(cursor)
     if (text.isEmpty())
         return QString();
@@ -98,7 +99,7 @@ QString AsnAutoCompleter::insertMatchingQuote(const QTextCursor &cursor,
                                               int *skippedChars) const
 {
     Q_UNUSED(cursor)
-    static const QChar quote(QLatin1Char('"'));
+    const QChar quote(QLatin1Char('"'));
     if (text.isEmpty() || text != quote)
         return QString();
     if (lookAhead == quote && skipChars) {
@@ -107,44 +108,29 @@ QString AsnAutoCompleter::insertMatchingQuote(const QTextCursor &cursor,
     }
     return quote;
 }
-/*
- *TODO?
-int AsnAutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor, const TextEditor::TabSettings &tabSettings)
+
+QString AsnAutoCompleter::insertParagraphSeparator(const QTextCursor &cursor) const
 {
-    const QString line = cursor.block().text().trimmed();
-    if (line.contains(QRegExp(QStringLiteral("^(endfunction|endmacro|endif|endforeach|endwhile)\\w*\\("))))
-        tabSettings.indentLine(cursor.block(), tabSettings.indentationColumn(cursor.block().text()));
-    return 0;
+    Q_UNUSED(cursor);
+    return QLatin1String("}");
 }
-*/
 
 bool AsnAutoCompleter::contextAllowsAutoBrackets(const QTextCursor &cursor,
                                                  const QString &textToInsert) const
 {
-    if (textToInsert.isEmpty())
-        return false;
-
-    const QChar c = textToInsert.at(0);
-    if (c == QLatin1Char('(') || c == QLatin1Char(')'))
-        return !isInComment(cursor);
-    return false;
+    Q_UNUSED(textToInsert);
+    return !isInComment(cursor) && !isInString(cursor);
 }
 
 bool AsnAutoCompleter::contextAllowsAutoQuotes(const QTextCursor &cursor, const QString &textToInsert) const
 {
-    if (textToInsert.isEmpty())
-        return false;
-
-    const QChar c = textToInsert.at(0);
-    if (c == QLatin1Char('"'))
-        return !isInComment(cursor);
-    return false;
+    return contextAllowsAutoBrackets(cursor, textToInsert);
 }
 
-/*
-bool AsnAutoCompleter::contextAllowsElectricCharacters(const QTextCursor &cursor) const
+int AsnAutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor,
+                                                          const TextEditor::TabSettings &tabSettings)
 {
-// TODO ?
-    return !isInComment(cursor) && !isInString(cursor);
+    auto block = cursor.document()->lastBlock();
+    TextEditor::TextDocumentLayout::setBraceDepth(block, 1); // TODO - workaround to reuse code from base class
+    return TextEditor::AutoCompleter::paragraphSeparatorAboutToBeInserted(cursor, tabSettings);
 }
-*/

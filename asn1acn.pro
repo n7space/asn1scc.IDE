@@ -75,7 +75,8 @@ SOURCES += \
     modeltree.cpp \
     asn1acnjsextension.cpp \
     asn1sccserviceprovider.cpp \
-    parseddocumentbuilder.cpp
+    parseddocumentbuilder.cpp \
+    indenter.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -107,7 +108,8 @@ HEADERS += \
     modeltree.h \
     asn1acnjsextension.h \
     asn1sccserviceprovider.h \
-    parseddocumentbuilder.h
+    parseddocumentbuilder.h \
+    indenter.h
 
 DISTFILES += \
     LICENSE \
