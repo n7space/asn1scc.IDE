@@ -21,12 +21,12 @@ fi
 echo "Getting QtCreator's source..."
 cd "${DOWNLOAD_DIR}"
 wget "http://download.qt-project.org/official_releases/qtcreator/${ENV_QTC_VERSION_SHORT}/${ENV_QTC_VERSION}/qt-creator-opensource-src-${ENV_QTC_VERSION}.tar.gz"
-tar xzf qt-creator-opensource-src-${ENV_QTC_VERSION}.tar.gz
+tar xzf qt-creator-opensource-src-${ENV_QTC_VERSION}.tar.gz || exit 1
 
 echo "Getting QtCreator's binaries..."
 cd "${DOWNLOAD_DIR}"
 wget "${QT_BIN_LINK}" -O qtcreator.7z
-7zr x -o${QTC_BUILD_DIR} qtcreator.7z
+7zr x -o${QTC_BUILD_DIR} qtcreator.7z || exit 1
 
 if [[ "$BUILD_OS_NAME" == "osx" ]]; then
     cd ${QTC_BUILD_DIR} && ln -s ./ bin
