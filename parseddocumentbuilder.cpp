@@ -26,6 +26,10 @@
 #include "parseddocumentbuilder.h"
 
 #include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonValue>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -50,14 +54,25 @@ void ParsedDocumentBuilder::requestFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
     if (reply->error() == QNetworkReply::NoError)
-        parseXML(reply->readAll());
+        parseResponse(reply->readAll());
 
     reply->deleteLater();
-
-    emit finished();
 }
 
-void ParsedDocumentBuilder::parseXML(const QByteArray &textData)
+void ParsedDocumentBuilder::parseResponse(const QByteArray &jsonData)
+{
+    const auto json = QJsonDocument::fromJson(jsonData).object();
+    if (responseContainsAst(json)) {
+        parseXML(getAstXml(json));
+        emit finished();
+    }
+    else {
+        storeErrorMessages(json);
+        emit errored();
+    }
+}
+
+void ParsedDocumentBuilder::parseXML(const QString &textData)
 {
     QXmlStreamReader reader;
     reader.addData(textData);
@@ -74,4 +89,23 @@ void ParsedDocumentBuilder::parseXML(const QByteArray &textData)
 std::unique_ptr<ParsedDocument> ParsedDocumentBuilder::takeDocument()
 {
     return std::move(m_parsedDocument);
+}
+
+bool ParsedDocumentBuilder::responseContainsAst(const QJsonObject &json)
+{
+    return json[QLatin1Literal("ErrorCode")].toInt(-1) == 0;
+}
+
+void ParsedDocumentBuilder::storeErrorMessages(const QJsonObject &json)
+{
+    for (const auto message : json[QLatin1Literal("Messages")].toArray())
+        m_errorMessages.append(message.toString());
+}
+
+QString ParsedDocumentBuilder::getAstXml(const QJsonObject &json)
+{
+    const auto files = json[QLatin1Literal("Files")].toArray();
+    if (files.size() != 1)
+        return QString::null;
+    return files[0].toObject()[QLatin1Literal("Contents")].toString();
 }
