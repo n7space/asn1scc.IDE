@@ -25,21 +25,22 @@
 
 #include "projectwatcher.h"
 
-#include <QRegularExpression>
 #include <QTextDocument>
 #include <QByteArray>
 #include <QString>
+#include <QSet>
 
 #include <projectexplorer/session.h>
+#include <projectexplorer/projectnodes.h>
 
 #include <utils/qtcassert.h>
+#include <utils/mimetypes/mimedatabase.h>
 
 #include "documentprocessor.h"
 #include "modeltreenode.h"
+#include "asn1acnconstants.h"
 
 using namespace Asn1Acn::Internal;
-
-static const QRegularExpression DOCUMENT_FILTER_EXTENSIONS_REGEXP("\\.acn$|\\.asn1?$");
 
 ProjectWatcher::ProjectWatcher()
 {
@@ -80,19 +81,20 @@ void ProjectWatcher::onProjectFileListChanged()
     QString projectName = project->displayName();
     int storedFilesCnt = m_tree->getProjectFilesCnt(projectName);
 
-    QStringList validFiles = filterValidPaths(project->files(ProjectExplorer::Project::AllFiles));
+    const QSet<QString> m_watchedMimeTypes { Constants::ASN1_MIMETYPE, Constants::ACN_MIMETYPE };
+    const QStringList validFiles = project->files(ProjectExplorer::Project::AllFiles,
+                                                  [&m_watchedMimeTypes](const ProjectExplorer::Node *n) {
+        if (const auto *fn = n->asFileNode())
+            return m_watchedMimeTypes.contains(Utils::mimeTypeForFile(fn->filePath().toString()).name());
+        return false;
+    });
+
     int currentFilesCnt = validFiles.count();
 
     if (currentFilesCnt > storedFilesCnt)
         handleFilesAdded(projectName, validFiles);
     else if (currentFilesCnt < storedFilesCnt)
         handleFilesRemoved(projectName, validFiles);
-}
-
-QStringList ProjectWatcher::filterValidPaths(const QStringList &paths)
-{
-    // TODO: filtering should be performed using mimetypes
-    return paths.filter(QRegularExpression(DOCUMENT_FILTER_EXTENSIONS_REGEXP));
 }
 
 void ProjectWatcher::handleFilesAdded(const QString &projectName, const QStringList &filePaths)
