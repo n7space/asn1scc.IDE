@@ -47,6 +47,8 @@ include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
 
 ### Plugin ###
 
+CONFIG += object_parallel_to_source
+
 DEFINES += ASN1ACN_LIBRARY
 
 # asn1acn plugin files
@@ -79,6 +81,8 @@ SOURCES += \
     documentsourceinfo.cpp \
     projectcontenthandler.cpp \
     indenter.cpp \
+    settings/settings.cpp \
+    settings/general.cpp \
     options-pages/general.cpp
 
 HEADERS += \
@@ -116,6 +120,8 @@ HEADERS += \
     projectcontenthandler.h \
     indenter.h \
     tr.h \
+    settings/settings.h\
+    settings/general.h \
     options-pages/general.h
 
 RESOURCES += \
