@@ -25,7 +25,7 @@
 
 #include "asnsnippetprovider.h"
 
-#include "asnautocompleter.h"
+#include "autocompleter.h"
 #include "asn1acnconstants.h"
 
 #include <texteditor/snippets/snippeteditor.h>
@@ -49,7 +49,7 @@ QString AsnSnippetProvider::displayName() const
 
 void AsnSnippetProvider::decorateEditor(TextEditor::SnippetEditorWidget *editor) const
 {
-    editor->setAutoCompleter(new AsnAutoCompleter);
+    editor->setAutoCompleter(new AutoCompleter);
     editor->textDocument()->setMimeType(Constants::ASN1_MIMETYPE);
     editor->configureGenericHighlighter();
 }

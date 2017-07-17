@@ -22,7 +22,7 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "asnautocompleter.h"
+#include "autocompleter.h"
 
 #include <texteditor/textdocumentlayout.h>
 
@@ -30,11 +30,11 @@
 
 using namespace Asn1Acn::Internal;
 
-AsnAutoCompleter::AsnAutoCompleter()
+AutoCompleter::AutoCompleter()
 {
 }
 
-bool AsnAutoCompleter::isInComment(const QTextCursor &cursor) const
+bool AutoCompleter::isInComment(const QTextCursor &cursor) const
 {
     // TODO: This doesn't handle '--' inside quotes
     QTextCursor moved = cursor;
@@ -42,7 +42,7 @@ bool AsnAutoCompleter::isInComment(const QTextCursor &cursor) const
     return moved.selectedText().contains(QLatin1Literal("--"));
 }
 
-bool AsnAutoCompleter::isInString(const QTextCursor &cursor) const
+bool AutoCompleter::isInString(const QTextCursor &cursor) const
 {
     // TODO: multiline strings in ASN?
     // TODO: escaping string?
@@ -66,11 +66,11 @@ bool AsnAutoCompleter::isInString(const QTextCursor &cursor) const
     return inString;
 }
 
-QString AsnAutoCompleter::insertMatchingBrace(const QTextCursor &cursor,
-                                              const QString &text,
-                                              QChar lookAhead,
-                                              bool skipChars,
-                                              int *skippedChars) const
+QString AutoCompleter::insertMatchingBrace(const QTextCursor &cursor,
+                                           const QString &text,
+                                           QChar lookAhead,
+                                           bool skipChars,
+                                           int *skippedChars) const
 {
     Q_UNUSED(cursor)
     if (text.isEmpty())
@@ -92,11 +92,11 @@ QString AsnAutoCompleter::insertMatchingBrace(const QTextCursor &cursor,
     return QString();
 }
 
-QString AsnAutoCompleter::insertMatchingQuote(const QTextCursor &cursor,
-                                              const QString &text,
-                                              QChar lookAhead,
-                                              bool skipChars,
-                                              int *skippedChars) const
+QString AutoCompleter::insertMatchingQuote(const QTextCursor &cursor,
+                                           const QString &text,
+                                           QChar lookAhead,
+                                           bool skipChars,
+                                           int *skippedChars) const
 {
     Q_UNUSED(cursor)
     const QChar quote(QLatin1Char('"'));
@@ -109,26 +109,26 @@ QString AsnAutoCompleter::insertMatchingQuote(const QTextCursor &cursor,
     return quote;
 }
 
-QString AsnAutoCompleter::insertParagraphSeparator(const QTextCursor &cursor) const
+QString AutoCompleter::insertParagraphSeparator(const QTextCursor &cursor) const
 {
     Q_UNUSED(cursor);
     return QLatin1String("}");
 }
 
-bool AsnAutoCompleter::contextAllowsAutoBrackets(const QTextCursor &cursor,
-                                                 const QString &textToInsert) const
+bool AutoCompleter::contextAllowsAutoBrackets(const QTextCursor &cursor,
+                                              const QString &textToInsert) const
 {
     Q_UNUSED(textToInsert);
     return !isInComment(cursor) && !isInString(cursor);
 }
 
-bool AsnAutoCompleter::contextAllowsAutoQuotes(const QTextCursor &cursor, const QString &textToInsert) const
+bool AutoCompleter::contextAllowsAutoQuotes(const QTextCursor &cursor, const QString &textToInsert) const
 {
     return contextAllowsAutoBrackets(cursor, textToInsert);
 }
 
-int AsnAutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor,
-                                                          const TextEditor::TabSettings &tabSettings)
+int AutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor,
+                                                       const TextEditor::TabSettings &tabSettings)
 {
     auto block = cursor.document()->lastBlock();
     TextEditor::TextDocumentLayout::setBraceDepth(block, 1); // TODO - workaround to reuse code from base class
