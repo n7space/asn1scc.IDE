@@ -78,7 +78,8 @@ SOURCES += \
     parseddocumentbuilder.cpp \
     documentsourceinfo.cpp \
     projectcontenthandler.cpp \
-    indenter.cpp
+    indenter.cpp \
+    options-pages/general.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -114,7 +115,8 @@ HEADERS += \
     documentsourceinfo.h \
     projectcontenthandler.h \
     indenter.h \
-    tr.h
+    tr.h \
+    options-pages/general.h
 
 RESOURCES += \
     asn1acn.qrc

@@ -30,7 +30,10 @@ namespace Constants {
 
 // Settings keys
 
-const char ASN1ACN_GROUP_NAME[] = "Asn1Acn";
+const char SETTINGS_CATEGORY[]  = "J.Asn1Acn";
+const char GENERAL_SETTINGS_ID[] = "A.Asn1Acn.General";
+
+const char SETTINGS_GROUP[] = "Asn1Acn";
 
 const char ASN1ACN_SERVICE_PATH[] = "ServicePath";
 const char ASN1ACN_SERVICE_PORT[] = "ServicePort";
@@ -40,12 +43,12 @@ const char ASN1ACN_SERVICE_WATCHDOG[] = "ServiceWatchdog";
 
 const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
 const char WIZARD_CATEGORY[] = "O.Asn1Acn";
+const char STRUCTURES_VIEW_ID[] = "Asn1Acn.StructuresView";
 
-// ASN1 constants
+// ASN.1 constants
 
 const char LANG_ASN1[] = "ASN.1";
 const char ASNEDITOR_ID[] = "Asn1Acn.AsnEditor";
-const char ASN_STRUCTURES_VIEW_ID[] = "Asn1Acn.StructuresView";
 const char ASN1_MIMETYPE[] = "text/x-asn1";
 const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
 
@@ -54,6 +57,10 @@ const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
 const char LANG_ACN[] = "ACN";
 const char ACNEDITOR_ID[] = "Asn1Acn.AcnEditor";
 const char ACN_MIMETYPE[] = "text/x-acn";
+
+// Icons
+
+const char OPTIONS_CATEGORY_ICON[] = ":/asn1acn/images/options_category.png";
 
 } // namespace Asn1Acn
 } // namespace Constants

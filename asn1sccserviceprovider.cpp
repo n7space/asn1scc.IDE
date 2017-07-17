@@ -130,7 +130,7 @@ QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QHash<QString, D
 void Asn1SccServiceProvider::loadServiceParams()
 {
     QSettings *s = Core::ICore::settings();
-    s->beginGroup(Constants::ASN1ACN_GROUP_NAME);
+    s->beginGroup(Constants::SETTINGS_GROUP);
 
     m_serviceBinaryPath = s->value(Constants::ASN1ACN_SERVICE_PATH).toString();
     m_serviceBaseUrl

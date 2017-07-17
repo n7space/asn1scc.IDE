@@ -22,45 +22,41 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "general.h"
 
-#include "structuresview.h"
+#include <QWidget>
 
-#include "modeltree.h"
-#include "asn1acnconstants.h"
+#include "../asn1acnconstants.h"
+#include "../tr.h"
 
-using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::OptionsPages;
 
-StructuresViewWidget::StructuresViewWidget() :
-    OverviewWidget(new OverviewModel)
+General::General()
 {
-    ModelTree *instance = ModelTree::instance();
-    auto modelRoot = instance->getModelTreeRoot();
-
-    m_model->setRootNode(modelRoot);
-
-    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            m_model, &OverviewModel::invalidated);
-
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            m_model, &OverviewModel::validated);
-
-    connect(m_model, &QAbstractItemModel::modelReset,
-            this, &StructuresViewWidget::modelUpdated);
+    setId(Constants::GENERAL_SETTINGS_ID);
+    setDisplayName(Tr::tr("General"));
+    setCategory(Constants::SETTINGS_CATEGORY);
+    setDisplayCategory(Tr::tr("ASN.1/ACN"));
+    setCategoryIcon(Utils::Icon(Constants::OPTIONS_CATEGORY_ICON));
 }
 
-StructuresViewWidget::~StructuresViewWidget()
+bool General::matches(const QString &searchKeyWord) const
 {
-    delete m_model;
+    // TODO - additional keywords?
+    return Core::IOptionsPage::matches(searchKeyWord);
 }
 
-StructuresViewFactory::StructuresViewFactory()
+QWidget* General::widget()
 {
-    setDisplayName(tr("Structures View"));
-    setPriority(500);
-    setId(Constants::STRUCTURES_VIEW_ID);
+    return new QWidget();//nullptr; // TODO
 }
 
-Core::NavigationView StructuresViewFactory::createWidget()
+void General::apply()
 {
-    return Core::NavigationView(new StructuresViewWidget);
+    // TODO
+}
+
+void General::finish()
+{
+    // TODO
 }

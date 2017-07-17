@@ -45,6 +45,7 @@
 #include "projectwatcher.h"
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
+#include "options-pages/general.h"
 
 #include "acneditor.h"
 
@@ -90,6 +91,8 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new ProjectWatcher);
 
+    addAutoReleasedObject(new OptionsPages::General);
+
     Asn1SccServiceProvider *sp = new Asn1SccServiceProvider;
     addAutoReleasedObject(sp);
     sp->start();
@@ -126,7 +129,7 @@ void Asn1AcnPlugin::setDefaultSettings()
 
     QSettings *s = Core::ICore::settings();
 
-    s->beginGroup(Constants::ASN1ACN_GROUP_NAME);
+    s->beginGroup(Constants::SETTINGS_GROUP);
 
     if (!s->contains(Constants::ASN1ACN_SERVICE_PATH))
         s->setValue(Constants::ASN1ACN_SERVICE_PATH,
