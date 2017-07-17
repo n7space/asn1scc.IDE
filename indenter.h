@@ -25,51 +25,21 @@
 
 #pragma once
 
-#include <memory>
-
-#include <QHash>
-#include <QString>
-#include <QFileInfo>
-#include <QByteArray>
-#include <QStringList>
-
-#include "parseddocument.h"
-#include "asn1sccserviceprovider.h"
-
-class QJsonObject;
+#include <texteditor/indenter.h>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedDocumentBuilder : public QObject
+class Indenter : public TextEditor::Indenter
 {
-    Q_OBJECT
-
 public:
-    ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents);
-    std::vector<std::unique_ptr<ParsedDocument> > takeDocuments();
-    const QStringList& errorMessages() const { return m_errorMessages; }
+    Indenter();
+    ~Indenter();
 
-signals:
-    void finished();
-    void errored();
+    bool isElectricCharacter(const QChar &ch) const override;
 
-private slots:
-    void requestFinished();
-
-private:
-    void parseResponse(const QByteArray &jsonData);
-    void parseXML(const QString &textData);
-    void storeErrorMessages(const QJsonObject &json);
-
-    bool responseContainsAst(const QJsonObject &json);
-    QString getAstXml(const QJsonObject &json);
-
-    const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
-    std::vector<std::unique_ptr<ParsedDocument> > m_parsedDocuments;
-
-    QStringList m_errorMessages;
+    int indentFor(const QTextBlock &block, const TextEditor::TabSettings &tabSettings) override;
 };
 
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+} // namespace Internal
+} // namespace Asn1Acn

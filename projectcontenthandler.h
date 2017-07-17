@@ -53,8 +53,6 @@ private slots:
     void onFilesProcessingFinished();
 
 private:
-    QStringList filterValidPaths(const QStringList &paths);
-
     void handleFilesAdded(const QString &projectName, const QStringList &filePaths);
     void handleFilesRemoved(const QString &projectName, const QStringList &filePaths);
 

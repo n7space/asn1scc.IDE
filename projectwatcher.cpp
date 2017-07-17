@@ -25,12 +25,16 @@
 
 #include "projectwatcher.h"
 
+#include <QSet>
 #include <QString>
 
 #include <projectexplorer/session.h>
+#include <projectexplorer/projectnodes.h>
+#include <utils/mimetypes/mimedatabase.h>
 
 #include <utils/qtcassert.h>
 
+#include "asn1acnconstants.h"
 #include "projectcontenthandler.h"
 
 using namespace Asn1Acn::Internal;
@@ -67,8 +71,14 @@ void ProjectWatcher::onProjectFileListChanged()
     ProjectExplorer::Project *project = qobject_cast<ProjectExplorer::Project *>(sender());
     QTC_ASSERT(project != nullptr, return );
 
-    ProjectContentHandler *proc = new ProjectContentHandler;
-    proc->handleFileListChanged(project->displayName(),
-                                project->files(ProjectExplorer::Project::AllFiles));
-}
+    const QSet<QString> watchedMimeTypes { Constants::ASN1_MIMETYPE, Constants::ACN_MIMETYPE };
+    const QStringList validFiles = project->files(ProjectExplorer::Project::AllFiles,
+                                                  [&watchedMimeTypes](const ProjectExplorer::Node *n) {
+        if (const auto *fn = n->asFileNode())
+            return watchedMimeTypes.contains(Utils::mimeTypeForFile(fn->filePath().toString()).name());
+        return false;
+    });
 
+    ProjectContentHandler *proc = new ProjectContentHandler;
+    proc->handleFileListChanged(project->displayName(), validFiles);
+}

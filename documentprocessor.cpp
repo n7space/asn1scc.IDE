@@ -56,6 +56,10 @@ void DocumentProcessor::run()
     m_docBuilder = new ParsedDocumentBuilder(m_documents);
     QObject::connect(m_docBuilder, &ParsedDocumentBuilder::finished,
                      this, &DocumentProcessor::onBuilderFinished);
+
+    // TODO: error should be handled exclusively
+    QObject::connect(m_docBuilder, &ParsedDocumentBuilder::errored,
+                     this, &DocumentProcessor::onBuilderFinished);
 }
 
 void DocumentProcessor::onBuilderFinished()

@@ -77,7 +77,8 @@ SOURCES += \
     asn1sccserviceprovider.cpp \
     parseddocumentbuilder.cpp \
     documentsourceinfo.cpp \
-    projectcontenthandler.cpp
+    projectcontenthandler.cpp \
+    indenter.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -111,7 +112,8 @@ HEADERS += \
     asn1sccserviceprovider.h \
     parseddocumentbuilder.h \
     documentsourceinfo.h \
-    projectcontenthandler.h
+    projectcontenthandler.h \
+    indenter.h
 
 DISTFILES += \
     LICENSE \

@@ -26,13 +26,10 @@
 #include "projectcontenthandler.h"
 
 #include <QList>
-#include <QRegularExpression>
 
 #include "documentprocessor.h"
 
 using namespace Asn1Acn::Internal;
-
-static const QRegularExpression DOCUMENT_FILTER_EXTENSIONS_REGEXP("\\.acn$|\\.asn1?$");
 
 ProjectContentHandler::ProjectContentHandler() :
     m_projectsChanged(0)
@@ -66,14 +63,13 @@ void ProjectContentHandler::handleFileListChanged(const QString &projectName, co
 {
     int storedFilesCnt = m_tree->getProjectFilesCnt(projectName);
 
-    QStringList validFiles = filterValidPaths(fileList);
-    int currentFilesCnt = validFiles.count();
+    int currentFilesCnt = fileList.count();
 
     m_tree->treeAboutToChange();
     if (currentFilesCnt > storedFilesCnt)
-        handleFilesAdded(projectName, validFiles);
+        handleFilesAdded(projectName, fileList);
     else if (currentFilesCnt < storedFilesCnt)
-        handleFilesRemoved(projectName, validFiles);
+        handleFilesRemoved(projectName, fileList);
 }
 
 void ProjectContentHandler::handleFileContentChanged(const QString &path, const QString &content, int revision)
@@ -105,12 +101,6 @@ void ProjectContentHandler::handleFileContentChanged(const QString &path, const 
 
         m_projectsChanged++;
     }
-}
-
-QStringList ProjectContentHandler::filterValidPaths(const QStringList &paths)
-{
-    // TODO: filtering should be performed using mimetypes
-    return paths.filter(QRegularExpression(DOCUMENT_FILTER_EXTENSIONS_REGEXP));
 }
 
 void ProjectContentHandler::handleFilesAdded(const QString &projectName, const QStringList &filePaths)
