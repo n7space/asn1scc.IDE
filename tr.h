@@ -23,42 +23,17 @@
 **
 ****************************************************************************/
 
-#include "acneditor.h"
+#pragma once
 
 #include <QCoreApplication>
 
-#include <texteditor/texteditoractionhandler.h>
+namespace Asn1Acn {
+namespace Internal {
 
-#include "asn1acnconstants.h"
-#include "acndocument.h"
-#include "tr.h"
-
-using namespace Asn1Acn::Internal;
-
-using namespace Core;
-using namespace TextEditor;
-
-AcnEditor::AcnEditor()
+struct Tr
 {
-    addContext(Constants::LANG_ACN);
-}
+    Q_DECLARE_TR_FUNCTIONS(Asn1Acn)
+};
 
-AcnEditorFactory::AcnEditorFactory()
-{
-    setId(Constants::ACNEDITOR_ID);
-    setDisplayName(Tr::tr("ACN Editor"));
-    addMimeType(Constants::ACN_MIMETYPE);
-
-    setUseGenericHighlighter(true);
-
-    setDocumentCreator([]() { return new AcnDocument; });
-    setEditorWidgetCreator([]() { return new AcnEditorWidget; });
-    setEditorCreator([]() { return new AcnEditor; });
-
-    setEditorActionHandlers(TextEditorActionHandler::Format
-                            | TextEditorActionHandler::UnCommentSelection
-                            | TextEditorActionHandler::UnCollapseAll
-                            | TextEditorActionHandler::FollowSymbolUnderCursor);
-
-    // TODO addHoverHandler(new CppHoverHandler);
-}
+} // namespace Internal
+} // namespace Asn1Acn

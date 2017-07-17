@@ -37,6 +37,7 @@
 #include "asnautocompleter.h"
 #include "asncompletionassist.h"
 #include "indenter.h"
+#include "tr.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -51,7 +52,7 @@ AsnEditor::AsnEditor()
 AsnEditorFactory::AsnEditorFactory()
 {
     setId(Constants::ASNEDITOR_ID);
-    setDisplayName(QCoreApplication::translate("OpenWith::Editors", Constants::ASNEDITOR_DISPLAY_NAME));
+    setDisplayName(Tr::tr("ASN.1 Editor"));
     addMimeType(Constants::ASN1_MIMETYPE);
 
     setDocumentCreator([]() { return new AsnDocument; });

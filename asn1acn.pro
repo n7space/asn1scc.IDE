@@ -113,7 +113,8 @@ HEADERS += \
     parseddocumentbuilder.h \
     documentsourceinfo.h \
     projectcontenthandler.h \
-    indenter.h
+    indenter.h \
+    tr.h
 
 DISTFILES += \
     LICENSE \
