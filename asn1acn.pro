@@ -116,6 +116,9 @@ HEADERS += \
     indenter.h \
     tr.h
 
+RESOURCES += \
+    asn1acn.qrc
+
 DISTFILES += \
     LICENSE \
     README.md

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/asn1acn">
+        <file>images/options_category.png</file>
+    </qresource>
+</RCC>
