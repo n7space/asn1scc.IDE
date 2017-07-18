@@ -50,7 +50,8 @@ public:
     void run();
 
 signals:
-    void processingFinished() const;
+    void processingFinished(const QString &projectName,
+                            std::vector<std::unique_ptr<ParsedDocument>> &parsedDocuments) const;
 
 private slots:
     void onBuilderFinished();

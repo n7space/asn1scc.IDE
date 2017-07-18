@@ -57,7 +57,7 @@ public:
 
     int getProjectFilesCnt(const QString &projectName) const;
 
-    bool isValid();
+    bool isValid() const;
 
 signals:
     void modelUpdated();

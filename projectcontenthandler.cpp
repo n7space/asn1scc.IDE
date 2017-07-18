@@ -36,12 +36,17 @@ ProjectContentHandler::ProjectContentHandler() :
 {
     m_tree = ModelTree::instance();
     m_storage = ParsedDataStorage::instance();
+
+    m_tree->treeAboutToChange();
+}
+
+ProjectContentHandler::~ProjectContentHandler()
+{
+    m_tree->treeChanged();
 }
 
 void ProjectContentHandler::handleProjectAdded(const QString &projectName)
 {
-    m_tree->treeAboutToChange();
-
     m_storage->addProject(projectName);
     auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(projectName));
     m_tree->addProjectNode(node);
@@ -51,8 +56,6 @@ void ProjectContentHandler::handleProjectAdded(const QString &projectName)
 
 void ProjectContentHandler::handleProjectRemoved(const QString &projectName)
 {
-    m_tree->treeAboutToChange();
-
     m_tree->removeProjectNode(projectName);
     m_storage->removeProject(projectName);
 
@@ -65,7 +68,6 @@ void ProjectContentHandler::handleFileListChanged(const QString &projectName, co
 
     int currentFilesCnt = fileList.count();
 
-    m_tree->treeAboutToChange();
     if (currentFilesCnt > storedFilesCnt)
         handleFilesAdded(projectName, fileList);
     else if (currentFilesCnt < storedFilesCnt)
@@ -74,32 +76,10 @@ void ProjectContentHandler::handleFileListChanged(const QString &projectName, co
 
 void ProjectContentHandler::handleFileContentChanged(const QString &path, const QString &content, int revision)
 {
-    m_tree->treeAboutToChange();
-
     QStringList projects = m_storage->getProjectsForFile(path);
     for (const QString projectName : projects) {
-        DocumentProcessor *docProcessor = new DocumentProcessor(projectName);
-
-        QList<std::shared_ptr<ParsedDocument> > files = m_storage->getFilesFromProject(projectName);
-        foreach (const std::shared_ptr<ParsedDocument> &file, files) {
-            if (file->source().getPath() == path) {
-                docProcessor->addToRun(content, path, revision);
-            } else {
-                docProcessor->addToRun(file->source().getContent(),
-                                       file->source().getPath(),
-                                       file->source().getRevision());
-            }
-        }
-
-        connect(docProcessor, &DocumentProcessor::processingFinished,
-                [this, docProcessor](){docProcessor->deleteLater();});
-
-        connect(docProcessor, &DocumentProcessor::processingFinished,
-                this, &ProjectContentHandler::onFilesProcessingFinished);
-
-        docProcessor->run();
-
-        m_projectsChanged++;
+        DocumentProcessor *docProcessor = createDocumentProcessorForFileChange(projectName, path, content, revision);
+        startProcessing(docProcessor);
     }
 }
 
@@ -128,19 +108,49 @@ void ProjectContentHandler::handleFilesRemoved(const QString &projectName, const
 
 void ProjectContentHandler::processFiles(const QString &projectName, const QStringList &filePaths)
 {
-    DocumentProcessor *dp = new DocumentProcessor(projectName);
+    DocumentProcessor *dp = createDocumentProcessorForProjectChange(projectName, filePaths);
+    startProcessing(dp);
+}
+
+DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(const QString &projectName,
+                                                                               const QString &path,
+                                                                               const QString &content,
+                                                                               int revision) const
+{
+    DocumentProcessor *docProcessor = new DocumentProcessor(projectName);
+
+    QList<std::shared_ptr<ParsedDocument> > files = m_storage->getFilesFromProject(projectName);
+    foreach (const std::shared_ptr<ParsedDocument> &file, files) {
+        if (file->source().getPath() == path) {
+            docProcessor->addToRun(content, path, revision);
+        } else {
+            docProcessor->addToRun(file->source().getContent(),
+                                   file->source().getPath(),
+                                   file->source().getRevision());
+        }
+    }
+
+    return docProcessor;
+}
+
+DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChange(const QString &projectName,
+                                                                                  const QStringList &filePaths) const
+{
+    DocumentProcessor *docProcessor = new DocumentProcessor(projectName);
 
     foreach (const QString &path, filePaths) {
         std::shared_ptr<ParsedDocument> parsedDoc = m_storage->getFileForPath(path);
         if (parsedDoc != nullptr)
-            dp->addToRun(parsedDoc->source().getContent(), path, parsedDoc->source().getRevision());
+            docProcessor->addToRun(parsedDoc->source().getContent(), path, parsedDoc->source().getRevision());
         else
-            dp->addToRun(readFileContent(path), path, -1);
+            docProcessor->addToRun(readFileContent(path), path, -1);
     }
 
-    connect(dp, &DocumentProcessor::processingFinished,
-            [dp](){dp->deleteLater();});
+    return docProcessor;
+}
 
+void ProjectContentHandler::startProcessing(DocumentProcessor *dp)
+{
     connect(dp, &DocumentProcessor::processingFinished,
             this, &ProjectContentHandler::onFilesProcessingFinished);
 
@@ -164,9 +174,14 @@ ProjectContentHandler::readFileContent(const QString &fileName) const
     return docContent;
 }
 
-void ProjectContentHandler::onFilesProcessingFinished()
+void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName,
+                                                      std::vector<std::unique_ptr<ParsedDocument>> &parsedDocuments)
 {
     DocumentProcessor *dp = qobject_cast<DocumentProcessor *>(sender());
+
+    for (size_t i = 0; i < parsedDocuments.size(); i++)
+        m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
+
     dp->deleteLater();
 
     if (--m_projectsChanged == 0)
@@ -175,6 +190,5 @@ void ProjectContentHandler::onFilesProcessingFinished()
 
 void ProjectContentHandler::allProcessingFinished()
 {
-    m_tree->treeChanged();
     deleteLater();
 }

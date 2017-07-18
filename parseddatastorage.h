@@ -37,6 +37,8 @@
 namespace Asn1Acn {
 namespace Internal {
 
+class ProjectContentHandler;
+
 class ParsedDataStorage : public QObject
 {
     Q_OBJECT
@@ -44,26 +46,28 @@ class ParsedDataStorage : public QObject
     ParsedDataStorage() = default;
     ~ParsedDataStorage() = default;
 
+    friend class ProjectContentHandler;
+
 public:
     static ParsedDataStorage *instance();
 
     std::shared_ptr<ParsedDocument> getFileForPath(const QString &filePath) const;
 
+    QStringList getProjectsForFile(const QString &filePath) const;
+    QList<std::shared_ptr<ParsedDocument>> getFilesFromProject(const QString &projectName) const;
+
+signals:
+    void fileUpdated(const QString &filePath, std::shared_ptr<ParsedDocument> newFile);
+
+private:
     void addProject(const QString &projectName);
     void removeProject(const QString &projectName);
 
     void addFileToProject(const QString &projectName, std::unique_ptr<ParsedDocument> file);
     void removeFileFromProject(const QString &projectName, const QString &filePath);
 
-    QStringList getProjectsForFile(const QString &filePath) const;
-    QList<std::shared_ptr<ParsedDocument>> getFilesFromProject(const QString &projectName) const;
-
     void cleanProject(const QString &projectName);
 
-signals:
-    void fileUpdated(const QString &filePath, std::shared_ptr<ParsedDocument> newFile);
-
-private:
     using Project = QHash<QString, std::shared_ptr<ParsedDocument>>;
 
     void refreshFileInProjects(std::shared_ptr<ParsedDocument> file, const QString &filePath);

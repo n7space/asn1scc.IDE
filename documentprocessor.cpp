@@ -28,7 +28,6 @@
 #include <QFileInfo>
 
 #include "parseddocument.h"
-#include "parseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -64,11 +63,6 @@ void DocumentProcessor::run()
 
 void DocumentProcessor::onBuilderFinished()
 {
-    std::vector<std::unique_ptr<ParsedDocument>> documents = m_docBuilder->takeDocuments();
-    ParsedDataStorage *model = ParsedDataStorage::instance();
-
-    for (size_t i = 0; i < documents.size(); i++)
-        model->addFileToProject(m_projectName, std::move(documents[i]));
-
-    emit processingFinished();
+    auto documents = m_docBuilder->takeDocuments();
+    emit processingFinished(m_projectName, documents);
 }

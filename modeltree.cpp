@@ -131,7 +131,7 @@ int ModelTree::getProjectFilesCnt(const QString &projectName) const
     return projectNode->childrenCount();
 }
 
-bool ModelTree::isValid()
+bool ModelTree::isValid() const
 {
     return m_modifiersCnt == 0;
 }
