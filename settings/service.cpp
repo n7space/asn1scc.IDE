@@ -43,13 +43,13 @@ QString Service::name() const
 void Service::saveOptionsTo(QSettings *s)
 {
     s->setValue(PATH, path);
-    s->setValue(BASE_URI, baseUri); // TODO must end with /
+    s->setValue(BASE_URI, baseUri);
     s->setValue(STAY_ALIVE_PERIOD, stayAlivePeriod);
 }
 
 void Service::loadOptionsFrom(QSettings *s)
 {
     path = s->value(PATH, "/opt/asn1sccDaemon/asn1scc/Daemon/bin/Debug/Daemon.exe").toString(); // TODO good default, TODO windows support
-    baseUri = s->value(BASE_URI, "http::/localhost:9749/").toString(); // TODO windows default!
+    baseUri = s->value(BASE_URI, "http://localhost:9749/").toString(); // TODO windows default!
     stayAlivePeriod = s->value(STAY_ALIVE_PERIOD, 1000).toInt();
 }

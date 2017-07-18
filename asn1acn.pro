@@ -86,6 +86,7 @@ SOURCES += \
     settings/service.cpp \
     options-pages/general.cpp \
     options-pages/service.cpp \
+    options-pages/servicewidget.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -126,7 +127,8 @@ HEADERS += \
     settings/general.h \
     settings/service.h \
     options-pages/general.h \
-    options-pages/service.h
+    options-pages/service.h \
+    options-pages/servicewidget.h
 
 FORMS += \
     options-pages/general.ui \

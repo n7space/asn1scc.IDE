@@ -38,6 +38,7 @@ namespace Settings {
 class Service : public Settings
 {
 public:
+    Service() = default;
     virtual ~Service();
 
     QString name() const override;

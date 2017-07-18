@@ -38,7 +38,7 @@ General::General(Settings::GeneralPtr settings)
     setId(Constants::GENERAL_SETTINGS_ID);
     setDisplayName(Tr::tr("General"));
     setCategory(Constants::SETTINGS_CATEGORY);
-    setDisplayCategory(Tr::tr("ASN.1/ACN"));
+    setDisplayCategory(Tr::tr(Constants::SETTINGS_CATEGORY_DISPLAY));
     setCategoryIcon(Utils::Icon(Constants::OPTIONS_CATEGORY_ICON));
 }
 

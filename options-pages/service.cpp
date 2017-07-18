@@ -29,38 +29,54 @@
 #include "../asn1acnconstants.h"
 #include "../tr.h"
 
+#include "servicewidget.h"
+
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::OptionsPages;
 
 Service::Service(Settings::ServicePtr settings)
     : m_settings(settings)
 {
-    setId(Constants::GENERAL_SETTINGS_ID);
+    setId(Constants::SERVICE_SETTINGS_ID);
     setDisplayName(Tr::tr("Service"));
     setCategory(Constants::SETTINGS_CATEGORY);
+    setDisplayCategory(Tr::tr(Constants::SETTINGS_CATEGORY_DISPLAY));
+    setCategoryIcon(Utils::Icon(Constants::OPTIONS_CATEGORY_ICON));
 }
 
 bool Service::matches(const QString &searchKeyWord) const
 {
-    // TODO - additional keywords?
+    const QStringList keywords { "asn1scc", "daemon", "asn1.exe", "asn1", "asn.1", "acn" };
+    for (const auto& keyword : keywords)
+        if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
+            return true;
     return Core::IOptionsPage::matches(searchKeyWord);
 }
 
 QWidget* Service::widget()
 {
-    auto w = new QWidget();
-    m_ui.setupUi(w);
-    return w;
-    // TODO
+    if (!m_widget) {
+        m_widget = new ServiceWidget;
+        m_widget->setPath(m_settings->path);
+        m_widget->setBaseUri(m_settings->baseUri);
+        m_widget->setStayAlivePeriod(m_settings->stayAlivePeriod);
+    }
+    return m_widget;
 }
 
 void Service::apply()
 {
-    // TODO
+    if (!m_widget)
+        return;
+    m_settings->path = m_widget->path();
+    m_settings->baseUri = m_widget->baseUri();
+    m_settings->stayAlivePeriod = m_widget->stayAlivePeriod();
+    // TODO signal!
     Settings::save(m_settings);
 }
 
 void Service::finish()
 {
-    // TODO
+    delete m_widget;
+    m_widget = nullptr;
 }

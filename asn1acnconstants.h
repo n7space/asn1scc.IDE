@@ -31,7 +31,9 @@ namespace Constants {
 // Settings keys
 
 const char SETTINGS_CATEGORY[]  = "J.Asn1Acn";
+const char SETTINGS_CATEGORY_DISPLAY[] = QT_TRANSLATE_NOOP(Asn1Acn, "ASN.1/ACN");
 const char GENERAL_SETTINGS_ID[] = "A.Asn1Acn.General";
+const char SERVICE_SETTINGS_ID[] = "B.Asn1Acn.Service";
 
 const char SETTINGS_GROUP[] = "Asn1Acn";
 

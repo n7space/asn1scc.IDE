@@ -25,9 +25,7 @@
 
 #pragma once
 
-#include <coreplugin/dialogs/ioptionspage.h>
-
-#include "../settings/service.h"
+#include <QWidget>
 
 #include "ui_service.h"
 
@@ -35,23 +33,25 @@ namespace Asn1Acn {
 namespace Internal {
 namespace OptionsPages {
 
-class ServiceWidget;
-
-class Service : public Core::IOptionsPage
+class ServiceWidget : public QWidget
 {
+    Q_OBJECT
 public:
-    Service(Settings::ServicePtr settings);
+    explicit ServiceWidget(QWidget *parent = nullptr);
 
-    bool matches(const QString &searchKeyWord) const override;
-    QWidget *widget() override;
-    void apply() override;
-    void finish() override;
+    QString path() const;
+    void setPath(const QString &path);
+
+    QString baseUri() const;
+    void setBaseUri(const QString &baseUri);
+
+    int stayAlivePeriod() const;
+    void setStayAlivePeriod(int i);
 
 private:
-    Settings::ServicePtr m_settings;
-    ServiceWidget* m_widget;
+    Ui::ServiceOptionsPage m_ui;
 };
 
 } // namespace OptionsPages
-} // namespace Internal
+} //namespace Internal
 } // namespace Asn1Acn
