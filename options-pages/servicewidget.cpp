@@ -77,8 +77,7 @@ void ServiceWidget::setStayAlivePeriod(int i)
     if (i > 0) {
         m_ui.stayAliveCheckbox->setChecked(false);
         m_ui.stayAliveSpinBox->setValue(i);
-    }
-    else {
+    } else {
         m_ui.stayAliveCheckbox->setChecked(true);
         m_ui.stayAliveSpinBox->setValue(m_ui.stayAliveSpinBox->minimum());
     }
