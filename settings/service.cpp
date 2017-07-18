@@ -25,6 +25,8 @@
 
 #include "service.h"
 
+#include <utils/hostosinfo.h>
+
 using namespace Asn1Acn::Internal::Settings;
 
 static const char PATH[] = "Path";
@@ -50,6 +52,9 @@ void Service::saveOptionsTo(QSettings *s)
 void Service::loadOptionsFrom(QSettings *s)
 {
     path = s->value(PATH, "/opt/asn1sccDaemon/asn1scc/Daemon/bin/Debug/Daemon.exe").toString(); // TODO good default, TODO windows support
-    baseUri = s->value(BASE_URI, "http://localhost:9749/").toString(); // TODO windows default!
+    baseUri = s->value(BASE_URI,
+                       Utils::HostOsInfo::isWindowsHost()
+                       ? "http://+:80/Temporary_Listen_Addresses/asn1scc.IDE/"
+                       : "http://localhost:9749/").toString();
     stayAlivePeriod = s->value(STAY_ALIVE_PERIOD, 1000).toInt();
 }
