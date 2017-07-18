@@ -68,8 +68,8 @@ void ServiceWidget::setBaseUri(const QString &uri)
 int ServiceWidget::stayAlivePeriod() const
 {
     if (m_ui.stayAliveCheckbox->isChecked())
-        return m_ui.stayAliveSpinBox->value();
-    return -1;
+        return -1;
+    return m_ui.stayAliveSpinBox->value();
 }
 
 void ServiceWidget::setStayAlivePeriod(int i)

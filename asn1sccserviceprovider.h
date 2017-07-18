@@ -57,6 +57,7 @@ public:
 private slots:
     void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void stayAliveTimeout();
+    void settingsChanged();
 
 private:
     QStringList additionalArguments() const;

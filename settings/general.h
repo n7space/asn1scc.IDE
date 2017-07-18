@@ -35,6 +35,7 @@ namespace Settings {
 
 class General : public Settings
 {
+    Q_OBJECT
 public:
     virtual ~General();
 

@@ -44,14 +44,13 @@ Asn1SccServiceProvider::Asn1SccServiceProvider(Settings::ServiceConstPtr setting
       m_terminating(false),
       m_settings(settings)
 {
-    m_asn1sccService->setProgram(m_settings->path);
-    m_asn1sccService->setArguments(additionalArguments());
+    settingsChanged();
+
+    connect(m_settings.get(), &Settings::Service::changed, this, &Asn1SccServiceProvider::settingsChanged);
 
     // QProcess::finished is overloaded, hence the cast
     connect(m_asn1sccService, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             this, &Asn1SccServiceProvider::onProcessFinished);
-
-    m_stayAliveTimer.setInterval(m_settings->stayAlivePeriod / 2);
 
     connect(&m_stayAliveTimer, &QTimer::timeout,
             this, &Asn1SccServiceProvider::stayAliveTimeout, Qt::UniqueConnection);
@@ -140,4 +139,22 @@ void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatu
 void Asn1SccServiceProvider::stayAliveTimeout()
 {
     networkManagerInstance->get(QNetworkRequest(QUrl(m_settings->baseUri + "stayAlive")));
+}
+
+void Asn1SccServiceProvider::settingsChanged()
+{
+    const bool wasRunning = (m_asn1sccService->state() != QProcess::NotRunning);
+
+    if (wasRunning) {
+        finalize();
+        m_terminating = false;
+    }
+
+    m_asn1sccService->setProgram(m_settings->path);
+    m_asn1sccService->setArguments(additionalArguments());
+
+    m_stayAliveTimer.setInterval(m_settings->stayAlivePeriod / 2);
+
+    if (wasRunning)
+        start();
 }

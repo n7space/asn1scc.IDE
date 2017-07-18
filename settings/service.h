@@ -37,6 +37,7 @@ namespace Settings {
 
 class Service : public Settings
 {
+    Q_OBJECT
 public:
     Service() = default;
     virtual ~Service();

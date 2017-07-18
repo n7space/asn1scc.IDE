@@ -71,7 +71,7 @@ void Service::apply()
     m_settings->path = m_widget->path();
     m_settings->baseUri = m_widget->baseUri();
     m_settings->stayAlivePeriod = m_widget->stayAlivePeriod();
-    // TODO signal!
+    m_settings->changed();
     Settings::save(m_settings);
 }
 

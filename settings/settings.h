@@ -29,6 +29,7 @@
 
 #include <QSettings>
 #include <QString>
+#include <QObject>
 
 #include <coreplugin/icore.h>
 
@@ -36,15 +37,20 @@ namespace Asn1Acn {
 namespace Internal {
 namespace Settings {
 
-class Settings
+class Settings : public QObject
 {
+    Q_OBJECT
 public:
+    Settings() = default;
     virtual ~Settings();
 
     virtual QString name() const = 0;
 
     void saveTo(QSettings *s);
     void loadFrom(QSettings *s);
+
+signals:
+    void changed();
 
 protected:
     virtual void saveOptionsTo(QSettings *s) = 0;
