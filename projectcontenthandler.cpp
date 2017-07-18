@@ -109,7 +109,8 @@ void ProjectContentHandler::handleFilesAdded(const QString &projectName, const Q
         if (m_tree->getNodeForFilepathFromProject(projectName, path) != nullptr)
             continue;
 
-        auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(path));
+        auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(path,
+                                                                      Data::SourceLocation(path, 0, 0)));
         m_tree->addNodeToProject(projectName, node);
     }
 

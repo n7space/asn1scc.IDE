@@ -74,6 +74,7 @@ OverviewWidget::OverviewWidget(OverviewModel *model) :
     setLayout(layout);
 
     m_treeView->setModel(m_model);
+    m_treeView->setExpandsOnDoubleClick(false);
 
     connect(m_treeView, &QAbstractItemView::activated,
             this, &OverviewWidget::onItemActivated);
@@ -100,10 +101,6 @@ void OverviewWidget::onItemActivated(const QModelIndex &index)
         return;
 
     ModelTreeNode *node = static_cast<ModelTreeNode *>(index.internalPointer());
-
-    // it is assumed, that if item has children, user wants to expand it, even though sometimes it could be jumped to.
-    if (node->childrenCount() > 0)
-        return;
 
     const auto location = node->getSourceLocation();
     Core::EditorManager::openEditorAt(location.path(),
