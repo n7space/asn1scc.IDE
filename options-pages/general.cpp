@@ -29,6 +29,7 @@
 #include "../asn1acnconstants.h"
 #include "../tr.h"
 
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::OptionsPages;
 
 General::General(Settings::GeneralPtr settings)
