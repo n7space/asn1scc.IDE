@@ -23,27 +23,29 @@
 **
 ****************************************************************************/
 
-#include "general.h"
+#pragma once
 
-using namespace Asn1Acn::Internal::Settings;
+#include <QWidget>
 
-static char ASN1SCC_PATH[] = "Asn1SccPath";
+#include "ui_general.h"
 
-General::~General()
+namespace Asn1Acn {
+namespace Internal {
+namespace OptionsPages {
+
+class GeneralWidget : public QWidget
 {
-}
+    Q_OBJECT
+public:
+    explicit GeneralWidget(QWidget *parent = nullptr);
 
-QString General::name() const
-{
-    return QLatin1String("General");
-}
+    QString asn1sccPath() const;
+    void setAsn1SccPath(const QString &path);
 
-void General::saveOptionsTo(QSettings *s)
-{
-    s->setValue(ASN1SCC_PATH, asn1sccPath);
-}
+private:
+    Ui::GeneralOptionsPage m_ui;
+};
 
-void General::loadOptionsFrom(QSettings *s)
-{
-    asn1sccPath = s->value(ASN1SCC_PATH, QLatin1Literal("asn1.exe")).toString(); // TODO default value?
-}
+} // namespace OptionsPages
+} // namespace Internal
+} // namespace Asn1Acn

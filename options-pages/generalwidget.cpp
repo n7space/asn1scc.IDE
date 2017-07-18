@@ -22,28 +22,23 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "generalwidget.h"
 
-#include "general.h"
+using namespace Asn1Acn::Internal::OptionsPages;
 
-using namespace Asn1Acn::Internal::Settings;
-
-static char ASN1SCC_PATH[] = "Asn1SccPath";
-
-General::~General()
+GeneralWidget::GeneralWidget(QWidget *parent) : QWidget(parent)
 {
+    m_ui.setupUi(this);
+
+    m_ui.asn1sccPathChooser->setExpectedKind(Utils::PathChooser::ExistingCommand);
 }
 
-QString General::name() const
+QString GeneralWidget::asn1sccPath() const
 {
-    return QLatin1String("General");
+    return m_ui.asn1sccPathChooser->path();
 }
 
-void General::saveOptionsTo(QSettings *s)
+void GeneralWidget::setAsn1SccPath(const QString &path)
 {
-    s->setValue(ASN1SCC_PATH, asn1sccPath);
-}
-
-void General::loadOptionsFrom(QSettings *s)
-{
-    asn1sccPath = s->value(ASN1SCC_PATH, QLatin1Literal("asn1.exe")).toString(); // TODO default value?
+    m_ui.asn1sccPathChooser->setPath(path);
 }

@@ -29,11 +29,14 @@
 #include "../asn1acnconstants.h"
 #include "../tr.h"
 
+#include "generalwidget.h"
+
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::OptionsPages;
 
 General::General(Settings::GeneralPtr settings)
-    : m_settings(settings)
+    : m_settings(settings),
+      m_widget(nullptr)
 {
     setId(Constants::GENERAL_SETTINGS_ID);
     setDisplayName(Tr::tr("General"));
@@ -44,24 +47,32 @@ General::General(Settings::GeneralPtr settings)
 
 bool General::matches(const QString &searchKeyWord) const
 {
-    // TODO - additional keywords?
+    const QStringList keywords { "asn1scc", "asn1.exe", "asn1", "asn.1", "acn" };
+    for (const auto& keyword : keywords)
+        if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
+            return true;
     return Core::IOptionsPage::matches(searchKeyWord);
 }
 
 QWidget* General::widget()
 {
-    auto w = new QWidget();//nullptr; // TODO
-    m_ui.setupUi(w);
-    return w;
+    if (!m_widget) {
+        m_widget = new GeneralWidget;
+        m_widget->setAsn1SccPath(m_settings->asn1sccPath);
+    }
+    return m_widget;
 }
 
 void General::apply()
 {
-    // TODO
+    if (!m_widget)
+        return;
+    m_settings->asn1sccPath = m_widget->asn1sccPath();
+    m_settings->changed();
     Settings::save(m_settings);
 }
 
 void General::finish()
 {
-    // TODO
+    delete m_widget;
 }

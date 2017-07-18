@@ -33,7 +33,7 @@ ServiceWidget::ServiceWidget(QWidget *parent)
 {
     m_ui.setupUi(this);
 
-    m_ui.pathChooser->setExpectedKind(Utils::PathChooser::File);
+    m_ui.pathChooser->setExpectedKind(Utils::PathChooser::ExistingCommand);
     m_ui.uriEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("https?://[a-zA-Z0-9._\\-]+(:[0-9]+)?(/[a-zA-Z0-9._/\\-]+)?/"), this));
     connect(m_ui.uriEdit, &QLineEdit::textChanged, [this](const QString&) {
        m_ui.uriEdit->setStyleSheet(m_ui.uriEdit->hasAcceptableInput() ? QLatin1String() : QLatin1String("color: red;"));

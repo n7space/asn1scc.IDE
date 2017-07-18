@@ -29,11 +29,11 @@
 
 #include "../settings/general.h"
 
-#include "ui_general.h"
-
 namespace Asn1Acn {
 namespace Internal {
 namespace OptionsPages {
+
+class GeneralWidget;
 
 class General : public Core::IOptionsPage
 {
@@ -47,7 +47,7 @@ public:
 
 private:
     Settings::GeneralPtr m_settings;
-    Ui::GeneralOptionsPage m_ui;
+    GeneralWidget* m_widget;
 };
 
 } // namespace OptionsPages

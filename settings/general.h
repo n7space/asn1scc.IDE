@@ -27,6 +27,8 @@
 
 #include <memory>
 
+#include <QString>
+
 #include "settings.h"
 
 namespace Asn1Acn {
@@ -37,9 +39,12 @@ class General : public Settings
 {
     Q_OBJECT
 public:
+    General() = default;
     virtual ~General();
 
     QString name() const override;
+
+    QString asn1sccPath;
 
 protected:
     void saveOptionsTo(QSettings *s) override;

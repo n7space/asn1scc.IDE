@@ -35,7 +35,8 @@ using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::OptionsPages;
 
 Service::Service(Settings::ServicePtr settings)
-    : m_settings(settings)
+    : m_settings(settings),
+      m_widget(nullptr)
 {
     setId(Constants::SERVICE_SETTINGS_ID);
     setDisplayName(Tr::tr("Service"));

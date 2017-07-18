@@ -53,5 +53,5 @@ private:
 };
 
 } // namespace OptionsPages
-} //namespace Internal
+} // namespace Internal
 } // namespace Asn1Acn
