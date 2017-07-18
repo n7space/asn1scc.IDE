@@ -53,6 +53,7 @@ public:
 signals:
     void finished();
     void errored();
+    void failed();
 
 private slots:
     void requestFinished();

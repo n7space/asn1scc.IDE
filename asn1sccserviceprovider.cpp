@@ -145,8 +145,9 @@ void Asn1SccServiceProvider::loadServiceParams()
 void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_UNUSED(exitCode);
+    Q_UNUSED(exitStatus);
 
-    if (!m_terminating && exitStatus != QProcess::NormalExit) {
+    if (!m_terminating) {
         m_asn1sccService->start();
         m_asn1sccService->waitForStarted();
     }

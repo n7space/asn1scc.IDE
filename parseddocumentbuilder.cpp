@@ -48,6 +48,7 @@ ParsedDocumentBuilder::ParsedDocumentBuilder(const QHash<QString, DocumentSource
     auto serviceProvider = ExtensionSystem::PluginManager::getObject<Asn1SccServiceProvider>();
 
     QNetworkReply *reply = serviceProvider->requestAst(documents);
+
     QObject::connect(reply, &QNetworkReply::finished,
                      this, &ParsedDocumentBuilder::requestFinished);
 }
@@ -58,6 +59,8 @@ void ParsedDocumentBuilder::requestFinished()
 
     if (reply->error() == QNetworkReply::NoError)
         parseResponse(reply->readAll());
+    else
+        emit failed();
 
     reply->deleteLater();
 }

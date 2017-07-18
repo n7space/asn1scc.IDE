@@ -53,7 +53,11 @@ void DocumentProcessor::addToRun(const QString &docContent, const QString &fileP
 void DocumentProcessor::run()
 {
     m_docBuilder = new ParsedDocumentBuilder(m_documents);
+
     QObject::connect(m_docBuilder, &ParsedDocumentBuilder::finished,
+                     this, &DocumentProcessor::onBuilderFinished);
+
+    QObject::connect(m_docBuilder, &ParsedDocumentBuilder::failed,
                      this, &DocumentProcessor::onBuilderFinished);
 
     // TODO: error should be handled exclusively
