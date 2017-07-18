@@ -56,7 +56,7 @@ public:
     void removeFileFromProject(const QString &projectName, const QString &filePath);
 
     QStringList getProjectsForFile(const QString &filePath) const;
-    QList<std::shared_ptr<ParsedDocument> > getFilesFromProject(const QString &projectName) const;
+    QList<std::shared_ptr<ParsedDocument>> getFilesFromProject(const QString &projectName) const;
 
     void cleanProject(const QString &projectName);
 
@@ -64,15 +64,15 @@ signals:
     void fileUpdated(const QString &filePath, std::shared_ptr<ParsedDocument> newFile);
 
 private:
-    using Project = QHash<QString, std::shared_ptr<ParsedDocument> >;
+    using Project = QHash<QString, std::shared_ptr<ParsedDocument>>;
 
     void refreshFileInProjects(std::shared_ptr<ParsedDocument> file, const QString &filePath);
 
     QStringList getProjectsForFileInternal(const QString &filePath) const;
-    QList<std::shared_ptr<ParsedDocument> > getFilesFromProjectInternal(const QString &projectName) const;
+    QList<std::shared_ptr<ParsedDocument>> getFilesFromProjectInternal(const QString &projectName) const;
     void removeFileFromProjectInternal(const QString &projectName, const QString &filePath);
 
-    QHash<QString, std::shared_ptr<ParsedDocument> > m_documents;
+    QHash<QString, std::shared_ptr<ParsedDocument>> m_documents;
     QHash<QString, Project> m_projects;
     mutable QMutex m_documentsMutex;
 };

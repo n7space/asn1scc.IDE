@@ -83,8 +83,8 @@ void ParsedDocumentBuilder::parseXML(const QString &textData)
     AstXmlParser parser(reader);
     parser.parse();
 
-    std::map<QString, std::unique_ptr<Data::Modules> > parsedData = parser.takeData();
-    std::map<QString, std::unique_ptr<Data::Modules> >::iterator it;
+    std::map<QString, std::unique_ptr<Data::Modules>> parsedData = parser.takeData();
+    std::map<QString, std::unique_ptr<Data::Modules>>::iterator it;
 
     for (it = parsedData.begin(); it != parsedData.end(); it++) {
         QString fileName = it->first;
@@ -96,7 +96,7 @@ void ParsedDocumentBuilder::parseXML(const QString &textData)
     }
 }
 
-std::vector<std::unique_ptr<ParsedDocument> > ParsedDocumentBuilder::takeDocuments()
+std::vector<std::unique_ptr<ParsedDocument>> ParsedDocumentBuilder::takeDocuments()
 {
     return std::move(m_parsedDocuments);
 }

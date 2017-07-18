@@ -65,7 +65,7 @@ void ParsedDataStorage::removeProject(const QString &projectName)
 {
     QMutexLocker locker(&m_documentsMutex);
 
-    QList<std::shared_ptr<ParsedDocument> > files = getFilesFromProjectInternal(projectName);
+    QList<std::shared_ptr<ParsedDocument>> files = getFilesFromProjectInternal(projectName);
     foreach (const std::shared_ptr<ParsedDocument> &file, files)
         removeFileFromProjectInternal(projectName, file->source().getPath());
 
@@ -78,7 +78,7 @@ QStringList ParsedDataStorage::getProjectsForFile(const QString &filePath) const
     return getProjectsForFileInternal(filePath);
 }
 
-QList<std::shared_ptr<ParsedDocument> > ParsedDataStorage::getFilesFromProject(const QString &projectName) const
+QList<std::shared_ptr<ParsedDocument>> ParsedDataStorage::getFilesFromProject(const QString &projectName) const
 {
     QMutexLocker locker(&m_documentsMutex);
     return getFilesFromProjectInternal(projectName);
@@ -109,7 +109,7 @@ void ParsedDataStorage::cleanProject(const QString &projectName)
     QMutexLocker locker(&m_documentsMutex);
 
     Project &p = m_projects[projectName];
-    QMutableHashIterator<QString, std::shared_ptr<ParsedDocument> > it(p);
+    QMutableHashIterator<QString, std::shared_ptr<ParsedDocument>> it(p);
 
     while (it.hasNext()) {
         it.next();
@@ -156,10 +156,10 @@ QStringList ParsedDataStorage::getProjectsForFileInternal(const QString &filePat
     return res;
 }
 
-QList<std::shared_ptr<ParsedDocument> > ParsedDataStorage::getFilesFromProjectInternal(const QString &projectName) const
+QList<std::shared_ptr<ParsedDocument>> ParsedDataStorage::getFilesFromProjectInternal(const QString &projectName) const
 {
     if (!m_projects.contains(projectName))
-        return QList<std::shared_ptr<ParsedDocument> >();
+        return QList<std::shared_ptr<ParsedDocument>>();
 
     Project p = m_projects.value(projectName);
 

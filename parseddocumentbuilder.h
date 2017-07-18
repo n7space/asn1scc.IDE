@@ -47,7 +47,7 @@ class ParsedDocumentBuilder : public QObject
 
 public:
     ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents);
-    std::vector<std::unique_ptr<ParsedDocument> > takeDocuments();
+    std::vector<std::unique_ptr<ParsedDocument>> takeDocuments();
     const QStringList& errorMessages() const { return m_errorMessages; }
 
 signals:
@@ -66,7 +66,7 @@ private:
     QString getAstXml(const QJsonObject &json);
 
     const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
-    std::vector<std::unique_ptr<ParsedDocument> > m_parsedDocuments;
+    std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
     QStringList m_errorMessages;
 };

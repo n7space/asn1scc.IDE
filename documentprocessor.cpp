@@ -64,7 +64,7 @@ void DocumentProcessor::run()
 
 void DocumentProcessor::onBuilderFinished()
 {
-    std::vector<std::unique_ptr<ParsedDocument> > documents = m_docBuilder->takeDocuments();
+    std::vector<std::unique_ptr<ParsedDocument>> documents = m_docBuilder->takeDocuments();
     ParsedDataStorage *model = ParsedDataStorage::instance();
 
     for (size_t i = 0; i < documents.size(); i++)

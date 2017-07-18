@@ -105,7 +105,7 @@ void OverviewWidget::onItemActivated(const QModelIndex &index)
     if (node->childrenCount() > 0)
         return;
 
-    Data::SourceLocation location = node->getSourceLocation();
+    const auto location = node->getSourceLocation();
     Core::EditorManager::openEditorAt(location.path(),
                                       location.line(),
                                       location.column());

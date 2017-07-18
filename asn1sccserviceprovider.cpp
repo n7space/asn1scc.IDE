@@ -114,8 +114,8 @@ QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QHash<QString, D
         iter.next();
 
         QJsonObject asnFileData;
-        asnFileData["Name"] = iter.value().getName().toStdString().c_str();
-        asnFileData["Contents"] = iter.value().getContent().toStdString().c_str();
+        asnFileData["Name"] = iter.value().getName();
+        asnFileData["Contents"] = iter.value().getContent();
 
         documentArray.append(asnFileData);
     }
