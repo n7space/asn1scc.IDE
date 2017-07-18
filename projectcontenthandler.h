@@ -59,6 +59,8 @@ private:
     void handleFilesAdded(const QString &projectName, const QStringList &filePaths);
     void handleFilesRemoved(const QString &projectName, const QStringList &filePaths);
 
+    QStringList getStaleFilesNames(const QString &projectName, const QStringList &filePaths) const;
+
     void processFiles(const QString &projectName, const QStringList &filePaths);
     QString readFileContent(const QString &fileName) const;
 

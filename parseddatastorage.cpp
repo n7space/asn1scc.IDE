@@ -104,19 +104,6 @@ void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique
     emit fileUpdated(filePath, newFile);
 }
 
-void ParsedDataStorage::cleanProject(const QString &projectName)
-{
-    QMutexLocker locker(&m_documentsMutex);
-
-    Project &p = m_projects[projectName];
-    QMutableHashIterator<QString, std::shared_ptr<ParsedDocument>> it(p);
-
-    while (it.hasNext()) {
-        it.next();
-        removeFileFromProjectInternal(projectName, it.key());
-    }
-}
-
 void ParsedDataStorage::removeFileFromProject(const QString &projectName, const QString &filePath)
 {
     QMutexLocker locker(&m_documentsMutex);

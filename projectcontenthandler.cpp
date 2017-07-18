@@ -77,6 +77,12 @@ void ProjectContentHandler::handleFileListChanged(const QString &projectName, co
 void ProjectContentHandler::handleFileContentChanged(const QString &path, const QString &content, int revision)
 {
     QStringList projects = m_storage->getProjectsForFile(path);
+
+    if (projects.empty()) {
+        allProcessingFinished();
+        return;
+    }
+
     for (const QString projectName : projects) {
         DocumentProcessor *docProcessor = createDocumentProcessorForFileChange(projectName, path, content, revision);
         startProcessing(docProcessor);
@@ -99,10 +105,13 @@ void ProjectContentHandler::handleFilesAdded(const QString &projectName, const Q
 
 void ProjectContentHandler::handleFilesRemoved(const QString &projectName, const QStringList &filePaths)
 {
-    m_tree->removeStaleNodesFromProject(projectName, filePaths);
-    m_storage->cleanProject(projectName);
+    QStringList stalePaths = getStaleFilesNames(projectName, filePaths);
 
-    // FIXME: if all the files were removed from project, than asn1scc daemon will crash
+    foreach (const QString &stalePath, stalePaths) {
+        m_tree->removeNodeFromProject(projectName, stalePath);
+        m_storage->removeFileFromProject(projectName, stalePath);
+    }
+
     processFiles(projectName, filePaths);
 }
 
@@ -112,6 +121,18 @@ void ProjectContentHandler::processFiles(const QString &projectName, const QStri
     startProcessing(dp);
 }
 
+QStringList ProjectContentHandler::getStaleFilesNames(const QString &projectName, const QStringList &filePaths) const
+{
+    QStringList staleFileList = m_tree->getFileListFromProject(projectName);
+    QSet<QString> pathsToRemove = staleFileList.toSet().subtract(filePaths.toSet());
+
+    QStringList ret;
+    foreach (const QString &stalePath, pathsToRemove)
+        ret.append(stalePath);
+
+    return ret;
+}
+
 DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(const QString &projectName,
                                                                                const QString &path,
                                                                                const QString &content,
@@ -119,7 +140,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
 {
     DocumentProcessor *docProcessor = new DocumentProcessor(projectName);
 
-    QList<std::shared_ptr<ParsedDocument> > files = m_storage->getFilesFromProject(projectName);
+    QList<std::shared_ptr<ParsedDocument>> files = m_storage->getFilesFromProject(projectName);
     foreach (const std::shared_ptr<ParsedDocument> &file, files) {
         if (file->source().getPath() == path) {
             docProcessor->addToRun(content, path, revision);

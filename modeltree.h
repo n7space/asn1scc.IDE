@@ -56,6 +56,7 @@ public:
     ModelTreeNode::ModelTreeNodePtr getNodeForFilepathFromProject(const QString &projectName, const QString &filePath) const;
 
     int getProjectFilesCnt(const QString &projectName) const;
+    QStringList getFileListFromProject(const QString &projectName) const;
 
     bool isValid() const;
 
@@ -68,8 +69,7 @@ private:
     void removeProjectNode(const QString &projectName);
 
     void addNodeToProject(const QString &projectName, ModelTreeNode::ModelTreeNodePtr node);
-
-    void removeStaleNodesFromProject(const QString &projectName, const QStringList &currentPaths);
+    void removeNodeFromProject(const QString &projectName, const QString &fileName);
 
     void treeAboutToChange();
     void treeChanged();
