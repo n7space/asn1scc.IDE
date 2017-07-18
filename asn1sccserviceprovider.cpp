@@ -44,7 +44,7 @@ Asn1SccServiceProvider::Asn1SccServiceProvider(Settings::ServiceConstPtr setting
       m_terminating(false),
       m_settings(settings)
 {
-    settingsChanged();
+    updateConfigFromSettings();
 
     connect(m_settings.get(), &Settings::Service::changed, this, &Asn1SccServiceProvider::settingsChanged);
 
@@ -141,6 +141,14 @@ void Asn1SccServiceProvider::stayAliveTimeout()
     networkManagerInstance->get(QNetworkRequest(QUrl(m_settings->baseUri + "stayAlive")));
 }
 
+void Asn1SccServiceProvider::updateConfigFromSettings()
+{
+    m_asn1sccService->setProgram(m_settings->path);
+    m_asn1sccService->setArguments(additionalArguments());
+
+    m_stayAliveTimer.setInterval(m_settings->stayAlivePeriod / 2);
+}
+
 void Asn1SccServiceProvider::settingsChanged()
 {
     const bool wasRunning = (m_asn1sccService->state() != QProcess::NotRunning);
@@ -150,10 +158,7 @@ void Asn1SccServiceProvider::settingsChanged()
         m_terminating = false;
     }
 
-    m_asn1sccService->setProgram(m_settings->path);
-    m_asn1sccService->setArguments(additionalArguments());
-
-    m_stayAliveTimer.setInterval(m_settings->stayAlivePeriod / 2);
+    updateConfigFromSettings();
 
     if (wasRunning)
         start();

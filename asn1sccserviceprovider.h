@@ -60,6 +60,7 @@ private slots:
     void settingsChanged();
 
 private:
+    void updateConfigFromSettings();
     QStringList additionalArguments() const;
 
     QJsonDocument buildAstRequestData(const QHash<QString, DocumentSourceInfo> &documents) const;
