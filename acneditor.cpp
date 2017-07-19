@@ -31,6 +31,8 @@
 
 #include "asn1acnconstants.h"
 #include "acndocument.h"
+#include "indenter.h"
+#include "autocompleter.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -48,11 +50,16 @@ AcnEditorFactory::AcnEditorFactory()
     setDisplayName(QCoreApplication::translate("OpenWith::Editors", Constants::ACNEDITOR_DISPLAY_NAME));
     addMimeType(Constants::ACN_MIMETYPE);
 
-    setUseGenericHighlighter(true);
-
     setDocumentCreator([]() { return new AcnDocument; });
     setEditorWidgetCreator([]() { return new AcnEditorWidget; });
     setEditorCreator([]() { return new AcnEditor; });
+    setIndenterCreator([]() { return new Indenter; });
+    setAutoCompleterCreator([]() { return new AutoCompleter; });
+
+    setCodeFoldingSupported(true);
+    setMarksVisible(true);
+    setParenthesesMatchingEnabled(true);
+    setUseGenericHighlighter(true);
 
     setEditorActionHandlers(TextEditorActionHandler::Format
                             | TextEditorActionHandler::UnCommentSelection

@@ -30,10 +30,10 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnAutoCompleter : public TextEditor::AutoCompleter
+class AutoCompleter : public TextEditor::AutoCompleter
 {
 public:
-    AsnAutoCompleter();
+    AutoCompleter();
 
     bool isInComment(const QTextCursor &cursor) const override;
     bool isInString(const QTextCursor &cursor) const override;
