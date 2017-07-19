@@ -33,6 +33,8 @@
 
 #include <coreplugin/icore.h>
 
+#include <utils/qtcassert.h>
+
 #include "asn1acnconstants.h"
 
 using namespace Asn1Acn::Internal;
@@ -41,7 +43,7 @@ Q_GLOBAL_STATIC(QNetworkAccessManager, networkManagerInstance)
 
 Asn1SccServiceProvider::Asn1SccServiceProvider(Settings::ServiceConstPtr settings)
     : m_asn1sccService(new QProcess(this)),
-      m_terminating(false),
+      m_serviceStarted(false),
       m_settings(settings)
 {
     updateConfigFromSettings();
@@ -58,8 +60,8 @@ Asn1SccServiceProvider::Asn1SccServiceProvider(Settings::ServiceConstPtr setting
 
 Asn1SccServiceProvider::~Asn1SccServiceProvider()
 {
-    if (m_asn1sccService->state() != QProcess::NotRunning)
-        finalize();
+    if (m_serviceStarted)
+        stop();
 }
 
 QNetworkReply *Asn1SccServiceProvider::requestAst(const QHash<QString, DocumentSourceInfo> &documents) const
@@ -74,16 +76,20 @@ QNetworkReply *Asn1SccServiceProvider::requestAst(const QHash<QString, DocumentS
 
 void Asn1SccServiceProvider::start()
 {
+    QTC_ASSERT(m_serviceStarted == false, return);
+
+    m_serviceStarted = true;
+
     m_stayAliveTimer.start();
     m_asn1sccService->start();
     m_asn1sccService->waitForStarted(); // TODO check for error
 }
 
-void Asn1SccServiceProvider::finalize()
+void Asn1SccServiceProvider::stop()
 {
-    m_terminating = true;
-    m_stayAliveTimer.stop();
+    m_serviceStarted = false;
 
+    m_stayAliveTimer.stop();
     m_asn1sccService->terminate();
     m_asn1sccService->waitForFinished();
 }
@@ -130,7 +136,7 @@ void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatu
     Q_UNUSED(exitCode);
     Q_UNUSED(exitStatus);
 
-    if (!m_terminating) {
+    if (m_serviceStarted) {
         m_asn1sccService->start();
         m_asn1sccService->waitForStarted();
     }
@@ -138,7 +144,12 @@ void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatu
 
 void Asn1SccServiceProvider::stayAliveTimeout()
 {
-    networkManagerInstance->get(QNetworkRequest(QUrl(m_settings->baseUri + "stayAlive")));
+    auto reply = networkManagerInstance->get(QNetworkRequest(QUrl(m_settings->baseUri + "stayAlive")));
+    connect(reply, &QNetworkReply::finished, [this, reply](){
+        if (m_serviceStarted && reply->error() != QNetworkReply::NoError)
+            restart();
+        reply->deleteLater();
+    });
 }
 
 void Asn1SccServiceProvider::updateConfigFromSettings()
@@ -151,12 +162,10 @@ void Asn1SccServiceProvider::updateConfigFromSettings()
 
 void Asn1SccServiceProvider::settingsChanged()
 {
-    const bool wasRunning = (m_asn1sccService->state() != QProcess::NotRunning);
+    const bool wasRunning = m_serviceStarted;
 
-    if (wasRunning) {
-        finalize();
-        m_terminating = false;
-    }
+    if (wasRunning)
+        stop();
 
     updateConfigFromSettings();
 

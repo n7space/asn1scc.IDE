@@ -52,7 +52,8 @@ public:
     QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const;
 
     void start();
-    void finalize();
+    void stop();
+    void restart() { stop(); start(); }
 
 private slots:
     void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -67,7 +68,7 @@ private:
 
     QProcess *m_asn1sccService;
     QTimer m_stayAliveTimer;
-    bool m_terminating;
+    bool m_serviceStarted;
 
     Settings::ServiceConstPtr m_settings;
 };
