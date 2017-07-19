@@ -48,10 +48,10 @@ public:
 
     void addToRun(const QString &docContent, const QString &filePath, int revision);
     void run();
+    std::vector<std::unique_ptr<ParsedDocument>> takeResults();
 
 signals:
-    void processingFinished(const QString &projectName,
-                            std::vector<std::unique_ptr<ParsedDocument>> &parsedDocuments) const;
+    void processingFinished(const QString &projectName) const;
 
 private slots:
     void onBuilderFinished();

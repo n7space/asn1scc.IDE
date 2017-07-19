@@ -195,11 +195,11 @@ ProjectContentHandler::readFileContent(const QString &fileName) const
     return docContent;
 }
 
-void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName,
-                                                      std::vector<std::unique_ptr<ParsedDocument>> &parsedDocuments)
+void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName)
 {
     DocumentProcessor *dp = qobject_cast<DocumentProcessor *>(sender());
 
+    std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments = dp->takeResults();
     for (size_t i = 0; i < parsedDocuments.size(); i++)
         m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
 

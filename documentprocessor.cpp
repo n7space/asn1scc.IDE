@@ -65,8 +65,12 @@ void DocumentProcessor::run()
                      this, &DocumentProcessor::onBuilderFinished);
 }
 
+std::vector<std::unique_ptr<ParsedDocument>> DocumentProcessor::takeResults()
+{
+    return m_docBuilder != nullptr ? m_docBuilder->takeDocuments() : std::vector<std::unique_ptr<ParsedDocument>>();
+}
+
 void DocumentProcessor::onBuilderFinished()
 {
-    auto documents = m_docBuilder->takeDocuments();
-    emit processingFinished(m_projectName, documents);
+    emit processingFinished(m_projectName);
 }

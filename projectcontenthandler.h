@@ -52,8 +52,7 @@ signals:
     void processingFinished();
 
 private slots:
-    void onFilesProcessingFinished(const QString &projectName,
-                                   std::vector<std::unique_ptr<ParsedDocument>> &parsedDocuments);
+    void onFilesProcessingFinished(const QString &projectName);
 
 private:
     void handleFilesAdded(const QString &projectName, const QStringList &filePaths);
