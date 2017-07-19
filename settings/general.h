@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include "settings.h"
 
 namespace Asn1Acn {
@@ -42,6 +44,9 @@ protected:
     void saveOptionsTo(QSettings *s) override;
     void loadOptionsFrom(QSettings *s) override;
 };
+
+using GeneralPtr = std::shared_ptr<General>;
+using GeneralConstPtr = std::shared_ptr<const General>;
 
 } // namespace Settings
 } // namespace Internal

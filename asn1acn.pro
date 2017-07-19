@@ -83,6 +83,7 @@ SOURCES += \
     indenter.cpp \
     settings/settings.cpp \
     settings/general.cpp \
+    settings/service.cpp \
     options-pages/general.cpp
 
 HEADERS += \
@@ -122,6 +123,7 @@ HEADERS += \
     tr.h \
     settings/settings.h\
     settings/general.h \
+    settings/service.h \
     options-pages/general.h
 
 RESOURCES += \

@@ -40,6 +40,7 @@ void Settings::saveTo(QSettings *s)
     saveOptionsTo(s);
     s->endGroup();
     s->endGroup();
+    s->sync();
 }
 
 void Settings::loadFrom(QSettings *s)
@@ -49,5 +50,4 @@ void Settings::loadFrom(QSettings *s)
     loadOptionsFrom(s);
     s->endGroup();
     s->endGroup();
-
 }

@@ -39,20 +39,19 @@ using namespace Asn1Acn::Internal;
 
 Q_GLOBAL_STATIC(QNetworkAccessManager, networkManagerInstance)
 
-Asn1SccServiceProvider::Asn1SccServiceProvider() :
-    m_asn1sccService(new QProcess(this)),
-    m_terminating(false)
+Asn1SccServiceProvider::Asn1SccServiceProvider(Settings::ServiceConstPtr settings)
+    : m_asn1sccService(new QProcess(this)),
+      m_terminating(false),
+      m_settings(settings)
 {
-    loadServiceParams();
-
-    m_asn1sccService->setProgram(m_serviceBinaryPath);
+    m_asn1sccService->setProgram(m_settings->path);
     m_asn1sccService->setArguments(additionalArguments());
 
     // QProcess::finished is overloaded, hence the cast
     connect(m_asn1sccService, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             this, &Asn1SccServiceProvider::onProcessFinished);
 
-    m_stayAliveTimer.setInterval(m_serviceStayAlivePeriod / 2);
+    m_stayAliveTimer.setInterval(m_settings->stayAlivePeriod / 2);
 
     connect(&m_stayAliveTimer, &QTimer::timeout,
             this, &Asn1SccServiceProvider::stayAliveTimeout, Qt::UniqueConnection);
@@ -66,7 +65,7 @@ Asn1SccServiceProvider::~Asn1SccServiceProvider()
 
 QNetworkReply *Asn1SccServiceProvider::requestAst(const QHash<QString, DocumentSourceInfo> &documents) const
 {
-    QNetworkRequest astRequest(QUrl(m_serviceBaseUrl + "ast"));
+    QNetworkRequest astRequest(QUrl(m_settings->baseUri + "ast"));
     astRequest.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
 
     QByteArray jsonRequestData = buildAstRequestData(documents).toJson();
@@ -94,13 +93,13 @@ QStringList Asn1SccServiceProvider::additionalArguments() const
 {
     QStringList arguments;
 
-    if (!m_serviceBaseUrl.isEmpty()) {
+    if (!m_settings->baseUri.isEmpty()) {
         arguments.append(QString("--uri"));
-        arguments.append(m_serviceBaseUrl);
+        arguments.append(m_settings->baseUri);
     }
 
     arguments.append(QString("--watchdog"));
-    arguments.append(QString::number(m_serviceStayAlivePeriod));
+    arguments.append(QString::number(m_settings->stayAlivePeriod));
 
     return arguments;
 }
@@ -127,21 +126,6 @@ QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QHash<QString, D
     return QJsonDocument(files);
 }
 
-void Asn1SccServiceProvider::loadServiceParams()
-{
-    QSettings *s = Core::ICore::settings();
-    s->beginGroup(Constants::SETTINGS_GROUP);
-
-    m_serviceBinaryPath = s->value(Constants::ASN1ACN_SERVICE_PATH).toString();
-    m_serviceBaseUrl
-        = QString("http://localhost:"
-                  + QString::number(s->value(Constants::ASN1ACN_SERVICE_PORT).toInt())
-                  + "/");
-    m_serviceStayAlivePeriod = s->value(Constants::ASN1ACN_SERVICE_WATCHDOG).toInt();
-
-    s->endGroup();
-}
-
 void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_UNUSED(exitCode);
@@ -155,5 +139,5 @@ void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatu
 
 void Asn1SccServiceProvider::stayAliveTimeout()
 {
-    networkManagerInstance->get(QNetworkRequest(QUrl(m_serviceBaseUrl + "stayAlive")));
+    networkManagerInstance->get(QNetworkRequest(QUrl(m_settings->baseUri + "stayAlive")));
 }

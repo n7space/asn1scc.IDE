@@ -27,6 +27,8 @@
 
 #include <coreplugin/dialogs/ioptionspage.h>
 
+#include "../settings/general.h"
+
 namespace Asn1Acn {
 namespace Internal {
 namespace OptionsPages {
@@ -34,12 +36,15 @@ namespace OptionsPages {
 class General : public Core::IOptionsPage
 {
 public:
-    General();
+    General(Settings::GeneralPtr settings);
 
     bool matches(const QString &searchKeyWord) const override;
     QWidget *widget() override;
     void apply() override;
     void finish() override;
+
+private:
+    Settings::GeneralPtr m_settings;
 };
 
 } // namespace OptionsPages

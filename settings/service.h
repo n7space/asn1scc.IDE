@@ -27,43 +27,32 @@
 
 #include <memory>
 
-#include <QSettings>
 #include <QString>
 
-#include <coreplugin/icore.h>
+#include "settings.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Settings {
 
-class Settings
+class Service : public Settings
 {
 public:
-    virtual ~Settings();
+    virtual ~Service();
 
-    virtual QString name() const = 0;
+    QString name() const override;
 
-    void saveTo(QSettings *s);
-    void loadFrom(QSettings *s);
+    QString baseUri;
+    QString path;
+    int stayAlivePeriod;
 
 protected:
-    virtual void saveOptionsTo(QSettings *s) = 0;
-    virtual void loadOptionsFrom(QSettings *s) = 0;
+    void saveOptionsTo(QSettings *s) override;
+    void loadOptionsFrom(QSettings *s) override;
 };
 
-template <typename Type>
-std::shared_ptr<Type> load()
-{
-    auto r = std::make_shared<Type>();
-    r->loadFrom(Core::ICore::settings());
-    return r;
-}
-
-template <typename Type>
-void save(std::shared_ptr<Type> settings)
-{
-    settings->saveTo(Core::ICore::settings());
-}
+using ServicePtr = std::shared_ptr<Service>;
+using ServiceConstPtr = std::shared_ptr<const Service>;
 
 } // namespace Settings
 } // namespace Internal

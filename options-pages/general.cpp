@@ -31,7 +31,8 @@
 
 using namespace Asn1Acn::Internal::OptionsPages;
 
-General::General()
+General::General(Settings::GeneralPtr settings)
+    : m_settings(settings)
 {
     setId(Constants::GENERAL_SETTINGS_ID);
     setDisplayName(Tr::tr("General"));
@@ -54,6 +55,7 @@ QWidget* General::widget()
 void General::apply()
 {
     // TODO
+    Settings::save(m_settings);
 }
 
 void General::finish()

@@ -23,48 +23,33 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "service.h"
 
-#include <memory>
+using namespace Asn1Acn::Internal::Settings;
 
-#include <QSettings>
-#include <QString>
+static const char PATH[] = "Path";
+static const char BASE_URI[] = "BaseUri";
+static const char STAY_ALIVE_PERIOD[] = "StayAlivePeriod";
 
-#include <coreplugin/icore.h>
-
-namespace Asn1Acn {
-namespace Internal {
-namespace Settings {
-
-class Settings
+Service::~Service()
 {
-public:
-    virtual ~Settings();
-
-    virtual QString name() const = 0;
-
-    void saveTo(QSettings *s);
-    void loadFrom(QSettings *s);
-
-protected:
-    virtual void saveOptionsTo(QSettings *s) = 0;
-    virtual void loadOptionsFrom(QSettings *s) = 0;
-};
-
-template <typename Type>
-std::shared_ptr<Type> load()
-{
-    auto r = std::make_shared<Type>();
-    r->loadFrom(Core::ICore::settings());
-    return r;
 }
 
-template <typename Type>
-void save(std::shared_ptr<Type> settings)
+QString Service::name() const
 {
-    settings->saveTo(Core::ICore::settings());
+    return QLatin1String("Service");
 }
 
-} // namespace Settings
-} // namespace Internal
-} // namespace Asn1Acn
+void Service::saveOptionsTo(QSettings *s)
+{
+    s->setValue(PATH, path);
+    s->setValue(BASE_URI, baseUri); // TODO must end with /
+    s->setValue(STAY_ALIVE_PERIOD, stayAlivePeriod);
+}
+
+void Service::loadOptionsFrom(QSettings *s)
+{
+    path = s->value(PATH, "/opt/asn1sccDaemon/asn1scc/Daemon/bin/Debug/Daemon.exe").toString(); // TODO good default, TODO windows support
+    baseUri = s->value(BASE_URI, "http::/localhost:9749/").toString(); // TODO windows default!
+    stayAlivePeriod = s->value(STAY_ALIVE_PERIOD, 1000).toInt();
+}

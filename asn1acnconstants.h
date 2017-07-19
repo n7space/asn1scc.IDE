@@ -35,10 +35,6 @@ const char GENERAL_SETTINGS_ID[] = "A.Asn1Acn.General";
 
 const char SETTINGS_GROUP[] = "Asn1Acn";
 
-const char ASN1ACN_SERVICE_PATH[] = "ServicePath";
-const char ASN1ACN_SERVICE_PORT[] = "ServicePort";
-const char ASN1ACN_SERVICE_WATCHDOG[] = "ServiceWatchdog";
-
 // Shared constants
 
 const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
