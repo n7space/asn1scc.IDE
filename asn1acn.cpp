@@ -51,6 +51,7 @@
 #include "settings/service.h"
 
 #include "options-pages/general.h"
+#include "options-pages/service.h"
 
 #include "acneditor.h"
 
@@ -98,6 +99,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(new ProjectWatcher);
 
     addAutoReleasedObject(new OptionsPages::General(generalSettings));
+    addAutoReleasedObject(new OptionsPages::Service(serviceSettings));
 
     Asn1SccServiceProvider *sp = new Asn1SccServiceProvider(serviceSettings);
     addAutoReleasedObject(sp);

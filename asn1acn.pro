@@ -84,7 +84,8 @@ SOURCES += \
     settings/settings.cpp \
     settings/general.cpp \
     settings/service.cpp \
-    options-pages/general.cpp
+    options-pages/general.cpp \
+    options-pages/service.cpp \
 
 HEADERS += \
     asn1acn_global.h \
@@ -124,7 +125,11 @@ HEADERS += \
     settings/settings.h\
     settings/general.h \
     settings/service.h \
-    options-pages/general.h
+    options-pages/general.h \
+    options-pages/service.h
+
+FORMS += \
+    options-pages/service.ui
 
 RESOURCES += \
     asn1acn.qrc
