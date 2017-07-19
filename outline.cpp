@@ -53,7 +53,7 @@ OutlineWidget::OutlineWidget(EditorWidget *editor) :
 
 void OutlineWidget::modelUpdated()
 {
-    QString path = m_editor->textDocument()->filePath().toString();
+    const QString &path = m_editor->textDocument()->filePath().toString();
 
     ModelTreeNode::ModelTreeNodePtr documentNode = ModelTree::instance()->getAnyNodeForFilepath(path);
     m_model->setRootNode(documentNode);
