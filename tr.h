@@ -23,44 +23,17 @@
 **
 ****************************************************************************/
 
-#include "structuresview.h"
+#pragma once
 
-#include "modeltree.h"
-#include "asn1acnconstants.h"
+#include <QCoreApplication>
 
-using namespace Asn1Acn::Internal;
+namespace Asn1Acn {
+namespace Internal {
 
-StructuresViewWidget::StructuresViewWidget() :
-    OverviewWidget(new OverviewModel)
+struct Tr
 {
-    ModelTree *instance = ModelTree::instance();
-    auto modelRoot = instance->getModelTreeRoot();
+    Q_DECLARE_TR_FUNCTIONS(Asn1Acn)
+};
 
-    m_model->setRootNode(modelRoot);
-
-    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            m_model, &OverviewModel::invalidated);
-
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            m_model, &OverviewModel::validated);
-
-    connect(m_model, &QAbstractItemModel::modelReset,
-            this, &StructuresViewWidget::modelUpdated);
-}
-
-StructuresViewWidget::~StructuresViewWidget()
-{
-    delete m_model;
-}
-
-StructuresViewFactory::StructuresViewFactory()
-{
-    setDisplayName(tr("Structures View"));
-    setPriority(500);
-    setId(Constants::STRUCTURES_VIEW_ID);
-}
-
-Core::NavigationView StructuresViewFactory::createWidget()
-{
-    return Core::NavigationView(new StructuresViewWidget);
-}
+} // namespace Internal
+} // namespace Asn1Acn

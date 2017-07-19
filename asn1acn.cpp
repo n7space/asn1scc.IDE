@@ -46,6 +46,13 @@
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
 
+#include "settings/settings.h"
+#include "settings/general.h"
+#include "settings/service.h"
+
+#include "options-pages/general.h"
+#include "options-pages/service.h"
+
 #include "acneditor.h"
 
 #ifdef WITH_TESTS
@@ -75,10 +82,11 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     // In the initialize function, a plugin can be sure that the plugins it
     // depends on have initialized their members.
 
-    setDefaultSettings();
-
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
+
+    const auto generalSettings = Settings::load<Settings::General>();
+    const auto serviceSettings = Settings::load<Settings::Service>();
 
     addAutoReleasedObject(new AsnEditorFactory);
     addAutoReleasedObject(new StructuresViewFactory);
@@ -90,7 +98,10 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new ProjectWatcher);
 
-    Asn1SccServiceProvider *sp = new Asn1SccServiceProvider;
+    addAutoReleasedObject(new OptionsPages::General(generalSettings));
+    addAutoReleasedObject(new OptionsPages::Service(serviceSettings));
+
+    Asn1SccServiceProvider *sp = new Asn1SccServiceProvider(serviceSettings);
     addAutoReleasedObject(sp);
     sp->start();
 
@@ -117,29 +128,6 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
     return SynchronousShutdown;
-}
-
-void Asn1AcnPlugin::setDefaultSettings()
-{
-    // TODO: loading of settings needs to be more sophisticated.
-    // Now on Linux OS settings can be found in ~/.config/QtProject/QtCreator.ini
-
-    QSettings *s = Core::ICore::settings();
-
-    s->beginGroup(Constants::ASN1ACN_GROUP_NAME);
-
-    if (!s->contains(Constants::ASN1ACN_SERVICE_PATH))
-        s->setValue(Constants::ASN1ACN_SERVICE_PATH,
-                    "/opt/asn1sccDaemon/asn1scc/Daemon/bin/Debug/Daemon.exe");
-
-    if (!s->contains(Constants::ASN1ACN_SERVICE_PORT))
-        s->setValue(Constants::ASN1ACN_SERVICE_PORT, 9749);
-
-    if (!s->contains(Constants::ASN1ACN_SERVICE_WATCHDOG))
-        s->setValue(Constants::ASN1ACN_SERVICE_WATCHDOG, 1000);
-
-    s->endGroup();
-    s->sync();
 }
 
 #ifdef WITH_TESTS

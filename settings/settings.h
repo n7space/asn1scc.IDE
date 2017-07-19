@@ -23,44 +23,54 @@
 **
 ****************************************************************************/
 
-#include "structuresview.h"
+#pragma once
 
-#include "modeltree.h"
-#include "asn1acnconstants.h"
+#include <memory>
 
-using namespace Asn1Acn::Internal;
+#include <QSettings>
+#include <QString>
+#include <QObject>
 
-StructuresViewWidget::StructuresViewWidget() :
-    OverviewWidget(new OverviewModel)
+#include <coreplugin/icore.h>
+
+namespace Asn1Acn {
+namespace Internal {
+namespace Settings {
+
+class Settings : public QObject
 {
-    ModelTree *instance = ModelTree::instance();
-    auto modelRoot = instance->getModelTreeRoot();
+    Q_OBJECT
+public:
+    Settings() = default;
+    virtual ~Settings();
 
-    m_model->setRootNode(modelRoot);
+    virtual QString name() const = 0;
 
-    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            m_model, &OverviewModel::invalidated);
+    void saveTo(QSettings *s);
+    void loadFrom(QSettings *s);
 
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            m_model, &OverviewModel::validated);
+signals:
+    void changed();
 
-    connect(m_model, &QAbstractItemModel::modelReset,
-            this, &StructuresViewWidget::modelUpdated);
+protected:
+    virtual void saveOptionsTo(QSettings *s) = 0;
+    virtual void loadOptionsFrom(QSettings *s) = 0;
+};
+
+template <typename Type>
+std::shared_ptr<Type> load()
+{
+    auto r = std::make_shared<Type>();
+    r->loadFrom(Core::ICore::settings());
+    return r;
 }
 
-StructuresViewWidget::~StructuresViewWidget()
+template <typename Type>
+void save(std::shared_ptr<Type> settings)
 {
-    delete m_model;
+    settings->saveTo(Core::ICore::settings());
 }
 
-StructuresViewFactory::StructuresViewFactory()
-{
-    setDisplayName(tr("Structures View"));
-    setPriority(500);
-    setId(Constants::STRUCTURES_VIEW_ID);
-}
-
-Core::NavigationView StructuresViewFactory::createWidget()
-{
-    return Core::NavigationView(new StructuresViewWidget);
-}
+} // namespace Settings
+} // namespace Internal
+} // namespace Asn1Acn

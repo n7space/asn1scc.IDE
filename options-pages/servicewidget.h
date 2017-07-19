@@ -23,44 +23,35 @@
 **
 ****************************************************************************/
 
-#include "structuresview.h"
+#pragma once
 
-#include "modeltree.h"
-#include "asn1acnconstants.h"
+#include <QWidget>
 
-using namespace Asn1Acn::Internal;
+#include "ui_service.h"
 
-StructuresViewWidget::StructuresViewWidget() :
-    OverviewWidget(new OverviewModel)
+namespace Asn1Acn {
+namespace Internal {
+namespace OptionsPages {
+
+class ServiceWidget : public QWidget
 {
-    ModelTree *instance = ModelTree::instance();
-    auto modelRoot = instance->getModelTreeRoot();
+    Q_OBJECT
+public:
+    explicit ServiceWidget(QWidget *parent = nullptr);
 
-    m_model->setRootNode(modelRoot);
+    QString path() const;
+    void setPath(const QString &path);
 
-    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            m_model, &OverviewModel::invalidated);
+    QString baseUri() const;
+    void setBaseUri(const QString &baseUri);
 
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            m_model, &OverviewModel::validated);
+    int stayAlivePeriod() const;
+    void setStayAlivePeriod(int i);
 
-    connect(m_model, &QAbstractItemModel::modelReset,
-            this, &StructuresViewWidget::modelUpdated);
-}
+private:
+    Ui::ServiceOptionsPage m_ui;
+};
 
-StructuresViewWidget::~StructuresViewWidget()
-{
-    delete m_model;
-}
-
-StructuresViewFactory::StructuresViewFactory()
-{
-    setDisplayName(tr("Structures View"));
-    setPriority(500);
-    setId(Constants::STRUCTURES_VIEW_ID);
-}
-
-Core::NavigationView StructuresViewFactory::createWidget()
-{
-    return Core::NavigationView(new StructuresViewWidget);
-}
+} // namespace OptionsPages
+} // namespace Internal
+} // namespace Asn1Acn

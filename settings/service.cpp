@@ -23,44 +23,38 @@
 **
 ****************************************************************************/
 
-#include "structuresview.h"
+#include "service.h"
 
-#include "modeltree.h"
-#include "asn1acnconstants.h"
+#include <utils/hostosinfo.h>
 
-using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Settings;
 
-StructuresViewWidget::StructuresViewWidget() :
-    OverviewWidget(new OverviewModel)
+static const char PATH[] = "Path";
+static const char BASE_URI[] = "BaseUri";
+static const char STAY_ALIVE_PERIOD[] = "StayAlivePeriod";
+
+Service::~Service()
 {
-    ModelTree *instance = ModelTree::instance();
-    auto modelRoot = instance->getModelTreeRoot();
-
-    m_model->setRootNode(modelRoot);
-
-    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            m_model, &OverviewModel::invalidated);
-
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            m_model, &OverviewModel::validated);
-
-    connect(m_model, &QAbstractItemModel::modelReset,
-            this, &StructuresViewWidget::modelUpdated);
 }
 
-StructuresViewWidget::~StructuresViewWidget()
+QString Service::name() const
 {
-    delete m_model;
+    return QLatin1String("Service");
 }
 
-StructuresViewFactory::StructuresViewFactory()
+void Service::saveOptionsTo(QSettings *s)
 {
-    setDisplayName(tr("Structures View"));
-    setPriority(500);
-    setId(Constants::STRUCTURES_VIEW_ID);
+    s->setValue(PATH, path);
+    s->setValue(BASE_URI, baseUri);
+    s->setValue(STAY_ALIVE_PERIOD, stayAlivePeriod);
 }
 
-Core::NavigationView StructuresViewFactory::createWidget()
+void Service::loadOptionsFrom(QSettings *s)
 {
-    return Core::NavigationView(new StructuresViewWidget);
+    path = s->value(PATH, "/opt/asn1sccDaemon/asn1scc/Daemon/bin/Debug/Daemon.exe").toString(); // TODO good default, TODO windows support
+    baseUri = s->value(BASE_URI,
+                       Utils::HostOsInfo::isWindowsHost()
+                       ? "http://+:80/Temporary_Listen_Addresses/asn1scc.IDE/"
+                       : "http://localhost:9749/").toString();
+    stayAlivePeriod = s->value(STAY_ALIVE_PERIOD, 1000).toInt();
 }

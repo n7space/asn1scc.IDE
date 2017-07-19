@@ -36,6 +36,7 @@
 #include <QTimer>
 
 #include "documentsourceinfo.h"
+#include "settings/service.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -45,7 +46,7 @@ class Asn1SccServiceProvider : public QObject
     Q_OBJECT
 
 public:
-    Asn1SccServiceProvider();
+    Asn1SccServiceProvider(Settings::ServiceConstPtr settings);
     ~Asn1SccServiceProvider();
 
     QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const;
@@ -56,10 +57,11 @@ public:
 private slots:
     void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void stayAliveTimeout();
+    void settingsChanged();
 
 private:
+    void updateConfigFromSettings();
     QStringList additionalArguments() const;
-    void loadServiceParams();
 
     QJsonDocument buildAstRequestData(const QHash<QString, DocumentSourceInfo> &documents) const;
 
@@ -67,9 +69,7 @@ private:
     QTimer m_stayAliveTimer;
     bool m_terminating;
 
-    QString m_serviceBaseUrl;
-    QString m_serviceBinaryPath;
-    int m_serviceStayAlivePeriod;
+    Settings::ServiceConstPtr m_settings;
 };
 
 } /* namespace Asn1Acn */

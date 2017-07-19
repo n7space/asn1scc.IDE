@@ -23,44 +23,37 @@
 **
 ****************************************************************************/
 
-#include "structuresview.h"
+#pragma once
 
-#include "modeltree.h"
-#include "asn1acnconstants.h"
+#include <memory>
 
-using namespace Asn1Acn::Internal;
+#include <QString>
 
-StructuresViewWidget::StructuresViewWidget() :
-    OverviewWidget(new OverviewModel)
+#include "settings.h"
+
+namespace Asn1Acn {
+namespace Internal {
+namespace Settings {
+
+class General : public Settings
 {
-    ModelTree *instance = ModelTree::instance();
-    auto modelRoot = instance->getModelTreeRoot();
+    Q_OBJECT
+public:
+    General() = default;
+    virtual ~General();
 
-    m_model->setRootNode(modelRoot);
+    QString name() const override;
 
-    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            m_model, &OverviewModel::invalidated);
+    QString asn1sccPath;
 
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            m_model, &OverviewModel::validated);
+protected:
+    void saveOptionsTo(QSettings *s) override;
+    void loadOptionsFrom(QSettings *s) override;
+};
 
-    connect(m_model, &QAbstractItemModel::modelReset,
-            this, &StructuresViewWidget::modelUpdated);
-}
+using GeneralPtr = std::shared_ptr<General>;
+using GeneralConstPtr = std::shared_ptr<const General>;
 
-StructuresViewWidget::~StructuresViewWidget()
-{
-    delete m_model;
-}
-
-StructuresViewFactory::StructuresViewFactory()
-{
-    setDisplayName(tr("Structures View"));
-    setPriority(500);
-    setId(Constants::STRUCTURES_VIEW_ID);
-}
-
-Core::NavigationView StructuresViewFactory::createWidget()
-{
-    return Core::NavigationView(new StructuresViewWidget);
-}
+} // namespace Settings
+} // namespace Internal
+} // namespace Asn1Acn

@@ -22,45 +22,23 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "generalwidget.h"
 
-#include "structuresview.h"
+using namespace Asn1Acn::Internal::OptionsPages;
 
-#include "modeltree.h"
-#include "asn1acnconstants.h"
-
-using namespace Asn1Acn::Internal;
-
-StructuresViewWidget::StructuresViewWidget() :
-    OverviewWidget(new OverviewModel)
+GeneralWidget::GeneralWidget(QWidget *parent) : QWidget(parent)
 {
-    ModelTree *instance = ModelTree::instance();
-    auto modelRoot = instance->getModelTreeRoot();
+    m_ui.setupUi(this);
 
-    m_model->setRootNode(modelRoot);
-
-    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            m_model, &OverviewModel::invalidated);
-
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            m_model, &OverviewModel::validated);
-
-    connect(m_model, &QAbstractItemModel::modelReset,
-            this, &StructuresViewWidget::modelUpdated);
+    m_ui.asn1sccPathChooser->setExpectedKind(Utils::PathChooser::ExistingCommand);
 }
 
-StructuresViewWidget::~StructuresViewWidget()
+QString GeneralWidget::asn1sccPath() const
 {
-    delete m_model;
+    return m_ui.asn1sccPathChooser->path();
 }
 
-StructuresViewFactory::StructuresViewFactory()
+void GeneralWidget::setAsn1SccPath(const QString &path)
 {
-    setDisplayName(tr("Structures View"));
-    setPriority(500);
-    setId(Constants::STRUCTURES_VIEW_ID);
-}
-
-Core::NavigationView StructuresViewFactory::createWidget()
-{
-    return Core::NavigationView(new StructuresViewWidget);
+    m_ui.asn1sccPathChooser->setPath(path);
 }

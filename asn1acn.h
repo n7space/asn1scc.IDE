@@ -45,9 +45,6 @@ public:
     void extensionsInitialized() override;
     ShutdownFlag aboutToShutdown() override;
 
-private:
-    void setDefaultSettings();
-
 #ifdef WITH_TESTS
 private:
     QList<QObject *> createTestObjects() const override;

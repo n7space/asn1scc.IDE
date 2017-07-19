@@ -33,6 +33,7 @@
 #include "acndocument.h"
 #include "indenter.h"
 #include "autocompleter.h"
+#include "tr.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -47,7 +48,7 @@ AcnEditor::AcnEditor()
 AcnEditorFactory::AcnEditorFactory()
 {
     setId(Constants::ACNEDITOR_ID);
-    setDisplayName(QCoreApplication::translate("OpenWith::Editors", Constants::ACNEDITOR_DISPLAY_NAME));
+    setDisplayName(Tr::tr("ACN Editor"));
     addMimeType(Constants::ACN_MIMETYPE);
 
     setDocumentCreator([]() { return new AcnDocument; });

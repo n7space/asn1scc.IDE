@@ -23,44 +23,31 @@
 **
 ****************************************************************************/
 
-#include "structuresview.h"
+#include "settings.h"
 
-#include "modeltree.h"
-#include "asn1acnconstants.h"
+#include "../asn1acnconstants.h"
 
-using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Settings;
 
-StructuresViewWidget::StructuresViewWidget() :
-    OverviewWidget(new OverviewModel)
+Settings::~Settings()
 {
-    ModelTree *instance = ModelTree::instance();
-    auto modelRoot = instance->getModelTreeRoot();
-
-    m_model->setRootNode(modelRoot);
-
-    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            m_model, &OverviewModel::invalidated);
-
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            m_model, &OverviewModel::validated);
-
-    connect(m_model, &QAbstractItemModel::modelReset,
-            this, &StructuresViewWidget::modelUpdated);
 }
 
-StructuresViewWidget::~StructuresViewWidget()
+void Settings::saveTo(QSettings *s)
 {
-    delete m_model;
+    s->beginGroup(Constants::SETTINGS_GROUP);
+    s->beginGroup(name());
+    saveOptionsTo(s);
+    s->endGroup();
+    s->endGroup();
+    s->sync();
 }
 
-StructuresViewFactory::StructuresViewFactory()
+void Settings::loadFrom(QSettings *s)
 {
-    setDisplayName(tr("Structures View"));
-    setPriority(500);
-    setId(Constants::STRUCTURES_VIEW_ID);
-}
-
-Core::NavigationView StructuresViewFactory::createWidget()
-{
-    return Core::NavigationView(new StructuresViewWidget);
+    s->beginGroup(Constants::SETTINGS_GROUP);
+    s->beginGroup(name());
+    loadOptionsFrom(s);
+    s->endGroup();
+    s->endGroup();
 }

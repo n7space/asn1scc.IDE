@@ -23,44 +23,27 @@
 **
 ****************************************************************************/
 
-#include "structuresview.h"
+#include "general.h"
 
-#include "modeltree.h"
-#include "asn1acnconstants.h"
+using namespace Asn1Acn::Internal::Settings;
 
-using namespace Asn1Acn::Internal;
+static char ASN1SCC_PATH[] = "Asn1SccPath";
 
-StructuresViewWidget::StructuresViewWidget() :
-    OverviewWidget(new OverviewModel)
+General::~General()
 {
-    ModelTree *instance = ModelTree::instance();
-    auto modelRoot = instance->getModelTreeRoot();
-
-    m_model->setRootNode(modelRoot);
-
-    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            m_model, &OverviewModel::invalidated);
-
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            m_model, &OverviewModel::validated);
-
-    connect(m_model, &QAbstractItemModel::modelReset,
-            this, &StructuresViewWidget::modelUpdated);
 }
 
-StructuresViewWidget::~StructuresViewWidget()
+QString General::name() const
 {
-    delete m_model;
+    return QLatin1String("General");
 }
 
-StructuresViewFactory::StructuresViewFactory()
+void General::saveOptionsTo(QSettings *s)
 {
-    setDisplayName(tr("Structures View"));
-    setPriority(500);
-    setId(Constants::STRUCTURES_VIEW_ID);
+    s->setValue(ASN1SCC_PATH, asn1sccPath);
 }
 
-Core::NavigationView StructuresViewFactory::createWidget()
+void General::loadOptionsFrom(QSettings *s)
 {
-    return Core::NavigationView(new StructuresViewWidget);
+    asn1sccPath = s->value(ASN1SCC_PATH, QLatin1Literal("asn1.exe")).toString(); // TODO default value?
 }

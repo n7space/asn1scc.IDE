@@ -47,6 +47,8 @@ include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
 
 ### Plugin ###
 
+CONFIG += object_parallel_to_source
+
 DEFINES += ASN1ACN_LIBRARY
 
 # asn1acn plugin files
@@ -78,7 +80,14 @@ SOURCES += \
     parseddocumentbuilder.cpp \
     documentsourceinfo.cpp \
     projectcontenthandler.cpp \
-    indenter.cpp
+    indenter.cpp \
+    settings/settings.cpp \
+    settings/general.cpp \
+    settings/service.cpp \
+    options-pages/general.cpp \
+    options-pages/service.cpp \
+    options-pages/servicewidget.cpp \
+    options-pages/generalwidget.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -113,7 +122,22 @@ HEADERS += \
     parseddocumentbuilder.h \
     documentsourceinfo.h \
     projectcontenthandler.h \
-    indenter.h
+    indenter.h \
+    tr.h \
+    settings/settings.h\
+    settings/general.h \
+    settings/service.h \
+    options-pages/general.h \
+    options-pages/service.h \
+    options-pages/servicewidget.h \
+    options-pages/generalwidget.h
+
+FORMS += \
+    options-pages/general.ui \
+    options-pages/service.ui
+
+RESOURCES += \
+    asn1acn.qrc
 
 DISTFILES += \
     LICENSE \
