@@ -35,6 +35,8 @@
 #include <QProcess>
 #include <QTimer>
 
+#include "documentsourceinfo.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -46,7 +48,7 @@ public:
     Asn1SccServiceProvider();
     ~Asn1SccServiceProvider();
 
-    QNetworkReply *requestAst(const QString &documentData, const QFileInfo &fileInfo) const;
+    QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const;
 
     void start();
     void finalize();
@@ -59,7 +61,7 @@ private:
     QStringList additionalArguments() const;
     void loadServiceParams();
 
-    QJsonDocument buildAstRequestData(const QString &inputData, const QFileInfo &fileInfo) const;
+    QJsonDocument buildAstRequestData(const QHash<QString, DocumentSourceInfo> &documents) const;
 
     QProcess *m_asn1sccService;
     QTimer m_stayAliveTimer;

@@ -25,11 +25,15 @@
 
 #pragma once
 
+#include <QHash>
 #include <QString>
+#include <QFileInfo>
+#include <QList>
 #include <QTextDocument>
 
 #include <memory>
 
+#include "documentsourceinfo.h"
 #include "parseddocumentbuilder.h"
 
 namespace Asn1Acn {
@@ -39,24 +43,24 @@ class DocumentProcessor : public QObject
 {
     Q_OBJECT
 public:
-    DocumentProcessor(const QTextDocument *doc, const QString &filePath, int revision);
+    DocumentProcessor(const QString &projectName);
     ~DocumentProcessor();
 
+    void addToRun(const QString &docContent, const QString &filePath, int revision);
     void run();
+    std::vector<std::unique_ptr<ParsedDocument>> takeResults();
 
 signals:
-    void processingFinished() const;
+    void processingFinished(const QString &projectName) const;
 
 private slots:
     void onBuilderFinished();
 
 private:
-    const QTextDocument *m_textDocument;
-    const QString m_filePath;
-    const int m_revision;
+    QHash<QString, DocumentSourceInfo> m_documents;
+    QString m_projectName;
 
     ParsedDocumentBuilder *m_docBuilder;
-
 };
 
 } // namespace Internal

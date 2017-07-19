@@ -64,12 +64,12 @@ Asn1SccServiceProvider::~Asn1SccServiceProvider()
         finalize();
 }
 
-QNetworkReply *Asn1SccServiceProvider::requestAst(const QString &documentData, const QFileInfo &fileInfo) const
+QNetworkReply *Asn1SccServiceProvider::requestAst(const QHash<QString, DocumentSourceInfo> &documents) const
 {
     QNetworkRequest astRequest(QUrl(m_serviceBaseUrl + "ast"));
     astRequest.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
 
-    QByteArray jsonRequestData = buildAstRequestData(documentData, fileInfo).toJson();
+    QByteArray jsonRequestData = buildAstRequestData(documents).toJson();
 
     return networkManagerInstance->post(astRequest, jsonRequestData);
 }
@@ -105,15 +105,23 @@ QStringList Asn1SccServiceProvider::additionalArguments() const
     return arguments;
 }
 
-QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QString &inputData, const QFileInfo &fileInfo) const
+QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QHash<QString, DocumentSourceInfo> &documents) const
 {
-    QJsonObject asnFileData;
+    QJsonArray documentArray;
 
-    asnFileData["Name"] = fileInfo.fileName().toStdString().c_str();
-    asnFileData["Contents"] = inputData.toStdString().c_str();
+    QHashIterator<QString, DocumentSourceInfo> iter(documents);
+    while (iter.hasNext()) {
+        iter.next();
+
+        QJsonObject asnFileData;
+        asnFileData["Name"] = iter.value().getName();
+        asnFileData["Contents"] = iter.value().getContent();
+
+        documentArray.append(asnFileData);
+    }
 
     QJsonObject files;
-    files["AsnFiles"] = QJsonArray { asnFileData };
+    files["AsnFiles"] = documentArray;
     files["AcnFiles"] = QJsonArray();
 
     return QJsonDocument(files);
@@ -137,8 +145,9 @@ void Asn1SccServiceProvider::loadServiceParams()
 void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     Q_UNUSED(exitCode);
+    Q_UNUSED(exitStatus);
 
-    if (!m_terminating && exitStatus != QProcess::NormalExit) {
+    if (!m_terminating) {
         m_asn1sccService->start();
         m_asn1sccService->waitForStarted();
     }

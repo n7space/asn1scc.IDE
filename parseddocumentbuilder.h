@@ -27,6 +27,7 @@
 
 #include <memory>
 
+#include <QHash>
 #include <QString>
 #include <QFileInfo>
 #include <QByteArray>
@@ -45,13 +46,14 @@ class ParsedDocumentBuilder : public QObject
     Q_OBJECT
 
 public:
-    ParsedDocumentBuilder(const QString &documentData, const QFileInfo &fileInfo, int revision);
-    std::unique_ptr<ParsedDocument> takeDocument();
+    ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents);
+    std::vector<std::unique_ptr<ParsedDocument>> takeDocuments();
     const QStringList& errorMessages() const { return m_errorMessages; }
 
 signals:
     void finished();
     void errored();
+    void failed();
 
 private slots:
     void requestFinished();
@@ -64,10 +66,9 @@ private:
     bool responseContainsAst(const QJsonObject &json);
     QString getAstXml(const QJsonObject &json);
 
-    QFileInfo m_fileInfo;
-    int m_revision;
+    const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
+    std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
-    std::unique_ptr<ParsedDocument> m_parsedDocument;
     QStringList m_errorMessages;
 };
 

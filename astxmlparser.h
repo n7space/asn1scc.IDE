@@ -29,6 +29,8 @@
 
 #include <QXmlStreamReader>
 
+#include <QString>
+
 #include "data/modules.h"
 
 namespace Asn1Acn {
@@ -41,7 +43,7 @@ public:
 
     bool parse();
 
-    std::unique_ptr<Data::Modules> takeData() { return std::move(m_data); }
+    std::map<QString, std::unique_ptr<Data::Modules>> takeData() { return std::move(m_data); }
 
 private:
     void readASN1AST();
@@ -65,7 +67,7 @@ private:
     bool nextRequiredElementIs(const QString& name);
 
     QXmlStreamReader& m_xmlReader;
-    std::unique_ptr<Data::Modules> m_data;
+    std::map<QString, std::unique_ptr<Data::Modules>> m_data;
     QString m_currentFile;
     Data::Definitions* m_currentDefinitions;
 };

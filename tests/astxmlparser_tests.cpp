@@ -66,10 +66,10 @@ void AstXmlParserTests::test_emptyDefinitions()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData->definitions().size(), std::size_t{1});
-    QCOMPARE(m_parsedData->definitions().begin()->first, QStringLiteral("TestDefinitions"));
-    QCOMPARE(m_parsedData->definitions().begin()->second->name(), QStringLiteral("TestDefinitions"));
-    QCOMPARE(m_parsedData->definitions().begin()->second->location().path(), QStringLiteral("TestFile.asn"));
+    QCOMPARE(m_parsedData["TestFile.asn"]->definitions().size(), std::size_t{1});
+    QCOMPARE(m_parsedData["TestFile.asn"]->definitions().begin()->first, QStringLiteral("TestDefinitions"));
+    QCOMPARE(m_parsedData["TestFile.asn"]->definitions().begin()->second->name(), QStringLiteral("TestDefinitions"));
+    QCOMPARE(m_parsedData["TestFile.asn"]->definitions().begin()->second->location().path(), QStringLiteral("TestFile.asn"));
 }
 
 void AstXmlParserTests::test_singleTypeAssignment()
@@ -85,11 +85,11 @@ void AstXmlParserTests::test_singleTypeAssignment()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData->definitions().at("TestDefinitions")->types().size(), std::size_t{1});
-    QCOMPARE(m_parsedData->definitions().at("TestDefinitions")->types().at("MyInt").name(), QStringLiteral("MyInt"));
-    QCOMPARE(m_parsedData->definitions().at("TestDefinitions")->types().at("MyInt").location().path(), QStringLiteral("Test2File.asn"));
-    QCOMPARE(m_parsedData->definitions().at("TestDefinitions")->types().at("MyInt").location().line(), 4);
-    QCOMPARE(m_parsedData->definitions().at("TestDefinitions")->types().at("MyInt").location().column(), 10);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().size(), std::size_t{1});
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").name(), QStringLiteral("MyInt"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").location().path(), QStringLiteral("Test2File.asn"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").location().line(), 4);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").location().column(), 10);
 }
 
 void AstXmlParserTests::parsingFails(const QString& xmlData)

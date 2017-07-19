@@ -32,8 +32,10 @@
 #include <QAction>
 #include <QList>
 
-
 #include <coreplugin/find/itemviewfind.h>
+#include <coreplugin/editormanager/editormanager.h>
+
+#include "data/sourcelocation.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -72,6 +74,10 @@ OverviewWidget::OverviewWidget(OverviewModel *model) :
     setLayout(layout);
 
     m_treeView->setModel(m_model);
+    m_treeView->setExpandsOnDoubleClick(false);
+
+    connect(m_treeView, &QAbstractItemView::activated,
+            this, &OverviewWidget::onItemActivated);
 }
 
 QList<QAction *> OverviewWidget::filterMenuActions() const
@@ -87,4 +93,17 @@ void OverviewWidget::setCursorSynchronization(bool syncWithCursor)
 void OverviewWidget::modelUpdated()
 {
     m_treeView->expandAll();
+}
+
+void OverviewWidget::onItemActivated(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+
+    ModelTreeNode *node = static_cast<ModelTreeNode *>(index.internalPointer());
+
+    const auto location = node->getSourceLocation();
+    Core::EditorManager::openEditorAt(location.path(),
+                                      location.line(),
+                                      location.column());
 }

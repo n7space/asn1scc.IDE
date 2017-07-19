@@ -28,7 +28,6 @@ using namespace Asn1Acn::Internal;
 
 AstXmlParser::AstXmlParser(QXmlStreamReader& xmlReader_)
     : m_xmlReader(xmlReader_),
-      m_data(new Data::Modules),
       m_currentDefinitions(nullptr)
 {
 }
@@ -56,6 +55,8 @@ void AstXmlParser::readAsn1File()
 void AstXmlParser::updateCurrentFile()
 {
     m_currentFile = m_xmlReader.attributes().value(QStringLiteral("FileName")).toString();
+
+    m_data.insert(std::make_pair(m_currentFile, std::make_unique<Data::Modules>()));
 }
 
 void AstXmlParser::readAsn1ModuleChildren()
@@ -82,7 +83,7 @@ void AstXmlParser::createNewAsn1Module()
     const auto location = Data::SourceLocation(m_currentFile, 0, 0); // TODO location of DEFINITIONS begin (fix in asn1scc required)
     auto module = std::unique_ptr<Data::Definitions>(new Data::Definitions(readAsnModuleId(), location));
     m_currentDefinitions = module.get();
-    m_data->add(std::move(module));
+    m_data[m_currentFile]->add(std::move(module));
 }
 
 void AstXmlParser::readAsn1Module()

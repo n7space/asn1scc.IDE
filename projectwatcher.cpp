@@ -25,20 +25,17 @@
 
 #include "projectwatcher.h"
 
-#include <QTextDocument>
-#include <QByteArray>
-#include <QString>
 #include <QSet>
+#include <QString>
 
 #include <projectexplorer/session.h>
 #include <projectexplorer/projectnodes.h>
-
-#include <utils/qtcassert.h>
 #include <utils/mimetypes/mimedatabase.h>
 
-#include "documentprocessor.h"
-#include "modeltreenode.h"
+#include <utils/qtcassert.h>
+
 #include "asn1acnconstants.h"
+#include "projectcontenthandler.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -49,17 +46,12 @@ ProjectWatcher::ProjectWatcher()
             this, &ProjectWatcher::onProjectRemoved);
     connect(sessionManager, &ProjectExplorer::SessionManager::projectAdded,
             this, &ProjectWatcher::onProjectAdded);
-
-    m_storage = ParsedDataStorage::instance();
-    m_tree = ModelTree::instance();
 }
 
 void ProjectWatcher::onProjectAdded(ProjectExplorer::Project *project)
 {
-    QString projectName = project->displayName();
-
-    auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(projectName));
-    m_tree->addProjectNode(node);
+    ProjectContentHandler *proc = new ProjectContentHandler;
+    proc->handleProjectAdded(project->displayName());
 
     connect(project, &ProjectExplorer::Project::fileListChanged,
             this, &ProjectWatcher::onProjectFileListChanged);
@@ -67,7 +59,8 @@ void ProjectWatcher::onProjectAdded(ProjectExplorer::Project *project)
 
 void ProjectWatcher::onProjectRemoved(ProjectExplorer::Project *project)
 {
-    m_tree->removeProjectNode(project->displayName());
+    ProjectContentHandler *proc = new ProjectContentHandler;
+    proc->handleProjectRemoved(project->displayName());
 
     disconnect(project, &ProjectExplorer::Project::fileListChanged,
                this, &ProjectWatcher::onProjectFileListChanged);
@@ -76,85 +69,16 @@ void ProjectWatcher::onProjectRemoved(ProjectExplorer::Project *project)
 void ProjectWatcher::onProjectFileListChanged()
 {
     ProjectExplorer::Project *project = qobject_cast<ProjectExplorer::Project *>(sender());
-    QTC_ASSERT(project != nullptr, return);
+    QTC_ASSERT(project != nullptr, return );
 
-    QString projectName = project->displayName();
-    int storedFilesCnt = m_tree->getProjectFilesCnt(projectName);
-
-    const QSet<QString> m_watchedMimeTypes { Constants::ASN1_MIMETYPE, Constants::ACN_MIMETYPE };
+    const QSet<QString> watchedMimeTypes { Constants::ASN1_MIMETYPE, Constants::ACN_MIMETYPE };
     const QStringList validFiles = project->files(ProjectExplorer::Project::AllFiles,
-                                                  [&m_watchedMimeTypes](const ProjectExplorer::Node *n) {
+                                                  [&watchedMimeTypes](const ProjectExplorer::Node *n) {
         if (const auto *fn = n->asFileNode())
-            return m_watchedMimeTypes.contains(Utils::mimeTypeForFile(fn->filePath().toString()).name());
+            return watchedMimeTypes.contains(Utils::mimeTypeForFile(fn->filePath().toString()).name());
         return false;
     });
 
-    int currentFilesCnt = validFiles.count();
-
-    if (currentFilesCnt > storedFilesCnt)
-        handleFilesAdded(projectName, validFiles);
-    else if (currentFilesCnt < storedFilesCnt)
-        handleFilesRemoved(projectName, validFiles);
-}
-
-void ProjectWatcher::handleFilesAdded(const QString &projectName, const QStringList &filePaths)
-{
-    foreach(const QString &path, filePaths) {
-        if (m_tree->getNodeForFilepathFromProject(projectName, path) != nullptr)
-            continue;
-
-        auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(path));
-        m_tree->addNodeToProject(projectName, node);
-    }
-
-    tryProcessFiles(filePaths);
-}
-
-void ProjectWatcher::handleFilesRemoved(const QString &projectName, const QStringList &filePaths)
-{
-    m_tree->removeStaleNodesFromProject(projectName, filePaths);
-    tryRemoveFiles(filePaths);
-}
-
-void ProjectWatcher::tryProcessFiles(const QStringList &filePaths) const
-{
-    foreach (const QString &path, filePaths) {
-        if (m_storage->getFileForPath(path) != nullptr)
-            continue;
-
-        auto doc = textDocumentFromPath(path);
-        DocumentProcessor *dp = new DocumentProcessor(doc.get(), path, -1);
-
-        connect(dp, &DocumentProcessor::processingFinished,
-                [dp](){dp->deleteLater();});
-
-        dp->run();
-    }
-}
-
-void ProjectWatcher::tryRemoveFiles(const QStringList &filePaths) const
-{
-    Q_UNUSED(filePaths);
-
-    foreach(const QString &path, filePaths) {
-        if (m_tree->getAnyNodeForFilepath(path))
-            m_storage->removeFile(path);
-    }
-}
-
-std::unique_ptr<QTextDocument>
-ProjectWatcher::textDocumentFromPath(const QString &fileName) const
-{
-    QFile file(fileName);
-
-    auto textDocument = std::unique_ptr<QTextDocument>(new QTextDocument);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return nullptr;
-
-    QString docContent = QString::fromLatin1(file.readAll().data());
-    textDocument->setPlainText(docContent);
-
-    file.close();
-
-    return std::move(textDocument);
+    ProjectContentHandler *proc = new ProjectContentHandler;
+    proc->handleFileListChanged(project->displayName(), validFiles);
 }

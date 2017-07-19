@@ -27,70 +27,57 @@
 
 #include <memory>
 
+#include <QDebug>
+
+#include "data/definitions.h"
+
 using namespace Asn1Acn::Internal;
 
-ParsedDocument::ParsedDocument() :
-    m_filePath(QString()),
-    m_revision(-1),
-    m_parsedData(nullptr)
-{
-}
-
-ParsedDocument::ParsedDocument(const QString &filePath, int revision, const QStringList &wordList) :
-    m_filePath(filePath),
-    m_revision(revision),
-    m_wordList(wordList),
-    m_parsedData(nullptr)
-{
-}
-
-ParsedDocument::ParsedDocument(const QString &filePath,
-                               int revision,
-                               std::unique_ptr<Data::Modules> parsedData) :
-    m_filePath(filePath),
-    m_revision(revision),
+ParsedDocument::ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSourceInfo &source) :
+    m_source(source),
     m_parsedData(std::move(parsedData))
 {
 }
 
-int ParsedDocument::getRevision() const
+const DocumentSourceInfo &ParsedDocument::source() const
 {
-    return m_revision;
+    return m_source;
 }
 
-void ParsedDocument::bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr node)
+void ParsedDocument::bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const
 {
-    if (m_parsedData != nullptr)
-        bindModelTreeNodeWithParsedData(node);
-    else if (m_wordList.empty() == false)
-        bindModelTreeNodeWithStubbedData(node);
-}
-
-void ParsedDocument::bindModelTreeNodeWithStubbedData(ModelTreeNode::ModelTreeNodePtr node)
-{
-    foreach (const QString &entry, m_wordList)
-        node->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(entry)));
-}
-
-void ParsedDocument::bindModelTreeNodeWithParsedData(ModelTreeNode::ModelTreeNodePtr node)
-{
-    using DefinitionsMap = Data::Modules::DefinitionsMap;
-    using Types = Data::Definitions::Types;
-
-    DefinitionsMap::const_iterator defIt = m_parsedData->definitions().begin();
+    Data::Modules::DefinitionsMap::const_iterator defIt = m_parsedData->definitions().begin();
     while (defIt != m_parsedData->definitions().end()) {
-        QString definitionName = defIt->first;
-        auto definition = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(definitionName));
-
-        const Types &types = defIt->second->types();
-        Types::const_iterator typeIt = types.begin();
-        while (typeIt != types.end()) {
-            QString typeName = typeIt->first;
-            definition->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(typeName)));
-            typeIt++;
-        }
-
-        node->addChild(definition);
+        auto definitionNode = createDefinition(defIt->second);
+        moduleNode->addChild(definitionNode);
         defIt++;
+    }
+}
+
+ModelTreeNode::ModelTreeNodePtr
+ParsedDocument::createDefinition(const std::unique_ptr<Data::Definitions> &definition) const
+{
+    auto definitionNode =
+            ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(definition->name(),
+                                                              Data::SourceLocation(source().getPath(),
+                                                                                   definition->location().line(),
+                                                                                   definition->location().column())));
+    attachTypesToDefiniton(definition->types(), definitionNode);
+
+    return definitionNode;
+}
+
+void ParsedDocument::attachTypesToDefiniton(const Data::Definitions::Types types,
+                                            ModelTreeNode::ModelTreeNodePtr definitionNode) const
+{
+    Data::Definitions::Types::const_iterator typeIt = types.begin();
+    while (typeIt != types.end()) {
+        auto typeNode =
+                ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(typeIt->second.name(),
+                                                                  Data::SourceLocation(source().getPath(),
+                                                                                       typeIt->second.location().line(),
+                                                                                       typeIt->second.location().column())));
+        definitionNode->addChild(typeNode);
+        typeIt++;
     }
 }

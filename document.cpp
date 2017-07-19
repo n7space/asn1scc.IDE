@@ -25,10 +25,11 @@
 
 #include "document.h"
 
+#include <QTextDocument>
+
 #include <coreplugin/idocument.h>
 
-#include "asn1acnconstants.h"
-#include "documentprocessor.h"
+#include "projectcontenthandler.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -56,8 +57,6 @@ void Document::onFilePathChanged(const Utils::FileName &oldPath, const Utils::Fi
     if (newPath.isEmpty() || newPath == oldPath)
         return;
 
-    emit documentUpdated();
-
     connect(this, &Core::IDocument::contentsChanged,
             this, &Document::scheduleProcessDocument);
 }
@@ -66,12 +65,10 @@ void Document::processDocument()
 {
     QTextDocument *currentDocument = document();
 
-    DocumentProcessor *docProcessor = new DocumentProcessor(currentDocument,
-                                                            filePath().toString(),
-                                                            currentDocument->revision());
+    const QString path = filePath().toString();
+    const QString content = currentDocument->toPlainText();
+    const int revision = currentDocument->revision();
 
-    connect(docProcessor, &DocumentProcessor::processingFinished,
-            [this, docProcessor](){emit documentUpdated(); docProcessor->deleteLater();});
-
-    docProcessor->run();
+    ProjectContentHandler *proc = new ProjectContentHandler();
+    proc->handleFileContentChanged(path, content, revision);
 }

@@ -42,9 +42,6 @@ public:
     explicit Document();
     void scheduleProcessDocument();
 
-signals:
-    void documentUpdated();
-
 private:
     void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
     void processDocument();

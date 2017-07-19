@@ -76,6 +76,8 @@ SOURCES += \
     asn1acnjsextension.cpp \
     asn1sccserviceprovider.cpp \
     parseddocumentbuilder.cpp \
+    documentsourceinfo.cpp \
+    projectcontenthandler.cpp \
     indenter.cpp
 
 HEADERS += \
@@ -109,6 +111,8 @@ HEADERS += \
     asn1acnjsextension.h \
     asn1sccserviceprovider.h \
     parseddocumentbuilder.h \
+    documentsourceinfo.h \
+    projectcontenthandler.h \
     indenter.h
 
 DISTFILES += \

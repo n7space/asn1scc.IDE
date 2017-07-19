@@ -33,29 +33,24 @@ using namespace Asn1Acn::Internal;
 StructuresViewWidget::StructuresViewWidget() :
     OverviewWidget(new OverviewModel)
 {
-    connect(ModelTree::instance(), &ModelTree::treeUpdated,
-            this, &StructuresViewWidget::modelUpdated);
+    ModelTree *instance = ModelTree::instance();
+    auto modelRoot = instance->getModelTreeRoot();
 
-    modelUpdated();
+    m_model->setRootNode(modelRoot);
+
+    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
+            m_model, &OverviewModel::invalidated);
+
+    connect(ModelTree::instance(), &ModelTree::modelUpdated,
+            m_model, &OverviewModel::validated);
+
+    connect(m_model, &QAbstractItemModel::modelReset,
+            this, &StructuresViewWidget::modelUpdated);
 }
 
 StructuresViewWidget::~StructuresViewWidget()
 {
     delete m_model;
-}
-
-void StructuresViewWidget::refreshModel()
-{
-    ModelTree *instance = ModelTree::instance();
-    auto modelRoot = instance->getModelTreeRoot();
-
-    m_model->setRootNode(modelRoot);
-}
-
-void StructuresViewWidget::modelUpdated()
-{
-    refreshModel();
-    OverviewWidget::modelUpdated();
 }
 
 StructuresViewFactory::StructuresViewFactory()

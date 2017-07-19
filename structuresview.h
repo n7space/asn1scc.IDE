@@ -38,10 +38,6 @@ class StructuresViewWidget : public OverviewWidget
 public:
     StructuresViewWidget();
     ~StructuresViewWidget();
-
-private:
-    void modelUpdated();
-    void refreshModel();
 };
 
 class StructuresViewFactory : public Core::INavigationWidgetFactory

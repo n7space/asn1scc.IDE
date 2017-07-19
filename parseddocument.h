@@ -32,6 +32,7 @@
 #include "data/definitions.h"
 
 #include "modeltreenode.h"
+#include "documentsourceinfo.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -39,24 +40,19 @@ namespace Internal {
 class ParsedDocument
 {
 public:
-    ParsedDocument();
-    ParsedDocument(const QString &filePath, int revision, const QStringList &list);
-    ParsedDocument(const QString &filePath,
-                   int revision,
-                   std::unique_ptr<Data::Modules> parsedData);
 
-    int getRevision() const;
-    void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr node);
+    ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSourceInfo &source);
+
+    const DocumentSourceInfo &source() const;
+
+    void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const;
 
 private:
-    void bindModelTreeNodeWithStubbedData(ModelTreeNode::ModelTreeNodePtr node);
-    void bindModelTreeNodeWithParsedData(ModelTreeNode::ModelTreeNodePtr node);
+    ModelTreeNode::ModelTreeNodePtr createDefinition(const std::unique_ptr<Data::Definitions> &definition) const;
+    void attachTypesToDefiniton(const Data::Definitions::Types types,
+                                ModelTreeNode::ModelTreeNodePtr definitionNode) const;
 
-    QString m_filePath;
-    int m_revision;
-
-    // TODO: m_wordList is temporal, as single words are used as data stubs
-    QStringList m_wordList;
+    DocumentSourceInfo m_source;
     std::unique_ptr<Data::Modules> m_parsedData;
 };
 

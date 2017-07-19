@@ -34,6 +34,10 @@ namespace Data {
 class SourceLocation
 {
 public:
+    SourceLocation()
+        : m_line(-1), m_column(-1)
+    {}
+
     SourceLocation(QString path, int line, int column)
         : m_path(path), m_line(line), m_column(column)
     {}
