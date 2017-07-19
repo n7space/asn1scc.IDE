@@ -49,7 +49,9 @@ bool General::matches(const QString &searchKeyWord) const
 
 QWidget* General::widget()
 {
-    return new QWidget();//nullptr; // TODO
+    auto w = new QWidget();//nullptr; // TODO
+    m_ui.setupUi(w);
+    return w;
 }
 
 void General::apply()

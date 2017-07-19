@@ -129,6 +129,7 @@ HEADERS += \
     options-pages/service.h
 
 FORMS += \
+    options-pages/general.ui \
     options-pages/service.ui
 
 RESOURCES += \

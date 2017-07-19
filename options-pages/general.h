@@ -29,6 +29,8 @@
 
 #include "../settings/general.h"
 
+#include "ui_general.h"
+
 namespace Asn1Acn {
 namespace Internal {
 namespace OptionsPages {
@@ -45,6 +47,7 @@ public:
 
 private:
     Settings::GeneralPtr m_settings;
+    Ui::GeneralOptionsPage m_ui;
 };
 
 } // namespace OptionsPages
