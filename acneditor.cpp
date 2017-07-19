@@ -31,6 +31,8 @@
 
 #include "asn1acnconstants.h"
 #include "acndocument.h"
+#include "indenter.h"
+#include "autocompleter.h"
 #include "tr.h"
 
 using namespace Asn1Acn::Internal;
@@ -49,11 +51,16 @@ AcnEditorFactory::AcnEditorFactory()
     setDisplayName(Tr::tr("ACN Editor"));
     addMimeType(Constants::ACN_MIMETYPE);
 
-    setUseGenericHighlighter(true);
-
     setDocumentCreator([]() { return new AcnDocument; });
     setEditorWidgetCreator([]() { return new AcnEditorWidget; });
     setEditorCreator([]() { return new AcnEditor; });
+    setIndenterCreator([]() { return new Indenter; });
+    setAutoCompleterCreator([]() { return new AutoCompleter; });
+
+    setCodeFoldingSupported(true);
+    setMarksVisible(true);
+    setParenthesesMatchingEnabled(true);
+    setUseGenericHighlighter(true);
 
     setEditorActionHandlers(TextEditorActionHandler::Format
                             | TextEditorActionHandler::UnCommentSelection

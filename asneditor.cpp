@@ -34,7 +34,7 @@
 
 #include "asn1acnconstants.h"
 #include "asndocument.h"
-#include "asnautocompleter.h"
+#include "autocompleter.h"
 #include "asncompletionassist.h"
 #include "indenter.h"
 #include "tr.h"
@@ -60,7 +60,7 @@ AsnEditorFactory::AsnEditorFactory()
     setEditorCreator([]() { return new AsnEditor; });
 
     setCompletionAssistProvider(new AsnCompletionAssistProvider);
-    setAutoCompleterCreator([]() { return new AsnAutoCompleter; });
+    setAutoCompleterCreator([]() { return new AutoCompleter; });
     setIndenterCreator([]() { return new Indenter; });
 
     setCodeFoldingSupported(true);
