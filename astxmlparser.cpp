@@ -99,7 +99,6 @@ QString AstXmlParser::readAsnModuleId()
 
 void AstXmlParser::readVariablesAssignments()
 {
-    // TODO
     m_xmlReader.skipCurrentElement();
 }
 
@@ -136,19 +135,16 @@ int AstXmlParser::readCharPossitionInLineAttribute()
 
 void AstXmlParser::readImportedModules()
 {
-    // TODO
     m_xmlReader.skipCurrentElement();
 }
 
 void AstXmlParser::readExportedVariables()
 {
-    // TODO
     m_xmlReader.skipCurrentElement();
 }
 
 void AstXmlParser::readExportedTypes()
 {
-    // TODO
     m_xmlReader.skipCurrentElement();
 }
 
