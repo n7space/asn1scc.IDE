@@ -64,11 +64,23 @@ private:
     int readLineAttribute();
     int readCharPossitionInLineAttribute();
 
+    void readTypeAssignmentAttributes();
+    void readTypeAssignmentType();
+    void readTypeAssignmentReferencedType(int line, int positionInLine);
+    void readTypeAssignmentBuiltinType(int line, int positionInLine);
+    void setTypeAssignmentTypeReference(const QString &referenceTypeName,
+                                        const QString &moduleName,
+                                        int line,
+                                        int positionInLine,
+                                        Data::TypeReference::DataType type);
+
     bool nextRequiredElementIs(const QString& name);
 
     QXmlStreamReader& m_xmlReader;
     std::map<QString, std::unique_ptr<Data::Modules>> m_data;
     QString m_currentFile;
+    QString m_currentModule;
+    Data::TypeReference m_typeReference;
     Data::Definitions* m_currentDefinitions;
 };
 

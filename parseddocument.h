@@ -25,11 +25,13 @@
 
 #pragma once
 
+#include <QMultiHash>
 #include <QString>
 #include <QList>
 
 #include "data/modules.h"
 #include "data/definitions.h"
+#include "data/typereference.h"
 
 #include "modeltreenode.h"
 #include "documentsourceinfo.h"
@@ -47,13 +49,24 @@ public:
 
     void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const;
 
+    Data::TypeReference getTypeReference(const int line, const int col) const;
+    Data::SourceLocation getDefinitionLocation(const QString& typeAssignmentName, const QString& moduleName) const;
+
 private:
     ModelTreeNode::ModelTreeNodePtr createDefinition(const std::unique_ptr<Data::Definitions> &definition) const;
     void attachTypesToDefiniton(const Data::Definitions::Types types,
                                 ModelTreeNode::ModelTreeNodePtr definitionNode) const;
 
+    void populateReferences();
+    void populateReferencesFromModule(const std::unique_ptr<Data::Definitions> &moduleDefinition);
+
+    Data::SourceLocation getLocationFromModule(const std::unique_ptr<Data::Definitions> &definition,
+                                               const QString &typeAssignmentName) const;
+
     DocumentSourceInfo m_source;
     std::unique_ptr<Data::Modules> m_parsedData;
+
+    QMultiHash<int, Data::TypeReference> m_refernceLookup;
 };
 
 } // namespace Internal

@@ -26,13 +26,13 @@
 #include "asneditor.h"
 
 #include <QApplication>
-#include <QTextDocumentFragment>
 
 #include <coreplugin/editormanager/documentmodel.h>
 
 #include <texteditor/texteditoractionhandler.h>
 
 #include "asn1acnconstants.h"
+#include "linkcreator.h"
 #include "asndocument.h"
 #include "autocompleter.h"
 #include "asncompletionassist.h"
@@ -82,31 +82,9 @@ AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
 {
     Q_UNUSED(inNextSplit);
 
-    TextDocument *document = textDocument();
-    if (document->characterAt(cursor.position()).isSpace())
-        return Link();
-
-    QTextCursor tc = cursor;
-    tc.select(QTextCursor::WordUnderCursor);
-    if (!tc.hasSelection())
-        return Link();
-
-    Link link(document->filePath().toString());
-    if (resolveTarget) {
-        QTextDocumentFragment selectedText(tc);
-        if (selectedText.isEmpty())
-            return Link();
-
-        QString docText = document->plainText();
-        int targetPos = docText.indexOf(selectedText.toPlainText());
-        if (targetPos == -1)
-            return Link();
-
-        convertPosition(targetPos, &link.targetLine, &link.targetColumn);
-    } else {
-        link.linkTextStart = tc.selectionStart();
-        link.linkTextEnd = tc.selectionEnd();
-    }
-
-    return link;
+    LinkCreator linkCreator(*textDocument());
+    if (resolveTarget)
+        return linkCreator.createTargetLink(cursor);
+    else
+        return linkCreator.createHighlightLink(cursor);
 }

@@ -81,7 +81,8 @@ void AstXmlParser::readAsn1ModuleChildren()
 void AstXmlParser::createNewAsn1Module()
 {
     const auto location = Data::SourceLocation(m_currentFile, 0, 0); // TODO location of DEFINITIONS begin (fix in asn1scc required)
-    auto module = std::unique_ptr<Data::Definitions>(new Data::Definitions(readAsnModuleId(), location));
+    m_currentModule = readAsnModuleId();
+    auto module = std::unique_ptr<Data::Definitions>(new Data::Definitions(m_currentModule, location));
     m_currentDefinitions = module.get();
     m_data[m_currentFile]->add(std::move(module));
 }
@@ -112,10 +113,74 @@ void AstXmlParser::readTypeAssignment()
 {
     Q_ASSERT(m_currentDefinitions != nullptr);
     const auto location = Data::SourceLocation(m_currentFile, readLineAttribute(), readCharPossitionInLineAttribute());
-    const auto type = Data::TypeAssignment(readNameAttribute(), location);
+    const auto name = readNameAttribute();
+
+    readTypeAssignmentAttributes();
+    const auto type = Data::TypeAssignment(name, location, m_typeReference);
+    m_typeReference = Data::TypeReference();
+
     m_currentDefinitions->add(type);
+}
+
+void AstXmlParser::readTypeAssignmentAttributes()
+{
+    while (m_xmlReader.readNextStartElement()) {
+        if (m_xmlReader.name() == QStringLiteral("Type")) {
+            readTypeAssignmentType();
+            m_xmlReader.skipCurrentElement();
+        } else {
+            m_xmlReader.skipCurrentElement();
+        }
+    }
+}
+
+void AstXmlParser::readTypeAssignmentType()
+{
+    const int line = readLineAttribute();
+    const int positionInLine = readCharPossitionInLineAttribute();
+
+    m_xmlReader.readNextStartElement();
+
+    QString attributeName = m_xmlReader.name().toString();
+    if (attributeName == QStringLiteral("ReferenceType"))
+        readTypeAssignmentReferencedType(line, positionInLine);
+    else
+        readTypeAssignmentBuiltinType(line, positionInLine);
 
     m_xmlReader.skipCurrentElement();
+}
+
+void AstXmlParser::readTypeAssignmentReferencedType(int line, int positionInLine)
+{
+    QString referenceTypeName = m_xmlReader.attributes().value(QStringLiteral("ReferencedTypeName")).toString();
+    QString moduleName = m_xmlReader.attributes().value(QStringLiteral("ReferencedModName")).toString();
+    if (moduleName.isEmpty())
+        moduleName = m_currentModule;
+
+    Data::TypeReference::DataType type = Data::TypeReference::DataType::USERDEFINED;
+
+    setTypeAssignmentTypeReference(referenceTypeName, moduleName, line, positionInLine, type);
+}
+
+void AstXmlParser::readTypeAssignmentBuiltinType(int line, int positionInLine)
+{
+    QString referenceTypeName = m_xmlReader.name().toString();
+    QString moduleName = m_currentModule;
+    Data::TypeReference::DataType type = Data::TypeReference::DataType::BUILTIN;
+
+    setTypeAssignmentTypeReference(referenceTypeName, moduleName, line, positionInLine, type);
+}
+
+void AstXmlParser::setTypeAssignmentTypeReference(const QString &referenceTypeName,
+                                                  const QString &moduleName,
+                                                  int line,
+                                                  int positionInLine,
+                                                  Data::TypeReference::DataType type)
+{
+    m_typeReference = Data::TypeReference(referenceTypeName,
+                                          Data::SourceLocation(m_currentFile, line, positionInLine),
+                                          type,
+                                          moduleName);
 }
 
 QString AstXmlParser::readNameAttribute()

@@ -45,6 +45,10 @@ private slots:
     void test_missingAsn1Module();
     void test_emptyDefinitions();
     void test_singleTypeAssignment();
+    void test_builtinTypeReference();
+    void test_userDefinedTypeReference();
+    void test_userDefinedTypeReferenceInOtherModule();
+
 
 private:
     void setXmlData(const QString& str);

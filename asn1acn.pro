@@ -87,7 +87,8 @@ SOURCES += \
     options-pages/general.cpp \
     options-pages/service.cpp \
     options-pages/servicewidget.cpp \
-    options-pages/generalwidget.cpp
+    options-pages/generalwidget.cpp \
+    linkcreator.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -130,7 +131,9 @@ HEADERS += \
     options-pages/general.h \
     options-pages/service.h \
     options-pages/servicewidget.h \
-    options-pages/generalwidget.h
+    options-pages/generalwidget.h \
+    linkcreator.h \
+    data/typereference.h
 
 FORMS += \
     options-pages/general.ui \
