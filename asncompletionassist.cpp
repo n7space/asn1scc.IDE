@@ -24,6 +24,8 @@
 ****************************************************************************/
 #include "asncompletionassist.h"
 
+#include <memory>
+
 #include <coreplugin/id.h>
 
 #include <texteditor/codeassist/assistproposalitem.h>
@@ -31,51 +33,65 @@
 #include <texteditor/codeassist/genericproposalmodel.h>
 
 #include "asn1acnconstants.h"
+#include "parseddatastorage.h"
+#include "parseddocument.h"
+
+#include "asnproposalsitemsprovider.h"
 
 using namespace Asn1Acn::Internal;
 
+static const int ASN_COMPLETER_ACTIVATION_LENGHT = 3;
+
 AsnCompletionAssistProcessor::AsnCompletionAssistProcessor()
-  : m_memberIcon(QLatin1String(":/codemodel/images/member.png")), // TODO in C++ mode somehow icons are colored
-    m_snippetCollector(QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID), QIcon(":/texteditor/images/snippet.png"))
+    : m_snippetCollector(QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID), QIcon(":/texteditor/images/snippet.png"))
 {
 }
 
-/*
- * m_variableIcon(QLatin1String(":/codemodel/images/keyword.png"))
- */
-
 TextEditor::IAssistProposal *AsnCompletionAssistProcessor::perform(const TextEditor::AssistInterface *interface)
 {
-    // TODO Keyword*Processor stores interface in ScopedPointer, why?
-
-    if (interface->reason() == TextEditor::IdleEditor)
+    if (interface->reason() != TextEditor::ExplicitlyInvoked && !shouldAccept(interface))
         return nullptr;
 
-    // TODO ugly placeholder code for future refactor
     QList<TextEditor::AssistProposalItemInterface *> proposals;
 
-    // TODO those should be somehow loaded from some global model
-    auto proposalItem = new TextEditor::AssistProposalItem;
-    proposalItem->setText("My-TestStructure");
-    proposalItem->setDetail("detail"); // optional
-    proposalItem->setIcon(m_memberIcon);
-    proposalItem->setOrder(0); // ?
-    proposals << proposalItem;
-    proposalItem = new TextEditor::AssistProposalItem;
-    proposalItem->setText("MyTestStructure");
-    proposalItem->setIcon(m_memberIcon);
-    proposals << proposalItem;
-    proposalItem = new TextEditor::AssistProposalItem;
-    proposalItem->setText(interface->fileName());
-    proposalItem->setIcon(m_memberIcon);
-    proposals << proposalItem;
+    appendProposalsFromUserTypes(proposals, interface->fileName());
+    appendProposalsFromSnippets(proposals);
+    appendProposalsFromKeywords(proposals);
 
-    proposals.append(m_snippetCollector.collect());
+    TextEditor::IAssistProposal *proposal = new TextEditor::GenericProposal(findStartOfName(interface), proposals);
 
-    TextEditor::GenericProposalModel *model = new TextEditor::GenericProposalModel;
-    model->loadContent(proposals);
-    TextEditor::IAssistProposal *proposal = new TextEditor::GenericProposal(findStartOfName(interface), model);
+    delete interface;
+
     return proposal;
+}
+
+void
+AsnCompletionAssistProcessor::appendProposalsFromUserTypes(QList<TextEditor::AssistProposalItemInterface *> &proposals, const QString &fileName) const
+{
+    ParsedDataStorage *storage = ParsedDataStorage::instance();
+
+    std::shared_ptr<ParsedDocument> doc = storage->getFileForPath(fileName);
+    if (doc == nullptr)
+        return;
+
+    proposals.append(doc->getProposalsProvider().takeProposals());
+}
+
+void AsnCompletionAssistProcessor::appendProposalsFromSnippets(QList<TextEditor::AssistProposalItemInterface *> &proposals) const
+{
+    proposals.append(m_snippetCollector.collect());
+}
+
+void AsnCompletionAssistProcessor::appendProposalsFromKeywords(QList<TextEditor::AssistProposalItemInterface *> &proposals) const
+{
+    // TODO: add ACN support
+    AsnProposalBuiltinsProvider asnProvider;
+    proposals.append(asnProvider.takeProposals());
+}
+
+bool AsnCompletionAssistProcessor::shouldAccept(const TextEditor::AssistInterface *interface)
+{
+    return (interface->position() - findStartOfName(interface) >= ASN_COMPLETER_ACTIVATION_LENGHT);
 }
 
 int AsnCompletionAssistProcessor::findStartOfName(const TextEditor::AssistInterface *interface) const

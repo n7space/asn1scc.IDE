@@ -35,6 +35,7 @@
 
 #include "modeltreenode.h"
 #include "documentsourceinfo.h"
+#include "proposalsusertypesprovider.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -51,6 +52,8 @@ public:
 
     Data::TypeReference getTypeReference(const int line, const int col) const;
     Data::SourceLocation getDefinitionLocation(const QString& typeAssignmentName, const QString& moduleName) const;
+
+    PoroposalsUserTypesProvider getProposalsProvider() const;
 
 private:
     ModelTreeNode::ModelTreeNodePtr createDefinition(const std::unique_ptr<Data::Definitions> &definition) const;

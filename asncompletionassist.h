@@ -43,9 +43,13 @@ public:
     TextEditor::IAssistProposal *perform(const TextEditor::AssistInterface *interface) override;
 
 private:
+    void appendProposalsFromUserTypes(QList<TextEditor::AssistProposalItemInterface *> &proposals, const QString &fileName) const;
+    void appendProposalsFromSnippets(QList<TextEditor::AssistProposalItemInterface *> &proposals) const;
+    void appendProposalsFromKeywords(QList<TextEditor::AssistProposalItemInterface *> &proposals) const;
+
+    bool shouldAccept(const TextEditor::AssistInterface *interface);
     int findStartOfName(const TextEditor::AssistInterface *interface) const;
 
-    QIcon m_memberIcon;
     TextEditor::SnippetAssistCollector m_snippetCollector;
 };
 

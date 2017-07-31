@@ -88,7 +88,10 @@ SOURCES += \
     options-pages/service.cpp \
     options-pages/servicewidget.cpp \
     options-pages/generalwidget.cpp \
-    linkcreator.cpp
+    linkcreator.cpp \
+    proposalitemsprovider.cpp \
+    asnproposalsitemsprovider.cpp \
+    proposalsusertypesprovider.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -133,7 +136,10 @@ HEADERS += \
     options-pages/servicewidget.h \
     options-pages/generalwidget.h \
     linkcreator.h \
-    data/typereference.h
+    data/typereference.h \
+    proposalitemsprovider.h \
+    asnproposalsitemsprovider.h \
+    proposalsusertypesprovider.h
 
 FORMS += \
     options-pages/general.ui \
