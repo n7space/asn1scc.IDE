@@ -154,7 +154,7 @@
         <comment name="singleLine" start="--" />
         <comment name="multiline" start="/*" end="*/" region="Comment Region" />
       </comments>
-      <keywords casesensitive="1" />
+      <keywords casesensitive="1" weakDeliminator="-" />
     </general>
 
   </highlighting>
