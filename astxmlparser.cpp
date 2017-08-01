@@ -141,7 +141,7 @@ void AstXmlParser::readTypeAssignmentType()
 
     m_xmlReader.readNextStartElement();
 
-    QString attributeName = m_xmlReader.name().toString();
+    const QStringRef attributeName = m_xmlReader.name();
     if (attributeName == QStringLiteral("ReferenceType"))
         readTypeAssignmentReferencedType(line, positionInLine);
     else
@@ -157,7 +157,7 @@ void AstXmlParser::readTypeAssignmentReferencedType(int line, int positionInLine
     if (moduleName.isEmpty())
         moduleName = m_currentModule;
 
-    Data::TypeReference::DataType type = Data::TypeReference::DataType::USERDEFINED;
+    Data::TypeReference::DataType type = Data::TypeReference::DataType::UserDefined;
 
     setTypeAssignmentTypeReference(referenceTypeName, moduleName, line, positionInLine, type);
 }
@@ -166,7 +166,7 @@ void AstXmlParser::readTypeAssignmentBuiltinType(int line, int positionInLine)
 {
     QString referenceTypeName = m_xmlReader.name().toString();
     QString moduleName = m_currentModule;
-    Data::TypeReference::DataType type = Data::TypeReference::DataType::BUILTIN;
+    Data::TypeReference::DataType type = Data::TypeReference::DataType::BuiltIn;
 
     setTypeAssignmentTypeReference(referenceTypeName, moduleName, line, positionInLine, type);
 }

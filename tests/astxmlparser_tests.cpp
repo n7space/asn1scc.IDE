@@ -111,7 +111,7 @@ void AstXmlParserTests::test_builtinTypeReference()
 
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().location().column(), 19);
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().location().line(), 3);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().type(), Data::TypeReference::DataType::BUILTIN);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().type(), Data::TypeReference::DataType::BuiltIn);
 }
 
 void AstXmlParserTests::test_userDefinedTypeReference()
@@ -133,7 +133,7 @@ void AstXmlParserTests::test_userDefinedTypeReference()
 
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().location().column(), 19);
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().location().line(), 3);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().type(), Data::TypeReference::DataType::USERDEFINED);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().type(), Data::TypeReference::DataType::UserDefined);
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().name(), QStringLiteral("ThirdInt"));
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().module(), QStringLiteral("TestDefinitions"));
 }
@@ -157,7 +157,7 @@ void AstXmlParserTests::test_userDefinedTypeReferenceInOtherModule()
 
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().location().column(), 19);
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().location().line(), 3);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().type(), Data::TypeReference::DataType::USERDEFINED);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().type(), Data::TypeReference::DataType::UserDefined);
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().name(), QStringLiteral("ThirdInt"));
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().module(), QStringLiteral("MYMOD"));
 }

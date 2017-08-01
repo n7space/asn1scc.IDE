@@ -37,8 +37,8 @@ class TypeReference
 public:
 
     enum class DataType {
-        BUILTIN,
-        USERDEFINED
+        BuiltIn,
+        UserDefined
     };
 
     TypeReference(const QString& name, const SourceLocation& location, const DataType dataType, const QString& module = QString())
