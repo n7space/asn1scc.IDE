@@ -1,7 +1,7 @@
 {
     "version": 1,
     "supportedProjectTypes": [ ],
-    "id": "Z.ASN1",
+    "id": "B.ASN1",
     "category": "O.Asn1Acn",
     "trDescription": "Creates an ASN.1 model.",
     "trDisplayName": "ASN.1 Model",
