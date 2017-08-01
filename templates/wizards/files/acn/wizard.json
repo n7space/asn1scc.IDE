@@ -2,7 +2,7 @@
     "version": 1,
     "supportedProjectTypes": [ ],
     "id": "C.ACN",
-    "category": "O.Asn1Acn",
+    "category": "R.Asn1Acn",
     "trDescription": "Creates an ACN encoding model.",
     "trDisplayName": "ACN Model",
     "trDisplayCategory": "ASN.1/ACN",
