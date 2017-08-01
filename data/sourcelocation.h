@@ -46,6 +46,8 @@ public:
     int line() const { return m_line; }
     int column() const { return m_column; }
 
+    bool isValid() const { return !m_path.isEmpty() && m_line != -1 && m_column != -1; }
+
 private:
     QString m_path;
     int m_line;

@@ -27,27 +27,36 @@
 #include <QString>
 
 #include "sourcelocation.h"
-#include "typereference.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-class TypeAssignment
+class TypeReference
 {
 public:
-    TypeAssignment(const QString& name, const SourceLocation& location, const TypeReference& reference)
-        : m_name(name), m_location(location), m_refernce(reference)
+
+    enum class DataType {
+        BuiltIn,
+        UserDefined
+    };
+
+    TypeReference(const QString& name, const SourceLocation& location, const DataType dataType, const QString& module = QString())
+        : m_type(dataType), m_name(name), m_location(location), m_module(module)
     {}
 
-    const QString& name() const { return m_name; }
-    const SourceLocation& location() const { return m_location; }
-    const TypeReference& reference() const { return m_refernce; }
+    TypeReference() = default;
+
+    const QString &name() const { return m_name; }
+    const QString &module() const { return m_module; }
+    const SourceLocation &location() const { return m_location; }
+    const DataType &type() const { return m_type; }
 
 private:
+    DataType m_type;
     QString m_name;
     SourceLocation m_location;
-    TypeReference m_refernce;
+    QString m_module;
 };
 
 } // namespace Data
