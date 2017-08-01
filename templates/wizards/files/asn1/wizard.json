@@ -2,7 +2,7 @@
     "version": 1,
     "supportedProjectTypes": [ ],
     "id": "B.ASN1",
-    "category": "O.Asn1Acn",
+    "category": "R.Asn1Acn",
     "trDescription": "Creates an ASN.1 model.",
     "trDisplayName": "ASN.1 Model",
     "trDisplayCategory": "ASN.1/ACN",
