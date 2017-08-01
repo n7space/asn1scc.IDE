@@ -29,11 +29,11 @@
 
 #include <texteditor/texteditoractionhandler.h>
 
+#include "autocompletion/autocompleter.h"
+#include "autocompletion/acncompletionassist.h"
 #include "asn1acnconstants.h"
 #include "acndocument.h"
 #include "indenter.h"
-#include "autocompleter.h"
-#include "acncompletionassist.h"
 #include "tr.h"
 
 using namespace Asn1Acn::Internal;

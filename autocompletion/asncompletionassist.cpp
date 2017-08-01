@@ -23,34 +23,31 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "asncompletionassist.h"
 
-#include <memory>
+#include "../asn1acnconstants.h"
 
-#include "proposalsprovider.h"
-#include "data/modules.h"
+#include "asnbuiltinsproposalsprovider.h"
 
-#include <texteditor/codeassist/assistproposalitem.h>
+using namespace Asn1Acn::Internal;
 
-namespace Asn1Acn {
-namespace Internal {
-
-class UserTypesProposalsProvider : public ProposalsProvider
+AsnCompletionAssistProcessor::AsnCompletionAssistProcessor()
+    : CompletionAssistProcessor(QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID))
 {
-public:
-    UserTypesProposalsProvider(const std::unique_ptr<Data::Modules> &data);
+}
 
-private:
-    QList<TextEditor::AssistProposalItemInterface *> createProposals() const override;
+std::unique_ptr<BuiltinsProposalsProvider> AsnCompletionAssistProcessor::getBuiltinsProposalsProvider() const
+{
+    auto provider = std::make_unique<AsnBuiltinsProposalsProvider>();
+    return std::move(provider);
+}
 
-    QList<TextEditor::AssistProposalItemInterface *>
-    createImportedTypes(const QList<QString> &importedProposals) const;
+bool AsnCompletionAssistProvider::supportsEditor(Core::Id editorId) const
+{
+    return editorId == Constants::ASNEDITOR_ID;
+}
 
-    QList<TextEditor::AssistProposalItemInterface *>
-    createInternalTypes(const Data::Definitions::Types &types) const;
-
-    const std::unique_ptr<Data::Modules> &m_data;
-};
-
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+TextEditor::IAssistProcessor *AsnCompletionAssistProvider::createProcessor() const
+{
+    return new AsnCompletionAssistProcessor;
+}

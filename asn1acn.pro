@@ -57,10 +57,7 @@ SOURCES += \
     asn1acn.cpp \
     asneditor.cpp \
     asndocument.cpp \
-    autocompleter.cpp \
-    asncompletionassist.cpp \
     outline.cpp \
-    asnsnippetprovider.cpp \
     acneditor.cpp \
     acndocument.cpp \
     editor.cpp \
@@ -89,13 +86,16 @@ SOURCES += \
     options-pages/servicewidget.cpp \
     options-pages/generalwidget.cpp \
     linkcreator.cpp \
-    proposalsprovider.cpp \
-    asnbuiltinsproposalsprovider.cpp \
-    usertypesproposalsprovider.cpp \
-    acnbuiltinsproposalsprovider.cpp \
-    completionassist.cpp \
-    acncompletionassist.cpp \
-    builtinsproposalsprovider.cpp
+    autocompletion/autocompleter.cpp \
+    autocompletion/asncompletionassist.cpp \
+    autocompletion/asnsnippetprovider.cpp \
+    autocompletion/proposalsprovider.cpp \
+    autocompletion/asnbuiltinsproposalsprovider.cpp \
+    autocompletion/usertypesproposalsprovider.cpp \
+    autocompletion/acnbuiltinsproposalsprovider.cpp \
+    autocompletion/completionassist.cpp \
+    autocompletion/acncompletionassist.cpp \
+    autocompletion/builtinsproposalsprovider.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -103,10 +103,7 @@ HEADERS += \
     asn1acn.h \
     asneditor.h \
     asndocument.h \
-    autocompleter.h \
-    asncompletionassist.h \
     outline.h \
-    asnsnippetprovider.h \
     acneditor.h \
     acndocument.h \
     editor.h \
@@ -141,13 +138,16 @@ HEADERS += \
     options-pages/generalwidget.h \
     linkcreator.h \
     data/typereference.h \
-    proposalsprovider.h \
-    asnbuiltinsproposalsprovider.h \
-    usertypesproposalsprovider.h \
-    acnbuiltinsproposalsprovider.h \
-    completionassist.h \
-    acncompletionassist.h \
-    builtinsproposalsprovider.h
+    autocompletion/autocompleter.h \
+    autocompletion/asncompletionassist.h \
+    autocompletion/asnsnippetprovider.h \
+    autocompletion/proposalsprovider.h \
+    autocompletion/asnbuiltinsproposalsprovider.h \
+    autocompletion/usertypesproposalsprovider.h \
+    autocompletion/acnbuiltinsproposalsprovider.h \
+    autocompletion/completionassist.h \
+    autocompletion/acncompletionassist.h \
+    autocompletion/builtinsproposalsprovider.h
 
 FORMS += \
     options-pages/general.ui \

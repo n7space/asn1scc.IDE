@@ -25,7 +25,7 @@
 
 #include "usertypesproposalsprovider.h"
 
-#include "data/definitions.h"
+#include "../data/definitions.h"
 
 #include <QDebug>
 

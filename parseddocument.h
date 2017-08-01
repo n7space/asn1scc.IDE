@@ -35,7 +35,7 @@
 
 #include "modeltreenode.h"
 #include "documentsourceinfo.h"
-#include "usertypesproposalsprovider.h"
+#include "autocompletion/usertypesproposalsprovider.h"
 
 namespace Asn1Acn {
 namespace Internal {

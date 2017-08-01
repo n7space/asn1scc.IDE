@@ -38,9 +38,9 @@
 
 #include <texteditor/texteditorconstants.h>
 
+#include "autocompletion/asnsnippetprovider.h"
 #include "asneditor.h"
 #include "outline.h"
-#include "asnsnippetprovider.h"
 #include "structuresview.h"
 #include "projectwatcher.h"
 #include "asn1acnjsextension.h"

@@ -31,11 +31,11 @@
 
 #include <texteditor/texteditoractionhandler.h>
 
+#include "autocompletion/autocompleter.h"
+#include "autocompletion/asncompletionassist.h"
 #include "asn1acnconstants.h"
 #include "linkcreator.h"
 #include "asndocument.h"
-#include "autocompleter.h"
-#include "asncompletionassist.h"
 #include "indenter.h"
 #include "tr.h"
 

@@ -23,31 +23,33 @@
 **
 ****************************************************************************/
 
-#include "asncompletionassist.h"
+#include "asnsnippetprovider.h"
 
-#include "asn1acnconstants.h"
+#include "autocompleter.h"
+#include "../asn1acnconstants.h"
 
-#include "asnbuiltinsproposalsprovider.h"
+#include <texteditor/snippets/snippeteditor.h>
+#include <texteditor/textdocument.h>
 
-using namespace Asn1Acn::Internal;
+#include <QLatin1String>
+#include <QCoreApplication>
 
-AsnCompletionAssistProcessor::AsnCompletionAssistProcessor()
-    : CompletionAssistProcessor(QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID))
+using namespace Asn1Acn;
+using namespace Internal;
+
+QString AsnSnippetProvider::groupId() const
 {
+    return QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID);
 }
 
-std::unique_ptr<BuiltinsProposalsProvider> AsnCompletionAssistProcessor::getBuiltinsProposalsProvider() const
+QString AsnSnippetProvider::displayName() const
 {
-    auto provider = std::make_unique<AsnBuiltinsProposalsProvider>();
-    return std::move(provider);
+    return QCoreApplication::translate("Asn1Acn::Internal::AsnSnippetProvider", "ASN.1");
 }
 
-bool AsnCompletionAssistProvider::supportsEditor(Core::Id editorId) const
+void AsnSnippetProvider::decorateEditor(TextEditor::SnippetEditorWidget *editor) const
 {
-    return editorId == Constants::ASNEDITOR_ID;
-}
-
-TextEditor::IAssistProcessor *AsnCompletionAssistProvider::createProcessor() const
-{
-    return new AsnCompletionAssistProcessor;
+    editor->setAutoCompleter(new AutoCompleter);
+    editor->textDocument()->setMimeType(Constants::ASN1_MIMETYPE);
+    editor->configureGenericHighlighter();
 }
