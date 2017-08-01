@@ -23,22 +23,22 @@
 **
 ****************************************************************************/
 
-#include "proposalitemsprovider.h"
+#include "proposalsprovider.h"
 
 using namespace Asn1Acn::Internal;
 
-ProposalItemsProvider::ProposalItemsProvider(const QString &iconPath)
+ProposalsProvider::ProposalsProvider(const QString &iconPath)
     : m_memberIcon(iconPath)
 {
 }
 
-QList<TextEditor::AssistProposalItemInterface *> ProposalItemsProvider::takeProposals() const
+QList<TextEditor::AssistProposalItemInterface *> ProposalsProvider::takeProposals() const
 {
     return createProposals();
 }
 
-void ProposalItemsProvider::addProposal(QList<TextEditor::AssistProposalItemInterface *> &proposals,
-                                        const QString &text) const
+void ProposalsProvider::addProposal(QList<TextEditor::AssistProposalItemInterface *> &proposals,
+                                    const QString &text) const
 {
     auto proposalItem = new TextEditor::AssistProposalItem;
 

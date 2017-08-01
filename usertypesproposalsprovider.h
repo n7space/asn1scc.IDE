@@ -27,7 +27,7 @@
 
 #include <memory>
 
-#include "proposalitemsprovider.h"
+#include "proposalsprovider.h"
 #include "data/modules.h"
 
 #include <texteditor/codeassist/assistproposalitem.h>
@@ -35,10 +35,10 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class PoroposalsUserTypesProvider : public ProposalItemsProvider
+class UserTypesProposalsProvider : public ProposalsProvider
 {
 public:
-    PoroposalsUserTypesProvider(const std::unique_ptr<Data::Modules> &data);
+    UserTypesProposalsProvider(const std::unique_ptr<Data::Modules> &data);
 
 private:
     QList<TextEditor::AssistProposalItemInterface *> createProposals() const override;

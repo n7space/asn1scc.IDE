@@ -23,21 +23,18 @@
 **
 ****************************************************************************/
 
-#include <QString>
+#pragma once
 
-#include "acnproposalsitemsprovider.h"
+#include "builtinsproposalsprovider.h"
 
-using namespace Asn1Acn::Internal;
+namespace Asn1Acn {
+namespace Internal {
 
-static const char *KEYWORDS[] = { "BEGIN", "END", "DEFINITIONS", "CONSTANT", "" };
-
-static const char *TYPES[] = { "INTEGER", "BOOLEAN", "" };
-
-static const char *BUILTIN[] = { "NULL", "big", "little", "pos-int", "twos-complement", "BCD", "ASCII", "IEEE754-1985-32", "IEEE754-1985-64", "byte", "word", "dword", "" };
-
-static const char *ATTRIBUTES[] = { "endianness", "encoding", "size", "null-terminated", "termination-pattern", "align-to-next", "encode-values", "true-value", "false-value", "pattern", "mapping-function", "present-when", "determinant", "" };
-
-AcnProposalBuiltinsProvider::AcnProposalBuiltinsProvider()
-    : ProposalBuiltinsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
+class AsnBuiltinsProposalsProvider : public BuiltinsProposalsProvider
 {
-}
+public:
+    AsnBuiltinsProposalsProvider();
+};
+
+} /* namespace Internal */
+} /* namespace Asn1Acn */

@@ -37,8 +37,8 @@
 #include "parseddatastorage.h"
 #include "parseddocument.h"
 
-#include "asnproposalsitemsprovider.h"
-#include "acnproposalsitemsprovider.h"
+#include "asnbuiltinsproposalsprovider.h"
+#include "acnbuiltinsproposalsprovider.h"
 
 #include "acneditor.h"
 #include "asneditor.h"
@@ -89,7 +89,7 @@ void CompletionAssistProcessor::appendProposalsFromSnippets(QList<TextEditor::As
 
 void CompletionAssistProcessor::appendProposalsFromKeywords(QList<TextEditor::AssistProposalItemInterface *> &proposals) const
 {
-    std::unique_ptr<ProposalBuiltinsProvider> provider = getBuiltinsProposalsProvider();
+    std::unique_ptr<BuiltinsProposalsProvider> provider = getBuiltinsProposalsProvider();
     proposals.append(provider->takeProposals());
 }
 

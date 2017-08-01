@@ -25,20 +25,20 @@
 
 #include <QString>
 
-#include "proposalsbuiltinitemsprovider.h"
+#include "builtinsproposalsprovider.h"
 
 using namespace Asn1Acn::Internal;
 
-ProposalBuiltinsProvider::ProposalBuiltinsProvider(const char *keywords[],
-                                                   const char *types[],
-                                                   const char *builtin[],
-                                                   const char *attributes[])
-    : ProposalItemsProvider(":/codemodel/images/keyword.png"),
+BuiltinsProposalsProvider::BuiltinsProposalsProvider(const char *keywords[],
+                                                     const char *types[],
+                                                     const char *builtin[],
+                                                     const char *attributes[])
+    : ProposalsProvider(":/codemodel/images/keyword.png"),
       m_keywords(keywords), m_types(types), m_builtin(builtin), m_attributes(attributes)
 {
 }
 
-QList<TextEditor::AssistProposalItemInterface *> ProposalBuiltinsProvider::createProposals() const
+QList<TextEditor::AssistProposalItemInterface *> BuiltinsProposalsProvider::createProposals() const
 {
     QList<TextEditor::AssistProposalItemInterface *> proposals;
 
@@ -51,7 +51,7 @@ QList<TextEditor::AssistProposalItemInterface *> ProposalBuiltinsProvider::creat
 }
 
 QList<TextEditor::AssistProposalItemInterface *>
-ProposalBuiltinsProvider::createProposalsGroup(const char *group[]) const
+BuiltinsProposalsProvider::createProposalsGroup(const char *group[]) const
 {
     QList<TextEditor::AssistProposalItemInterface *> proposals;
 

@@ -23,23 +23,34 @@
 **
 ****************************************************************************/
 
-#include "asnproposalsitemsprovider.h"
+#pragma once
 
-using namespace Asn1Acn::Internal;
+#include <QList>
 
-static const char *KEYWORDS[] = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMATIC", "TAGS", "EXPLICIT", "IMPLICIT",
-                                  "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "IMPORTS", "DEFINITIONS", "FROM",
-                                  "APPLICATION", "PRIVATE", "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM", "" };
+#include <texteditor/codeassist/assistproposalitem.h>
 
-static const char *TYPES[] = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SET OF", "SEQUENCE",
-                               "SEQUENCE OF", "OCTET STRING", "BIT STRING", "" };
+#include "proposalsprovider.h"
 
-static const char *BUILTIN[] = { "NULL", "FALSE", "TRUE", ""};
+namespace Asn1Acn {
+namespace Internal {
 
-static const char *ATTRIBUTES[] = { "SIZE", "OPTIONAL", "MIN", "MAX", "DEFAULT", "WITH COMPONENT", "WITH COMPONENTS",
-                                    "INCLUDES", "ABSENT", "PRESENT", "PATTERN", "" };
-
-AsnProposalBuiltinsProvider::AsnProposalBuiltinsProvider()
-    : ProposalBuiltinsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
+class BuiltinsProposalsProvider : public ProposalsProvider
 {
-}
+public:
+    BuiltinsProposalsProvider(const char *keywords[],
+                              const char *types[],
+                              const char *builtin[],
+                              const char *attributes[]);
+
+private:
+    QList<TextEditor::AssistProposalItemInterface *> createProposals() const override;
+    QList<TextEditor::AssistProposalItemInterface *> createProposalsGroup(const char *proposalsGroup[]) const;
+
+    const char **m_keywords;
+    const char **m_types;
+    const char **m_builtin;
+    const char **m_attributes;
+};
+
+} /* namespace Internal */
+} /* namespace Asn1Acn */

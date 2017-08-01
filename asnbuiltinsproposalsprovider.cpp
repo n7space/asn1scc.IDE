@@ -23,31 +23,23 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "asnbuiltinsproposalsprovider.h"
 
-#include <QIcon>
-#include <QList>
-#include <QString>
+using namespace Asn1Acn::Internal;
 
-#include <texteditor/codeassist/assistproposalitem.h>
+static const char *KEYWORDS[] = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMATIC", "TAGS", "EXPLICIT", "IMPLICIT",
+                                  "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "IMPORTS", "DEFINITIONS", "FROM",
+                                  "APPLICATION", "PRIVATE", "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM", "" };
 
-namespace Asn1Acn {
-namespace Internal {
+static const char *TYPES[] = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SET OF", "SEQUENCE",
+                               "SEQUENCE OF", "OCTET STRING", "BIT STRING", "" };
 
-class ProposalItemsProvider
+static const char *BUILTIN[] = { "NULL", "FALSE", "TRUE", ""};
+
+static const char *ATTRIBUTES[] = { "SIZE", "OPTIONAL", "MIN", "MAX", "DEFAULT", "WITH COMPONENT", "WITH COMPONENTS",
+                                    "INCLUDES", "ABSENT", "PRESENT", "PATTERN", "" };
+
+AsnBuiltinsProposalsProvider::AsnBuiltinsProposalsProvider()
+    : BuiltinsProposalsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
 {
-public:
-    ProposalItemsProvider(const QString &iconPath);
-    QList<TextEditor::AssistProposalItemInterface *> takeProposals() const;
-
-protected:
-    void addProposal(QList<TextEditor::AssistProposalItemInterface *> &proposals, const QString &text) const;
-
-    QIcon m_memberIcon;
-
-private:
-    virtual QList<TextEditor::AssistProposalItemInterface *> createProposals() const = 0;
-};
-
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+}

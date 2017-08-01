@@ -27,7 +27,7 @@
 
 #include "asn1acnconstants.h"
 
-#include "acnproposalsitemsprovider.h"
+#include "acnbuiltinsproposalsprovider.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -36,9 +36,9 @@ AcnCompletionAssistProcessor::AcnCompletionAssistProcessor()
 {
 }
 
-std::unique_ptr<ProposalBuiltinsProvider> AcnCompletionAssistProcessor::getBuiltinsProposalsProvider() const
+std::unique_ptr<BuiltinsProposalsProvider> AcnCompletionAssistProcessor::getBuiltinsProposalsProvider() const
 {
-    auto provider = std::make_unique<AcnProposalBuiltinsProvider>();
+    auto provider = std::make_unique<AcnBuiltinsProposalProvider>();
     return std::move(provider);
 }
 

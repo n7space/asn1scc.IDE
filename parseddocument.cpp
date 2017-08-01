@@ -149,7 +149,7 @@ Data::SourceLocation ParsedDocument::getLocationFromModule(const std::unique_ptr
     return Data::SourceLocation();
 }
 
-PoroposalsUserTypesProvider ParsedDocument::getProposalsProvider() const
+UserTypesProposalsProvider ParsedDocument::getProposalsProvider() const
 {
-    return PoroposalsUserTypesProvider(m_parsedData);
+    return UserTypesProposalsProvider(m_parsedData);
 }

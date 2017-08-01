@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "proposalsusertypesprovider.h"
+#include "usertypesproposalsprovider.h"
 
 #include "data/definitions.h"
 
@@ -31,12 +31,12 @@
 
 using namespace Asn1Acn::Internal;
 
-PoroposalsUserTypesProvider::PoroposalsUserTypesProvider(const std::unique_ptr<Data::Modules> &data)
-    : ProposalItemsProvider(":/codemodel/images/member.png"), m_data(data)
+UserTypesProposalsProvider::UserTypesProposalsProvider(const std::unique_ptr<Data::Modules> &data)
+    : ProposalsProvider(":/codemodel/images/member.png"), m_data(data)
 {
 }
 
-QList<TextEditor::AssistProposalItemInterface *> PoroposalsUserTypesProvider::createProposals() const
+QList<TextEditor::AssistProposalItemInterface *> UserTypesProposalsProvider::createProposals() const
 {
     QList<TextEditor::AssistProposalItemInterface *> proposals;
 
@@ -54,7 +54,7 @@ QList<TextEditor::AssistProposalItemInterface *> PoroposalsUserTypesProvider::cr
 }
 
 QList<TextEditor::AssistProposalItemInterface *>
-PoroposalsUserTypesProvider::createInternalTypes(const Data::Definitions::Types &types) const
+UserTypesProposalsProvider::createInternalTypes(const Data::Definitions::Types &types) const
 {
     QList<TextEditor::AssistProposalItemInterface *> proposals;
 
@@ -66,7 +66,7 @@ PoroposalsUserTypesProvider::createInternalTypes(const Data::Definitions::Types 
 }
 
 QList<TextEditor::AssistProposalItemInterface *>
-PoroposalsUserTypesProvider::createImportedTypes(const QList<QString> &importedProposals) const
+UserTypesProposalsProvider::createImportedTypes(const QList<QString> &importedProposals) const
 {
     QList<TextEditor::AssistProposalItemInterface *> proposals;
 

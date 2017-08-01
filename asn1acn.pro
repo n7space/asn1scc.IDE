@@ -89,13 +89,13 @@ SOURCES += \
     options-pages/servicewidget.cpp \
     options-pages/generalwidget.cpp \
     linkcreator.cpp \
-    proposalitemsprovider.cpp \
-    asnproposalsitemsprovider.cpp \
-    proposalsusertypesprovider.cpp \
-    acnproposalsitemsprovider.cpp \
+    proposalsprovider.cpp \
+    asnbuiltinsproposalsprovider.cpp \
+    usertypesproposalsprovider.cpp \
+    acnbuiltinsproposalsprovider.cpp \
     completionassist.cpp \
     acncompletionassist.cpp \
-    proposalsbuiltinitemsprovider.cpp
+    builtinsproposalsprovider.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -141,13 +141,13 @@ HEADERS += \
     options-pages/generalwidget.h \
     linkcreator.h \
     data/typereference.h \
-    proposalitemsprovider.h \
-    asnproposalsitemsprovider.h \
-    proposalsusertypesprovider.h \
-    acnproposalsitemsprovider.h \
+    proposalsprovider.h \
+    asnbuiltinsproposalsprovider.h \
+    usertypesproposalsprovider.h \
+    acnbuiltinsproposalsprovider.h \
     completionassist.h \
     acncompletionassist.h \
-    proposalsbuiltinitemsprovider.h
+    builtinsproposalsprovider.h
 
 FORMS += \
     options-pages/general.ui \

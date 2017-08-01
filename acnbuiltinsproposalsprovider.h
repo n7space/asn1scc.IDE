@@ -25,16 +25,16 @@
 
 #pragma once
 
-#include "proposalsbuiltinitemsprovider.h"
+#include "builtinsproposalsprovider.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AcnProposalBuiltinsProvider : public ProposalBuiltinsProvider
+class AcnBuiltinsProposalProvider : public BuiltinsProposalsProvider
 {
 
 public:
-    AcnProposalBuiltinsProvider();
+    AcnBuiltinsProposalProvider();
 };
 
 } /* namespace Internal */

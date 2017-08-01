@@ -32,7 +32,7 @@
 #include <texteditor/codeassist/iassistprocessor.h>
 #include <texteditor/snippets/snippetassistcollector.h>
 
-#include "proposalsbuiltinitemsprovider.h"
+#include "builtinsproposalsprovider.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -45,7 +45,7 @@ public:
     TextEditor::IAssistProposal *perform(const TextEditor::AssistInterface *interface) override;
 
 private:
-    virtual std::unique_ptr<ProposalBuiltinsProvider> getBuiltinsProposalsProvider() const = 0;
+    virtual std::unique_ptr<BuiltinsProposalsProvider> getBuiltinsProposalsProvider() const = 0;
 
     void appendProposalsFromUserTypes(QList<TextEditor::AssistProposalItemInterface *> &proposals, const QString &fileName) const;
     void appendProposalsFromSnippets(QList<TextEditor::AssistProposalItemInterface *> &proposals) const;
