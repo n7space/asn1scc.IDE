@@ -74,6 +74,10 @@ private:
                                         int positionInLine,
                                         Data::TypeReference::DataType type);
 
+    void readImportedModule();
+    void readImportedVariables();
+    void readImportedTypes();
+
     bool nextRequiredElementIs(const QString& name);
 
     QXmlStreamReader& m_xmlReader;

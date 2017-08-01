@@ -43,6 +43,12 @@ public:
 private:
     QList<TextEditor::AssistProposalItemInterface *> createProposals() const override;
 
+    QList<TextEditor::AssistProposalItemInterface *>
+    createImportedTypes(const QList<QString> &importedProposals) const;
+
+    QList<TextEditor::AssistProposalItemInterface *>
+    createInternalTypes(const Data::Definitions::Types &types) const;
+
     const std::unique_ptr<Data::Modules> &m_data;
 };
 

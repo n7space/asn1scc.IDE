@@ -49,13 +49,22 @@ public:
         m_types.insert(std::make_pair(type.name(), type));
     }
 
+    void addImportedType(const QString &typeName)
+    {
+        m_importedTypes.append(typeName);
+    }
+
     using Types = std::map<QString, TypeAssignment>;
+
     const Types& types() const { return m_types; }
+    const QList<QString> &importedTypes() { return m_importedTypes; }
 
 private:
     QString m_name;
     SourceLocation m_location;
     Types m_types;
+
+    QList<QString> m_importedTypes;
 };
 
 } // namespace Data

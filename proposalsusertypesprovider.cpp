@@ -27,6 +27,8 @@
 
 #include "data/definitions.h"
 
+#include <QDebug>
+
 using namespace Asn1Acn::Internal;
 
 PoroposalsUserTypesProvider::PoroposalsUserTypesProvider(const std::unique_ptr<Data::Modules> &data)
@@ -41,14 +43,35 @@ QList<TextEditor::AssistProposalItemInterface *> PoroposalsUserTypesProvider::cr
     Data::Modules::DefinitionsMap::const_iterator defIt;
     for (defIt = m_data->definitions().begin(); defIt != m_data->definitions().end(); defIt++) {
 
-        const Data::Definitions::Types &types = defIt->second->types();
+        const std::unique_ptr<Data::Definitions> &definitions = defIt->second;
+        proposals.append(createImportedTypes(definitions->importedTypes()));
 
-        Data::Definitions::Types::const_iterator typeIt;
-        for (typeIt = types.begin(); typeIt != types.end(); typeIt++)
-            addProposal(proposals, typeIt->second.name());
+        const Data::Definitions::Types &types = definitions->types();
+        proposals.append(createInternalTypes(types));
     }
 
-    // TODO: this should provide information about imported types also, but those are not parsed yet
+    return proposals;
+}
+
+QList<TextEditor::AssistProposalItemInterface *>
+PoroposalsUserTypesProvider::createInternalTypes(const Data::Definitions::Types &types) const
+{
+    QList<TextEditor::AssistProposalItemInterface *> proposals;
+
+    Data::Definitions::Types::const_iterator typeIt;
+    for (typeIt = types.begin(); typeIt != types.end(); typeIt++)
+        addProposal(proposals, typeIt->second.name());
+
+    return proposals;
+}
+
+QList<TextEditor::AssistProposalItemInterface *>
+PoroposalsUserTypesProvider::createImportedTypes(const QList<QString> &importedProposals) const
+{
+    QList<TextEditor::AssistProposalItemInterface *> proposals;
+
+    foreach(const QString &typeName, importedProposals)
+        addProposal(proposals, typeName);
 
     return proposals;
 }
