@@ -91,7 +91,11 @@ SOURCES += \
     linkcreator.cpp \
     proposalitemsprovider.cpp \
     asnproposalsitemsprovider.cpp \
-    proposalsusertypesprovider.cpp
+    proposalsusertypesprovider.cpp \
+    acnproposalsitemsprovider.cpp \
+    completionassist.cpp \
+    acncompletionassist.cpp \
+    proposalsbuiltinitemsprovider.cpp
 
 HEADERS += \
     asn1acn_global.h \
@@ -139,7 +143,11 @@ HEADERS += \
     data/typereference.h \
     proposalitemsprovider.h \
     asnproposalsitemsprovider.h \
-    proposalsusertypesprovider.h
+    proposalsusertypesprovider.h \
+    acnproposalsitemsprovider.h \
+    completionassist.h \
+    acncompletionassist.h \
+    proposalsbuiltinitemsprovider.h
 
 FORMS += \
     options-pages/general.ui \

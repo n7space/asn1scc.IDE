@@ -55,6 +55,7 @@ const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
 const char LANG_ACN[] = "ACN";
 const char ACNEDITOR_ID[] = "Asn1Acn.AcnEditor";
 const char ACN_MIMETYPE[] = "text/x-acn";
+const char ACN1_SNIPPETS_GROUP_ID[] = "ACN";
 
 // Icons
 

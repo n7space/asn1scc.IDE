@@ -25,24 +25,15 @@
 
 #pragma once
 
-#include <QList>
-
-#include <texteditor/codeassist/assistproposalitem.h>
-
-#include "proposalitemsprovider.h"
+#include "proposalsbuiltinitemsprovider.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class AsnProposalBuiltinsProvider : public ProposalItemsProvider
+class AsnProposalBuiltinsProvider : public ProposalBuiltinsProvider
 {
 public:
     AsnProposalBuiltinsProvider();
-
-private:
-    QList<TextEditor::AssistProposalItemInterface *> createProposals() const override;
-    QList<TextEditor::AssistProposalItemInterface *> createProposalsGroup(const char *proposalsGroup[]) const;
-
 };
 
 } /* namespace Internal */

@@ -23,51 +23,23 @@
 **
 ****************************************************************************/
 
-#include <QString>
-
 #include "asnproposalsitemsprovider.h"
 
 using namespace Asn1Acn::Internal;
 
-const char *KEYWORDS[] = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMATIC", "TAGS", "EXPLICIT", "IMPLICIT",
-                           "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "IMPORTS", "DEFINITIONS", "FROM",
-                           "APPLICATION", "PRIVATE", "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM", "" };
+static const char *KEYWORDS[] = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMATIC", "TAGS", "EXPLICIT", "IMPLICIT",
+                                  "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "IMPORTS", "DEFINITIONS", "FROM",
+                                  "APPLICATION", "PRIVATE", "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM", "" };
 
-const char *TYPES[] = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SET OF", "SEQUENCE",
-                        "SEQUENCE OF", "OCTET STRING", "BIT STRING", "" };
+static const char *TYPES[] = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SET OF", "SEQUENCE",
+                               "SEQUENCE OF", "OCTET STRING", "BIT STRING", "" };
 
-const char *BUILTIN[] = { "NULL", "FALSE", "TRUE", ""};
+static const char *BUILTIN[] = { "NULL", "FALSE", "TRUE", ""};
 
-const char *ATTRIBUTES[] = { "SIZE", "OPTIONAL", "MIN", "MAX", "DEFAULT", "WITH COMPONENT", "WITH COMPONENTS",
-                             "INCLUDES", "ABSENT", "PRESENT", "PATTERN", "" };
+static const char *ATTRIBUTES[] = { "SIZE", "OPTIONAL", "MIN", "MAX", "DEFAULT", "WITH COMPONENT", "WITH COMPONENTS",
+                                    "INCLUDES", "ABSENT", "PRESENT", "PATTERN", "" };
 
 AsnProposalBuiltinsProvider::AsnProposalBuiltinsProvider()
-    : ProposalItemsProvider(":/codemodel/images/keyword.png")
+    : ProposalBuiltinsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
 {
-}
-
-QList<TextEditor::AssistProposalItemInterface *> AsnProposalBuiltinsProvider::createProposals() const
-{
-    QList<TextEditor::AssistProposalItemInterface *> proposals;
-
-    proposals.append(createProposalsGroup(KEYWORDS));
-    proposals.append(createProposalsGroup(TYPES));
-    proposals.append(createProposalsGroup(BUILTIN));
-    proposals.append(createProposalsGroup(ATTRIBUTES));
-
-    return proposals;
-}
-
-QList<TextEditor::AssistProposalItemInterface *>
-AsnProposalBuiltinsProvider::createProposalsGroup(const char *group[]) const
-{
-    QList<TextEditor::AssistProposalItemInterface *> proposals;
-
-    int i = 0;
-    while (group[i] != '\0') {
-        addProposal(proposals, QLatin1String(group[i]));
-        i++;
-    }
-
-    return proposals;
 }
