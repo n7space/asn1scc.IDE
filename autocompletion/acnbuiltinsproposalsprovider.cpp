@@ -33,9 +33,12 @@ static const char *KEYWORDS[] = { "BEGIN", "END", "DEFINITIONS", "CONSTANT", "" 
 
 static const char *TYPES[] = { "INTEGER", "BOOLEAN", "" };
 
-static const char *BUILTIN[] = { "NULL", "big", "little", "pos-int", "twos-complement", "BCD", "ASCII", "IEEE754-1985-32", "IEEE754-1985-64", "byte", "word", "dword", "" };
+static const char *BUILTIN[] = { "NULL", "big", "little", "pos-int", "twos-complement", "BCD", "ASCII",
+                                 "IEEE754-1985-32", "IEEE754-1985-64", "byte", "word", "dword", "" };
 
-static const char *ATTRIBUTES[] = { "endianness", "encoding", "size", "null-terminated", "termination-pattern", "align-to-next", "encode-values", "true-value", "false-value", "pattern", "mapping-function", "present-when", "determinant", "" };
+static const char *ATTRIBUTES[] = { "endianness", "encoding", "size", "null-terminated", "termination-pattern",
+                                    "align-to-next", "encode-values", "true-value", "false-value", "pattern",
+                                    "mapping-function", "present-when", "determinant", "" };
 
 AcnBuiltinsProposalProvider::AcnBuiltinsProposalProvider()
     : BuiltinsProposalsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
