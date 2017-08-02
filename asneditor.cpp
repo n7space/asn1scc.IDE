@@ -47,6 +47,7 @@ using namespace TextEditor;
 AsnEditor::AsnEditor()
 {
     addContext(Constants::LANG_ASN1);
+    addContext(Constants::BASE_CONTEXT);
 }
 
 AsnEditorFactory::AsnEditorFactory()

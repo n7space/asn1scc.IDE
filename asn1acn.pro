@@ -98,6 +98,7 @@ SOURCES += \
     documentsourceinfo.cpp \
     projectcontenthandler.cpp \
     indenter.cpp \
+    tools.cpp \
     linkcreator.cpp
 
 HEADERS += \
@@ -155,7 +156,8 @@ HEADERS += \
     projectcontenthandler.h \
     indenter.h \
     tr.h \
-    linkcreator.h
+    linkcreator.h \
+    tools.h
 
 FORMS += \
     options-pages/general.ui \

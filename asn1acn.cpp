@@ -23,8 +23,7 @@
 **
 ****************************************************************************/
 
-#include "asn1acn.h"
-#include "asn1acnconstants.h"
+#include <QMenu>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/icontext.h>
@@ -54,10 +53,15 @@
 #include "options-pages/service.h"
 
 #include "acneditor.h"
+#include "asn1acnconstants.h"
+#include "tr.h"
+#include "tools.h"
 
 #ifdef WITH_TESTS
 #include "tests/astxmlparser_tests.h"
 #endif
+
+#include "asn1acn.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -105,14 +109,47 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(sp);
     sp->start();
 
-    Core::ActionContainer *contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
-
-    Core::Command *cmd = Core::ActionManager::ActionManager::command(TextEditor::Constants::FOLLOW_SYMBOL_UNDER_CURSOR);
-    contextMenu->addAction(cmd);
+    initializeMenus();
 
     Core::JsExpander::registerQObjectForJs(QLatin1String("Asn1Acn"), new Asn1AcnJsExtension);
 
     return true;
+}
+
+static void addToToolsMenu(Core::ActionContainer* container)
+{
+    auto toolsMenu = Core::ActionManager::actionContainer(Core::Constants::M_TOOLS);
+    QMenu *menu = container->menu();
+    menu->setTitle(Tr::tr("&ASN.1/ACN"));
+    menu->setEnabled(true);
+    toolsMenu->addMenu(container);
+}
+
+void Asn1AcnPlugin::initializeMenus()
+{
+    auto asnToolsMenu = Core::ActionManager::createMenu(Constants::M_TOOLS_ASN);
+    auto contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
+
+    Core::Context context(Constants::BASE_CONTEXT);
+
+    QAction *switchAction = new QAction(tr("Switch Data/Encoding"), this);
+    Core::Command *command = Core::ActionManager::registerAction(switchAction, Constants::SWITCH_DATA_ENCODING, context, true);
+    command->setDefaultKeySequence(QKeySequence(Qt::Key_F4));
+    connect(switchAction, &QAction::triggered, []() { Tools::switchBetweenDataAndEncoding(); });
+    asnToolsMenu->addAction(command);
+    contextMenu->addAction(command);
+
+    QAction *openInNextSplitAction = new QAction(tr("Open Corresponding Data/Encoding in Next Split"), this);
+    command = Core::ActionManager::registerAction(openInNextSplitAction, Constants::OPEN_DATA_ENCODING_IN_NEXT_SPLIT, context, true);
+    command->setDefaultKeySequence(QKeySequence(Utils::HostOsInfo::isMacHost() ? tr("Meta+E, F4") : tr("Ctrl+E, F4")));
+    connect(openInNextSplitAction, &QAction::triggered, []() { Tools::switchBetweenDataAndEncodingInNextSplit(); });
+    asnToolsMenu->addAction(command);
+
+    command = Core::ActionManager::ActionManager::command(TextEditor::Constants::FOLLOW_SYMBOL_UNDER_CURSOR);
+    contextMenu->addAction(command);
+    asnToolsMenu->addAction(command);
+
+    addToToolsMenu(asnToolsMenu);
 }
 
 void Asn1AcnPlugin::extensionsInitialized()

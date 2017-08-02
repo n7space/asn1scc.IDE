@@ -64,14 +64,9 @@ void ProjectContentHandler::handleProjectRemoved(const QString &projectName)
 
 void ProjectContentHandler::handleFileListChanged(const QString &projectName, const QStringList &fileList)
 {
-    int storedFilesCnt = m_tree->getProjectFilesCnt(projectName);
-
-    int currentFilesCnt = fileList.count();
-
-    if (currentFilesCnt > storedFilesCnt)
-        handleFilesAdded(projectName, fileList);
-    else if (currentFilesCnt < storedFilesCnt)
-        handleFilesRemoved(projectName, fileList);
+    removeStaleFiles(projectName, fileList);
+    addNewFiles(projectName, fileList);
+    processFiles(projectName, fileList);
 }
 
 void ProjectContentHandler::handleFileContentChanged(const QString &path, const QString &content, int revision)
@@ -89,7 +84,17 @@ void ProjectContentHandler::handleFileContentChanged(const QString &path, const 
     }
 }
 
-void ProjectContentHandler::handleFilesAdded(const QString &projectName, const QStringList &filePaths)
+void ProjectContentHandler::removeStaleFiles(const QString &projectName, const QStringList &filePaths)
+{
+    QStringList stalePaths = getStaleFilesNames(projectName, filePaths);
+
+    foreach (const QString &stalePath, stalePaths) {
+        m_tree->removeNodeFromProject(projectName, stalePath);
+        m_storage->removeFileFromProject(projectName, stalePath);
+    }
+}
+
+void ProjectContentHandler::addNewFiles(const QString &projectName, const QStringList &filePaths)
 {
     foreach (const QString &path, filePaths) {
         if (m_tree->getNodeForFilepathFromProject(projectName, path) != nullptr)
@@ -99,20 +104,6 @@ void ProjectContentHandler::handleFilesAdded(const QString &projectName, const Q
                                                                       Data::SourceLocation(path, 0, 0)));
         m_tree->addNodeToProject(projectName, node);
     }
-
-    processFiles(projectName, filePaths);
-}
-
-void ProjectContentHandler::handleFilesRemoved(const QString &projectName, const QStringList &filePaths)
-{
-    QStringList stalePaths = getStaleFilesNames(projectName, filePaths);
-
-    foreach (const QString &stalePath, stalePaths) {
-        m_tree->removeNodeFromProject(projectName, stalePath);
-        m_storage->removeFileFromProject(projectName, stalePath);
-    }
-
-    processFiles(projectName, filePaths);
 }
 
 void ProjectContentHandler::processFiles(const QString &projectName, const QStringList &filePaths)
