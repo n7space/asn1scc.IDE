@@ -81,6 +81,7 @@ SOURCES += \
     documentsourceinfo.cpp \
     projectcontenthandler.cpp \
     indenter.cpp \
+    tools.cpp \
     settings/settings.cpp \
     settings/general.cpp \
     settings/service.cpp \
@@ -125,6 +126,7 @@ HEADERS += \
     projectcontenthandler.h \
     indenter.h \
     tr.h \
+    tools.h \
     settings/settings.h\
     settings/general.h \
     settings/service.h \

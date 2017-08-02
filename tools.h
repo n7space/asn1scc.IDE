@@ -25,33 +25,13 @@
 
 #pragma once
 
-#include "asn1acn_global.h"
-
-#include <extensionsystem/iplugin.h>
-
 namespace Asn1Acn {
 namespace Internal {
+namespace Tools {
 
-class Asn1AcnPlugin : public ExtensionSystem::IPlugin
-{
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QtCreatorPlugin" FILE "Asn1Acn.json")
+void switchBetweenDataAndEncoding();
+void switchBetweenDataAndEncodingInNextSplit();
 
-public:
-    Asn1AcnPlugin();
-    ~Asn1AcnPlugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString) override;
-    void extensionsInitialized() override;
-    ShutdownFlag aboutToShutdown() override;
-
-private:
-    void initializeMenus();
-
-#ifdef WITH_TESTS   
-    QList<QObject *> createTestObjects() const override;
-#endif
-};
-
+} // namespace Tools
 } // namespace Internal
 } // namespace Asn1Acn

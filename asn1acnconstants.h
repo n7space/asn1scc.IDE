@@ -39,6 +39,7 @@ const char SETTINGS_GROUP[] = "Asn1Acn";
 
 // Shared constants
 
+const char BASE_CONTEXT[] = "Asn1Acn.BaseContext";
 const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
 const char WIZARD_CATEGORY[] = "O.Asn1Acn";
 const char STRUCTURES_VIEW_ID[] = "Asn1Acn.StructuresView";
@@ -55,6 +56,12 @@ const char ASN1_SNIPPETS_GROUP_ID[] = "ASN.1";
 const char LANG_ACN[] = "ACN";
 const char ACNEDITOR_ID[] = "Asn1Acn.AcnEditor";
 const char ACN_MIMETYPE[] = "text/x-acn";
+
+// Menus
+
+const char M_TOOLS_ASN[]                      = "Asn1Acn.Tools.Menu";
+const char SWITCH_DATA_ENCODING[]             = "Asn1Acn.SwitchDataEncoding";
+const char OPEN_DATA_ENCODING_IN_NEXT_SPLIT[] = "Asn1Acn.SwitchDataEncodingInNextSplit";
 
 // Icons
 
