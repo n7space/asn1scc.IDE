@@ -57,7 +57,7 @@ TextEditor::IAssistProposal *CompletionAssistProcessor::perform(const TextEditor
     if (interface->reason() != TextEditor::ExplicitlyInvoked && !shouldAccept(interface))
         return nullptr;
 
-    QList<TextEditor::AssistProposalItemInterface *> proposals;
+    Proposals proposals;
 
     appendProposalsFromUserTypes(proposals, interface->fileName());
     appendProposalsFromSnippets(proposals);
@@ -70,8 +70,7 @@ TextEditor::IAssistProposal *CompletionAssistProcessor::perform(const TextEditor
     return proposal;
 }
 
-void
-CompletionAssistProcessor::appendProposalsFromUserTypes(QList<TextEditor::AssistProposalItemInterface *> &proposals, const QString &fileName) const
+void CompletionAssistProcessor::appendProposalsFromUserTypes(Proposals &proposals, const QString &fileName) const
 {
     ParsedDataStorage *storage = ParsedDataStorage::instance();
 
@@ -82,12 +81,12 @@ CompletionAssistProcessor::appendProposalsFromUserTypes(QList<TextEditor::Assist
     proposals.append(doc->getProposalsProvider().takeProposals());
 }
 
-void CompletionAssistProcessor::appendProposalsFromSnippets(QList<TextEditor::AssistProposalItemInterface *> &proposals) const
+void CompletionAssistProcessor::appendProposalsFromSnippets(Proposals &proposals) const
 {
     proposals.append(m_snippetCollector.collect());
 }
 
-void CompletionAssistProcessor::appendProposalsFromKeywords(QList<TextEditor::AssistProposalItemInterface *> &proposals) const
+void CompletionAssistProcessor::appendProposalsFromKeywords(Proposals &proposals) const
 {
     std::unique_ptr<BuiltinsProposalsProvider> provider = getBuiltinsProposalsProvider();
     proposals.append(provider->takeProposals());

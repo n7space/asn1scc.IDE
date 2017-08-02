@@ -34,6 +34,8 @@
 
 #include "builtinsproposalsprovider.h"
 
+#include "completiontypedefs.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -47,9 +49,9 @@ public:
 private:
     virtual std::unique_ptr<BuiltinsProposalsProvider> getBuiltinsProposalsProvider() const = 0;
 
-    void appendProposalsFromUserTypes(QList<TextEditor::AssistProposalItemInterface *> &proposals, const QString &fileName) const;
-    void appendProposalsFromSnippets(QList<TextEditor::AssistProposalItemInterface *> &proposals) const;
-    void appendProposalsFromKeywords(QList<TextEditor::AssistProposalItemInterface *> &proposals) const;
+    void appendProposalsFromUserTypes(Proposals &proposals, const QString &fileName) const;
+    void appendProposalsFromSnippets(Proposals &proposals) const;
+    void appendProposalsFromKeywords(Proposals &proposals) const;
 
     bool shouldAccept(const TextEditor::AssistInterface *interface) const;
     int findStartOfName(const TextEditor::AssistInterface *interface) const;

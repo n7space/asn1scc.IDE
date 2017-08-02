@@ -31,6 +31,8 @@
 
 #include "proposalsprovider.h"
 
+#include "completiontypedefs.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -43,8 +45,8 @@ public:
                               const QStringList &attributes);
 
 private:
-    QList<TextEditor::AssistProposalItemInterface *> createProposals() const override;
-    QList<TextEditor::AssistProposalItemInterface *> createProposalsGroup(const QStringList &proposalsGroup) const;
+    Proposals createProposals() const override;
+    Proposals createProposalsGroup(const QStringList &proposalsGroup) const;
 
     const QStringList &m_keywords;
     const QStringList &m_types;

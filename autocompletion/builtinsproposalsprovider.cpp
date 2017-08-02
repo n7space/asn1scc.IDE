@@ -39,9 +39,9 @@ BuiltinsProposalsProvider::BuiltinsProposalsProvider(const QStringList &keywords
 {
 }
 
-QList<TextEditor::AssistProposalItemInterface *> BuiltinsProposalsProvider::createProposals() const
+Proposals BuiltinsProposalsProvider::createProposals() const
 {
-    QList<TextEditor::AssistProposalItemInterface *> proposals;
+    Proposals proposals;
 
     proposals.append(createProposalsGroup(m_keywords));
     proposals.append(createProposalsGroup(m_types));
@@ -51,10 +51,9 @@ QList<TextEditor::AssistProposalItemInterface *> BuiltinsProposalsProvider::crea
     return proposals;
 }
 
-QList<TextEditor::AssistProposalItemInterface *>
-BuiltinsProposalsProvider::createProposalsGroup(const QStringList &group) const
+Proposals BuiltinsProposalsProvider::createProposalsGroup(const QStringList &group) const
 {
-    QList<TextEditor::AssistProposalItemInterface *> proposals;
+    Proposals proposals;
 
     foreach(const QString &word, group)
         addProposal(proposals, word);

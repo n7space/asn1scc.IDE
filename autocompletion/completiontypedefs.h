@@ -25,28 +25,14 @@
 
 #pragma once
 
-#include <memory>
+#include <QList>
 
-#include <texteditor/codeassist/assistproposalitem.h>
-
-#include "proposalsprovider.h"
-#include "../data/modules.h"
+#include <texteditor/codeassist/assistproposaliteminterface.h>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class UserTypesProposalsProvider : public ProposalsProvider
-{
-public:
-    UserTypesProposalsProvider(const std::unique_ptr<Data::Modules> &data);
-
-private:
-    Proposals createProposals() const override;
-    Proposals createImportedTypes(const QList<QString> &importedProposals) const;
-    Proposals createInternalTypes(const Data::Definitions::Types &types) const;
-
-    const std::unique_ptr<Data::Modules> &m_data;
-};
+using Proposals = QList<TextEditor::AssistProposalItemInterface *>;
 
 } /* namespace Internal */
 } /* namespace Asn1Acn */

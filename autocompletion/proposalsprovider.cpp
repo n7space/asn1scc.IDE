@@ -32,13 +32,12 @@ ProposalsProvider::ProposalsProvider(const QString &iconPath)
 {
 }
 
-QList<TextEditor::AssistProposalItemInterface *> ProposalsProvider::takeProposals() const
+Proposals ProposalsProvider::takeProposals() const
 {
     return createProposals();
 }
 
-void ProposalsProvider::addProposal(QList<TextEditor::AssistProposalItemInterface *> &proposals,
-                                    const QString &text) const
+void ProposalsProvider::addProposal(Proposals &proposals, const QString &text) const
 {
     auto proposalItem = new TextEditor::AssistProposalItem;
 

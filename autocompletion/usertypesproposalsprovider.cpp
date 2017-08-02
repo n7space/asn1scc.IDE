@@ -36,9 +36,9 @@ UserTypesProposalsProvider::UserTypesProposalsProvider(const std::unique_ptr<Dat
 {
 }
 
-QList<TextEditor::AssistProposalItemInterface *> UserTypesProposalsProvider::createProposals() const
+Proposals UserTypesProposalsProvider::createProposals() const
 {
-    QList<TextEditor::AssistProposalItemInterface *> proposals;
+    Proposals proposals;
 
     Data::Modules::DefinitionsMap::const_iterator defIt;
     for (defIt = m_data->definitions().begin(); defIt != m_data->definitions().end(); defIt++) {
@@ -53,10 +53,9 @@ QList<TextEditor::AssistProposalItemInterface *> UserTypesProposalsProvider::cre
     return proposals;
 }
 
-QList<TextEditor::AssistProposalItemInterface *>
-UserTypesProposalsProvider::createInternalTypes(const Data::Definitions::Types &types) const
+Proposals UserTypesProposalsProvider::createInternalTypes(const Data::Definitions::Types &types) const
 {
-    QList<TextEditor::AssistProposalItemInterface *> proposals;
+    Proposals proposals;
 
     Data::Definitions::Types::const_iterator typeIt;
     for (typeIt = types.begin(); typeIt != types.end(); typeIt++)
@@ -65,10 +64,9 @@ UserTypesProposalsProvider::createInternalTypes(const Data::Definitions::Types &
     return proposals;
 }
 
-QList<TextEditor::AssistProposalItemInterface *>
-UserTypesProposalsProvider::createImportedTypes(const QList<QString> &importedProposals) const
+Proposals UserTypesProposalsProvider::createImportedTypes(const QList<QString> &importedProposals) const
 {
-    QList<TextEditor::AssistProposalItemInterface *> proposals;
+    Proposals proposals;
 
     foreach(const QString &typeName, importedProposals)
         addProposal(proposals, typeName);
