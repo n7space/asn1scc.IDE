@@ -55,8 +55,8 @@ private slots:
     void onFilesProcessingFinished(const QString &projectName);
 
 private:
-    void handleFilesAdded(const QString &projectName, const QStringList &filePaths);
-    void handleFilesRemoved(const QString &projectName, const QStringList &filePaths);
+    void removeStaleFiles(const QString &projectName, const QStringList &filePaths);
+    void addNewFiles(const QString &projectName, const QStringList &filePaths);
 
     QStringList getStaleFilesNames(const QString &projectName, const QStringList &filePaths) const;
 
