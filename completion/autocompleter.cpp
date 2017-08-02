@@ -28,7 +28,7 @@
 
 #include <QTextCursor>
 
-using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Completion;
 
 AutoCompleter::AutoCompleter()
 {

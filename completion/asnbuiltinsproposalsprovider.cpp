@@ -27,7 +27,7 @@
 
 #include <QStringList>
 
-using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Completion;
 
 static const QStringList KEYWORDS = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMATIC", "TAGS", "EXPLICIT", "IMPLICIT",
                                       "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "IMPORTS", "DEFINITIONS", "FROM",

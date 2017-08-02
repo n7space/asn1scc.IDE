@@ -43,7 +43,7 @@
 #include "../acneditor.h"
 #include "../asneditor.h"
 
-using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Completion;
 
 static const int COMPLETER_ACTIVATION_LENGHT = 3;
 

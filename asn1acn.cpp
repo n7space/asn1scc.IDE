@@ -38,7 +38,7 @@
 
 #include <texteditor/texteditorconstants.h>
 
-#include "autocompletion/asnsnippetprovider.h"
+#include "completion/asnsnippetprovider.h"
 #include "asneditor.h"
 #include "outline.h"
 #include "structuresview.h"
@@ -90,7 +90,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new AsnEditorFactory);
     addAutoReleasedObject(new StructuresViewFactory);
-    addAutoReleasedObject(new AsnSnippetProvider);
+    addAutoReleasedObject(new Completion::AsnSnippetProvider);
 
     addAutoReleasedObject(new AcnEditorFactory);
 

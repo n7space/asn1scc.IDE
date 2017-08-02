@@ -54,6 +54,26 @@ DEFINES += ASN1ACN_LIBRARY
 # asn1acn plugin files
 
 SOURCES += \
+    completion/autocompleter.cpp \
+    completion/asncompletionassist.cpp \
+    completion/asnsnippetprovider.cpp \
+    completion/proposalsprovider.cpp \
+    completion/asnbuiltinsproposalsprovider.cpp \
+    completion/usertypesproposalsprovider.cpp \
+    completion/acnbuiltinsproposalsprovider.cpp \
+    completion/completionassist.cpp \
+    completion/acncompletionassist.cpp \
+    completion/builtinsproposalsprovider.cpp \
+    \
+    options-pages/general.cpp \
+    options-pages/service.cpp \
+    options-pages/servicewidget.cpp \
+    options-pages/generalwidget.cpp \
+    \
+    settings/settings.cpp \
+    settings/general.cpp \
+    settings/service.cpp \
+    \
     asn1acn.cpp \
     asneditor.cpp \
     asndocument.cpp \
@@ -78,26 +98,36 @@ SOURCES += \
     documentsourceinfo.cpp \
     projectcontenthandler.cpp \
     indenter.cpp \
-    settings/settings.cpp \
-    settings/general.cpp \
-    settings/service.cpp \
-    options-pages/general.cpp \
-    options-pages/service.cpp \
-    options-pages/servicewidget.cpp \
-    options-pages/generalwidget.cpp \
-    linkcreator.cpp \
-    autocompletion/autocompleter.cpp \
-    autocompletion/asncompletionassist.cpp \
-    autocompletion/asnsnippetprovider.cpp \
-    autocompletion/proposalsprovider.cpp \
-    autocompletion/asnbuiltinsproposalsprovider.cpp \
-    autocompletion/usertypesproposalsprovider.cpp \
-    autocompletion/acnbuiltinsproposalsprovider.cpp \
-    autocompletion/completionassist.cpp \
-    autocompletion/acncompletionassist.cpp \
-    autocompletion/builtinsproposalsprovider.cpp
+    linkcreator.cpp
 
 HEADERS += \
+    completion/autocompleter.h \
+    completion/asncompletionassist.h \
+    completion/asnsnippetprovider.h \
+    completion/proposalsprovider.h \
+    completion/asnbuiltinsproposalsprovider.h \
+    completion/usertypesproposalsprovider.h \
+    completion/acnbuiltinsproposalsprovider.h \
+    completion/completionassist.h \
+    completion/acncompletionassist.h \
+    completion/builtinsproposalsprovider.h \
+    completion/completiontypedefs.h \
+    \
+    data/sourcelocation.h \
+    data/typeassignment.h \
+    data/definitions.h \
+    data/modules.h \
+    data/typereference.h \
+    \
+    options-pages/general.h \
+    options-pages/service.h \
+    options-pages/servicewidget.h \
+    options-pages/generalwidget.h \
+    \
+    settings/settings.h\
+    settings/general.h \
+    settings/service.h \
+    \
     asn1acn_global.h \
     asn1acnconstants.h \
     asn1acn.h \
@@ -113,10 +143,6 @@ HEADERS += \
     parseddocument.h \
     structuresview.h \
     astxmlparser.h \
-    data/sourcelocation.h \
-    data/typeassignment.h \
-    data/definitions.h \
-    data/modules.h \
     modeltreenode.h \
     projectwatcher.h \
     overviewwidget.h \
@@ -129,25 +155,7 @@ HEADERS += \
     projectcontenthandler.h \
     indenter.h \
     tr.h \
-    settings/settings.h\
-    settings/general.h \
-    settings/service.h \
-    options-pages/general.h \
-    options-pages/service.h \
-    options-pages/servicewidget.h \
-    options-pages/generalwidget.h \
-    linkcreator.h \
-    data/typereference.h \
-    autocompletion/autocompleter.h \
-    autocompletion/asncompletionassist.h \
-    autocompletion/asnsnippetprovider.h \
-    autocompletion/proposalsprovider.h \
-    autocompletion/asnbuiltinsproposalsprovider.h \
-    autocompletion/usertypesproposalsprovider.h \
-    autocompletion/acnbuiltinsproposalsprovider.h \
-    autocompletion/completionassist.h \
-    autocompletion/acncompletionassist.h \
-    autocompletion/builtinsproposalsprovider.h
+    linkcreator.h
 
 FORMS += \
     options-pages/general.ui \

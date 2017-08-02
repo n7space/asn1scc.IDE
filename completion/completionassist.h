@@ -38,6 +38,7 @@
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Completion {
 
 class CompletionAssistProcessor : public TextEditor::IAssistProcessor
 {
@@ -67,5 +68,6 @@ public:
     bool isContinuationChar(const QChar &c) const override;
 };
 
-} // Internal
-} // Asn1Acn
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

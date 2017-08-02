@@ -23,33 +23,21 @@
 **
 ****************************************************************************/
 
-#include "acncompletionassist.h"
+#pragma once
 
-#include "../asn1acnconstants.h"
+#include "builtinsproposalsprovider.h"
 
-#include "acnbuiltinsproposalsprovider.h"
+namespace Asn1Acn {
+namespace Internal {
+namespace Completion {
 
-using namespace Asn1Acn::Internal;
-
-AcnCompletionAssistProcessor::AcnCompletionAssistProcessor()
-    : CompletionAssistProcessor(QLatin1String(Constants::ACN1_SNIPPETS_GROUP_ID))
+class AcnBuiltinsProposalProvider : public BuiltinsProposalsProvider
 {
-}
 
-std::unique_ptr<BuiltinsProposalsProvider> AcnCompletionAssistProcessor::getBuiltinsProposalsProvider() const
-{
-    auto provider = std::make_unique<AcnBuiltinsProposalProvider>();
-    return std::move(provider);
-}
+public:
+    AcnBuiltinsProposalProvider();
+};
 
-bool AcnCompletionAssistProvider::supportsEditor(Core::Id editorId) const
-{
-    return editorId == Constants::ACNEDITOR_ID;
-}
-
-TextEditor::IAssistProcessor *AcnCompletionAssistProvider::createProcessor() const
-{
-    return new AcnCompletionAssistProcessor;
-}
-
-
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

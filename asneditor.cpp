@@ -31,8 +31,8 @@
 
 #include <texteditor/texteditoractionhandler.h>
 
-#include "autocompletion/autocompleter.h"
-#include "autocompletion/asncompletionassist.h"
+#include "completion/autocompleter.h"
+#include "completion/asncompletionassist.h"
 #include "asn1acnconstants.h"
 #include "linkcreator.h"
 #include "asndocument.h"
@@ -59,7 +59,7 @@ AsnEditorFactory::AsnEditorFactory()
     setEditorWidgetCreator([]() { return new AsnEditorWidget; });
     setEditorCreator([]() { return new AsnEditor; });
 
-    setCompletionAssistProvider(new AsnCompletionAssistProvider);
+    setCompletionAssistProvider(new Completion::AsnCompletionAssistProvider);
     setAutoCompleterCreator([]() { return new AutoCompleter; });
     setIndenterCreator([]() { return new Indenter; });
 

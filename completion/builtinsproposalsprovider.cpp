@@ -28,7 +28,7 @@
 
 #include "builtinsproposalsprovider.h"
 
-using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Completion;
 
 BuiltinsProposalsProvider::BuiltinsProposalsProvider(const QStringList &keywords,
                                                      const QStringList &types,

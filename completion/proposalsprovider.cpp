@@ -23,31 +23,26 @@
 **
 ****************************************************************************/
 
-#include "asncompletionassist.h"
+#include "proposalsprovider.h"
 
-#include "../asn1acnconstants.h"
+using namespace Asn1Acn::Internal::Completion;
 
-#include "asnbuiltinsproposalsprovider.h"
-
-using namespace Asn1Acn::Internal;
-
-AsnCompletionAssistProcessor::AsnCompletionAssistProcessor()
-    : CompletionAssistProcessor(QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID))
+ProposalsProvider::ProposalsProvider(const QString &iconPath)
+    : m_memberIcon(iconPath)
 {
 }
 
-std::unique_ptr<BuiltinsProposalsProvider> AsnCompletionAssistProcessor::getBuiltinsProposalsProvider() const
+Proposals ProposalsProvider::takeProposals() const
 {
-    auto provider = std::make_unique<AsnBuiltinsProposalsProvider>();
-    return std::move(provider);
+    return createProposals();
 }
 
-bool AsnCompletionAssistProvider::supportsEditor(Core::Id editorId) const
+void ProposalsProvider::addProposal(Proposals &proposals, const QString &text) const
 {
-    return editorId == Constants::ASNEDITOR_ID;
-}
+    auto proposalItem = new TextEditor::AssistProposalItem;
 
-TextEditor::IAssistProcessor *AsnCompletionAssistProvider::createProcessor() const
-{
-    return new AsnCompletionAssistProcessor;
+    proposalItem->setText(text);
+    proposalItem->setIcon(m_memberIcon);
+
+    proposals.append(proposalItem);
 }

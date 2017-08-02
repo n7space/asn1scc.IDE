@@ -25,31 +25,30 @@
 
 #pragma once
 
-#include <QIcon>
-#include <QList>
-#include <QString>
+#include <memory>
 
 #include <texteditor/codeassist/assistproposalitem.h>
 
-#include "completiontypedefs.h"
+#include "proposalsprovider.h"
+#include "../data/modules.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Completion {
 
-class ProposalsProvider
+class UserTypesProposalsProvider : public ProposalsProvider
 {
 public:
-    ProposalsProvider(const QString &iconPath);
-    Proposals takeProposals() const;
-
-protected:
-    void addProposal(Proposals &proposals, const QString &text) const;
-
-    QIcon m_memberIcon;
+    UserTypesProposalsProvider(const std::unique_ptr<Data::Modules> &data);
 
 private:
-    virtual Proposals createProposals() const = 0;
+    Proposals createProposals() const override;
+    Proposals createImportedTypes(const QList<QString> &importedProposals) const;
+    Proposals createInternalTypes(const Data::Definitions::Types &types) const;
+
+    const std::unique_ptr<Data::Modules> &m_data;
 };
 
+} /* nameapsce Completion */
 } /* namespace Internal */
 } /* namespace Asn1Acn */

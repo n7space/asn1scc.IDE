@@ -29,7 +29,7 @@
 
 #include <QDebug>
 
-using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Completion;
 
 UserTypesProposalsProvider::UserTypesProposalsProvider(const std::unique_ptr<Data::Modules> &data)
     : ProposalsProvider(":/codemodel/images/member.png"), m_data(data)

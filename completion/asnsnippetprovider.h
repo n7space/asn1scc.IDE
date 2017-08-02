@@ -23,33 +23,26 @@
 **
 ****************************************************************************/
 
-#include "asnsnippetprovider.h"
+#pragma once
 
-#include "autocompleter.h"
-#include "../asn1acnconstants.h"
+#include <texteditor/snippets/isnippetprovider.h>
 
-#include <texteditor/snippets/snippeteditor.h>
-#include <texteditor/textdocument.h>
+namespace Asn1Acn {
+namespace Internal {
+namespace Completion {
 
-#include <QLatin1String>
-#include <QCoreApplication>
-
-using namespace Asn1Acn;
-using namespace Internal;
-
-QString AsnSnippetProvider::groupId() const
+class AsnSnippetProvider : public TextEditor::ISnippetProvider
 {
-    return QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID);
-}
+    Q_OBJECT
 
-QString AsnSnippetProvider::displayName() const
-{
-    return QCoreApplication::translate("Asn1Acn::Internal::AsnSnippetProvider", "ASN.1");
-}
+public:
+    ~AsnSnippetProvider() final = default;
 
-void AsnSnippetProvider::decorateEditor(TextEditor::SnippetEditorWidget *editor) const
-{
-    editor->setAutoCompleter(new AutoCompleter);
-    editor->textDocument()->setMimeType(Constants::ASN1_MIMETYPE);
-    editor->configureGenericHighlighter();
-}
+    QString groupId() const override final;
+    QString displayName() const override final;
+    void decorateEditor(TextEditor::SnippetEditorWidget *editor) const override final;
+};
+
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

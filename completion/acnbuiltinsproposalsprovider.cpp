@@ -23,19 +23,24 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include <QStringList>
 
-#include "builtinsproposalsprovider.h"
+#include "acnbuiltinsproposalsprovider.h"
 
-namespace Asn1Acn {
-namespace Internal {
+using namespace Asn1Acn::Internal::Completion;
 
-class AcnBuiltinsProposalProvider : public BuiltinsProposalsProvider
+static const QStringList KEYWORDS = { "BEGIN", "END", "DEFINITIONS", "CONSTANT" };
+
+static const QStringList TYPES = { "INTEGER", "BOOLEAN" };
+
+static const QStringList BUILTIN = { "NULL", "big", "little", "pos-int", "twos-complement", "BCD", "ASCII",
+                                     "IEEE754-1985-32", "IEEE754-1985-64", "byte", "word", "dword" };
+
+static const QStringList ATTRIBUTES = { "endianness", "encoding", "size", "null-terminated", "termination-pattern",
+                                        "align-to-next", "encode-values", "true-value", "false-value", "pattern",
+                                        "mapping-function", "present-when", "determinant" };
+
+AcnBuiltinsProposalProvider::AcnBuiltinsProposalProvider()
+    : BuiltinsProposalsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
 {
-
-public:
-    AcnBuiltinsProposalProvider();
-};
-
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+}

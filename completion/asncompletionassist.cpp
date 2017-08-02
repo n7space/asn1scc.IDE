@@ -23,36 +23,31 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "asncompletionassist.h"
 
-#include <QList>
+#include "../asn1acnconstants.h"
 
-#include <texteditor/codeassist/assistproposalitem.h>
+#include "asnbuiltinsproposalsprovider.h"
 
-#include "proposalsprovider.h"
+using namespace Asn1Acn::Internal::Completion;
 
-#include "completiontypedefs.h"
-
-namespace Asn1Acn {
-namespace Internal {
-
-class BuiltinsProposalsProvider : public ProposalsProvider
+AsnCompletionAssistProcessor::AsnCompletionAssistProcessor()
+    : CompletionAssistProcessor(QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID))
 {
-public:
-    BuiltinsProposalsProvider(const QStringList &keywords,
-                              const QStringList &types,
-                              const QStringList &builtin,
-                              const QStringList &attributes);
+}
 
-private:
-    Proposals createProposals() const override;
-    Proposals createProposalsGroup(const QStringList &proposalsGroup) const;
+std::unique_ptr<BuiltinsProposalsProvider> AsnCompletionAssistProcessor::getBuiltinsProposalsProvider() const
+{
+    auto provider = std::make_unique<AsnBuiltinsProposalsProvider>();
+    return std::move(provider);
+}
 
-    const QStringList &m_keywords;
-    const QStringList &m_types;
-    const QStringList &m_builtin;
-    const QStringList &m_attributes;
-};
+bool AsnCompletionAssistProvider::supportsEditor(Core::Id editorId) const
+{
+    return editorId == Constants::ASNEDITOR_ID;
+}
 
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+TextEditor::IAssistProcessor *AsnCompletionAssistProvider::createProcessor() const
+{
+    return new AsnCompletionAssistProcessor;
+}

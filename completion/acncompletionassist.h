@@ -3,7 +3,7 @@
 ** Copyright (C) 2017 N7 Mobile sp. z o. o.
 ** Contact: http://n7mobile.com/Space
 **
-** This file is part of ASN.1/ACN Plugin for QtCreator.
+** This file is part of Acn.1/ACN Plugin for QtCreator.
 **
 ** Plugin was developed under a programme and funded by
 ** European Space Agency.
@@ -23,26 +23,34 @@
 **
 ****************************************************************************/
 
-#include "proposalsprovider.h"
+#pragma once
 
-using namespace Asn1Acn::Internal;
+#include <coreplugin/id.h>
 
-ProposalsProvider::ProposalsProvider(const QString &iconPath)
-    : m_memberIcon(iconPath)
+#include "completionassist.h"
+
+namespace Asn1Acn {
+namespace Internal {
+namespace Completion {
+
+class AcnCompletionAssistProcessor : public CompletionAssistProcessor
 {
-}
+public:
+    AcnCompletionAssistProcessor();
 
-Proposals ProposalsProvider::takeProposals() const
+private:
+    std::unique_ptr<BuiltinsProposalsProvider> getBuiltinsProposalsProvider() const override;
+};
+
+class AcnCompletionAssistProvider : public CompletionAssistProvider
 {
-    return createProposals();
-}
+    Q_OBJECT
 
-void ProposalsProvider::addProposal(Proposals &proposals, const QString &text) const
-{
-    auto proposalItem = new TextEditor::AssistProposalItem;
+public:
+    bool supportsEditor(Core::Id editorId) const override;
+    TextEditor::IAssistProcessor *createProcessor() const override;
+};
 
-    proposalItem->setText(text);
-    proposalItem->setIcon(m_memberIcon);
-
-    proposals.append(proposalItem);
-}
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

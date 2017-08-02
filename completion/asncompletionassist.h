@@ -25,14 +25,32 @@
 
 #pragma once
 
-#include <QList>
+#include <coreplugin/id.h>
 
-#include <texteditor/codeassist/assistproposaliteminterface.h>
+#include "completionassist.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Completion {
 
-using Proposals = QList<TextEditor::AssistProposalItemInterface *>;
+class AsnCompletionAssistProcessor : public CompletionAssistProcessor
+{
+public:
+    AsnCompletionAssistProcessor();
 
+private:
+    std::unique_ptr<BuiltinsProposalsProvider> getBuiltinsProposalsProvider() const override;
+};
+
+class AsnCompletionAssistProvider : public CompletionAssistProvider
+{
+    Q_OBJECT
+
+public:
+    bool supportsEditor(Core::Id editorId) const override;
+    TextEditor::IAssistProcessor *createProcessor() const override;
+};
+
+} /* nameapsce Completion */
 } /* namespace Internal */
 } /* namespace Asn1Acn */
