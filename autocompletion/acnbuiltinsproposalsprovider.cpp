@@ -29,16 +29,16 @@
 
 using namespace Asn1Acn::Internal;
 
-static const char *KEYWORDS[] = { "BEGIN", "END", "DEFINITIONS", "CONSTANT", "" };
+static const char *KEYWORDS[] = { "BEGIN", "END", "DEFINITIONS", "CONSTANT", nullptr };
 
-static const char *TYPES[] = { "INTEGER", "BOOLEAN", "" };
+static const char *TYPES[] = { "INTEGER", "BOOLEAN", nullptr };
 
 static const char *BUILTIN[] = { "NULL", "big", "little", "pos-int", "twos-complement", "BCD", "ASCII",
-                                 "IEEE754-1985-32", "IEEE754-1985-64", "byte", "word", "dword", "" };
+                                 "IEEE754-1985-32", "IEEE754-1985-64", "byte", "word", "dword", nullptr };
 
 static const char *ATTRIBUTES[] = { "endianness", "encoding", "size", "null-terminated", "termination-pattern",
                                     "align-to-next", "encode-values", "true-value", "false-value", "pattern",
-                                    "mapping-function", "present-when", "determinant", "" };
+                                    "mapping-function", "present-when", "determinant", nullptr };
 
 AcnBuiltinsProposalProvider::AcnBuiltinsProposalProvider()
     : BuiltinsProposalsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)

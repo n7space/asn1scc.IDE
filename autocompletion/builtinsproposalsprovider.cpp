@@ -56,7 +56,7 @@ BuiltinsProposalsProvider::createProposalsGroup(const char *group[]) const
     QList<TextEditor::AssistProposalItemInterface *> proposals;
 
     int i = 0;
-    while (group[i] != '\0') {
+    while (group[i] != nullptr) {
         addProposal(proposals, QLatin1String(group[i]));
         i++;
     }
