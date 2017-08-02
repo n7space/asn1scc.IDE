@@ -27,6 +27,7 @@
 
 #include "../data/definitions.h"
 
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Completion;
 
 UserTypesProposalsProvider::UserTypesProposalsProvider(const std::unique_ptr<Data::Modules> &data)
