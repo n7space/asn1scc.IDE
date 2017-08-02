@@ -43,6 +43,7 @@ using namespace TextEditor;
 AcnEditor::AcnEditor()
 {
     addContext(Constants::LANG_ACN);
+    addContext(Constants::BASE_CONTEXT);
 }
 
 AcnEditorFactory::AcnEditorFactory()
