@@ -27,8 +27,6 @@
 
 #include "../data/definitions.h"
 
-#include <QDebug>
-
 using namespace Asn1Acn::Internal::Completion;
 
 UserTypesProposalsProvider::UserTypesProposalsProvider(const std::unique_ptr<Data::Modules> &data)
@@ -57,8 +55,7 @@ Proposals UserTypesProposalsProvider::createInternalTypes(const Data::Definition
 {
     Proposals proposals;
 
-    Data::Definitions::Types::const_iterator typeIt;
-    for (typeIt = types.begin(); typeIt != types.end(); typeIt++)
+    for (auto typeIt = types.begin(); typeIt != types.end(); typeIt++)
         addProposal(proposals, typeIt->second.name());
 
     return proposals;

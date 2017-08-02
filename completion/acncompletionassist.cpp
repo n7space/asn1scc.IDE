@@ -32,7 +32,7 @@
 using namespace Asn1Acn::Internal::Completion;
 
 AcnCompletionAssistProcessor::AcnCompletionAssistProcessor()
-    : CompletionAssistProcessor(QLatin1String(Constants::ACN1_SNIPPETS_GROUP_ID))
+    : CompletionAssistProcessor(QLatin1String(Constants::ACN_SNIPPETS_GROUP_ID))
 {
 }
 
