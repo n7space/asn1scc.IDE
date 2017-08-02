@@ -37,19 +37,19 @@ namespace Internal {
 class BuiltinsProposalsProvider : public ProposalsProvider
 {
 public:
-    BuiltinsProposalsProvider(const char *keywords[],
-                              const char *types[],
-                              const char *builtin[],
-                              const char *attributes[]);
+    BuiltinsProposalsProvider(const QStringList &keywords,
+                              const QStringList &types,
+                              const QStringList &builtin,
+                              const QStringList &attributes);
 
 private:
     QList<TextEditor::AssistProposalItemInterface *> createProposals() const override;
-    QList<TextEditor::AssistProposalItemInterface *> createProposalsGroup(const char *proposalsGroup[]) const;
+    QList<TextEditor::AssistProposalItemInterface *> createProposalsGroup(const QStringList &proposalsGroup) const;
 
-    const char **m_keywords;
-    const char **m_types;
-    const char **m_builtin;
-    const char **m_attributes;
+    const QStringList &m_keywords;
+    const QStringList &m_types;
+    const QStringList &m_builtin;
+    const QStringList &m_attributes;
 };
 
 } /* namespace Internal */

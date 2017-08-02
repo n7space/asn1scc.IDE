@@ -25,19 +25,21 @@
 
 #include "asnbuiltinsproposalsprovider.h"
 
+#include <QStringList>
+
 using namespace Asn1Acn::Internal;
 
-static const char *KEYWORDS[] = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMATIC", "TAGS", "EXPLICIT", "IMPLICIT",
-                                  "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "IMPORTS", "DEFINITIONS", "FROM",
-                                  "APPLICATION", "PRIVATE", "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM", nullptr };
+static const QStringList KEYWORDS = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMATIC", "TAGS", "EXPLICIT", "IMPLICIT",
+                                      "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "IMPORTS", "DEFINITIONS", "FROM",
+                                      "APPLICATION", "PRIVATE", "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM" };
 
-static const char *TYPES[] = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SET OF", "SEQUENCE",
-                               "SEQUENCE OF", "OCTET STRING", "BIT STRING", nullptr };
+static const QStringList TYPES = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SET OF", "SEQUENCE",
+                                   "SEQUENCE OF", "OCTET STRING", "BIT STRING" };
 
-static const char *BUILTIN[] = { "NULL", "FALSE", "TRUE", nullptr };
+static const QStringList BUILTIN = { "NULL", "FALSE", "TRUE" };
 
-static const char *ATTRIBUTES[] = { "SIZE", "OPTIONAL", "MIN", "MAX", "DEFAULT", "WITH COMPONENT", "WITH COMPONENTS",
-                                    "INCLUDES", "ABSENT", "PRESENT", "PATTERN", nullptr };
+static const QStringList ATTRIBUTES = { "SIZE", "OPTIONAL", "MIN", "MAX", "DEFAULT", "WITH COMPONENT", "WITH COMPONENTS",
+                                        "INCLUDES", "ABSENT", "PRESENT", "PATTERN" };
 
 AsnBuiltinsProposalsProvider::AsnBuiltinsProposalsProvider()
     : BuiltinsProposalsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
