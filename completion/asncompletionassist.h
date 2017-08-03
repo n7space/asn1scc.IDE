@@ -25,40 +25,32 @@
 
 #pragma once
 
-#include <QIcon>
+#include <coreplugin/id.h>
 
-#include <texteditor/codeassist/assistinterface.h>
-#include <texteditor/codeassist/completionassistprovider.h>
-#include <texteditor/codeassist/iassistprocessor.h>
-#include <texteditor/snippets/snippetassistcollector.h>
+#include "completionassist.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Completion {
 
-class AsnCompletionAssistProcessor : public TextEditor::IAssistProcessor
+class AsnCompletionAssistProcessor : public CompletionAssistProcessor
 {
 public:
     AsnCompletionAssistProcessor();
 
-    TextEditor::IAssistProposal *perform(const TextEditor::AssistInterface *interface) override;
-
 private:
-    int findStartOfName(const TextEditor::AssistInterface *interface) const;
-
-    QIcon m_memberIcon;
-    TextEditor::SnippetAssistCollector m_snippetCollector;
+    std::unique_ptr<BuiltinsProposalsProvider> getBuiltinsProposalsProvider() const override;
 };
 
-class AsnCompletionAssistProvider : public TextEditor::CompletionAssistProvider
+class AsnCompletionAssistProvider : public CompletionAssistProvider
 {
     Q_OBJECT
 
 public:
     bool supportsEditor(Core::Id editorId) const override;
     TextEditor::IAssistProcessor *createProcessor() const override;
-
-    bool isContinuationChar(const QChar &c) const override;
 };
 
-} // Internal
-} // Asn1Acn
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

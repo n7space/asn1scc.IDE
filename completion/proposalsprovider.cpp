@@ -22,51 +22,27 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
 
-#include <map>
+#include "proposalsprovider.h"
 
-#include <QString>
+using namespace Asn1Acn::Internal::Completion;
 
-#include "typeassignment.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace Data {
-
-class Definitions
+ProposalsProvider::ProposalsProvider(const QString &iconPath)
+    : m_memberIcon(iconPath)
 {
-public:
-    Definitions(const QString& name, const SourceLocation& location)
-        : m_name(name), m_location(location)
-    {}
+}
 
-    const QString& name() const { return m_name; }
-    const SourceLocation& location() const { return m_location; }
+Proposals ProposalsProvider::takeProposals() const
+{
+    return createProposals();
+}
 
-    void add(const TypeAssignment& type)
-    {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
+void ProposalsProvider::addProposal(Proposals &proposals, const QString &text) const
+{
+    auto proposalItem = new TextEditor::AssistProposalItem;
 
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
+    proposalItem->setText(text);
+    proposalItem->setIcon(m_memberIcon);
 
-    using Types = std::map<QString, TypeAssignment>;
-
-    const Types& types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
-
-private:
-    QString m_name;
-    SourceLocation m_location;
-    Types m_types;
-
-    QList<QString> m_importedTypes;
-};
-
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+    proposals.append(proposalItem);
+}

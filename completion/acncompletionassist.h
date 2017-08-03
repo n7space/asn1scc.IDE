@@ -3,7 +3,7 @@
 ** Copyright (C) 2017 N7 Mobile sp. z o. o.
 ** Contact: http://n7mobile.com/Space
 **
-** This file is part of ASN.1/ACN Plugin for QtCreator.
+** This file is part of Acn.1/ACN Plugin for QtCreator.
 **
 ** Plugin was developed under a programme and funded by
 ** European Space Agency.
@@ -22,51 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <map>
+#include <coreplugin/id.h>
 
-#include <QString>
-
-#include "typeassignment.h"
+#include "completionassist.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace Completion {
 
-class Definitions
+class AcnCompletionAssistProcessor : public CompletionAssistProcessor
 {
 public:
-    Definitions(const QString& name, const SourceLocation& location)
-        : m_name(name), m_location(location)
-    {}
-
-    const QString& name() const { return m_name; }
-    const SourceLocation& location() const { return m_location; }
-
-    void add(const TypeAssignment& type)
-    {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
-
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
-
-    using Types = std::map<QString, TypeAssignment>;
-
-    const Types& types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
+    AcnCompletionAssistProcessor();
 
 private:
-    QString m_name;
-    SourceLocation m_location;
-    Types m_types;
-
-    QList<QString> m_importedTypes;
+    std::unique_ptr<BuiltinsProposalsProvider> getBuiltinsProposalsProvider() const override;
 };
 
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+class AcnCompletionAssistProvider : public CompletionAssistProvider
+{
+    Q_OBJECT
+
+public:
+    bool supportsEditor(Core::Id editorId) const override;
+    TextEditor::IAssistProcessor *createProcessor() const override;
+};
+
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

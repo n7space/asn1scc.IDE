@@ -29,6 +29,7 @@
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Completion {
 
 class AutoCompleter : public TextEditor::AutoCompleter
 {
@@ -54,5 +55,6 @@ public:
     bool contextAllowsAutoQuotes(const QTextCursor &cursor, const QString &textToInsert) const override;
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

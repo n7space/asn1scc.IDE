@@ -25,22 +25,16 @@
 
 #pragma once
 
-#include <texteditor/snippets/isnippetprovider.h>
+#include <QList>
+
+#include <texteditor/codeassist/assistproposaliteminterface.h>
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Completion {
 
-class AsnSnippetProvider : public TextEditor::ISnippetProvider
-{
-    Q_OBJECT
+using Proposals = QList<TextEditor::AssistProposalItemInterface *>;
 
-public:
-    ~AsnSnippetProvider() final = default;
-
-    QString groupId() const override final;
-    QString displayName() const override final;
-    void decorateEditor(TextEditor::SnippetEditorWidget *editor) const override final;
-};
-
-} // Internal
-} // Asn1Acn
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

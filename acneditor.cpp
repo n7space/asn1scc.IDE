@@ -29,10 +29,11 @@
 
 #include <texteditor/texteditoractionhandler.h>
 
+#include "completion/autocompleter.h"
+#include "completion/acncompletionassist.h"
 #include "asn1acnconstants.h"
 #include "acndocument.h"
 #include "indenter.h"
-#include "autocompleter.h"
 #include "tr.h"
 
 using namespace Asn1Acn::Internal;
@@ -55,6 +56,8 @@ AcnEditorFactory::AcnEditorFactory()
     setDocumentCreator([]() { return new AcnDocument; });
     setEditorWidgetCreator([]() { return new AcnEditorWidget; });
     setEditorCreator([]() { return new AcnEditor; });
+
+    setCompletionAssistProvider(new Completion::AcnCompletionAssistProvider);
     setIndenterCreator([]() { return new Indenter; });
     setAutoCompleterCreator([]() { return new AutoCompleter; });
 

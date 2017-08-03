@@ -22,51 +22,39 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <map>
+#include <QList>
 
-#include <QString>
+#include <texteditor/codeassist/assistproposalitem.h>
 
-#include "typeassignment.h"
+#include "proposalsprovider.h"
+
+#include "completiontypedefs.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace Completion {
 
-class Definitions
+class BuiltinsProposalsProvider : public ProposalsProvider
 {
 public:
-    Definitions(const QString& name, const SourceLocation& location)
-        : m_name(name), m_location(location)
-    {}
-
-    const QString& name() const { return m_name; }
-    const SourceLocation& location() const { return m_location; }
-
-    void add(const TypeAssignment& type)
-    {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
-
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
-
-    using Types = std::map<QString, TypeAssignment>;
-
-    const Types& types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
+    BuiltinsProposalsProvider(const QStringList &keywords,
+                              const QStringList &types,
+                              const QStringList &builtin,
+                              const QStringList &attributes);
 
 private:
-    QString m_name;
-    SourceLocation m_location;
-    Types m_types;
+    Proposals createProposals() const override;
+    Proposals createProposalsGroup(const QStringList &proposalsGroup) const;
 
-    QList<QString> m_importedTypes;
+    const QStringList &m_keywords;
+    const QStringList &m_types;
+    const QStringList &m_builtin;
+    const QStringList &m_attributes;
 };
 
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

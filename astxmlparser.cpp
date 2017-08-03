@@ -200,6 +200,33 @@ int AstXmlParser::readCharPossitionInLineAttribute()
 
 void AstXmlParser::readImportedModules()
 {
+    while (nextRequiredElementIs(QStringLiteral("ImportedModule")))
+        readImportedModule();
+}
+
+void AstXmlParser::readImportedModule()
+{
+    while (m_xmlReader.readNextStartElement())
+    {
+        if (m_xmlReader.name() == QStringLiteral("ImportedTypes"))
+            readImportedTypes();
+        else if (m_xmlReader.name() == QStringLiteral("ImportedVariables"))
+            readImportedVariables();
+        else
+            m_xmlReader.skipCurrentElement();
+    }
+}
+
+void AstXmlParser::readImportedVariables()
+{
+    m_xmlReader.skipCurrentElement();
+}
+
+void AstXmlParser::readImportedTypes()
+{
+    while(nextRequiredElementIs("ImportedType"))
+        m_currentDefinitions->addImportedType(m_xmlReader.attributes().value(QStringLiteral("Name")).toString());
+
     m_xmlReader.skipCurrentElement();
 }
 

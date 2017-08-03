@@ -23,33 +23,24 @@
 **
 ****************************************************************************/
 
-#include "asnsnippetprovider.h"
+#include <QStringList>
 
-#include "autocompleter.h"
-#include "asn1acnconstants.h"
+#include "acnbuiltinsproposalsprovider.h"
 
-#include <texteditor/snippets/snippeteditor.h>
-#include <texteditor/textdocument.h>
+using namespace Asn1Acn::Internal::Completion;
 
-#include <QLatin1String>
-#include <QCoreApplication>
+static const QStringList KEYWORDS = { "BEGIN", "END", "DEFINITIONS", "CONSTANT" };
 
-using namespace Asn1Acn;
-using namespace Internal;
+static const QStringList TYPES = { "INTEGER", "BOOLEAN" };
 
-QString AsnSnippetProvider::groupId() const
+static const QStringList BUILTIN = { "NULL", "big", "little", "pos-int", "twos-complement", "BCD", "ASCII",
+                                     "IEEE754-1985-32", "IEEE754-1985-64", "byte", "word", "dword" };
+
+static const QStringList ATTRIBUTES = { "endianness", "encoding", "size", "null-terminated", "termination-pattern",
+                                        "align-to-next", "encode-values", "true-value", "false-value", "pattern",
+                                        "mapping-function", "present-when", "determinant" };
+
+AcnBuiltinsProposalProvider::AcnBuiltinsProposalProvider()
+    : BuiltinsProposalsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
 {
-    return QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID);
-}
-
-QString AsnSnippetProvider::displayName() const
-{
-    return QCoreApplication::translate("Asn1Acn::Internal::AsnSnippetProvider", "ASN.1");
-}
-
-void AsnSnippetProvider::decorateEditor(TextEditor::SnippetEditorWidget *editor) const
-{
-    editor->setAutoCompleter(new AutoCompleter);
-    editor->textDocument()->setMimeType(Constants::ASN1_MIMETYPE);
-    editor->configureGenericHighlighter();
 }

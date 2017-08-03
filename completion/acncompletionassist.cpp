@@ -22,51 +22,34 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
 
-#include <map>
+#include "acncompletionassist.h"
 
-#include <QString>
+#include "../asn1acnconstants.h"
 
-#include "typeassignment.h"
+#include "acnbuiltinsproposalsprovider.h"
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Data {
+using namespace Asn1Acn::Internal::Completion;
 
-class Definitions
+AcnCompletionAssistProcessor::AcnCompletionAssistProcessor()
+    : CompletionAssistProcessor(QLatin1String(Constants::ACN_SNIPPETS_GROUP_ID))
 {
-public:
-    Definitions(const QString& name, const SourceLocation& location)
-        : m_name(name), m_location(location)
-    {}
+}
 
-    const QString& name() const { return m_name; }
-    const SourceLocation& location() const { return m_location; }
+std::unique_ptr<BuiltinsProposalsProvider> AcnCompletionAssistProcessor::getBuiltinsProposalsProvider() const
+{
+    auto provider = std::make_unique<AcnBuiltinsProposalProvider>();
+    return std::move(provider);
+}
 
-    void add(const TypeAssignment& type)
-    {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
+bool AcnCompletionAssistProvider::supportsEditor(Core::Id editorId) const
+{
+    return editorId == Constants::ACNEDITOR_ID;
+}
 
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
+TextEditor::IAssistProcessor *AcnCompletionAssistProvider::createProcessor() const
+{
+    return new AcnCompletionAssistProcessor;
+}
 
-    using Types = std::map<QString, TypeAssignment>;
 
-    const Types& types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
-
-private:
-    QString m_name;
-    SourceLocation m_location;
-    Types m_types;
-
-    QList<QString> m_importedTypes;
-};
-
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
