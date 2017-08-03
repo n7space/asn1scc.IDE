@@ -39,6 +39,9 @@ Proposals UserTypesProposalsProvider::createProposals() const
 {
     Proposals proposals;
 
+    if (m_data == nullptr)
+        return proposals;
+
     Data::Modules::DefinitionsMap::const_iterator defIt;
     for (defIt = m_data->definitions().begin(); defIt != m_data->definitions().end(); defIt++) {
 

@@ -38,6 +38,12 @@ ParsedDocument::ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const 
     populateReferences();
 }
 
+ParsedDocument::ParsedDocument(const DocumentSourceInfo &source) :
+    m_source(source),
+    m_parsedData(nullptr)
+{
+}
+
 const DocumentSourceInfo &ParsedDocument::source() const
 {
     return m_source;
@@ -45,6 +51,9 @@ const DocumentSourceInfo &ParsedDocument::source() const
 
 void ParsedDocument::bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const
 {
+    if (m_parsedData == nullptr)
+        return;
+
     Data::Modules::DefinitionsMap::const_iterator defIt = m_parsedData->definitions().begin();
     while (defIt != m_parsedData->definitions().end()) {
         auto definitionNode = createDefinition(defIt->second);
@@ -55,6 +64,9 @@ void ParsedDocument::bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNod
 
 void ParsedDocument::populateReferences()
 {
+    if (m_parsedData == nullptr)
+        return;
+
     Data::Modules::DefinitionsMap::const_iterator defIt;
     for (defIt = m_parsedData->definitions().begin(); defIt != m_parsedData->definitions().end(); defIt++)
         populateReferencesFromModule(defIt->second);
@@ -119,6 +131,9 @@ Data::TypeReference ParsedDocument::getTypeReference(const int line, const int c
 Data::SourceLocation ParsedDocument::getDefinitionLocation(const QString &typeAssignmentName,
                                                            const QString &moduleName) const
 {
+    if (m_parsedData == nullptr)
+        return Data::SourceLocation();
+
     Data::Modules::DefinitionsMap::const_iterator defIt;
     for (defIt = m_parsedData->definitions().begin(); defIt != m_parsedData->definitions().end(); defIt++) {
 

@@ -27,6 +27,8 @@
 
 #include <QList>
 
+#include <utils/qtcassert.h>
+
 #include "documentprocessor.h"
 
 using namespace Asn1Acn::Internal;
@@ -189,15 +191,43 @@ ProjectContentHandler::readFileContent(const QString &fileName) const
 void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName)
 {
     DocumentProcessor *dp = qobject_cast<DocumentProcessor *>(sender());
-
     std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments = dp->takeResults();
-    for (size_t i = 0; i < parsedDocuments.size(); i++)
-        m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
+
+    switch (dp->getState()) {
+        case DocumentProcessor::State::Successful:
+            handleFilesProcesedWithSuccess(projectName, std::move(parsedDocuments));
+            break;
+        case DocumentProcessor::State::Errored:
+        case DocumentProcessor::State::Failed:
+            handleFilesProcesedWithFailure(projectName, std::move(parsedDocuments));
+            break;
+        default:
+            break;
+    }
 
     dp->deleteLater();
 
     if (--m_projectsChanged == 0)
         allProcessingFinished();
+}
+
+void ProjectContentHandler::handleFilesProcesedWithSuccess(const QString &projectName,
+                                                          std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments)
+{
+    for (size_t i = 0; i < parsedDocuments.size(); i++)
+        m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
+}
+
+void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projectName,
+                                                          std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments)
+{
+    for (size_t i = 0; i < parsedDocuments.size(); i++) {
+        auto filePath = parsedDocuments[i]->source().getPath();
+        if (m_storage->getFileForPath(filePath) != nullptr)
+            continue;
+
+        m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
+    }
 }
 
 void ProjectContentHandler::allProcessingFinished()
