@@ -43,6 +43,14 @@ class DocumentProcessor : public QObject
 {
     Q_OBJECT
 public:
+
+    enum class State {
+        Unfinished,
+        Successful,
+        Failed,
+        Errored
+    };
+
     DocumentProcessor(const QString &projectName);
     ~DocumentProcessor();
 
@@ -50,15 +58,24 @@ public:
     void run();
     std::vector<std::unique_ptr<ParsedDocument>> takeResults();
 
+    State getState();
+
 signals:
     void processingFinished(const QString &projectName) const;
 
 private slots:
     void onBuilderFinished();
+    void onBuilderFailed();
+    void onBuilderErrored();
 
 private:
+    void createFallbackResults();
+
     QHash<QString, DocumentSourceInfo> m_documents;
     QString m_projectName;
+
+    std::vector<std::unique_ptr<ParsedDocument>> m_results;
+    State m_state;
 
     ParsedDocumentBuilder *m_docBuilder;
 };

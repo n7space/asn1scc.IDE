@@ -33,6 +33,7 @@ using namespace Asn1Acn::Internal;
 
 DocumentProcessor::DocumentProcessor(const QString &projectName) :
     m_projectName(projectName),
+    m_state(State::Unfinished),
     m_docBuilder(nullptr)
 {
 }
@@ -58,19 +59,51 @@ void DocumentProcessor::run()
                      this, &DocumentProcessor::onBuilderFinished);
 
     QObject::connect(m_docBuilder, &ParsedDocumentBuilder::failed,
-                     this, &DocumentProcessor::onBuilderFinished);
+                     this, &DocumentProcessor::onBuilderFailed);
 
-    // TODO: error should be handled exclusively
     QObject::connect(m_docBuilder, &ParsedDocumentBuilder::errored,
-                     this, &DocumentProcessor::onBuilderFinished);
+                     this, &DocumentProcessor::onBuilderErrored);
+}
+
+DocumentProcessor::State DocumentProcessor::getState()
+{
+    return m_state;
 }
 
 std::vector<std::unique_ptr<ParsedDocument>> DocumentProcessor::takeResults()
 {
-    return m_docBuilder != nullptr ? m_docBuilder->takeDocuments() : std::vector<std::unique_ptr<ParsedDocument>>();
+    return std::move(m_results);
 }
 
 void DocumentProcessor::onBuilderFinished()
 {
+    m_results = m_docBuilder->takeDocuments();
+    m_state = State::Successful;
+
     emit processingFinished(m_projectName);
+}
+
+void DocumentProcessor::onBuilderFailed()
+{
+    createFallbackResults();
+    m_state = State::Failed;
+
+    emit processingFinished(m_projectName);
+}
+
+void DocumentProcessor::onBuilderErrored()
+{
+    createFallbackResults();
+    m_state = State::Errored;
+
+    emit processingFinished(m_projectName);
+}
+
+void DocumentProcessor::createFallbackResults()
+{
+    QHashIterator<QString, DocumentSourceInfo> it(m_documents);
+    while (it.hasNext()) {
+        it.next();
+        m_results.push_back(std::make_unique<ParsedDocument>(it.value()));
+    }
 }
