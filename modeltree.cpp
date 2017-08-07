@@ -31,20 +31,10 @@
 
 using namespace Asn1Acn::Internal;
 
-static ModelTree *m_instance;
-static QMutex m_instanceMutex;
-
 ModelTree *ModelTree::instance()
 {
-    if (m_instance)
-        return m_instance;
-
-    QMutexLocker locker(&m_instanceMutex);
-
-    if (!m_instance)
-        m_instance = new ModelTree;
-
-    return m_instance;
+    static ModelTree instance_;
+    return &instance_;
 }
 
 ModelTree::ModelTree() :
