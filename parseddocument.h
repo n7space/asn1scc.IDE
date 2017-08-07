@@ -43,8 +43,7 @@ namespace Internal {
 class ParsedDocument
 {
 public:
-
-    ParsedDocument(const DocumentSourceInfo &source);
+    ParsedDocument(const DocumentSourceInfo &source = {});
     ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSourceInfo &source);
 
     const DocumentSourceInfo &source() const;

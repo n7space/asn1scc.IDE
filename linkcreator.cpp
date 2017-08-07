@@ -39,6 +39,8 @@ LinkCreator::LinkCreator(const TextEditor::TextDocument &document)
 {
     ParsedDataStorage *storage = ParsedDataStorage::instance();
     m_parsedDocument = storage->getFileForPath(m_documentPath);
+    if (m_parsedDocument == nullptr)
+        m_parsedDocument = std::make_shared<ParsedDocument>();
 }
 
 LinkCreator::Link LinkCreator::createHighlightLink(const QTextCursor &cursor) const
@@ -59,7 +61,7 @@ LinkCreator::Link LinkCreator::createTargetLink(const QTextCursor &cursor) const
 
 Data::TypeReference LinkCreator::getSymbolTypeReference(const QTextCursor &cursor) const
 {
-    if (!m_textDocument.characterAt(cursor.position()).isLetterOrNumber() || m_parsedDocument == nullptr)
+    if (!m_textDocument.characterAt(cursor.position()).isLetterOrNumber())
         return Data::TypeReference();
 
     return m_parsedDocument->getTypeReference(cursor.blockNumber() + 1, cursor.columnNumber());

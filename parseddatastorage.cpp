@@ -29,20 +29,10 @@
 
 using namespace Asn1Acn::Internal;
 
-static ParsedDataStorage *m_instance;
-static QMutex m_instanceMutex;
-
 ParsedDataStorage *ParsedDataStorage::instance()
 {
-    if (m_instance)
-        return m_instance;
-
-    QMutexLocker locker(&m_instanceMutex);
-
-    if (!m_instance)
-        m_instance = new ParsedDataStorage;
-
-    return m_instance;
+    static ParsedDataStorage instance_;
+    return &instance_;
 }
 
 std::shared_ptr<ParsedDocument>
