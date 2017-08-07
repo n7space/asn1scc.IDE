@@ -191,7 +191,12 @@ STATIC_FILES += \
     templates/wizards/files/acn/wizard.json \
     templates/wizards/files/acn/template.acn \
     templates/wizards/files/asn1/wizard.json \
-    templates/wizards/files/asn1/template.asn
+    templates/wizards/files/asn1/template.asn \
+    templates/wizards/projects/asn1acn/wizard.json \
+    templates/wizards/projects/asn1acn/template.asn \
+    templates/wizards/projects/asn1acn/template.acn \
+    templates/wizards/projects/asn1acn/file.pro \
+    templates/wizards/projects/asn1acn/CMakeLists.txt
 
 STATIC_BASE = $$PWD
 STATIC_OUTPUT_BASE = $$IDE_DATA_PATH
