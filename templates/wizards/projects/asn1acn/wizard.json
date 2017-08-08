@@ -1,0 +1,134 @@
+{
+    "version": 1,
+    "supportedProjectTypes": [ "CMakeProjectManager.CMakeProject", "Qt4ProjectManager.Qt4Project" ],
+    "id": "S.Plain Asn1Acn Project",
+    "category": "I.Projects",
+    "trDescription": "Create Asn1Acn project with optional default models.",
+    "trDisplayName": "Plain Asn1Acn Project",
+    "trDisplayCategory": "Non-Qt Project",
+    "enabled": true,
+    "icon": "../../global/consoleapplication.png",
+
+    "options":
+    [
+        { "key": "ProjectFile", "value": "%{JS: '%{BuildSystem}' === 'qmake' ? '%{ProFile}' : '%{CMakeFile}'}" },
+        { "key": "ProFile", "value": "%{JS: Util.fileName('%{ProjectDirectory}/%{ProjectName}', 'pro')}" },
+        { "key": "CMakeFile", "value": "%{ProjectDirectory}/CMakeLists.txt" },
+        { "key": "AsnFullFileName", "value": "%{JS: Util.fileName('%{ProjectName}', '%{AsnModelExtension}')}" },
+        { "key": "AcnFullFileName", "value": "%{JS: Util.fileName('%{ProjectName}', '%{JS: Util.preferredSuffix('text/x-acn')}')}" }
+    ],
+
+    "pages":
+    [
+        {
+            "trDisplayName": "Project Location",
+            "trShortTitle": "Location",
+            "typeId": "Project"
+        },
+        {
+            "trDisplayName": "Project Initialization",
+            "trShortTitle": "Project Initialization",
+            "typeId": "Fields",
+            "enabled": true,
+            "data":
+            [
+                {
+                    "name": "BuildSystem",
+                    "trDisplayName": "Build system:",
+                    "type": "ComboBox",
+                    "data":
+                    {
+                        "index": 0,
+                        "items":
+                        [
+                            {
+                                "trKey": "qmake",
+                                "value": "qmake",
+                                "condition": "%{JS: [ %{Plugins} ].indexOf('QmakeProjectManager') >= 0}"
+                            },
+                            {
+                                "trKey": "CMake",
+                                "value": "cmake",
+                                "condition": "%{JS: [ %{Plugins} ].indexOf('CMakeProjectManager') >= 0}"
+                            }
+                        ]
+                    }
+                },
+				{
+                    "name": "Sp1",
+                    "type": "Spacer",
+                    "data": { "factor": 4 }
+                },
+                {
+                    "name": "AddAsnFile",
+                    "trDisplayName": "Add ASN.1 file",
+                    "type": "CheckBox",
+                    "data": { "checked": false }
+                },
+                {
+                    "name": "AsnModelExtension",
+                    "trDisplayName": "Extension:",
+                    "type": "ComboBox",
+                    "visible": "%{JS: '%{AddAsnFile}'}",
+                    "data":
+                    {
+                        "index": 0,
+                        "items":
+                        [
+                            { "trKey": ".asn", "value": ".asn" },
+                            { "trKey": ".asn1", "value": ".asn1" }
+                        ]
+                    }
+                },
+                {
+                    "name": "AddAcnFile",
+                    "trDisplayName": "Add ACN file",
+                    "type": "CheckBox",
+                    "data": { "checked": false }
+                }
+            ]
+        },
+        {
+            "trDisplayName": "Project Management",
+            "trShortTitle": "Summary",
+            "typeId": "Summary"
+        }
+    ],
+    "generators":
+    [
+        {
+            "typeId": "File",
+            "data":
+            [
+                {
+                    "source": "file.pro",
+                    "target": "%{ProFile}",
+                    "openAsProject": true,
+                    "condition": "%{JS: '%{BuildSystem}' === 'qmake'}"
+                },
+                {
+                    "source": "CMakeLists.txt",
+                    "openAsProject": true,
+                    "condition": "%{JS: '%{BuildSystem}' === 'cmake'}"
+                },
+                {
+                    "source": "template.asn",
+                    "target": "%{AsnFullFileName}",
+                    "openInEditor": true,
+                    "condition": "%{AddAsnFile}"
+                },
+                {
+                    "source": "template.acn",
+                    "target": "%{AcnFullFileName}",
+                    "openInEditor": false,
+                    "condition": "%{AddAcnFile}"
+                },
+                {
+                    "source": "../git.ignore",
+                    "target": ".gitignore",
+                    "condition": "%{JS: ! %{IsSubproject} && '%{VersionControl}' === 'G.Git'}"
+                }
+            ]
+        }
+    ]
+}
