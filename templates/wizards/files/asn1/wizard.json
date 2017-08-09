@@ -26,7 +26,11 @@
                     "trDisplayName": "Model name:",
                     "mandatory": true,
                     "type": "LineEdit",
-                    "data": { "validator": "[A-Z]([a-zA-Z0-9]|-)*" }
+                    "data":
+                    {
+                        "validator": "[A-Z]([a-zA-Z0-9]|-)*",
+                        "fixup": "%{JS: '%{INPUT}'.charAt(0).toUpperCase() + '%{INPUT}'.slice(1) }"
+                    }
                 },
                 {
                     "name": "FileExtensionType",
