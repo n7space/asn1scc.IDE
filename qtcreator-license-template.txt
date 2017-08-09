@@ -1,7 +1,7 @@
 /****************************************************************************
 **
 ** Copyright (C) %YEAR% N7 Mobile sp. z o. o.
-** Contact: http://n7mobile.com/Space
+** Contact: http://n7mobile.pl/Space
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
