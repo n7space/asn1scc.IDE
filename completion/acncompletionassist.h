@@ -1,9 +1,9 @@
 /****************************************************************************
 **
 ** Copyright (C) 2017 N7 Mobile sp. z o. o.
-** Contact: http://n7mobile.com/Space
+** Contact: http://n7mobile.pl/Space
 **
-** This file is part of Acn.1/ACN Plugin for QtCreator.
+** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
 ** Plugin was developed under a programme and funded by
 ** European Space Agency.

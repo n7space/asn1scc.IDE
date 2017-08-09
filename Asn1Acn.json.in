@@ -6,7 +6,7 @@
     \"Copyright\" : \"(C) 2017 N7 Mobile sp. z o.o.\",
     \"License\" : \"GPL v3.0\",
     \"Description\" : \"Plugin for asn1scc - ASN.1/ACN compiler for embedded systems \",
-    \"Url\" : \"http://n7mobile.com/Space\",
+    \"Url\" : \"http://n7mobile.pl/Space\",
     \"Category\" : \"Modeling\",
     $$dependencyList,
 
