@@ -29,9 +29,11 @@
 
 using namespace Asn1Acn::Internal;
 
-QString Asn1AcnJsExtension::firstLetterToUpper(QString in)
+QString Asn1AcnJsExtension::toAsn1TypeName(QString in)
 {
     QTC_ASSERT(in.isEmpty() == false, return QString());
 
+    in = in.simplified();
+    in.replace(' ', '-').replace('_', '-');
     return in.replace(0, 1, in.at(0).toUpper());
 }

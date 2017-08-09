@@ -38,7 +38,7 @@ class Asn1AcnJsExtension : public QObject
 public:
     Asn1AcnJsExtension(QObject *parent = 0) : QObject(parent) { }
 
-    Q_INVOKABLE QString firstLetterToUpper(QString in);
+    Q_INVOKABLE QString toAsn1TypeName(QString in);
 };
 
 } // namespace Internal

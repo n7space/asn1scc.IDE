@@ -4,7 +4,7 @@
     "id": "S.Plain Asn1Acn Project",
     "category": "I.Projects",
     "trDescription": "Create Asn1Acn project with optional default models.",
-    "trDisplayName": "Plain Asn1Acn Project",
+    "trDisplayName": "Plain ASN.1/ACN Project",
     "trDisplayCategory": "Non-Qt Project",
     "enabled": true,
     "icon": "../../global/consoleapplication.png",
@@ -54,7 +54,7 @@
                         ]
                     }
                 },
-				{
+                {
                     "name": "Sp1",
                     "type": "Spacer",
                     "data": { "factor": 4 }
