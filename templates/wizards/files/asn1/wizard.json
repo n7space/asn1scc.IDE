@@ -8,30 +8,67 @@
     "trDisplayCategory": "ASN.1/ACN",
     "enabled": "%{JS: [ %{Plugins} ].indexOf('ASN.1/ACN') >= 0}",
 
-    "pages" :
+    "options":
+    [
+        { "key": "FilePath", "value": "%{TargetPath}/%{SrcFileName}" }
+    ],
+
+    "pages":
     [
         {
-            "trDisplayName": "Location",
-            "trShortTitle": "Location",
-            "typeId": "File"
-        },
-        {
-            "trDisplayName": "File Extension",
-            "trShortTitle": "Extension",
+            "trDisplayName": "Define ASN.1 Model",
+            "trShortTitle": "Details",
             "typeId": "Fields",
             "data":
-            {
-                "name": "FileExtensionType",
-                "type": "ComboBox",
-                "data" :
+            [
                 {
-                    "items" :
-                    [
-                        { "trKey": "asn", "value": ".asn" },
-                        { "trKey": "asn1", "value": ".asn1" }
-                    ]
-                 }
-            }
+                    "name": "Model",
+                    "trDisplayName": "Model name:",
+                    "mandatory": true,
+                    "type": "LineEdit",
+                    "data":
+                    {
+                        "validator": "[A-Z]([a-zA-Z0-9]|-)*",
+                        "fixup": "%{JS: '%{INPUT}'.charAt(0).toUpperCase() + '%{INPUT}'.slice(1) }"
+                    }
+                },
+                {
+                    "name": "FileExtensionType",
+                    "type": "ComboBox",
+                    "trDisplayName": "File extension",
+                    "mandatory": true,
+                    "data":
+                    {
+                        "items":
+                        [
+                            { "trKey": "asn", "value": ".asn" },
+                            { "trKey": "asn1", "value": ".asn1" }
+                        ]
+                    }
+                },
+                {
+                    "name": "SrcFileName",
+                    "type": "LineEdit",
+                    "trDisplayName": "Source file:",
+                    "mandatory": true,
+                    "data":
+                    {
+                        "trText": "%{JS: Util.fileName('%{Model}', '%{FileExtensionType}')}"
+                    }
+                },
+                {
+                    "name": "TargetPath",
+                    "type": "PathChooser",
+                    "trDisplayName": "Path:",
+                    "mandatory": true,
+                    "data":
+                    {
+                        "kind": "existingDirectory",
+                        "basePath": "%{InitialPath}",
+                        "path": "%{InitialPath}"
+                    }
+                }
+            ]
         },
         {
             "trDisplayName": "Project Management",
@@ -46,7 +83,7 @@
             "data":
             {
                 "source": "template.asn",
-                "target": "%{JS: Util.fileName('%{TargetPath}', '%{FileExtensionType}')}",
+                "target": "%{FilePath}",
                 "openInEditor": true
             }
         }
