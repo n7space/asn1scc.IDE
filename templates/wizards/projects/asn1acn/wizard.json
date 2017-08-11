@@ -107,6 +107,24 @@
                     "condition": "%{JS: '%{BuildSystem}' === 'qmake'}"
                 },
                 {
+                    "source": "handleAsn1AcnBuild.pri",
+                    "target": "handleAsn1AcnBuild.pri",
+                    "openAsProject": false,
+                    "condition": "%{JS: '%{BuildSystem}' === 'qmake'}"
+                },
+                {
+                    "source": "createSourcesList.pri",
+                    "target": "createSourcesList.pri",
+                    "openAsProject": false,
+                    "condition": "%{JS: '%{BuildSystem}' === 'qmake'}"
+                },
+                {
+                    "source": "createSources.pri",
+                    "target": "createSources.pri",
+                    "openAsProject": false,
+                    "condition": "%{JS: '%{BuildSystem}' === 'qmake'}"
+                },
+                {
                     "source": "CMakeLists.txt",
                     "openAsProject": true,
                     "condition": "%{JS: '%{BuildSystem}' === 'cmake'}"
