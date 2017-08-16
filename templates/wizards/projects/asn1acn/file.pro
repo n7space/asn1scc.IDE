@@ -10,4 +10,6 @@ CONFIG -= qt
       else if ('%{AddAcnFile}' === 'true')
         'DISTFILES += \\\\ \n %{AcnFullFileName}'
       else
-        '' }
+        'DISTFILES += ' }
+
+include(handleAsn1AcnBuild.pri)

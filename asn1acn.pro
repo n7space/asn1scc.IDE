@@ -196,6 +196,9 @@ STATIC_FILES += \
     templates/wizards/projects/asn1acn/template.asn \
     templates/wizards/projects/asn1acn/template.acn \
     templates/wizards/projects/asn1acn/file.pro \
+    templates/wizards/projects/asn1acn/createSources.pri \
+    templates/wizards/projects/asn1acn/handleAsn1AcnBuild.pri \
+    templates/wizards/projects/asn1acn/createSourcesList.pri \
     templates/wizards/projects/asn1acn/CMakeLists.txt
 
 STATIC_BASE = $$PWD
