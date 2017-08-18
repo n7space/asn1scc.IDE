@@ -200,9 +200,9 @@ STATIC_FILES += \
     templates/wizards/projects/asn1acn/handleAsn1AcnBuild.pri \
     templates/wizards/projects/asn1acn/createSourcesList.pri \
     templates/wizards/projects/asn1acn/CMakeLists.txt \
-    templates/wizards/projects/asn1acn/asn1sccSettings.txt \
-    templates/wizards/projects/asn1acn/configureAsn1SccTarget.txt \
-    templates/wizards/projects/asn1acn/createFilesList.txt
+    templates/wizards/projects/asn1acn/asn1sccSettings.cmake \
+    templates/wizards/projects/asn1acn/configureAsn1SccTarget.cmake \
+    templates/wizards/projects/asn1acn/createFilesList.cmake
 
 STATIC_BASE = $$PWD
 STATIC_OUTPUT_BASE = $$IDE_DATA_PATH

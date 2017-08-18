@@ -11,14 +11,14 @@ set(ASN1ACNSOURCES %{JS: if ('%{AddAsnFile}' === 'true' && '%{AddAcnFile}' === '
                          else
                              ' ' })
 
-include(asn1sccSettings.txt)
-include(createFilesList.txt)
+include(asn1sccSettings.cmake)
+include(createFilesList.cmake)
 
 set(SOURCES ${ASN1SCC_CPP_PRODUCTS})
 
 if(SOURCES)
-    set(EXECUTABLE_NAME ${PROJECT_NAME})
-    add_executable(${EXECUTABLE_NAME} ${SOURCES})
+    set(TARGET_NAME ${PROJECT_NAME})
+    add_executable(${TARGET_NAME} ${SOURCES})
 endif()
 
-include(configureAsn1SccTarget.txt)
+include(configureAsn1SccTarget.cmake)

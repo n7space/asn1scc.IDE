@@ -138,20 +138,20 @@
                     "condition": "%{JS: '%{BuildSystem}' === 'cmake'}"
                 },
                 {
-                    "source": "asn1sccSettings.txt",
-                    "target": "asn1sccSettings.txt",
+                    "source": "asn1sccSettings.cmake",
+                    "target": "asn1sccSettings.cmake",
                     "openAsProject": false,
                     "condition": "%{JS: '%{BuildSystem}' === 'cmake'}"
                 },
                 {
-                    "source": "configureAsn1SccTarget.txt",
-                    "target": "configureAsn1SccTarget.txt",
+                    "source": "configureAsn1SccTarget.cmake",
+                    "target": "configureAsn1SccTarget.cmake",
                     "openAsProject": false,
                     "condition": "%{JS: '%{BuildSystem}' === 'cmake'}"
                 },
                 {
-                    "source": "createFilesList.txt",
-                    "target": "createFilesList.txt",
+                    "source": "createFilesList.cmake",
+                    "target": "createFilesList.cmake",
                     "openAsProject": false,
                     "condition": "%{JS: '%{BuildSystem}' === 'cmake'}"
                 },

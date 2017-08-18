@@ -29,8 +29,8 @@ add_custom_target(
     COMMENT "Running Asn1Scc"
     VERBATIM)
 
-if (TARGET ${EXECUTABLE_NAME})
-    add_dependencies(${EXECUTABLE_NAME} Asn1AcnSources)
+if (TARGET ${TARGET_NAME})
+    add_dependencies(${TARGET_NAME} Asn1AcnSources)
 endif()
 
 set_property(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${ASN1SCC_PRODUCTS_DIR})
