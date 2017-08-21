@@ -89,6 +89,13 @@
             ]
         },
         {
+            "trDisplayName": "Kit Selection",
+            "trShortTitle": "Kits",
+            "typeId": "Kits",
+            "enabled": true,
+            "data": { "projectFilePath": "%{ProjectFile}" }
+        },
+        {
             "trDisplayName": "Project Management",
             "trShortTitle": "Summary",
             "typeId": "Summary"
@@ -126,7 +133,26 @@
                 },
                 {
                     "source": "CMakeLists.txt",
+                    "target": "CMakeLists.txt",
                     "openAsProject": true,
+                    "condition": "%{JS: '%{BuildSystem}' === 'cmake'}"
+                },
+                {
+                    "source": "asn1sccSettings.cmake",
+                    "target": "asn1sccSettings.cmake",
+                    "openAsProject": false,
+                    "condition": "%{JS: '%{BuildSystem}' === 'cmake'}"
+                },
+                {
+                    "source": "configureAsn1SccTarget.cmake",
+                    "target": "configureAsn1SccTarget.cmake",
+                    "openAsProject": false,
+                    "condition": "%{JS: '%{BuildSystem}' === 'cmake'}"
+                },
+                {
+                    "source": "createFilesList.cmake",
+                    "target": "createFilesList.cmake",
+                    "openAsProject": false,
                     "condition": "%{JS: '%{BuildSystem}' === 'cmake'}"
                 },
                 {
