@@ -38,6 +38,9 @@ class StructuresViewWidget : public OverviewWidget
 public:
     StructuresViewWidget();
     ~StructuresViewWidget();
+
+private:
+    OverviewIndexUpdater *createIndexUpdater() const;
 };
 
 class StructuresViewFactory : public Core::INavigationWidgetFactory

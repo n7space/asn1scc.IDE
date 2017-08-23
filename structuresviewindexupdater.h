@@ -25,50 +25,29 @@
 
 #pragma once
 
-#include <QModelIndex>
+#include <QString>
+#include <QAbstractItemModel>
 
-#include <texteditor/ioutlinewidget.h>
+#include "coreplugin/editormanager/ieditor.h"
 
-#include <utils/navigationtreeview.h>
-
-#include "overviewmodel.h"
 #include "overviewindexupdater.h"
+#include "overviewmodel.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class OverviewTreeView : public Utils::NavigationTreeView
+class StructuresViewIndexUpdater : public OverviewIndexUpdater
 {
-    Q_OBJECT
 public:
-    OverviewTreeView(QWidget *parent);
+    StructuresViewIndexUpdater(const OverviewModel *model);
 
-    void contextMenuEvent(QContextMenuEvent *event) override;
+public slots:
+    void onEditorChanged(Core::IEditor *editor);
+
+private:
+    QModelIndex getCurrentFileIndex() const override;
+    QModelIndex getIndexFromPath(const QString &path) const;
 };
 
-class OverviewWidget : public TextEditor::IOutlineWidget
-{
-    Q_OBJECT
-public:
-    OverviewWidget(OverviewModel *model);
-    ~OverviewWidget();
-
-    QList<QAction *> filterMenuActions() const override;
-    void setCursorSynchronization(bool syncWithCursor) override;
-
-protected:
-    void modelUpdated();
-    OverviewTreeView *m_treeView;
-    OverviewModel *m_model;
-
-    OverviewIndexUpdater *m_indexUpdater;
-
-protected slots:
-    void updateSelectionInTree(const QModelIndex &index);
-
-private slots:
-    void onItemActivated(const QModelIndex &index);
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Asn1Acn */
+} /* namespace Internal */

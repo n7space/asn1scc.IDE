@@ -99,7 +99,9 @@ SOURCES += \
     projectcontenthandler.cpp \
     indenter.cpp \
     tools.cpp \
-    linkcreator.cpp
+    linkcreator.cpp \
+    overviewindexupdater.cpp \
+    structuresviewindexupdater.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -157,7 +159,9 @@ HEADERS += \
     indenter.h \
     tr.h \
     linkcreator.h \
-    tools.h
+    tools.h \
+    overviewindexupdater.h \
+    structuresviewindexupdater.h
 
 FORMS += \
     options-pages/general.ui \
