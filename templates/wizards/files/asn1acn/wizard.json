@@ -1,22 +1,23 @@
 {
     "version": 1,
     "supportedProjectTypes": [ ],
-    "id": "B.ASN1",
+    "id": "A.ASN1ACN",
     "category": "R.Asn1Acn",
-    "trDescription": "Creates an ASN.1 model.",
-    "trDisplayName": "ASN.1 Model",
+    "trDescription": "Creates an ASN.1/ACN model.",
+    "trDisplayName": "ASN.1/ACN Model",
     "trDisplayCategory": "ASN.1/ACN",
     "enabled": "%{JS: [ %{Plugins} ].indexOf('ASN.1/ACN') >= 0}",
 
     "options":
     [
-        { "key": "FilePath", "value": "%{TargetPath}/%{SrcFileName}" }
+        { "key": "AsnFilePath", "value": "%{TargetPath}/%{AsnSrcFileName}" },
+        { "key": "AcnFilePath", "value": "%{TargetPath}/%{AcnSrcFileName}" }
     ],
 
     "pages":
     [
         {
-            "trDisplayName": "Define ASN.1 Model",
+            "trDisplayName": "Define ASN.1/ACN Model",
             "trShortTitle": "Details",
             "typeId": "Fields",
             "data":
@@ -35,7 +36,7 @@
                 {
                     "name": "FileExtensionType",
                     "type": "ComboBox",
-                    "trDisplayName": "File extension:",
+                    "trDisplayName": "ASN.1 Model file extension:",
                     "mandatory": true,
                     "data":
                     {
@@ -47,13 +48,23 @@
                     }
                 },
                 {
-                    "name": "SrcFileName",
+                    "name": "AsnSrcFileName",
                     "type": "LineEdit",
-                    "trDisplayName": "Source file:",
+                    "trDisplayName": "ASN.1 Model file:",
                     "mandatory": true,
                     "data":
                     {
                         "trText": "%{JS: Util.fileName('%{Model}', '%{FileExtensionType}')}"
+                    }
+                },
+                {
+                    "name": "AcnSrcFileName",
+                    "type": "LineEdit",
+                    "trDisplayName": "ACN Model file:",
+                    "mandatory": true,
+                    "data":
+                    {
+                        "trText": "%{JS: Util.fileName('%{Model}', '%{JS: Util.preferredSuffix('text/x-acn')}')}"
                     }
                 },
                 {
@@ -83,7 +94,16 @@
             "data":
             {
                 "source": "template.asn",
-                "target": "%{FilePath}",
+                "target": "%{AsnFilePath}",
+                "openInEditor": true
+            }
+        },
+        {
+            "typeId": "File",
+            "data":
+            {
+                "source": "template.acn",
+                "target": "%{AcnFilePath}",
                 "openInEditor": true
             }
         }

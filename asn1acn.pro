@@ -192,6 +192,9 @@ STATIC_FILES += \
     templates/wizards/files/acn/template.acn \
     templates/wizards/files/asn1/wizard.json \
     templates/wizards/files/asn1/template.asn \
+    templates/wizards/files/asn1acn/wizard.json \
+    templates/wizards/files/asn1acn/template.asn \
+    templates/wizards/files/asn1acn/template.acn \
     templates/wizards/projects/asn1acn/wizard.json \
     templates/wizards/projects/asn1acn/template.asn \
     templates/wizards/projects/asn1acn/template.acn \
