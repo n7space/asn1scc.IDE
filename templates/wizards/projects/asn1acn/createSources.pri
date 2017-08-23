@@ -29,7 +29,7 @@ defineReplace(filterASN1ACNFiles) {
         extension = $$last(splitted)
 
         equals(extension, asn)|equals(extension, asn1)|equals(extension, acn) {
-            fileNames += $${PWD}/$${file}
+            fileNames += $${_PRO_FILE_PWD_}/$${file}
         }
     }
 
