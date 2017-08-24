@@ -180,12 +180,13 @@ equals(TEST, 1) {
 
 SOURCES += \
     tests/astxmlparser_tests.cpp \
-    tests/overviewindexupdater_tests.cpp
+    tests/overviewindexupdater_tests.cpp \
+    tests/structuresviewindexupdater_tests.cpp
 
 HEADERS += \
     tests/astxmlparser_tests.h \
-    tests/overviewindexupdater_tests.h
-
+    tests/overviewindexupdater_tests.h \
+    tests/structuresviewindexupdater_tests.h
 }
 
 ### Static files ###
