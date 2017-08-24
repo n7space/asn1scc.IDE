@@ -179,10 +179,12 @@ DISTFILES += \
 equals(TEST, 1) {
 
 SOURCES += \
-    tests/astxmlparser_tests.cpp
+    tests/astxmlparser_tests.cpp \
+    tests/overviewindexupdater_tests.cpp
 
 HEADERS += \
-    tests/astxmlparser_tests.h
+    tests/astxmlparser_tests.h \
+    tests/overviewindexupdater_tests.h
 
 }
 
