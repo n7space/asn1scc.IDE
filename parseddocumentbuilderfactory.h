@@ -25,56 +25,28 @@
 
 #pragma once
 
-#include <memory>
+#include "memory.h"
 
 #include <QHash>
 #include <QString>
-#include <QFileInfo>
-#include <QByteArray>
-#include <QStringList>
 
-#include "parseddocument.h"
+#include <extensionsystem/pluginmanager.h>
+
+#include "documentsourceinfo.h"
+#include "parseddocumentbuilder.h"
 #include "asn1sccserviceprovider.h"
 #include "parseddocumentbuilderinterface.h"
-
-class QJsonObject;
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedDocumentBuilder
-        : public QObject
-        , public ParsedDocumentBuilderInterface
+class ParsedDocumentBuilderFactory
 {
-    Q_OBJECT
-
 public:
-    ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents,
-                          Asn1SccServiceProviderInterface *serviceProvider);
-
-    std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
-    const QStringList& errorMessages() const override { return m_errorMessages; }
-
-signals:
-    void finished();
-    void errored();
-    void failed();
-
-private slots:
-    void requestFinished();
-
-private:
-    void parseResponse(const QByteArray &jsonData);
-    void parseXML(const QString &textData);
-    void storeErrorMessages(const QJsonObject &json);
-
-    bool responseContainsAst(const QJsonObject &json);
-    QString getAstXml(const QJsonObject &json);
-
-    const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
-    std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
-
-    QStringList m_errorMessages;
+    static ParsedDocumentBuilderInterface *create(const QHash<QString, DocumentSourceInfo> &documents) {
+        auto serviceProvider = ExtensionSystem::PluginManager::getObject<Asn1SccServiceProvider>();
+        return new ParsedDocumentBuilder(documents, serviceProvider);
+    }
 };
 
 } /* namespace Internal */

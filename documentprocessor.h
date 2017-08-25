@@ -34,7 +34,7 @@
 #include <memory>
 
 #include "documentsourceinfo.h"
-#include "parseddocumentbuilder.h"
+#include "parseddocumentbuilderfactory.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -77,7 +77,7 @@ private:
     std::vector<std::unique_ptr<ParsedDocument>> m_results;
     State m_state;
 
-    ParsedDocumentBuilder *m_docBuilder;
+    ParsedDocumentBuilderInterface *m_docBuilder;
 };
 
 } // namespace Internal

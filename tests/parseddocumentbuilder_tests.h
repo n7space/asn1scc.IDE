@@ -25,57 +25,31 @@
 
 #pragma once
 
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
-
-#include <QJsonDocument>
-
-#include <QFileInfo>
 #include <QObject>
-#include <QProcess>
-#include <QTimer>
 
-#include "documentsourceinfo.h"
-#include "settings/service.h"
-
-#include "asn1sccserviceproviderinterface.h"
+#include "../parseddocumentbuilder.h"
+#include "../asn1sccserviceproviderphony.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class Asn1SccServiceProvider
-        : public QObject
-        , public Asn1SccServiceProviderInterface
+class ParsedDocumentBuilderTests : public QObject
 {
     Q_OBJECT
 
 public:
-    Asn1SccServiceProvider(Settings::ServiceConstPtr settings);
-    ~Asn1SccServiceProvider();
-
-    QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
-
-    void start() override;
-    void stop() override;
-    void restart() override { stop(); start(); }
+    explicit ParsedDocumentBuilderTests(QObject *parent = 0);
+    ~ParsedDocumentBuilderTests();
 
 private slots:
-    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void stayAliveTimeout();
-    void settingsChanged();
+    void test_empty();
 
 private:
-    void updateConfigFromSettings();
-    QStringList additionalArguments() const;
-
-    QJsonDocument buildAstRequestData(const QHash<QString, DocumentSourceInfo> &documents) const;
-
-    QProcess *m_asn1sccService;
-    QTimer m_stayAliveTimer;
-    bool m_serviceStarted;
-
-    Settings::ServiceConstPtr m_settings;
+    Asn1SccServiceProviderPhony *m_serviceProvider;
+    ParsedDocumentBuilder *m_documentBuilder;
 };
 
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Tests
+} // namespace Internal
+} // namespace Asn1Acn

@@ -25,56 +25,27 @@
 
 #pragma once
 
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
-
-#include <QJsonDocument>
-
-#include <QFileInfo>
 #include <QObject>
-#include <QProcess>
-#include <QTimer>
+
+#include <QNetworkReply>
+#include <QHash>
 
 #include "documentsourceinfo.h"
-#include "settings/service.h"
-
-#include "asn1sccserviceproviderinterface.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class Asn1SccServiceProvider
-        : public QObject
-        , public Asn1SccServiceProviderInterface
-{
-    Q_OBJECT
+class Asn1SccServiceProviderInterface {
 
 public:
-    Asn1SccServiceProvider(Settings::ServiceConstPtr settings);
-    ~Asn1SccServiceProvider();
+    Asn1SccServiceProviderInterface() = default;
+    virtual ~Asn1SccServiceProviderInterface() = default;
 
-    QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
+    virtual QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const = 0;
 
-    void start() override;
-    void stop() override;
-    void restart() override { stop(); start(); }
-
-private slots:
-    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void stayAliveTimeout();
-    void settingsChanged();
-
-private:
-    void updateConfigFromSettings();
-    QStringList additionalArguments() const;
-
-    QJsonDocument buildAstRequestData(const QHash<QString, DocumentSourceInfo> &documents) const;
-
-    QProcess *m_asn1sccService;
-    QTimer m_stayAliveTimer;
-    bool m_serviceStarted;
-
-    Settings::ServiceConstPtr m_settings;
+    virtual void start() = 0;
+    virtual void stop() = 0;
+    virtual void restart() = 0;
 };
 
 } /* namespace Asn1Acn */

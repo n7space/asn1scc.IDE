@@ -42,11 +42,11 @@
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocumentBuilder::ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents) :
-    m_rawDocuments(documents)
+ParsedDocumentBuilder::ParsedDocumentBuilder(const QHash<QString,
+                                             DocumentSourceInfo> &documents,
+                                             Asn1SccServiceProviderInterface *serviceProvider)
+    : m_rawDocuments(documents)
 {
-    auto serviceProvider = ExtensionSystem::PluginManager::getObject<Asn1SccServiceProvider>();
-
     QNetworkReply *reply = serviceProvider->requestAst(documents);
 
     QObject::connect(reply, &QNetworkReply::finished,

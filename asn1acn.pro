@@ -157,7 +157,11 @@ HEADERS += \
     indenter.h \
     tr.h \
     linkcreator.h \
-    tools.h
+    tools.h \
+    asn1sccserviceproviderinterface.h \
+    asn1sccserviceproviderphony.h \
+    parseddocumentbuilderfactory.h \
+    parseddocumentbuilderinterface.h
 
 FORMS += \
     options-pages/general.ui \
@@ -175,10 +179,12 @@ DISTFILES += \
 equals(TEST, 1) {
 
 SOURCES += \
-    tests/astxmlparser_tests.cpp
+    tests/astxmlparser_tests.cpp \
+    tests/parseddocumentbuilder_tests.cpp
 
 HEADERS += \
-    tests/astxmlparser_tests.h
+    tests/astxmlparser_tests.h \
+    tests/parseddocumentbuilder_tests.h
 
 }
 

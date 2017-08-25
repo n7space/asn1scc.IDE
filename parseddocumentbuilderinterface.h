@@ -25,56 +25,31 @@
 
 #pragma once
 
-#include <memory>
+#include "memory.h"
 
 #include <QHash>
+#include <QObject>
 #include <QString>
-#include <QFileInfo>
-#include <QByteArray>
-#include <QStringList>
 
 #include "parseddocument.h"
-#include "asn1sccserviceprovider.h"
-#include "parseddocumentbuilderinterface.h"
-
-class QJsonObject;
+#include "documentsourceinfo.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedDocumentBuilder
-        : public QObject
-        , public ParsedDocumentBuilderInterface
+class ParsedDocumentBuilderInterface
 {
-    Q_OBJECT
 
 public:
-    ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents,
-                          Asn1SccServiceProviderInterface *serviceProvider);
+    virtual ~ParsedDocumentBuilderInterface() {}
 
-    std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
-    const QStringList& errorMessages() const override { return m_errorMessages; }
+    virtual std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() = 0;
+    virtual const QStringList &errorMessages() const = 0;
 
 signals:
-    void finished();
-    void errored();
-    void failed();
-
-private slots:
-    void requestFinished();
-
-private:
-    void parseResponse(const QByteArray &jsonData);
-    void parseXML(const QString &textData);
-    void storeErrorMessages(const QJsonObject &json);
-
-    bool responseContainsAst(const QJsonObject &json);
-    QString getAstXml(const QJsonObject &json);
-
-    const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
-    std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
-
-    QStringList m_errorMessages;
+    virtual void finished() = 0;
+    virtual void errored() = 0;
+    virtual void failed() = 0;
 };
 
 } /* namespace Internal */

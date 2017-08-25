@@ -53,16 +53,11 @@ void DocumentProcessor::addToRun(const QString &docContent, const QString &fileP
 
 void DocumentProcessor::run()
 {
-    m_docBuilder = new ParsedDocumentBuilder(m_documents);
+    m_docBuilder = ParsedDocumentBuilderFactory::create(m_documents);
 
-    QObject::connect(m_docBuilder, &ParsedDocumentBuilder::finished,
-                     this, &DocumentProcessor::onBuilderFinished);
-
-    QObject::connect(m_docBuilder, &ParsedDocumentBuilder::failed,
-                     this, &DocumentProcessor::onBuilderFailed);
-
-    QObject::connect(m_docBuilder, &ParsedDocumentBuilder::errored,
-                     this, &DocumentProcessor::onBuilderErrored);
+    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(finished()), this, SLOT(onBuilderFinished()));
+    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(failed()), this, SLOT(onBuilderFailed()));
+    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(errored()), this, SLOT(onBuilderErrored()));
 }
 
 DocumentProcessor::State DocumentProcessor::getState()
