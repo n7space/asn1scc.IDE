@@ -52,6 +52,8 @@ public:
     ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents,
                           Asn1SccServiceProviderInterface *serviceProvider);
 
+    void run() override;
+
     std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
     const QStringList& errorMessages() const override { return m_errorMessages; }
 
@@ -70,6 +72,8 @@ private:
 
     bool responseContainsAst(const QJsonObject &json);
     QString getAstXml(const QJsonObject &json);
+
+    Asn1SccServiceProviderInterface *m_serviceProvider;
 
     const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
     std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;

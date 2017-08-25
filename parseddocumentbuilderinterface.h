@@ -41,7 +41,9 @@ class ParsedDocumentBuilderInterface
 {
 
 public:
-    virtual ~ParsedDocumentBuilderInterface() {}
+    virtual ~ParsedDocumentBuilderInterface() = default;
+
+    virtual void run() = 0;
 
     virtual std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() = 0;
     virtual const QStringList &errorMessages() const = 0;
