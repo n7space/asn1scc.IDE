@@ -42,8 +42,7 @@ public:
 
     using ModelTreeNodePtr = std::shared_ptr<ModelTreeNode>;
 
-    ModelTreeNode() = default;
-    ModelTreeNode(const QString &id, const Data::SourceLocation location = Data::SourceLocation());
+    ModelTreeNode(const QString &name = QString::null, const Data::SourceLocation location = Data::SourceLocation());
 
     int childrenCount() const;
 
@@ -55,17 +54,17 @@ public:
     void removeChildByName(const QString &name);
     void removeChildren();
 
-    QVariant data() const;
-    QString id() const;
-    const ModelTreeNode *parent() const;
+    QString name() const;
 
-    int columnCount() const;
-    int row() const;
+    const ModelTreeNode *parent() const;
+    ModelTreeNode *parent();
+
+    int indexInParent() const;
 
     const Data::SourceLocation &sourceLocation() const;
 
 private:
-    QString m_id;
+    QString m_name;
 
     ModelTreeNode *m_parent;
     QList<ModelTreeNodePtr> m_children;

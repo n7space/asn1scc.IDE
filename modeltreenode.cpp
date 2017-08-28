@@ -29,8 +29,8 @@
 
 using namespace Asn1Acn::Internal;
 
-ModelTreeNode::ModelTreeNode(const QString &id, const Data::SourceLocation location) :
-    m_id(id),
+ModelTreeNode::ModelTreeNode(const QString &name, const Data::SourceLocation location) :
+    m_name(name),
     m_parent(nullptr),
     m_location(location)
 {
@@ -50,7 +50,7 @@ ModelTreeNode::ModelTreeNodePtr ModelTreeNode::getChildByName(const QString &nam
 {
     QList<ModelTreeNode::ModelTreeNodePtr>::const_iterator it;
     for (it = m_children.begin(); it != m_children.end(); ++it) {
-        if ((*it)->m_id == name)
+        if ((*it)->m_name == name)
             return *it;
     }
 
@@ -69,7 +69,7 @@ void ModelTreeNode::removeChildByName(const QString &name)
 {
     QList<ModelTreeNode::ModelTreeNodePtr>::iterator it;
     for (it = m_children.begin(); it != m_children.end(); ++it) {
-        if ((*it)->m_id == name) {
+        if ((*it)->m_name == name) {
             m_children.erase(it);
             return;
         }
@@ -81,14 +81,9 @@ void ModelTreeNode::removeChildren()
     m_children.clear();
 }
 
-QVariant ModelTreeNode::data() const
+QString ModelTreeNode::name() const
 {
-    return QVariant(m_id);
-}
-
-QString ModelTreeNode::id() const
-{
-    return m_id;
+    return m_name;
 }
 
 const ModelTreeNode *ModelTreeNode::parent() const
@@ -96,12 +91,12 @@ const ModelTreeNode *ModelTreeNode::parent() const
     return m_parent;
 }
 
-int ModelTreeNode::columnCount() const
+ModelTreeNode *ModelTreeNode::parent()
 {
-    return 1;
+    return m_parent;
 }
 
-int ModelTreeNode::row() const
+int ModelTreeNode::indexInParent() const
 {
     int idx = 0;
     foreach (const ModelTreeNode::ModelTreeNodePtr &obj, m_parent->m_children) {
