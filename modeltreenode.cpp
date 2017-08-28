@@ -114,7 +114,7 @@ int ModelTreeNode::row() const
     return 0;
 }
 
-const Data::SourceLocation &ModelTreeNode::getSourceLocation() const
+const Data::SourceLocation &ModelTreeNode::sourceLocation() const
 {
     return m_location;
 }

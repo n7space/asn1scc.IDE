@@ -132,7 +132,7 @@ void StructuresViewIndexUpdaterTests::test_forceUpdate()
     QCOMPARE(index.isValid(), true);
 
     const ModelTreeNode *symbol = static_cast<ModelTreeNode *>(index.internalPointer());
-    const Data::SourceLocation location = symbol->getSourceLocation();
+    const Data::SourceLocation location = symbol->sourceLocation();
     QCOMPARE(location.path(), FILE_PATH);
     QCOMPARE(location.line(), lineNumber);
 }

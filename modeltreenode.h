@@ -62,7 +62,7 @@ public:
     int columnCount() const;
     int row() const;
 
-    const Data::SourceLocation &getSourceLocation() const;
+    const Data::SourceLocation &sourceLocation() const;
 
 private:
     QString m_id;

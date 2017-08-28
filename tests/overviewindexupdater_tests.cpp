@@ -154,7 +154,7 @@ void OverviewIndexUpdaterTests::test_setNonEmpytEditorChangedPosition()
     QCOMPARE(index.isValid(), true);
 
     const ModelTreeNode *symbol = static_cast<ModelTreeNode *>(index.internalPointer());
-    const Data::SourceLocation location = symbol->getSourceLocation();
+    const Data::SourceLocation location = symbol->sourceLocation();
     QCOMPARE(location.line(), lineNumber);
 }
 
@@ -195,7 +195,7 @@ void OverviewIndexUpdaterTests::test_cursorMovedToTypeDefinition()
     QCOMPARE(index.isValid(), true);
 
     const ModelTreeNode *symbol = static_cast<ModelTreeNode *>(index.internalPointer());
-    const Data::SourceLocation location = symbol->getSourceLocation();
+    const Data::SourceLocation location = symbol->sourceLocation();
     QCOMPARE(location.line(), lineNumber);
 }
 
@@ -235,7 +235,7 @@ void OverviewIndexUpdaterTests::test_forceUpdate()
     QCOMPARE(index.isValid(), true);
 
     const ModelTreeNode *symbol = static_cast<ModelTreeNode *>(index.internalPointer());
-    const Data::SourceLocation location = symbol->getSourceLocation();
+    const Data::SourceLocation location = symbol->sourceLocation();
     QCOMPARE(location.line(), lineNumber);
 }
 
@@ -257,7 +257,7 @@ void OverviewIndexUpdaterTests::test_forceUpdateAfterCursorMoved()
     QCOMPARE(index.isValid(), true);
 
     const ModelTreeNode *symbol = static_cast<ModelTreeNode *>(index.internalPointer());
-    const Data::SourceLocation location = symbol->getSourceLocation();
+    const Data::SourceLocation location = symbol->sourceLocation();
     QCOMPARE(location.line(), lineNumber);
 }
 
