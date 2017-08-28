@@ -38,14 +38,14 @@
 #include "documentsourceinfo.h"
 #include "settings/service.h"
 
-#include "asn1sccserviceproviderinterface.h"
+#include "parsingserviceprovider.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
 class Asn1SccServiceProvider
         : public QObject
-        , public Asn1SccServiceProviderInterface
+        , public ParsingServiceProvider
 {
     Q_OBJECT
 

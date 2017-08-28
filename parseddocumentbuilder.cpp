@@ -43,7 +43,7 @@
 using namespace Asn1Acn::Internal;
 
 ParsedDocumentBuilder::ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents,
-                                             Asn1SccServiceProviderInterface *serviceProvider)
+                                             ParsingServiceProvider *serviceProvider)
     : m_serviceProvider(serviceProvider), m_rawDocuments(documents)
 {
 }

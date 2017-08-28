@@ -23,13 +23,13 @@
 **
 ****************************************************************************/
 
-#include "asn1sccserviceproviderphony.h"
+#include "asn1sccserviceproviderstub.h"
 
 #include "documentsourceinfo.h"
 
 using namespace Asn1Acn::Internal;
 
-QNetworkReply *Asn1SccServiceProviderPhony::requestAst(const QHash<QString, DocumentSourceInfo> &documents) const
+QNetworkReply *Asn1SccServiceProviderStub::requestAst(const QHash<QString, DocumentSourceInfo> &documents) const
 {
     NetworkReply *reply = new NetworkReply;
 

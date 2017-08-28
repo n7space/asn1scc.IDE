@@ -35,11 +35,11 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class Asn1SccServiceProviderInterface {
+class ParsingServiceProvider {
 
 public:
-    Asn1SccServiceProviderInterface() = default;
-    virtual ~Asn1SccServiceProviderInterface() = default;
+    ParsingServiceProvider() = default;
+    virtual ~ParsingServiceProvider() = default;
 
     virtual QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const = 0;
 };

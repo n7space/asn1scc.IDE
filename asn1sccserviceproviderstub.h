@@ -26,16 +26,16 @@
 #pragma once
 
 #include "networkreply.h"
-#include "asn1sccserviceproviderinterface.h"
+#include "parsingserviceprovider.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class Asn1SccServiceProviderPhony : public Asn1SccServiceProviderInterface
+class Asn1SccServiceProviderStub : public ParsingServiceProvider
 {
 public:
-    Asn1SccServiceProviderPhony() = default;
-    ~Asn1SccServiceProviderPhony() = default;
+    Asn1SccServiceProviderStub() = default;
+    ~Asn1SccServiceProviderStub() = default;
 
     QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
 };

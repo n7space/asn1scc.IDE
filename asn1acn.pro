@@ -100,7 +100,7 @@ SOURCES += \
     indenter.cpp \
     tools.cpp \
     linkcreator.cpp \
-    asn1sccserviceproviderphony.cpp \
+    asn1sccserviceproviderstub.cpp \
     networkreply.cpp
 
 HEADERS += \
@@ -160,8 +160,8 @@ HEADERS += \
     tr.h \
     linkcreator.h \
     tools.h \
-    asn1sccserviceproviderinterface.h \
-    asn1sccserviceproviderphony.h \
+    parsingserviceprovider.h \
+    asn1sccserviceproviderstub.h \
     parseddocumentbuilderfactory.h \
     parseddocumentbuilderinterface.h \
     networkreply.h
