@@ -38,12 +38,7 @@
 #include <texteditor/texteditorconstants.h>
 
 #include "completion/asnsnippetprovider.h"
-#include "asneditor.h"
-#include "outline.h"
-#include "structuresview.h"
-#include "projectwatcher.h"
-#include "asn1acnjsextension.h"
-#include "asn1sccserviceprovider.h"
+#include "completion/acnsnippetprovider.h"
 
 #include "settings/settings.h"
 #include "settings/general.h"
@@ -52,7 +47,13 @@
 #include "options-pages/general.h"
 #include "options-pages/service.h"
 
+#include "asneditor.h"
 #include "acneditor.h"
+#include "outline.h"
+#include "structuresview.h"
+#include "projectwatcher.h"
+#include "asn1acnjsextension.h"
+#include "asn1sccserviceprovider.h"
 #include "asn1acnconstants.h"
 #include "tr.h"
 #include "tools.h"
@@ -104,6 +105,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(new AsnEditorFactory);
     addAutoReleasedObject(new StructuresViewFactory);
     addAutoReleasedObject(new Completion::AsnSnippetProvider);
+    addAutoReleasedObject(new Completion::AcnSnippetProvider);
 
     addAutoReleasedObject(new AcnEditorFactory);
 
