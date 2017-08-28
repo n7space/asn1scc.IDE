@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "networkreply.h"
 #include "asn1sccserviceproviderinterface.h"
 
 namespace Asn1Acn {
@@ -36,11 +37,11 @@ public:
     Asn1SccServiceProviderPhony() = default;
     ~Asn1SccServiceProviderPhony() = default;
 
-    QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override { Q_UNUSED(documents); return nullptr; }
+    QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
 
-    void start() override {}
-    void stop() override {}
-    void restart() override {}
+    void start() override;
+    void stop() override;
+    void restart() override;
 };
 
 } /* namespace Asn1Acn */

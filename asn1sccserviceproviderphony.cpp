@@ -23,34 +23,39 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "asn1sccserviceproviderphony.h"
 
-#include <QObject>
+#include "documentsourceinfo.h"
 
-#include "../parseddocumentbuilder.h"
-#include "../asn1sccserviceproviderphony.h"
+using namespace Asn1Acn::Internal;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Tests {
-
-class ParsedDocumentBuilderTests : public QObject
+QNetworkReply *Asn1SccServiceProviderPhony::requestAst(const QHash<QString, DocumentSourceInfo> &documents) const
 {
-    Q_OBJECT
+    NetworkReply *reply = new NetworkReply;
 
-public:
-    explicit ParsedDocumentBuilderTests(QObject *parent = 0);
-    ~ParsedDocumentBuilderTests();
+    QString key = *(documents.keyBegin());
+    if (key == "FAILED")
+        reply->setErrored();
 
-private slots:
-    void test_failed();
-    void test_error();
-    void test_success();
+    DocumentSourceInfo sourceInfo = documents.value(key);
 
-private:
-    Asn1SccServiceProviderPhony *m_serviceProvider;
-};
+    reply->write(sourceInfo.getContent().toUtf8());
+    reply->run();
 
-} // namespace Tests
-} // namespace Internal
-} // namespace Asn1Acn
+    return reply;
+}
+
+void Asn1SccServiceProviderPhony::start()
+{
+
+}
+
+void Asn1SccServiceProviderPhony::stop()
+{
+
+}
+
+void Asn1SccServiceProviderPhony::restart()
+{
+
+}

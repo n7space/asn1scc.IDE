@@ -99,7 +99,9 @@ SOURCES += \
     projectcontenthandler.cpp \
     indenter.cpp \
     tools.cpp \
-    linkcreator.cpp
+    linkcreator.cpp \
+    asn1sccserviceproviderphony.cpp \
+    networkreply.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -161,7 +163,8 @@ HEADERS += \
     asn1sccserviceproviderinterface.h \
     asn1sccserviceproviderphony.h \
     parseddocumentbuilderfactory.h \
-    parseddocumentbuilderinterface.h
+    parseddocumentbuilderinterface.h \
+    networkreply.h
 
 FORMS += \
     options-pages/general.ui \

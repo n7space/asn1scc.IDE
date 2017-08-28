@@ -27,25 +27,118 @@
 
 #include <QtTest>
 
+#include <QSignalSpy>
+
+#include "../parseddocument.h"
+
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
 
 ParsedDocumentBuilderTests::ParsedDocumentBuilderTests(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      m_serviceProvider(new Asn1SccServiceProviderPhony)
 {
-    QHash<QString, DocumentSourceInfo> documents;
-
-    m_serviceProvider = new Asn1SccServiceProviderPhony();
-    m_documentBuilder = new ParsedDocumentBuilder(documents, m_serviceProvider);
 }
 
 ParsedDocumentBuilderTests::~ParsedDocumentBuilderTests()
 {
     delete m_serviceProvider;
-    delete m_documentBuilder;
 }
 
-void ParsedDocumentBuilderTests::test_empty()
+void ParsedDocumentBuilderTests::test_failed()
 {
-    QVERIFY(true);
+    DocumentSourceInfo sourceInfo;
+    sourceInfo.setName("FAILED");
+
+    QHash<QString, DocumentSourceInfo> documents;
+    documents.insert("FAILED", sourceInfo);
+
+    ParsedDocumentBuilder *builder = new ParsedDocumentBuilder(documents, m_serviceProvider);
+    QSignalSpy spyFailed(builder, &ParsedDocumentBuilder::failed);
+    QSignalSpy spyErrored(builder, &ParsedDocumentBuilder::errored);
+    QSignalSpy spyFinished(builder, &ParsedDocumentBuilder::finished);
+
+    builder->run();
+
+    QTest::qWait(200);
+
+    QCOMPARE(spyFailed.count(), 1);
+    QCOMPARE(spyErrored.count(), 0);
+    QCOMPARE(spyFinished.count(), 0);
+
+    std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments = builder->takeDocuments();
+    QVERIFY(parsedDocuments.size() == 0);
+
+    delete builder;
+}
+
+void ParsedDocumentBuilderTests::test_error()
+{
+    DocumentSourceInfo sourceInfo;
+    sourceInfo.setName("ERROR");
+    sourceInfo.setContent("{\"ErrorCode\":2,\"Files\":null,\"Messages\":[\"Asn1.asn:8:13: error: No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'\"]}");
+
+    QHash<QString, DocumentSourceInfo> documents;
+    documents.insert("ERROR", sourceInfo);
+
+    ParsedDocumentBuilder *builder = new ParsedDocumentBuilder(documents, m_serviceProvider);
+    QSignalSpy spyFailed(builder, &ParsedDocumentBuilder::failed);
+    QSignalSpy spyErrored(builder, &ParsedDocumentBuilder::errored);
+    QSignalSpy spyFinished(builder, &ParsedDocumentBuilder::finished);
+
+    builder->run();
+
+    QTest::qWait(200);
+
+    QCOMPARE(spyFailed.count(), 0);
+    QCOMPARE(spyErrored.count(), 1);
+    QCOMPARE(spyFinished.count(), 0);
+
+    QStringList errorMessages = builder->errorMessages();
+    QCOMPARE(errorMessages.count(), 1);
+    QCOMPARE(errorMessages.at(0), QString("Asn1.asn:8:13: error: No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'"));
+
+    std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments = builder->takeDocuments();
+    QVERIFY(parsedDocuments.size() == 0);
+
+    delete builder;
+}
+
+void ParsedDocumentBuilderTests::test_success()
+{
+    DocumentSourceInfo sourceInfo;
+    sourceInfo.setName("SUCCESS");
+    sourceInfo.setContent("{\"ErrorCode\":0,\"Files\":[{\"Contents\":\"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?>\\u000a<ASN1AST>\\u000a    "
+                          "<Asn1File FileName=\\\"emptyAsn2.asn\\\">\\u000a        <Asn1Module ID=\\\"EmptyAsn2\\\">\\u000a        "
+                          "<ExportedTypes>\\u000a            <ExportedType Name=\\\"AData\\\" \\/>\\u000a            "
+                          "<ExportedType Name=\\\"BData\\\" \\/> \\u000a        <\\/ExportedTypes>\\u000a        <ExportedVariables>\\u000a         "
+                          "\\u000a        <\\/ExportedVariables>\\u000a        <ImportedModules>\\u000a        <\\/ImportedModules>\\u000a        "
+                          "<TypeAssignments>\\u000a            <TypeAssignment Name=\\\"AData\\\" Line=\\\"2\\\" CharPositionInLine=\\\"4\\\">\\u000a                "
+                          "<Type Line=\\\"2\\\" CharPositionInLine=\\\"14\\\">\\u000a                    "
+                          "<IntegerType Min=\\\"-100\\\" Max=\\\"1000\\\"\\/>\\u000a                <\\/Type>\\u000a            "
+                          "<\\/TypeAssignment>\\u000a            <TypeAssignment Name=\\\"BData\\\" Line=\\\"3\\\" CharPositionInLine=\\\"4\\\">\\u000a                "
+                          "<Type Line=\\\"3\\\" CharPositionInLine=\\\"14\\\">\\u000a                    <IntegerType Min=\\\"0\\\" Max=\\\"1000\\\"\\/>\\u000a                "
+                          "<\\/Type>\\u000a            <\\/TypeAssignment>\\u000a        <\\/TypeAssignments>\\u000a        <VariablesAssignments>\\u000a        "
+                          "<\\/VariablesAssignments>\\u000a        <\\/Asn1Module>\\u000a    <\\/Asn1File>\\u000a<\\/ASN1AST>\",\"Name\":\"AST.xml\"}],\"Messages\":null}");
+
+    QHash<QString, DocumentSourceInfo> documents;
+    documents.insert("SUCCESS", sourceInfo);
+
+    ParsedDocumentBuilder *builder = new ParsedDocumentBuilder(documents, m_serviceProvider);
+    QSignalSpy spyFailed(builder, &ParsedDocumentBuilder::failed);
+    QSignalSpy spyErrored(builder, &ParsedDocumentBuilder::errored);
+    QSignalSpy spyFinished(builder, &ParsedDocumentBuilder::finished);
+
+    builder->run();
+
+    QTest::qWait(200);
+
+    QCOMPARE(spyFailed.count(), 0);
+    QCOMPARE(spyErrored.count(), 0);
+    QCOMPARE(spyFinished.count(), 1);
+
+    std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments = builder->takeDocuments();
+    QCOMPARE(parsedDocuments.size(), static_cast<size_t>(1));
+
+    delete builder;
 }

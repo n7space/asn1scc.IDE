@@ -25,32 +25,31 @@
 
 #pragma once
 
-#include <QObject>
-
-#include "../parseddocumentbuilder.h"
-#include "../asn1sccserviceproviderphony.h"
+#include <QNetworkReply>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Tests {
 
-class ParsedDocumentBuilderTests : public QObject
+class NetworkReply : public QNetworkReply
 {
-    Q_OBJECT
-
 public:
-    explicit ParsedDocumentBuilderTests(QObject *parent = 0);
-    ~ParsedDocumentBuilderTests();
+    NetworkReply();
+    ~NetworkReply();
 
-private slots:
-    void test_failed();
-    void test_error();
-    void test_success();
+    void run();
+    void setErrored();
+
+    qint64 readData(char *data, qint64 maxlen) override;
+    qint64 writeData(const char *data, qint64 len) override;
+
+    void abort() override {}
 
 private:
-    Asn1SccServiceProviderPhony *m_serviceProvider;
+    void onTimerTimeout();
+
+    char *m_data;
+    qint64 m_len;
 };
 
-} // namespace Tests
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Asn1Acn */
+} /* namespace Internal */
