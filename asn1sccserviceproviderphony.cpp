@@ -44,18 +44,3 @@ QNetworkReply *Asn1SccServiceProviderPhony::requestAst(const QHash<QString, Docu
 
     return reply;
 }
-
-void Asn1SccServiceProviderPhony::start()
-{
-
-}
-
-void Asn1SccServiceProviderPhony::stop()
-{
-
-}
-
-void Asn1SccServiceProviderPhony::restart()
-{
-
-}

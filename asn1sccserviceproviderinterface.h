@@ -42,10 +42,6 @@ public:
     virtual ~Asn1SccServiceProviderInterface() = default;
 
     virtual QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const = 0;
-
-    virtual void start() = 0;
-    virtual void stop() = 0;
-    virtual void restart() = 0;
 };
 
 } /* namespace Asn1Acn */

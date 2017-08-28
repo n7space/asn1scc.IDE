@@ -55,9 +55,9 @@ public:
 
     QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
 
-    void start() override;
-    void stop() override;
-    void restart() override { stop(); start(); }
+    void start();
+    void stop();
+    void restart() { stop(); start(); }
 
 private slots:
     void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);

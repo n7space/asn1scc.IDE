@@ -38,10 +38,6 @@ public:
     ~Asn1SccServiceProviderPhony() = default;
 
     QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
-
-    void start() override;
-    void stop() override;
-    void restart() override;
 };
 
 } /* namespace Asn1Acn */
