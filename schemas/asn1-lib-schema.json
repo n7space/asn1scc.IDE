@@ -24,7 +24,9 @@
       "properties": {
         "from": { "$ref": "#/definitions/asn1TypeName" },
         "type": { "$ref": "#/definitions/asn1TypeName" }
-      }
+      },
+      "required": ["from", "type"],
+      "additionalProperties": false
     }
   },
   "type": "object",
@@ -57,17 +59,20 @@
               },
               "required": [
                 "name"
-              ]
+              ],
+	      "additionalProperties": false
             }
           }
         },
         "required": [
           "name"
-        ]
+        ],
+	"additionalProperties": false
       }
     }
   },
   "required": [
     "name"
-  ]
+  ],
+  "additionalProperties": false
 }
