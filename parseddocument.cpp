@@ -87,14 +87,15 @@ void ParsedDocument::populateReferencesFromModule(const std::unique_ptr<Data::De
 ModelTreeNode::ModelTreeNodePtr
 ParsedDocument::createDefinition(const std::unique_ptr<Data::Definitions> &definition) const
 {
-    auto definitionNode =
-            ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(definition->name(),
-                                                              Data::SourceLocation(source().getPath(),
-                                                                                   definition->location().line(),
-                                                                                   definition->location().column())));
+    auto definitionNode = ModelTreeNode::makePtr(definition->name(), updateSourceLocation(definition->location()));
     attachTypesToDefiniton(definition->types(), definitionNode);
 
     return definitionNode;
+}
+
+Data::SourceLocation ParsedDocument::updateSourceLocation(const Data::SourceLocation& location) const
+{
+    return { source().getPath(), location.line(), location.column() };
 }
 
 void ParsedDocument::attachTypesToDefiniton(const Data::Definitions::Types types,
@@ -102,11 +103,7 @@ void ParsedDocument::attachTypesToDefiniton(const Data::Definitions::Types types
 {
     Data::Definitions::Types::const_iterator typeIt = types.begin();
     while (typeIt != types.end()) {
-        auto typeNode =
-                ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(typeIt->second.name(),
-                                                                  Data::SourceLocation(source().getPath(),
-                                                                                       typeIt->second.location().line(),
-                                                                                       typeIt->second.location().column())));
+        auto typeNode = ModelTreeNode::makePtr(typeIt->second.name(), updateSourceLocation(typeIt->second.location()));
         definitionNode->addChild(typeNode);
         typeIt++;
     }

@@ -40,7 +40,7 @@ ModelTree *ModelTree::instance()
 ModelTree::ModelTree() :
     m_modifiersCnt(0)
 {
-    m_treeRoot = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode);
+    m_treeRoot = ModelTreeNode::makePtr();
 
     ParsedDataStorage *storage = ParsedDataStorage::instance();
     connect(storage, &ParsedDataStorage::fileUpdated,

@@ -37,12 +37,14 @@ namespace Asn1Acn {
 namespace Internal {
 
 class ModelTreeNode
-{
-public:
+{ 
+protected:
+    ModelTreeNode(const QString &name, const Data::SourceLocation location);
 
+public:
     using ModelTreeNodePtr = std::shared_ptr<ModelTreeNode>;
 
-    ModelTreeNode(const QString &name = QString::null, const Data::SourceLocation location = Data::SourceLocation());
+    static ModelTreeNodePtr makePtr(const QString &name = QString::null, const Data::SourceLocation location = Data::SourceLocation());
 
     int childrenCount() const;
 

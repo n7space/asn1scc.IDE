@@ -29,6 +29,19 @@
 
 using namespace Asn1Acn::Internal;
 
+ModelTreeNode::ModelTreeNodePtr ModelTreeNode::makePtr(const QString &name, const Data::SourceLocation location)
+{
+    class make_shared_enabler : public ModelTreeNode
+    {
+    public:
+        make_shared_enabler(const QString &name, const Data::SourceLocation location)
+            : ModelTreeNode(name, location)
+        {}
+    };
+
+    return std::make_shared<make_shared_enabler>(name, location);
+}
+
 ModelTreeNode::ModelTreeNode(const QString &name, const Data::SourceLocation location) :
     m_name(name),
     m_parent(nullptr),

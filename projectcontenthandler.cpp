@@ -50,7 +50,7 @@ ProjectContentHandler::~ProjectContentHandler()
 void ProjectContentHandler::handleProjectAdded(const QString &projectName)
 {
     m_storage->addProject(projectName);
-    auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(projectName));
+    auto node = ModelTreeNode::makePtr(projectName);
     m_tree->addProjectNode(node);
 
     allProcessingFinished();
@@ -102,8 +102,7 @@ void ProjectContentHandler::addNewFiles(const QString &projectName, const QStrin
         if (m_tree->getNodeForFilepathFromProject(projectName, path) != nullptr)
             continue;
 
-        auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(path,
-                                                                      Data::SourceLocation(path, 0, 0)));
+        auto node = ModelTreeNode::makePtr(path, Data::SourceLocation(path, 0, 0));
         m_tree->addNodeToProject(projectName, node);
     }
 }

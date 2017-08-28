@@ -85,30 +85,30 @@ TextEditor::TextEditorWidget *StructuresViewIndexUpdaterTests::createEditorWidge
 
 ModelTreeNode::ModelTreeNodePtr StructuresViewIndexUpdaterTests::createModelNodes()
 {
-    ModelTreeNode::ModelTreeNodePtr rootNode = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode);
-    ModelTreeNode::ModelTreeNodePtr projectNode = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode);
+    auto rootNode = ModelTreeNode::makePtr();
+    auto projectNode = ModelTreeNode::makePtr();
     rootNode->addChild(projectNode);
 
     Data::SourceLocation location = Data::SourceLocation(FILE_PATH, 0, 0);
-    ModelTreeNode::ModelTreeNodePtr fileNode = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(FILE_PATH, location));
+    auto fileNode = ModelTreeNode::makePtr(FILE_PATH, location);
     projectNode->addChild(fileNode);
 
     location = Data::SourceLocation(FILE_PATH, 0, 0);
-    ModelTreeNode::ModelTreeNodePtr moduleNode = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Module1", location));
+    auto moduleNode = ModelTreeNode::makePtr("Module1", location);
 
     location = Data::SourceLocation(FILE_PATH, 2, 3);
-    moduleNode->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Num1", location)));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num1", location));
     location = Data::SourceLocation(FILE_PATH, 3, 3);
-    moduleNode->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Num2", location)));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num2", location));
     fileNode->addChild(moduleNode);
 
     location = Data::SourceLocation(FILE_PATH, 0, 0);
-    moduleNode = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Module2", location));
+    moduleNode = ModelTreeNode::makePtr("Module2", location);
 
     location = Data::SourceLocation(FILE_PATH, 6, 3);
-    moduleNode->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Num3", location)));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num3", location));
     location = Data::SourceLocation(FILE_PATH, 7, 3);
-    moduleNode->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Num4", location)));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num4", location));
     fileNode->addChild(moduleNode);
 
     return rootNode;
