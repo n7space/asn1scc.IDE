@@ -25,61 +25,63 @@
 
 #pragma once
 
+#include <memory>
+
 #include <QHash>
 #include <QString>
 #include <QFileInfo>
-#include <QList>
-#include <QTextDocument>
-
-#include <memory>
+#include <QByteArray>
+#include <QStringList>
 
 #include "parseddocument.h"
+#include "asn1sccserviceprovider.h"
 #include "parseddocumentbuilder.h"
-#include "documentsourceinfo.h"
+
+class QJsonObject;
 
 namespace Asn1Acn {
 namespace Internal {
 
-class DocumentProcessor : public QObject
+class Asn1SccParsedDocumentBuilder
+        : public QObject
+        , public ParsedDocumentBuilder
 {
     Q_OBJECT
+
 public:
+    static ParsedDocumentBuilder *create(const QHash<QString, DocumentSourceInfo> &documents);
 
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+    Asn1SccParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents,
+                                 ParsingServiceProvider *serviceProvider);
 
-    DocumentProcessor(const QString &projectName);
-    ~DocumentProcessor();
+    void run() override;
 
-    void addToRun(const QString &docContent, const QString &filePath, int revision);
-    void run();
-    std::vector<std::unique_ptr<ParsedDocument>> takeResults();
-
-    State getState();
+    std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
+    const QStringList& errorMessages() const override { return m_errorMessages; }
 
 signals:
-    void processingFinished(const QString &projectName) const;
+    void finished();
+    void errored();
+    void failed();
 
 private slots:
-    void onBuilderFinished();
-    void onBuilderFailed();
-    void onBuilderErrored();
+    void requestFinished();
 
 private:
-    void createFallbackResults();
+    void parseResponse(const QByteArray &jsonData);
+    void parseXML(const QString &textData);
+    void storeErrorMessages(const QJsonObject &json);
 
-    QHash<QString, DocumentSourceInfo> m_documents;
-    QString m_projectName;
+    bool responseContainsAst(const QJsonObject &json);
+    QString getAstXml(const QJsonObject &json);
 
-    std::vector<std::unique_ptr<ParsedDocument>> m_results;
-    State m_state;
+    ParsingServiceProvider *m_serviceProvider;
 
-    ParsedDocumentBuilder *m_docBuilder;
+    const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
+    std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
+
+    QStringList m_errorMessages;
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Internal */
+} /* namespace Asn1Acn */

@@ -94,7 +94,7 @@ SOURCES += \
     modeltree.cpp \
     asn1acnjsextension.cpp \
     asn1sccserviceprovider.cpp \
-    parseddocumentbuilder.cpp \
+    asn1sccparseddocumentbuilder.cpp \
     documentsourceinfo.cpp \
     projectcontenthandler.cpp \
     indenter.cpp \
@@ -153,7 +153,7 @@ HEADERS += \
     modeltree.h \
     asn1acnjsextension.h \
     asn1sccserviceprovider.h \
-    parseddocumentbuilder.h \
+    asn1sccparseddocumentbuilder.h \
     documentsourceinfo.h \
     projectcontenthandler.h \
     indenter.h \
@@ -162,7 +162,7 @@ HEADERS += \
     tools.h \
     parsingserviceprovider.h \
     asn1sccserviceproviderstub.h \
-    parseddocumentbuilderinterface.h \
+    parseddocumentbuilder.h \
     networkreply.h
 
 FORMS += \

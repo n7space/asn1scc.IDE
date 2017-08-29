@@ -53,10 +53,10 @@ void ParsedDocumentBuilderTests::test_failed()
     QHash<QString, DocumentSourceInfo> documents;
     documents.insert("FAILED", sourceInfo);
 
-    ParsedDocumentBuilder *builder = new ParsedDocumentBuilder(documents, m_serviceProvider);
-    QSignalSpy spyFailed(builder, &ParsedDocumentBuilder::failed);
-    QSignalSpy spyErrored(builder, &ParsedDocumentBuilder::errored);
-    QSignalSpy spyFinished(builder, &ParsedDocumentBuilder::finished);
+    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(documents, m_serviceProvider);
+    QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);
+    QSignalSpy spyErrored(builder, &Asn1SccParsedDocumentBuilder::errored);
+    QSignalSpy spyFinished(builder, &Asn1SccParsedDocumentBuilder::finished);
 
     builder->run();
 
@@ -81,10 +81,10 @@ void ParsedDocumentBuilderTests::test_error()
     QHash<QString, DocumentSourceInfo> documents;
     documents.insert("ERROR", sourceInfo);
 
-    ParsedDocumentBuilder *builder = new ParsedDocumentBuilder(documents, m_serviceProvider);
-    QSignalSpy spyFailed(builder, &ParsedDocumentBuilder::failed);
-    QSignalSpy spyErrored(builder, &ParsedDocumentBuilder::errored);
-    QSignalSpy spyFinished(builder, &ParsedDocumentBuilder::finished);
+    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(documents, m_serviceProvider);
+    QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);
+    QSignalSpy spyErrored(builder, &Asn1SccParsedDocumentBuilder::errored);
+    QSignalSpy spyFinished(builder, &Asn1SccParsedDocumentBuilder::finished);
 
     builder->run();
 
@@ -124,10 +124,10 @@ void ParsedDocumentBuilderTests::test_success()
     QHash<QString, DocumentSourceInfo> documents;
     documents.insert("SUCCESS", sourceInfo);
 
-    ParsedDocumentBuilder *builder = new ParsedDocumentBuilder(documents, m_serviceProvider);
-    QSignalSpy spyFailed(builder, &ParsedDocumentBuilder::failed);
-    QSignalSpy spyErrored(builder, &ParsedDocumentBuilder::errored);
-    QSignalSpy spyFinished(builder, &ParsedDocumentBuilder::finished);
+    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(documents, m_serviceProvider);
+    QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);
+    QSignalSpy spyErrored(builder, &Asn1SccParsedDocumentBuilder::errored);
+    QSignalSpy spyFinished(builder, &Asn1SccParsedDocumentBuilder::finished);
 
     builder->run();
 
