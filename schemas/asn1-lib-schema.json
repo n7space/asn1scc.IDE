@@ -60,14 +60,14 @@
               "required": [
                 "name"
               ],
-	      "additionalProperties": false
+              "additionalProperties": false
             }
           }
         },
         "required": [
           "name"
         ],
-	"additionalProperties": false
+        "additionalProperties": false
       }
     }
   },
