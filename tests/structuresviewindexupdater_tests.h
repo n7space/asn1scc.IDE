@@ -25,51 +25,36 @@
 
 #pragma once
 
-#include <memory>
+#include <QObject>
 
-#include <QModelIndex>
+#include "../overviewmodel.h"
+#include "../structuresviewindexupdater.h"
 
-#include <texteditor/ioutlinewidget.h>
-
-#include <utils/navigationtreeview.h>
-
-#include "overviewmodel.h"
-#include "overviewindexupdater.h"
+#include "../modeltreenode.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class OverviewTreeView : public Utils::NavigationTreeView
+class StructuresViewIndexUpdaterTests : public QObject
 {
     Q_OBJECT
 public:
-    OverviewTreeView(QWidget *parent);
-
-    void contextMenuEvent(QContextMenuEvent *event) override;
-};
-
-class OverviewWidget : public TextEditor::IOutlineWidget
-{
-    Q_OBJECT
-public:
-    OverviewWidget(OverviewModel *model);
-
-    QList<QAction *> filterMenuActions() const override;
-    void setCursorSynchronization(bool syncWithCursor) override;
-
-protected:
-    void modelUpdated();
-    OverviewTreeView *m_treeView;
-    OverviewModel *m_model;
-
-    std::unique_ptr<OverviewIndexUpdater> m_indexUpdater;
-
-protected slots:
-    void updateSelectionInTree(const QModelIndex &index);
+    explicit StructuresViewIndexUpdaterTests(QObject *parent = 0);
+    ~StructuresViewIndexUpdaterTests();
 
 private slots:
-    void onItemActivated(const QModelIndex &index);
+    void test_forceUpdate();
+
+private:
+    ModelTreeNode::ModelTreeNodePtr createModelNodes();
+    TextEditor::TextEditorWidget *createEditorWidget();
+
+    OverviewModel *m_model;
+    StructuresViewIndexUpdater *m_indexUpdater;
+    TextEditor::TextEditorWidget *m_editorWidget;
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

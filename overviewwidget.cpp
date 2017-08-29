@@ -93,6 +93,7 @@ void OverviewWidget::setCursorSynchronization(bool syncWithCursor)
 void OverviewWidget::modelUpdated()
 {
     m_treeView->expandAll();
+    m_indexUpdater->updateCurrentIndex();
 }
 
 void OverviewWidget::onItemActivated(const QModelIndex &index)
@@ -106,4 +107,10 @@ void OverviewWidget::onItemActivated(const QModelIndex &index)
     Core::EditorManager::openEditorAt(location.path(),
                                       location.line(),
                                       location.column());
+}
+
+void OverviewWidget::updateSelectionInTree(const QModelIndex &index)
+{
+    m_treeView->setCurrentIndex(index);
+    m_treeView->scrollTo(index);
 }

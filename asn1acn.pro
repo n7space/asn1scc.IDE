@@ -99,7 +99,9 @@ SOURCES += \
     projectcontenthandler.cpp \
     indenter.cpp \
     tools.cpp \
-    linkcreator.cpp
+    linkcreator.cpp \
+    overviewindexupdater.cpp \
+    structuresviewindexupdater.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -157,7 +159,9 @@ HEADERS += \
     indenter.h \
     tr.h \
     linkcreator.h \
-    tools.h
+    tools.h \
+    overviewindexupdater.h \
+    structuresviewindexupdater.h
 
 FORMS += \
     options-pages/general.ui \
@@ -175,11 +179,14 @@ DISTFILES += \
 equals(TEST, 1) {
 
 SOURCES += \
-    tests/astxmlparser_tests.cpp
+    tests/astxmlparser_tests.cpp \
+    tests/overviewindexupdater_tests.cpp \
+    tests/structuresviewindexupdater_tests.cpp
 
 HEADERS += \
-    tests/astxmlparser_tests.h
-
+    tests/astxmlparser_tests.h \
+    tests/overviewindexupdater_tests.h \
+    tests/structuresviewindexupdater_tests.h
 }
 
 ### Static files ###

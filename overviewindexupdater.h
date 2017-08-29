@@ -25,51 +25,54 @@
 
 #pragma once
 
-#include <memory>
+#include <QObject>
+#include <QTimer>
+#include <QAbstractItemModel>
 
-#include <QModelIndex>
+#include "coreplugin/editormanager/ieditor.h"
 
-#include <texteditor/ioutlinewidget.h>
-
-#include <utils/navigationtreeview.h>
-
+#include "editor.h"
 #include "overviewmodel.h"
-#include "overviewindexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class OverviewTreeView : public Utils::NavigationTreeView
+class OverviewIndexUpdater : public QObject
 {
     Q_OBJECT
+
 public:
-    OverviewTreeView(QWidget *parent);
+    OverviewIndexUpdater(const OverviewModel *model);
+    virtual ~OverviewIndexUpdater() = default;
 
-    void contextMenuEvent(QContextMenuEvent *event) override;
-};
+    void setEditor(TextEditor::TextEditorWidget *editorWidget);
+    void updateCurrentIndex();
 
-class OverviewWidget : public TextEditor::IOutlineWidget
-{
-    Q_OBJECT
-public:
-    OverviewWidget(OverviewModel *model);
+public slots:
+    void onCursorPositionChanged();
 
-    QList<QAction *> filterMenuActions() const override;
-    void setCursorSynchronization(bool syncWithCursor) override;
+signals:
+    void currentIndexUpdated(const QModelIndex &modelIndex);
 
 protected:
-    void modelUpdated();
-    OverviewTreeView *m_treeView;
-    OverviewModel *m_model;
+    QModelIndex indexForPosition(const QModelIndex &rootIndex) const;
 
-    std::unique_ptr<OverviewIndexUpdater> m_indexUpdater;
+    const OverviewModel *m_model;
+    TextEditor::TextEditorWidget *m_editorWidget;
 
-protected slots:
-    void updateSelectionInTree(const QModelIndex &index);
+private:
+    void updateNow();
 
-private slots:
-    void onItemActivated(const QModelIndex &index);
+    void createUpdateTimer();
+    void onUpdateTimerTimeout();
+
+    virtual QModelIndex getCurrentFileIndex() const;
+
+    QModelIndex getTargetIndexFromFileIndex(const QModelIndex &fileIndex) const;
+    QModelIndex getTargetIndexFromModuleIndex(const QModelIndex &moduleIndex, int line) const;
+
+    QTimer *m_updateIndexTimer;
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Asn1Acn */
+} /* namespace Internal */

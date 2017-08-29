@@ -59,6 +59,8 @@
 
 #ifdef WITH_TESTS
 #include "tests/astxmlparser_tests.h"
+#include "tests/overviewindexupdater_tests.h"
+#include "tests/structuresviewindexupdater_tests.h"
 #endif
 
 #include "asn1acn.h"
@@ -172,6 +174,8 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
 {
     return QList<QObject *>()
             << new Tests::AstXmlParserTests
+            << new Tests::OverviewIndexUpdaterTests
+            << new Tests::StructuresViewIndexUpdaterTests
                ;
 }
 #endif
