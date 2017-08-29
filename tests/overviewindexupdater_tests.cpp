@@ -110,10 +110,10 @@ void OverviewIndexUpdaterTests::test_setEmptyEditor()
 
     QCOMPARE(spy.count(), 1);
 
-    QVariant result = spy.at(0).at(0);
+    const QVariant result = spy.at(0).at(0);
     QCOMPARE(result.type(), QVariant::ModelIndex);
 
-    QModelIndex index = qvariant_cast<QModelIndex>(result);
+    const QModelIndex index = qvariant_cast<QModelIndex>(result);
     QCOMPARE(index.isValid(), false);
 }
 
@@ -128,10 +128,10 @@ void OverviewIndexUpdaterTests::test_setNonEmpytEditorInitialCursorPosition()
 
     QCOMPARE(spy.count(), 1);
 
-    QVariant result = spy.at(0).at(0);
+    const QVariant result = spy.at(0).at(0);
     QCOMPARE(result.type(), QVariant::ModelIndex);
 
-    QModelIndex index = qvariant_cast<QModelIndex>(result);
+    const QModelIndex index = qvariant_cast<QModelIndex>(result);
     QCOMPARE(index.isValid(), false);
 }
 
