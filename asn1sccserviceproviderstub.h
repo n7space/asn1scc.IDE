@@ -33,9 +33,10 @@ namespace Internal {
 
 class Asn1SccServiceProviderStub : public ParsingServiceProvider
 {
+    Q_OBJECT
+
 public:
-    Asn1SccServiceProviderStub() = default;
-    ~Asn1SccServiceProviderStub() = default;
+    Asn1SccServiceProviderStub(QObject *parent = 0);
 
     QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
 };

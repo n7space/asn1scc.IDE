@@ -29,6 +29,11 @@
 
 using namespace Asn1Acn::Internal;
 
+Asn1SccServiceProviderStub::Asn1SccServiceProviderStub(QObject *parent)
+    : ParsingServiceProvider(parent)
+{
+}
+
 QNetworkReply *Asn1SccServiceProviderStub::requestAst(const QHash<QString, DocumentSourceInfo> &documents) const
 {
     NetworkReply *reply = new NetworkReply;

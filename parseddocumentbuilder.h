@@ -49,6 +49,8 @@ class ParsedDocumentBuilder
     Q_OBJECT
 
 public:
+    static ParsedDocumentBuilderInterface *create(const QHash<QString, DocumentSourceInfo> &documents);
+
     ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents,
                           ParsingServiceProvider *serviceProvider);
 

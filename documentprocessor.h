@@ -33,8 +33,9 @@
 
 #include <memory>
 
+#include "parseddocument.h"
+#include "parseddocumentbuilderinterface.h"
 #include "documentsourceinfo.h"
-#include "parseddocumentbuilderfactory.h"
 
 namespace Asn1Acn {
 namespace Internal {

@@ -35,10 +35,13 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsingServiceProvider {
+class ParsingServiceProvider
+    : public QObject
+{
+    Q_OBJECT
 
 public:
-    ParsingServiceProvider() = default;
+    ParsingServiceProvider(QObject *parent = 0) : QObject(parent) {}
     virtual ~ParsingServiceProvider() = default;
 
     virtual QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const = 0;

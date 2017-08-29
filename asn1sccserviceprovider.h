@@ -44,9 +44,9 @@ namespace Asn1Acn {
 namespace Internal {
 
 class Asn1SccServiceProvider
-        : public QObject
-        , public ParsingServiceProvider
+        : public ParsingServiceProvider
 {
+
     Q_OBJECT
 
 public:

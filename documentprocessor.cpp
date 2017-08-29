@@ -28,6 +28,7 @@
 #include <QFileInfo>
 
 #include "parseddocument.h"
+#include "parseddocumentbuilder.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -53,7 +54,7 @@ void DocumentProcessor::addToRun(const QString &docContent, const QString &fileP
 
 void DocumentProcessor::run()
 {
-    m_docBuilder = ParsedDocumentBuilderFactory::create(m_documents);
+    m_docBuilder = ParsedDocumentBuilder::create(m_documents);
     m_docBuilder->run();
 
     QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(finished()), this, SLOT(onBuilderFinished()));

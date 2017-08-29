@@ -42,6 +42,12 @@
 
 using namespace Asn1Acn::Internal;
 
+ParsedDocumentBuilderInterface *ParsedDocumentBuilder::create(const QHash<QString, DocumentSourceInfo> &documents)
+{
+    auto serviceProvider = ExtensionSystem::PluginManager::getObject<ParsingServiceProvider>();
+    return new ParsedDocumentBuilder(documents, serviceProvider);
+}
+
 ParsedDocumentBuilder::ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents,
                                              ParsingServiceProvider *serviceProvider)
     : m_serviceProvider(serviceProvider), m_rawDocuments(documents)

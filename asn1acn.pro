@@ -162,7 +162,6 @@ HEADERS += \
     tools.h \
     parsingserviceprovider.h \
     asn1sccserviceproviderstub.h \
-    parseddocumentbuilderfactory.h \
     parseddocumentbuilderinterface.h \
     networkreply.h
 
