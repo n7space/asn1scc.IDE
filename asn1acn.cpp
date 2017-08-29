@@ -61,6 +61,7 @@
 #include "tests/astxmlparser_tests.h"
 #include "tests/overviewindexupdater_tests.h"
 #include "tests/structuresviewindexupdater_tests.h"
+#include "libraries/tests/metadataparser_tests.h"
 #endif
 
 #include "asn1acn.h"
@@ -176,6 +177,7 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
             << new Tests::AstXmlParserTests
             << new Tests::OverviewIndexUpdaterTests
             << new Tests::StructuresViewIndexUpdaterTests
+            << new Libraries::Tests::MetadataParserTests
                ;
 }
 #endif
