@@ -131,6 +131,11 @@ HEADERS += \
     settings/general.h \
     settings/service.h \
     \
+    libraries/metadata/element.h \
+    libraries/metadata/import.h \
+    libraries/metadata/submodule.h \
+    libraries/metadata/module.h \
+    \
     asn1acn_global.h \
     asn1acnconstants.h \
     asn1acn.h \
