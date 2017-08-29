@@ -80,11 +80,6 @@ OverviewWidget::OverviewWidget(OverviewModel *model) :
             this, &OverviewWidget::onItemActivated);
 }
 
-OverviewWidget::~OverviewWidget()
-{
-    delete m_indexUpdater;
-}
-
 QList<QAction *> OverviewWidget::filterMenuActions() const
 {
     return QList<QAction *>();

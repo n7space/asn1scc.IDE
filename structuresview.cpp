@@ -58,17 +58,17 @@ StructuresViewWidget::~StructuresViewWidget()
     delete m_model;
 }
 
-OverviewIndexUpdater *StructuresViewWidget::createIndexUpdater() const
+std::unique_ptr<OverviewIndexUpdater> StructuresViewWidget::createIndexUpdater() const
 {
-    StructuresViewIndexUpdater *indexUpdater = new StructuresViewIndexUpdater(m_model);
+    std::unique_ptr<StructuresViewIndexUpdater> indexUpdater = std::make_unique<StructuresViewIndexUpdater>(m_model);
 
-    connect(indexUpdater, &OverviewIndexUpdater::currentIndexUpdated,
+    connect(indexUpdater.get(), &OverviewIndexUpdater::currentIndexUpdated,
             this, &StructuresViewWidget::updateSelectionInTree);
 
     connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
-            indexUpdater, &StructuresViewIndexUpdater::onEditorChanged);
+            indexUpdater.get(), &StructuresViewIndexUpdater::onEditorChanged);
 
-    return indexUpdater;
+    return std::move(indexUpdater);
 }
 
 StructuresViewFactory::StructuresViewFactory()

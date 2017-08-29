@@ -48,9 +48,9 @@ OutlineWidget::OutlineWidget(EditorWidget *editor) :
     connect(m_model, &QAbstractItemModel::modelReset,
             this, &OutlineWidget::modelUpdated);
 
-    m_indexUpdater = new OverviewIndexUpdater(m_model);
+    m_indexUpdater = std::make_unique<OverviewIndexUpdater>(m_model);
 
-    connect(m_indexUpdater, &OverviewIndexUpdater::currentIndexUpdated,
+    connect(m_indexUpdater.get(), &OverviewIndexUpdater::currentIndexUpdated,
             this, &OutlineWidget::updateSelectionInTree);
 
     m_indexUpdater->setEditor(m_editor);

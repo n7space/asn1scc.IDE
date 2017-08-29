@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <QModelIndex>
 
 #include <texteditor/ioutlinewidget.h>
@@ -51,7 +53,6 @@ class OverviewWidget : public TextEditor::IOutlineWidget
     Q_OBJECT
 public:
     OverviewWidget(OverviewModel *model);
-    ~OverviewWidget();
 
     QList<QAction *> filterMenuActions() const override;
     void setCursorSynchronization(bool syncWithCursor) override;
@@ -61,7 +62,7 @@ protected:
     OverviewTreeView *m_treeView;
     OverviewModel *m_model;
 
-    OverviewIndexUpdater *m_indexUpdater;
+    std::unique_ptr<OverviewIndexUpdater> m_indexUpdater;
 
 protected slots:
     void updateSelectionInTree(const QModelIndex &index);
