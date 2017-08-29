@@ -22,49 +22,42 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <QString>
-#include <QStringList>
-#include <QList>
+#include <QObject>
 
-#include "import.h"
+#include "../metadataparser.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
-namespace Metadata {
+namespace Tests {
 
-class Element
+class MetadataParserTests : public QObject
 {
+    Q_OBJECT
 public:
-    Element(const QString &name, const QString &description)
-        : m_name(name)
-        , m_description(description)
-    {}
+    explicit MetadataParserTests(QObject *parent = 0);
 
-    const QString &name() const { return m_name; }
-    const QString &description() const { return m_description; }
-    const QStringList &asn1Files() const { return m_asn1Files; }
-    const QStringList &conflicts() const { return m_conflicts; }
-    const QStringList &requirements() const { return m_requirements; }
-    const QList<Import> &imports() const { return m_imports; }
-
-    void addAsn1File(const QString &file) { m_asn1Files.append(file); }
-    void addConflict(const QString &conflict) { m_conflicts.append(conflict); }
-    void addRequirement(const QString &requirement) { m_requirements.append(requirement); }
-    void addImport(const Import &import) { m_imports.append(import); }
+private slots:
+    void test_emptyFile();
+    void test_malformedJson();
+    void test_wrongJsonType();
+    void test_emptyObject();
+    void test_emptyModule();
+    void test_emptySubmodule();
+    void test_emptyElement();
+    void test_completeElement();
 
 private:
-    QString m_name;
-    QString m_description;
-    QStringList m_asn1Files;
-    QStringList m_conflicts;
-    QStringList m_requirements;
-    QList<Import> m_imports;
+    void parsingFails(const QString &jsonData);
+    void parse(const QString &jsonData);
+
+    Metadata::Module m_parsedData;
 };
 
-} // namespace Metadata
+} // namespace Tests
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

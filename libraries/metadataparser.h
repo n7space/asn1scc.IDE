@@ -24,47 +24,36 @@
 ****************************************************************************/
 #pragma once
 
-#include <QString>
-#include <QStringList>
-#include <QList>
+#include <stdexcept>
+#include <string>
 
-#include "import.h"
+#include <QJsonDocument>
+#include <QByteArray>
+
+#include "metadata/module.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
-namespace Metadata {
 
-class Element
+class MetadataParser
 {
 public:
-    Element(const QString &name, const QString &description)
-        : m_name(name)
-        , m_description(description)
-    {}
+    struct Error : std::runtime_error
+    {
+        Error(const std::string &msg)
+            : std::runtime_error(msg)
+        {}
+    };
 
-    const QString &name() const { return m_name; }
-    const QString &description() const { return m_description; }
-    const QStringList &asn1Files() const { return m_asn1Files; }
-    const QStringList &conflicts() const { return m_conflicts; }
-    const QStringList &requirements() const { return m_requirements; }
-    const QList<Import> &imports() const { return m_imports; }
+    MetadataParser(const QByteArray &data);
 
-    void addAsn1File(const QString &file) { m_asn1Files.append(file); }
-    void addConflict(const QString &conflict) { m_conflicts.append(conflict); }
-    void addRequirement(const QString &requirement) { m_requirements.append(requirement); }
-    void addImport(const Import &import) { m_imports.append(import); }
+    Metadata::Module parse();
 
 private:
-    QString m_name;
-    QString m_description;
-    QStringList m_asn1Files;
-    QStringList m_conflicts;
-    QStringList m_requirements;
-    QList<Import> m_imports;
+    QJsonDocument m_document;
 };
 
-} // namespace Metadata
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

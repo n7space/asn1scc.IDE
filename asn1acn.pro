@@ -74,6 +74,8 @@ SOURCES += \
     settings/general.cpp \
     settings/service.cpp \
     \
+    libraries/metadataparser.cpp \
+    \
     asn1acn.cpp \
     asneditor.cpp \
     asndocument.cpp \
@@ -131,6 +133,8 @@ HEADERS += \
     settings/general.h \
     settings/service.h \
     \
+    libraries/metadataparser.h \
+    \
     libraries/metadata/element.h \
     libraries/metadata/import.h \
     libraries/metadata/submodule.h \
@@ -184,11 +188,15 @@ DISTFILES += \
 equals(TEST, 1) {
 
 SOURCES += \
+    libraries/tests/metadataparser_tests.cpp \
+    \
     tests/astxmlparser_tests.cpp \
     tests/overviewindexupdater_tests.cpp \
     tests/structuresviewindexupdater_tests.cpp
 
 HEADERS += \
+    libraries/tests/metadataparser_tests.h \
+    \
     tests/astxmlparser_tests.h \
     tests/overviewindexupdater_tests.h \
     tests/structuresviewindexupdater_tests.h
