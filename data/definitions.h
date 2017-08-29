@@ -37,14 +37,14 @@ namespace Data {
 class Definitions
 {
 public:
-    Definitions(const QString& name, const SourceLocation& location)
+    Definitions(const QString &name, const SourceLocation &location)
         : m_name(name), m_location(location)
     {}
 
-    const QString& name() const { return m_name; }
-    const SourceLocation& location() const { return m_location; }
+    const QString &name() const { return m_name; }
+    const SourceLocation &location() const { return m_location; }
 
-    void add(const TypeAssignment& type)
+    void add(const TypeAssignment &type)
     {
         m_types.insert(std::make_pair(type.name(), type));
     }
@@ -56,7 +56,7 @@ public:
 
     using Types = std::map<QString, TypeAssignment>;
 
-    const Types& types() const { return m_types; }
+    const Types &types() const { return m_types; }
     const QList<QString> &importedTypes() { return m_importedTypes; }
 
 private:

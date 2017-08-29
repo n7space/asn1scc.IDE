@@ -43,7 +43,7 @@ public:
     }
 
     using DefinitionsMap = std::map<QString, std::unique_ptr<Definitions>>;
-    const DefinitionsMap& definitions() const { return m_definitions; }
+    const DefinitionsMap &definitions() const { return m_definitions; }
 
 private:
     DefinitionsMap m_definitions;
