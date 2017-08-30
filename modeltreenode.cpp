@@ -29,23 +29,24 @@
 
 using namespace Asn1Acn::Internal;
 
-ModelTreeNode::ModelTreeNodePtr ModelTreeNode::makePtr(const QString &name, const Data::SourceLocation location)
+ModelTreeNode::ModelTreeNodePtr ModelTreeNode::makePtr(const QString &name, Data::Type type, const Data::SourceLocation location)
 {
     class make_shared_enabler : public ModelTreeNode
     {
     public:
-        make_shared_enabler(const QString &name, const Data::SourceLocation location)
-            : ModelTreeNode(name, location)
+        make_shared_enabler(const QString &name, Data::Type type, const Data::SourceLocation location)
+            : ModelTreeNode(name, type, location)
         {}
     };
 
-    return std::make_shared<make_shared_enabler>(name, location);
+    return std::make_shared<make_shared_enabler>(name, type, location);
 }
 
-ModelTreeNode::ModelTreeNode(const QString &name, const Data::SourceLocation location) :
-    m_name(name),
-    m_parent(nullptr),
-    m_location(location)
+ModelTreeNode::ModelTreeNode(const QString &name, Data::Type type, const Data::SourceLocation location)
+    : m_name(name)
+    , m_type(type)
+    , m_parent(nullptr)
+    , m_location(location)
 {
 }
 
@@ -92,11 +93,6 @@ void ModelTreeNode::removeChildByName(const QString &name)
 void ModelTreeNode::removeChildren()
 {
     m_children.clear();
-}
-
-QString ModelTreeNode::name() const
-{
-    return m_name;
 }
 
 const ModelTreeNode *ModelTreeNode::parent() const

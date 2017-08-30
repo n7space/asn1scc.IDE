@@ -90,25 +90,25 @@ ModelTreeNode::ModelTreeNodePtr StructuresViewIndexUpdaterTests::createModelNode
     rootNode->addChild(projectNode);
 
     Data::SourceLocation location = Data::SourceLocation(FILE_PATH, 0, 0);
-    auto fileNode = ModelTreeNode::makePtr(FILE_PATH, location);
+    auto fileNode = ModelTreeNode::makePtr(FILE_PATH, Data::Type::UserDefined, location);
     projectNode->addChild(fileNode);
 
     location = Data::SourceLocation(FILE_PATH, 0, 0);
-    auto moduleNode = ModelTreeNode::makePtr("Module1", location);
+    auto moduleNode = ModelTreeNode::makePtr("Module1", Data::Type::UserDefined, location);
 
     location = Data::SourceLocation(FILE_PATH, 2, 3);
-    moduleNode->addChild(ModelTreeNode::makePtr("Num1", location));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num1", Data::Type::Integer, location));
     location = Data::SourceLocation(FILE_PATH, 3, 3);
-    moduleNode->addChild(ModelTreeNode::makePtr("Num2", location));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num2", Data::Type::Integer, location));
     fileNode->addChild(moduleNode);
 
     location = Data::SourceLocation(FILE_PATH, 0, 0);
-    moduleNode = ModelTreeNode::makePtr("Module2", location);
+    moduleNode = ModelTreeNode::makePtr("Module2", Data::Type::UserDefined, location);
 
     location = Data::SourceLocation(FILE_PATH, 6, 3);
-    moduleNode->addChild(ModelTreeNode::makePtr("Num3", location));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num3", Data::Type::Integer, location));
     location = Data::SourceLocation(FILE_PATH, 7, 3);
-    moduleNode->addChild(ModelTreeNode::makePtr("Num4", location));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num4", Data::Type::Integer, location));
     fileNode->addChild(moduleNode);
 
     return rootNode;

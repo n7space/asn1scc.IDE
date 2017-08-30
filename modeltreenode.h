@@ -32,6 +32,7 @@
 #include <QList>
 
 #include "data/sourcelocation.h"
+#include "data/type.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -39,12 +40,14 @@ namespace Internal {
 class ModelTreeNode
 { 
 protected:
-    ModelTreeNode(const QString &name, const Data::SourceLocation location);
+    ModelTreeNode(const QString &name, Data::Type type, const Data::SourceLocation location);
 
 public:
     using ModelTreeNodePtr = std::shared_ptr<ModelTreeNode>;
 
-    static ModelTreeNodePtr makePtr(const QString &name = QString::null, const Data::SourceLocation location = Data::SourceLocation());
+    static ModelTreeNodePtr makePtr(const QString &name = QString::null,
+                                    Data::Type type = Data::Type::UserDefined,
+                                    const Data::SourceLocation location = Data::SourceLocation());
 
     int childrenCount() const;
 
@@ -56,7 +59,8 @@ public:
     void removeChildByName(const QString &name);
     void removeChildren();
 
-    QString name() const;
+    const QString& name() const { return m_name; }
+    Data::Type type() const { return m_type; }
 
     const ModelTreeNode *parent() const;
     ModelTreeNode *parent();
@@ -67,6 +71,7 @@ public:
 
 private:
     QString m_name;
+    Data::Type m_type;
 
     ModelTreeNode *m_parent;
     QList<ModelTreeNodePtr> m_children;

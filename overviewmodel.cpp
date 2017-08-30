@@ -25,6 +25,8 @@
 
 #include "overviewmodel.h"
 
+#include "icons.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -63,7 +65,8 @@ QVariant OverviewModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case Qt::DecorationRole:
-        return QVariant();
+        // TODO files & definitions should have different icon
+        return Icons::iconForType(item->type());
     case Qt::DisplayRole:
     case Qt::ToolTipRole:
         return item->name();
