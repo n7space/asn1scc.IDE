@@ -260,3 +260,23 @@ void OverviewIndexUpdaterTests::test_forceUpdateAfterCursorMoved()
     const Data::SourceLocation location = symbol->getSourceLocation();
     QCOMPARE(location.line(), lineNumber);
 }
+
+void OverviewIndexUpdaterTests::test_removeEditorAfterLineUpdate()
+{
+    QSignalSpy spy(m_indexUpdater, &OverviewIndexUpdater::currentIndexUpdated);
+    const int lineNumber = 7;
+
+    m_indexUpdater->setEditor(m_editorWidget);
+    m_editorWidget->gotoLine(lineNumber);
+    m_indexUpdater->setEditor(nullptr);
+
+    QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
+
+    QCOMPARE(spy.count(), 2);
+
+    const QVariant result = spy.at(0).at(0);
+    QCOMPARE(result.type(), QVariant::ModelIndex);
+
+    const QModelIndex index = qvariant_cast<QModelIndex>(result);
+    QCOMPARE(index.isValid(), false);
+}

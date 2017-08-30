@@ -55,6 +55,8 @@ private slots:
     void test_forceUpdate();
     void test_forceUpdateAfterCursorMoved();
 
+    void test_removeEditorAfterLineUpdate();
+
 private:
     ModelTreeNode::ModelTreeNodePtr createModelNodes();
     TextEditor::TextEditorWidget *createEditorWidget();
