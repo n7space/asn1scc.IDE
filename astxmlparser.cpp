@@ -24,6 +24,8 @@
 ****************************************************************************/
 #include "astxmlparser.h"
 
+#include <QMap>
+
 using namespace Asn1Acn::Internal;
 
 AstXmlParser::AstXmlParser(QXmlStreamReader& xmlReader_)
@@ -206,12 +208,37 @@ Data::SourceLocation AstXmlParser::readLocationFromAttributes()
     return { m_currentFile, readLineAttribute(), readCharPossitionInLineAttribute() };
 }
 
+namespace
+{
+Data::TypeReference::DataType mapNameToDataType(const QStringRef& name)
+{
+    static const QMap<QString, Data::TypeReference::DataType> mapping = {
+        { "BooleanType",       Data::TypeReference::DataType::Boolean },
+        { "NullType",          Data::TypeReference::DataType::Null },
+        { "IntegerType",       Data::TypeReference::DataType::Integer },
+        { "RealType",          Data::TypeReference::DataType::Real },
+        { "BitStringType",     Data::TypeReference::DataType::BitString },
+        { "OctetStringType",   Data::TypeReference::DataType::OctetString },
+        { "IA5StringType",     Data::TypeReference::DataType::IA5String },
+        { "NumericStringType", Data::TypeReference::DataType::NumericString },
+        { "EnumeratedType",    Data::TypeReference::DataType::Enumerated },
+        { "ChoiceType",        Data::TypeReference::DataType::Choice },
+        { "SequenceType",      Data::TypeReference::DataType::Sequence },
+        { "SequenceOfType",    Data::TypeReference::DataType::SequenceOf },
+    };
+    const auto it = mapping.find(name.toString());
+    if (it == mapping.end())
+        return Data::TypeReference::DataType::UserDefined;
+    return it.value();
+}
+} // namespace
+
 Data::TypeReference AstXmlParser::readType(const Data::SourceLocation& location)
 {
     const auto attributeName = m_xmlReader.name();
     if (attributeName == QStringLiteral("ReferenceType"))
         return { readReferencedTypeNameAttribute(), readReferencedModuleAttribute(), location };
-    return { Data::TypeReference::DataType::BuiltIn, location };
+    return { mapNameToDataType(attributeName), location };
 }
 
 Data::TypeReference AstXmlParser::readTypeReference()

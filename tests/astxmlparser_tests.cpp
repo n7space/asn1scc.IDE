@@ -92,8 +92,13 @@ void AstXmlParserTests::test_singleTypeAssignment()
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").location().column(), 10);
 }
 
+Q_DECLARE_METATYPE(Asn1Acn::Internal::Data::TypeReference::DataType)
+
 void AstXmlParserTests::test_builtinTypeReference()
 {
+    QFETCH(QString, typeName);
+    QFETCH(Data::TypeReference::DataType, type);
+
     parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
           R"(<ASN1AST>)"
           R"(  <Asn1File FileName="Test2File.asn">)"
@@ -101,7 +106,7 @@ void AstXmlParserTests::test_builtinTypeReference()
           R"(      <TypeAssignments>)"
           R"(        <TypeAssignment Name="MyInt" Line="4" CharPositionInLine="10">)"
           R"(          <Type Line="3" CharPositionInLine="19">)"
-          R"(            <IntegerType Min="0" Max="1000"/>)"
+          R"(            <)" + typeName + "/>"
           R"(          </Type>)"
           R"(        </TypeAssignment>)"
           R"(      </TypeAssignments>)"
@@ -111,7 +116,27 @@ void AstXmlParserTests::test_builtinTypeReference()
 
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().location().column(), 19);
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().location().line(), 3);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().type(), Data::TypeReference::DataType::BuiltIn);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().type(), type);
+
+}
+
+void AstXmlParserTests::test_builtinTypeReference_data()
+{
+    QTest::addColumn<QString>("typeName");
+    QTest::addColumn<Data::TypeReference::DataType>("type");
+
+    QTest::newRow("Boolean")       << "BooleanType"       << Data::TypeReference::DataType::Boolean;
+    QTest::newRow("Null")          << "NullType"          << Data::TypeReference::DataType::Null;
+    QTest::newRow("Integer")       << "IntegerType"       << Data::TypeReference::DataType::Integer;
+    QTest::newRow("Real")          << "RealType"          << Data::TypeReference::DataType::Real;
+    QTest::newRow("BitString")     << "BitStringType"     << Data::TypeReference::DataType::BitString;
+    QTest::newRow("OctetString")   << "OctetStringType"   << Data::TypeReference::DataType::OctetString;
+    QTest::newRow("IA5String")     << "IA5StringType"     << Data::TypeReference::DataType::IA5String;
+    QTest::newRow("NumericString") << "NumericStringType" << Data::TypeReference::DataType::NumericString;
+    QTest::newRow("Enumerated")    << "EnumeratedType"    << Data::TypeReference::DataType::Enumerated;
+    QTest::newRow("Choice")        << "ChoiceType"        << Data::TypeReference::DataType::Choice;
+    QTest::newRow("Sequence")      << "SequenceType"      << Data::TypeReference::DataType::Sequence;
+    QTest::newRow("SequenceOf")    << "SequenceOfType"    << Data::TypeReference::DataType::SequenceOf;
 }
 
 void AstXmlParserTests::test_userDefinedTypeReference()

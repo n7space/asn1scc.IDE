@@ -35,9 +35,20 @@ namespace Data {
 class TypeReference
 {
 public:
-
     enum class DataType {
-        BuiltIn,
+        Boolean,
+        Null,
+        Integer,
+        Real,
+        BitString,
+        OctetString,
+        IA5String,
+        NumericString,
+        Enumerated,
+        Choice,
+        Sequence,
+        SequenceOf,
+
         UserDefined
     };
 
