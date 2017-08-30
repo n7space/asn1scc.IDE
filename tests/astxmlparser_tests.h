@@ -49,6 +49,7 @@ private slots:
     void test_builtinTypeReference_data();
     void test_userDefinedTypeReference();
     void test_userDefinedTypeReferenceInOtherModule();
+    void test_multipleTypeAssignments();
     void test_importedTypes();
 
 

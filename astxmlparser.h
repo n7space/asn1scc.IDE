@@ -39,7 +39,7 @@ namespace Internal {
 class AstXmlParser
 {
 public:
-    AstXmlParser(QXmlStreamReader& m_xmlReader);
+    AstXmlParser(QXmlStreamReader &m_xmlReader);
 
     bool parse();
 
@@ -71,11 +71,11 @@ private:
     Data::SourceLocation readLocationFromAttributes();
 
     Data::TypeReference readTypeReference();
-    Data::TypeReference readType(const Data::SourceLocation& location);
+    Data::TypeReference readType(const Data::SourceLocation &location);
     QString readReferencedTypeNameAttribute();
     QString readReferencedModuleAttribute();
 
-    bool nextRequiredElementIs(const QString& name);
+    bool nextRequiredElementIs(const QString &name);
 
     QXmlStreamReader& m_xmlReader;
     std::map<QString, std::unique_ptr<Data::Modules>> m_data;

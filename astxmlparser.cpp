@@ -28,7 +28,7 @@
 
 using namespace Asn1Acn::Internal;
 
-AstXmlParser::AstXmlParser(QXmlStreamReader& xmlReader_)
+AstXmlParser::AstXmlParser(QXmlStreamReader &xmlReader_)
     : m_xmlReader(xmlReader_),
       m_currentDefinitions(nullptr)
 {
@@ -37,7 +37,7 @@ AstXmlParser::AstXmlParser(QXmlStreamReader& xmlReader_)
 bool AstXmlParser::parse()
 {
     if (nextRequiredElementIs(QStringLiteral("ASN1AST")))
-            readASN1AST();
+        readASN1AST();
     return !m_xmlReader.hasError();
 }
 
@@ -121,6 +121,8 @@ void AstXmlParser::readTypeAssignment()
     const auto type = Data::TypeAssignment(name, location, reference);
 
     m_currentDefinitions->add(type);
+
+    m_xmlReader.skipCurrentElement();
 }
 
 QString AstXmlParser::readReferencedTypeNameAttribute()
@@ -193,7 +195,7 @@ void AstXmlParser::readExportedTypes()
     m_xmlReader.skipCurrentElement();
 }
 
-bool AstXmlParser::nextRequiredElementIs(const QString& name)
+bool AstXmlParser::nextRequiredElementIs(const QString &name)
 {
     if (!m_xmlReader.readNextStartElement())
         return false;
@@ -210,7 +212,7 @@ Data::SourceLocation AstXmlParser::readLocationFromAttributes()
 
 namespace
 {
-Data::Type mapNameToDataType(const QStringRef& name)
+Data::Type mapNameToDataType(const QStringRef &name)
 {
     static const QMap<QString, Data::Type> mapping = {
         { "BooleanType",       Data::Type::Boolean },
@@ -233,7 +235,7 @@ Data::Type mapNameToDataType(const QStringRef& name)
 }
 } // namespace
 
-Data::TypeReference AstXmlParser::readType(const Data::SourceLocation& location)
+Data::TypeReference AstXmlParser::readType(const Data::SourceLocation &location)
 {
     const auto attributeName = m_xmlReader.name();
     if (attributeName == QStringLiteral("ReferenceType"))
@@ -250,6 +252,8 @@ Data::TypeReference AstXmlParser::readTypeReference()
 
     m_xmlReader.readNextStartElement();
     const auto type = readType(location);
+    m_xmlReader.skipCurrentElement();
+
     m_xmlReader.skipCurrentElement();
 
     return type;
