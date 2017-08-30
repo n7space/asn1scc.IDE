@@ -123,6 +123,7 @@ HEADERS += \
     data/definitions.h \
     data/modules.h \
     data/typereference.h \
+    data/type.h \
     \
     options-pages/general.h \
     options-pages/service.h \

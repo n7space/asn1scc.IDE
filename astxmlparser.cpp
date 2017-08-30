@@ -210,25 +210,25 @@ Data::SourceLocation AstXmlParser::readLocationFromAttributes()
 
 namespace
 {
-Data::TypeReference::DataType mapNameToDataType(const QStringRef& name)
+Data::Type mapNameToDataType(const QStringRef& name)
 {
-    static const QMap<QString, Data::TypeReference::DataType> mapping = {
-        { "BooleanType",       Data::TypeReference::DataType::Boolean },
-        { "NullType",          Data::TypeReference::DataType::Null },
-        { "IntegerType",       Data::TypeReference::DataType::Integer },
-        { "RealType",          Data::TypeReference::DataType::Real },
-        { "BitStringType",     Data::TypeReference::DataType::BitString },
-        { "OctetStringType",   Data::TypeReference::DataType::OctetString },
-        { "IA5StringType",     Data::TypeReference::DataType::IA5String },
-        { "NumericStringType", Data::TypeReference::DataType::NumericString },
-        { "EnumeratedType",    Data::TypeReference::DataType::Enumerated },
-        { "ChoiceType",        Data::TypeReference::DataType::Choice },
-        { "SequenceType",      Data::TypeReference::DataType::Sequence },
-        { "SequenceOfType",    Data::TypeReference::DataType::SequenceOf },
+    static const QMap<QString, Data::Type> mapping = {
+        { "BooleanType",       Data::Type::Boolean },
+        { "NullType",          Data::Type::Null },
+        { "IntegerType",       Data::Type::Integer },
+        { "RealType",          Data::Type::Real },
+        { "BitStringType",     Data::Type::BitString },
+        { "OctetStringType",   Data::Type::OctetString },
+        { "IA5StringType",     Data::Type::IA5String },
+        { "NumericStringType", Data::Type::NumericString },
+        { "EnumeratedType",    Data::Type::Enumerated },
+        { "ChoiceType",        Data::Type::Choice },
+        { "SequenceType",      Data::Type::Sequence },
+        { "SequenceOfType",    Data::Type::SequenceOf },
     };
     const auto it = mapping.find(name.toString());
     if (it == mapping.end())
-        return Data::TypeReference::DataType::UserDefined;
+        return Data::Type::UserDefined;
     return it.value();
 }
 } // namespace

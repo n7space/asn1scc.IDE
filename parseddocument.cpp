@@ -79,7 +79,7 @@ void ParsedDocument::populateReferencesFromModule(const std::unique_ptr<Data::De
     Data::Definitions::Types::const_iterator typeIt;
     for (typeIt = types.begin(); typeIt != types.end(); typeIt++) {
         auto reference = typeIt->second.reference();
-        if (reference.type() == Data::TypeReference::DataType::UserDefined)
+        if (reference.isUserDefined())
             m_refernceLookup.insert(typeIt->second.location().line(), reference);
     }
 }
