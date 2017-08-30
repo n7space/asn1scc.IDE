@@ -50,7 +50,8 @@ private slots:
     void test_userDefinedTypeReference();
     void test_userDefinedTypeReferenceInOtherModule();
     void test_multipleTypeAssignments();
-    void test_importedTypes();
+    void test_importedType();
+    void test_multipleImportedType();
 
 
 private:

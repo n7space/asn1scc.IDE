@@ -67,6 +67,7 @@ private:
     void readImportedModule();
     void readImportedVariables();
     void readImportedTypes();
+    void readImportedType();
 
     Data::SourceLocation readLocationFromAttributes();
 

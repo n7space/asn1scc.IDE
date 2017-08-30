@@ -118,9 +118,7 @@ void AstXmlParser::readTypeAssignment()
     const auto name = readNameAttribute();
     const auto reference = readTypeReference();
 
-    const auto type = Data::TypeAssignment(name, location, reference);
-
-    m_currentDefinitions->add(type);
+    m_currentDefinitions->add(Data::TypeAssignment(name, location, reference));
 
     m_xmlReader.skipCurrentElement();
 }
@@ -180,8 +178,12 @@ void AstXmlParser::readImportedVariables()
 void AstXmlParser::readImportedTypes()
 {
     while (nextRequiredElementIs("ImportedType"))
-        m_currentDefinitions->addImportedType(m_xmlReader.attributes().value(QStringLiteral("Name")).toString());
+        readImportedType();
+}
 
+void AstXmlParser::readImportedType()
+{
+    m_currentDefinitions->addImportedType(readNameAttribute());
     m_xmlReader.skipCurrentElement();
 }
 

@@ -190,27 +190,6 @@ void AstXmlParserTests::test_userDefinedTypeReferenceInOtherModule()
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().module(), QStringLiteral("MYMOD"));
 }
 
-void AstXmlParserTests::test_importedTypes()
-{
-    parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
-          R"(<ASN1AST>)"
-          R"(  <Asn1File FileName="Test2File.asn">)"
-          R"(    <Asn1Module ID="TestDefinitions">)"
-          R"(      <ImportedModules>)"
-          R"(          <ImportedModule ID="OtherDefinitions">)"
-          R"(              <ImportedTypes>)"
-          R"(                  <ImportedType Name="Imported" />)"
-          R"(              </ImportedTypes>)"
-          R"(          </ImportedModule>)"
-          R"(      </ImportedModules>)"
-          R"(      <TypeAssignments/>)"
-          R"(    </Asn1Module>)"
-          R"(  </Asn1File>)"
-          R"(</ASN1AST>)");
-
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->importedTypes().at(0), QStringLiteral("Imported"));
-}
-
 void AstXmlParserTests::test_multipleTypeAssignments()
 {
     parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
@@ -243,6 +222,52 @@ void AstXmlParserTests::test_multipleTypeAssignments()
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyInt").reference().type(), Data::Type::Integer);
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MySeq").reference().type(), Data::Type::Sequence);
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->types().at("MyNull").reference().type(), Data::Type::Null);
+}
+
+void AstXmlParserTests::test_importedType()
+{
+    parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
+          R"(<ASN1AST>)"
+          R"(  <Asn1File FileName="Test2File.asn">)"
+          R"(    <Asn1Module ID="TestDefinitions">)"
+          R"(      <ImportedModules>)"
+          R"(          <ImportedModule ID="OtherDefinitions">)"
+          R"(              <ImportedTypes>)"
+          R"(                  <ImportedType Name="Imported" />)"
+          R"(              </ImportedTypes>)"
+          R"(          </ImportedModule>)"
+          R"(      </ImportedModules>)"
+          R"(      <TypeAssignments/>)"
+          R"(    </Asn1Module>)"
+          R"(  </Asn1File>)"
+          R"(</ASN1AST>)");
+
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->importedTypes().size(), 1);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->importedTypes().at(0), QStringLiteral("Imported"));
+}
+
+void AstXmlParserTests::test_multipleImportedType()
+{
+    parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
+          R"(<ASN1AST>)"
+          R"(  <Asn1File FileName="Test2File.asn">)"
+          R"(    <Asn1Module ID="TestDefinitions">)"
+          R"(      <ImportedModules>)"
+          R"(          <ImportedModule ID="OtherDefinitions">)"
+          R"(              <ImportedTypes>)"
+          R"(                  <ImportedType Name="Imported1" />)"
+          R"(                  <ImportedType Name="Imported2" />)"
+          R"(              </ImportedTypes>)"
+          R"(          </ImportedModule>)"
+          R"(      </ImportedModules>)"
+          R"(      <TypeAssignments/>)"
+          R"(    </Asn1Module>)"
+          R"(  </Asn1File>)"
+          R"(</ASN1AST>)");
+
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->importedTypes().size(), 2);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->importedTypes().at(0), QStringLiteral("Imported1"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions().at("TestDefinitions")->importedTypes().at(1), QStringLiteral("Imported2"));
 }
 
 void AstXmlParserTests::parsingFails(const QString& xmlData)
