@@ -131,7 +131,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
                                                                                const QString &content,
                                                                                int revision) const
 {
-    DocumentProcessor *docProcessor = new DocumentProcessor(projectName);
+    DocumentProcessor *docProcessor = DocumentProcessor::create(projectName);
 
     QList<std::shared_ptr<ParsedDocument>> files = m_storage->getFilesFromProject(projectName);
     foreach (const std::shared_ptr<ParsedDocument> &file, files) {
@@ -150,7 +150,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
 DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChange(const QString &projectName,
                                                                                   const QStringList &filePaths) const
 {
-    DocumentProcessor *docProcessor = new DocumentProcessor(projectName);
+    DocumentProcessor *docProcessor = DocumentProcessor::create(projectName);
 
     foreach (const QString &path, filePaths) {
         std::shared_ptr<ParsedDocument> parsedDoc = m_storage->getFileForPath(path);

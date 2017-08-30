@@ -25,63 +25,45 @@
 
 #pragma once
 
-#include <QHash>
-#include <QString>
-#include <QFileInfo>
-#include <QList>
-#include <QTextDocument>
-
 #include <memory>
 
+#include <QHash>
+#include <QString>
+
 #include "parseddocument.h"
-#include "parseddocumentbuilder.h"
 #include "documentsourceinfo.h"
+#include "parseddocumentbuilder.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class DocumentProcessor : public QObject
+class ParsedDocumentBuilderStub
+        : public QObject
+        , public ParsedDocumentBuilder
 {
     Q_OBJECT
+
 public:
+    ParsedDocumentBuilderStub(QObject *parent = 0);
+    ~ParsedDocumentBuilderStub() = default;
 
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+    void setDocumentsToProcess(const QHash<QString, DocumentSourceInfo> *documents) override;
+    void run() override;
 
-    static DocumentProcessor *create(const QString &projectName);
-
-    DocumentProcessor(const QString &projectName, ParsedDocumentBuilder *docBuilder);
-    ~DocumentProcessor();
-
-    void addToRun(const QString &docContent, const QString &filePath, int revision);
-    void run();
-    std::vector<std::unique_ptr<ParsedDocument>> takeResults();
-
-    State getState();
+    std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
+    const QStringList &errorMessages() const override;
 
 signals:
-    void processingFinished(const QString &projectName) const;
-
-private slots:
-    void onBuilderFinished();
-    void onBuilderFailed();
-    void onBuilderErrored();
+    void finished();
+    void errored();
+    void failed();
 
 private:
-    void createFallbackResults();
+    const QHash<QString, DocumentSourceInfo> *m_rawDocuments;
+    std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
-    QHash<QString, DocumentSourceInfo> m_documents;
-    QString m_projectName;
-
-    std::vector<std::unique_ptr<ParsedDocument>> m_results;
-    State m_state;
-
-    ParsedDocumentBuilder *m_docBuilder;
+    QStringList m_errorMessages;
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Internal */
+} /* namespace Asn1Acn */

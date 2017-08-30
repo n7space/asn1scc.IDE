@@ -32,11 +32,20 @@
 
 using namespace Asn1Acn::Internal;
 
-DocumentProcessor::DocumentProcessor(const QString &projectName) :
-    m_projectName(projectName),
-    m_state(State::Unfinished),
-    m_docBuilder(nullptr)
+DocumentProcessor *DocumentProcessor::create(const QString &projectName)
 {
+    ParsedDocumentBuilder *docBuilder = Asn1SccParsedDocumentBuilder::create();
+    return new DocumentProcessor(projectName, docBuilder);
+}
+
+DocumentProcessor::DocumentProcessor(const QString &projectName, ParsedDocumentBuilder *docBuilder)
+    : m_projectName(projectName),
+      m_state(State::Unfinished),
+      m_docBuilder(docBuilder)
+{
+    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(finished()), this, SLOT(onBuilderFinished()));
+    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(failed()), this, SLOT(onBuilderFailed()));
+    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(errored()), this, SLOT(onBuilderErrored()));
 }
 
 DocumentProcessor::~DocumentProcessor()
@@ -54,12 +63,8 @@ void DocumentProcessor::addToRun(const QString &docContent, const QString &fileP
 
 void DocumentProcessor::run()
 {
-    m_docBuilder = Asn1SccParsedDocumentBuilder::create(m_documents);
+    m_docBuilder->setDocumentsToProcess(&m_documents);
     m_docBuilder->run();
-
-    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(finished()), this, SLOT(onBuilderFinished()));
-    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(failed()), this, SLOT(onBuilderFailed()));
-    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(errored()), this, SLOT(onBuilderErrored()));
 }
 
 DocumentProcessor::State DocumentProcessor::getState()

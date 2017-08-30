@@ -53,11 +53,12 @@ void ParsedDocumentBuilderTests::test_failed()
     QHash<QString, DocumentSourceInfo> documents;
     documents.insert("FAILED", sourceInfo);
 
-    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(documents, m_serviceProvider);
+    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider);
     QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);
     QSignalSpy spyErrored(builder, &Asn1SccParsedDocumentBuilder::errored);
     QSignalSpy spyFinished(builder, &Asn1SccParsedDocumentBuilder::finished);
 
+    builder->setDocumentsToProcess(&documents);
     builder->run();
 
     QTest::qWait(200);
@@ -81,11 +82,12 @@ void ParsedDocumentBuilderTests::test_error()
     QHash<QString, DocumentSourceInfo> documents;
     documents.insert("ERROR", sourceInfo);
 
-    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(documents, m_serviceProvider);
+    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider);
     QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);
     QSignalSpy spyErrored(builder, &Asn1SccParsedDocumentBuilder::errored);
     QSignalSpy spyFinished(builder, &Asn1SccParsedDocumentBuilder::finished);
 
+    builder->setDocumentsToProcess(&documents);
     builder->run();
 
     QTest::qWait(200);
@@ -124,11 +126,12 @@ void ParsedDocumentBuilderTests::test_success()
     QHash<QString, DocumentSourceInfo> documents;
     documents.insert("SUCCESS", sourceInfo);
 
-    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(documents, m_serviceProvider);
+    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider);
     QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);
     QSignalSpy spyErrored(builder, &Asn1SccParsedDocumentBuilder::errored);
     QSignalSpy spyFinished(builder, &Asn1SccParsedDocumentBuilder::finished);
 
+    builder->setDocumentsToProcess(&documents);
     builder->run();
 
     QTest::qWait(200);

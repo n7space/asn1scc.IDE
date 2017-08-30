@@ -25,63 +25,43 @@
 
 #pragma once
 
-#include <QHash>
-#include <QString>
-#include <QFileInfo>
-#include <QList>
-#include <QTextDocument>
+#include <QObject>
 
-#include <memory>
+#include <QSignalSpy>
 
-#include "parseddocument.h"
-#include "parseddocumentbuilder.h"
-#include "documentsourceinfo.h"
+#include "../documentprocessor.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class DocumentProcessor : public QObject
+class DocumentProcessorTests : public QObject
 {
     Q_OBJECT
+
 public:
-
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
-
-    static DocumentProcessor *create(const QString &projectName);
-
-    DocumentProcessor(const QString &projectName, ParsedDocumentBuilder *docBuilder);
-    ~DocumentProcessor();
-
-    void addToRun(const QString &docContent, const QString &filePath, int revision);
-    void run();
-    std::vector<std::unique_ptr<ParsedDocument>> takeResults();
-
-    State getState();
-
-signals:
-    void processingFinished(const QString &projectName) const;
+    explicit DocumentProcessorTests(QObject *parent = 0);
 
 private slots:
-    void onBuilderFinished();
-    void onBuilderFailed();
-    void onBuilderErrored();
+    void test_unstarted();
+    void test_successful();
+    void test_error();
+    void test_failed();
 
 private:
-    void createFallbackResults();
+    void examine(DocumentProcessor *dp,
+                 const QSignalSpy &spy,
+                 const DocumentProcessor::State state,
+                 const QString &fileName,
+                 const QString &filePath) const;
 
-    QHash<QString, DocumentSourceInfo> m_documents;
-    QString m_projectName;
+    const QString m_projectName;
 
-    std::vector<std::unique_ptr<ParsedDocument>> m_results;
-    State m_state;
-
-    ParsedDocumentBuilder *m_docBuilder;
+    const QString m_fileContent;
+    const QString m_fileDir;
+    const int m_revision;
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

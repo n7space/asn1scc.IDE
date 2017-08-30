@@ -42,21 +42,25 @@
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create(const QHash<QString, DocumentSourceInfo> &documents)
+ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create()
 {
     auto serviceProvider = ExtensionSystem::PluginManager::getObject<ParsingServiceProvider>();
-    return new Asn1SccParsedDocumentBuilder(documents, serviceProvider);
+    return new Asn1SccParsedDocumentBuilder(serviceProvider);
 }
 
-Asn1SccParsedDocumentBuilder::Asn1SccParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents,
-                                                           ParsingServiceProvider *serviceProvider)
-    : m_serviceProvider(serviceProvider), m_rawDocuments(documents)
+Asn1SccParsedDocumentBuilder::Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider)
+    : m_serviceProvider(serviceProvider)
 {
+}
+
+void Asn1SccParsedDocumentBuilder::setDocumentsToProcess(const QHash<QString, DocumentSourceInfo> *documents)
+{
+    m_rawDocuments = documents;
 }
 
 void Asn1SccParsedDocumentBuilder::run()
 {
-    QNetworkReply *reply = m_serviceProvider->requestAst(m_rawDocuments);
+    QNetworkReply *reply = m_serviceProvider->requestAst(*m_rawDocuments);
 
     QObject::connect(reply, &QNetworkReply::finished,
                      this, &Asn1SccParsedDocumentBuilder::requestFinished);
@@ -100,7 +104,7 @@ void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
 
     for (it = parsedData.begin(); it != parsedData.end(); it++) {
         QString fileName = it->first;
-        DocumentSourceInfo sourceInfo = m_rawDocuments[fileName];
+        DocumentSourceInfo sourceInfo = (*m_rawDocuments)[fileName];
 
         std::unique_ptr<ParsedDocument> parsedDoc(new ParsedDocument(std::move(it->second), sourceInfo));
 

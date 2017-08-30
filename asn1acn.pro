@@ -101,7 +101,8 @@ SOURCES += \
     tools.cpp \
     linkcreator.cpp \
     asn1sccserviceproviderstub.cpp \
-    networkreply.cpp
+    networkreply.cpp \
+    parseddocumentbuilderstub.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -163,7 +164,8 @@ HEADERS += \
     parsingserviceprovider.h \
     asn1sccserviceproviderstub.h \
     parseddocumentbuilder.h \
-    networkreply.h
+    networkreply.h \
+    parseddocumentbuilderstub.h
 
 FORMS += \
     options-pages/general.ui \
@@ -182,11 +184,13 @@ equals(TEST, 1) {
 
 SOURCES += \
     tests/astxmlparser_tests.cpp \
-    tests/parseddocumentbuilder_tests.cpp
+    tests/parseddocumentbuilder_tests.cpp \
+    tests/documentprocessor_tests.cpp
 
 HEADERS += \
     tests/astxmlparser_tests.h \
-    tests/parseddocumentbuilder_tests.h
+    tests/parseddocumentbuilder_tests.h \
+    tests/documentprocessor_tests.h
 
 }
 
