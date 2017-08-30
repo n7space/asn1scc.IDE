@@ -30,17 +30,19 @@
 #include <utils/qtcassert.h>
 
 #include "asn1sccdocumentprocessor.h"
+#include "externalsourcereader.h"
 
 using namespace Asn1Acn::Internal;
 
 ProjectContentHandler *ProjectContentHandler::create()
 {
-    return new ProjectContentHandler(DocumentProcessorFactory());
+    return new ProjectContentHandler(DocumentProcessorFactory(), new ExternalSourceReader);
 }
 
-ProjectContentHandler::ProjectContentHandler(const DocumentProcessorFactory &factory)
+ProjectContentHandler::ProjectContentHandler(const DocumentProcessorFactory &factory, const SourceReader *sourceReader)
     : m_projectsChanged(0)
     , m_factory(factory)
+    , m_sourceReader(sourceReader)
 {
     m_tree = ModelTree::instance();
     m_storage = ParsedDataStorage::instance();
@@ -51,6 +53,8 @@ ProjectContentHandler::ProjectContentHandler(const DocumentProcessorFactory &fac
 ProjectContentHandler::~ProjectContentHandler()
 {
     m_tree->treeChanged();
+
+    delete(m_sourceReader);
 }
 
 void ProjectContentHandler::handleProjectAdded(const QString &projectName)
@@ -163,7 +167,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChang
         if (parsedDoc != nullptr)
             docProcessor->addToRun(parsedDoc->source().getContent(), path, parsedDoc->source().getRevision());
         else
-            docProcessor->addToRun(readFileContent(path), path, -1);
+            docProcessor->addToRun(m_sourceReader->readFileContent(path), path, -1);
     }
 
     return docProcessor;
@@ -177,21 +181,6 @@ void ProjectContentHandler::startProcessing(DocumentProcessor *dp)
     dp->run();
 
     m_projectsChanged++;
-}
-
-QString
-ProjectContentHandler::readFileContent(const QString &fileName) const
-{
-    QFile file(fileName);
-
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return QString();
-
-    QString docContent = QString::fromLatin1(file.readAll().data());
-
-    file.close();
-
-    return docContent;
 }
 
 void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName)

@@ -31,6 +31,7 @@
 #include "parseddatastorage.h"
 #include "documentprocessor.h"
 #include "documentprocessorfactory.h"
+#include "sourcereader.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -42,7 +43,7 @@ class ProjectContentHandler : public QObject
 public:
     static ProjectContentHandler *create();
 
-    ProjectContentHandler(const DocumentProcessorFactory &factory);
+    ProjectContentHandler(const DocumentProcessorFactory &factory, const SourceReader *sourceReader);
     ~ProjectContentHandler();
 
     void handleProjectAdded(const QString &projectName);
@@ -64,7 +65,6 @@ private:
     QStringList getStaleFilesNames(const QString &projectName, const QStringList &filePaths) const;
 
     void processFiles(const QString &projectName, const QStringList &filePaths);
-    QString readFileContent(const QString &fileName) const;
 
     DocumentProcessor *createDocumentProcessorForFileChange(const QString &projectName,
                                                             const QString &path,
@@ -84,6 +84,7 @@ private:
     unsigned m_projectsChanged;
 
     DocumentProcessorFactory m_factory;
+    const SourceReader *m_sourceReader;
 };
 
 } // namespace Internal

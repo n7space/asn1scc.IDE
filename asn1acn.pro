@@ -103,7 +103,9 @@ SOURCES += \
     asn1sccserviceproviderstub.cpp \
     networkreply.cpp \
     parseddocumentbuilderstub.cpp \
-    documentprocessorstub.cpp
+    documentprocessorstub.cpp \
+    externalsourcereader.cpp \
+    internalsourcereader.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -169,7 +171,10 @@ HEADERS += \
     parseddocumentbuilderstub.h \
     documentprocessor.h \
     documentprocessorstub.h \
-    documentprocessorfactory.h
+    documentprocessorfactory.h \
+    sourcereader.h \
+    externalsourcereader.h \
+    internalsourcereader.h
 
 FORMS += \
     options-pages/general.ui \
