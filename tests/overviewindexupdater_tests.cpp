@@ -35,7 +35,7 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
 
-static const int RESPONSE_WAIT_TIME_MS = 600;
+static const int RESPONSE_WAIT_MAX_TIME_MS = 20000;
 
 OverviewIndexUpdaterTests::OverviewIndexUpdaterTests(QObject *parent)
     : QObject(parent)
@@ -124,7 +124,7 @@ void OverviewIndexUpdaterTests::test_setNonEmpytEditorInitialCursorPosition()
     m_editorWidget->gotoLine(0);
     m_indexUpdater->setEditor(m_editorWidget);
 
-    QTest::qWait(RESPONSE_WAIT_TIME_MS);
+    QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
 
     QCOMPARE(spy.count(), 1);
 
@@ -143,7 +143,7 @@ void OverviewIndexUpdaterTests::test_setNonEmpytEditorChangedPosition()
     m_editorWidget->gotoLine(lineNumber);
     m_indexUpdater->setEditor(m_editorWidget);
 
-    QTest::qWait(RESPONSE_WAIT_TIME_MS);
+    QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
 
     QCOMPARE(spy.count(), 1);
 
@@ -165,7 +165,7 @@ void OverviewIndexUpdaterTests::test_cursorMovedToModule()
     m_editorWidget->gotoLine(1);
     m_indexUpdater->setEditor(m_editorWidget);
 
-    QTest::qWait(RESPONSE_WAIT_TIME_MS);
+    QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
 
     QCOMPARE(spy.count(), 1);
 
@@ -184,7 +184,7 @@ void OverviewIndexUpdaterTests::test_cursorMovedToTypeDefinition()
     m_editorWidget->gotoLine(lineNumber);
     m_indexUpdater->setEditor(m_editorWidget);
 
-    QTest::qWait(RESPONSE_WAIT_TIME_MS);
+    QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
 
     QCOMPARE(spy.count(), 1);
 
@@ -206,7 +206,7 @@ void OverviewIndexUpdaterTests::test_cursorMovedToEmptyLine()
     m_editorWidget->gotoLine(8);
     m_indexUpdater->setEditor(m_editorWidget);
 
-    QTest::qWait(RESPONSE_WAIT_TIME_MS);
+    QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
 
     QCOMPARE(spy.count(), 1);
 
@@ -247,8 +247,6 @@ void OverviewIndexUpdaterTests::test_forceUpdateAfterCursorMoved()
     m_indexUpdater->setEditor(m_editorWidget);
     m_editorWidget->gotoLine(lineNumber);
     m_indexUpdater->updateCurrentIndex();
-
-    QTest::qWait(RESPONSE_WAIT_TIME_MS);
 
     QCOMPARE(spy.count(), 1);
 
