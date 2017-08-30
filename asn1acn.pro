@@ -82,7 +82,7 @@ SOURCES += \
     acndocument.cpp \
     editor.cpp \
     overviewmodel.cpp \
-    documentprocessor.cpp \
+    asn1sccdocumentprocessor.cpp \
     parseddatastorage.cpp \
     parseddocument.cpp \
     structuresview.cpp \
@@ -102,7 +102,8 @@ SOURCES += \
     linkcreator.cpp \
     asn1sccserviceproviderstub.cpp \
     networkreply.cpp \
-    parseddocumentbuilderstub.cpp
+    parseddocumentbuilderstub.cpp \
+    documentprocessorstub.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -142,7 +143,7 @@ HEADERS += \
     acndocument.h \
     editor.h \
     overviewmodel.h \
-    documentprocessor.h \
+    asn1sccdocumentprocessor.h \
     parseddatastorage.h \
     parseddocument.h \
     structuresview.h \
@@ -165,7 +166,10 @@ HEADERS += \
     asn1sccserviceproviderstub.h \
     parseddocumentbuilder.h \
     networkreply.h \
-    parseddocumentbuilderstub.h
+    parseddocumentbuilderstub.h \
+    documentprocessor.h \
+    documentprocessorstub.h \
+    documentprocessorfactory.h
 
 FORMS += \
     options-pages/general.ui \
@@ -185,12 +189,14 @@ equals(TEST, 1) {
 SOURCES += \
     tests/astxmlparser_tests.cpp \
     tests/parseddocumentbuilder_tests.cpp \
-    tests/documentprocessor_tests.cpp
+    tests/documentprocessor_tests.cpp \
+    tests/projectcontenthandler_tests.cpp
 
 HEADERS += \
     tests/astxmlparser_tests.h \
     tests/parseddocumentbuilder_tests.h \
-    tests/documentprocessor_tests.h
+    tests/documentprocessor_tests.h \
+    tests/projectcontenthandler_tests.h
 
 }
 

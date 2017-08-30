@@ -23,46 +23,21 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "projectcontenthandler_tests.h"
 
-#include <QObject>
+#include <QtTest>
 
 #include <QSignalSpy>
 
-#include "../documentprocessor.h"
-#include "../asn1sccdocumentprocessor.h"
+using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Tests;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Tests {
-
-class DocumentProcessorTests : public QObject
+ProjectContentHandlerTests::ProjectContentHandlerTests(QObject *parent)
+    : QObject(parent)
 {
-    Q_OBJECT
+}
 
-public:
-    explicit DocumentProcessorTests(QObject *parent = 0);
-
-private slots:
-    void test_unstarted();
-    void test_successful();
-    void test_error();
-    void test_failed();
-
-private:
-    void examine(DocumentProcessor *dp,
-                 const QSignalSpy &spy,
-                 const DocumentProcessor::State state,
-                 const QString &fileName,
-                 const QString &filePath) const;
-
-    const QString m_projectName;
-
-    const QString m_fileContent;
-    const QString m_fileDir;
-    const int m_revision;
-};
-
-} // namespace Tests
-} // namespace Internal
-} // namespace Asn1Acn
+void ProjectContentHandlerTests::test_empty()
+{
+    QVERIFY(true);
+}

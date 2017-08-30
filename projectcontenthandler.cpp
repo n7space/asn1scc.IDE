@@ -29,12 +29,18 @@
 
 #include <utils/qtcassert.h>
 
-#include "documentprocessor.h"
+#include "asn1sccdocumentprocessor.h"
 
 using namespace Asn1Acn::Internal;
 
-ProjectContentHandler::ProjectContentHandler() :
-    m_projectsChanged(0)
+ProjectContentHandler *ProjectContentHandler::create()
+{
+    return new ProjectContentHandler(DocumentProcessorFactory());
+}
+
+ProjectContentHandler::ProjectContentHandler(const DocumentProcessorFactory &factory)
+    : m_projectsChanged(0)
+    , m_factory(factory)
 {
     m_tree = ModelTree::instance();
     m_storage = ParsedDataStorage::instance();
@@ -131,7 +137,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
                                                                                const QString &content,
                                                                                int revision) const
 {
-    DocumentProcessor *docProcessor = DocumentProcessor::create(projectName);
+    DocumentProcessor *docProcessor = Asn1SccDocumentProcessor::create(projectName);
 
     QList<std::shared_ptr<ParsedDocument>> files = m_storage->getFilesFromProject(projectName);
     foreach (const std::shared_ptr<ParsedDocument> &file, files) {
@@ -150,7 +156,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
 DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChange(const QString &projectName,
                                                                                   const QStringList &filePaths) const
 {
-    DocumentProcessor *docProcessor = DocumentProcessor::create(projectName);
+    DocumentProcessor *docProcessor = Asn1SccDocumentProcessor::create(projectName);
 
     foreach (const QString &path, filePaths) {
         std::shared_ptr<ParsedDocument> parsedDoc = m_storage->getFileForPath(path);

@@ -42,7 +42,7 @@ DocumentProcessorTests::DocumentProcessorTests(QObject *parent)
 
 void DocumentProcessorTests::test_unstarted()
 {
-    DocumentProcessor *dp = new DocumentProcessor("ProjectName", new ParsedDocumentBuilderStub);
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor("ProjectName", new ParsedDocumentBuilderStub);
 
     QCOMPARE(dp->getState(), DocumentProcessor::State::Unfinished);
 
@@ -57,7 +57,7 @@ void DocumentProcessorTests::test_successful()
     const QString fileName("SUCCESS");
     const QString filePath = m_fileDir + fileName;
 
-    DocumentProcessor *dp = new DocumentProcessor(m_projectName, new ParsedDocumentBuilderStub);
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, new ParsedDocumentBuilderStub);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
     dp->addToRun(m_fileContent, filePath, m_revision);
@@ -73,7 +73,7 @@ void DocumentProcessorTests::test_error()
     const QString fileName("ERROR");
     const QString filePath = m_fileDir + fileName;
 
-    DocumentProcessor *dp = new DocumentProcessor(m_projectName, new ParsedDocumentBuilderStub);
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, new ParsedDocumentBuilderStub);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
     dp->addToRun(m_fileContent, filePath, m_revision);
@@ -89,7 +89,7 @@ void DocumentProcessorTests::test_failed()
     const QString fileName("FAILED");
     const QString filePath = m_fileDir + fileName;
 
-    DocumentProcessor *dp = new DocumentProcessor(m_projectName, new ParsedDocumentBuilderStub);
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, new ParsedDocumentBuilderStub);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
     dp->addToRun(m_fileContent, filePath, m_revision);

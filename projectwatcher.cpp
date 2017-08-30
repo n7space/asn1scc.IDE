@@ -50,7 +50,7 @@ ProjectWatcher::ProjectWatcher()
 
 void ProjectWatcher::onProjectAdded(ProjectExplorer::Project *project)
 {
-    ProjectContentHandler *proc = new ProjectContentHandler;
+    ProjectContentHandler *proc = ProjectContentHandler::create();
     proc->handleProjectAdded(project->displayName());
 
     connect(project, &ProjectExplorer::Project::fileListChanged,
@@ -59,7 +59,7 @@ void ProjectWatcher::onProjectAdded(ProjectExplorer::Project *project)
 
 void ProjectWatcher::onProjectRemoved(ProjectExplorer::Project *project)
 {
-    ProjectContentHandler *proc = new ProjectContentHandler;
+    ProjectContentHandler *proc = ProjectContentHandler::create();
     proc->handleProjectRemoved(project->displayName());
 
     disconnect(project, &ProjectExplorer::Project::fileListChanged,
@@ -79,6 +79,6 @@ void ProjectWatcher::onProjectFileListChanged()
         return false;
     });
 
-    ProjectContentHandler *proc = new ProjectContentHandler;
+    ProjectContentHandler *proc = ProjectContentHandler::create();
     proc->handleFileListChanged(project->displayName(), validFiles);
 }

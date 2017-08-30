@@ -25,44 +25,37 @@
 
 #pragma once
 
-#include <QObject>
-
-#include <QSignalSpy>
-
-#include "../documentprocessor.h"
-#include "../asn1sccdocumentprocessor.h"
+#include "documentprocessor.h"
+#include "documentprocessorstub.h"
+#include "asn1sccdocumentprocessor.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Tests {
 
-class DocumentProcessorTests : public QObject
+class DocumentProcessorFactory
 {
-    Q_OBJECT
-
 public:
-    explicit DocumentProcessorTests(QObject *parent = 0);
+    enum class WorkMode {
+        Test,
+        Real
+    };
 
-private slots:
-    void test_unstarted();
-    void test_successful();
-    void test_error();
-    void test_failed();
+    DocumentProcessorFactory(WorkMode mode = WorkMode::Real) : m_mode(mode) {}
+
+    DocumentProcessor *create(const QString &projectName) {
+        switch(m_mode) {
+            case WorkMode::Test:
+                return new DocumentProcessorStub();
+            case WorkMode::Real:
+                return Asn1SccDocumentProcessor::create(projectName);
+            default:
+                return nullptr;
+        }
+    }
 
 private:
-    void examine(DocumentProcessor *dp,
-                 const QSignalSpy &spy,
-                 const DocumentProcessor::State state,
-                 const QString &fileName,
-                 const QString &filePath) const;
-
-    const QString m_projectName;
-
-    const QString m_fileContent;
-    const QString m_fileDir;
-    const int m_revision;
+    WorkMode m_mode;
 };
 
-} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

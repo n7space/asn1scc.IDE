@@ -27,40 +27,19 @@
 
 #include <QObject>
 
-#include <QSignalSpy>
-
-#include "../documentprocessor.h"
-#include "../asn1sccdocumentprocessor.h"
-
 namespace Asn1Acn {
 namespace Internal {
 namespace Tests {
 
-class DocumentProcessorTests : public QObject
+class ProjectContentHandlerTests : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit DocumentProcessorTests(QObject *parent = 0);
+    explicit ProjectContentHandlerTests(QObject *parent = 0);
 
 private slots:
-    void test_unstarted();
-    void test_successful();
-    void test_error();
-    void test_failed();
-
-private:
-    void examine(DocumentProcessor *dp,
-                 const QSignalSpy &spy,
-                 const DocumentProcessor::State state,
-                 const QString &fileName,
-                 const QString &filePath) const;
-
-    const QString m_projectName;
-
-    const QString m_fileContent;
-    const QString m_fileDir;
-    const int m_revision;
+    void test_empty();
 };
 
 } // namespace Tests

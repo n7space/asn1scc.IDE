@@ -25,26 +25,21 @@
 
 #pragma once
 
-#include <QHash>
-#include <QString>
-#include <QFileInfo>
-#include <QList>
-#include <QTextDocument>
-
+#include <vector>
 #include <memory>
 
+#include <QString>
+
 #include "parseddocument.h"
-#include "parseddocumentbuilder.h"
-#include "documentsourceinfo.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class DocumentProcessor : public QObject
+class DocumentProcessor
+        : public QObject
 {
     Q_OBJECT
 public:
-
     enum class State {
         Unfinished,
         Successful,
@@ -52,35 +47,16 @@ public:
         Errored
     };
 
-    static DocumentProcessor *create(const QString &projectName);
+    virtual ~DocumentProcessor() = default;
 
-    DocumentProcessor(const QString &projectName, ParsedDocumentBuilder *docBuilder);
-    ~DocumentProcessor();
+    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
+    virtual void run() = 0;
+    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
 
-    void addToRun(const QString &docContent, const QString &filePath, int revision);
-    void run();
-    std::vector<std::unique_ptr<ParsedDocument>> takeResults();
-
-    State getState();
+    virtual State getState() = 0;
 
 signals:
     void processingFinished(const QString &projectName) const;
-
-private slots:
-    void onBuilderFinished();
-    void onBuilderFailed();
-    void onBuilderErrored();
-
-private:
-    void createFallbackResults();
-
-    QHash<QString, DocumentSourceInfo> m_documents;
-    QString m_projectName;
-
-    std::vector<std::unique_ptr<ParsedDocument>> m_results;
-    State m_state;
-
-    ParsedDocumentBuilder *m_docBuilder;
 };
 
 } // namespace Internal

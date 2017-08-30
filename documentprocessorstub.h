@@ -25,44 +25,35 @@
 
 #pragma once
 
-#include <QObject>
+#include <memory>
+#include <vector>
 
-#include <QSignalSpy>
+#include <QString>
 
-#include "../documentprocessor.h"
-#include "../asn1sccdocumentprocessor.h"
+#include "parseddocument.h"
+
+#include "documentprocessor.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Tests {
 
-class DocumentProcessorTests : public QObject
+class DocumentProcessorStub
+        : public DocumentProcessor
 {
     Q_OBJECT
-
 public:
-    explicit DocumentProcessorTests(QObject *parent = 0);
 
-private slots:
-    void test_unstarted();
-    void test_successful();
-    void test_error();
-    void test_failed();
+    using State = DocumentProcessor::State;
 
-private:
-    void examine(DocumentProcessor *dp,
-                 const QSignalSpy &spy,
-                 const DocumentProcessor::State state,
-                 const QString &fileName,
-                 const QString &filePath) const;
+    DocumentProcessorStub() = default;
+    ~DocumentProcessorStub() = default;
 
-    const QString m_projectName;
+    void addToRun(const QString &docContent, const QString &filePath, int revision) override;
+    void run() override;
+    std::vector<std::unique_ptr<ParsedDocument>> takeResults() override;
 
-    const QString m_fileContent;
-    const QString m_fileDir;
-    const int m_revision;
+    State getState() override;
 };
 
-} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "documentprocessor.h"
+#include "asn1sccdocumentprocessor.h"
 
 #include <QFileInfo>
 
@@ -32,13 +32,13 @@
 
 using namespace Asn1Acn::Internal;
 
-DocumentProcessor *DocumentProcessor::create(const QString &projectName)
+Asn1SccDocumentProcessor *Asn1SccDocumentProcessor::create(const QString &projectName)
 {
     ParsedDocumentBuilder *docBuilder = Asn1SccParsedDocumentBuilder::create();
-    return new DocumentProcessor(projectName, docBuilder);
+    return new Asn1SccDocumentProcessor(projectName, docBuilder);
 }
 
-DocumentProcessor::DocumentProcessor(const QString &projectName, ParsedDocumentBuilder *docBuilder)
+Asn1SccDocumentProcessor::Asn1SccDocumentProcessor(const QString &projectName, ParsedDocumentBuilder *docBuilder)
     : m_projectName(projectName),
       m_state(State::Unfinished),
       m_docBuilder(docBuilder)
@@ -48,12 +48,12 @@ DocumentProcessor::DocumentProcessor(const QString &projectName, ParsedDocumentB
     QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(errored()), this, SLOT(onBuilderErrored()));
 }
 
-DocumentProcessor::~DocumentProcessor()
+Asn1SccDocumentProcessor::~Asn1SccDocumentProcessor()
 {
     delete m_docBuilder;
 }
 
-void DocumentProcessor::addToRun(const QString &docContent, const QString &filePath, int revision)
+void Asn1SccDocumentProcessor::addToRun(const QString &docContent, const QString &filePath, int revision)
 {
     QString fileName = QFileInfo(filePath).fileName();
     DocumentSourceInfo fileInfo(revision, docContent, filePath, fileName);
@@ -61,23 +61,23 @@ void DocumentProcessor::addToRun(const QString &docContent, const QString &fileP
     m_documents.insert(fileName, fileInfo);
 }
 
-void DocumentProcessor::run()
+void Asn1SccDocumentProcessor::run()
 {
     m_docBuilder->setDocumentsToProcess(&m_documents);
     m_docBuilder->run();
 }
 
-DocumentProcessor::State DocumentProcessor::getState()
+Asn1SccDocumentProcessor::State Asn1SccDocumentProcessor::getState()
 {
     return m_state;
 }
 
-std::vector<std::unique_ptr<ParsedDocument>> DocumentProcessor::takeResults()
+std::vector<std::unique_ptr<ParsedDocument>> Asn1SccDocumentProcessor::takeResults()
 {
     return std::move(m_results);
 }
 
-void DocumentProcessor::onBuilderFinished()
+void Asn1SccDocumentProcessor::onBuilderFinished()
 {
     m_results = m_docBuilder->takeDocuments();
     m_state = State::Successful;
@@ -85,7 +85,7 @@ void DocumentProcessor::onBuilderFinished()
     emit processingFinished(m_projectName);
 }
 
-void DocumentProcessor::onBuilderFailed()
+void Asn1SccDocumentProcessor::onBuilderFailed()
 {
     createFallbackResults();
     m_state = State::Failed;
@@ -93,7 +93,7 @@ void DocumentProcessor::onBuilderFailed()
     emit processingFinished(m_projectName);
 }
 
-void DocumentProcessor::onBuilderErrored()
+void Asn1SccDocumentProcessor::onBuilderErrored()
 {
     createFallbackResults();
     m_state = State::Errored;
@@ -101,7 +101,7 @@ void DocumentProcessor::onBuilderErrored()
     emit processingFinished(m_projectName);
 }
 
-void DocumentProcessor::createFallbackResults()
+void Asn1SccDocumentProcessor::createFallbackResults()
 {
     QHashIterator<QString, DocumentSourceInfo> it(m_documents);
     while (it.hasNext()) {

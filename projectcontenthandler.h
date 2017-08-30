@@ -30,6 +30,7 @@
 #include "modeltree.h"
 #include "parseddatastorage.h"
 #include "documentprocessor.h"
+#include "documentprocessorfactory.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -39,7 +40,9 @@ class ProjectContentHandler : public QObject
     Q_OBJECT
 
 public:
-    ProjectContentHandler();
+    static ProjectContentHandler *create();
+
+    ProjectContentHandler(const DocumentProcessorFactory &factory);
     ~ProjectContentHandler();
 
     void handleProjectAdded(const QString &projectName);
@@ -79,6 +82,8 @@ private:
     ParsedDataStorage *m_storage;
 
     unsigned m_projectsChanged;
+
+    DocumentProcessorFactory m_factory;
 };
 
 } // namespace Internal

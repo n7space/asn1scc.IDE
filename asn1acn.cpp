@@ -61,6 +61,7 @@
 #include "tests/astxmlparser_tests.h"
 #include "tests/parseddocumentbuilder_tests.h"
 #include "tests/documentprocessor_tests.h"
+#include "tests/projectcontenthandler_tests.h"
 #endif
 
 #include "asn1acn.h"
@@ -176,6 +177,7 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
             << new Tests::AstXmlParserTests
             << new Tests::ParsedDocumentBuilderTests
             << new Tests::DocumentProcessorTests
+            << new Tests::ProjectContentHandlerTests
                ;
 }
 #endif

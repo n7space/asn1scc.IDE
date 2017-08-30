@@ -23,46 +23,27 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "documentprocessorstub.h"
 
-#include <QObject>
+using namespace Asn1Acn::Internal;
 
-#include <QSignalSpy>
-
-#include "../documentprocessor.h"
-#include "../asn1sccdocumentprocessor.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace Tests {
-
-class DocumentProcessorTests : public QObject
+void DocumentProcessorStub::addToRun(const QString &docContent, const QString &filePath, int revision)
 {
-    Q_OBJECT
+    Q_UNUSED(docContent);
+    Q_UNUSED(filePath);
+    Q_UNUSED(revision);
+}
 
-public:
-    explicit DocumentProcessorTests(QObject *parent = 0);
+void DocumentProcessorStub::run()
+{
+}
 
-private slots:
-    void test_unstarted();
-    void test_successful();
-    void test_error();
-    void test_failed();
+std::vector<std::unique_ptr<ParsedDocument>> DocumentProcessorStub::takeResults()
+{
+    return std::vector<std::unique_ptr<ParsedDocument>> ();
+}
 
-private:
-    void examine(DocumentProcessor *dp,
-                 const QSignalSpy &spy,
-                 const DocumentProcessor::State state,
-                 const QString &fileName,
-                 const QString &filePath) const;
-
-    const QString m_projectName;
-
-    const QString m_fileContent;
-    const QString m_fileDir;
-    const int m_revision;
-};
-
-} // namespace Tests
-} // namespace Internal
-} // namespace Asn1Acn
+DocumentProcessorStub::State DocumentProcessorStub::getState()
+{
+    return State::Unfinished;
+}
