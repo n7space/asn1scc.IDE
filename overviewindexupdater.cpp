@@ -60,9 +60,6 @@ void OverviewIndexUpdater::setEditor(TextEditor::TextEditorWidget *editorWidget)
 
 void OverviewIndexUpdater::updateCurrentIndex()
 {
-    if (m_editorWidget == nullptr)
-        return;
-
     updateNow();
 }
 
@@ -91,7 +88,10 @@ void OverviewIndexUpdater::updateNow()
 {
     m_updateIndexTimer->stop();
 
-    QModelIndex index = getTargetIndexFromFileIndex(getCurrentFileIndex());
+    QModelIndex index;
+    if (m_editorWidget != nullptr)
+        index = getTargetIndexFromFileIndex(getCurrentFileIndex());
+
     emit currentIndexUpdated(index);
 }
 
