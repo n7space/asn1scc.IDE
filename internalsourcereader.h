@@ -36,7 +36,12 @@ class InternalSourceReader
         : public SourceReader
 {
 public:
+    InternalSourceReader();
+
     QString readFileContent(const QString &fileName) const override;
+
+private:
+    QString m_content;
 };
 
 } /* namespace Internal */

@@ -43,7 +43,11 @@ class ProjectContentHandler : public QObject
 public:
     static ProjectContentHandler *create();
 
-    ProjectContentHandler(const DocumentProcessorFactory &factory, const SourceReader *sourceReader);
+    ProjectContentHandler(const DocumentProcessorFactory &factory,
+                          const SourceReader *sourceReader,
+                          ModelTree *tree,
+                          ParsedDataStorage *storage);
+
     ~ProjectContentHandler();
 
     void handleProjectAdded(const QString &projectName);

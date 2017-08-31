@@ -25,25 +25,46 @@
 
 #include "documentprocessorstub.h"
 
+#include <QList>
+
+#include "data/modules.h"
+
+#include <QDebug>
+
 using namespace Asn1Acn::Internal;
 
 void DocumentProcessorStub::addToRun(const QString &docContent, const QString &filePath, int revision)
 {
-    Q_UNUSED(docContent);
-    Q_UNUSED(filePath);
-    Q_UNUSED(revision);
+    QString fileName = QFileInfo(filePath).fileName();
+    DocumentSourceInfo fileInfo(revision, docContent, filePath, fileName);
+
+    m_documents.insert(fileName, fileInfo);
+
+    if (docContent.contains("SUCCESS"))
+        m_state = State::Successful;
+    else if (docContent.contains("FAILED"))
+        m_state = State::Failed;
+    else if (docContent.contains("ERROR"))
+        m_state = State::Errored;
 }
 
 void DocumentProcessorStub::run()
 {
+    for (auto it = m_documents.begin(); it != m_documents.cend(); ++it) {
+        auto modules = std::make_unique<Data::Modules>();
+        std::unique_ptr<ParsedDocument> parsedDocument(new ParsedDocument(std::move(modules), it.value()));
+        m_results.push_back(std::move(parsedDocument));
+    }
+
+    emit processingFinished(m_projectName);
 }
 
 std::vector<std::unique_ptr<ParsedDocument>> DocumentProcessorStub::takeResults()
 {
-    return std::vector<std::unique_ptr<ParsedDocument>> ();
+    return std::move(m_results);
 }
 
 DocumentProcessorStub::State DocumentProcessorStub::getState()
 {
-    return State::Unfinished;
+    return m_state;
 }

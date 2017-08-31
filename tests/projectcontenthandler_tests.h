@@ -27,6 +27,9 @@
 
 #include <QObject>
 
+#include "../parseddatastorage.h"
+#include "../modeltree.h"
+
 namespace Asn1Acn {
 namespace Internal {
 namespace Tests {
@@ -39,7 +42,29 @@ public:
     explicit ProjectContentHandlerTests(QObject *parent = 0);
 
 private slots:
-    void test_empty();
+    void test_singleProjectAddedAndRemoved();
+    void test_multipleProjectsAddedAndRemoved();
+    void test_projectAddedAndRemovedTwice();
+
+    void test_singleFileAddedAndRemoved();
+    void test_multipleFilesAddedAndRemoved();
+    void test_fileAddedToMultipleProjects();
+
+    void test_fileContentChanged();
+    void test_fileContentChangedNoProject();
+    void test_fileInMultipleProjectContentChanged();
+
+private:
+    void addProject(const QString &projectName);
+    void removeProject(const QString &projectName);
+
+    void fileListChanged(const QString &projectName, const QStringList &files);
+    void fileContentChanged(const QString &path, const QString &content);
+
+    ModelTree *m_tree;
+    ParsedDataStorage *m_storage;
+
+    QStringList m_fileTypes;
 };
 
 } // namespace Tests

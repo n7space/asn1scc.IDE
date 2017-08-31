@@ -42,7 +42,7 @@ public:
 
     DocumentProcessorFactory(WorkMode mode = WorkMode::Real) : m_mode(mode) {}
 
-    DocumentProcessor *create(const QString &projectName) {
+    DocumentProcessor *create(const QString &projectName) const {
         switch(m_mode) {
             case WorkMode::Test:
                 return new DocumentProcessorStub();

@@ -25,12 +25,25 @@
 
 #include "internalsourcereader.h"
 
-#include <QFile>
+#include <QDebug>
 
 using namespace Asn1Acn::Internal;
 
+InternalSourceReader::InternalSourceReader()
+    : m_content("Test content")
+{
+}
+
 QString InternalSourceReader::readFileContent(const QString &fileName) const
 {
-    // TODO
-    return QString(fileName);
+    if (fileName.contains("_ERROR_"))
+        return QString("ERROR");
+
+    if (fileName.contains("_FAILED_"))
+        return QString("FAILED");
+
+    if (fileName.contains("_SUCCESS_"))
+        return QString("SUCCESS");
+
+    return QString();
 }

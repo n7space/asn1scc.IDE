@@ -36,24 +36,27 @@ using namespace Asn1Acn::Internal;
 
 ProjectContentHandler *ProjectContentHandler::create()
 {
-    return new ProjectContentHandler(DocumentProcessorFactory(), new ExternalSourceReader);
+    return new ProjectContentHandler(DocumentProcessorFactory(),
+                                     new ExternalSourceReader,
+                                     ModelTree::instance(),
+                                     ParsedDataStorage::instance());
 }
 
-ProjectContentHandler::ProjectContentHandler(const DocumentProcessorFactory &factory, const SourceReader *sourceReader)
-    : m_projectsChanged(0)
+ProjectContentHandler::ProjectContentHandler(const DocumentProcessorFactory &factory,
+                                             const SourceReader *sourceReader,
+                                             ModelTree *tree,
+                                             ParsedDataStorage *storage)
+    : m_tree(tree)
+    , m_storage(storage)
+    , m_projectsChanged(0)
     , m_factory(factory)
     , m_sourceReader(sourceReader)
 {
-    m_tree = ModelTree::instance();
-    m_storage = ParsedDataStorage::instance();
-
     m_tree->treeAboutToChange();
 }
 
 ProjectContentHandler::~ProjectContentHandler()
 {
-    m_tree->treeChanged();
-
     delete(m_sourceReader);
 }
 
@@ -141,7 +144,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
                                                                                const QString &content,
                                                                                int revision) const
 {
-    DocumentProcessor *docProcessor = Asn1SccDocumentProcessor::create(projectName);
+    DocumentProcessor *docProcessor = m_factory.create(projectName);
 
     QList<std::shared_ptr<ParsedDocument>> files = m_storage->getFilesFromProject(projectName);
     foreach (const std::shared_ptr<ParsedDocument> &file, files) {
@@ -160,7 +163,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
 DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChange(const QString &projectName,
                                                                                   const QStringList &filePaths) const
 {
-    DocumentProcessor *docProcessor = Asn1SccDocumentProcessor::create(projectName);
+    DocumentProcessor *docProcessor = m_factory.create(projectName);
 
     foreach (const QString &path, filePaths) {
         std::shared_ptr<ParsedDocument> parsedDoc = m_storage->getFileForPath(path);
@@ -178,9 +181,9 @@ void ProjectContentHandler::startProcessing(DocumentProcessor *dp)
     connect(dp, &DocumentProcessor::processingFinished,
             this, &ProjectContentHandler::onFilesProcessingFinished);
 
-    dp->run();
-
     m_projectsChanged++;
+
+    dp->run();
 }
 
 void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName)
@@ -227,5 +230,6 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
 
 void ProjectContentHandler::allProcessingFinished()
 {
+    m_tree->treeChanged();
     deleteLater();
 }
