@@ -63,6 +63,7 @@
 #include "tests/documentprocessor_tests.h"
 #include "tests/projectcontenthandler_tests.h"
 #include "tests/parseddatastorage_tests.h"
+#include "tests/modeltree_tests.h"
 #endif
 
 #include "asn1acn.h"
@@ -180,6 +181,7 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
             << new Tests::DocumentProcessorTests
             << new Tests::ProjectContentHandlerTests
             << new Tests::ParsedDataStorageTests
+            << new Tests::ModelTreeTests
                ;
 }
 #endif

@@ -28,6 +28,7 @@
 #include <QStringList>
 
 #include "modeltree.h"
+#include "modeltreeproxy.h"
 #include "parseddatastorage.h"
 #include "parseddatastorageproxy.h"
 #include "documentprocessor.h"
@@ -40,6 +41,7 @@ namespace Internal {
 class ProjectContentHandler
         : public QObject
         , public ParsedDataStorageProxy
+        , public ModelTreeProxy
 {
     Q_OBJECT
 

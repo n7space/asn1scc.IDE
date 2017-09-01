@@ -52,7 +52,7 @@ ProjectContentHandler::ProjectContentHandler(const DocumentProcessorFactory &fac
     , m_factory(factory)
     , m_sourceReader(sourceReader)
 {
-    m_tree->treeAboutToChange();
+    ModelTreeProxy::treeAboutToChange(m_tree);
 }
 
 ProjectContentHandler::~ProjectContentHandler()
@@ -64,14 +64,14 @@ void ProjectContentHandler::handleProjectAdded(const QString &projectName)
 {
     ParsedDataStorageProxy::addProject(m_storage, projectName);
     auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(projectName));
-    m_tree->addProjectNode(node);
+    ModelTreeProxy::addProjectNode(m_tree, node);
 
     allProcessingFinished();
 }
 
 void ProjectContentHandler::handleProjectRemoved(const QString &projectName)
 {
-    m_tree->removeProjectNode(projectName);
+    ModelTreeProxy::removeProjectNode(m_tree, projectName);
     ParsedDataStorageProxy::removeProject(m_storage, projectName);
 
     allProcessingFinished();
@@ -104,7 +104,7 @@ void ProjectContentHandler::removeStaleFiles(const QString &projectName, const Q
     QStringList stalePaths = getStaleFilesNames(projectName, filePaths);
 
     foreach (const QString &stalePath, stalePaths) {
-        m_tree->removeNodeFromProject(projectName, stalePath);
+        ModelTreeProxy::removeNodeFromProject(m_tree, projectName, stalePath);
         ParsedDataStorageProxy::removeFileFromProject(m_storage, projectName, stalePath);
     }
 }
@@ -117,7 +117,7 @@ void ProjectContentHandler::addNewFiles(const QString &projectName, const QStrin
 
         auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(path,
                                                                       Data::SourceLocation(path, 0, 0)));
-        m_tree->addNodeToProject(projectName, node);
+        ModelTreeProxy::addNodeToProject(m_tree, projectName, node);
     }
 }
 
@@ -230,6 +230,6 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
 
 void ProjectContentHandler::allProcessingFinished()
 {
-    m_tree->treeChanged();
+    ModelTreeProxy::treeChanged(m_tree);
     deleteLater();
 }
