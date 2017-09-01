@@ -100,6 +100,16 @@ void ParsedDataStorage::removeFileFromProject(const QString &projectName, const 
     removeFileFromProjectInternal(projectName, filePath);
 }
 
+int ParsedDataStorage::projectsCnt()
+{
+    return m_projects.size();
+}
+
+int ParsedDataStorage::documentsCnt()
+{
+    return m_documents.size();
+}
+
 void ParsedDataStorage::refreshFileInProjects(std::shared_ptr<ParsedDocument> file, const QString &filePath)
 {
     QStringList projects = getProjectsForFileInternal(filePath);

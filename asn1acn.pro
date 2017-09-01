@@ -174,7 +174,8 @@ HEADERS += \
     documentprocessorfactory.h \
     sourcereader.h \
     externalsourcereader.h \
-    internalsourcereader.h
+    internalsourcereader.h \
+    parseddatastorageproxy.h
 
 FORMS += \
     options-pages/general.ui \
@@ -195,14 +196,15 @@ SOURCES += \
     tests/astxmlparser_tests.cpp \
     tests/parseddocumentbuilder_tests.cpp \
     tests/documentprocessor_tests.cpp \
-    tests/projectcontenthandler_tests.cpp
+    tests/projectcontenthandler_tests.cpp \
+    tests/parseddatastorage_tests.cpp
 
 HEADERS += \
     tests/astxmlparser_tests.h \
     tests/parseddocumentbuilder_tests.h \
     tests/documentprocessor_tests.h \
-    tests/projectcontenthandler_tests.h
-
+    tests/projectcontenthandler_tests.h \
+    tests/parseddatastorage_tests.h
 }
 
 ### Static files ###

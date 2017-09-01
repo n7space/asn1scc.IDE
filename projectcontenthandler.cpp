@@ -62,7 +62,7 @@ ProjectContentHandler::~ProjectContentHandler()
 
 void ProjectContentHandler::handleProjectAdded(const QString &projectName)
 {
-    m_storage->addProject(projectName);
+    ParsedDataStorageProxy::addProject(m_storage, projectName);
     auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(projectName));
     m_tree->addProjectNode(node);
 
@@ -72,7 +72,7 @@ void ProjectContentHandler::handleProjectAdded(const QString &projectName)
 void ProjectContentHandler::handleProjectRemoved(const QString &projectName)
 {
     m_tree->removeProjectNode(projectName);
-    m_storage->removeProject(projectName);
+    ParsedDataStorageProxy::removeProject(m_storage, projectName);
 
     allProcessingFinished();
 }
@@ -105,7 +105,7 @@ void ProjectContentHandler::removeStaleFiles(const QString &projectName, const Q
 
     foreach (const QString &stalePath, stalePaths) {
         m_tree->removeNodeFromProject(projectName, stalePath);
-        m_storage->removeFileFromProject(projectName, stalePath);
+        ParsedDataStorageProxy::removeFileFromProject(m_storage, projectName, stalePath);
     }
 }
 
@@ -213,7 +213,7 @@ void ProjectContentHandler::handleFilesProcesedWithSuccess(const QString &projec
                                                           std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++)
-        m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
+        ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
 }
 
 void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projectName,
@@ -224,7 +224,7 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
         if (m_storage->getFileForPath(filePath) != nullptr)
             continue;
 
-        m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
+        ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
     }
 }
 

@@ -29,6 +29,7 @@
 
 #include "modeltree.h"
 #include "parseddatastorage.h"
+#include "parseddatastorageproxy.h"
 #include "documentprocessor.h"
 #include "documentprocessorfactory.h"
 #include "sourcereader.h"
@@ -36,7 +37,9 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class ProjectContentHandler : public QObject
+class ProjectContentHandler
+        : public QObject
+        , public ParsedDataStorageProxy
 {
     Q_OBJECT
 
