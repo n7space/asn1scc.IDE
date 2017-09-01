@@ -42,7 +42,6 @@ class ParsedDataStorageTests
 
 public:
     explicit ParsedDataStorageTests(QObject *parent = 0);
-    ~ParsedDataStorageTests();
 
 private slots:
     void test_addAndRemoveProject();
@@ -56,16 +55,17 @@ private slots:
     void test_updateFileInOneProject();
     void test_updateFileInMultipleProjects();
 
+    void test_getFilesFromNonExistingProject();
+
 private:
-    void addFileToProject(const QString &project,
+    void addFileToProject(ParsedDataStorage *storage,
+                          const QString &project,
                           const QString &fileContent,
                           const QString &fileName,
                           const QString &filePath,
                           const int &revision);
 
     QString pathFromName(const QString &name);
-
-    ParsedDataStorage *m_storage;
 };
 
 } // namespace Tests
