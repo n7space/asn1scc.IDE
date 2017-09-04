@@ -65,7 +65,7 @@ private:
 
     Data::SourceLocation getLocationFromModule(const std::unique_ptr<Data::Definitions> &definition,
                                                const QString &typeAssignmentName) const;
-    Data::SourceLocation updateSourceLocation(const Data::SourceLocation& location) const;
+    Data::SourceLocation buildLocation(const Data::SourceLocation& location) const;
 
     DocumentSourceInfo m_source;
     std::unique_ptr<Data::Modules> m_parsedData;
