@@ -22,49 +22,15 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
-
-#include <map>
-
-#include <QString>
-
-#include "typeassignment.h"
 #include "node.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-class Definitions : public Node
+Node::~Node()
 {
-public:
-    Definitions(const QString &name, const SourceLocation &location)
-        : Node(location)
-        , m_name(name)
-    {}
-
-    const QString &name() const { return m_name; }
-
-    void add(const TypeAssignment &type)
-    {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
-
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
-
-    using Types = std::map<QString, TypeAssignment>;
-
-    const Types &types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
-
-private:
-    QString m_name;
-    Types m_types;
-    QList<QString> m_importedTypes;
-};
+}
 
 } // namespace Data
 } // namespace Internal

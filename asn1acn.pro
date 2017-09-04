@@ -66,6 +66,8 @@ SOURCES += \
     completion/acncompletionassist.cpp \
     completion/builtinsproposalsprovider.cpp \
     \
+    data/node.cpp \
+    \
     options-pages/general.cpp \
     options-pages/service.cpp \
     options-pages/servicewidget.cpp \
@@ -132,6 +134,7 @@ HEADERS += \
     data/typereference.h \
     data/type.h \
     data/errormessage.h \
+    data/node.h \
     \
     options-pages/general.h \
     options-pages/service.h \

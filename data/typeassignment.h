@@ -28,26 +28,27 @@
 
 #include "sourcelocation.h"
 #include "typereference.h"
+#include "node.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-class TypeAssignment
+class TypeAssignment : public Node
 {
 public:
     TypeAssignment(const QString &name, const SourceLocation &location, const TypeReference &reference)
-        : m_name(name), m_location(location), m_refernce(reference)
+        : Node(location)
+        , m_name(name)
+        , m_reference(reference)
     {}
 
     const QString &name() const { return m_name; }
-    const SourceLocation &location() const { return m_location; }
-    const TypeReference &reference() const { return m_refernce; }
+    const TypeReference &reference() const { return m_reference; }
 
 private:
     QString m_name;
-    SourceLocation m_location;
-    TypeReference m_refernce;
+    TypeReference m_reference;
 };
 
 } // namespace Data
