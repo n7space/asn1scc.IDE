@@ -25,6 +25,8 @@
 
 #include "overviewmodel.h"
 
+#include <coreplugin/fileiconprovider.h>
+
 #include "icons.h"
 
 namespace Asn1Acn {
@@ -65,7 +67,8 @@ QVariant OverviewModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case Qt::DecorationRole:
-        // TODO files & definitions should have different icon
+        if (item->parent() == m_rootItem.get())
+            return Core::FileIconProvider::icon(QFileIconProvider::Folder);
         return Icons::iconForType(item->type());
     case Qt::DisplayRole:
     case Qt::ToolTipRole:
