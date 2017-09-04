@@ -24,29 +24,28 @@
 ****************************************************************************/
 #pragma once
 
-#include <QString>
+#include <QObject>
+
+#include "../astxmlparser.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace Tests {
 
-enum class Type {
-    Boolean,
-    Null,
-    Integer,
-    Real,
-    BitString,
-    OctetString,
-    IA5String,
-    NumericString,
-    Enumerated,
-    Choice,
-    Sequence,
-    SequenceOf,
+class ErrorMessageParserTests : public QObject
+{
+    Q_OBJECT
+public:
+    explicit ErrorMessageParserTests(QObject *parent = 0);
 
-    UserDefined
+private slots:
+    void test_emptyMessage();
+    void test_wrongFormatMessage();
+    void test_messageWithOnlyLineNumber();
+    void test_messageWithColumnAndLineNumber();
+    void test_mappingSourceFiles();
 };
 
-} // namespace Data
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

@@ -25,28 +25,24 @@
 #pragma once
 
 #include <QString>
+#include <QMap>
+
+#include "data/errormessage.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
 
-enum class Type {
-    Boolean,
-    Null,
-    Integer,
-    Real,
-    BitString,
-    OctetString,
-    IA5String,
-    NumericString,
-    Enumerated,
-    Choice,
-    Sequence,
-    SequenceOf,
+class ErrorMessageParser
+{
+public:
+    explicit ErrorMessageParser(const QMap<QString, QString>& pathMapping = {});
+    Data::ErrorMessage parse(const QString& message) const;
 
-    UserDefined
+private:
+    QString mapPath(const QString& path) const;
+
+    QMap<QString, QString> m_pathMapping;
 };
 
-} // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn

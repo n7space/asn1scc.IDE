@@ -105,6 +105,7 @@ SOURCES += \
     linkcreator.cpp \
     overviewindexupdater.cpp \
     structuresviewindexupdater.cpp \
+    errormessageparser.cpp \
     filesourcereader.cpp
 
 HEADERS += \
@@ -126,6 +127,7 @@ HEADERS += \
     data/modules.h \
     data/typereference.h \
     data/type.h \
+    data/errormessage.h \
     \
     options-pages/general.h \
     options-pages/service.h \
@@ -181,7 +183,8 @@ HEADERS += \
     sourcereader.h \
     filesourcereader.h \
     parseddatastorageproxy.h \
-    modeltreeproxy.h
+    modeltreeproxy.h \
+    errormessageparser.h
 
 FORMS += \
     options-pages/general.ui \
@@ -202,6 +205,7 @@ SOURCES += \
     libraries/tests/metadataparser_tests.cpp \
     \
     tests/astxmlparser_tests.cpp \
+    tests/errormessageparser_tests.cpp \
     tests/overviewindexupdater_tests.cpp \
     tests/structuresviewindexupdater_tests.cpp \
     tests/parseddocumentbuilder_tests.cpp \
@@ -220,6 +224,7 @@ HEADERS += \
     libraries/tests/metadataparser_tests.h \
     \
     tests/astxmlparser_tests.h \
+    tests/errormessageparser_tests.h \
     tests/overviewindexupdater_tests.h \
     tests/structuresviewindexupdater_tests.h \
     tests/parseddocumentbuilder_tests.h \

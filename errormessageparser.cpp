@@ -22,31 +22,30 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "errormessageparser.h"
 
-#include <QString>
+#include <QRegularExpression>
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Data {
+using namespace Asn1Acn::Internal;
 
-enum class Type {
-    Boolean,
-    Null,
-    Integer,
-    Real,
-    BitString,
-    OctetString,
-    IA5String,
-    NumericString,
-    Enumerated,
-    Choice,
-    Sequence,
-    SequenceOf,
+ErrorMessageParser::ErrorMessageParser(const QMap<QString, QString>& pathMapping)
+    : m_pathMapping(pathMapping)
+{
+}
 
-    UserDefined
-};
+Data::ErrorMessage ErrorMessageParser::parse(const QString& message) const
+{
+    static const QRegularExpression regExp(R"(^(.+?):(\d+)(?::(\d+))?: error: (.*)$)");
 
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+    const auto match = regExp.match(message);
+    if (!match.hasMatch())
+        return {};
+
+    const auto loc = Data::SourceLocation(mapPath(match.captured(1)), match.captured(2).toInt(), match.captured(3).toInt());
+    return {loc, match.captured(4)};
+}
+
+QString ErrorMessageParser::mapPath(const QString& path) const
+{
+    return m_pathMapping.value(path, path);
+}

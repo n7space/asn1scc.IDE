@@ -26,25 +26,29 @@
 
 #include <QString>
 
+#include "sourcelocation.h"
+
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-enum class Type {
-    Boolean,
-    Null,
-    Integer,
-    Real,
-    BitString,
-    OctetString,
-    IA5String,
-    NumericString,
-    Enumerated,
-    Choice,
-    Sequence,
-    SequenceOf,
+class ErrorMessage
+{
+public:
+    ErrorMessage() = default;
 
-    UserDefined
+    ErrorMessage(const SourceLocation& location, const QString& message)
+        : m_location(location)
+        , m_message(message)
+    {}
+
+    const SourceLocation& location() const { return m_location; }
+    const QString& message() const { return m_message; }
+    bool isValid() const { return location().isValid() && !message().isEmpty(); }
+
+private:
+    SourceLocation m_location;
+    QString m_message;
 };
 
 } // namespace Data
