@@ -70,14 +70,14 @@ protected:
         storage->removeFileFromProject(projectName, filePath);
     }
 
-    int projectsCnt(ParsedDataStorage *storage)
+    int getProjectsCount(ParsedDataStorage *storage)
     {
-        return storage->projectsCnt();
+        return storage->getProjectsCount();
     }
 
-    int filesCnt(ParsedDataStorage *storage)
+    int getDocumentsCount(ParsedDataStorage *storage)
     {
-        return storage->documentsCnt();
+        return storage->getDocumentsCount();
     }
 
     void refreshFileInProjects(ParsedDataStorage *storage, std::shared_ptr<ParsedDocument> file, const QString &filePath)

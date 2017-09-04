@@ -25,8 +25,6 @@
 
 #include "internalsourcereader.h"
 
-#include <QDebug>
-
 using namespace Asn1Acn::Internal;
 
 InternalSourceReader::InternalSourceReader()

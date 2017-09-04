@@ -100,12 +100,12 @@ void ParsedDataStorage::removeFileFromProject(const QString &projectName, const 
     removeFileFromProjectInternal(projectName, filePath);
 }
 
-int ParsedDataStorage::projectsCnt()
+int ParsedDataStorage::getProjectsCount()
 {
     return m_projects.size();
 }
 
-int ParsedDataStorage::documentsCnt()
+int ParsedDataStorage::getDocumentsCount()
 {
     return m_documents.size();
 }

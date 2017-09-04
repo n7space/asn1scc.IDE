@@ -74,5 +74,3 @@ private:
 
 } // namespace Internal
 } // namespace Asn1Acn
-
-Q_DECLARE_METATYPE(std::shared_ptr<Asn1Acn::Internal::ParsedDocument>)

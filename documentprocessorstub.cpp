@@ -29,8 +29,6 @@
 
 #include "data/modules.h"
 
-#include <QDebug>
-
 using namespace Asn1Acn::Internal;
 
 void DocumentProcessorStub::addToRun(const QString &docContent, const QString &filePath, int revision)

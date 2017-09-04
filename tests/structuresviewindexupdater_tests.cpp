@@ -33,8 +33,6 @@
 #include <texteditor/textdocument.h>
 #include <utils/fileutils.h>
 
-#include <QDebug>
-
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
 

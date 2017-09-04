@@ -66,8 +66,8 @@ private:
     void addFileToProject(const QString &projectName, std::unique_ptr<ParsedDocument> file);
     void removeFileFromProject(const QString &projectName, const QString &filePath);
 
-    int projectsCnt();
-    int documentsCnt();
+    int getProjectsCount();
+    int getDocumentsCount();
 
     using Project = QHash<QString, std::shared_ptr<ParsedDocument>>;
 
