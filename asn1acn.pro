@@ -104,7 +104,7 @@ SOURCES += \
     linkcreator.cpp \
     overviewindexupdater.cpp \
     structuresviewindexupdater.cpp \
-    asn1sccserviceproviderstub.cpp \
+    parsingserviceproviderstub.cpp \
     networkreply.cpp \
     parseddocumentbuilderstub.cpp \
     documentprocessorstub.cpp \
@@ -178,7 +178,7 @@ HEADERS += \
     overviewindexupdater.h \
     structuresviewindexupdater.h \
     parsingserviceprovider.h \
-    asn1sccserviceproviderstub.h \
+    parsingserviceproviderstub.h \
     parseddocumentbuilder.h \
     networkreply.h \
     parseddocumentbuilderstub.h \

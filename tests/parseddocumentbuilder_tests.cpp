@@ -36,7 +36,7 @@ using namespace Asn1Acn::Internal::Tests;
 
 ParsedDocumentBuilderTests::ParsedDocumentBuilderTests(QObject *parent)
     : QObject(parent),
-      m_serviceProvider(new Asn1SccServiceProviderStub)
+      m_serviceProvider(new ParsingServiceProviderStub)
 {
 }
 

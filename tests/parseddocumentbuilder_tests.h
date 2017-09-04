@@ -28,7 +28,7 @@
 #include <QObject>
 
 #include "../asn1sccparseddocumentbuilder.h"
-#include "../asn1sccserviceproviderstub.h"
+#include "../parsingserviceproviderstub.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -48,7 +48,7 @@ private slots:
     void test_success();
 
 private:
-    Asn1SccServiceProviderStub *m_serviceProvider;
+    ParsingServiceProviderStub *m_serviceProvider;
 };
 
 } // namespace Tests

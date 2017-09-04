@@ -71,7 +71,6 @@ private:
 
     ParsingServiceProvider *m_serviceProvider;
 
-    // TODO: use pointer here?
     const QHash<QString, DocumentSourceInfo> *m_rawDocuments;
     std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 

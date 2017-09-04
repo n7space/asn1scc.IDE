@@ -23,23 +23,29 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "parsingserviceproviderstub.h"
 
-#include "networkreply.h"
-#include "parsingserviceprovider.h"
+#include "documentsourceinfo.h"
 
-namespace Asn1Acn {
-namespace Internal {
+using namespace Asn1Acn::Internal;
 
-class Asn1SccServiceProviderStub : public ParsingServiceProvider
+ParsingServiceProviderStub::ParsingServiceProviderStub(QObject *parent)
+    : ParsingServiceProvider(parent)
 {
-    Q_OBJECT
+}
 
-public:
-    Asn1SccServiceProviderStub(QObject *parent = 0);
+QNetworkReply *ParsingServiceProviderStub::requestAst(const QHash<QString, DocumentSourceInfo> &documents) const
+{
+    NetworkReply *reply = new NetworkReply;
 
-    QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
-};
+    QString key = *(documents.keyBegin());
+    if (key == "FAILED")
+        reply->setErrored();
 
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+    DocumentSourceInfo sourceInfo = documents.value(key);
+
+    reply->write(sourceInfo.getContent().toUtf8());
+    reply->run();
+
+    return reply;
+}
