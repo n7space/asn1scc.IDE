@@ -101,6 +101,7 @@ SOURCES += \
     projectcontenthandler.cpp \
     indenter.cpp \
     tools.cpp \
+    icons.cpp \
     linkcreator.cpp \
     overviewindexupdater.cpp \
     structuresviewindexupdater.cpp
@@ -123,6 +124,7 @@ HEADERS += \
     data/definitions.h \
     data/modules.h \
     data/typereference.h \
+    data/type.h \
     \
     options-pages/general.h \
     options-pages/service.h \
@@ -169,6 +171,7 @@ HEADERS += \
     tr.h \
     linkcreator.h \
     tools.h \
+    icons.h \
     overviewindexupdater.h \
     structuresviewindexupdater.h
 

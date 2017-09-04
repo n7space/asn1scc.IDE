@@ -29,10 +29,24 @@
 
 using namespace Asn1Acn::Internal;
 
-ModelTreeNode::ModelTreeNode(const QString &id, const Data::SourceLocation location) :
-    m_id(id),
-    m_parent(nullptr),
-    m_location(location)
+ModelTreeNode::ModelTreeNodePtr ModelTreeNode::makePtr(const QString &name, Data::Type type, const Data::SourceLocation location)
+{
+    class make_shared_enabler : public ModelTreeNode
+    {
+    public:
+        make_shared_enabler(const QString &name, Data::Type type, const Data::SourceLocation location)
+            : ModelTreeNode(name, type, location)
+        {}
+    };
+
+    return std::make_shared<make_shared_enabler>(name, type, location);
+}
+
+ModelTreeNode::ModelTreeNode(const QString &name, Data::Type type, const Data::SourceLocation location)
+    : m_name(name)
+    , m_type(type)
+    , m_parent(nullptr)
+    , m_location(location)
 {
 }
 
@@ -50,7 +64,7 @@ ModelTreeNode::ModelTreeNodePtr ModelTreeNode::getChildByName(const QString &nam
 {
     QList<ModelTreeNode::ModelTreeNodePtr>::const_iterator it;
     for (it = m_children.begin(); it != m_children.end(); ++it) {
-        if ((*it)->m_id == name)
+        if ((*it)->m_name == name)
             return *it;
     }
 
@@ -69,7 +83,7 @@ void ModelTreeNode::removeChildByName(const QString &name)
 {
     QList<ModelTreeNode::ModelTreeNodePtr>::iterator it;
     for (it = m_children.begin(); it != m_children.end(); ++it) {
-        if ((*it)->m_id == name) {
+        if ((*it)->m_name == name) {
             m_children.erase(it);
             return;
         }
@@ -81,27 +95,17 @@ void ModelTreeNode::removeChildren()
     m_children.clear();
 }
 
-QVariant ModelTreeNode::data() const
-{
-    return QVariant(m_id);
-}
-
-QString ModelTreeNode::id() const
-{
-    return m_id;
-}
-
 const ModelTreeNode *ModelTreeNode::parent() const
 {
     return m_parent;
 }
 
-int ModelTreeNode::columnCount() const
+ModelTreeNode *ModelTreeNode::parent()
 {
-    return 1;
+    return m_parent;
 }
 
-int ModelTreeNode::row() const
+int ModelTreeNode::indexInParent() const
 {
     int idx = 0;
     foreach (const ModelTreeNode::ModelTreeNodePtr &obj, m_parent->m_children) {
@@ -114,7 +118,7 @@ int ModelTreeNode::row() const
     return 0;
 }
 
-const Data::SourceLocation &ModelTreeNode::getSourceLocation() const
+const Data::SourceLocation &ModelTreeNode::sourceLocation() const
 {
     return m_location;
 }

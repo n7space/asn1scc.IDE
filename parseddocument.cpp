@@ -79,7 +79,7 @@ void ParsedDocument::populateReferencesFromModule(const std::unique_ptr<Data::De
     Data::Definitions::Types::const_iterator typeIt;
     for (typeIt = types.begin(); typeIt != types.end(); typeIt++) {
         auto reference = typeIt->second.reference();
-        if (reference.type() == Data::TypeReference::DataType::UserDefined)
+        if (reference.isUserDefined())
             m_refernceLookup.insert(typeIt->second.location().line(), reference);
     }
 }
@@ -87,28 +87,23 @@ void ParsedDocument::populateReferencesFromModule(const std::unique_ptr<Data::De
 ModelTreeNode::ModelTreeNodePtr
 ParsedDocument::createDefinition(const std::unique_ptr<Data::Definitions> &definition) const
 {
-    auto definitionNode =
-            ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(definition->name(),
-                                                              Data::SourceLocation(source().getPath(),
-                                                                                   definition->location().line(),
-                                                                                   definition->location().column())));
+    auto definitionNode = ModelTreeNode::makePtr(definition->name(), Data::Type::UserDefined, buildLocation(definition->location()));
     attachTypesToDefiniton(definition->types(), definitionNode);
 
     return definitionNode;
 }
 
+Data::SourceLocation ParsedDocument::buildLocation(const Data::SourceLocation& location) const
+{
+    return { source().getPath(), location.line(), location.column() };
+}
+
 void ParsedDocument::attachTypesToDefiniton(const Data::Definitions::Types types,
                                             ModelTreeNode::ModelTreeNodePtr definitionNode) const
 {
-    Data::Definitions::Types::const_iterator typeIt = types.begin();
-    while (typeIt != types.end()) {
-        auto typeNode =
-                ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(typeIt->second.name(),
-                                                                  Data::SourceLocation(source().getPath(),
-                                                                                       typeIt->second.location().line(),
-                                                                                       typeIt->second.location().column())));
+    for (const auto& type : types) {
+        auto typeNode = ModelTreeNode::makePtr(type.second.name(), type.second.reference().type(), buildLocation(type.second.location()));
         definitionNode->addChild(typeNode);
-        typeIt++;
     }
 }
 

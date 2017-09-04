@@ -2,5 +2,31 @@
     <qresource prefix="/asn1acn">
         <file>images/options_category.png</file>
         <file>schemas/asn1-lib-schema.json</file>
+        <file>images/outline/bitstring.png</file>
+        <file>images/outline/choice.png</file>
+        <file>images/outline/enumerated.png</file>
+        <file>images/outline/ia5string.png</file>
+        <file>images/outline/integer.png</file>
+        <file>images/outline/null.png</file>
+        <file>images/outline/numericstring.png</file>
+        <file>images/outline/octetstring.png</file>
+        <file>images/outline/real.png</file>
+        <file>images/outline/sequence.png</file>
+        <file>images/outline/sequenceof.png</file>
+        <file>images/outline/userdefined.png</file>
+        <file>images/outline/bitstring@2x.png</file>
+        <file>images/outline/choice@2x.png</file>
+        <file>images/outline/enumerated@2x.png</file>
+        <file>images/outline/ia5string@2x.png</file>
+        <file>images/outline/integer@2x.png</file>
+        <file>images/outline/null@2x.png</file>
+        <file>images/outline/numericstring@2x.png</file>
+        <file>images/outline/octetstring@2x.png</file>
+        <file>images/outline/real@2x.png</file>
+        <file>images/outline/sequence@2x.png</file>
+        <file>images/outline/sequenceof@2x.png</file>
+        <file>images/outline/userdefined@2x.png</file>
+        <file>images/outline/boolean.png</file>
+        <file>images/outline/boolean@2x.png</file>
     </qresource>
 </RCC>

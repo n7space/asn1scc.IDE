@@ -79,24 +79,24 @@ TextEditor::TextEditorWidget *OverviewIndexUpdaterTests::createEditorWidget()
 
 ModelTreeNode::ModelTreeNodePtr OverviewIndexUpdaterTests::createModelNodes()
 {
-    ModelTreeNode::ModelTreeNodePtr rootNode = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode);
+    auto rootNode = ModelTreeNode::makePtr();
 
     Data::SourceLocation location = Data::SourceLocation("", 0, 0);
-    ModelTreeNode::ModelTreeNodePtr moduleNode = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Module1", location));
+    auto moduleNode = ModelTreeNode::makePtr("Module1", Data::Type::UserDefined, location);
 
     location = Data::SourceLocation("", 2, 3);
-    moduleNode->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Num1", location)));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num1", Data::Type::Integer, location));
     location = Data::SourceLocation("", 3, 3);
-    moduleNode->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Num2", location)));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num2", Data::Type::Integer, location));
     rootNode->addChild(moduleNode);
 
     location = Data::SourceLocation("", 0, 0);
-    moduleNode = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Module2", location));
+    moduleNode = ModelTreeNode::makePtr("Module2", Data::Type::UserDefined, location);
 
     location = Data::SourceLocation("", 6, 3);
-    moduleNode->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Num3", location)));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num3", Data::Type::Integer, location));
     location = Data::SourceLocation("", 7, 3);
-    moduleNode->addChild(ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode("Num4", location)));
+    moduleNode->addChild(ModelTreeNode::makePtr("Num4", Data::Type::Integer, location));
     rootNode->addChild(moduleNode);
 
     return rootNode;
@@ -154,7 +154,7 @@ void OverviewIndexUpdaterTests::test_setNonEmpytEditorChangedPosition()
     QCOMPARE(index.isValid(), true);
 
     const ModelTreeNode *symbol = static_cast<ModelTreeNode *>(index.internalPointer());
-    const Data::SourceLocation location = symbol->getSourceLocation();
+    const Data::SourceLocation location = symbol->sourceLocation();
     QCOMPARE(location.line(), lineNumber);
 }
 
@@ -195,7 +195,7 @@ void OverviewIndexUpdaterTests::test_cursorMovedToTypeDefinition()
     QCOMPARE(index.isValid(), true);
 
     const ModelTreeNode *symbol = static_cast<ModelTreeNode *>(index.internalPointer());
-    const Data::SourceLocation location = symbol->getSourceLocation();
+    const Data::SourceLocation location = symbol->sourceLocation();
     QCOMPARE(location.line(), lineNumber);
 }
 
@@ -235,7 +235,7 @@ void OverviewIndexUpdaterTests::test_forceUpdate()
     QCOMPARE(index.isValid(), true);
 
     const ModelTreeNode *symbol = static_cast<ModelTreeNode *>(index.internalPointer());
-    const Data::SourceLocation location = symbol->getSourceLocation();
+    const Data::SourceLocation location = symbol->sourceLocation();
     QCOMPARE(location.line(), lineNumber);
 }
 
@@ -257,7 +257,7 @@ void OverviewIndexUpdaterTests::test_forceUpdateAfterCursorMoved()
     QCOMPARE(index.isValid(), true);
 
     const ModelTreeNode *symbol = static_cast<ModelTreeNode *>(index.internalPointer());
-    const Data::SourceLocation location = symbol->getSourceLocation();
+    const Data::SourceLocation location = symbol->sourceLocation();
     QCOMPARE(location.line(), lineNumber);
 }
 
