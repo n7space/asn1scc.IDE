@@ -61,9 +61,7 @@ private:
     void addFileToProject(ParsedDataStorage *storage,
                           const QString &project,
                           const QString &fileContent,
-                          const QString &fileName,
-                          const QString &filePath,
-                          const int &revision);
+                          const QString &filePath);
 
     QString pathFromName(const QString &name);
 };
