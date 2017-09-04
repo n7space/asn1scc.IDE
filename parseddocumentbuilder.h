@@ -38,7 +38,10 @@ namespace Asn1Acn {
 namespace Internal {
 
 class ParsedDocumentBuilder
+        : public QObject
 {
+    Q_OBJECT
+
 public:
     virtual ~ParsedDocumentBuilder() = default;
 
@@ -49,9 +52,9 @@ public:
     virtual const QStringList &errorMessages() const = 0;
 
 signals:
-    virtual void finished() = 0;
-    virtual void errored() = 0;
-    virtual void failed() = 0;
+    void finished();
+    void errored();
+    void failed();
 };
 
 } /* namespace Internal */

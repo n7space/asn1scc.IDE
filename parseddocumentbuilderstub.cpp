@@ -27,11 +27,6 @@
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocumentBuilderStub::ParsedDocumentBuilderStub(QObject *parent)
-    : QObject(parent)
-{
-}
-
 void ParsedDocumentBuilderStub::setDocumentsToProcess(const QHash<QString, DocumentSourceInfo> *documents)
 {
     m_rawDocuments = documents;

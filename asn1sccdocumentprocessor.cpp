@@ -43,9 +43,12 @@ Asn1SccDocumentProcessor::Asn1SccDocumentProcessor(const QString &projectName, P
       m_state(State::Unfinished),
       m_docBuilder(docBuilder)
 {
-    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(finished()), this, SLOT(onBuilderFinished()));
-    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(failed()), this, SLOT(onBuilderFailed()));
-    QObject::connect(dynamic_cast<QObject *>(m_docBuilder), SIGNAL(errored()), this, SLOT(onBuilderErrored()));
+    connect(m_docBuilder, &ParsedDocumentBuilder::finished,
+            this, &Asn1SccDocumentProcessor::onBuilderFinished);
+    connect(m_docBuilder, &ParsedDocumentBuilder::failed,
+            this, &Asn1SccDocumentProcessor::onBuilderFailed);
+    connect(m_docBuilder, &ParsedDocumentBuilder::errored,
+            this, &Asn1SccDocumentProcessor::onBuilderErrored);
 }
 
 Asn1SccDocumentProcessor::~Asn1SccDocumentProcessor()

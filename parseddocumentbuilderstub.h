@@ -38,25 +38,16 @@ namespace Asn1Acn {
 namespace Internal {
 
 class ParsedDocumentBuilderStub
-        : public QObject
-        , public ParsedDocumentBuilder
+        : public ParsedDocumentBuilder
 {
     Q_OBJECT
 
 public:
-    ParsedDocumentBuilderStub(QObject *parent = 0);
-    ~ParsedDocumentBuilderStub() = default;
-
     void setDocumentsToProcess(const QHash<QString, DocumentSourceInfo> *documents) override;
     void run() override;
 
     std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
     const QStringList &errorMessages() const override;
-
-signals:
-    void finished();
-    void errored();
-    void failed();
 
 private:
     const QHash<QString, DocumentSourceInfo> *m_rawDocuments;

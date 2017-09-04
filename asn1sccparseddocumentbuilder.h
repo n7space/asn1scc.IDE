@@ -43,8 +43,7 @@ namespace Asn1Acn {
 namespace Internal {
 
 class Asn1SccParsedDocumentBuilder
-        : public QObject
-        , public ParsedDocumentBuilder
+        : public ParsedDocumentBuilder
 {
     Q_OBJECT
 
@@ -58,11 +57,6 @@ public:
 
     std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
     const QStringList& errorMessages() const override { return m_errorMessages; }
-
-signals:
-    void finished();
-    void errored();
-    void failed();
 
 private slots:
     void requestFinished();
