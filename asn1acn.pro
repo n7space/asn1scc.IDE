@@ -74,6 +74,8 @@ SOURCES += \
     settings/general.cpp \
     settings/service.cpp \
     \
+    libraries/metadataparser.cpp \
+    \
     asn1acn.cpp \
     asneditor.cpp \
     asndocument.cpp \
@@ -100,6 +102,8 @@ SOURCES += \
     indenter.cpp \
     tools.cpp \
     linkcreator.cpp \
+    overviewindexupdater.cpp \
+    structuresviewindexupdater.cpp \
     asn1sccserviceproviderstub.cpp \
     networkreply.cpp \
     parseddocumentbuilderstub.cpp \
@@ -135,6 +139,13 @@ HEADERS += \
     settings/general.h \
     settings/service.h \
     \
+    libraries/metadataparser.h \
+    \
+    libraries/metadata/element.h \
+    libraries/metadata/import.h \
+    libraries/metadata/submodule.h \
+    libraries/metadata/module.h \
+    \
     asn1acn_global.h \
     asn1acnconstants.h \
     asn1acn.h \
@@ -164,6 +175,8 @@ HEADERS += \
     tr.h \
     linkcreator.h \
     tools.h \
+    overviewindexupdater.h \
+    structuresviewindexupdater.h \
     parsingserviceprovider.h \
     asn1sccserviceproviderstub.h \
     parseddocumentbuilder.h \
@@ -194,7 +207,11 @@ DISTFILES += \
 equals(TEST, 1) {
 
 SOURCES += \
+    libraries/tests/metadataparser_tests.cpp \
+    \
     tests/astxmlparser_tests.cpp \
+    tests/overviewindexupdater_tests.cpp \
+    tests/structuresviewindexupdater_tests.cpp \
     tests/parseddocumentbuilder_tests.cpp \
     tests/documentprocessor_tests.cpp \
     tests/projectcontenthandler_tests.cpp \
@@ -202,7 +219,11 @@ SOURCES += \
     tests/modeltree_tests.cpp
 
 HEADERS += \
+    libraries/tests/metadataparser_tests.h \
+    \
     tests/astxmlparser_tests.h \
+    tests/overviewindexupdater_tests.h \
+    tests/structuresviewindexupdater_tests.h \
     tests/parseddocumentbuilder_tests.h \
     tests/documentprocessor_tests.h \
     tests/projectcontenthandler_tests.h \

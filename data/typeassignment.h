@@ -36,13 +36,13 @@ namespace Data {
 class TypeAssignment
 {
 public:
-    TypeAssignment(const QString& name, const SourceLocation& location, const TypeReference& reference)
+    TypeAssignment(const QString &name, const SourceLocation &location, const TypeReference &reference)
         : m_name(name), m_location(location), m_refernce(reference)
     {}
 
-    const QString& name() const { return m_name; }
-    const SourceLocation& location() const { return m_location; }
-    const TypeReference& reference() const { return m_refernce; }
+    const QString &name() const { return m_name; }
+    const SourceLocation &location() const { return m_location; }
+    const TypeReference &reference() const { return m_refernce; }
 
 private:
     QString m_name;

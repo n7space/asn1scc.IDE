@@ -25,8 +25,11 @@
 
 #include "structuresview.h"
 
+#include <coreplugin/editormanager/editormanager.h>
+
 #include "modeltree.h"
 #include "asn1acnconstants.h"
+#include "structuresviewindexupdater.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -37,6 +40,8 @@ StructuresViewWidget::StructuresViewWidget() :
     auto modelRoot = instance->getModelTreeRoot();
 
     m_model->setRootNode(modelRoot);
+
+    m_indexUpdater = createIndexUpdater();
 
     connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
             m_model, &OverviewModel::invalidated);
@@ -51,6 +56,19 @@ StructuresViewWidget::StructuresViewWidget() :
 StructuresViewWidget::~StructuresViewWidget()
 {
     delete m_model;
+}
+
+std::unique_ptr<OverviewIndexUpdater> StructuresViewWidget::createIndexUpdater() const
+{
+    std::unique_ptr<StructuresViewIndexUpdater> indexUpdater = std::make_unique<StructuresViewIndexUpdater>(m_model);
+
+    connect(indexUpdater.get(), &OverviewIndexUpdater::currentIndexUpdated,
+            this, &StructuresViewWidget::updateSelectionInTree);
+
+    connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
+            indexUpdater.get(), &StructuresViewIndexUpdater::onEditorChanged);
+
+    return std::move(indexUpdater);
 }
 
 StructuresViewFactory::StructuresViewFactory()

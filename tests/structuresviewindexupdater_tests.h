@@ -22,51 +22,39 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <map>
+#include <QObject>
 
-#include <QString>
+#include "../overviewmodel.h"
+#include "../structuresviewindexupdater.h"
 
-#include "typeassignment.h"
+#include "../modeltreenode.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace Tests {
 
-class Definitions
+class StructuresViewIndexUpdaterTests : public QObject
 {
+    Q_OBJECT
 public:
-    Definitions(const QString &name, const SourceLocation &location)
-        : m_name(name), m_location(location)
-    {}
+    explicit StructuresViewIndexUpdaterTests(QObject *parent = 0);
+    ~StructuresViewIndexUpdaterTests();
 
-    const QString &name() const { return m_name; }
-    const SourceLocation &location() const { return m_location; }
-
-    void add(const TypeAssignment &type)
-    {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
-
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
-
-    using Types = std::map<QString, TypeAssignment>;
-
-    const Types &types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
+private slots:
+    void test_forceUpdate();
 
 private:
-    QString m_name;
-    SourceLocation m_location;
-    Types m_types;
+    ModelTreeNode::ModelTreeNodePtr createModelNodes();
+    TextEditor::TextEditorWidget *createEditorWidget();
 
-    QList<QString> m_importedTypes;
+    OverviewModel *m_model;
+    StructuresViewIndexUpdater *m_indexUpdater;
+    TextEditor::TextEditorWidget *m_editorWidget;
 };
 
-} // namespace Data
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

@@ -24,49 +24,30 @@
 ****************************************************************************/
 #pragma once
 
-#include <map>
-
 #include <QString>
-
-#include "typeassignment.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace Libraries {
+namespace Metadata {
 
-class Definitions
+class Import
 {
 public:
-    Definitions(const QString &name, const SourceLocation &location)
-        : m_name(name), m_location(location)
+    Import(const QString &from, const QString &type)
+        : m_from(from)
+        , m_type(type)
     {}
 
-    const QString &name() const { return m_name; }
-    const SourceLocation &location() const { return m_location; }
-
-    void add(const TypeAssignment &type)
-    {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
-
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
-
-    using Types = std::map<QString, TypeAssignment>;
-
-    const Types &types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
+    const QString &from() const { return m_from; }
+    const QString &type() const { return m_type; }
 
 private:
-    QString m_name;
-    SourceLocation m_location;
-    Types m_types;
-
-    QList<QString> m_importedTypes;
+    QString m_from;
+    QString m_type;
 };
 
-} // namespace Data
+} // namespace Metadata
+} // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

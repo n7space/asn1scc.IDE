@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <QModelIndex>
 
 #include <texteditor/ioutlinewidget.h>
@@ -32,6 +34,7 @@
 #include <utils/navigationtreeview.h>
 
 #include "overviewmodel.h"
+#include "overviewindexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -58,6 +61,11 @@ protected:
     void modelUpdated();
     OverviewTreeView *m_treeView;
     OverviewModel *m_model;
+
+    std::unique_ptr<OverviewIndexUpdater> m_indexUpdater;
+
+protected slots:
+    void updateSelectionInTree(const QModelIndex &index);
 
 private slots:
     void onItemActivated(const QModelIndex &index);

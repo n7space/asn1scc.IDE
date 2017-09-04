@@ -22,51 +22,57 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <map>
+#include <QObject>
+#include <QTimer>
+#include <QAbstractItemModel>
 
-#include <QString>
+#include "coreplugin/editormanager/ieditor.h"
 
-#include "typeassignment.h"
+#include "editor.h"
+#include "overviewmodel.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
 
-class Definitions
+class OverviewIndexUpdater : public QObject
 {
+    Q_OBJECT
+
 public:
-    Definitions(const QString &name, const SourceLocation &location)
-        : m_name(name), m_location(location)
-    {}
+    OverviewIndexUpdater(const OverviewModel *model);
+    virtual ~OverviewIndexUpdater() = default;
 
-    const QString &name() const { return m_name; }
-    const SourceLocation &location() const { return m_location; }
+    void setEditor(TextEditor::TextEditorWidget *editorWidget);
+    void updateCurrentIndex();
 
-    void add(const TypeAssignment &type)
-    {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
+public slots:
+    void onCursorPositionChanged();
 
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
+signals:
+    void currentIndexUpdated(const QModelIndex &modelIndex);
 
-    using Types = std::map<QString, TypeAssignment>;
+protected:
+    QModelIndex indexForPosition(const QModelIndex &rootIndex) const;
 
-    const Types &types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
+    const OverviewModel *m_model;
+    TextEditor::TextEditorWidget *m_editorWidget;
 
 private:
-    QString m_name;
-    SourceLocation m_location;
-    Types m_types;
+    void updateNow();
 
-    QList<QString> m_importedTypes;
+    void createUpdateTimer();
+    void onUpdateTimerTimeout();
+
+    virtual QModelIndex getCurrentFileIndex() const;
+
+    QModelIndex getTargetIndexFromFileIndex(const QModelIndex &fileIndex) const;
+    QModelIndex getTargetIndexFromModuleIndex(const QModelIndex &moduleIndex, int line) const;
+
+    QTimer *m_updateIndexTimer;
 };
 
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Asn1Acn */
+} /* namespace Internal */

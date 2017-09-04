@@ -24,49 +24,36 @@
 ****************************************************************************/
 #pragma once
 
-#include <map>
+#include <stdexcept>
+#include <string>
 
-#include <QString>
+#include <QJsonDocument>
+#include <QByteArray>
 
-#include "typeassignment.h"
+#include "metadata/module.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace Libraries {
 
-class Definitions
+class MetadataParser
 {
 public:
-    Definitions(const QString &name, const SourceLocation &location)
-        : m_name(name), m_location(location)
-    {}
-
-    const QString &name() const { return m_name; }
-    const SourceLocation &location() const { return m_location; }
-
-    void add(const TypeAssignment &type)
+    struct Error : std::runtime_error
     {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
+        Error(const std::string &msg)
+            : std::runtime_error(msg)
+        {}
+    };
 
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
+    MetadataParser(const QByteArray &data);
 
-    using Types = std::map<QString, TypeAssignment>;
-
-    const Types &types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
+    Metadata::Module parse();
 
 private:
-    QString m_name;
-    SourceLocation m_location;
-    Types m_types;
-
-    QList<QString> m_importedTypes;
+    QJsonDocument m_document;
 };
 
-} // namespace Data
+} // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

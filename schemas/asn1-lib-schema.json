@@ -1,0 +1,78 @@
+{
+  "id": "http://n7mobile.pl/Space/asn1-lib-schema.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "ASN.1 Types Library Metadata schema",
+  "definitions": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "asn1TypeName": {
+      "type": "string",
+      "pattern": "^[A-Z]([a-zA-Z0-9]|-)*$"
+    },
+    "referenceList": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/nonEmptyString" }
+    },
+    "fileList": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/nonEmptyString" }
+    },
+    "importedType": {
+      "type": "object",
+      "properties": {
+        "from": { "$ref": "#/definitions/asn1TypeName" },
+        "type": { "$ref": "#/definitions/asn1TypeName" }
+      },
+      "required": ["from", "type"],
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "properties": {
+    "name": { "$ref": "#/definitions/nonEmptyString" },
+    "description": {
+      "type": "string"
+    },
+    "submodules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "$ref": "#/definitions/nonEmptyString" },
+          "description": { "type": "string" },
+          "elements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "$ref": "#/definitions/nonEmptyString" },
+                "description": { "type": "string" },
+                "asn1Files": { "$ref": "#/definitions/fileList" },
+                "conflicts": { "$ref": "#/definitions/referenceList" },
+                "requires": { "$ref": "#/definitions/referenceList" },
+                "imports": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/importedType" }
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "additionalProperties": false
+}

@@ -24,49 +24,47 @@
 ****************************************************************************/
 #pragma once
 
-#include <map>
-
 #include <QString>
+#include <QStringList>
+#include <QList>
 
-#include "typeassignment.h"
+#include "import.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace Libraries {
+namespace Metadata {
 
-class Definitions
+class Element
 {
 public:
-    Definitions(const QString &name, const SourceLocation &location)
-        : m_name(name), m_location(location)
+    Element(const QString &name, const QString &description)
+        : m_name(name)
+        , m_description(description)
     {}
 
     const QString &name() const { return m_name; }
-    const SourceLocation &location() const { return m_location; }
+    const QString &description() const { return m_description; }
+    const QStringList &asn1Files() const { return m_asn1Files; }
+    const QStringList &conflicts() const { return m_conflicts; }
+    const QStringList &requirements() const { return m_requirements; }
+    const QList<Import> &imports() const { return m_imports; }
 
-    void add(const TypeAssignment &type)
-    {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
-
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
-
-    using Types = std::map<QString, TypeAssignment>;
-
-    const Types &types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
+    void addAsn1File(const QString &file) { m_asn1Files.append(file); }
+    void addConflict(const QString &conflict) { m_conflicts.append(conflict); }
+    void addRequirement(const QString &requirement) { m_requirements.append(requirement); }
+    void addImport(const Import &import) { m_imports.append(import); }
 
 private:
     QString m_name;
-    SourceLocation m_location;
-    Types m_types;
-
-    QList<QString> m_importedTypes;
+    QString m_description;
+    QStringList m_asn1Files;
+    QStringList m_conflicts;
+    QStringList m_requirements;
+    QList<Import> m_imports;
 };
 
-} // namespace Data
+} // namespace Metadata
+} // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

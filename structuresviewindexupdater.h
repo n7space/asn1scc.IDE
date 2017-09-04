@@ -22,51 +22,32 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <map>
-
 #include <QString>
+#include <QAbstractItemModel>
 
-#include "typeassignment.h"
+#include "coreplugin/editormanager/ieditor.h"
+
+#include "overviewindexupdater.h"
+#include "overviewmodel.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
 
-class Definitions
+class StructuresViewIndexUpdater : public OverviewIndexUpdater
 {
 public:
-    Definitions(const QString &name, const SourceLocation &location)
-        : m_name(name), m_location(location)
-    {}
+    StructuresViewIndexUpdater(const OverviewModel *model);
 
-    const QString &name() const { return m_name; }
-    const SourceLocation &location() const { return m_location; }
-
-    void add(const TypeAssignment &type)
-    {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
-
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
-
-    using Types = std::map<QString, TypeAssignment>;
-
-    const Types &types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
+public slots:
+    void onEditorChanged(Core::IEditor *editor);
 
 private:
-    QString m_name;
-    SourceLocation m_location;
-    Types m_types;
-
-    QList<QString> m_importedTypes;
+    QModelIndex getCurrentFileIndex() const override;
+    QModelIndex getIndexFromPath(const QString &path) const;
 };
 
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Asn1Acn */
+} /* namespace Internal */

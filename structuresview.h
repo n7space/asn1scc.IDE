@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include <coreplugin/inavigationwidgetfactory.h>
 
 #include "overviewwidget.h"
@@ -38,6 +40,9 @@ class StructuresViewWidget : public OverviewWidget
 public:
     StructuresViewWidget();
     ~StructuresViewWidget();
+
+private:
+    std::unique_ptr<OverviewIndexUpdater> createIndexUpdater() const;
 };
 
 class StructuresViewFactory : public Core::INavigationWidgetFactory

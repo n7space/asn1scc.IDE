@@ -24,49 +24,36 @@
 ****************************************************************************/
 #pragma once
 
-#include <map>
+#include <QList>
 
-#include <QString>
-
-#include "typeassignment.h"
+#include "submodule.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace Libraries {
+namespace Metadata {
 
-class Definitions
+class Module
 {
 public:
-    Definitions(const QString &name, const SourceLocation &location)
-        : m_name(name), m_location(location)
+    Module(const QString &name, const QString &description)
+        : m_name(name)
+        , m_description(description)
     {}
 
     const QString &name() const { return m_name; }
-    const SourceLocation &location() const { return m_location; }
+    const QString &description() const { return m_description; }
+    const QList<Submodule> &submodules() const { return m_submodules; }
 
-    void add(const TypeAssignment &type)
-    {
-        m_types.insert(std::make_pair(type.name(), type));
-    }
-
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
-
-    using Types = std::map<QString, TypeAssignment>;
-
-    const Types &types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
+    void addSubmodule(const Submodule &submodule) { m_submodules.append(submodule); }
 
 private:
     QString m_name;
-    SourceLocation m_location;
-    Types m_types;
-
-    QList<QString> m_importedTypes;
+    QString m_description;
+    QList<Submodule> m_submodules;
 };
 
-} // namespace Data
+} // namespace Metadata
+} // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

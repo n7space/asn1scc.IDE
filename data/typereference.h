@@ -41,7 +41,7 @@ public:
         UserDefined
     };
 
-    TypeReference(const QString& name, const SourceLocation& location, const DataType dataType, const QString& module = QString())
+    TypeReference(const QString &name, const SourceLocation &location, const DataType dataType, const QString &module = QString())
         : m_type(dataType), m_name(name), m_location(location), m_module(module)
     {}
 
