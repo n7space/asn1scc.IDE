@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <QPointer>
+
 #include <coreplugin/dialogs/ioptionspage.h>
 
 #include "../settings/general.h"
@@ -47,7 +49,7 @@ public:
 
 private:
     Settings::GeneralPtr m_settings;
-    GeneralWidget* m_widget;
+    QPointer<GeneralWidget> m_widget;
 };
 
 } // namespace OptionsPages
