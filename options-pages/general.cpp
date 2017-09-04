@@ -75,4 +75,5 @@ void General::apply()
 void General::finish()
 {
     delete m_widget;
+    m_widget = nullptr;
 }
