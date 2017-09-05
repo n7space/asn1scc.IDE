@@ -31,6 +31,7 @@
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
 class SourceReaderMock
         : public SourceReader
@@ -44,5 +45,6 @@ private:
     QString m_content;
 };
 
+} /* namespace Tests */
 } /* namespace Internal */
 } /* namespace Asn1Acn */

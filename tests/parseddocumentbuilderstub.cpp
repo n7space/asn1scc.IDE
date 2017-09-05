@@ -26,6 +26,7 @@
 #include "parseddocumentbuilderstub.h"
 
 using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Tests;
 
 ParsedDocumentBuilderStub::ParsedDocumentBuilderStub(const QHash<QString, DocumentSourceInfo> &documents)
     : m_rawDocuments(documents)
@@ -54,7 +55,7 @@ std::vector<std::unique_ptr<ParsedDocument>> ParsedDocumentBuilderStub::takeDocu
     return std::move(m_parsedDocuments);
 }
 
-const QStringList &ParsedDocumentBuilderStub::errorMessages() const
+const QList<Data::ErrorMessage> &ParsedDocumentBuilderStub::errorMessages() const
 {
     return m_errorMessages;
 }

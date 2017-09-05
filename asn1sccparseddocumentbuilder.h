@@ -31,7 +31,6 @@
 #include <QString>
 #include <QFileInfo>
 #include <QByteArray>
-#include <QStringList>
 
 #include "parseddocument.h"
 #include "asn1sccserviceprovider.h"
@@ -55,7 +54,7 @@ public:
     void run() override;
 
     std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
-    const QStringList& errorMessages() const override { return m_errorMessages; }
+    const QList<Data::ErrorMessage> &errorMessages() const override { return m_errorMessages; }
 
 private slots:
     void requestFinished();
@@ -73,7 +72,7 @@ private:
     const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
     std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
-    QStringList m_errorMessages;
+    QList<Data::ErrorMessage> m_errorMessages;
 };
 
 } /* namespace Internal */

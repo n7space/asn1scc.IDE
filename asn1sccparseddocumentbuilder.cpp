@@ -30,17 +30,29 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
+#include <QMap>
 
 #include <extensionsystem/pluginmanager.h>
-
-#include "astxmlparser.h"
 
 #include "data/modules.h"
 #include "data/definitions.h"
 
+#include "astxmlparser.h"
+#include "errormessageparser.h"
 #include "documentsourceinfo.h"
 
 using namespace Asn1Acn::Internal;
+
+namespace
+{
+QMap<QString, QString> buildPathMapping(const QHash<QString, DocumentSourceInfo>& docInfo)
+{
+    auto result = QMap<QString, QString>();
+    for (auto it = docInfo.begin(), end = docInfo.end(); it != end; ++it)
+        result[it.key()] = it.value().getPath();
+    return result;
+}
+} // namespace
 
 ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create(const QHash<QString, DocumentSourceInfo> &documents)
 {
@@ -100,7 +112,7 @@ void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
 
     for (it = parsedData.begin(); it != parsedData.end(); it++) {
         QString fileName = it->first;
-        DocumentSourceInfo sourceInfo = (m_rawDocuments)[fileName];
+        DocumentSourceInfo sourceInfo = m_rawDocuments[fileName];
 
         std::unique_ptr<ParsedDocument> parsedDoc(new ParsedDocument(std::move(it->second), sourceInfo));
 
@@ -120,8 +132,9 @@ bool Asn1SccParsedDocumentBuilder::responseContainsAst(const QJsonObject &json)
 
 void Asn1SccParsedDocumentBuilder::storeErrorMessages(const QJsonObject &json)
 {
+    const auto parser = ErrorMessageParser(buildPathMapping(m_rawDocuments));
     for (const auto message : json[QLatin1Literal("Messages")].toArray())
-        m_errorMessages.append(message.toString());
+        m_errorMessages.append(parser.parse(message.toString()));
 }
 
 QString Asn1SccParsedDocumentBuilder::getAstXml(const QJsonObject &json)

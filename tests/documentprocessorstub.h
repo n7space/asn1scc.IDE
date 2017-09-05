@@ -36,6 +36,7 @@
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
 class DocumentProcessorStub
         : public DocumentProcessor
@@ -62,5 +63,6 @@ private:
     std::vector<std::unique_ptr<ParsedDocument>> m_results;
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

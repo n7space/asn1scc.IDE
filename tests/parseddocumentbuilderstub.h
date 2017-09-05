@@ -36,6 +36,7 @@
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
 class ParsedDocumentBuilderStub
         : public ParsedDocumentBuilder
@@ -48,14 +49,15 @@ public:
     void run() override;
 
     std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
-    const QStringList &errorMessages() const override;
+    const QList<Data::ErrorMessage> &errorMessages() const override;
 
 private:
     const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
     std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
-    QStringList m_errorMessages;
+    QList<Data::ErrorMessage> m_errorMessages;
 };
 
+} /* namespace Tests */
 } /* namespace Internal */
 } /* namespace Asn1Acn */

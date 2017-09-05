@@ -30,6 +30,7 @@
 #include "../data/modules.h"
 
 using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Tests;
 
 DocumentProcessorStub::DocumentProcessorStub(const QString &project)
     : m_projectName(project)

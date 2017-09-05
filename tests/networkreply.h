@@ -31,6 +31,7 @@
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
 class NetworkReply : public QNetworkReply
 {
@@ -53,5 +54,6 @@ private:
     // qint64 m_len;
 };
 
+} /* namespace Tests */
 } /* namespace Asn1Acn */
 } /* namespace Internal */

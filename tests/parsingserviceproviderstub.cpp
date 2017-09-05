@@ -27,6 +27,7 @@
 
 #include "../documentsourceinfo.h"
 
+using namespace Asn1Acn::Internal::Tests;
 using namespace Asn1Acn::Internal;
 
 ParsingServiceProviderStub::ParsingServiceProviderStub(QObject *parent)

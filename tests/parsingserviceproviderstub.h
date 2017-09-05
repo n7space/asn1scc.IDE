@@ -30,6 +30,7 @@
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
 class ParsingServiceProviderStub : public ParsingServiceProvider
 {
@@ -41,5 +42,6 @@ public:
     QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
 };
 
+} /* namespace Tests */
 } /* namespace Asn1Acn */
 } /* namespace Internal */

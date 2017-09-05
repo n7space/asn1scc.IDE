@@ -25,11 +25,14 @@
 
 #pragma once
 
-#include "memory.h"
+#include <memory>
 
 #include <QHash>
 #include <QObject>
 #include <QString>
+#include <QList>
+
+#include "data/errormessage.h"
 
 #include "parseddocument.h"
 #include "documentsourceinfo.h"
@@ -48,7 +51,7 @@ public:
     virtual void run() = 0;
 
     virtual std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() = 0;
-    virtual const QStringList &errorMessages() const = 0;
+    virtual const QList<Data::ErrorMessage> &errorMessages() const = 0;
 
 signals:
     void finished();
