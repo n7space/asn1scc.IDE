@@ -69,7 +69,12 @@ std::vector<std::unique_ptr<ParsedDocument>> DocumentProcessorStub::takeResults(
     return std::move(m_results);
 }
 
-DocumentProcessorStub::State DocumentProcessorStub::getState()
+DocumentProcessorStub::State DocumentProcessorStub::state()
 {
     return m_state;
+}
+
+const std::vector<Data::ErrorMessage> &DocumentProcessorStub::errorMessages() const
+{
+    return m_errorMessages;
 }

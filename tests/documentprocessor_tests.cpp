@@ -45,7 +45,7 @@ void DocumentProcessorTests::test_unstarted()
 {
     DocumentProcessor *dp = new Asn1SccDocumentProcessor("ProjectName", m_docBuilderCreator);
 
-    QCOMPARE(dp->getState(), DocumentProcessor::State::Unfinished);
+    QCOMPARE(dp->state(), DocumentProcessor::State::Unfinished);
 
     const std::vector<std::unique_ptr<ParsedDocument>> results = dp->takeResults();
     QCOMPARE(results.size(), static_cast<size_t>(0));
@@ -107,7 +107,7 @@ void DocumentProcessorTests::examine(DocumentProcessor *dp,
                                      const QString &fileName,
                                      const QString &filePath) const
 {
-    QCOMPARE(dp->getState(), state);
+    QCOMPARE(dp->state(), state);
     QCOMPARE(spy.count(), 1);
 
     const QVariant signalArg = spy.at(0).at(0);

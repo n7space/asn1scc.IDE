@@ -93,7 +93,7 @@ void ParsedDocumentBuilderTests::test_error()
     QCOMPARE(spyFinished.count(), 0);
 
     const auto errorMessages = builder->errorMessages();
-    QCOMPARE(errorMessages.count(), 1);
+    QCOMPARE(errorMessages.size(), std::size_t(1));
     QCOMPARE(errorMessages.at(0).message(), QStringLiteral("No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'"));
     QCOMPARE(errorMessages.at(0).location().line(), 8);
     QCOMPARE(errorMessages.at(0).location().column(), 13);

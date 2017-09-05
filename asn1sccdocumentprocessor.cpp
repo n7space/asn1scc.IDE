@@ -70,7 +70,7 @@ void Asn1SccDocumentProcessor::run()
     m_docBuilder->run();
 }
 
-Asn1SccDocumentProcessor::State Asn1SccDocumentProcessor::getState()
+Asn1SccDocumentProcessor::State Asn1SccDocumentProcessor::state()
 {
     return m_state;
 }
@@ -108,4 +108,9 @@ void Asn1SccDocumentProcessor::createFallbackResults()
 {
     for (const auto& source : m_documents)
         m_results.push_back(std::make_unique<ParsedDocument>(source));
+}
+
+const std::vector<Data::ErrorMessage> &Asn1SccDocumentProcessor::errorMessages() const
+{
+    return m_docBuilder->errorMessages();
 }

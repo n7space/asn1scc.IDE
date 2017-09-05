@@ -29,7 +29,6 @@
 
 #include <QHash>
 #include <QString>
-#include <QFileInfo>
 #include <QByteArray>
 
 #include "parseddocument.h"
@@ -54,7 +53,7 @@ public:
     void run() override;
 
     std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
-    const QList<Data::ErrorMessage> &errorMessages() const override { return m_errorMessages; }
+    const std::vector<Data::ErrorMessage> &errorMessages() const override { return m_errorMessages; }
 
 private slots:
     void requestFinished();
@@ -72,7 +71,7 @@ private:
     const QHash<QString, DocumentSource> &m_rawDocuments;
     std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
-    QList<Data::ErrorMessage> m_errorMessages;
+    std::vector<Data::ErrorMessage> m_errorMessages;
 };
 
 } /* namespace Internal */

@@ -60,8 +60,9 @@ public:
     void addToRun(const QString &filePath, const QString &docContent) override;
     void run() override;
     std::vector<std::unique_ptr<ParsedDocument>> takeResults() override;
+    const std::vector<Data::ErrorMessage> &errorMessages() const override;
 
-    State getState() override;
+    State state() override;
 
 private slots:
     void onBuilderFinished();

@@ -185,7 +185,7 @@ void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName
 {
     DocumentProcessor *dp = qobject_cast<DocumentProcessor *>(sender());
 
-    switch (dp->getState()) {
+    switch (dp->state()) {
         case DocumentProcessor::State::Successful:
             handleFilesProcesedWithSuccess(projectName, dp->takeResults());
             break;

@@ -29,6 +29,8 @@
 
 #include <QString>
 
+#include "data/errormessage.h"
+
 #include "parseddocument.h"
 
 namespace Asn1Acn {
@@ -51,8 +53,9 @@ public:
     virtual void addToRun(const QString &filePath, const QString &docContent) = 0;
     virtual void run() = 0;
     virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+    virtual const std::vector<Data::ErrorMessage> &errorMessages() const = 0;
 
-    virtual State getState() = 0;
+    virtual State state() = 0;
 
 signals:
     void processingFinished(const QString &projectName) const;

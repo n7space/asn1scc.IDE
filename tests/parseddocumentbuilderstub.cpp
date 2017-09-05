@@ -55,7 +55,7 @@ std::vector<std::unique_ptr<ParsedDocument>> ParsedDocumentBuilderStub::takeDocu
     return std::move(m_parsedDocuments);
 }
 
-const QList<Data::ErrorMessage> &ParsedDocumentBuilderStub::errorMessages() const
+const std::vector<Data::ErrorMessage> &ParsedDocumentBuilderStub::errorMessages() const
 {
     return m_errorMessages;
 }

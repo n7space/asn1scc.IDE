@@ -52,8 +52,9 @@ public:
     void addToRun(const QString &filePath, const QString &docContent) override;
     void run() override;
     std::vector<std::unique_ptr<ParsedDocument>> takeResults() override;
+    const std::vector<Data::ErrorMessage> &errorMessages() const override;
 
-    State getState() override;
+    State state() override;
 
 private:
     State m_state;
@@ -61,6 +62,7 @@ private:
 
     QHash<QString, DocumentSource> m_documents;
     std::vector<std::unique_ptr<ParsedDocument>> m_results;
+    std::vector<Data::ErrorMessage> m_errorMessages;
 };
 
 } // namespace Tests

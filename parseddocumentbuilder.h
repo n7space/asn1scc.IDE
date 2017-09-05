@@ -31,7 +31,6 @@
 #include <QHash>
 #include <QObject>
 #include <QString>
-#include <QList>
 
 #include "data/errormessage.h"
 
@@ -52,7 +51,7 @@ public:
     virtual void run() = 0;
 
     virtual std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() = 0;
-    virtual const QList<Data::ErrorMessage> &errorMessages() const = 0;
+    virtual const std::vector<Data::ErrorMessage> &errorMessages() const = 0;
 
 signals:
     void finished();
