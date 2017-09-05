@@ -108,8 +108,8 @@ SOURCES += \
     networkreply.cpp \
     parseddocumentbuilderstub.cpp \
     documentprocessorstub.cpp \
-    externalsourcereader.cpp \
-    internalsourcereader.cpp
+    filesourcereader.cpp \
+    sourcereadermock.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -186,8 +186,8 @@ HEADERS += \
     documentprocessorstub.h \
     documentprocessorfactory.h \
     sourcereader.h \
-    externalsourcereader.h \
-    internalsourcereader.h \
+    filesourcereader.h \
+    sourcereadermock.h \
     parseddatastorageproxy.h \
     modeltreeproxy.h
 

@@ -32,7 +32,7 @@
 #include <QSignalSpy>
 
 #include "../documentprocessorfactory.h"
-#include "../internalsourcereader.h"
+#include "../sourcereadermock.h"
 
 #include "../projectcontenthandler.h"
 
@@ -205,7 +205,7 @@ void ProjectContentHandlerTests::addProject(const QString &projectName)
     QSignalSpy spyUpdated(m_tree, &ModelTree::modelUpdated);
 
     ProjectContentHandler *pch = new ProjectContentHandler(DocumentProcessorFactory(DocumentProcessorFactory::WorkMode::Test),
-                                                           new InternalSourceReader,
+                                                           new SourceReaderMock,
                                                            m_tree,
                                                            m_storage);
     QCOMPARE(spyAboutToUpdate.count(), 1);
@@ -223,7 +223,7 @@ void ProjectContentHandlerTests::removeProject(const QString &projectName)
     QSignalSpy spyUpdated(m_tree, &ModelTree::modelUpdated);
 
     ProjectContentHandler *pch = new ProjectContentHandler(DocumentProcessorFactory(DocumentProcessorFactory::WorkMode::Test),
-                                                           new InternalSourceReader,
+                                                           new SourceReaderMock,
                                                            m_tree,
                                                            m_storage);
     QCOMPARE(spyAboutToUpdate.count(), 1);
@@ -241,7 +241,7 @@ void ProjectContentHandlerTests::fileListChanged(const QString &projectName, con
     QSignalSpy spyUpdated(m_tree, &ModelTree::modelUpdated);
 
     ProjectContentHandler *pch = new ProjectContentHandler(DocumentProcessorFactory(DocumentProcessorFactory::WorkMode::Test),
-                                                           new InternalSourceReader,
+                                                           new SourceReaderMock,
                                                            m_tree,
                                                            m_storage);
 
@@ -260,7 +260,7 @@ void ProjectContentHandlerTests::fileContentChanged(const QString &path, const Q
     QSignalSpy spyUpdated(m_tree, &ModelTree::modelUpdated);
 
     ProjectContentHandler *pch = new ProjectContentHandler(DocumentProcessorFactory(DocumentProcessorFactory::WorkMode::Test),
-                                                           new InternalSourceReader,
+                                                           new SourceReaderMock,
                                                            m_tree,
                                                            m_storage);
 

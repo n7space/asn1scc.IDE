@@ -23,25 +23,26 @@
 **
 ****************************************************************************/
 
-#include "internalsourcereader.h"
+#pragma once
 
-using namespace Asn1Acn::Internal;
+#include <QString>
 
-InternalSourceReader::InternalSourceReader()
-    : m_content("Test content")
+#include "sourcereader.h"
+
+namespace Asn1Acn {
+namespace Internal {
+
+class SourceReaderMock
+        : public SourceReader
 {
-}
+public:
+    SourceReaderMock();
 
-QString InternalSourceReader::readFileContent(const QString &fileName) const
-{
-    if (fileName.contains("_ERROR_"))
-        return QString("ERROR");
+    QString readContent(const QString &fileName) const override;
 
-    if (fileName.contains("_FAILED_"))
-        return QString("FAILED");
+private:
+    QString m_content;
+};
 
-    if (fileName.contains("_SUCCESS_"))
-        return QString("SUCCESS");
-
-    return QString();
-}
+} /* namespace Internal */
+} /* namespace Asn1Acn */

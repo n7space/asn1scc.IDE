@@ -23,22 +23,21 @@
 **
 ****************************************************************************/
 
-#include "externalsourcereader.h"
+#pragma once
 
-#include <QFile>
+#include <QString>
 
-using namespace Asn1Acn::Internal;
+#include "sourcereader.h"
 
-QString ExternalSourceReader::readFileContent(const QString &fileName) const
+namespace Asn1Acn {
+namespace Internal {
+
+class FileSourceReader
+        : public SourceReader
 {
-    QFile file(fileName);
+public:
+    QString readContent(const QString &fileName) const override;
+};
 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return QString();
-
-    QString docContent = QString::fromLatin1(file.readAll().data());
-
-    file.close();
-
-    return docContent;
-}
+} /* namespace Internal */
+} /* namespace Asn1Acn */

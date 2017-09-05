@@ -35,7 +35,7 @@ class SourceReader
 public:
     virtual ~SourceReader() = default;
 
-    virtual QString readFileContent(const QString &fileName) const = 0;
+    virtual QString readContent(const QString &fileName) const = 0;
 };
 
 } /* namespace Internal */

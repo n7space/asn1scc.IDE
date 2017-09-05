@@ -30,14 +30,14 @@
 #include <utils/qtcassert.h>
 
 #include "asn1sccdocumentprocessor.h"
-#include "externalsourcereader.h"
+#include "filesourcereader.h"
 
 using namespace Asn1Acn::Internal;
 
 ProjectContentHandler *ProjectContentHandler::create()
 {
     return new ProjectContentHandler(DocumentProcessorFactory(),
-                                     new ExternalSourceReader,
+                                     new FileSourceReader,
                                      ModelTree::instance(),
                                      ParsedDataStorage::instance());
 }
@@ -170,7 +170,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChang
         if (parsedDoc != nullptr)
             docProcessor->addToRun(parsedDoc->source().getContent(), path, parsedDoc->source().getRevision());
         else
-            docProcessor->addToRun(m_sourceReader->readFileContent(path), path, -1);
+            docProcessor->addToRun(m_sourceReader->readContent(path), path, -1);
     }
 
     return docProcessor;

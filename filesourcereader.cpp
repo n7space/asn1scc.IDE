@@ -23,26 +23,22 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "filesourcereader.h"
 
-#include <QString>
+#include <QFile>
 
-#include "sourcereader.h"
+using namespace Asn1Acn::Internal;
 
-namespace Asn1Acn {
-namespace Internal {
-
-class InternalSourceReader
-        : public SourceReader
+QString FileSourceReader::readContent(const QString &fileName) const
 {
-public:
-    InternalSourceReader();
+    QFile file(fileName);
 
-    QString readFileContent(const QString &fileName) const override;
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return QString();
 
-private:
-    QString m_content;
-};
+    QString docContent = QString::fromLatin1(file.readAll().data());
 
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+    file.close();
+
+    return docContent;
+}
