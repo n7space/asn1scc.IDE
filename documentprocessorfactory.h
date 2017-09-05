@@ -26,7 +26,7 @@
 #pragma once
 
 #include "documentprocessor.h"
-#include "documentprocessorstub.h"
+#include "tests/documentprocessorstub.h"
 #include "asn1sccdocumentprocessor.h"
 
 namespace Asn1Acn {

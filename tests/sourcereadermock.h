@@ -27,7 +27,7 @@
 
 #include <QString>
 
-#include "sourcereader.h"
+#include "../sourcereader.h"
 
 namespace Asn1Acn {
 namespace Internal {

@@ -32,7 +32,7 @@
 #include <QSignalSpy>
 
 #include "../documentprocessorfactory.h"
-#include "../sourcereadermock.h"
+#include "sourcereadermock.h"
 
 #include "../projectcontenthandler.h"
 

@@ -28,7 +28,7 @@
 #include <QObject>
 
 #include "../asn1sccparseddocumentbuilder.h"
-#include "../parsingserviceproviderstub.h"
+#include "parsingserviceproviderstub.h"
 
 namespace Asn1Acn {
 namespace Internal {

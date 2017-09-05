@@ -27,7 +27,7 @@
 
 #include <QtTest>
 
-#include "../parseddocumentbuilderstub.h"
+#include "parseddocumentbuilderstub.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;

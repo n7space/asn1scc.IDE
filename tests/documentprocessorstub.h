@@ -30,9 +30,9 @@
 
 #include <QString>
 
-#include "parseddocument.h"
+#include "../parseddocument.h"
 
-#include "documentprocessor.h"
+#include "../documentprocessor.h"
 
 namespace Asn1Acn {
 namespace Internal {

@@ -27,7 +27,7 @@
 
 #include <QList>
 
-#include "data/modules.h"
+#include "../data/modules.h"
 
 using namespace Asn1Acn::Internal;
 

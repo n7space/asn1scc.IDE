@@ -25,36 +25,21 @@
 
 #pragma once
 
-#include <memory>
-
-#include <QHash>
-#include <QString>
-
-#include "parseddocument.h"
-#include "documentsourceinfo.h"
-#include "parseddocumentbuilder.h"
+#include "networkreply.h"
+#include "../parsingserviceprovider.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedDocumentBuilderStub
-        : public ParsedDocumentBuilder
+class ParsingServiceProviderStub : public ParsingServiceProvider
 {
     Q_OBJECT
 
 public:
-    void setDocumentsToProcess(const QHash<QString, DocumentSourceInfo> *documents) override;
-    void run() override;
+    ParsingServiceProviderStub(QObject *parent = 0);
 
-    std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
-    const QStringList &errorMessages() const override;
-
-private:
-    const QHash<QString, DocumentSourceInfo> *m_rawDocuments;
-    std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
-
-    QStringList m_errorMessages;
+    QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
 };
 
-} /* namespace Internal */
 } /* namespace Asn1Acn */
+} /* namespace Internal */

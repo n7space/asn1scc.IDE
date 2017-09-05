@@ -104,12 +104,7 @@ SOURCES += \
     linkcreator.cpp \
     overviewindexupdater.cpp \
     structuresviewindexupdater.cpp \
-    parsingserviceproviderstub.cpp \
-    networkreply.cpp \
-    parseddocumentbuilderstub.cpp \
-    documentprocessorstub.cpp \
-    filesourcereader.cpp \
-    sourcereadermock.cpp
+    filesourcereader.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -178,16 +173,11 @@ HEADERS += \
     overviewindexupdater.h \
     structuresviewindexupdater.h \
     parsingserviceprovider.h \
-    parsingserviceproviderstub.h \
     parseddocumentbuilder.h \
-    networkreply.h \
-    parseddocumentbuilderstub.h \
     documentprocessor.h \
-    documentprocessorstub.h \
     documentprocessorfactory.h \
     sourcereader.h \
     filesourcereader.h \
-    sourcereadermock.h \
     parseddatastorageproxy.h \
     modeltreeproxy.h
 
@@ -216,7 +206,13 @@ SOURCES += \
     tests/documentprocessor_tests.cpp \
     tests/projectcontenthandler_tests.cpp \
     tests/parseddatastorage_tests.cpp \
-    tests/modeltree_tests.cpp
+    tests/modeltree_tests.cpp \
+    \
+    tests/networkreply.cpp \
+    tests/parsingserviceproviderstub.cpp \
+    tests/parseddocumentbuilderstub.cpp \
+    tests/documentprocessorstub.cpp \
+    tests/sourcereadermock.cpp
 
 HEADERS += \
     libraries/tests/metadataparser_tests.h \
@@ -228,7 +224,13 @@ HEADERS += \
     tests/documentprocessor_tests.h \
     tests/projectcontenthandler_tests.h \
     tests/parseddatastorage_tests.h \
-    tests/modeltree_tests.h
+    tests/modeltree_tests.h \
+    \
+    tests/networkreply.h \
+    tests/parsingserviceproviderstub.h \
+    tests/parseddocumentbuilderstub.h \
+    tests/documentprocessorstub.h \
+    tests/sourcereadermock.h
 }
 
 ### Static files ###

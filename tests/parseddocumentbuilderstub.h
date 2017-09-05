@@ -23,29 +23,38 @@
 **
 ****************************************************************************/
 
-#include "parsingserviceproviderstub.h"
+#pragma once
 
-#include "documentsourceinfo.h"
+#include <memory>
 
-using namespace Asn1Acn::Internal;
+#include <QHash>
+#include <QString>
 
-ParsingServiceProviderStub::ParsingServiceProviderStub(QObject *parent)
-    : ParsingServiceProvider(parent)
+#include "../parseddocument.h"
+#include "../documentsourceinfo.h"
+#include "../parseddocumentbuilder.h"
+
+namespace Asn1Acn {
+namespace Internal {
+
+class ParsedDocumentBuilderStub
+        : public ParsedDocumentBuilder
 {
-}
+    Q_OBJECT
 
-QNetworkReply *ParsingServiceProviderStub::requestAst(const QHash<QString, DocumentSourceInfo> &documents) const
-{
-    NetworkReply *reply = new NetworkReply;
+public:
+    void setDocumentsToProcess(const QHash<QString, DocumentSourceInfo> *documents) override;
+    void run() override;
 
-    QString key = *(documents.keyBegin());
-    if (key == "FAILED")
-        reply->setErrored();
+    std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
+    const QStringList &errorMessages() const override;
 
-    DocumentSourceInfo sourceInfo = documents.value(key);
+private:
+    const QHash<QString, DocumentSourceInfo> *m_rawDocuments;
+    std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
-    reply->write(sourceInfo.getContent().toUtf8());
-    reply->run();
+    QStringList m_errorMessages;
+};
 
-    return reply;
-}
+} /* namespace Internal */
+} /* namespace Asn1Acn */
