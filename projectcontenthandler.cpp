@@ -36,21 +36,21 @@ using namespace Asn1Acn::Internal;
 
 ProjectContentHandler *ProjectContentHandler::create()
 {
-    return new ProjectContentHandler(DocumentProcessorFactory(),
+    return new ProjectContentHandler([](const QString &project)->DocumentProcessor* { return Asn1SccDocumentProcessor::create(project); } ,
                                      new FileSourceReader,
                                      ModelTree::instance(),
                                      ParsedDataStorage::instance());
 }
 
-ProjectContentHandler::ProjectContentHandler(const DocumentProcessorFactory &factory,
+ProjectContentHandler::ProjectContentHandler(std::function<DocumentProcessor *(const QString &)> createProcessor,
                                              const SourceReader *sourceReader,
                                              ModelTree *tree,
                                              ParsedDataStorage *storage)
     : m_tree(tree)
     , m_storage(storage)
     , m_projectsChanged(0)
-    , m_factory(factory)
     , m_sourceReader(sourceReader)
+    , m_createProcessor(createProcessor)
 {
     ModelTreeProxy::treeAboutToChange(m_tree);
 }
@@ -144,7 +144,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
                                                                                const QString &content,
                                                                                int revision) const
 {
-    DocumentProcessor *docProcessor = m_factory.create(projectName);
+    DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
     QList<std::shared_ptr<ParsedDocument>> files = m_storage->getFilesFromProject(projectName);
     foreach (const std::shared_ptr<ParsedDocument> &file, files) {
@@ -163,7 +163,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
 DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChange(const QString &projectName,
                                                                                   const QStringList &filePaths) const
 {
-    DocumentProcessor *docProcessor = m_factory.create(projectName);
+    DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
     foreach (const QString &path, filePaths) {
         std::shared_ptr<ParsedDocument> parsedDoc = m_storage->getFileForPath(path);

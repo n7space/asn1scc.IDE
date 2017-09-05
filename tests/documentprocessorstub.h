@@ -45,7 +45,7 @@ public:
 
     using State = DocumentProcessor::State;
 
-    DocumentProcessorStub() = default;
+    DocumentProcessorStub(const QString &project = QString());
     ~DocumentProcessorStub() = default;
 
     void addToRun(const QString &docContent, const QString &filePath, int revision) override;

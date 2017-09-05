@@ -27,6 +27,7 @@
 
 #include <QObject>
 
+#include "../documentprocessor.h"
 #include "../parseddatastorage.h"
 #include "../modeltree.h"
 
@@ -65,6 +66,8 @@ private:
     ParsedDataStorage *m_storage;
 
     QStringList m_fileTypes;
+
+    std::function<DocumentProcessor *(const QString &)> m_createProcessor;
 };
 
 } // namespace Tests

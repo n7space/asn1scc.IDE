@@ -23,6 +23,8 @@
 **
 ****************************************************************************/
 
+#include <functional>
+
 #include <QObject>
 #include <QString>
 #include <QStringList>
@@ -32,7 +34,6 @@
 #include "parseddatastorage.h"
 #include "parseddatastorageproxy.h"
 #include "documentprocessor.h"
-#include "documentprocessorfactory.h"
 #include "sourcereader.h"
 
 namespace Asn1Acn {
@@ -48,7 +49,7 @@ class ProjectContentHandler
 public:
     static ProjectContentHandler *create();
 
-    ProjectContentHandler(const DocumentProcessorFactory &factory,
+    ProjectContentHandler(std::function<DocumentProcessor *(const QString&)>,
                           const SourceReader *sourceReader,
                           ModelTree *tree,
                           ParsedDataStorage *storage);
@@ -92,8 +93,9 @@ private:
 
     unsigned m_projectsChanged;
 
-    DocumentProcessorFactory m_factory;
     const SourceReader *m_sourceReader;
+
+    std::function<DocumentProcessor *(const QString &)> m_createProcessor;
 };
 
 } // namespace Internal

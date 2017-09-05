@@ -31,6 +31,11 @@
 
 using namespace Asn1Acn::Internal;
 
+DocumentProcessorStub::DocumentProcessorStub(const QString &project)
+    : m_projectName(project)
+{
+}
+
 void DocumentProcessorStub::addToRun(const QString &docContent, const QString &filePath, int revision)
 {
     QString fileName = QFileInfo(filePath).fileName();

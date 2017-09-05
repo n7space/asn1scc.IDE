@@ -175,7 +175,6 @@ HEADERS += \
     parsingserviceprovider.h \
     parseddocumentbuilder.h \
     documentprocessor.h \
-    documentprocessorfactory.h \
     sourcereader.h \
     filesourcereader.h \
     parseddatastorageproxy.h \
