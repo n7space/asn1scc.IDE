@@ -43,14 +43,15 @@ class ParsedDocumentBuilderStub
     Q_OBJECT
 
 public:
-    void setDocumentsToProcess(const QHash<QString, DocumentSourceInfo> *documents) override;
+    ParsedDocumentBuilderStub(const QHash<QString, DocumentSourceInfo> &documents);
+
     void run() override;
 
     std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
     const QStringList &errorMessages() const override;
 
 private:
-    const QHash<QString, DocumentSourceInfo> *m_rawDocuments;
+    const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
     std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
     QStringList m_errorMessages;

@@ -37,12 +37,14 @@ DocumentProcessorTests::DocumentProcessorTests(QObject *parent)
     , m_fileContent("Document content")
     , m_fileDir("/test/dir/")
     , m_revision(1)
+    , m_docBuilderCreator([](const QHash<QString, DocumentSourceInfo> &documents)->ParsedDocumentBuilder *
+                          { return new ParsedDocumentBuilderStub(documents); })
 {
 }
 
 void DocumentProcessorTests::test_unstarted()
 {
-    DocumentProcessor *dp = new Asn1SccDocumentProcessor("ProjectName", new ParsedDocumentBuilderStub);
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor("ProjectName", m_docBuilderCreator);
 
     QCOMPARE(dp->getState(), DocumentProcessor::State::Unfinished);
 
@@ -57,7 +59,7 @@ void DocumentProcessorTests::test_successful()
     const QString fileName("SUCCESS");
     const QString filePath = m_fileDir + fileName;
 
-    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, new ParsedDocumentBuilderStub);
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
     dp->addToRun(m_fileContent, filePath, m_revision);
@@ -73,7 +75,7 @@ void DocumentProcessorTests::test_error()
     const QString fileName("ERROR");
     const QString filePath = m_fileDir + fileName;
 
-    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, new ParsedDocumentBuilderStub);
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
     dp->addToRun(m_fileContent, filePath, m_revision);
@@ -89,7 +91,7 @@ void DocumentProcessorTests::test_failed()
     const QString fileName("FAILED");
     const QString filePath = m_fileDir + fileName;
 
-    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, new ParsedDocumentBuilderStub);
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
     dp->addToRun(m_fileContent, filePath, m_revision);

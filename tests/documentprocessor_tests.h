@@ -61,6 +61,8 @@ private:
     const QString m_fileContent;
     const QString m_fileDir;
     const int m_revision;
+
+    Asn1SccDocumentProcessor::DocumentBuilderCreator m_docBuilderCreator;
 };
 
 } // namespace Tests

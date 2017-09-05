@@ -45,7 +45,6 @@ class ParsedDocumentBuilder
 public:
     virtual ~ParsedDocumentBuilder() = default;
 
-    virtual void setDocumentsToProcess(const QHash<QString, DocumentSourceInfo> *documents) = 0;
     virtual void run() = 0;
 
     virtual std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() = 0;

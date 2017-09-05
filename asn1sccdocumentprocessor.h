@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <functional>
+
 #include <QHash>
 #include <QString>
 #include <QFileInfo>
@@ -49,10 +51,11 @@ class Asn1SccDocumentProcessor
 public:
 
     using State = DocumentProcessor::State;
+    using DocumentBuilderCreator = std::function<ParsedDocumentBuilder *(const QHash<QString, DocumentSourceInfo> &documents)>;
 
     static Asn1SccDocumentProcessor *create(const QString &projectName);
 
-    Asn1SccDocumentProcessor(const QString &projectName, ParsedDocumentBuilder *docBuilder);
+    Asn1SccDocumentProcessor(const QString &projectName, DocumentBuilderCreator docBuilderCreator);
     ~Asn1SccDocumentProcessor();
 
     void addToRun(const QString &docContent, const QString &filePath, int revision) override;
@@ -76,6 +79,7 @@ private:
     State m_state;
 
     ParsedDocumentBuilder *m_docBuilder;
+    DocumentBuilderCreator m_docBuilderCreator;
 };
 
 } // namespace Internal

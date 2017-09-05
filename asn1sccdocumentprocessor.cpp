@@ -34,21 +34,18 @@ using namespace Asn1Acn::Internal;
 
 Asn1SccDocumentProcessor *Asn1SccDocumentProcessor::create(const QString &projectName)
 {
-    ParsedDocumentBuilder *docBuilder = Asn1SccParsedDocumentBuilder::create();
-    return new Asn1SccDocumentProcessor(projectName, docBuilder);
+    return new Asn1SccDocumentProcessor(projectName,
+                                        [](const QHash<QString, DocumentSourceInfo> &documents)->ParsedDocumentBuilder *
+                                        { return Asn1SccParsedDocumentBuilder::create(documents); });
 }
 
-Asn1SccDocumentProcessor::Asn1SccDocumentProcessor(const QString &projectName, ParsedDocumentBuilder *docBuilder)
+Asn1SccDocumentProcessor::Asn1SccDocumentProcessor(const QString &projectName,
+                                                   DocumentBuilderCreator docBuilderCreator)
     : m_projectName(projectName),
       m_state(State::Unfinished),
-      m_docBuilder(docBuilder)
+      m_docBuilder(nullptr),
+      m_docBuilderCreator(docBuilderCreator)
 {
-    connect(m_docBuilder, &ParsedDocumentBuilder::finished,
-            this, &Asn1SccDocumentProcessor::onBuilderFinished);
-    connect(m_docBuilder, &ParsedDocumentBuilder::failed,
-            this, &Asn1SccDocumentProcessor::onBuilderFailed);
-    connect(m_docBuilder, &ParsedDocumentBuilder::errored,
-            this, &Asn1SccDocumentProcessor::onBuilderErrored);
 }
 
 Asn1SccDocumentProcessor::~Asn1SccDocumentProcessor()
@@ -66,7 +63,15 @@ void Asn1SccDocumentProcessor::addToRun(const QString &docContent, const QString
 
 void Asn1SccDocumentProcessor::run()
 {
-    m_docBuilder->setDocumentsToProcess(&m_documents);
+    m_docBuilder = m_docBuilderCreator(m_documents);
+
+    connect(m_docBuilder, &ParsedDocumentBuilder::finished,
+            this, &Asn1SccDocumentProcessor::onBuilderFinished);
+    connect(m_docBuilder, &ParsedDocumentBuilder::failed,
+            this, &Asn1SccDocumentProcessor::onBuilderFailed);
+    connect(m_docBuilder, &ParsedDocumentBuilder::errored,
+            this, &Asn1SccDocumentProcessor::onBuilderErrored);
+
     m_docBuilder->run();
 }
 
