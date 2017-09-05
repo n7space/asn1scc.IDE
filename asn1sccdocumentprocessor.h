@@ -26,14 +26,13 @@
 #pragma once
 
 #include <functional>
+#include <memory>
 
 #include <QHash>
 #include <QString>
 #include <QFileInfo>
 #include <QList>
 #include <QTextDocument>
-
-#include <memory>
 
 #include "parseddocument.h"
 #include "parseddocumentbuilder.h"
@@ -78,7 +77,7 @@ private:
     std::vector<std::unique_ptr<ParsedDocument>> m_results;
     State m_state;
 
-    ParsedDocumentBuilder *m_docBuilder;
+    std::unique_ptr<ParsedDocumentBuilder> m_docBuilder;
     DocumentBuilderCreator m_docBuilderCreator;
 };
 
