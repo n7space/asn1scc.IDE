@@ -26,8 +26,11 @@
 #include "document.h"
 
 #include <QTextDocument>
+#include <QTextBlock>
 
 #include <coreplugin/idocument.h>
+#include <texteditor/texteditorsettings.h>
+#include <texteditor/fontsettings.h>
 
 #include "projectcontenthandler.h"
 
@@ -61,6 +64,36 @@ void Document::onFilePathChanged(const Utils::FileName &oldPath, const Utils::Fi
             this, &Document::scheduleProcessDocument);
 }
 
+namespace {
+QList<QTextEdit::ExtraSelection> errorsToSelection(const std::vector<Data::ErrorMessage> &errorMessages,
+                                                   QTextDocument *textDocument,
+                                                   const QString &path)
+{
+    const auto errorFormat = TextEditor::TextEditorSettings::instance()->fontSettings().toTextCharFormat(TextEditor::C_ERROR);
+
+    QList<QTextEdit::ExtraSelection> result;
+
+    for (const auto &message : errorMessages) {
+        if (message.location().path() != path)
+            continue;
+        const auto &location = message.location();
+
+        QTextEdit::ExtraSelection selection;
+        selection.format = errorFormat;
+        selection.format.setToolTip(message.message());
+
+        QTextCursor cursor(textDocument->findBlockByNumber(location.line() - 1));
+        cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, location.column());
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        selection.cursor = cursor;
+
+        result.append(selection);
+    }
+
+    return result;
+}
+} // namespace
+
 void Document::processDocument()
 {
     QTextDocument *currentDocument = document();
@@ -68,6 +101,11 @@ void Document::processDocument()
     const QString path = filePath().toString();
     const QString content = currentDocument->toPlainText();
 
-    ProjectContentHandler *proc = ProjectContentHandler::create();
-    proc->handleFileContentChanged(path, content);
+    ProjectContentHandler *handler = ProjectContentHandler::create();
+    connect(handler, &ProjectContentHandler::codeErrorsChanged,
+            [this](const std::vector<Data::ErrorMessage> &errorMessages) {
+        const auto list = errorsToSelection(errorMessages, document(), filePath().toString());
+        emit extraSelectionsUpdated(list);
+    });
+    handler->handleFileContentChanged(path, content);
 }

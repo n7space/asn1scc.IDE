@@ -186,16 +186,19 @@ void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName
     DocumentProcessor *dp = qobject_cast<DocumentProcessor *>(sender());
 
     switch (dp->state()) {
-        case DocumentProcessor::State::Successful:
-            handleFilesProcesedWithSuccess(projectName, dp->takeResults());
-            break;
-        case DocumentProcessor::State::Errored:
-        case DocumentProcessor::State::Failed:
-            handleFilesProcesedWithFailure(projectName, dp->takeResults());
-            break;
-        default:
-            break;
+    case DocumentProcessor::State::Successful:
+        handleFilesProcesedWithSuccess(projectName, dp->takeResults());
+        break;
+    case DocumentProcessor::State::Errored:
+    case DocumentProcessor::State::Failed:
+        handleFilesProcesedWithFailure(projectName, dp->takeResults());
+        break;
+    case DocumentProcessor::State::Unfinished:
+        QTC_CHECK(false && "Wrong state in onFilesProcessingFinished");
+        break;
     }
+
+    emit codeErrorsChanged(dp->errorMessages());
 
     dp->deleteLater();
 

@@ -45,6 +45,7 @@ public:
     OverviewModel *getOverviewModel() const;
 
 protected:
+    void finalizeInitialization() override;
     void contextMenuEvent(QContextMenuEvent *) override;
 
     OverviewModel *m_model;

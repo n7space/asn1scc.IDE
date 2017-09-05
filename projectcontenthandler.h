@@ -62,6 +62,9 @@ public:
     void handleFileListChanged(const QString &projectName, const QStringList &fileList);
     void handleFileContentChanged(const QString &path, const QString &content);
 
+signals:
+    void codeErrorsChanged(const std::vector<Data::ErrorMessage> &errorMessages);
+
 private slots:
     void onFilesProcessingFinished(const QString &projectName);
 
