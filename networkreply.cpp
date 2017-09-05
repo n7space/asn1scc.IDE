@@ -32,7 +32,6 @@ using namespace Asn1Acn::Internal;
 static const int REPLY_WAIT_TIME_MS = 100;
 
 NetworkReply::NetworkReply()
-    : m_data(nullptr)
 {
     open(QIODevice::ReadWrite);
 }
@@ -40,7 +39,6 @@ NetworkReply::NetworkReply()
 NetworkReply::~NetworkReply()
 {
     close();
-    free(m_data);
 }
 
 void NetworkReply::setErrored()
@@ -69,27 +67,21 @@ void NetworkReply::onTimerTimeout()
 
 qint64 NetworkReply::readData(char *data, qint64 maxlen)
 {
-    if (m_len == 0)
+    if (m_data.size() == 0)
         return -1;
 
-    qint64 len = maxlen > m_len ? m_len : maxlen;
+    qint64 storedLen = m_data.size();
+    qint64 len = maxlen > storedLen ? storedLen : maxlen;
+    memcpy(data, m_data.data(), len);
 
-    memcpy(data, m_data, len);
-
-    m_len -= len;
+    std::vector<char>(m_data.begin() + len, m_data.end()).swap(m_data);
 
     return len;
 }
 
 qint64 NetworkReply::writeData(const char *data, qint64 len)
 {
-    if (m_data != nullptr)
-        free(m_data);
-
-    m_len = len;
-    m_data = (char *) malloc(m_len);
-
-    memcpy(m_data, data, m_len);
-
-    return m_len;
+    m_data.resize(len);
+    memcpy(m_data.data(), data, len);
+    return len;
 }

@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include <QNetworkReply>
 
 namespace Asn1Acn {
@@ -47,8 +49,8 @@ public:
 private:
     void onTimerTimeout();
 
-    char *m_data;
-    qint64 m_len;
+    std::vector<char> m_data;
+    // qint64 m_len;
 };
 
 } /* namespace Asn1Acn */
