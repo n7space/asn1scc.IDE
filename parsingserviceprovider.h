@@ -30,7 +30,7 @@
 #include <QNetworkReply>
 #include <QHash>
 
-#include "documentsourceinfo.h"
+#include "documentsource.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -44,7 +44,7 @@ public:
     ParsingServiceProvider(QObject *parent = 0) : QObject(parent) {}
     virtual ~ParsingServiceProvider() = default;
 
-    virtual QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const = 0;
+    virtual QNetworkReply *requestAst(const QHash<QString, DocumentSource> &documents) const = 0;
 };
 
 } /* namespace Asn1Acn */

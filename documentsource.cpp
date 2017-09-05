@@ -23,19 +23,19 @@
 **
 ****************************************************************************/
 
-#include "documentsourceinfo.h"
+#include "documentsource.h"
 
 #include <QFileInfo>
 
 using namespace Asn1Acn::Internal;
 
-DocumentSourceInfo::DocumentSourceInfo(const QString &path, const QString &contents)
+DocumentSource::DocumentSource(const QString &path, const QString &contents)
     : m_filePath(path)
     , m_contents(contents)
 {
 }
 
-QString DocumentSourceInfo::fileName() const
+QString DocumentSource::fileName() const
 {
     return QFileInfo(filePath()).fileName();
 }

@@ -59,7 +59,7 @@ private:
     State m_state;
     QString m_projectName;
 
-    QHash<QString, DocumentSourceInfo> m_documents;
+    QHash<QString, DocumentSource> m_documents;
     std::vector<std::unique_ptr<ParsedDocument>> m_results;
 };
 

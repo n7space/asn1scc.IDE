@@ -31,20 +31,20 @@
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocument::ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSourceInfo &source) :
+ParsedDocument::ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSource &source) :
     m_source(source),
     m_parsedData(std::move(parsedData))
 {
     populateReferences();
 }
 
-ParsedDocument::ParsedDocument(const DocumentSourceInfo &source) :
+ParsedDocument::ParsedDocument(const DocumentSource &source) :
     m_source(source),
     m_parsedData(nullptr)
 {
 }
 
-const DocumentSourceInfo &ParsedDocument::source() const
+const DocumentSource &ParsedDocument::source() const
 {
     return m_source;
 }

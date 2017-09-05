@@ -36,7 +36,7 @@
 #include "data/errormessage.h"
 
 #include "parseddocument.h"
-#include "documentsourceinfo.h"
+#include "documentsource.h"
 
 namespace Asn1Acn {
 namespace Internal {

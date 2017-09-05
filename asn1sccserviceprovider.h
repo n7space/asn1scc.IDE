@@ -35,7 +35,7 @@
 #include <QProcess>
 #include <QTimer>
 
-#include "documentsourceinfo.h"
+#include "documentsource.h"
 #include "settings/service.h"
 
 #include "parsingserviceprovider.h"
@@ -46,14 +46,13 @@ namespace Internal {
 class Asn1SccServiceProvider
         : public ParsingServiceProvider
 {
-
     Q_OBJECT
 
 public:
     Asn1SccServiceProvider(Settings::ServiceConstPtr settings);
     ~Asn1SccServiceProvider();
 
-    QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
+    QNetworkReply *requestAst(const QHash<QString, DocumentSource> &documents) const override;
 
     void start();
     void stop();
@@ -68,7 +67,7 @@ private:
     void updateConfigFromSettings();
     QStringList additionalArguments() const;
 
-    QJsonDocument buildAstRequestData(const QHash<QString, DocumentSourceInfo> &documents) const;
+    QJsonDocument buildAstRequestData(const QHash<QString, DocumentSource> &documents) const;
 
     QProcess *m_asn1sccService;
     QTimer m_stayAliveTimer;

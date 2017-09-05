@@ -39,7 +39,7 @@ class ParsingServiceProviderStub : public ParsingServiceProvider
 public:
     ParsingServiceProviderStub(QObject *parent = 0);
 
-    QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
+    QNetworkReply *requestAst(const QHash<QString, DocumentSource> &documents) const override;
 };
 
 } /* namespace Tests */

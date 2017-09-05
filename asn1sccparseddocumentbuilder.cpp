@@ -39,13 +39,13 @@
 
 #include "astxmlparser.h"
 #include "errormessageparser.h"
-#include "documentsourceinfo.h"
+#include "documentsource.h"
 
 using namespace Asn1Acn::Internal;
 
 namespace
 {
-QMap<QString, QString> buildPathMapping(const QHash<QString, DocumentSourceInfo>& docInfo)
+QMap<QString, QString> buildPathMapping(const QHash<QString, DocumentSource>& docInfo)
 {
     auto result = QMap<QString, QString>();
     for (auto it = docInfo.begin(), end = docInfo.end(); it != end; ++it)
@@ -54,13 +54,13 @@ QMap<QString, QString> buildPathMapping(const QHash<QString, DocumentSourceInfo>
 }
 } // namespace
 
-ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create(const QHash<QString, DocumentSourceInfo> &documents)
+ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create(const QHash<QString, DocumentSource> &documents)
 {
     auto serviceProvider = ExtensionSystem::PluginManager::getObject<ParsingServiceProvider>();
     return new Asn1SccParsedDocumentBuilder(serviceProvider, documents);
 }
 
-Asn1SccParsedDocumentBuilder::Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider, const QHash<QString, DocumentSourceInfo> & documents)
+Asn1SccParsedDocumentBuilder::Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider, const QHash<QString, DocumentSource> & documents)
     : m_serviceProvider(serviceProvider)
     , m_rawDocuments(documents)
 {
@@ -112,7 +112,7 @@ void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
 
     for (it = parsedData.begin(); it != parsedData.end(); it++) {
         QString fileName = it->first;
-        DocumentSourceInfo sourceInfo = m_rawDocuments[fileName];
+        DocumentSource sourceInfo = m_rawDocuments[fileName];
 
         std::unique_ptr<ParsedDocument> parsedDoc(new ParsedDocument(std::move(it->second), sourceInfo));
 

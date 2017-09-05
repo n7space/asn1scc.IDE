@@ -31,7 +31,7 @@
 #include <QString>
 
 #include "../parseddocument.h"
-#include "../documentsourceinfo.h"
+#include "../documentsource.h"
 #include "../parseddocumentbuilder.h"
 
 namespace Asn1Acn {
@@ -44,7 +44,7 @@ class ParsedDocumentBuilderStub
     Q_OBJECT
 
 public:
-    ParsedDocumentBuilderStub(const QHash<QString, DocumentSourceInfo> &documents);
+    ParsedDocumentBuilderStub(const QHash<QString, DocumentSource> &documents);
 
     void run() override;
 
@@ -52,7 +52,7 @@ public:
     const QList<Data::ErrorMessage> &errorMessages() const override;
 
 private:
-    const QHash<QString, DocumentSourceInfo> &m_rawDocuments;
+    const QHash<QString, DocumentSource> &m_rawDocuments;
     std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
     QList<Data::ErrorMessage> m_errorMessages;

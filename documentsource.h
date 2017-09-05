@@ -30,11 +30,11 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class DocumentSourceInfo
+class DocumentSource
 {
 public:
-    DocumentSourceInfo() = default;
-    DocumentSourceInfo(const QString &path, const QString &contents);
+    DocumentSource() = default;
+    DocumentSource(const QString &path, const QString &contents);
 
     const QString &filePath() const { return m_filePath; }
     const QString &contents() const { return m_contents; }

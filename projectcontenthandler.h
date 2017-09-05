@@ -62,9 +62,6 @@ public:
     void handleFileListChanged(const QString &projectName, const QStringList &fileList);
     void handleFileContentChanged(const QString &path, const QString &content);
 
-signals:
-    void processingFinished();
-
 private slots:
     void onFilesProcessingFinished(const QString &projectName);
 

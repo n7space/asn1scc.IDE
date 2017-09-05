@@ -25,7 +25,7 @@
 
 #include "parsingserviceproviderstub.h"
 
-#include "../documentsourceinfo.h"
+#include "../documentsource.h"
 
 using namespace Asn1Acn::Internal::Tests;
 using namespace Asn1Acn::Internal;
@@ -35,7 +35,7 @@ ParsingServiceProviderStub::ParsingServiceProviderStub(QObject *parent)
 {
 }
 
-QNetworkReply *ParsingServiceProviderStub::requestAst(const QHash<QString, DocumentSourceInfo> &documents) const
+QNetworkReply *ParsingServiceProviderStub::requestAst(const QHash<QString, DocumentSource> &documents) const
 {
     NetworkReply *reply = new NetworkReply;
 
@@ -43,7 +43,7 @@ QNetworkReply *ParsingServiceProviderStub::requestAst(const QHash<QString, Docum
     if (key == "FAILED")
         reply->setErrored();
 
-    DocumentSourceInfo sourceInfo = documents.value(key);
+    DocumentSource sourceInfo = documents.value(key);
 
     reply->write(sourceInfo.contents().toUtf8());
     reply->run();

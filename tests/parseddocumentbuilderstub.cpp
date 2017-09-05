@@ -28,7 +28,7 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
 
-ParsedDocumentBuilderStub::ParsedDocumentBuilderStub(const QHash<QString, DocumentSourceInfo> &documents)
+ParsedDocumentBuilderStub::ParsedDocumentBuilderStub(const QHash<QString, DocumentSource> &documents)
     : m_rawDocuments(documents)
 {
 }

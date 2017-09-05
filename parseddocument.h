@@ -34,7 +34,7 @@
 #include "data/typereference.h"
 
 #include "modeltreenode.h"
-#include "documentsourceinfo.h"
+#include "documentsource.h"
 #include "completion/usertypesproposalsprovider.h"
 
 namespace Asn1Acn {
@@ -43,10 +43,10 @@ namespace Internal {
 class ParsedDocument
 {
 public:
-    ParsedDocument(const DocumentSourceInfo &source = {});
-    ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSourceInfo &source);
+    ParsedDocument(const DocumentSource &source = {});
+    ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSource &source);
 
-    const DocumentSourceInfo &source() const;
+    const DocumentSource &source() const;
 
     void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const;
 
@@ -67,7 +67,7 @@ private:
                                                const QString &typeAssignmentName) const;
     Data::SourceLocation buildLocation(const Data::SourceLocation& location) const;
 
-    DocumentSourceInfo m_source;
+    DocumentSource m_source;
     std::unique_ptr<Data::Modules> m_parsedData;
 
     QMultiHash<int, Data::TypeReference> m_refernceLookup;

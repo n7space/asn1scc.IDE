@@ -37,7 +37,7 @@
 
 #include "parseddocument.h"
 #include "parseddocumentbuilder.h"
-#include "documentsourceinfo.h"
+#include "documentsource.h"
 
 #include "documentprocessor.h"
 
@@ -51,7 +51,7 @@ class Asn1SccDocumentProcessor
 public:
 
     using State = DocumentProcessor::State;
-    using DocumentBuilderCreator = std::function<ParsedDocumentBuilder *(const QHash<QString, DocumentSourceInfo> &documents)>;
+    using DocumentBuilderCreator = std::function<ParsedDocumentBuilder *(const QHash<QString, DocumentSource> &documents)>;
 
     static Asn1SccDocumentProcessor *create(const QString &projectName);
 
@@ -72,7 +72,7 @@ private slots:
 private:
     void createFallbackResults();
 
-    QHash<QString, DocumentSourceInfo> m_documents;
+    QHash<QString, DocumentSource> m_documents;
     QString m_projectName;
 
     std::vector<std::unique_ptr<ParsedDocument>> m_results;

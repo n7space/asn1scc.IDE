@@ -97,7 +97,7 @@ SOURCES += \
     asn1acnjsextension.cpp \
     asn1sccserviceprovider.cpp \
     asn1sccparseddocumentbuilder.cpp \
-    documentsourceinfo.cpp \
+    documentsource.cpp \
     projectcontenthandler.cpp \
     indenter.cpp \
     tools.cpp \
@@ -105,8 +105,8 @@ SOURCES += \
     linkcreator.cpp \
     overviewindexupdater.cpp \
     structuresviewindexupdater.cpp \
-    errormessageparser.cpp \
-    filesourcereader.cpp
+    filesourcereader.cpp \
+    errormessageparser.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -168,7 +168,7 @@ HEADERS += \
     asn1acnjsextension.h \
     asn1sccserviceprovider.h \
     asn1sccparseddocumentbuilder.h \
-    documentsourceinfo.h \
+    documentsource.h \
     projectcontenthandler.h \
     indenter.h \
     tr.h \

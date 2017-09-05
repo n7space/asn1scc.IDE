@@ -204,14 +204,14 @@ void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName
 }
 
 void ProjectContentHandler::handleFilesProcesedWithSuccess(const QString &projectName,
-                                                          std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments)
+                                                           std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++)
         ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
 }
 
 void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projectName,
-                                                          std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments)
+                                                           std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++) {
         auto filePath = parsedDocuments[i]->source().filePath();

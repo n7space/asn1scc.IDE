@@ -30,7 +30,7 @@
 #include <QtTest>
 
 #include "../parseddocument.h"
-#include "../documentsourceinfo.h"
+#include "../documentsource.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
@@ -190,7 +190,7 @@ void ParsedDataStorageTests::test_updateFileInOneProject()
     const QList<std::shared_ptr<ParsedDocument>> files = storage->getFilesFromProject(project);
 
     QCOMPARE(files.size(), 1);
-    const DocumentSourceInfo received = files.at(0)->source();
+    const DocumentSource received = files.at(0)->source();
 
     QCOMPARE(received.contents(), refreshedContent);
 
@@ -220,12 +220,12 @@ void ParsedDataStorageTests::test_updateFileInMultipleProjects()
     QList<std::shared_ptr<ParsedDocument>> files = storage->getFilesFromProject(firstProject);
     QCOMPARE(files.size(), 1);
 
-    const DocumentSourceInfo received = files.at(0)->source();
+    const DocumentSource received = files.at(0)->source();
     QCOMPARE(received.contents(), refreshedContent);
 
     files = storage->getFilesFromProject(secondProject);
     QCOMPARE(files.size(), 1);
-    const DocumentSourceInfo receivedSecond = files.at(0)->source();
+    const DocumentSource receivedSecond = files.at(0)->source();
 
     QCOMPARE(receivedSecond.contents(), refreshedContent);
 
@@ -247,7 +247,7 @@ void ParsedDataStorageTests::addFileToProject(ParsedDataStorage *storage,
                                               const QString &fileContent,
                                               const QString &filePath)
 {
-    const DocumentSourceInfo info(filePath, fileContent);
+    const DocumentSource info(filePath, fileContent);
     std::unique_ptr<ParsedDocument> parsedDocument(new ParsedDocument(std::make_unique<Data::Modules>(), info));
     ParsedDataStorageProxy::addFileToProject(storage, project, std::move(parsedDocument));
 }

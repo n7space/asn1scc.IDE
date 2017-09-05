@@ -41,7 +41,7 @@ DocumentProcessorStub::DocumentProcessorStub(const QString &project)
 void DocumentProcessorStub::addToRun(const QString &filePath, const QString &docContent)
 {
     QString fileName = QFileInfo(filePath).fileName();
-    DocumentSourceInfo fileInfo(filePath, docContent);
+    DocumentSource fileInfo(filePath, docContent);
 
     m_documents.insert(fileName, fileInfo);
 
