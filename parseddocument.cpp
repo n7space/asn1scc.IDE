@@ -95,7 +95,7 @@ ParsedDocument::createDefinition(const std::unique_ptr<Data::Definitions> &defin
 
 Data::SourceLocation ParsedDocument::buildLocation(const Data::SourceLocation& location) const
 {
-    return { source().getPath(), location.line(), location.column() };
+    return { source().filePath(), location.line(), location.column() };
 }
 
 void ParsedDocument::attachTypesToDefiniton(const Data::Definitions::Types types,

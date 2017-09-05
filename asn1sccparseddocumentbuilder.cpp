@@ -49,7 +49,7 @@ QMap<QString, QString> buildPathMapping(const QHash<QString, DocumentSourceInfo>
 {
     auto result = QMap<QString, QString>();
     for (auto it = docInfo.begin(), end = docInfo.end(); it != end; ++it)
-        result[it.key()] = it.value().getPath();
+        result[it.key()] = it.value().filePath();
     return result;
 }
 } // namespace

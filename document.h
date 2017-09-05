@@ -47,7 +47,6 @@ private:
     void processDocument();
 
     QTimer m_processorTimer;
-
 };
 
 } // namespace Internal

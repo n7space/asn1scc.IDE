@@ -26,7 +26,6 @@
 #pragma once
 
 #include <QString>
-#include <QFileInfo>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -35,26 +34,18 @@ class DocumentSourceInfo
 {
 public:
     DocumentSourceInfo() = default;
-    DocumentSourceInfo(int revision, const QString &content, const QString &path, const QString &name);
+    DocumentSourceInfo(int revision, const QString &contents, const QString &path);
 
-    int getRevision() const;
-    void setRevision(int revision);
-
-    const QString &getContent() const;
-    void setContent(QString content);
-
-    const QString &getPath() const;
-    void setPath(QString path);
-
-    const QString &getName() const;
-    void setName(QString name);
+    int revision() const { return m_revision; }
+    const QString &contents() const { return m_contents; }
+    const QString &filePath() const { return m_filePath; }
+    QString fileName() const;
 
 private:
     int m_revision;
 
-    QString m_rawContent;
+    QString m_contents;
     QString m_filePath;
-    QString m_fileName;
 };
 
 } // namespace Internal

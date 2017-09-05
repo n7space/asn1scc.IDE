@@ -25,52 +25,18 @@
 
 #include "documentsourceinfo.h"
 
+#include <QFileInfo>
+
 using namespace Asn1Acn::Internal;
 
-DocumentSourceInfo::DocumentSourceInfo(int revision, const QString &content, const QString &path, const QString &name) :
-    m_revision(revision),
-    m_rawContent(content),
-    m_filePath(path),
-    m_fileName(name)
+DocumentSourceInfo::DocumentSourceInfo(int revision, const QString &contents, const QString &path)
+    : m_revision(revision)
+    , m_contents(contents)
+    , m_filePath(path)
 {
 }
 
-int DocumentSourceInfo::getRevision() const
+QString DocumentSourceInfo::fileName() const
 {
-    return m_revision;
-}
-
-void DocumentSourceInfo::setRevision(int revision)
-{
-    m_revision = revision;
-}
-
-const QString &DocumentSourceInfo::getContent() const
-{
-    return m_rawContent;
-}
-
-void DocumentSourceInfo::setContent(QString content)
-{
-    m_rawContent = content;
-}
-
-const QString &DocumentSourceInfo::getName() const
-{
-    return m_fileName;
-}
-
-void DocumentSourceInfo::setName(QString name)
-{
-    m_fileName = name;
-}
-
-const QString &DocumentSourceInfo::getPath() const
-{
-    return m_filePath;
-}
-
-void DocumentSourceInfo::setPath(QString path)
-{
-    m_filePath = path;
+    return QFileInfo(filePath()).fileName();
 }

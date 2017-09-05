@@ -147,12 +147,12 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
 
     QList<std::shared_ptr<ParsedDocument>> files = m_storage->getFilesFromProject(projectName);
     foreach (const std::shared_ptr<ParsedDocument> &file, files) {
-        if (file->source().getPath() == path) {
+        if (file->source().filePath() == path) {
             docProcessor->addToRun(content, path, revision);
         } else {
-            docProcessor->addToRun(file->source().getContent(),
-                                   file->source().getPath(),
-                                   file->source().getRevision());
+            docProcessor->addToRun(file->source().contents(),
+                                   file->source().filePath(),
+                                   file->source().revision());
         }
     }
 
@@ -167,7 +167,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChang
     foreach (const QString &path, filePaths) {
         std::shared_ptr<ParsedDocument> parsedDoc = m_storage->getFileForPath(path);
         if (parsedDoc != nullptr)
-            docProcessor->addToRun(parsedDoc->source().getContent(), path, parsedDoc->source().getRevision());
+            docProcessor->addToRun(parsedDoc->source().contents(), path, parsedDoc->source().revision());
         else
             docProcessor->addToRun(m_sourceReader->readContent(path), path, -1);
     }
@@ -188,15 +188,14 @@ void ProjectContentHandler::startProcessing(DocumentProcessor *dp)
 void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName)
 {
     DocumentProcessor *dp = qobject_cast<DocumentProcessor *>(sender());
-    std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments = dp->takeResults();
 
     switch (dp->getState()) {
         case DocumentProcessor::State::Successful:
-            handleFilesProcesedWithSuccess(projectName, std::move(parsedDocuments));
+            handleFilesProcesedWithSuccess(projectName, dp->takeResults());
             break;
         case DocumentProcessor::State::Errored:
         case DocumentProcessor::State::Failed:
-            handleFilesProcesedWithFailure(projectName, std::move(parsedDocuments));
+            handleFilesProcesedWithFailure(projectName, dp->takeResults());
             break;
         default:
             break;
@@ -219,7 +218,7 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
                                                           std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++) {
-        auto filePath = parsedDocuments[i]->source().getPath();
+        auto filePath = parsedDocuments[i]->source().filePath();
         if (m_storage->getFileForPath(filePath) != nullptr)
             continue;
 

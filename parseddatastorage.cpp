@@ -57,7 +57,7 @@ void ParsedDataStorage::removeProject(const QString &projectName)
 
     QList<std::shared_ptr<ParsedDocument>> files = getFilesFromProjectInternal(projectName);
     foreach (const std::shared_ptr<ParsedDocument> &file, files)
-        removeFileFromProjectInternal(projectName, file->source().getPath());
+        removeFileFromProjectInternal(projectName, file->source().filePath());
 
     m_projects.remove(projectName);
 }
@@ -77,7 +77,7 @@ QList<std::shared_ptr<ParsedDocument>> ParsedDataStorage::getFilesFromProject(co
 void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique_ptr<ParsedDocument> file)
 {
     std::shared_ptr<ParsedDocument> newFile = std::move(file);
-    QString filePath = newFile->source().getPath();
+    QString filePath = newFile->source().filePath();
 
     {
         QMutexLocker locker(&m_documentsMutex);

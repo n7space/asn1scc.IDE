@@ -25,8 +25,6 @@
 
 #include "asn1sccdocumentprocessor.h"
 
-#include <QFileInfo>
-
 #include "parseddocument.h"
 #include "asn1sccparseddocumentbuilder.h"
 
@@ -55,10 +53,8 @@ Asn1SccDocumentProcessor::~Asn1SccDocumentProcessor()
 
 void Asn1SccDocumentProcessor::addToRun(const QString &docContent, const QString &filePath, int revision)
 {
-    QString fileName = QFileInfo(filePath).fileName();
-    DocumentSourceInfo fileInfo(revision, docContent, filePath, fileName);
-
-    m_documents.insert(fileName, fileInfo);
+    DocumentSourceInfo fileInfo(revision, docContent, filePath);
+    m_documents.insert(fileInfo.fileName(), fileInfo);
 }
 
 void Asn1SccDocumentProcessor::run()
