@@ -57,7 +57,7 @@ ProjectContentHandler::ProjectContentHandler(std::function<DocumentProcessor *(c
 
 ProjectContentHandler::~ProjectContentHandler()
 {
-    delete(m_sourceReader);
+    delete m_sourceReader;
 }
 
 void ProjectContentHandler::handleProjectAdded(const QString &projectName)
@@ -84,7 +84,7 @@ void ProjectContentHandler::handleFileListChanged(const QString &projectName, co
     processFiles(projectName, fileList);
 }
 
-void ProjectContentHandler::handleFileContentChanged(const QString &path, const QString &content, int revision)
+void ProjectContentHandler::handleFileContentChanged(const QString &path, const QString &content)
 {
     QStringList projects = m_storage->getProjectsForFile(path);
 
@@ -94,7 +94,7 @@ void ProjectContentHandler::handleFileContentChanged(const QString &path, const 
     }
 
     for (const QString projectName : projects) {
-        DocumentProcessor *docProcessor = createDocumentProcessorForFileChange(projectName, path, content, revision);
+        DocumentProcessor *docProcessor = createDocumentProcessorForFileChange(projectName, path, content);
         startProcessing(docProcessor);
     }
 }
@@ -140,20 +140,16 @@ QStringList ProjectContentHandler::getStaleFilesNames(const QString &projectName
 
 DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(const QString &projectName,
                                                                                const QString &path,
-                                                                               const QString &content,
-                                                                               int revision) const
+                                                                               const QString &content) const
 {
     DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
     QList<std::shared_ptr<ParsedDocument>> files = m_storage->getFilesFromProject(projectName);
     foreach (const std::shared_ptr<ParsedDocument> &file, files) {
-        if (file->source().filePath() == path) {
-            docProcessor->addToRun(content, path, revision);
-        } else {
-            docProcessor->addToRun(file->source().contents(),
-                                   file->source().filePath(),
-                                   file->source().revision());
-        }
+        if (file->source().filePath() == path)
+            docProcessor->addToRun(path, content);
+        else
+            docProcessor->addToRun(file->source().filePath(), file->source().contents());
     }
 
     return docProcessor;
@@ -165,11 +161,11 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChang
     DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
     foreach (const QString &path, filePaths) {
-        std::shared_ptr<ParsedDocument> parsedDoc = m_storage->getFileForPath(path);
+        auto parsedDoc = m_storage->getFileForPath(path);
         if (parsedDoc != nullptr)
-            docProcessor->addToRun(parsedDoc->source().contents(), path, parsedDoc->source().revision());
+            docProcessor->addToRun(path, parsedDoc->source().contents());
         else
-            docProcessor->addToRun(m_sourceReader->readContent(path), path, -1);
+            docProcessor->addToRun(path, m_sourceReader->readContent(path));
     }
 
     return docProcessor;

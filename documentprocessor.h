@@ -49,7 +49,7 @@ public:
 
     virtual ~DocumentProcessor() = default;
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
+    virtual void addToRun(const QString &filePath, const QString &docContent) = 0;
     virtual void run() = 0;
     virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
 

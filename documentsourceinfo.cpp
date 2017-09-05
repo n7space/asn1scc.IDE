@@ -29,10 +29,9 @@
 
 using namespace Asn1Acn::Internal;
 
-DocumentSourceInfo::DocumentSourceInfo(int revision, const QString &contents, const QString &path)
-    : m_revision(revision)
+DocumentSourceInfo::DocumentSourceInfo(const QString &path, const QString &contents)
+    : m_filePath(path)
     , m_contents(contents)
-    , m_filePath(path)
 {
 }
 

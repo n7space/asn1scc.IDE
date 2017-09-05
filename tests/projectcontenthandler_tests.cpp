@@ -267,7 +267,7 @@ void ProjectContentHandlerTests::fileContentChanged(const QString &path, const Q
     QCOMPARE(spyAboutToUpdate.count(), 1);
     QCOMPARE(m_tree->isValid(), false);
 
-    pch->handleFileContentChanged(path, content, 1);
+    pch->handleFileContentChanged(path, content);
 
     QCOMPARE(spyUpdated.count(), 1);
     QCOMPARE(m_tree->isValid(), true);

@@ -134,7 +134,7 @@ void Asn1SccParsedDocumentBuilder::storeErrorMessages(const QJsonObject &json)
 {
     const auto parser = ErrorMessageParser(buildPathMapping(m_rawDocuments));
     for (const auto message : json[QLatin1Literal("Messages")].toArray())
-        m_errorMessages.append(parser.parse(message.toString()));
+        m_errorMessages.push_back(parser.parse(message.toString()));
 }
 
 QString Asn1SccParsedDocumentBuilder::getAstXml(const QJsonObject &json)

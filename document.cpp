@@ -67,8 +67,7 @@ void Document::processDocument()
 
     const QString path = filePath().toString();
     const QString content = currentDocument->toPlainText();
-    const int revision = currentDocument->revision();
 
     ProjectContentHandler *proc = ProjectContentHandler::create();
-    proc->handleFileContentChanged(path, content, revision);
+    proc->handleFileContentChanged(path, content);
 }

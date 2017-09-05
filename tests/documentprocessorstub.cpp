@@ -26,6 +26,7 @@
 #include "documentprocessorstub.h"
 
 #include <QList>
+#include <QFileInfo>
 
 #include "../data/modules.h"
 
@@ -37,10 +38,10 @@ DocumentProcessorStub::DocumentProcessorStub(const QString &project)
 {
 }
 
-void DocumentProcessorStub::addToRun(const QString &docContent, const QString &filePath, int revision)
+void DocumentProcessorStub::addToRun(const QString &filePath, const QString &docContent)
 {
     QString fileName = QFileInfo(filePath).fileName();
-    DocumentSourceInfo fileInfo(revision, docContent, filePath, fileName);
+    DocumentSourceInfo fileInfo(filePath, docContent);
 
     m_documents.insert(fileName, fileInfo);
 

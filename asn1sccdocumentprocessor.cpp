@@ -51,9 +51,9 @@ Asn1SccDocumentProcessor::~Asn1SccDocumentProcessor()
     delete m_docBuilder;
 }
 
-void Asn1SccDocumentProcessor::addToRun(const QString &docContent, const QString &filePath, int revision)
+void Asn1SccDocumentProcessor::addToRun(const QString &filePath, const QString &docContent)
 {
-    DocumentSourceInfo fileInfo(revision, docContent, filePath);
+    DocumentSourceInfo fileInfo(filePath, docContent);
     m_documents.insert(fileInfo.fileName(), fileInfo);
 }
 

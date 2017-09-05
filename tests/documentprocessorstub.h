@@ -49,7 +49,7 @@ public:
     DocumentProcessorStub(const QString &project = QString());
     ~DocumentProcessorStub() = default;
 
-    void addToRun(const QString &docContent, const QString &filePath, int revision) override;
+    void addToRun(const QString &filePath, const QString &docContent) override;
     void run() override;
     std::vector<std::unique_ptr<ParsedDocument>> takeResults() override;
 

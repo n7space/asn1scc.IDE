@@ -45,7 +45,7 @@ QNetworkReply *ParsingServiceProviderStub::requestAst(const QHash<QString, Docum
 
     DocumentSourceInfo sourceInfo = documents.value(key);
 
-    reply->write(sourceInfo.getContent().toUtf8());
+    reply->write(sourceInfo.contents().toUtf8());
     reply->run();
 
     return reply;

@@ -48,8 +48,7 @@ ParsedDocumentBuilderTests::~ParsedDocumentBuilderTests()
 
 void ParsedDocumentBuilderTests::test_failed()
 {
-    DocumentSourceInfo sourceInfo;
-    sourceInfo.setName("FAILED");
+    DocumentSourceInfo sourceInfo("FAILED", "FAILED");
 
     QHash<QString, DocumentSourceInfo> documents;
     documents.insert("FAILED", sourceInfo);
@@ -75,9 +74,7 @@ void ParsedDocumentBuilderTests::test_failed()
 
 void ParsedDocumentBuilderTests::test_error()
 {
-    DocumentSourceInfo sourceInfo;
-    sourceInfo.setName("ERROR");
-    sourceInfo.setContent("{\"ErrorCode\":2,\"Files\":null,\"Messages\":[\"Asn1.asn:8:13: error: No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'\"]}");
+    DocumentSourceInfo sourceInfo("ERROR", "{\"ErrorCode\":2,\"Files\":null,\"Messages\":[\"Asn1.asn:8:13: error: No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'\"]}");
 
     QHash<QString, DocumentSourceInfo> documents;
     documents.insert("ERROR", sourceInfo);
@@ -109,9 +106,8 @@ void ParsedDocumentBuilderTests::test_error()
 
 void ParsedDocumentBuilderTests::test_success()
 {
-    DocumentSourceInfo sourceInfo;
-    sourceInfo.setName("SUCCESS");
-    sourceInfo.setContent("{\"ErrorCode\":0,\"Files\":[{\"Contents\":\"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?>\\u000a<ASN1AST>\\u000a    "
+    DocumentSourceInfo sourceInfo("SUCCESS",
+                          "{\"ErrorCode\":0,\"Files\":[{\"Contents\":\"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?>\\u000a<ASN1AST>\\u000a    "
                           "<Asn1File FileName=\\\"emptyAsn2.asn\\\">\\u000a        <Asn1Module ID=\\\"EmptyAsn2\\\">\\u000a        "
                           "<ExportedTypes>\\u000a            <ExportedType Name=\\\"AData\\\" \\/>\\u000a            "
                           "<ExportedType Name=\\\"BData\\\" \\/> \\u000a        <\\/ExportedTypes>\\u000a        <ExportedVariables>\\u000a         "

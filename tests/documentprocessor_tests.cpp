@@ -36,7 +36,6 @@ DocumentProcessorTests::DocumentProcessorTests(QObject *parent)
     : QObject(parent)
     , m_fileContent("Document content")
     , m_fileDir("/test/dir/")
-    , m_revision(1)
     , m_docBuilderCreator([](const QHash<QString, DocumentSourceInfo> &documents)->ParsedDocumentBuilder *
                           { return new ParsedDocumentBuilderStub(documents); })
 {
@@ -62,7 +61,7 @@ void DocumentProcessorTests::test_successful()
     DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
-    dp->addToRun(m_fileContent, filePath, m_revision);
+    dp->addToRun(filePath, m_fileContent);
     dp->run();
 
     examine(dp, spy, DocumentProcessor::State::Successful, fileName, filePath);
@@ -78,7 +77,7 @@ void DocumentProcessorTests::test_error()
     DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
-    dp->addToRun(m_fileContent, filePath, m_revision);
+    dp->addToRun(filePath, m_fileContent);
     dp->run();
 
     examine(dp, spy, DocumentProcessor::State::Errored, fileName, filePath);
@@ -94,7 +93,7 @@ void DocumentProcessorTests::test_failed()
     DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
-    dp->addToRun(m_fileContent, filePath, m_revision);
+    dp->addToRun(filePath, m_fileContent);
     dp->run();
 
     examine(dp, spy, DocumentProcessor::State::Failed, fileName, filePath);
@@ -119,8 +118,7 @@ void DocumentProcessorTests::examine(DocumentProcessor *dp,
     QCOMPARE(results.size(), static_cast<size_t>(1));
 
     const DocumentSourceInfo resultInfo = results.at(0)->source();
-    QCOMPARE(resultInfo.getRevision(), m_revision);
-    QCOMPARE(resultInfo.getContent(), m_fileContent);
-    QCOMPARE(resultInfo.getName(), fileName);
-    QCOMPARE(resultInfo.getPath(), filePath);
+    QCOMPARE(resultInfo.contents(), m_fileContent);
+    QCOMPARE(resultInfo.fileName(), fileName);
+    QCOMPARE(resultInfo.filePath(), filePath);
 }

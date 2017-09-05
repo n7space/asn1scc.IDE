@@ -60,7 +60,7 @@ public:
     void handleProjectRemoved(const QString &projectName);
 
     void handleFileListChanged(const QString &projectName, const QStringList &fileList);
-    void handleFileContentChanged(const QString &path, const QString &content, int revision);
+    void handleFileContentChanged(const QString &path, const QString &content);
 
 signals:
     void processingFinished();
@@ -78,8 +78,7 @@ private:
 
     DocumentProcessor *createDocumentProcessorForFileChange(const QString &projectName,
                                                             const QString &path,
-                                                            const QString &content,
-                                                            int revision) const;
+                                                            const QString &content) const;
     DocumentProcessor *createDocumentProcessorForProjectChange(const QString &projectName,
                                                                const QStringList &filePaths) const;
     void startProcessing(DocumentProcessor *dp);

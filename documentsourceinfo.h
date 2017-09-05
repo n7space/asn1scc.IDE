@@ -34,18 +34,16 @@ class DocumentSourceInfo
 {
 public:
     DocumentSourceInfo() = default;
-    DocumentSourceInfo(int revision, const QString &contents, const QString &path);
+    DocumentSourceInfo(const QString &path, const QString &contents);
 
-    int revision() const { return m_revision; }
-    const QString &contents() const { return m_contents; }
     const QString &filePath() const { return m_filePath; }
+    const QString &contents() const { return m_contents; }
+
     QString fileName() const;
 
 private:
-    int m_revision;
-
-    QString m_contents;
     QString m_filePath;
+    QString m_contents;
 };
 
 } // namespace Internal

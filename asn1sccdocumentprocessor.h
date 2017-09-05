@@ -58,7 +58,7 @@ public:
     Asn1SccDocumentProcessor(const QString &projectName, DocumentBuilderCreator docBuilderCreator);
     ~Asn1SccDocumentProcessor();
 
-    void addToRun(const QString &docContent, const QString &filePath, int revision) override;
+    void addToRun(const QString &filePath, const QString &docContent) override;
     void run() override;
     std::vector<std::unique_ptr<ParsedDocument>> takeResults() override;
 
