@@ -59,6 +59,8 @@ private slots:
 
 private:
     void addProjectNode(ModelTree *tree, const QString &projectName);
+    void createNodeInProject(ModelTree *tree, const QString &project, const QString &path);
+    bool nodeExistInProject(const ModelTree *tree, const QString &project, const QString &path);
 };
 
 } // namespace Tests

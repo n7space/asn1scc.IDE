@@ -132,11 +132,8 @@ void ModelTreeTests::test_addAndRemoveNodesWithinProject()
 
     const int nodesCnt = 3;
 
-    for (int i = 0; i < nodesCnt; i++) {
-        const auto path = QString::number(i);
-        ModelTreeNode::ModelTreeNodePtr node = std::make_shared<ModelTreeNode>(path);
-        ModelTreeProxy::addNodeToProject(tree, project, node);
-    }
+    for (int i = 0; i < nodesCnt; i++)
+        createNodeInProject(tree, project, QString::number(i));
 
     QCOMPARE(tree->getProjectFilesCnt(project), nodesCnt);
 
@@ -144,23 +141,12 @@ void ModelTreeTests::test_addAndRemoveNodesWithinProject()
     QCOMPARE(fileList.size(), nodesCnt);
 
     for (int i = 0; i < nodesCnt; i++) {
-        const auto path = QString::number(i);
-        QVERIFY(tree->getAnyNodeForFilepath(path) != nullptr);
-        QVERIFY(tree->getNodeForFilepathFromProject(project, path) != nullptr);
-    }
-
-    for (int i = 0; i < nodesCnt; i++) {
-        const auto path = QString::number(i);
-        ModelTreeProxy::removeNodeFromProject(tree, project, path);
+        QVERIFY(nodeExistInProject(tree, project, QString::number(i)));
+        ModelTreeProxy::removeNodeFromProject(tree, project, QString::number(i));
+        QVERIFY(!nodeExistInProject(tree, project, QString::number(i)));
     }
 
     QCOMPARE(tree->getProjectFilesCnt(project), 0);
-
-    for (int i = 0; i < nodesCnt; i++) {
-        const auto path = QString::number(i);
-        QVERIFY(tree->getAnyNodeForFilepath(path) == nullptr);
-        QVERIFY(tree->getNodeForFilepathFromProject(project, path) == nullptr);
-    }
 
     ModelTreeProxy::finish(tree);
 }
@@ -172,9 +158,9 @@ void ModelTreeTests::test_updateNode()
     const QString project("ProjectName");
     addProjectNode(tree, project);
 
-    const auto path = QString("/path/fileName");
-    ModelTreeNode::ModelTreeNodePtr node = std::make_shared<ModelTreeNode>(path);
-    ModelTreeProxy::addNodeToProject(tree, project, node);
+    QString path(QString("/path/fileName"));
+    createNodeInProject(tree, project, path);
+    ModelTreeNode::ModelTreeNodePtr node = tree->getNodeForFilepathFromProject(project, path);
 
     const int nodesCnt = 3;
     for (int i = 0; i < nodesCnt; i++) {
@@ -196,4 +182,16 @@ void ModelTreeTests::addProjectNode(ModelTree *tree, const QString &projectName)
 {
     ModelTreeNode::ModelTreeNodePtr projectNode = std::make_shared<ModelTreeNode>(projectName);
     ModelTreeProxy::addProjectNode(tree, projectNode);
+}
+
+void ModelTreeTests::createNodeInProject(ModelTree *tree, const QString &project, const QString &path)
+{
+    ModelTreeNode::ModelTreeNodePtr node = std::make_shared<ModelTreeNode>(path);
+    ModelTreeProxy::addNodeToProject(tree, project, node);
+}
+
+bool ModelTreeTests::nodeExistInProject(const ModelTree *tree, const QString &project, const QString &path)
+{
+    return (tree->getAnyNodeForFilepath(path) != nullptr) &&
+            (tree->getNodeForFilepathFromProject(project, path) != nullptr);
 }
