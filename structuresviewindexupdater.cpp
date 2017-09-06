@@ -51,7 +51,7 @@ QModelIndex StructuresViewIndexUpdater::getIndexFromPath(const QString &path) co
     for (int row = 0; row < m_model->rowCount(rootIndex); ++row) {
         const QModelIndex index = m_model->index(row, 0, rootIndex);
         const ModelTreeNode *symbol = static_cast<ModelTreeNode *>(index.internalPointer());
-        const Data::SourceLocation location = symbol->getSourceLocation();
+        const Data::SourceLocation location = symbol->sourceLocation();
 
         if (location.path() == path)
             return index;

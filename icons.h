@@ -22,36 +22,18 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QPointer>
+#include <QIcon>
 
-#include <coreplugin/dialogs/ioptionspage.h>
-
-#include "../settings/general.h"
+#include "data/type.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace OptionsPages {
+namespace Icons {
 
-class GeneralWidget;
+QIcon iconForType(Data::Type type);
 
-class General : public Core::IOptionsPage
-{
-public:
-    General(Settings::GeneralPtr settings);
-
-    bool matches(const QString &searchKeyWord) const override;
-    QWidget *widget() override;
-    void apply() override;
-    void finish() override;
-
-private:
-    Settings::GeneralPtr m_settings;
-    QPointer<GeneralWidget> m_widget;
-};
-
-} // namespace OptionsPages
+} // namespace Icon
 } // namespace Internal
 } // namespace Asn1Acn

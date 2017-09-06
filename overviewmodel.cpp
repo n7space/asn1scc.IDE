@@ -25,6 +25,10 @@
 
 #include "overviewmodel.h"
 
+#include <coreplugin/fileiconprovider.h>
+
+#include "icons.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -40,9 +44,8 @@ OverviewModel::~OverviewModel()
 
 int OverviewModel::columnCount(const QModelIndex &parent) const
 {
-    const ModelTreeNode *symbol = getValidNode(parent);
-
-    return symbol != nullptr ? symbol->columnCount() : 0;
+    Q_UNUSED(parent);
+    return 1;
 }
 
 int OverviewModel::rowCount(const QModelIndex &parent) const
@@ -57,12 +60,22 @@ int OverviewModel::rowCount(const QModelIndex &parent) const
 
 QVariant OverviewModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || role != Qt::DisplayRole)
+    if (!index.isValid())
         return QVariant();
 
-    ModelTreeNode *item = static_cast<ModelTreeNode *>(index.internalPointer());
+    const auto item = static_cast<ModelTreeNode *>(index.internalPointer());
 
-    return item->data();
+    switch (role) {
+    case Qt::DecorationRole:
+        if (item->parent() == m_rootItem.get())
+            return Core::FileIconProvider::icon(QFileIconProvider::Folder);
+        return Icons::iconForType(item->type());
+    case Qt::DisplayRole:
+    case Qt::ToolTipRole:
+        return item->name();
+    }
+
+    return QVariant();
 }
 
 Qt::ItemFlags OverviewModel::flags(const QModelIndex &index) const
@@ -103,13 +116,13 @@ QModelIndex OverviewModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    ModelTreeNode *child = static_cast<ModelTreeNode *>(index.internalPointer());
-    const ModelTreeNode *parent = child->parent();
+    ModelTreeNode *item = static_cast<ModelTreeNode *>(index.internalPointer());
+    ModelTreeNode *parent = item->parent();
 
     if (parent == nullptr || parent == m_rootItem.get())
         return QModelIndex();
 
-    return createIndex(parent->row(), 0, const_cast<ModelTreeNode *>(parent));
+    return createIndex(parent->indexInParent(), 0, parent);
 }
 
 void OverviewModel::invalidated()

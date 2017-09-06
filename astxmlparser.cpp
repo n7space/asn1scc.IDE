@@ -24,9 +24,11 @@
 ****************************************************************************/
 #include "astxmlparser.h"
 
+#include <QMap>
+
 using namespace Asn1Acn::Internal;
 
-AstXmlParser::AstXmlParser(QXmlStreamReader& xmlReader_)
+AstXmlParser::AstXmlParser(QXmlStreamReader &xmlReader_)
     : m_xmlReader(xmlReader_),
       m_currentDefinitions(nullptr)
 {
@@ -35,7 +37,7 @@ AstXmlParser::AstXmlParser(QXmlStreamReader& xmlReader_)
 bool AstXmlParser::parse()
 {
     if (nextRequiredElementIs(QStringLiteral("ASN1AST")))
-            readASN1AST();
+        readASN1AST();
     return !m_xmlReader.hasError();
 }
 
@@ -82,7 +84,7 @@ void AstXmlParser::createNewAsn1Module()
 {
     const auto location = Data::SourceLocation(m_currentFile, 0, 0); // TODO location of DEFINITIONS begin (fix in asn1scc required)
     m_currentModule = readAsnModuleId();
-    auto module = std::unique_ptr<Data::Definitions>(new Data::Definitions(m_currentModule, location));
+    auto module = std::make_unique<Data::Definitions>(m_currentModule, location);
     m_currentDefinitions = module.get();
     m_data[m_currentFile]->add(std::move(module));
 }
@@ -112,75 +114,26 @@ void AstXmlParser::readTypeAssignments()
 void AstXmlParser::readTypeAssignment()
 {
     Q_ASSERT(m_currentDefinitions != nullptr);
-    const auto location = Data::SourceLocation(m_currentFile, readLineAttribute(), readCharPossitionInLineAttribute());
+    const auto location = readLocationFromAttributes();
     const auto name = readNameAttribute();
+    const auto reference = readTypeReference();
 
-    readTypeAssignmentAttributes();
-    const auto type = Data::TypeAssignment(name, location, m_typeReference);
-    m_typeReference = Data::TypeReference();
-
-    m_currentDefinitions->add(type);
-}
-
-void AstXmlParser::readTypeAssignmentAttributes()
-{
-    while (m_xmlReader.readNextStartElement()) {
-        if (m_xmlReader.name() == QStringLiteral("Type")) {
-            readTypeAssignmentType();
-            m_xmlReader.skipCurrentElement();
-        } else {
-            m_xmlReader.skipCurrentElement();
-        }
-    }
-}
-
-void AstXmlParser::readTypeAssignmentType()
-{
-    const int line = readLineAttribute();
-    const int positionInLine = readCharPossitionInLineAttribute();
-
-    m_xmlReader.readNextStartElement();
-
-    const QStringRef attributeName = m_xmlReader.name();
-    if (attributeName == QStringLiteral("ReferenceType"))
-        readTypeAssignmentReferencedType(line, positionInLine);
-    else
-        readTypeAssignmentBuiltinType(line, positionInLine);
+    m_currentDefinitions->add(Data::TypeAssignment(name, location, reference));
 
     m_xmlReader.skipCurrentElement();
 }
 
-void AstXmlParser::readTypeAssignmentReferencedType(int line, int positionInLine)
+QString AstXmlParser::readReferencedTypeNameAttribute()
 {
-    QString referenceTypeName = m_xmlReader.attributes().value(QStringLiteral("ReferencedTypeName")).toString();
-    QString moduleName = m_xmlReader.attributes().value(QStringLiteral("ReferencedModName")).toString();
+    return m_xmlReader.attributes().value(QStringLiteral("ReferencedTypeName")).toString();
+}
+
+QString AstXmlParser::readReferencedModuleAttribute()
+{
+    const auto moduleName = m_xmlReader.attributes().value(QStringLiteral("ReferencedModName")).toString();
     if (moduleName.isEmpty())
-        moduleName = m_currentModule;
-
-    Data::TypeReference::DataType type = Data::TypeReference::DataType::UserDefined;
-
-    setTypeAssignmentTypeReference(referenceTypeName, moduleName, line, positionInLine, type);
-}
-
-void AstXmlParser::readTypeAssignmentBuiltinType(int line, int positionInLine)
-{
-    QString referenceTypeName = m_xmlReader.name().toString();
-    QString moduleName = m_currentModule;
-    Data::TypeReference::DataType type = Data::TypeReference::DataType::BuiltIn;
-
-    setTypeAssignmentTypeReference(referenceTypeName, moduleName, line, positionInLine, type);
-}
-
-void AstXmlParser::setTypeAssignmentTypeReference(const QString &referenceTypeName,
-                                                  const QString &moduleName,
-                                                  int line,
-                                                  int positionInLine,
-                                                  Data::TypeReference::DataType type)
-{
-    m_typeReference = Data::TypeReference(referenceTypeName,
-                                          Data::SourceLocation(m_currentFile, line, positionInLine),
-                                          type,
-                                          moduleName);
+        return m_currentModule;
+    return moduleName;
 }
 
 QString AstXmlParser::readNameAttribute()
@@ -224,9 +177,13 @@ void AstXmlParser::readImportedVariables()
 
 void AstXmlParser::readImportedTypes()
 {
-    while(nextRequiredElementIs("ImportedType"))
-        m_currentDefinitions->addImportedType(m_xmlReader.attributes().value(QStringLiteral("Name")).toString());
+    while (nextRequiredElementIs("ImportedType"))
+        readImportedType();
+}
 
+void AstXmlParser::readImportedType()
+{
+    m_currentDefinitions->addImportedType(readNameAttribute());
     m_xmlReader.skipCurrentElement();
 }
 
@@ -240,7 +197,7 @@ void AstXmlParser::readExportedTypes()
     m_xmlReader.skipCurrentElement();
 }
 
-bool AstXmlParser::nextRequiredElementIs(const QString& name)
+bool AstXmlParser::nextRequiredElementIs(const QString &name)
 {
     if (!m_xmlReader.readNextStartElement())
         return false;
@@ -248,4 +205,58 @@ bool AstXmlParser::nextRequiredElementIs(const QString& name)
         return true;
     m_xmlReader.raiseError(QString("XML does not contain expected <%1> element").arg(name));
     return false;
+}
+
+Data::SourceLocation AstXmlParser::readLocationFromAttributes()
+{
+    return { m_currentFile, readLineAttribute(), readCharPossitionInLineAttribute() };
+}
+
+namespace
+{
+Data::Type mapNameToDataType(const QStringRef &name)
+{
+    static const QMap<QString, Data::Type> mapping = {
+        { "BooleanType",       Data::Type::Boolean },
+        { "NullType",          Data::Type::Null },
+        { "IntegerType",       Data::Type::Integer },
+        { "RealType",          Data::Type::Real },
+        { "BitStringType",     Data::Type::BitString },
+        { "OctetStringType",   Data::Type::OctetString },
+        { "IA5StringType",     Data::Type::IA5String },
+        { "NumericStringType", Data::Type::NumericString },
+        { "EnumeratedType",    Data::Type::Enumerated },
+        { "ChoiceType",        Data::Type::Choice },
+        { "SequenceType",      Data::Type::Sequence },
+        { "SequenceOfType",    Data::Type::SequenceOf },
+    };
+    const auto it = mapping.find(name.toString());
+    if (it == mapping.end())
+        return Data::Type::UserDefined;
+    return it.value();
+}
+} // namespace
+
+Data::TypeReference AstXmlParser::readType(const Data::SourceLocation &location)
+{
+    const auto attributeName = m_xmlReader.name();
+    if (attributeName == QStringLiteral("ReferenceType"))
+        return { readReferencedTypeNameAttribute(), readReferencedModuleAttribute(), location };
+    return { mapNameToDataType(attributeName), location };
+}
+
+Data::TypeReference AstXmlParser::readTypeReference()
+{
+    if (!nextRequiredElementIs("Type"))
+        return {};
+
+    const auto location = readLocationFromAttributes();
+
+    m_xmlReader.readNextStartElement();
+    const auto type = readType(location);
+    m_xmlReader.skipCurrentElement();
+
+    m_xmlReader.skipCurrentElement();
+
+    return type;
 }

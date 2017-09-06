@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <QPointer>
+
 #include <coreplugin/dialogs/ioptionspage.h>
 
 #include "../settings/service.h"
@@ -49,7 +51,7 @@ public:
 
 private:
     Settings::ServicePtr m_settings;
-    ServiceWidget* m_widget;
+    QPointer<ServiceWidget> m_widget;
 };
 
 } // namespace OptionsPages

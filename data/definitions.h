@@ -63,7 +63,6 @@ private:
     QString m_name;
     SourceLocation m_location;
     Types m_types;
-
     QList<QString> m_importedTypes;
 };
 

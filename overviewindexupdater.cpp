@@ -122,7 +122,7 @@ QModelIndex OverviewIndexUpdater::getTargetIndexFromModuleIndex(const QModelInde
         const QModelIndex index = m_model->index(row, 0, moduleIndex);
 
         const ModelTreeNode *symbol = static_cast<ModelTreeNode *>(index.internalPointer());
-        const Data::SourceLocation location = symbol->getSourceLocation();
+        const Data::SourceLocation location = symbol->sourceLocation();
         if (location.line() == line)
             return index;
     }

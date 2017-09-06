@@ -103,7 +103,7 @@ void OverviewWidget::onItemActivated(const QModelIndex &index)
 
     ModelTreeNode *node = static_cast<ModelTreeNode *>(index.internalPointer());
 
-    const auto location = node->getSourceLocation();
+    const auto location = node->sourceLocation();
     Core::EditorManager::openEditorAt(location.path(),
                                       location.line(),
                                       location.column());

@@ -45,10 +45,10 @@ void ModelTreeTests::test_addAndRemoveProject()
     ModelTree *tree = ModelTreeProxy::create();
 
     const QString project("ProjectName");
-    ModelTreeNode::ModelTreeNodePtr projectNode = std::make_shared<ModelTreeNode>(project);
+    auto projectNode = ModelTreeNode::makePtr(project);
 
     ModelTreeProxy::addProjectNode(tree, projectNode);
-    ModelTreeNode::ModelTreeNodePtr rootNode = tree->getModelTreeRoot();
+    auto rootNode = tree->getModelTreeRoot();
 
     QVERIFY(rootNode != nullptr);
     QVERIFY(rootNode->getChildByName(project) != nullptr);
@@ -164,7 +164,7 @@ void ModelTreeTests::test_updateNode()
 
     const int nodesCnt = 3;
     for (int i = 0; i < nodesCnt; i++) {
-        ModelTreeNode::ModelTreeNodePtr childNode = std::make_shared<ModelTreeNode>(QString::number(i));
+        auto childNode = ModelTreeNode::makePtr(QString::number(i));
         node->addChild(childNode);
     }
 
@@ -180,13 +180,13 @@ void ModelTreeTests::test_updateNode()
 
 void ModelTreeTests::addProjectNode(ModelTree *tree, const QString &projectName)
 {
-    ModelTreeNode::ModelTreeNodePtr projectNode = std::make_shared<ModelTreeNode>(projectName);
+    auto projectNode = ModelTreeNode::makePtr(projectName);
     ModelTreeProxy::addProjectNode(tree, projectNode);
 }
 
 void ModelTreeTests::createNodeInProject(ModelTree *tree, const QString &project, const QString &path)
 {
-    ModelTreeNode::ModelTreeNodePtr node = std::make_shared<ModelTreeNode>(path);
+    auto node = ModelTreeNode::makePtr(path);
     ModelTreeProxy::addNodeToProject(tree, project, node);
 }
 

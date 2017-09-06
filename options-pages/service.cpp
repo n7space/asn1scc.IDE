@@ -79,5 +79,4 @@ void Service::apply()
 void Service::finish()
 {
     delete m_widget;
-    m_widget = nullptr;
 }

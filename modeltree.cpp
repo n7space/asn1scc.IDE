@@ -40,7 +40,7 @@ ModelTree *ModelTree::instance()
 ModelTree::ModelTree() :
     m_modifiersCnt(0)
 {
-    m_treeRoot = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode);
+    m_treeRoot = ModelTreeNode::makePtr();
 
     ParsedDataStorage *storage = ParsedDataStorage::instance();
     connect(storage, &ParsedDataStorage::fileUpdated,
@@ -72,7 +72,7 @@ void ModelTree::addNodeToProject(const QString &projectName,
     projectNode->addChild(node);
 
     ParsedDataStorage *storage = ParsedDataStorage::instance();
-    std::shared_ptr<ParsedDocument> document = storage->getFileForPath(node->id());
+    std::shared_ptr<ParsedDocument> document = storage->getFileForPath(node->name());
     if (document != nullptr)
         document->bindModelTreeNode(node);
 }
@@ -130,7 +130,7 @@ QStringList ModelTree::getFileListFromProject(const QString &projectName) const
 
     QStringList paths;
     for (int i = 0; i < projectNode->childrenCount(); i++)
-        paths.append(projectNode->childAt(i)->id());
+        paths.append(projectNode->childAt(i)->name());
 
     return paths;
 }

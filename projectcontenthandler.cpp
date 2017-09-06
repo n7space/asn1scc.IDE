@@ -63,7 +63,7 @@ ProjectContentHandler::~ProjectContentHandler()
 void ProjectContentHandler::handleProjectAdded(const QString &projectName)
 {
     ParsedDataStorageProxy::addProject(m_storage, projectName);
-    auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(projectName));
+    auto node = ModelTreeNode::makePtr(projectName);
     ModelTreeProxy::addProjectNode(m_tree, node);
 
     allProcessingFinished();
@@ -115,8 +115,7 @@ void ProjectContentHandler::addNewFiles(const QString &projectName, const QStrin
         if (m_tree->getNodeForFilepathFromProject(projectName, path) != nullptr)
             continue;
 
-        auto node = ModelTreeNode::ModelTreeNodePtr(new ModelTreeNode(path,
-                                                                      Data::SourceLocation(path, 0, 0)));
+        auto node = ModelTreeNode::makePtr(path, Data::Type::UserDefined, Data::SourceLocation(path, 0, 0)); // TODO type?
         ModelTreeProxy::addNodeToProject(m_tree, projectName, node);
     }
 }

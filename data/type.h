@@ -22,36 +22,33 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QPointer>
+#include <QString>
 
-#include <coreplugin/dialogs/ioptionspage.h>
-
-#include "../settings/general.h"
+#include "sourcelocation.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace OptionsPages {
+namespace Data {
 
-class GeneralWidget;
+enum class Type {
+    Boolean,
+    Null,
+    Integer,
+    Real,
+    BitString,
+    OctetString,
+    IA5String,
+    NumericString,
+    Enumerated,
+    Choice,
+    Sequence,
+    SequenceOf,
 
-class General : public Core::IOptionsPage
-{
-public:
-    General(Settings::GeneralPtr settings);
-
-    bool matches(const QString &searchKeyWord) const override;
-    QWidget *widget() override;
-    void apply() override;
-    void finish() override;
-
-private:
-    Settings::GeneralPtr m_settings;
-    QPointer<GeneralWidget> m_widget;
+    UserDefined
 };
 
-} // namespace OptionsPages
+} // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn
