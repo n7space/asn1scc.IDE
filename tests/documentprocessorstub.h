@@ -25,38 +25,41 @@
 
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include <QString>
 
-#include "parseddocument.h"
+#include "../parseddocument.h"
+
+#include "../documentprocessor.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class DocumentProcessor
-        : public QObject
+class DocumentProcessorStub
+        : public DocumentProcessor
 {
     Q_OBJECT
 public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
 
-    virtual ~DocumentProcessor() = default;
+    using State = DocumentProcessor::State;
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+    DocumentProcessorStub(const QString &project = QString());
+    ~DocumentProcessorStub() = default;
 
-    virtual State getState() = 0;
+    void addToRun(const QString &docContent, const QString &filePath, int revision) override;
+    void run() override;
+    std::vector<std::unique_ptr<ParsedDocument>> takeResults() override;
 
-signals:
-    void processingFinished(const QString &projectName) const;
+    State getState() override;
+
+private:
+    State m_state;
+    QString m_projectName;
+
+    QHash<QString, DocumentSourceInfo> m_documents;
+    std::vector<std::unique_ptr<ParsedDocument>> m_results;
 };
 
 } // namespace Internal

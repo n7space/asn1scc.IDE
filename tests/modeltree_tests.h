@@ -25,39 +25,44 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include <QObject>
 
-#include <QString>
-
-#include "parseddocument.h"
+#include "../modeltree.h"
+#include "../modeltreeproxy.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class DocumentProcessor
+class ModelTreeTests
         : public QObject
+        , public ModelTreeProxy
 {
     Q_OBJECT
+
 public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+    explicit ModelTreeTests(QObject *parent = 0);
 
-    virtual ~DocumentProcessor() = default;
+private slots:
+    void test_addAndRemoveProject();
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+    void test_getNonexistingNode();
+    void test_getNodeFromNonexistingProject();
+    void test_getFileListFromNonexisitngProject();
+    void test_getFilesCntInNonexisitngProject();
 
-    virtual State getState() = 0;
+    void test_modifiersCount();
 
-signals:
-    void processingFinished(const QString &projectName) const;
+    void test_addAndRemoveNodesWithinProject();
+
+    void test_updateNode();
+
+private:
+    void addProjectNode(ModelTree *tree, const QString &projectName);
+    void createNodeInProject(ModelTree *tree, const QString &project, const QString &path);
+    bool nodeExistInProject(const ModelTree *tree, const QString &project, const QString &path);
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

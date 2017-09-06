@@ -25,39 +25,32 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include <QObject>
 
-#include <QString>
-
-#include "parseddocument.h"
+#include "../asn1sccparseddocumentbuilder.h"
+#include "parsingserviceproviderstub.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class DocumentProcessor
-        : public QObject
+class ParsedDocumentBuilderTests : public QObject
 {
     Q_OBJECT
+
 public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+    explicit ParsedDocumentBuilderTests(QObject *parent = 0);
+    ~ParsedDocumentBuilderTests();
 
-    virtual ~DocumentProcessor() = default;
+private slots:
+    void test_failed();
+    void test_error();
+    void test_success();
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
-
-    virtual State getState() = 0;
-
-signals:
-    void processingFinished(const QString &projectName) const;
+private:
+    ParsingServiceProviderStub *m_serviceProvider;
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

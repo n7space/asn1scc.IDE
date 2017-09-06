@@ -26,38 +26,32 @@
 #pragma once
 
 #include <vector>
-#include <memory>
 
-#include <QString>
-
-#include "parseddocument.h"
+#include <QNetworkReply>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class DocumentProcessor
-        : public QObject
+class NetworkReply : public QNetworkReply
 {
-    Q_OBJECT
 public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+    NetworkReply();
+    ~NetworkReply();
 
-    virtual ~DocumentProcessor() = default;
+    void run();
+    void setErrored();
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+    qint64 readData(char *data, qint64 maxlen) override;
+    qint64 writeData(const char *data, qint64 len) override;
 
-    virtual State getState() = 0;
+    void abort() override {}
 
-signals:
-    void processingFinished(const QString &projectName) const;
+private:
+    void onTimerTimeout();
+
+    std::vector<char> m_data;
+    // qint64 m_len;
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Asn1Acn */
+} /* namespace Internal */

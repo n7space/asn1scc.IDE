@@ -23,41 +23,29 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "parsingserviceproviderstub.h"
 
-#include <vector>
-#include <memory>
+#include "../documentsourceinfo.h"
 
-#include <QString>
+using namespace Asn1Acn::Internal;
 
-#include "parseddocument.h"
-
-namespace Asn1Acn {
-namespace Internal {
-
-class DocumentProcessor
-        : public QObject
+ParsingServiceProviderStub::ParsingServiceProviderStub(QObject *parent)
+    : ParsingServiceProvider(parent)
 {
-    Q_OBJECT
-public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+}
 
-    virtual ~DocumentProcessor() = default;
+QNetworkReply *ParsingServiceProviderStub::requestAst(const QHash<QString, DocumentSourceInfo> &documents) const
+{
+    NetworkReply *reply = new NetworkReply;
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+    QString key = *(documents.keyBegin());
+    if (key == "FAILED")
+        reply->setErrored();
 
-    virtual State getState() = 0;
+    DocumentSourceInfo sourceInfo = documents.value(key);
 
-signals:
-    void processingFinished(const QString &projectName) const;
-};
+    reply->write(sourceInfo.getContent().toUtf8());
+    reply->run();
 
-} // namespace Internal
-} // namespace Asn1Acn
+    return reply;
+}

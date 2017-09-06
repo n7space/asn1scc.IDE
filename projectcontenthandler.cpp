@@ -29,37 +29,50 @@
 
 #include <utils/qtcassert.h>
 
-#include "documentprocessor.h"
+#include "asn1sccdocumentprocessor.h"
+#include "filesourcereader.h"
 
 using namespace Asn1Acn::Internal;
 
-ProjectContentHandler::ProjectContentHandler() :
-    m_projectsChanged(0)
+ProjectContentHandler *ProjectContentHandler::create()
 {
-    m_tree = ModelTree::instance();
-    m_storage = ParsedDataStorage::instance();
+    return new ProjectContentHandler([](const QString &project)->DocumentProcessor* { return Asn1SccDocumentProcessor::create(project); } ,
+                                     new FileSourceReader,
+                                     ModelTree::instance(),
+                                     ParsedDataStorage::instance());
+}
 
-    m_tree->treeAboutToChange();
+ProjectContentHandler::ProjectContentHandler(std::function<DocumentProcessor *(const QString &)> createProcessor,
+                                             const SourceReader *sourceReader,
+                                             ModelTree *tree,
+                                             ParsedDataStorage *storage)
+    : m_tree(tree)
+    , m_storage(storage)
+    , m_projectsChanged(0)
+    , m_sourceReader(sourceReader)
+    , m_createProcessor(createProcessor)
+{
+    ModelTreeProxy::treeAboutToChange(m_tree);
 }
 
 ProjectContentHandler::~ProjectContentHandler()
 {
-    m_tree->treeChanged();
+    delete(m_sourceReader);
 }
 
 void ProjectContentHandler::handleProjectAdded(const QString &projectName)
 {
-    m_storage->addProject(projectName);
+    ParsedDataStorageProxy::addProject(m_storage, projectName);
     auto node = ModelTreeNode::makePtr(projectName);
-    m_tree->addProjectNode(node);
+    ModelTreeProxy::addProjectNode(m_tree, node);
 
     allProcessingFinished();
 }
 
 void ProjectContentHandler::handleProjectRemoved(const QString &projectName)
 {
-    m_tree->removeProjectNode(projectName);
-    m_storage->removeProject(projectName);
+    ModelTreeProxy::removeProjectNode(m_tree, projectName);
+    ParsedDataStorageProxy::removeProject(m_storage, projectName);
 
     allProcessingFinished();
 }
@@ -91,8 +104,8 @@ void ProjectContentHandler::removeStaleFiles(const QString &projectName, const Q
     QStringList stalePaths = getStaleFilesNames(projectName, filePaths);
 
     foreach (const QString &stalePath, stalePaths) {
-        m_tree->removeNodeFromProject(projectName, stalePath);
-        m_storage->removeFileFromProject(projectName, stalePath);
+        ModelTreeProxy::removeNodeFromProject(m_tree, projectName, stalePath);
+        ParsedDataStorageProxy::removeFileFromProject(m_storage, projectName, stalePath);
     }
 }
 
@@ -103,7 +116,7 @@ void ProjectContentHandler::addNewFiles(const QString &projectName, const QStrin
             continue;
 
         auto node = ModelTreeNode::makePtr(path, Data::Type::UserDefined, Data::SourceLocation(path, 0, 0)); // TODO type?
-        m_tree->addNodeToProject(projectName, node);
+        ModelTreeProxy::addNodeToProject(m_tree, projectName, node);
     }
 }
 
@@ -130,7 +143,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
                                                                                const QString &content,
                                                                                int revision) const
 {
-    DocumentProcessor *docProcessor = new DocumentProcessor(projectName);
+    DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
     QList<std::shared_ptr<ParsedDocument>> files = m_storage->getFilesFromProject(projectName);
     foreach (const std::shared_ptr<ParsedDocument> &file, files) {
@@ -149,14 +162,14 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
 DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChange(const QString &projectName,
                                                                                   const QStringList &filePaths) const
 {
-    DocumentProcessor *docProcessor = new DocumentProcessor(projectName);
+    DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
     foreach (const QString &path, filePaths) {
         std::shared_ptr<ParsedDocument> parsedDoc = m_storage->getFileForPath(path);
         if (parsedDoc != nullptr)
             docProcessor->addToRun(parsedDoc->source().getContent(), path, parsedDoc->source().getRevision());
         else
-            docProcessor->addToRun(readFileContent(path), path, -1);
+            docProcessor->addToRun(m_sourceReader->readContent(path), path, -1);
     }
 
     return docProcessor;
@@ -167,24 +180,9 @@ void ProjectContentHandler::startProcessing(DocumentProcessor *dp)
     connect(dp, &DocumentProcessor::processingFinished,
             this, &ProjectContentHandler::onFilesProcessingFinished);
 
-    dp->run();
-
     m_projectsChanged++;
-}
 
-QString
-ProjectContentHandler::readFileContent(const QString &fileName) const
-{
-    QFile file(fileName);
-
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return QString();
-
-    QString docContent = QString::fromLatin1(file.readAll().data());
-
-    file.close();
-
-    return docContent;
+    dp->run();
 }
 
 void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName)
@@ -214,7 +212,7 @@ void ProjectContentHandler::handleFilesProcesedWithSuccess(const QString &projec
                                                           std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++)
-        m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
+        ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
 }
 
 void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projectName,
@@ -225,11 +223,12 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
         if (m_storage->getFileForPath(filePath) != nullptr)
             continue;
 
-        m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
+        ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
     }
 }
 
 void ProjectContentHandler::allProcessingFinished()
 {
+    ModelTreeProxy::treeChanged(m_tree);
     deleteLater();
 }

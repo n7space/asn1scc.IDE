@@ -37,7 +37,7 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class ProjectContentHandler;
+class ParsedDataStorageProxy;
 
 class ParsedDataStorage : public QObject
 {
@@ -46,7 +46,7 @@ class ParsedDataStorage : public QObject
     ParsedDataStorage() = default;
     ~ParsedDataStorage() = default;
 
-    friend class ProjectContentHandler;
+    friend class ParsedDataStorageProxy;
 
 public:
     static ParsedDataStorage *instance();
@@ -65,6 +65,9 @@ private:
 
     void addFileToProject(const QString &projectName, std::unique_ptr<ParsedDocument> file);
     void removeFileFromProject(const QString &projectName, const QString &filePath);
+
+    int getProjectsCount();
+    int getDocumentsCount();
 
     using Project = QHash<QString, std::shared_ptr<ParsedDocument>>;
 

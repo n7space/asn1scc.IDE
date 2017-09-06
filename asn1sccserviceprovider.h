@@ -38,18 +38,22 @@
 #include "documentsourceinfo.h"
 #include "settings/service.h"
 
+#include "parsingserviceprovider.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
-class Asn1SccServiceProvider : public QObject
+class Asn1SccServiceProvider
+        : public ParsingServiceProvider
 {
+
     Q_OBJECT
 
 public:
     Asn1SccServiceProvider(Settings::ServiceConstPtr settings);
     ~Asn1SccServiceProvider();
 
-    QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const;
+    QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const override;
 
     void start();
     void stop();

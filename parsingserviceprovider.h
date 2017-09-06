@@ -25,39 +25,27 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include <QObject>
 
-#include <QString>
+#include <QNetworkReply>
+#include <QHash>
 
-#include "parseddocument.h"
+#include "documentsourceinfo.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class DocumentProcessor
-        : public QObject
+class ParsingServiceProvider
+    : public QObject
 {
     Q_OBJECT
+
 public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+    ParsingServiceProvider(QObject *parent = 0) : QObject(parent) {}
+    virtual ~ParsingServiceProvider() = default;
 
-    virtual ~DocumentProcessor() = default;
-
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
-
-    virtual State getState() = 0;
-
-signals:
-    void processingFinished(const QString &projectName) const;
+    virtual QNetworkReply *requestAst(const QHash<QString, DocumentSourceInfo> &documents) const = 0;
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Asn1Acn */
+} /* namespace Internal */

@@ -23,41 +23,25 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "sourcereadermock.h"
 
-#include <vector>
-#include <memory>
+using namespace Asn1Acn::Internal;
 
-#include <QString>
-
-#include "parseddocument.h"
-
-namespace Asn1Acn {
-namespace Internal {
-
-class DocumentProcessor
-        : public QObject
+SourceReaderMock::SourceReaderMock()
+    : m_content("Test content")
 {
-    Q_OBJECT
-public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+}
 
-    virtual ~DocumentProcessor() = default;
+QString SourceReaderMock::readContent(const QString &fileName) const
+{
+    if (fileName.contains("_ERROR_"))
+        return QString("ERROR");
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+    if (fileName.contains("_FAILED_"))
+        return QString("FAILED");
 
-    virtual State getState() = 0;
+    if (fileName.contains("_SUCCESS_"))
+        return QString("SUCCESS");
 
-signals:
-    void processingFinished(const QString &projectName) const;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+    return QString();
+}

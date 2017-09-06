@@ -25,39 +25,46 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include <QObject>
 
-#include <QString>
+#include <QSignalSpy>
 
-#include "parseddocument.h"
+#include "../documentprocessor.h"
+#include "../asn1sccdocumentprocessor.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class DocumentProcessor
-        : public QObject
+class DocumentProcessorTests : public QObject
 {
     Q_OBJECT
+
 public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+    explicit DocumentProcessorTests(QObject *parent = 0);
 
-    virtual ~DocumentProcessor() = default;
+private slots:
+    void test_unstarted();
+    void test_successful();
+    void test_error();
+    void test_failed();
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+private:
+    void examine(DocumentProcessor *dp,
+                 const QSignalSpy &spy,
+                 const DocumentProcessor::State state,
+                 const QString &fileName,
+                 const QString &filePath) const;
 
-    virtual State getState() = 0;
+    const QString m_projectName;
 
-signals:
-    void processingFinished(const QString &projectName) const;
+    const QString m_fileContent;
+    const QString m_fileDir;
+    const int m_revision;
+
+    Asn1SccDocumentProcessor::DocumentBuilderCreator m_docBuilderCreator;
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

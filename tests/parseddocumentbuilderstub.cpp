@@ -23,41 +23,38 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "parseddocumentbuilderstub.h"
 
-#include <vector>
-#include <memory>
+using namespace Asn1Acn::Internal;
 
-#include <QString>
-
-#include "parseddocument.h"
-
-namespace Asn1Acn {
-namespace Internal {
-
-class DocumentProcessor
-        : public QObject
+ParsedDocumentBuilderStub::ParsedDocumentBuilderStub(const QHash<QString, DocumentSourceInfo> &documents)
+    : m_rawDocuments(documents)
 {
-    Q_OBJECT
-public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+}
 
-    virtual ~DocumentProcessor() = default;
+void ParsedDocumentBuilderStub::run()
+{
+    QString key = *m_rawDocuments.keyBegin();
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+    if (key == "ERROR") {
+        emit errored();
+    } else if (key == "FAILED") {
+        emit failed();
+    } else if (key == "SUCCESS") {
+        auto modules = std::make_unique<Data::Modules>();
+        std::unique_ptr<ParsedDocument> parsedDocument(new ParsedDocument(std::move(modules), m_rawDocuments.value(key)));
+        m_parsedDocuments.push_back(std::move(parsedDocument));
 
-    virtual State getState() = 0;
+        emit finished();
+    }
+}
 
-signals:
-    void processingFinished(const QString &projectName) const;
-};
+std::vector<std::unique_ptr<ParsedDocument>> ParsedDocumentBuilderStub::takeDocuments()
+{
+    return std::move(m_parsedDocuments);
+}
 
-} // namespace Internal
-} // namespace Asn1Acn
+const QStringList &ParsedDocumentBuilderStub::errorMessages() const
+{
+    return m_errorMessages;
+}

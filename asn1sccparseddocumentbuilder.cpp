@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "parseddocumentbuilder.h"
+#include "asn1sccparseddocumentbuilder.h"
 
 #include <QNetworkReply>
 #include <QJsonDocument>
@@ -42,18 +42,27 @@
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocumentBuilder::ParsedDocumentBuilder(const QHash<QString, DocumentSourceInfo> &documents) :
-    m_rawDocuments(documents)
+ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create(const QHash<QString, DocumentSourceInfo> &documents)
 {
-    auto serviceProvider = ExtensionSystem::PluginManager::getObject<Asn1SccServiceProvider>();
-
-    QNetworkReply *reply = serviceProvider->requestAst(documents);
-
-    QObject::connect(reply, &QNetworkReply::finished,
-                     this, &ParsedDocumentBuilder::requestFinished);
+    auto serviceProvider = ExtensionSystem::PluginManager::getObject<ParsingServiceProvider>();
+    return new Asn1SccParsedDocumentBuilder(serviceProvider, documents);
 }
 
-void ParsedDocumentBuilder::requestFinished()
+Asn1SccParsedDocumentBuilder::Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider, const QHash<QString, DocumentSourceInfo> & documents)
+    : m_serviceProvider(serviceProvider)
+    , m_rawDocuments(documents)
+{
+}
+
+void Asn1SccParsedDocumentBuilder::run()
+{
+    QNetworkReply *reply = m_serviceProvider->requestAst(m_rawDocuments);
+
+    QObject::connect(reply, &QNetworkReply::finished,
+                     this, &Asn1SccParsedDocumentBuilder::requestFinished);
+}
+
+void Asn1SccParsedDocumentBuilder::requestFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
 
@@ -65,7 +74,7 @@ void ParsedDocumentBuilder::requestFinished()
     reply->deleteLater();
 }
 
-void ParsedDocumentBuilder::parseResponse(const QByteArray &jsonData)
+void Asn1SccParsedDocumentBuilder::parseResponse(const QByteArray &jsonData)
 {
     const auto json = QJsonDocument::fromJson(jsonData).object();
     if (responseContainsAst(json)) {
@@ -78,7 +87,7 @@ void ParsedDocumentBuilder::parseResponse(const QByteArray &jsonData)
     }
 }
 
-void ParsedDocumentBuilder::parseXML(const QString &textData)
+void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
 {
     QXmlStreamReader reader;
     reader.addData(textData);
@@ -91,7 +100,7 @@ void ParsedDocumentBuilder::parseXML(const QString &textData)
 
     for (it = parsedData.begin(); it != parsedData.end(); it++) {
         QString fileName = it->first;
-        DocumentSourceInfo sourceInfo = m_rawDocuments[fileName];
+        DocumentSourceInfo sourceInfo = (m_rawDocuments)[fileName];
 
         std::unique_ptr<ParsedDocument> parsedDoc(new ParsedDocument(std::move(it->second), sourceInfo));
 
@@ -99,23 +108,23 @@ void ParsedDocumentBuilder::parseXML(const QString &textData)
     }
 }
 
-std::vector<std::unique_ptr<ParsedDocument>> ParsedDocumentBuilder::takeDocuments()
+std::vector<std::unique_ptr<ParsedDocument>> Asn1SccParsedDocumentBuilder::takeDocuments()
 {
     return std::move(m_parsedDocuments);
 }
 
-bool ParsedDocumentBuilder::responseContainsAst(const QJsonObject &json)
+bool Asn1SccParsedDocumentBuilder::responseContainsAst(const QJsonObject &json)
 {
     return json[QLatin1Literal("ErrorCode")].toInt(-1) == 0;
 }
 
-void ParsedDocumentBuilder::storeErrorMessages(const QJsonObject &json)
+void Asn1SccParsedDocumentBuilder::storeErrorMessages(const QJsonObject &json)
 {
     for (const auto message : json[QLatin1Literal("Messages")].toArray())
         m_errorMessages.append(message.toString());
 }
 
-QString ParsedDocumentBuilder::getAstXml(const QJsonObject &json)
+QString Asn1SccParsedDocumentBuilder::getAstXml(const QJsonObject &json)
 {
     const auto files = json[QLatin1Literal("Files")].toArray();
     if (files.size() != 1)

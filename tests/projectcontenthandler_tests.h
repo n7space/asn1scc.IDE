@@ -25,39 +25,51 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include <QObject>
 
-#include <QString>
-
-#include "parseddocument.h"
+#include "../documentprocessor.h"
+#include "../parseddatastorage.h"
+#include "../modeltree.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class DocumentProcessor
-        : public QObject
+class ProjectContentHandlerTests : public QObject
 {
     Q_OBJECT
+
 public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+    explicit ProjectContentHandlerTests(QObject *parent = 0);
 
-    virtual ~DocumentProcessor() = default;
+private slots:
+    void test_singleProjectAddedAndRemoved();
+    void test_multipleProjectsAddedAndRemoved();
+    void test_projectAddedAndRemovedTwice();
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+    void test_singleFileAddedAndRemoved();
+    void test_multipleFilesAddedAndRemoved();
+    void test_fileAddedToMultipleProjects();
 
-    virtual State getState() = 0;
+    void test_fileContentChanged();
+    void test_fileContentChangedNoProject();
+    void test_fileInMultipleProjectContentChanged();
 
-signals:
-    void processingFinished(const QString &projectName) const;
+private:
+    void addProject(const QString &projectName);
+    void removeProject(const QString &projectName);
+
+    void fileListChanged(const QString &projectName, const QStringList &files);
+    void fileContentChanged(const QString &path, const QString &content);
+
+    ModelTree *m_tree;
+    ParsedDataStorage *m_storage;
+
+    QStringList m_fileTypes;
+
+    std::function<DocumentProcessor *(const QString &)> m_createProcessor;
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

@@ -23,41 +23,22 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "filesourcereader.h"
 
-#include <vector>
-#include <memory>
+#include <QFile>
 
-#include <QString>
+using namespace Asn1Acn::Internal;
 
-#include "parseddocument.h"
-
-namespace Asn1Acn {
-namespace Internal {
-
-class DocumentProcessor
-        : public QObject
+QString FileSourceReader::readContent(const QString &fileName) const
 {
-    Q_OBJECT
-public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+    QFile file(fileName);
 
-    virtual ~DocumentProcessor() = default;
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return QString();
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+    QString docContent = QString::fromLatin1(file.readAll().data());
 
-    virtual State getState() = 0;
+    file.close();
 
-signals:
-    void processingFinished(const QString &projectName) const;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+    return docContent;
+}

@@ -25,39 +25,48 @@
 
 #pragma once
 
-#include <vector>
-#include <memory>
+#include <QObject>
 
-#include <QString>
-
-#include "parseddocument.h"
+#include "../parseddatastorage.h"
+#include "../parseddatastorageproxy.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class DocumentProcessor
+class ParsedDataStorageTests
         : public QObject
+        , public ParsedDataStorageProxy
 {
     Q_OBJECT
+
 public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+    explicit ParsedDataStorageTests(QObject *parent = 0);
 
-    virtual ~DocumentProcessor() = default;
+private slots:
+    void test_addAndRemoveProject();
+    void test_addAndRemoveMultipleProjects();
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+    void test_addAndRemoveFileFromProject();
+    void test_addAndRemoveMultipleFilesFromProject();
 
-    virtual State getState() = 0;
+    void test_removeNonemptyProject();
 
-signals:
-    void processingFinished(const QString &projectName) const;
+    void test_updateFileInOneProject();
+    void test_updateFileInMultipleProjects();
+
+    void test_getFilesFromNonExistingProject();
+
+private:
+    void addFileToProject(ParsedDataStorage *storage,
+                          const QString &project,
+                          const QString &fileContent,
+                          const QString &filePath);
+
+    QString pathFromName(const QString &name);
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn
+

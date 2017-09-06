@@ -36,7 +36,7 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class ProjectContentHandler;
+class ModelTreeProxy;
 
 class ModelTree : public QObject
 {
@@ -45,7 +45,7 @@ class ModelTree : public QObject
     ModelTree();
     ~ModelTree() = default;
 
-    friend class ProjectContentHandler;
+    friend class ModelTreeProxy;
 
 public:
     static ModelTree *instance();

@@ -23,23 +23,37 @@
 **
 ****************************************************************************/
 
+#include <functional>
+
 #include <QObject>
 #include <QString>
 #include <QStringList>
 
 #include "modeltree.h"
+#include "modeltreeproxy.h"
 #include "parseddatastorage.h"
+#include "parseddatastorageproxy.h"
 #include "documentprocessor.h"
+#include "sourcereader.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ProjectContentHandler : public QObject
+class ProjectContentHandler
+        : public QObject
+        , public ParsedDataStorageProxy
+        , public ModelTreeProxy
 {
     Q_OBJECT
 
 public:
-    ProjectContentHandler();
+    static ProjectContentHandler *create();
+
+    ProjectContentHandler(std::function<DocumentProcessor *(const QString&)>,
+                          const SourceReader *sourceReader,
+                          ModelTree *tree,
+                          ParsedDataStorage *storage);
+
     ~ProjectContentHandler();
 
     void handleProjectAdded(const QString &projectName);
@@ -61,7 +75,6 @@ private:
     QStringList getStaleFilesNames(const QString &projectName, const QStringList &filePaths) const;
 
     void processFiles(const QString &projectName, const QStringList &filePaths);
-    QString readFileContent(const QString &fileName) const;
 
     DocumentProcessor *createDocumentProcessorForFileChange(const QString &projectName,
                                                             const QString &path,
@@ -79,6 +92,10 @@ private:
     ParsedDataStorage *m_storage;
 
     unsigned m_projectsChanged;
+
+    const SourceReader *m_sourceReader;
+
+    std::function<DocumentProcessor *(const QString &)> m_createProcessor;
 };
 
 } // namespace Internal
