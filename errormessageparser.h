@@ -35,11 +35,11 @@ namespace Internal {
 class ErrorMessageParser
 {
 public:
-    explicit ErrorMessageParser(const QMap<QString, QString>& pathMapping = {});
-    Data::ErrorMessage parse(const QString& message) const;
+    explicit ErrorMessageParser(const QMap<QString, QString> &pathMapping = {});
+    Data::ErrorMessage parse(const QString &message) const;
 
 private:
-    QString mapPath(const QString& path) const;
+    QString mapPath(const QString &path) const;
 
     QMap<QString, QString> m_pathMapping;
 };

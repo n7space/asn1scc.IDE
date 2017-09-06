@@ -37,13 +37,13 @@ class ErrorMessage
 public:
     ErrorMessage() = default;
 
-    ErrorMessage(const SourceLocation& location, const QString& message)
+    ErrorMessage(const SourceLocation &location, const QString &message)
         : m_location(location)
         , m_message(message)
     {}
 
-    const SourceLocation& location() const { return m_location; }
-    const QString& message() const { return m_message; }
+    const SourceLocation &location() const { return m_location; }
+    const QString &message() const { return m_message; }
     bool isValid() const { return location().isValid() && !message().isEmpty(); }
 
 private:

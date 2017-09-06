@@ -45,7 +45,7 @@ using namespace Asn1Acn::Internal;
 
 namespace
 {
-QMap<QString, QString> buildPathMapping(const QHash<QString, DocumentSource>& docInfo)
+QMap<QString, QString> buildPathMapping(const QHash<QString, DocumentSource> &docInfo)
 {
     auto result = QMap<QString, QString>();
     for (auto it = docInfo.begin(), end = docInfo.end(); it != end; ++it)

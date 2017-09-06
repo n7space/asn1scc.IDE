@@ -28,12 +28,12 @@
 
 using namespace Asn1Acn::Internal;
 
-ErrorMessageParser::ErrorMessageParser(const QMap<QString, QString>& pathMapping)
+ErrorMessageParser::ErrorMessageParser(const QMap<QString, QString> &pathMapping)
     : m_pathMapping(pathMapping)
 {
 }
 
-Data::ErrorMessage ErrorMessageParser::parse(const QString& message) const
+Data::ErrorMessage ErrorMessageParser::parse(const QString &message) const
 {
     static const QRegularExpression regExp(R"(^(.+?):(\d+)(?::(\d+))?: error: (.*)$)");
 
@@ -45,7 +45,7 @@ Data::ErrorMessage ErrorMessageParser::parse(const QString& message) const
     return {loc, match.captured(4)};
 }
 
-QString ErrorMessageParser::mapPath(const QString& path) const
+QString ErrorMessageParser::mapPath(const QString &path) const
 {
     return m_pathMapping.value(path, path);
 }
