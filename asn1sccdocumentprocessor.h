@@ -26,6 +26,7 @@
 #pragma once
 
 #include <functional>
+#include <memory>
 
 #include <QHash>
 #include <QString>
@@ -33,11 +34,9 @@
 #include <QList>
 #include <QTextDocument>
 
-#include <memory>
-
 #include "parseddocument.h"
 #include "parseddocumentbuilder.h"
-#include "documentsourceinfo.h"
+#include "documentsource.h"
 
 #include "documentprocessor.h"
 
@@ -51,18 +50,19 @@ class Asn1SccDocumentProcessor
 public:
 
     using State = DocumentProcessor::State;
-    using DocumentBuilderCreator = std::function<ParsedDocumentBuilder *(const QHash<QString, DocumentSourceInfo> &documents)>;
+    using DocumentBuilderCreator = std::function<ParsedDocumentBuilder *(const QHash<QString, DocumentSource> &documents)>;
 
     static Asn1SccDocumentProcessor *create(const QString &projectName);
 
     Asn1SccDocumentProcessor(const QString &projectName, DocumentBuilderCreator docBuilderCreator);
     ~Asn1SccDocumentProcessor();
 
-    void addToRun(const QString &docContent, const QString &filePath, int revision) override;
+    void addToRun(const QString &filePath, const QString &docContent) override;
     void run() override;
     std::vector<std::unique_ptr<ParsedDocument>> takeResults() override;
+    const std::vector<Data::ErrorMessage> &errorMessages() const override;
 
-    State getState() override;
+    State state() override;
 
 private slots:
     void onBuilderFinished();
@@ -72,13 +72,13 @@ private slots:
 private:
     void createFallbackResults();
 
-    QHash<QString, DocumentSourceInfo> m_documents;
+    QHash<QString, DocumentSource> m_documents;
     QString m_projectName;
 
     std::vector<std::unique_ptr<ParsedDocument>> m_results;
     State m_state;
 
-    ParsedDocumentBuilder *m_docBuilder;
+    std::unique_ptr<ParsedDocumentBuilder> m_docBuilder;
     DocumentBuilderCreator m_docBuilderCreator;
 };
 

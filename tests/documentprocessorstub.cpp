@@ -26,20 +26,22 @@
 #include "documentprocessorstub.h"
 
 #include <QList>
+#include <QFileInfo>
 
 #include "../data/modules.h"
 
 using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Tests;
 
 DocumentProcessorStub::DocumentProcessorStub(const QString &project)
     : m_projectName(project)
 {
 }
 
-void DocumentProcessorStub::addToRun(const QString &docContent, const QString &filePath, int revision)
+void DocumentProcessorStub::addToRun(const QString &filePath, const QString &docContent)
 {
     QString fileName = QFileInfo(filePath).fileName();
-    DocumentSourceInfo fileInfo(revision, docContent, filePath, fileName);
+    DocumentSource fileInfo(filePath, docContent);
 
     m_documents.insert(fileName, fileInfo);
 
@@ -67,7 +69,12 @@ std::vector<std::unique_ptr<ParsedDocument>> DocumentProcessorStub::takeResults(
     return std::move(m_results);
 }
 
-DocumentProcessorStub::State DocumentProcessorStub::getState()
+DocumentProcessorStub::State DocumentProcessorStub::state()
 {
     return m_state;
+}
+
+const std::vector<Data::ErrorMessage> &DocumentProcessorStub::errorMessages() const
+{
+    return m_errorMessages;
 }

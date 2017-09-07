@@ -22,29 +22,27 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <QString>
+#include <QMap>
 
-#include "../sourcereader.h"
+#include "data/errormessage.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Tests {
 
-class SourceReaderMock
-        : public SourceReader
+class ErrorMessageParser
 {
 public:
-    SourceReaderMock();
-
-    QString readContent(const QString &fileName) const override;
+    explicit ErrorMessageParser(const QMap<QString, QString> &pathMapping = {});
+    Data::ErrorMessage parse(const QString &message) const;
 
 private:
-    QString m_content;
+    QString mapPath(const QString &path) const;
+
+    QMap<QString, QString> m_pathMapping;
 };
 
-} /* namespace Tests */
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+} // namespace Internal
+} // namespace Asn1Acn

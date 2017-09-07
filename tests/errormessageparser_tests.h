@@ -22,59 +22,30 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
-
-#include <QJsonDocument>
-
-#include <QFileInfo>
 #include <QObject>
-#include <QProcess>
-#include <QTimer>
 
-#include "documentsource.h"
-#include "settings/service.h"
-
-#include "parsingserviceprovider.h"
+#include "../astxmlparser.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class Asn1SccServiceProvider
-        : public ParsingServiceProvider
+class ErrorMessageParserTests : public QObject
 {
     Q_OBJECT
-
 public:
-    Asn1SccServiceProvider(Settings::ServiceConstPtr settings);
-    ~Asn1SccServiceProvider();
-
-    QNetworkReply *requestAst(const QHash<QString, DocumentSource> &documents) const override;
-
-    void start();
-    void stop();
-    void restart() { stop(); start(); }
+    explicit ErrorMessageParserTests(QObject *parent = 0);
 
 private slots:
-    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void stayAliveTimeout();
-    void settingsChanged();
-
-private:
-    void updateConfigFromSettings();
-    QStringList additionalArguments() const;
-
-    QJsonDocument buildAstRequestData(const QHash<QString, DocumentSource> &documents) const;
-
-    QProcess *m_asn1sccService;
-    QTimer m_stayAliveTimer;
-    bool m_serviceStarted;
-
-    Settings::ServiceConstPtr m_settings;
+    void test_emptyMessage();
+    void test_wrongFormatMessage();
+    void test_messageWithOnlyLineNumber();
+    void test_messageWithColumnAndLineNumber();
+    void test_mappingSourceFiles();
 };
 
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Tests
+} // namespace Internal
+} // namespace Asn1Acn

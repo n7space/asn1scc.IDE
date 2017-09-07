@@ -36,8 +36,7 @@ DocumentProcessorTests::DocumentProcessorTests(QObject *parent)
     : QObject(parent)
     , m_fileContent("Document content")
     , m_fileDir("/test/dir/")
-    , m_revision(1)
-    , m_docBuilderCreator([](const QHash<QString, DocumentSourceInfo> &documents)->ParsedDocumentBuilder *
+    , m_docBuilderCreator([](const QHash<QString, DocumentSource> &documents)->ParsedDocumentBuilder *
                           { return new ParsedDocumentBuilderStub(documents); })
 {
 }
@@ -46,7 +45,7 @@ void DocumentProcessorTests::test_unstarted()
 {
     DocumentProcessor *dp = new Asn1SccDocumentProcessor("ProjectName", m_docBuilderCreator);
 
-    QCOMPARE(dp->getState(), DocumentProcessor::State::Unfinished);
+    QCOMPARE(dp->state(), DocumentProcessor::State::Unfinished);
 
     const std::vector<std::unique_ptr<ParsedDocument>> results = dp->takeResults();
     QCOMPARE(results.size(), static_cast<size_t>(0));
@@ -62,7 +61,7 @@ void DocumentProcessorTests::test_successful()
     DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
-    dp->addToRun(m_fileContent, filePath, m_revision);
+    dp->addToRun(filePath, m_fileContent);
     dp->run();
 
     examine(dp, spy, DocumentProcessor::State::Successful, fileName, filePath);
@@ -78,7 +77,7 @@ void DocumentProcessorTests::test_error()
     DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
-    dp->addToRun(m_fileContent, filePath, m_revision);
+    dp->addToRun(filePath, m_fileContent);
     dp->run();
 
     examine(dp, spy, DocumentProcessor::State::Errored, fileName, filePath);
@@ -94,7 +93,7 @@ void DocumentProcessorTests::test_failed()
     DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
-    dp->addToRun(m_fileContent, filePath, m_revision);
+    dp->addToRun(filePath, m_fileContent);
     dp->run();
 
     examine(dp, spy, DocumentProcessor::State::Failed, fileName, filePath);
@@ -108,7 +107,7 @@ void DocumentProcessorTests::examine(DocumentProcessor *dp,
                                      const QString &fileName,
                                      const QString &filePath) const
 {
-    QCOMPARE(dp->getState(), state);
+    QCOMPARE(dp->state(), state);
     QCOMPARE(spy.count(), 1);
 
     const QVariant signalArg = spy.at(0).at(0);
@@ -118,9 +117,8 @@ void DocumentProcessorTests::examine(DocumentProcessor *dp,
     const std::vector<std::unique_ptr<ParsedDocument>> results = dp->takeResults();
     QCOMPARE(results.size(), static_cast<size_t>(1));
 
-    const DocumentSourceInfo resultInfo = results.at(0)->source();
-    QCOMPARE(resultInfo.getRevision(), m_revision);
-    QCOMPARE(resultInfo.getContent(), m_fileContent);
-    QCOMPARE(resultInfo.getName(), fileName);
-    QCOMPARE(resultInfo.getPath(), filePath);
+    const DocumentSource resultInfo = results.at(0)->source();
+    QCOMPARE(resultInfo.contents(), m_fileContent);
+    QCOMPARE(resultInfo.fileName(), fileName);
+    QCOMPARE(resultInfo.filePath(), filePath);
 }

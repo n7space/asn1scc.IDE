@@ -25,7 +25,7 @@
 
 #include "sourcereadermock.h"
 
-using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Tests;
 
 SourceReaderMock::SourceReaderMock()
     : m_content("Test content")

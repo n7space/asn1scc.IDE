@@ -97,7 +97,7 @@ SOURCES += \
     asn1acnjsextension.cpp \
     asn1sccserviceprovider.cpp \
     asn1sccparseddocumentbuilder.cpp \
-    documentsourceinfo.cpp \
+    documentsource.cpp \
     projectcontenthandler.cpp \
     indenter.cpp \
     tools.cpp \
@@ -105,7 +105,8 @@ SOURCES += \
     linkcreator.cpp \
     overviewindexupdater.cpp \
     structuresviewindexupdater.cpp \
-    filesourcereader.cpp
+    filesourcereader.cpp \
+    errormessageparser.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -126,6 +127,7 @@ HEADERS += \
     data/modules.h \
     data/typereference.h \
     data/type.h \
+    data/errormessage.h \
     \
     options-pages/general.h \
     options-pages/service.h \
@@ -166,7 +168,7 @@ HEADERS += \
     asn1acnjsextension.h \
     asn1sccserviceprovider.h \
     asn1sccparseddocumentbuilder.h \
-    documentsourceinfo.h \
+    documentsource.h \
     projectcontenthandler.h \
     indenter.h \
     tr.h \
@@ -181,7 +183,8 @@ HEADERS += \
     sourcereader.h \
     filesourcereader.h \
     parseddatastorageproxy.h \
-    modeltreeproxy.h
+    modeltreeproxy.h \
+    errormessageparser.h
 
 FORMS += \
     options-pages/general.ui \
@@ -202,6 +205,7 @@ SOURCES += \
     libraries/tests/metadataparser_tests.cpp \
     \
     tests/astxmlparser_tests.cpp \
+    tests/errormessageparser_tests.cpp \
     tests/overviewindexupdater_tests.cpp \
     tests/structuresviewindexupdater_tests.cpp \
     tests/parseddocumentbuilder_tests.cpp \
@@ -220,6 +224,7 @@ HEADERS += \
     libraries/tests/metadataparser_tests.h \
     \
     tests/astxmlparser_tests.h \
+    tests/errormessageparser_tests.h \
     tests/overviewindexupdater_tests.h \
     tests/structuresviewindexupdater_tests.h \
     tests/parseddocumentbuilder_tests.h \

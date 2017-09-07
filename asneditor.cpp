@@ -30,6 +30,7 @@
 #include <coreplugin/editormanager/documentmodel.h>
 
 #include <texteditor/texteditoractionhandler.h>
+#include <texteditor/basehoverhandler.h>
 
 #include "completion/autocompleter.h"
 #include "completion/asncompletionassist.h"
@@ -64,6 +65,8 @@ AsnEditorFactory::AsnEditorFactory()
     setAutoCompleterCreator([]() { return new AutoCompleter; });
     setIndenterCreator([]() { return new Indenter; });
 
+    addHoverHandler(new TextEditor::BaseHoverHandler); // TODO maybe better hover tips?
+
     setCodeFoldingSupported(true);
     setMarksVisible(true);
     setParenthesesMatchingEnabled(true);
@@ -73,8 +76,6 @@ AsnEditorFactory::AsnEditorFactory()
                           | TextEditorActionHandler::UnCommentSelection
                           | TextEditorActionHandler::UnCollapseAll
                           | TextEditorActionHandler::FollowSymbolUnderCursor);
-
-  // TODO      addHoverHandler(new CppHoverHandler);
 }
 
 AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,

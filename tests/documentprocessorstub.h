@@ -36,6 +36,7 @@
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
 class DocumentProcessorStub
         : public DocumentProcessor
@@ -48,19 +49,22 @@ public:
     DocumentProcessorStub(const QString &project = QString());
     ~DocumentProcessorStub() = default;
 
-    void addToRun(const QString &docContent, const QString &filePath, int revision) override;
+    void addToRun(const QString &filePath, const QString &docContent) override;
     void run() override;
     std::vector<std::unique_ptr<ParsedDocument>> takeResults() override;
+    const std::vector<Data::ErrorMessage> &errorMessages() const override;
 
-    State getState() override;
+    State state() override;
 
 private:
     State m_state;
     QString m_projectName;
 
-    QHash<QString, DocumentSourceInfo> m_documents;
+    QHash<QString, DocumentSource> m_documents;
     std::vector<std::unique_ptr<ParsedDocument>> m_results;
+    std::vector<Data::ErrorMessage> m_errorMessages;
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

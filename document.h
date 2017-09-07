@@ -26,6 +26,7 @@
 #pragma once
 
 #include <QTimer>
+#include <QTextEdit>
 
 #include <texteditor/textdocument.h>
 
@@ -42,12 +43,14 @@ public:
     explicit Document();
     void scheduleProcessDocument();
 
+signals:
+    void extraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections);
+
 private:
     void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
     void processDocument();
 
     QTimer m_processorTimer;
-
 };
 
 } // namespace Internal

@@ -48,10 +48,9 @@ ParsedDocumentBuilderTests::~ParsedDocumentBuilderTests()
 
 void ParsedDocumentBuilderTests::test_failed()
 {
-    DocumentSourceInfo sourceInfo;
-    sourceInfo.setName("FAILED");
+    DocumentSource sourceInfo("FAILED", "FAILED");
 
-    QHash<QString, DocumentSourceInfo> documents;
+    QHash<QString, DocumentSource> documents;
     documents.insert("FAILED", sourceInfo);
 
     Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider, documents);
@@ -75,11 +74,9 @@ void ParsedDocumentBuilderTests::test_failed()
 
 void ParsedDocumentBuilderTests::test_error()
 {
-    DocumentSourceInfo sourceInfo;
-    sourceInfo.setName("ERROR");
-    sourceInfo.setContent("{\"ErrorCode\":2,\"Files\":null,\"Messages\":[\"Asn1.asn:8:13: error: No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'\"]}");
+    DocumentSource sourceInfo("ERROR", "{\"ErrorCode\":2,\"Files\":null,\"Messages\":[\"Asn1.asn:8:13: error: No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'\"]}");
 
-    QHash<QString, DocumentSourceInfo> documents;
+    QHash<QString, DocumentSource> documents;
     documents.insert("ERROR", sourceInfo);
 
     Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider, documents);
@@ -95,9 +92,11 @@ void ParsedDocumentBuilderTests::test_error()
     QCOMPARE(spyErrored.count(), 1);
     QCOMPARE(spyFinished.count(), 0);
 
-    QStringList errorMessages = builder->errorMessages();
-    QCOMPARE(errorMessages.count(), 1);
-    QCOMPARE(errorMessages.at(0), QString("Asn1.asn:8:13: error: No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'"));
+    const auto errorMessages = builder->errorMessages();
+    QCOMPARE(errorMessages.size(), std::size_t(1));
+    QCOMPARE(errorMessages.at(0).message(), QStringLiteral("No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'"));
+    QCOMPARE(errorMessages.at(0).location().line(), 8);
+    QCOMPARE(errorMessages.at(0).location().column(), 13);
 
     std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments = builder->takeDocuments();
     QVERIFY(parsedDocuments.size() == 0);
@@ -107,9 +106,8 @@ void ParsedDocumentBuilderTests::test_error()
 
 void ParsedDocumentBuilderTests::test_success()
 {
-    DocumentSourceInfo sourceInfo;
-    sourceInfo.setName("SUCCESS");
-    sourceInfo.setContent("{\"ErrorCode\":0,\"Files\":[{\"Contents\":\"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?>\\u000a<ASN1AST>\\u000a    "
+    DocumentSource sourceInfo("SUCCESS",
+                          "{\"ErrorCode\":0,\"Files\":[{\"Contents\":\"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?>\\u000a<ASN1AST>\\u000a    "
                           "<Asn1File FileName=\\\"emptyAsn2.asn\\\">\\u000a        <Asn1Module ID=\\\"EmptyAsn2\\\">\\u000a        "
                           "<ExportedTypes>\\u000a            <ExportedType Name=\\\"AData\\\" \\/>\\u000a            "
                           "<ExportedType Name=\\\"BData\\\" \\/> \\u000a        <\\/ExportedTypes>\\u000a        <ExportedVariables>\\u000a         "
@@ -122,7 +120,7 @@ void ParsedDocumentBuilderTests::test_success()
                           "<\\/Type>\\u000a            <\\/TypeAssignment>\\u000a        <\\/TypeAssignments>\\u000a        <VariablesAssignments>\\u000a        "
                           "<\\/VariablesAssignments>\\u000a        <\\/Asn1Module>\\u000a    <\\/Asn1File>\\u000a<\\/ASN1AST>\",\"Name\":\"AST.xml\"}],\"Messages\":null}");
 
-    QHash<QString, DocumentSourceInfo> documents;
+    QHash<QString, DocumentSource> documents;
     documents.insert("SUCCESS", sourceInfo);
 
     Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider, documents);

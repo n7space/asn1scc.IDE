@@ -123,14 +123,14 @@ Data::SourceLocation LinkCreator::getTargetLocationFromProject(const QString &pr
 {
     QList<std::shared_ptr<ParsedDocument>> documents = ParsedDataStorage::instance()->getFilesFromProject(projectName);
     for (const std::shared_ptr<ParsedDocument> &document : documents) {
-        if (document->source().getPath() == m_documentPath)
+        if (document->source().filePath() == m_documentPath)
             continue;
 
         const auto location = document->getDefinitionLocation(typeName, moduleName);
 
         // can not simply return location, as it contains only file name and not file path
         if (location.isValid())
-            return Data::SourceLocation(document->source().getPath(), location.line(), location.column());
+            return Data::SourceLocation(document->source().filePath(), location.line(), location.column());
     }
 
     return Data::SourceLocation();

@@ -27,7 +27,7 @@
 
 #include "networkreply.h"
 
-using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Tests;
 
 static const int REPLY_WAIT_TIME_MS = 100;
 

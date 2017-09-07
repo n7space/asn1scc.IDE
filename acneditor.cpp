@@ -28,6 +28,7 @@
 #include <QCoreApplication>
 
 #include <texteditor/texteditoractionhandler.h>
+#include <texteditor/basehoverhandler.h>
 
 #include "completion/autocompleter.h"
 #include "completion/acncompletionassist.h"
@@ -61,6 +62,8 @@ AcnEditorFactory::AcnEditorFactory()
     setIndenterCreator([]() { return new Indenter; });
     setAutoCompleterCreator([]() { return new AutoCompleter; });
 
+    addHoverHandler(new TextEditor::BaseHoverHandler); // TODO maybe better tips?
+
     setCodeFoldingSupported(true);
     setMarksVisible(true);
     setParenthesesMatchingEnabled(true);
@@ -70,6 +73,4 @@ AcnEditorFactory::AcnEditorFactory()
                             | TextEditorActionHandler::UnCommentSelection
                             | TextEditorActionHandler::UnCollapseAll
                             | TextEditorActionHandler::FollowSymbolUnderCursor);
-
-    // TODO addHoverHandler(new CppHoverHandler);
 }

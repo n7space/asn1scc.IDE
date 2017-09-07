@@ -26,8 +26,6 @@
 
 #include <QString>
 
-#include "sourcelocation.h"
-
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {

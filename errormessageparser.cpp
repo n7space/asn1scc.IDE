@@ -22,29 +22,30 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "errormessageparser.h"
 
-#pragma once
+#include <QRegularExpression>
 
-#include <QString>
+using namespace Asn1Acn::Internal;
 
-#include "../sourcereader.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace Tests {
-
-class SourceReaderMock
-        : public SourceReader
+ErrorMessageParser::ErrorMessageParser(const QMap<QString, QString> &pathMapping)
+    : m_pathMapping(pathMapping)
 {
-public:
-    SourceReaderMock();
+}
 
-    QString readContent(const QString &fileName) const override;
+Data::ErrorMessage ErrorMessageParser::parse(const QString &message) const
+{
+    static const QRegularExpression regExp(R"(^(.+?):(\d+)(?::(\d+))?: error: (.*)$)");
 
-private:
-    QString m_content;
-};
+    const auto match = regExp.match(message);
+    if (!match.hasMatch())
+        return {};
 
-} /* namespace Tests */
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+    const auto loc = Data::SourceLocation(mapPath(match.captured(1)), match.captured(2).toInt(), match.captured(3).toInt());
+    return {loc, match.captured(4)};
+}
+
+QString ErrorMessageParser::mapPath(const QString &path) const
+{
+    return m_pathMapping.value(path, path);
+}

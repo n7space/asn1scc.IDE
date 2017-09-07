@@ -22,59 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QNetworkReply>
-#include <QNetworkAccessManager>
+#include <QString>
 
-#include <QJsonDocument>
-
-#include <QFileInfo>
-#include <QObject>
-#include <QProcess>
-#include <QTimer>
-
-#include "documentsource.h"
-#include "settings/service.h"
-
-#include "parsingserviceprovider.h"
+#include "sourcelocation.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Data {
 
-class Asn1SccServiceProvider
-        : public ParsingServiceProvider
+class ErrorMessage
 {
-    Q_OBJECT
-
 public:
-    Asn1SccServiceProvider(Settings::ServiceConstPtr settings);
-    ~Asn1SccServiceProvider();
+    ErrorMessage() = default;
 
-    QNetworkReply *requestAst(const QHash<QString, DocumentSource> &documents) const override;
+    ErrorMessage(const SourceLocation &location, const QString &message)
+        : m_location(location)
+        , m_message(message)
+    {}
 
-    void start();
-    void stop();
-    void restart() { stop(); start(); }
-
-private slots:
-    void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void stayAliveTimeout();
-    void settingsChanged();
+    const SourceLocation &location() const { return m_location; }
+    const QString &message() const { return m_message; }
+    bool isValid() const { return location().isValid() && !message().isEmpty(); }
 
 private:
-    void updateConfigFromSettings();
-    QStringList additionalArguments() const;
-
-    QJsonDocument buildAstRequestData(const QHash<QString, DocumentSource> &documents) const;
-
-    QProcess *m_asn1sccService;
-    QTimer m_stayAliveTimer;
-    bool m_serviceStarted;
-
-    Settings::ServiceConstPtr m_settings;
+    SourceLocation m_location;
+    QString m_message;
 };
 
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Data
+} // namespace Internal
+} // namespace Asn1Acn

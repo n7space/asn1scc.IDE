@@ -41,8 +41,6 @@ using namespace Core;
 
 EditorWidget::EditorWidget()
 {
-    // TODO ? setLanguageSettingsId(Constants::SettingsId);
-
     m_model = new OverviewModel(this);
 
     connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
@@ -79,4 +77,17 @@ void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
     if (!menu)
         return;
     delete menu;
+}
+
+void EditorWidget::finalizeInitialization()
+{
+    // TODO finalizeInitializationAfterDuplication
+    // TODO ? setLanguageSettingsId(Constants::SettingsId);
+
+    auto document = qobject_cast<Document *>(textDocument());
+
+    connect(document, &Document::extraSelectionsUpdated,
+            [this](const QList<QTextEdit::ExtraSelection> &selections){
+        setExtraSelections(TextEditorWidget::CodeWarningsSelection, selections);
+    });
 }

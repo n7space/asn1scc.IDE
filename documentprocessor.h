@@ -22,13 +22,14 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <vector>
 #include <memory>
 
 #include <QString>
+
+#include "data/errormessage.h"
 
 #include "parseddocument.h"
 
@@ -49,11 +50,12 @@ public:
 
     virtual ~DocumentProcessor() = default;
 
-    virtual void addToRun(const QString &docContent, const QString &filePath, int revision) = 0;
+    virtual void addToRun(const QString &filePath, const QString &docContent) = 0;
     virtual void run() = 0;
     virtual std::vector<std::unique_ptr<ParsedDocument>> takeResults() = 0;
+    virtual const std::vector<Data::ErrorMessage> &errorMessages() const = 0;
 
-    virtual State getState() = 0;
+    virtual State state() = 0;
 
 signals:
     void processingFinished(const QString &projectName) const;

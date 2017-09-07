@@ -31,20 +31,20 @@
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocument::ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSourceInfo &source) :
+ParsedDocument::ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSource &source) :
     m_source(source),
     m_parsedData(std::move(parsedData))
 {
     populateReferences();
 }
 
-ParsedDocument::ParsedDocument(const DocumentSourceInfo &source) :
+ParsedDocument::ParsedDocument(const DocumentSource &source) :
     m_source(source),
     m_parsedData(nullptr)
 {
 }
 
-const DocumentSourceInfo &ParsedDocument::source() const
+const DocumentSource &ParsedDocument::source() const
 {
     return m_source;
 }
@@ -95,7 +95,7 @@ ParsedDocument::createDefinition(const std::unique_ptr<Data::Definitions> &defin
 
 Data::SourceLocation ParsedDocument::buildLocation(const Data::SourceLocation& location) const
 {
-    return { source().getPath(), location.line(), location.column() };
+    return { source().filePath(), location.line(), location.column() };
 }
 
 void ParsedDocument::attachTypesToDefiniton(const Data::Definitions::Types types,
