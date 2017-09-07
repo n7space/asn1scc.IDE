@@ -25,6 +25,7 @@
 #pragma once
 
 #include <QString>
+#include <QStringList>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -34,17 +35,17 @@ namespace Metadata {
 class Import
 {
 public:
-    Import(const QString &from, const QString &type)
+    Import(const QString &from, const QStringList &types)
         : m_from(from)
-        , m_type(type)
+        , m_types(types)
     {}
 
     const QString &from() const { return m_from; }
-    const QString &type() const { return m_type; }
+    const QStringList &types() const { return m_types; }
 
 private:
     QString m_from;
-    QString m_type;
+    QStringList m_types;
 };
 
 } // namespace Metadata

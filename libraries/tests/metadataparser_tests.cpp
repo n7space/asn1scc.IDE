@@ -124,7 +124,7 @@ void MetadataParserTests::test_completeElement()
                     "conflicts": ["c1", "c2", "c3"],
                     "requires": ["r1"],
                     "imports": [
-                      { "from": "X", "type": "Y" }
+                      { "from": "X", "types": ["Y", "Z"] }
                     ]
                   }
                 ]
@@ -142,7 +142,9 @@ void MetadataParserTests::test_completeElement()
     QCOMPARE(element.imports().size(), 1);
     const auto import = element.imports().at(0);
     QCOMPARE(import.from(), QLatin1Literal("X"));
-    QCOMPARE(import.type(), QLatin1Literal("Y"));
+    QCOMPARE(import.types().size(), 2);
+    QCOMPARE(import.types().at(0), QLatin1Literal("Y"));
+    QCOMPARE(import.types().at(1), QLatin1Literal("Z"));
 }
 
 void MetadataParserTests::parsingFails(const QString &jsonData)
