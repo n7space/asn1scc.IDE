@@ -106,7 +106,8 @@ SOURCES += \
     overviewindexupdater.cpp \
     structuresviewindexupdater.cpp \
     filesourcereader.cpp \
-    errormessageparser.cpp
+    errormessageparser.cpp \
+    editoroutline.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -184,7 +185,9 @@ HEADERS += \
     filesourcereader.h \
     parseddatastorageproxy.h \
     modeltreeproxy.h \
-    errormessageparser.h
+    errormessageparser.h \
+    editoroutline.h \
+    overviewactivatehandler.h
 
 FORMS += \
     options-pages/general.ui \

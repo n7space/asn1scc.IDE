@@ -41,8 +41,11 @@ public:
     StructuresViewWidget();
     ~StructuresViewWidget();
 
+private slots:
+    void modelUpdated();
+
 private:
-    std::unique_ptr<OverviewIndexUpdater> createIndexUpdater() const;
+    std::shared_ptr<OverviewIndexUpdater> createIndexUpdater() const;
 };
 
 class StructuresViewFactory : public Core::INavigationWidgetFactory

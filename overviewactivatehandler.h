@@ -23,34 +23,31 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include <QModelIndex>
 
-#include <texteditor/texteditor.h>
+#include "modeltreenode.h"
 
-#include <utils/uncommentselection.h>
-
-#include "overviewmodel.h"
+#include "coreplugin/editormanager/editormanager.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class EditorOutline;
-
-class EditorWidget : public TextEditor::TextEditorWidget
+class OverviewActivateHandler
 {
-    Q_OBJECT
-
 public:
-    explicit EditorWidget();
-    EditorOutline *outline() const;
+    static void gotoSymbol(const QModelIndex &index)
+    {
+        if (!index.isValid())
+            return;
 
-protected:
-    void finalizeInitialization() override;
-    void contextMenuEvent(QContextMenuEvent *) override;
+        ModelTreeNode *node = static_cast<ModelTreeNode *>(index.internalPointer());
 
-    EditorOutline *m_editorOutline;
-    Utils::CommentDefinition m_commentDefinition;
+        const auto location = node->sourceLocation();
+        Core::EditorManager::openEditorAt(location.path(),
+                                          location.line(),
+                                          location.column());
+    }
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Internal */
+} /* namespace Asn1Acn */
