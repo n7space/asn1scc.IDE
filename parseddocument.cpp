@@ -31,7 +31,7 @@
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocument::ParsedDocument(const Data::ModulesPtr &parsedData, const DocumentSource &source) :
+ParsedDocument::ParsedDocument(const Data::ModulePtr &parsedData, const DocumentSource &source) :
     m_source(source),
     m_parsedData(parsedData)
 {
@@ -54,12 +54,8 @@ void ParsedDocument::bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNod
     if (m_parsedData == nullptr)
         return;
 
-    Data::Modules::DefinitionsMap::const_iterator defIt = m_parsedData->definitions().begin();
-    while (defIt != m_parsedData->definitions().end()) {
-        auto definitionNode = createDefinition(defIt->second);
-        moduleNode->addChild(definitionNode);
-        defIt++;
-    }
+    for (const auto &definitions : m_parsedData->definitionsList())
+        moduleNode->addChild(createDefinition(definitions));
 }
 
 void ParsedDocument::populateReferences()
@@ -67,9 +63,8 @@ void ParsedDocument::populateReferences()
     if (m_parsedData == nullptr)
         return;
 
-    Data::Modules::DefinitionsMap::const_iterator defIt;
-    for (defIt = m_parsedData->definitions().begin(); defIt != m_parsedData->definitions().end(); defIt++)
-        populateReferencesFromModule(defIt->second);
+    for (const auto &definitions : m_parsedData->definitionsList())
+        populateReferencesFromModule(definitions);
 }
 
 void ParsedDocument::populateReferencesFromModule(const Data::DefinitionsPtr &moduleDefinition)
@@ -124,23 +119,13 @@ Data::TypeReference ParsedDocument::getTypeReference(const int line, const int c
 }
 
 Data::SourceLocation ParsedDocument::getDefinitionLocation(const QString &typeAssignmentName,
-                                                           const QString &moduleName) const
+                                                           const QString &definitionsName) const
 {
     if (m_parsedData == nullptr)
         return Data::SourceLocation();
 
-    Data::Modules::DefinitionsMap::const_iterator defIt;
-    for (defIt = m_parsedData->definitions().begin(); defIt != m_parsedData->definitions().end(); defIt++) {
-
-        if (defIt->first != moduleName)
-            continue;
-
-        Data::SourceLocation location = getLocationFromModule(defIt->second, typeAssignmentName);
-        if (location.isValid())
-            return location;
-    }
-
-    return Data::SourceLocation();
+    const auto &definitions = m_parsedData->definitions(definitionsName);
+    return getLocationFromModule(definitions, typeAssignmentName);
 }
 
 Data::SourceLocation ParsedDocument::getLocationFromModule(const Data::DefinitionsPtr &moduleDefinition,

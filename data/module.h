@@ -26,6 +26,7 @@
 
 #include <memory>
 #include <map>
+#include <vector>
 
 #include "definitions.h"
 
@@ -33,23 +34,25 @@ namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-class Modules
+class Module
 {
 public:
-
     void add(const DefinitionsPtr &defs)
     {
-        m_definitions[defs->name()] = defs;
+        m_definitionsByNameMap[defs->name()] = defs;
+        m_definitionsList.push_back(defs);
     }
 
-    using DefinitionsMap = std::map<QString, DefinitionsPtr>;
-    const DefinitionsMap &definitions() const { return m_definitions; }
+    using DefinitionsList = std::vector<DefinitionsPtr>;
+    const DefinitionsList &definitionsList() const { return m_definitionsList; }
+    const DefinitionsPtr &definitions(const QString &name) const { return m_definitionsByNameMap.at(name); }
 
 private:
-    DefinitionsMap m_definitions;
+    DefinitionsList m_definitionsList;
+    std::map<QString, DefinitionsPtr> m_definitionsByNameMap;
 };
 
-using ModulesPtr = std::shared_ptr<Modules>;
+using ModulePtr = std::shared_ptr<Module>;
 
 } // namespace Data
 } // namespace Internal

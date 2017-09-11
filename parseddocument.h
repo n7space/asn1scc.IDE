@@ -29,7 +29,7 @@
 #include <QString>
 #include <QList>
 
-#include "data/modules.h"
+#include "data/module.h"
 #include "data/definitions.h"
 #include "data/typereference.h"
 
@@ -44,14 +44,14 @@ class ParsedDocument
 {
 public:
     ParsedDocument(const DocumentSource &source = {});
-    ParsedDocument(const Data::ModulesPtr &parsedData, const DocumentSource &source);
+    ParsedDocument(const Data::ModulePtr &parsedData, const DocumentSource &source);
 
     const DocumentSource &source() const;
 
     void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const;
 
     Data::TypeReference getTypeReference(const int line, const int col) const;
-    Data::SourceLocation getDefinitionLocation(const QString& typeAssignmentName, const QString& moduleName) const;
+    Data::SourceLocation getDefinitionLocation(const QString& typeAssignmentName, const QString& definitionsName) const;
 
     Completion::UserTypesProposalsProvider getProposalsProvider() const;
 
@@ -68,7 +68,7 @@ private:
     Data::SourceLocation buildLocation(const Data::SourceLocation& location) const;
 
     DocumentSource m_source;
-    Data::ModulesPtr m_parsedData;
+    Data::ModulePtr m_parsedData;
 
     QMultiHash<int, Data::TypeReference> m_referenceLookup;
 };

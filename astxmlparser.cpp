@@ -58,7 +58,7 @@ void AstXmlParser::updateCurrentFile()
 {
     m_currentFile = m_xmlReader.attributes().value(QStringLiteral("FileName")).toString();
 
-    m_data.insert(std::make_pair(m_currentFile, std::make_unique<Data::Modules>()));
+    m_data.insert(std::make_pair(m_currentFile, std::make_unique<Data::Module>()));
 }
 
 void AstXmlParser::readAsn1ModuleChildren()

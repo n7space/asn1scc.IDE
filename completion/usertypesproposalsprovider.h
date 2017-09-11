@@ -30,7 +30,7 @@
 #include <texteditor/codeassist/assistproposalitem.h>
 
 #include "proposalsprovider.h"
-#include "../data/modules.h"
+#include "../data/module.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -39,14 +39,14 @@ namespace Completion {
 class UserTypesProposalsProvider : public ProposalsProvider
 {
 public:
-    UserTypesProposalsProvider(const Data::ModulesPtr &data);
+    UserTypesProposalsProvider(const Data::ModulePtr &data);
 
 private:
     Proposals createProposals() const override;
     Proposals createImportedTypes(const QList<QString> &importedProposals) const;
     Proposals createInternalTypes(const Data::Definitions::Types &types) const;
 
-    Data::ModulesPtr m_data;
+    Data::ModulePtr m_data;
 };
 
 } /* nameapsce Completion */

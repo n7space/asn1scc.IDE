@@ -30,7 +30,7 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Completion;
 
-UserTypesProposalsProvider::UserTypesProposalsProvider(const Data::ModulesPtr &data)
+UserTypesProposalsProvider::UserTypesProposalsProvider(const Data::ModulePtr &data)
     : ProposalsProvider(":/codemodel/images/member.png")
     , m_data(data)
 {
@@ -43,14 +43,9 @@ Proposals UserTypesProposalsProvider::createProposals() const
     if (m_data == nullptr)
         return proposals;
 
-    Data::Modules::DefinitionsMap::const_iterator defIt;
-    for (defIt = m_data->definitions().begin(); defIt != m_data->definitions().end(); defIt++) {
-
-        const auto &definitions = defIt->second;
+    for (const auto &definitions : m_data->definitionsList()) {
         proposals.append(createImportedTypes(definitions->importedTypes()));
-
-        const auto &types = definitions->types();
-        proposals.append(createInternalTypes(types));
+        proposals.append(createInternalTypes(definitions->types()));
     }
 
     return proposals;

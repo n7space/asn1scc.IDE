@@ -34,7 +34,7 @@
 
 #include <extensionsystem/pluginmanager.h>
 
-#include "data/modules.h"
+#include "data/module.h"
 #include "data/definitions.h"
 
 #include "astxmlparser.h"

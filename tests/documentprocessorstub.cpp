@@ -28,7 +28,7 @@
 #include <QList>
 #include <QFileInfo>
 
-#include "../data/modules.h"
+#include "../data/module.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
@@ -52,7 +52,7 @@ void DocumentProcessorStub::run()
     m_state = createState();
 
     for (auto it = m_documents.begin(); it != m_documents.cend(); ++it) {
-        auto modules = std::make_unique<Data::Modules>();
+        auto modules = std::make_unique<Data::Module>();
         std::unique_ptr<ParsedDocument> parsedDocument(new ParsedDocument(std::move(modules), it.value()));
         m_results.push_back(std::move(parsedDocument));
     }

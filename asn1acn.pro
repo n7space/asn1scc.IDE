@@ -130,11 +130,11 @@ HEADERS += \
     data/sourcelocation.h \
     data/typeassignment.h \
     data/definitions.h \
-    data/modules.h \
     data/typereference.h \
     data/type.h \
     data/errormessage.h \
     data/node.h \
+    data/module.h \
     \
     options-pages/general.h \
     options-pages/service.h \
