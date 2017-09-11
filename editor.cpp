@@ -36,28 +36,19 @@
 #include "modeltree.h"
 #include "overviewmodel.h"
 
+#include "editoroutline.h"
+
 using namespace Asn1Acn::Internal;
 using namespace Core;
 
 EditorWidget::EditorWidget()
+    : m_editorOutline(new EditorOutline(this))
 {
-    m_model = new OverviewModel(this);
-
-    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            m_model, &OverviewModel::invalidated);
-
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            m_model, &OverviewModel::validated);
 }
 
-EditorWidget::~EditorWidget()
+EditorOutline *EditorWidget::outline() const
 {
-    delete m_model;
-}
-
-OverviewModel *EditorWidget::getOverviewModel() const
-{
-    return m_model;
+    return m_editorOutline;
 }
 
 void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
@@ -67,15 +58,15 @@ void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
     ActionContainer *mcontext = ActionManager::actionContainer(Constants::CONTEXT_MENU);
     QMenu *contextMenu = mcontext->menu();
 
-    foreach (QAction *action, contextMenu->actions()) {
+    foreach (QAction *action, contextMenu->actions())
         menu->addAction(action);
-    }
 
     appendStandardContextMenuActions(menu);
 
     menu->exec(e->globalPos());
     if (!menu)
         return;
+
     delete menu;
 }
 
@@ -90,4 +81,6 @@ void EditorWidget::finalizeInitialization()
             [this](const QList<QTextEdit::ExtraSelection> &selections){
         setExtraSelections(TextEditorWidget::CodeWarningsSelection, selections);
     });
+
+    insertExtraToolBarWidget(TextEditorWidget::Left, m_editorOutline->takeWidget());
 }

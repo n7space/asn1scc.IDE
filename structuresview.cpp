@@ -36,18 +36,9 @@ using namespace Asn1Acn::Internal;
 StructuresViewWidget::StructuresViewWidget() :
     OverviewWidget(new OverviewModel)
 {
-    ModelTree *instance = ModelTree::instance();
-    auto modelRoot = instance->getModelTreeRoot();
-
-    m_model->setRootNode(modelRoot);
+    m_model->setRootNode(ModelTree::instance()->getModelTreeRoot());
 
     m_indexUpdater = createIndexUpdater();
-
-    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            m_model, &OverviewModel::invalidated);
-
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            m_model, &OverviewModel::validated);
 
     connect(m_model, &QAbstractItemModel::modelReset,
             this, &StructuresViewWidget::modelUpdated);
@@ -58,9 +49,15 @@ StructuresViewWidget::~StructuresViewWidget()
     delete m_model;
 }
 
-std::unique_ptr<OverviewIndexUpdater> StructuresViewWidget::createIndexUpdater() const
+void StructuresViewWidget::modelUpdated()
 {
-    std::unique_ptr<StructuresViewIndexUpdater> indexUpdater = std::make_unique<StructuresViewIndexUpdater>(m_model);
+    m_indexUpdater->updateCurrentIndex();
+    m_treeView->expandAll();
+}
+
+std::shared_ptr<OverviewIndexUpdater> StructuresViewWidget::createIndexUpdater() const
+{
+    auto indexUpdater = std::make_unique<StructuresViewIndexUpdater>(m_model);
 
     connect(indexUpdater.get(), &OverviewIndexUpdater::currentIndexUpdated,
             this, &StructuresViewWidget::updateSelectionInTree);
@@ -68,7 +65,7 @@ std::unique_ptr<OverviewIndexUpdater> StructuresViewWidget::createIndexUpdater()
     connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
             indexUpdater.get(), &StructuresViewIndexUpdater::onEditorChanged);
 
-    return std::move(indexUpdater);
+    return indexUpdater;
 }
 
 StructuresViewFactory::StructuresViewFactory()

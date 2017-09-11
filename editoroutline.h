@@ -25,32 +25,48 @@
 
 #pragma once
 
-#include <texteditor/texteditor.h>
+#include <QObject>
 
-#include <utils/uncommentselection.h>
+#include <texteditor/texteditor.h>
+#include <utils/treeviewcombobox.h>
 
 #include "overviewmodel.h"
+#include "overviewindexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class EditorOutline;
+class EditorWidget;
 
-class EditorWidget : public TextEditor::TextEditorWidget
+class EditorOutline : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit EditorWidget();
-    EditorOutline *outline() const;
+    EditorOutline(TextEditor::TextEditorWidget *editorWidget);
 
-protected:
-    void finalizeInitialization() override;
-    void contextMenuEvent(QContextMenuEvent *) override;
+    QWidget *takeWidget() const;
 
-    EditorOutline *m_editorOutline;
-    Utils::CommentDefinition m_commentDefinition;
+    OverviewModel *model() const;
+    const std::shared_ptr<OverviewIndexUpdater> &indexUpdater() const;
+
+public slots:
+    void modelUpdated();
+
+private slots:
+    void updateSelectionInTree(const QModelIndex &index);
+    void itemActivated();
+    void onEditorChanged();
+
+private:
+    void setupCombo();
+
+    EditorWidget *m_editorWidget;
+
+    OverviewModel *m_model;
+    std::shared_ptr<OverviewIndexUpdater> m_indexUpdater;
+
+    Utils::TreeViewComboBox *m_combo;
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Asn1Acn */
+} /* namespace Internal */

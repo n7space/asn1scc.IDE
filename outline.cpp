@@ -36,24 +36,23 @@
 #include "asneditor.h"
 #include "acneditor.h"
 
+#include "editoroutline.h"
 #include "modeltree.h"
 #include "overviewindexupdater.h"
 
 using namespace Asn1Acn::Internal;
 
-OutlineWidget::OutlineWidget(EditorWidget *editor) :
-    OverviewWidget(editor->getOverviewModel()),
-    m_editor(editor)
+OutlineWidget::OutlineWidget(EditorWidget *editor)
+    : OverviewWidget(editor->outline()->model())
+    , m_editor(editor)
 {
+    m_indexUpdater = editor->outline()->indexUpdater();
+
     connect(m_model, &QAbstractItemModel::modelReset,
             this, &OutlineWidget::modelUpdated);
 
-    m_indexUpdater = std::make_unique<OverviewIndexUpdater>(m_model);
-
     connect(m_indexUpdater.get(), &OverviewIndexUpdater::currentIndexUpdated,
             this, &OutlineWidget::updateSelectionInTree);
-
-    m_indexUpdater->setEditor(m_editor);
 
     if (ModelTree::instance()->isValid())
         modelUpdated();
@@ -66,7 +65,9 @@ void OutlineWidget::modelUpdated()
     ModelTreeNode::ModelTreeNodePtr documentNode = ModelTree::instance()->getAnyNodeForFilepath(path);
     m_model->setRootNode(documentNode);
 
-    OverviewWidget::modelUpdated();
+    m_treeView->expandAll();
+
+    updateSelectionInTree(m_currentIndex);
 }
 
 bool OutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const

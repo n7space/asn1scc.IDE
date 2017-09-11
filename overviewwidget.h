@@ -58,11 +58,11 @@ public:
     void setCursorSynchronization(bool syncWithCursor) override;
 
 protected:
-    void modelUpdated();
     OverviewTreeView *m_treeView;
     OverviewModel *m_model;
 
-    std::unique_ptr<OverviewIndexUpdater> m_indexUpdater;
+    std::shared_ptr<OverviewIndexUpdater> m_indexUpdater;
+    QModelIndex m_currentIndex;
 
 protected slots:
     void updateSelectionInTree(const QModelIndex &index);
