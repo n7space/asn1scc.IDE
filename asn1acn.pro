@@ -67,6 +67,9 @@ SOURCES += \
     completion/builtinsproposalsprovider.cpp \
     \
     data/node.cpp \
+    data/module.cpp \
+    data/typeassignment.cpp \
+    data/definitions.cpp \
     \
     options-pages/general.cpp \
     options-pages/service.cpp \

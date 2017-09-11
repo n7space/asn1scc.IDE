@@ -45,6 +45,8 @@ public:
         , m_reference(reference)
     {}
 
+    ~TypeAssignment() override;
+
     const QString &name() const { return m_name; }
     const TypeReference &reference() const { return m_reference; }
 

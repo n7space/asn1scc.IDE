@@ -55,8 +55,8 @@ Proposals UserTypesProposalsProvider::createInternalTypes(const Data::Definition
 {
     Proposals proposals;
 
-    for (auto typeIt = types.begin(); typeIt != types.end(); typeIt++)
-        addProposal(proposals, typeIt->second->name());
+    for (const auto &type : types)
+        addProposal(proposals, type->name());
 
     return proposals;
 }

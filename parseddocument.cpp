@@ -69,13 +69,10 @@ void ParsedDocument::populateReferences()
 
 void ParsedDocument::populateReferencesFromModule(const Data::DefinitionsPtr &moduleDefinition)
 {
-    const Data::Definitions::Types &types = moduleDefinition->types();
-
-    Data::Definitions::Types::const_iterator typeIt;
-    for (typeIt = types.begin(); typeIt != types.end(); typeIt++) {
-        auto reference = typeIt->second->reference();
+    for (const auto &type : moduleDefinition->types()) {
+        auto reference = type->reference();
         if (reference.isUserDefined())
-            m_referenceLookup.insert(typeIt->second->location().line(), reference);
+            m_referenceLookup.insert(type->location().line(), reference);
     }
 }
 
@@ -97,7 +94,7 @@ void ParsedDocument::attachTypesToDefiniton(const Data::Definitions::Types types
                                             ModelTreeNode::ModelTreeNodePtr definitionNode) const
 {
     for (const auto& type : types) {
-        auto typeNode = ModelTreeNode::makePtr(type.second->name(), type.second->reference().type(), buildLocation(type.second->location()));
+        auto typeNode = ModelTreeNode::makePtr(type->name(), type->reference().type(), buildLocation(type->location()));
         definitionNode->addChild(typeNode);
     }
 }
@@ -125,23 +122,18 @@ Data::SourceLocation ParsedDocument::getDefinitionLocation(const QString &typeAs
         return Data::SourceLocation();
 
     const auto &definitions = m_parsedData->definitions(definitionsName);
+    if (!definitions)
+        return {};
     return getLocationFromModule(definitions, typeAssignmentName);
 }
 
 Data::SourceLocation ParsedDocument::getLocationFromModule(const Data::DefinitionsPtr &moduleDefinition,
                                                            const QString &typeAssignmentName) const
 {
-    const Data::Definitions::Types &types = moduleDefinition->types();
-
-    Data::Definitions::Types::const_iterator typeIt;
-    for (typeIt = types.begin(); typeIt != types.end(); typeIt++) {
-        if (typeIt->first != typeAssignmentName)
-            continue;
-
-        return typeIt->second->location();
-    }
-
-    return Data::SourceLocation();
+    const auto &type = moduleDefinition->type(typeAssignmentName);
+    if (!type)
+        return {};
+    return type->location();
 }
 
 Completion::UserTypesProposalsProvider ParsedDocument::getProposalsProvider() const

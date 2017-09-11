@@ -25,9 +25,11 @@
 #pragma once
 
 #include <map>
+#include <list>
 #include <memory>
 
 #include <QString>
+#include <QStringList>
 
 #include "typeassignment.h"
 #include "node.h"
@@ -44,11 +46,14 @@ public:
         , m_name(name)
     {}
 
+    ~Definitions() override;
+
     const QString &name() const { return m_name; }
 
     void add(const TypeAssignmentPtr &type)
     {
-        m_types.insert(std::make_pair(type->name(), type));
+        m_typeByNameMap.insert({ type->name(), type });
+        m_types.push_back(type);
     }
 
     void addImportedType(const QString &typeName)
@@ -56,15 +61,17 @@ public:
         m_importedTypes.append(typeName);
     }
 
-    using Types = std::map<QString, TypeAssignmentPtr>;
+    using Types = std::list<TypeAssignmentPtr>;
 
     const Types &types() const { return m_types; }
-    const QList<QString> &importedTypes() { return m_importedTypes; }
+    const TypeAssignmentPtr &type(const QString &name) const;
+    const QStringList &importedTypes() { return m_importedTypes; }
 
 private:
     QString m_name;
     Types m_types;
-    QList<QString> m_importedTypes;
+    std::map<QString, TypeAssignmentPtr> m_typeByNameMap;
+    QStringList m_importedTypes;
 };
 
 using DefinitionsPtr = std::shared_ptr<Definitions>;

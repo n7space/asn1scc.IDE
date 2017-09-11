@@ -67,7 +67,7 @@ void AstXmlParserTests::test_emptyDefinitions()
           R"(</ASN1AST>)");
 
     QCOMPARE(m_parsedData["TestFile.asn"]->definitionsList().size(), std::size_t{1});
-    QCOMPARE(m_parsedData["TestFile.asn"]->definitions(QStringLiteral("TestDefinitions"))->name(), QStringLiteral("TestDefinitions"));
+    QCOMPARE(m_parsedData["TestFile.asn"]->definitions("TestDefinitions")->name(), QStringLiteral("TestDefinitions"));
     QCOMPARE(m_parsedData["TestFile.asn"]->definitionsList().front()->name(), QStringLiteral("TestDefinitions"));
     QCOMPARE(m_parsedData["TestFile.asn"]->definitionsList().front()->location().path(), QStringLiteral("TestFile.asn"));
 }
@@ -90,10 +90,10 @@ void AstXmlParserTests::test_singleTypeAssignment()
           R"(</ASN1AST>)");
 
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().size(), std::size_t{1});
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->name(), QStringLiteral("MyInt"));
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->location().path(), QStringLiteral("Test2File.asn"));
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->location().line(), 4);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->location().column(), 10);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->name(), QStringLiteral("MyInt"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->location().path(), QStringLiteral("Test2File.asn"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->location().line(), 4);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->location().column(), 10);
 }
 
 Q_DECLARE_METATYPE(Asn1Acn::Internal::Data::Type)
@@ -118,9 +118,9 @@ void AstXmlParserTests::test_builtinTypeReference()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().location().column(), 19);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().location().line(), 3);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().type(), type);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().location().column(), 19);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().location().line(), 3);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().type(), type);
 }
 
 void AstXmlParserTests::test_builtinTypeReference_data()
@@ -159,11 +159,11 @@ void AstXmlParserTests::test_userDefinedTypeReference()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().location().column(), 19);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().location().line(), 3);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().type(), Data::Type::UserDefined);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().name(), QStringLiteral("ThirdInt"));
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().module(), QStringLiteral("TestDefinitions"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().location().column(), 19);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().location().line(), 3);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().type(), Data::Type::UserDefined);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().name(), QStringLiteral("ThirdInt"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().module(), QStringLiteral("TestDefinitions"));
 }
 
 void AstXmlParserTests::test_userDefinedTypeReferenceInOtherModule()
@@ -183,11 +183,11 @@ void AstXmlParserTests::test_userDefinedTypeReferenceInOtherModule()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().location().column(), 19);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().location().line(), 3);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().type(), Data::Type::UserDefined);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().name(), QStringLiteral("ThirdInt"));
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().module(), QStringLiteral("MYMOD"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().location().column(), 19);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().location().line(), 3);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().type(), Data::Type::UserDefined);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().name(), QStringLiteral("ThirdInt"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().module(), QStringLiteral("MYMOD"));
 }
 
 void AstXmlParserTests::test_multipleTypeAssignments()
@@ -219,9 +219,9 @@ void AstXmlParserTests::test_multipleTypeAssignments()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyInt")->reference().type(), Data::Type::Integer);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MySeq")->reference().type(), Data::Type::Sequence);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->types().at("MyNull")->reference().type(), Data::Type::Null);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().type(), Data::Type::Integer);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeq")->reference().type(), Data::Type::Sequence);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyNull")->reference().type(), Data::Type::Null);
 }
 
 void AstXmlParserTests::test_importedType()

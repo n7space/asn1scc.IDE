@@ -22,40 +22,10 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "typeassignment.h"
 
-#include <memory>
-#include <map>
-#include <vector>
+using namespace Asn1Acn::Internal::Data;
 
-#include "definitions.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace Data {
-
-class Module
+TypeAssignment::~TypeAssignment()
 {
-public:
-    // TODO inherit Node ? ~Module() override;
-
-    void add(const DefinitionsPtr &defs)
-    {
-        m_definitionsByNameMap[defs->name()] = defs;
-        m_definitionsList.push_back(defs);
-    }
-
-    using DefinitionsList = std::vector<DefinitionsPtr>;
-    const DefinitionsList &definitionsList() const { return m_definitionsList; }
-    DefinitionsPtr definitions(const QString &name) const;
-
-private:
-    DefinitionsList m_definitionsList;
-    std::map<QString, DefinitionsPtr> m_definitionsByNameMap;
-};
-
-using ModulePtr = std::shared_ptr<Module>;
-
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+}
