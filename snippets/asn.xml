@@ -1,36 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <snippets>
-<snippet group="ASN.1" trigger="sequence" id="sample_snippet_definition">Sample DEFINITIONS ::= BEGIN
-
-    $name$ ::= SEQUENCE {
-        trackingNumber INTEGER,
-        question       IA5String
-    }
-
-    Test ::= SEQUENCE {
-        other $name$
-    }
-
+<snippet group="ASN.1" trigger="sequence" id="sequence">SEQUENCE
+{
+    $$
+}
+</snippet>
+<snippet group="ASN.1" trigger="enumerated" id="enumerated">ENUMERATED
+{
+    $$
+}
+</snippet>
+<snippet group="ASN.1" trigger="choice" id="choice">CHOICE
+{
+    $$
+}
+</snippet>
+<snippet group="ASN.1" trigger="set" id="set">SET
+{
+    $$
+}
+</snippet>
+<snippet group="ASN.1" trigger="setof" id="setof">SET (SIZE($constraint1$ .. $constraint2$)) OF $type$</snippet>
+<snippet group="ASN.1" trigger="sequenceof" id="sequenceof">SEQUENCE (SIZE($constraint1$ .. $constraint2$)) OF $type$</snippet>
+<snippet group="ASN.1" trigger="definitions" id="definitions">$name$ DEFINITIONS ::= BEGIN
+    $$
 END
 </snippet>
-<snippet group="ASN.1" trigger="snippet2" id="another_snippet_definition">Sample DEFINITIONS ::= BEGIN
-
-    Question ::= SEQUENCE {
-        trackingNumber INTEGER(0..199),
-        question       IA5String
-    }
-
-    Answer ::= SEQUENCE {
-        questionNumber INTEGER(10..20),
-        answer         BOOLEAN
-    }
-
-    History ::= SEQUENCE {
-        questions SEQUENCE(SIZE(0..10)) OF Question,
-        answers   SEQUENCE(SIZE(1..10)) OF Answer,
-        anArray   SEQUENCE(SIZE(100))  OF INTEGER(0..1000),
-    }
-
-END
-</snippet>
+<snippet group="ASN.1" trigger="imports" id="imports">IMPORTS $type$ FROM $module$;</snippet>
 </snippets>

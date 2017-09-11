@@ -30,11 +30,11 @@
 using namespace Asn1Acn::Internal::Completion;
 
 static const QStringList KEYWORDS = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMATIC", "TAGS", "EXPLICIT", "IMPLICIT",
-                                      "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "IMPORTS", "DEFINITIONS", "FROM",
-                                      "APPLICATION", "PRIVATE", "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM" };
+                                      "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "DEFINITIONS", "APPLICATION", "PRIVATE",
+                                      "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM" };
 
-static const QStringList TYPES = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SET OF", "SEQUENCE",
-                                   "SEQUENCE OF", "OCTET STRING", "BIT STRING" };
+static const QStringList TYPES = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SEQUENCE",
+                                   "OCTET STRING", "BIT STRING" };
 
 static const QStringList BUILTIN = { "NULL", "FALSE", "TRUE" };
 
