@@ -25,6 +25,7 @@
 #pragma once
 
 #include <map>
+#include <memory>
 
 #include <QString>
 
@@ -45,9 +46,9 @@ public:
 
     const QString &name() const { return m_name; }
 
-    void add(const TypeAssignment &type)
+    void add(const TypeAssignmentPtr &type)
     {
-        m_types.insert(std::make_pair(type.name(), type));
+        m_types.insert(std::make_pair(type->name(), type));
     }
 
     void addImportedType(const QString &typeName)
@@ -55,7 +56,7 @@ public:
         m_importedTypes.append(typeName);
     }
 
-    using Types = std::map<QString, TypeAssignment>;
+    using Types = std::map<QString, TypeAssignmentPtr>;
 
     const Types &types() const { return m_types; }
     const QList<QString> &importedTypes() { return m_importedTypes; }
@@ -65,6 +66,8 @@ private:
     Types m_types;
     QList<QString> m_importedTypes;
 };
+
+using DefinitionsPtr = std::shared_ptr<Definitions>;
 
 } // namespace Data
 } // namespace Internal

@@ -37,17 +37,19 @@ class Modules
 {
 public:
 
-    void add(std::unique_ptr<Definitions> defs)
+    void add(const DefinitionsPtr &defs)
     {
-        m_definitions[defs->name()] = std::move(defs);
+        m_definitions[defs->name()] = defs;
     }
 
-    using DefinitionsMap = std::map<QString, std::unique_ptr<Definitions>>;
+    using DefinitionsMap = std::map<QString, DefinitionsPtr>;
     const DefinitionsMap &definitions() const { return m_definitions; }
 
 private:
     DefinitionsMap m_definitions;
 };
+
+using ModulesPtr = std::shared_ptr<Modules>;
 
 } // namespace Data
 } // namespace Internal

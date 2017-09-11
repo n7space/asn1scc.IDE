@@ -30,8 +30,9 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Completion;
 
-UserTypesProposalsProvider::UserTypesProposalsProvider(const std::unique_ptr<Data::Modules> &data)
-    : ProposalsProvider(":/codemodel/images/member.png"), m_data(data)
+UserTypesProposalsProvider::UserTypesProposalsProvider(const Data::ModulesPtr &data)
+    : ProposalsProvider(":/codemodel/images/member.png")
+    , m_data(data)
 {
 }
 
@@ -45,10 +46,10 @@ Proposals UserTypesProposalsProvider::createProposals() const
     Data::Modules::DefinitionsMap::const_iterator defIt;
     for (defIt = m_data->definitions().begin(); defIt != m_data->definitions().end(); defIt++) {
 
-        const std::unique_ptr<Data::Definitions> &definitions = defIt->second;
+        const auto &definitions = defIt->second;
         proposals.append(createImportedTypes(definitions->importedTypes()));
 
-        const Data::Definitions::Types &types = definitions->types();
+        const auto &types = definitions->types();
         proposals.append(createInternalTypes(types));
     }
 
@@ -60,7 +61,7 @@ Proposals UserTypesProposalsProvider::createInternalTypes(const Data::Definition
     Proposals proposals;
 
     for (auto typeIt = types.begin(); typeIt != types.end(); typeIt++)
-        addProposal(proposals, typeIt->second.name());
+        addProposal(proposals, typeIt->second->name());
 
     return proposals;
 }

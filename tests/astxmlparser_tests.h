@@ -53,14 +53,13 @@ private slots:
     void test_importedType();
     void test_multipleImportedType();
 
-
 private:
     void setXmlData(const QString& str);
     void parsingFails(const QString& xmlData);
     void parse(const QString& xmlData);
 
     QXmlStreamReader m_xmlReader;
-    std::map<QString, std::unique_ptr<Data::Modules>> m_parsedData;
+    std::map<QString, Data::ModulesPtr> m_parsedData;
 };
 
 } // namespace Tests

@@ -43,7 +43,7 @@ public:
 
     bool parse();
 
-    std::map<QString, std::unique_ptr<Data::Modules>> takeData() { return std::move(m_data); }
+    std::map<QString, Data::ModulesPtr> takeData() { return std::move(m_data); }
 
 private:
     void readASN1AST();
@@ -79,7 +79,7 @@ private:
     bool nextRequiredElementIs(const QString &name);
 
     QXmlStreamReader& m_xmlReader;
-    std::map<QString, std::unique_ptr<Data::Modules>> m_data;
+    std::map<QString, Data::ModulesPtr> m_data;
     QString m_currentFile;
     QString m_currentModule;
     Data::Definitions* m_currentDefinitions;

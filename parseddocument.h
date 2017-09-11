@@ -44,7 +44,7 @@ class ParsedDocument
 {
 public:
     ParsedDocument(const DocumentSource &source = {});
-    ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSource &source);
+    ParsedDocument(const Data::ModulesPtr &parsedData, const DocumentSource &source);
 
     const DocumentSource &source() const;
 
@@ -56,21 +56,21 @@ public:
     Completion::UserTypesProposalsProvider getProposalsProvider() const;
 
 private:
-    ModelTreeNode::ModelTreeNodePtr createDefinition(const std::unique_ptr<Data::Definitions> &definition) const;
+    ModelTreeNode::ModelTreeNodePtr createDefinition(const Data::DefinitionsPtr &definition) const;
     void attachTypesToDefiniton(const Data::Definitions::Types types,
                                 ModelTreeNode::ModelTreeNodePtr definitionNode) const;
 
     void populateReferences();
-    void populateReferencesFromModule(const std::unique_ptr<Data::Definitions> &moduleDefinition);
+    void populateReferencesFromModule(const Data::DefinitionsPtr &moduleDefinition);
 
-    Data::SourceLocation getLocationFromModule(const std::unique_ptr<Data::Definitions> &definition,
+    Data::SourceLocation getLocationFromModule(const Data::DefinitionsPtr &definition,
                                                const QString &typeAssignmentName) const;
     Data::SourceLocation buildLocation(const Data::SourceLocation& location) const;
 
     DocumentSource m_source;
-    std::unique_ptr<Data::Modules> m_parsedData;
+    Data::ModulesPtr m_parsedData;
 
-    QMultiHash<int, Data::TypeReference> m_refernceLookup;
+    QMultiHash<int, Data::TypeReference> m_referenceLookup;
 };
 
 } // namespace Internal

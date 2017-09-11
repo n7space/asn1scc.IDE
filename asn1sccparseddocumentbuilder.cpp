@@ -107,16 +107,11 @@ void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
     AstXmlParser parser(reader);
     parser.parse();
 
-    std::map<QString, std::unique_ptr<Data::Modules>> parsedData = parser.takeData();
-    std::map<QString, std::unique_ptr<Data::Modules>>::iterator it;
-
-    for (it = parsedData.begin(); it != parsedData.end(); it++) {
-        QString fileName = it->first;
-        DocumentSource sourceInfo = m_rawDocuments[fileName];
-
-        std::unique_ptr<ParsedDocument> parsedDoc(new ParsedDocument(std::move(it->second), sourceInfo));
-
-        m_parsedDocuments.push_back(std::move(parsedDoc));
+    auto parsedData = parser.takeData();
+    for (const auto &item : parsedData) {
+        const QString &fileName = item.first;
+        const DocumentSource &sourceInfo = m_rawDocuments[fileName];
+        m_parsedDocuments.push_back(std::make_unique<ParsedDocument>(item.second, sourceInfo));
     }
 }
 

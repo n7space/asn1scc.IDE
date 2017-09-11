@@ -24,6 +24,8 @@
 ****************************************************************************/
 #pragma once
 
+#include <memory>
+
 #include "sourcelocation.h"
 
 namespace Asn1Acn {
@@ -45,6 +47,8 @@ public:
 private:
     SourceLocation m_location;
 };
+
+using NodePtr = std::shared_ptr<Node>;
 
 } // namespace Data
 } // namespace Internal

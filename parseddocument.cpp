@@ -31,9 +31,9 @@
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocument::ParsedDocument(std::unique_ptr<Data::Modules> parsedData, const DocumentSource &source) :
+ParsedDocument::ParsedDocument(const Data::ModulesPtr &parsedData, const DocumentSource &source) :
     m_source(source),
-    m_parsedData(std::move(parsedData))
+    m_parsedData(parsedData)
 {
     populateReferences();
 }
@@ -72,20 +72,20 @@ void ParsedDocument::populateReferences()
         populateReferencesFromModule(defIt->second);
 }
 
-void ParsedDocument::populateReferencesFromModule(const std::unique_ptr<Data::Definitions> &moduleDefinition)
+void ParsedDocument::populateReferencesFromModule(const Data::DefinitionsPtr &moduleDefinition)
 {
     const Data::Definitions::Types &types = moduleDefinition->types();
 
     Data::Definitions::Types::const_iterator typeIt;
     for (typeIt = types.begin(); typeIt != types.end(); typeIt++) {
-        auto reference = typeIt->second.reference();
+        auto reference = typeIt->second->reference();
         if (reference.isUserDefined())
-            m_refernceLookup.insert(typeIt->second.location().line(), reference);
+            m_referenceLookup.insert(typeIt->second->location().line(), reference);
     }
 }
 
 ModelTreeNode::ModelTreeNodePtr
-ParsedDocument::createDefinition(const std::unique_ptr<Data::Definitions> &definition) const
+ParsedDocument::createDefinition(const Data::DefinitionsPtr &definition) const
 {
     auto definitionNode = ModelTreeNode::makePtr(definition->name(), Data::Type::UserDefined, buildLocation(definition->location()));
     attachTypesToDefiniton(definition->types(), definitionNode);
@@ -102,17 +102,17 @@ void ParsedDocument::attachTypesToDefiniton(const Data::Definitions::Types types
                                             ModelTreeNode::ModelTreeNodePtr definitionNode) const
 {
     for (const auto& type : types) {
-        auto typeNode = ModelTreeNode::makePtr(type.second.name(), type.second.reference().type(), buildLocation(type.second.location()));
+        auto typeNode = ModelTreeNode::makePtr(type.second->name(), type.second->reference().type(), buildLocation(type.second->location()));
         definitionNode->addChild(typeNode);
     }
 }
 
 Data::TypeReference ParsedDocument::getTypeReference(const int line, const int col) const
 {
-    if (!m_refernceLookup.contains(line))
+    if (!m_referenceLookup.contains(line))
         return Data::TypeReference();
 
-    QList<Data::TypeReference> typeRefs = m_refernceLookup.values(line);
+    QList<Data::TypeReference> typeRefs = m_referenceLookup.values(line);
     foreach (const Data::TypeReference &typeRef, typeRefs) {
         Data::SourceLocation sourceLocation = typeRef.location();
 
@@ -143,7 +143,7 @@ Data::SourceLocation ParsedDocument::getDefinitionLocation(const QString &typeAs
     return Data::SourceLocation();
 }
 
-Data::SourceLocation ParsedDocument::getLocationFromModule(const std::unique_ptr<Data::Definitions> &moduleDefinition,
+Data::SourceLocation ParsedDocument::getLocationFromModule(const Data::DefinitionsPtr &moduleDefinition,
                                                            const QString &typeAssignmentName) const
 {
     const Data::Definitions::Types &types = moduleDefinition->types();
@@ -153,7 +153,7 @@ Data::SourceLocation ParsedDocument::getLocationFromModule(const std::unique_ptr
         if (typeIt->first != typeAssignmentName)
             continue;
 
-        return typeIt->second.location();
+        return typeIt->second->location();
     }
 
     return Data::SourceLocation();

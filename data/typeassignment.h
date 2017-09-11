@@ -24,6 +24,8 @@
 ****************************************************************************/
 #pragma once
 
+#include <memory>
+
 #include <QString>
 
 #include "sourcelocation.h"
@@ -50,6 +52,8 @@ private:
     QString m_name;
     TypeReference m_reference;
 };
+
+using TypeAssignmentPtr = std::shared_ptr<TypeAssignment>;
 
 } // namespace Data
 } // namespace Internal
