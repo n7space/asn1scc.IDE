@@ -69,6 +69,7 @@ SOURCES += \
     data/node.cpp \
     data/module.cpp \
     data/typeassignment.cpp \
+    data/typereference.cpp \
     data/definitions.cpp \
     \
     options-pages/general.cpp \

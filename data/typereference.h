@@ -52,6 +52,8 @@ public:
     // TODO kill
     TypeReference() : TypeReference(Type::UserDefined, {}) {}
 
+    int childrenCount() const override;
+
     const QString &name() const { return m_name; }
     const QString &module() const { return m_module; }
     Type type() const { return m_type; }

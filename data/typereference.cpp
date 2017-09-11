@@ -22,36 +22,11 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "typereference.h"
 
-#include <memory>
+using namespace Asn1Acn::Internal::Data;
 
-#include "sourcelocation.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace Data {
-
-class Node
+int TypeReference::childrenCount() const
 {
-protected:
-    Node(const SourceLocation& location)
-        : m_location(location)
-    {}
-
-public:
-    virtual ~Node();
-
-    const SourceLocation& location() const { return m_location; }
-
-    virtual int childrenCount() const = 0;
-
-private:
-    SourceLocation m_location;
-};
-
-using NodePtr = std::shared_ptr<Node>;
-
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+    return 0;
+}

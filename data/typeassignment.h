@@ -49,6 +49,7 @@ public:
 
     const QString &name() const { return m_name; }
     const TypeReference &reference() const { return m_reference; }
+    int childrenCount() const override;
 
 private:
     QString m_name;

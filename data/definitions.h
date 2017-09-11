@@ -50,6 +50,8 @@ public:
 
     const QString &name() const { return m_name; }
 
+    int childrenCount() const override;
+
     void add(const TypeAssignmentPtr &type)
     {
         m_typeByNameMap.insert({ type->name(), type });
@@ -64,7 +66,7 @@ public:
     using Types = std::list<TypeAssignmentPtr>;
 
     const Types &types() const { return m_types; }
-    const TypeAssignmentPtr &type(const QString &name) const;
+    TypeAssignmentPtr type(const QString &name) const;
     const QStringList &importedTypes() { return m_importedTypes; }
 
 private:

@@ -29,3 +29,8 @@ using namespace Asn1Acn::Internal::Data;
 TypeAssignment::~TypeAssignment()
 {
 }
+
+int TypeAssignment::childrenCount() const
+{
+    return 0;
+}

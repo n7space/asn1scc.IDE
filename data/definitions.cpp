@@ -30,10 +30,15 @@ Definitions::~Definitions()
 {
 }
 
-const TypeAssignmentPtr &Definitions::type(const QString &name) const
+TypeAssignmentPtr Definitions::type(const QString &name) const
 {
     const auto it = m_typeByNameMap.find(name);
     if (it == m_typeByNameMap.end())
         return {};
     return it->second;
+}
+
+int Definitions::childrenCount() const
+{
+    return static_cast<int>(m_types.size());
 }
