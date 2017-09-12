@@ -45,7 +45,7 @@
 
 using namespace Asn1Acn::Internal::Completion;
 
-static const int COMPLETER_ACTIVATION_LENGHT = 3;
+static const int COMPLETER_ACTIVATION_LENGHT = 2;
 
 CompletionAssistProcessor::CompletionAssistProcessor(const QString &snippetsGroup)
     : m_snippetCollector(snippetsGroup, QIcon(":/texteditor/images/snippet.png"))
