@@ -57,6 +57,7 @@ SOURCES += \
     completion/autocompleter.cpp \
     completion/asncompletionassist.cpp \
     completion/asnsnippetprovider.cpp \
+    completion/acnsnippetprovider.cpp \
     completion/proposalsprovider.cpp \
     completion/asnbuiltinsproposalsprovider.cpp \
     completion/usertypesproposalsprovider.cpp \
@@ -106,12 +107,14 @@ SOURCES += \
     overviewindexupdater.cpp \
     structuresviewindexupdater.cpp \
     filesourcereader.cpp \
-    errormessageparser.cpp
+    errormessageparser.cpp \
+    editoroutline.cpp
 
 HEADERS += \
     completion/autocompleter.h \
     completion/asncompletionassist.h \
     completion/asnsnippetprovider.h \
+    completion/acnsnippetprovider.h \
     completion/proposalsprovider.h \
     completion/asnbuiltinsproposalsprovider.h \
     completion/usertypesproposalsprovider.h \
@@ -184,7 +187,9 @@ HEADERS += \
     filesourcereader.h \
     parseddatastorageproxy.h \
     modeltreeproxy.h \
-    errormessageparser.h
+    errormessageparser.h \
+    editoroutline.h \
+    overviewactivatehandler.h
 
 FORMS += \
     options-pages/general.ui \
@@ -243,7 +248,8 @@ HEADERS += \
 ### Static files ###
 
 STATIC_FILES += \
-    snippets/asn.xml \
+    snippets/asn1.xml \
+    snippets/acn.xml \
     generic-highlighter/asn1.xml \
     generic-highlighter/acn.xml \
     templates/wizards/files/acn/wizard.json \

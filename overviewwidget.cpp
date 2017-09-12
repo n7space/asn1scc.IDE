@@ -36,6 +36,7 @@
 #include <coreplugin/editormanager/editormanager.h>
 
 #include "data/sourcelocation.h"
+#include "overviewactivatehandler.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -63,9 +64,9 @@ void OverviewTreeView::contextMenuEvent(QContextMenuEvent *event)
     event->accept();
 }
 
-OverviewWidget::OverviewWidget(OverviewModel *model) :
-    m_treeView(new OverviewTreeView(this)),
-    m_model(model)
+OverviewWidget::OverviewWidget(OverviewModel *model)
+    : m_treeView(new OverviewTreeView(this))
+    , m_model(model)
 {
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
@@ -90,27 +91,15 @@ void OverviewWidget::setCursorSynchronization(bool syncWithCursor)
     Q_UNUSED(syncWithCursor);
 }
 
-void OverviewWidget::modelUpdated()
-{
-    m_treeView->expandAll();
-    m_indexUpdater->updateCurrentIndex();
-}
-
 void OverviewWidget::onItemActivated(const QModelIndex &index)
 {
-    if (!index.isValid())
-        return;
-
-    ModelTreeNode *node = static_cast<ModelTreeNode *>(index.internalPointer());
-
-    const auto location = node->sourceLocation();
-    Core::EditorManager::openEditorAt(location.path(),
-                                      location.line(),
-                                      location.column());
+    OverviewActivateHandler::gotoSymbol(index);
 }
 
 void OverviewWidget::updateSelectionInTree(const QModelIndex &index)
 {
+    m_currentIndex = index;
+
     m_treeView->setCurrentIndex(index);
     m_treeView->scrollTo(index);
 }

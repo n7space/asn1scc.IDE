@@ -25,32 +25,24 @@
 
 #pragma once
 
-#include <texteditor/texteditor.h>
-
-#include <utils/uncommentselection.h>
-
-#include "overviewmodel.h"
+#include <texteditor/snippets/isnippetprovider.h>
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Completion {
 
-class EditorOutline;
-
-class EditorWidget : public TextEditor::TextEditorWidget
+class AcnSnippetProvider : public TextEditor::ISnippetProvider
 {
     Q_OBJECT
 
 public:
-    explicit EditorWidget();
-    EditorOutline *outline() const;
+    ~AcnSnippetProvider() final = default;
 
-protected:
-    void finalizeInitialization() override;
-    void contextMenuEvent(QContextMenuEvent *) override;
-
-    EditorOutline *m_editorOutline;
-    Utils::CommentDefinition m_commentDefinition;
+    QString groupId() const override final;
+    QString displayName() const override final;
+    void decorateEditor(TextEditor::SnippetEditorWidget *editor) const override final;
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

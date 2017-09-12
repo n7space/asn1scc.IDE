@@ -23,34 +23,32 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "acnsnippetprovider.h"
 
-#include <texteditor/texteditor.h>
+#include "autocompleter.h"
+#include "../asn1acnconstants.h"
 
-#include <utils/uncommentselection.h>
+#include <texteditor/snippets/snippeteditor.h>
+#include <texteditor/textdocument.h>
 
-#include "overviewmodel.h"
+#include <QLatin1String>
+#include <QCoreApplication>
 
-namespace Asn1Acn {
-namespace Internal {
+using namespace Asn1Acn::Internal::Completion;
 
-class EditorOutline;
-
-class EditorWidget : public TextEditor::TextEditorWidget
+QString AcnSnippetProvider::groupId() const
 {
-    Q_OBJECT
+    return QLatin1String(Constants::ACN_SNIPPETS_GROUP_ID);
+}
 
-public:
-    explicit EditorWidget();
-    EditorOutline *outline() const;
+QString AcnSnippetProvider::displayName() const
+{
+    return QCoreApplication::translate("Asn1Acn::Internal::AcnSnippetProvider", "ACN");
+}
 
-protected:
-    void finalizeInitialization() override;
-    void contextMenuEvent(QContextMenuEvent *) override;
-
-    EditorOutline *m_editorOutline;
-    Utils::CommentDefinition m_commentDefinition;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+void AcnSnippetProvider::decorateEditor(TextEditor::SnippetEditorWidget *editor) const
+{
+    editor->setAutoCompleter(new AutoCompleter);
+    editor->textDocument()->setMimeType(Constants::ACN_MIMETYPE);
+    editor->configureGenericHighlighter();
+}

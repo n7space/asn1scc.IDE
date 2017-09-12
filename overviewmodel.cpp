@@ -28,6 +28,7 @@
 #include <coreplugin/fileiconprovider.h>
 
 #include "icons.h"
+#include "modeltree.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -36,6 +37,11 @@ OverviewModel::OverviewModel(QObject *parent) :
     QAbstractItemModel(parent),
     m_rootItem(nullptr)
 {
+    connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
+            this, &OverviewModel::invalidated);
+
+    connect(ModelTree::instance(), &ModelTree::modelUpdated,
+            this, &OverviewModel::validated);
 }
 
 OverviewModel::~OverviewModel()
