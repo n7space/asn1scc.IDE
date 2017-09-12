@@ -22,44 +22,43 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "module.h"
+#pragma once
 
-#include <utils/qtcassert.h>
+#include <memory>
+#include <map>
+#include <vector>
 
-using namespace Asn1Acn::Internal::Data;
+#include "definitions.h"
+#include "node.h"
 
-Module::Module(const QString &filePath)
-    : Node({filePath, 0, 0})
+namespace Asn1Acn {
+namespace Internal {
+namespace Data {
+
+class File : public Node
 {
-}
+public:
+    File(const QString &filePath);
+    ~File() override;
 
-Module::~Module()
-{
-}
+    void add(const DefinitionsPtr &defs);
 
-DefinitionsPtr Module::definitions(const QString &name) const
-{
-    const auto it = m_definitionsByNameMap.find(name);
-    if (it == m_definitionsByNameMap.end())
-        return {};
-    return it->second;
-}
+    using DefinitionsList = std::vector<DefinitionsPtr>;
+    const DefinitionsList &definitionsList() const { return m_definitionsList; }
+    DefinitionsPtr definitions(const QString &name) const;
 
-int Module::childrenCount() const
-{
-    return static_cast<int>(m_definitionsList.size());
-}
+    int childrenCount() const override;
+    int childIndex(const NodeConstPtr &child) const override;
 
-void Module::add(const DefinitionsPtr &defs)
-{
-    m_definitionsByNameMap[defs->name()] = defs;
-    m_definitionsList.push_back(defs);
-    defs->setParent(shared_from_this());
-}
+    const QString &name() const { return location().path(); }
 
-int Module::childIndex(const NodeConstPtr &child) const
-{
-    const auto it = std::find(m_definitionsList.begin(), m_definitionsList.end(), child);
-    QTC_ASSERT(it != m_definitionsList.end(), return -1);
-    return std::distance(m_definitionsList.begin(), it);
-}
+private:
+    DefinitionsList m_definitionsList;
+    std::map<QString, DefinitionsPtr> m_definitionsByNameMap;
+};
+
+using FilePtr = std::shared_ptr<File>;
+
+} // namespace Data
+} // namespace Internal
+} // namespace Asn1Acn

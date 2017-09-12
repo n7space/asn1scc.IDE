@@ -67,7 +67,7 @@ SOURCES += \
     completion/builtinsproposalsprovider.cpp \
     \
     data/node.cpp \
-    data/module.cpp \
+    data/file.cpp \
     data/typeassignment.cpp \
     data/typereference.cpp \
     data/definitions.cpp \
@@ -139,7 +139,7 @@ HEADERS += \
     data/type.h \
     data/errormessage.h \
     data/node.h \
-    data/module.h \
+    data/file.h \
     \
     options-pages/general.h \
     options-pages/service.h \

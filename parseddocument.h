@@ -29,7 +29,7 @@
 #include <QString>
 #include <QList>
 
-#include "data/module.h"
+#include "data/file.h"
 #include "data/definitions.h"
 #include "data/typereference.h"
 
@@ -44,7 +44,7 @@ class ParsedDocument
 {
 public:
     ParsedDocument(const DocumentSource &source = {});
-    ParsedDocument(const Data::ModulePtr &parsedData, const DocumentSource &source);
+    ParsedDocument(const Data::FilePtr &parsedData, const DocumentSource &source);
 
     const DocumentSource &source() const;
 
@@ -67,7 +67,7 @@ private:
                                                const QString &typeAssignmentName) const;
 
     DocumentSource m_source;
-    Data::ModulePtr m_parsedData;
+    Data::FilePtr m_parsedData;
 
     QMultiHash<int, Data::TypeReference> m_referenceLookup;
 };

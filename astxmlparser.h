@@ -31,7 +31,7 @@
 
 #include <QString>
 
-#include "data/module.h"
+#include "data/file.h"
 
 #include "pathmapper.h"
 
@@ -45,7 +45,7 @@ public:
 
     bool parse();
 
-    std::map<QString, Data::ModulePtr> takeData() { return std::move(m_data); }
+    std::map<QString, Data::FilePtr> takeData() { return std::move(m_data); }
 
 private:
     void readASN1AST();
@@ -81,7 +81,7 @@ private:
     bool nextRequiredElementIs(const QString &name);
 
     QXmlStreamReader& m_xmlReader;
-    std::map<QString, Data::ModulePtr> m_data;
+    std::map<QString, Data::FilePtr> m_data;
     QString m_currentFile;
     QString m_currentModule;
     Data::Definitions* m_currentDefinitions;

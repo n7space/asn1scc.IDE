@@ -31,7 +31,7 @@
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocument::ParsedDocument(const Data::ModulePtr &parsedData, const DocumentSource &source) :
+ParsedDocument::ParsedDocument(const Data::FilePtr &parsedData, const DocumentSource &source) :
     m_source(source),
     m_parsedData(parsedData)
 {

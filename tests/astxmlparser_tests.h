@@ -61,7 +61,7 @@ private:
 
     QXmlStreamReader m_xmlReader;
     PathMapper m_pathMapper;
-    std::map<QString, Data::ModulePtr> m_parsedData;
+    std::map<QString, Data::FilePtr> m_parsedData;
 };
 
 } // namespace Tests

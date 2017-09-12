@@ -30,7 +30,7 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Completion;
 
-UserTypesProposalsProvider::UserTypesProposalsProvider(const Data::ModulePtr &data)
+UserTypesProposalsProvider::UserTypesProposalsProvider(const Data::FilePtr &data)
     : ProposalsProvider(":/codemodel/images/member.png")
     , m_data(data)
 {

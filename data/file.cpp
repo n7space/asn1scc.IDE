@@ -22,43 +22,44 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "file.h"
 
-#include <memory>
-#include <map>
-#include <vector>
+#include <utils/qtcassert.h>
 
-#include "definitions.h"
-#include "node.h"
+using namespace Asn1Acn::Internal::Data;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Data {
-
-class Module : public Node
+File::File(const QString &filePath)
+    : Node({filePath, 0, 0})
 {
-public:
-    Module(const QString &filePath);
-    ~Module() override;
+}
 
-    void add(const DefinitionsPtr &defs);
+File::~File()
+{
+}
 
-    using DefinitionsList = std::vector<DefinitionsPtr>;
-    const DefinitionsList &definitionsList() const { return m_definitionsList; }
-    DefinitionsPtr definitions(const QString &name) const;
+DefinitionsPtr File::definitions(const QString &name) const
+{
+    const auto it = m_definitionsByNameMap.find(name);
+    if (it == m_definitionsByNameMap.end())
+        return {};
+    return it->second;
+}
 
-    int childrenCount() const override;
-    int childIndex(const NodeConstPtr &child) const override;
+int File::childrenCount() const
+{
+    return static_cast<int>(m_definitionsList.size());
+}
 
-    const QString &name() const { return location().path(); }
+void File::add(const DefinitionsPtr &defs)
+{
+    m_definitionsByNameMap[defs->name()] = defs;
+    m_definitionsList.push_back(defs);
+    defs->setParent(shared_from_this());
+}
 
-private:
-    DefinitionsList m_definitionsList;
-    std::map<QString, DefinitionsPtr> m_definitionsByNameMap;
-};
-
-using ModulePtr = std::shared_ptr<Module>;
-
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+int File::childIndex(const NodeConstPtr &child) const
+{
+    const auto it = std::find(m_definitionsList.begin(), m_definitionsList.end(), child);
+    QTC_ASSERT(it != m_definitionsList.end(), return -1);
+    return std::distance(m_definitionsList.begin(), it);
+}
