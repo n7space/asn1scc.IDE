@@ -57,6 +57,7 @@ SOURCES += \
     completion/autocompleter.cpp \
     completion/asncompletionassist.cpp \
     completion/asnsnippetprovider.cpp \
+    completion/acnsnippetprovider.cpp \
     completion/proposalsprovider.cpp \
     completion/asnbuiltinsproposalsprovider.cpp \
     completion/usertypesproposalsprovider.cpp \
@@ -113,6 +114,7 @@ HEADERS += \
     completion/autocompleter.h \
     completion/asncompletionassist.h \
     completion/asnsnippetprovider.h \
+    completion/acnsnippetprovider.h \
     completion/proposalsprovider.h \
     completion/asnbuiltinsproposalsprovider.h \
     completion/usertypesproposalsprovider.h \
@@ -246,7 +248,8 @@ HEADERS += \
 ### Static files ###
 
 STATIC_FILES += \
-    snippets/asn.xml \
+    snippets/asn1.xml \
+    snippets/acn.xml \
     generic-highlighter/asn1.xml \
     generic-highlighter/acn.xml \
     templates/wizards/files/acn/wizard.json \
