@@ -64,7 +64,6 @@
 #include "tests/errormessageparser_tests.h"
 #include "tests/overviewindexupdater_tests.h"
 #include "tests/structuresviewindexupdater_tests.h"
-#include "libraries/tests/metadataparser_tests.h"
 #include "tests/parseddocumentbuilder_tests.h"
 #include "tests/documentprocessor_tests.h"
 #include "tests/projectcontenthandler_tests.h"
@@ -72,6 +71,8 @@
 #include "tests/modeltree_tests.h"
 #include "tests/autocompleter_tests.h"
 #include "tests/pathmapper_tests.h"
+#include "libraries/tests/metadataparser_tests.h"
+#include "model/tests/displayrolevisitor_tests.h"
 #endif
 
 #include "asn1acn.h"
@@ -187,11 +188,12 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
 QList<QObject *> Asn1AcnPlugin::createTestObjects() const
 {
     return QList<QObject *>()
+            << new Libraries::Tests::MetadataParserTests
+            << new Model::Tests::DisplayRoleVisitorTests
             << new Tests::AstXmlParserTests
             << new Tests::ErrorMessageParserTests
             << new Tests::OverviewIndexUpdaterTests
             << new Tests::StructuresViewIndexUpdaterTests
-            << new Libraries::Tests::MetadataParserTests
             << new Tests::ParsedDocumentBuilderTests
             << new Tests::DocumentProcessorTests
             << new Tests::ProjectContentHandlerTests

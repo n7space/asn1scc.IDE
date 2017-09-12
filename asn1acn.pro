@@ -73,6 +73,8 @@ SOURCES += \
     data/definitions.cpp \
     data/visitor.cpp \
     \
+    model/displayrolevisitor.cpp \
+    \
     options-pages/general.cpp \
     options-pages/service.cpp \
     options-pages/servicewidget.cpp \
@@ -142,6 +144,8 @@ HEADERS += \
     data/node.h \
     data/file.h \
     data/visitor.h \
+    \
+    model/displayrolevisitor.cpp \
     \
     options-pages/general.h \
     options-pages/service.h \
@@ -222,6 +226,8 @@ equals(TEST, 1) {
 SOURCES += \
     libraries/tests/metadataparser_tests.cpp \
     \
+    model/tests/displayrolevisitor_tests.cpp \
+    \
     tests/astxmlparser_tests.cpp \
     tests/errormessageparser_tests.cpp \
     tests/overviewindexupdater_tests.cpp \
@@ -242,6 +248,8 @@ SOURCES += \
 
 HEADERS += \
     libraries/tests/metadataparser_tests.h \
+    \
+    model/tests/displayrolevisitor_tests.h \
     \
     tests/astxmlparser_tests.h \
     tests/errormessageparser_tests.h \
