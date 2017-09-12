@@ -70,6 +70,10 @@ void AstXmlParserTests::test_emptyDefinitions()
     QCOMPARE(m_parsedData["TestFile.asn"]->definitions("TestDefinitions")->name(), QStringLiteral("TestDefinitions"));
     QCOMPARE(m_parsedData["TestFile.asn"]->definitionsList().front()->name(), QStringLiteral("TestDefinitions"));
     QCOMPARE(m_parsedData["TestFile.asn"]->definitionsList().front()->location().path(), QStringLiteral("TestFile.asn"));
+
+    QCOMPARE(m_parsedData["TestFile.asn"]->definitions("TestDefinitions")->parent().get(),
+             m_parsedData["TestFile.asn"].get());
+    QCOMPARE(m_parsedData["TestFile.asn"]->childIndex(m_parsedData["TestFile.asn"]->definitions("TestDefinitions")), 0);
 }
 
 void AstXmlParserTests::test_singleTypeAssignment()
@@ -94,6 +98,10 @@ void AstXmlParserTests::test_singleTypeAssignment()
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->location().path(), QStringLiteral("Test2File.asn"));
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->location().line(), 4);
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->location().column(), 10);
+
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->parent().get(),
+             m_parsedData["Test2File.asn"]->definitions("TestDefinitions").get());
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->childIndex(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")), 0);
 }
 
 Q_DECLARE_METATYPE(Asn1Acn::Internal::Data::Type)

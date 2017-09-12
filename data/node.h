@@ -32,7 +32,12 @@ namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-class Node
+class Node;
+
+using NodePtr = std::shared_ptr<Node>;
+using NodeConstPtr = std::shared_ptr<const Node>;
+
+class Node : public std::enable_shared_from_this<Node>
 {
 protected:
     Node(const SourceLocation& location)
@@ -44,13 +49,17 @@ public:
 
     const SourceLocation& location() const { return m_location; }
 
+    NodePtr parent() const { return m_parent.lock(); }
+    void setParent(const NodePtr &parent) { m_parent = parent; }
+
     virtual int childrenCount() const = 0;
+    virtual int childIndex(const NodeConstPtr &child) const = 0;
+    int indexInParent() const { return parent()->childIndex(shared_from_this()); }
 
 private:
     SourceLocation m_location;
+    std::weak_ptr<Node> m_parent;
 };
-
-using NodePtr = std::shared_ptr<Node>;
 
 } // namespace Data
 } // namespace Internal

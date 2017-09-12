@@ -34,25 +34,18 @@ namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
+// TODO not a node?
 class TypeReference : public Node
 {
 public:
-    TypeReference(const Type dataType, const SourceLocation &location)
-        : Node(location)
-        , m_type(dataType)
-    {}
-
-    TypeReference(const QString &name, const QString &module, const SourceLocation &location)
-        : TypeReference(Type::UserDefined, location)
-    {
-        m_name = name;
-        m_module = module;
-    }
-
+    TypeReference(const Type dataType, const SourceLocation &location);
+    TypeReference(const QString &name, const QString &module, const SourceLocation &location);
     // TODO kill
     TypeReference() : TypeReference(Type::UserDefined, {}) {}
+    ~TypeReference() override;
 
     int childrenCount() const override;
+    int childIndex(const NodeConstPtr &child) const override;
 
     const QString &name() const { return m_name; }
     const QString &module() const { return m_module; }

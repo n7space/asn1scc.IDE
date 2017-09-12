@@ -29,25 +29,28 @@
 #include <vector>
 
 #include "definitions.h"
+#include "node.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-class Module
+class Module : public Node
 {
 public:
-    // TODO inherit Node ? ~Module() override;
+    Module(const QString &filePath);
+    ~Module() override;
 
-    void add(const DefinitionsPtr &defs)
-    {
-        m_definitionsByNameMap[defs->name()] = defs;
-        m_definitionsList.push_back(defs);
-    }
+    void add(const DefinitionsPtr &defs);
 
     using DefinitionsList = std::vector<DefinitionsPtr>;
     const DefinitionsList &definitionsList() const { return m_definitionsList; }
     DefinitionsPtr definitions(const QString &name) const;
+
+    int childrenCount() const override;
+    int childIndex(const NodeConstPtr &child) const override;
+
+    const QString &name() const { return location().path(); }
 
 private:
     DefinitionsList m_definitionsList;

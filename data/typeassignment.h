@@ -39,17 +39,14 @@ namespace Data {
 class TypeAssignment : public Node
 {
 public:
-    TypeAssignment(const QString &name, const SourceLocation &location, const TypeReference &reference)
-        : Node(location)
-        , m_name(name)
-        , m_reference(reference)
-    {}
-
+    TypeAssignment(const QString &name, const SourceLocation &location, const TypeReference &reference);
     ~TypeAssignment() override;
 
     const QString &name() const { return m_name; }
     const TypeReference &reference() const { return m_reference; }
+
     int childrenCount() const override;
+    int childIndex(const NodeConstPtr &child) const override;
 
 private:
     QString m_name;

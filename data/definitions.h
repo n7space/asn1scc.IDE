@@ -41,27 +41,16 @@ namespace Data {
 class Definitions : public Node
 {
 public:
-    Definitions(const QString &name, const SourceLocation &location)
-        : Node(location)
-        , m_name(name)
-    {}
-
+    Definitions(const QString &name, const SourceLocation &location);
     ~Definitions() override;
 
     const QString &name() const { return m_name; }
 
     int childrenCount() const override;
+    int childIndex(const NodeConstPtr &child) const override;
 
-    void add(const TypeAssignmentPtr &type)
-    {
-        m_typeByNameMap.insert({ type->name(), type });
-        m_types.push_back(type);
-    }
-
-    void addImportedType(const QString &typeName)
-    {
-        m_importedTypes.append(typeName);
-    }
+    void add(const TypeAssignmentPtr &type);
+    void addImportedType(const QString &typeName);
 
     using Types = std::list<TypeAssignmentPtr>;
 

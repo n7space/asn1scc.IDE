@@ -26,6 +26,12 @@
 
 using namespace Asn1Acn::Internal::Data;
 
+TypeAssignment::TypeAssignment(const QString &name, const SourceLocation &location, const TypeReference &reference)
+    : Node(location)
+    , m_name(name)
+    , m_reference(reference)
+{}
+
 TypeAssignment::~TypeAssignment()
 {
 }
@@ -33,4 +39,10 @@ TypeAssignment::~TypeAssignment()
 int TypeAssignment::childrenCount() const
 {
     return 0;
+}
+
+int TypeAssignment::childIndex(const NodeConstPtr &child) const
+{
+    Q_UNUSED(child);
+    return -1;
 }

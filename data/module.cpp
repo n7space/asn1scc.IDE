@@ -24,7 +24,18 @@
 ****************************************************************************/
 #include "module.h"
 
+#include <utils/qtcassert.h>
+
 using namespace Asn1Acn::Internal::Data;
+
+Module::Module(const QString &filePath)
+    : Node({filePath, 0, 0})
+{
+}
+
+Module::~Module()
+{
+}
 
 DefinitionsPtr Module::definitions(const QString &name) const
 {
@@ -32,4 +43,23 @@ DefinitionsPtr Module::definitions(const QString &name) const
     if (it == m_definitionsByNameMap.end())
         return {};
     return it->second;
+}
+
+int Module::childrenCount() const
+{
+    return static_cast<int>(m_definitionsList.size());
+}
+
+void Module::add(const DefinitionsPtr &defs)
+{
+    m_definitionsByNameMap[defs->name()] = defs;
+    m_definitionsList.push_back(defs);
+    defs->setParent(shared_from_this());
+}
+
+int Module::childIndex(const NodeConstPtr &child) const
+{
+    const auto it = std::find(m_definitionsList.begin(), m_definitionsList.end(), child);
+    QTC_ASSERT(it != m_definitionsList.end(), return -1);
+    return std::distance(m_definitionsList.begin(), it);
 }

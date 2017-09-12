@@ -24,10 +24,29 @@
 ****************************************************************************/
 #include "definitions.h"
 
+#include <utils/qtcassert.h>
+
 using namespace Asn1Acn::Internal::Data;
+
+Definitions::Definitions(const QString &name, const SourceLocation &location)
+    : Node(location)
+    , m_name(name)
+{}
 
 Definitions::~Definitions()
 {
+}
+
+void Definitions::add(const TypeAssignmentPtr &type)
+{
+    m_typeByNameMap.insert({ type->name(), type });
+    m_types.push_back(type);
+    type->setParent(shared_from_this());
+}
+
+void Definitions::addImportedType(const QString &typeName)
+{
+    m_importedTypes.append(typeName);
 }
 
 TypeAssignmentPtr Definitions::type(const QString &name) const
@@ -41,4 +60,11 @@ TypeAssignmentPtr Definitions::type(const QString &name) const
 int Definitions::childrenCount() const
 {
     return static_cast<int>(m_types.size());
+}
+
+int Definitions::childIndex(const NodeConstPtr &child) const
+{
+    const auto it = std::find(m_types.begin(), m_types.end(), child);
+    QTC_ASSERT(it != m_types.end(), return -1);
+    return std::distance(m_types.begin(), it);
 }

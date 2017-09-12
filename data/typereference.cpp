@@ -26,7 +26,28 @@
 
 using namespace Asn1Acn::Internal::Data;
 
+TypeReference::TypeReference(const Type dataType, const SourceLocation &location)
+    : Node(location)
+    , m_type(dataType)
+{}
+
+TypeReference::TypeReference(const QString &name, const QString &module, const SourceLocation &location)
+    : TypeReference(Type::UserDefined, location)
+{
+    m_name = name;
+    m_module = module;
+}
+
+TypeReference::~TypeReference()
+{
+}
+
 int TypeReference::childrenCount() const
 {
     return 0;
+}
+
+int TypeReference::childIndex(const NodeConstPtr &child) const
+{
+    return -1;
 }
