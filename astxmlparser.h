@@ -39,7 +39,7 @@ namespace Internal {
 class AstXmlParser
 {
 public:
-    AstXmlParser(QXmlStreamReader &m_xmlReader);
+    explicit AstXmlParser(QXmlStreamReader &xmlReader);
 
     bool parse();
 

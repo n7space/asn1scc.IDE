@@ -49,5 +49,6 @@ int TypeReference::childrenCount() const
 
 int TypeReference::childIndex(const NodeConstPtr &child) const
 {
+    Q_UNUSED(child);
     return -1;
 }

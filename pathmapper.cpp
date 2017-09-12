@@ -22,27 +22,17 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
-
-#include <QString>
-#include <QMap>
-
-#include "data/errormessage.h"
-
 #include "pathmapper.h"
 
-namespace Asn1Acn {
-namespace Internal {
+using namespace Asn1Acn::Internal;
 
-class ErrorMessageParser
+PathMapper::PathMapper(const QList<DocumentSource> &documents)
 {
-public:
-    explicit ErrorMessageParser(const PathMapper &pathMapper = PathMapper());
-    Data::ErrorMessage parse(const QString &message) const;
+    for (const auto &doc : documents)
+        m_mapping[doc.fileName()] = doc.filePath();
+}
 
-private:
-    PathMapper m_pathMapping;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+QString PathMapper::map(const QString &path) const
+{
+    return m_mapping.value(path, path);
+}

@@ -24,24 +24,24 @@
 ****************************************************************************/
 #pragma once
 
+#include <QHash>
 #include <QString>
 #include <QMap>
 
-#include "data/errormessage.h"
-
-#include "pathmapper.h"
+#include "documentsource.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ErrorMessageParser
+class PathMapper
 {
 public:
-    explicit ErrorMessageParser(const PathMapper &pathMapper = PathMapper());
-    Data::ErrorMessage parse(const QString &message) const;
+    explicit PathMapper(const QList<DocumentSource> &documents = {});
+
+    QString map(const QString &path) const;
 
 private:
-    PathMapper m_pathMapping;
+    QMap<QString, QString> m_mapping;
 };
 
 } // namespace Internal

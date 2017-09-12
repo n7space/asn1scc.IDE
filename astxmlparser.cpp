@@ -28,8 +28,8 @@
 
 using namespace Asn1Acn::Internal;
 
-AstXmlParser::AstXmlParser(QXmlStreamReader &xmlReader_)
-    : m_xmlReader(xmlReader_),
+AstXmlParser::AstXmlParser(QXmlStreamReader &xmlReader)
+    : m_xmlReader(xmlReader),
       m_currentDefinitions(nullptr)
 {
 }

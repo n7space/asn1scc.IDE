@@ -28,8 +28,8 @@
 
 using namespace Asn1Acn::Internal;
 
-ErrorMessageParser::ErrorMessageParser(const QMap<QString, QString> &pathMapping)
-    : m_pathMapping(pathMapping)
+ErrorMessageParser::ErrorMessageParser(const PathMapper &pathMapper)
+    : m_pathMapping(pathMapper)
 {
 }
 
@@ -41,11 +41,6 @@ Data::ErrorMessage ErrorMessageParser::parse(const QString &message) const
     if (!match.hasMatch())
         return {};
 
-    const auto loc = Data::SourceLocation(mapPath(match.captured(1)), match.captured(2).toInt(), match.captured(3).toInt());
+    const auto loc = Data::SourceLocation(m_pathMapping.map(match.captured(1)), match.captured(2).toInt(), match.captured(3).toInt());
     return {loc, match.captured(4)};
-}
-
-QString ErrorMessageParser::mapPath(const QString &path) const
-{
-    return m_pathMapping.value(path, path);
 }

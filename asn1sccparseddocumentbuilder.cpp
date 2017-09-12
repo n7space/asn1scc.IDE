@@ -30,7 +30,6 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
-#include <QMap>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -42,17 +41,6 @@
 #include "documentsource.h"
 
 using namespace Asn1Acn::Internal;
-
-namespace
-{
-QMap<QString, QString> buildPathMapping(const QHash<QString, DocumentSource> &docInfo)
-{
-    auto result = QMap<QString, QString>();
-    for (auto it = docInfo.begin(), end = docInfo.end(); it != end; ++it)
-        result[it.key()] = it.value().filePath();
-    return result;
-}
-} // namespace
 
 ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create(const QHash<QString, DocumentSource> &documents)
 {
@@ -127,7 +115,7 @@ bool Asn1SccParsedDocumentBuilder::responseContainsAst(const QJsonObject &json)
 
 void Asn1SccParsedDocumentBuilder::storeErrorMessages(const QJsonObject &json)
 {
-    const auto parser = ErrorMessageParser(buildPathMapping(m_rawDocuments));
+    const auto parser = ErrorMessageParser(PathMapper(m_rawDocuments.values()));
     for (const auto message : json[QLatin1Literal("Messages")].toArray()) {
         const auto msg = parser.parse(message.toString());
         if (msg.isValid())

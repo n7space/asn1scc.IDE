@@ -22,27 +22,31 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "pathmapper_tests.h"
 
-#include <QString>
-#include <QMap>
+#include <QtTest>
 
-#include "data/errormessage.h"
+#include "../pathmapper.h"
 
-#include "pathmapper.h"
+using namespace Asn1Acn::Internal::Tests;
+using namespace Asn1Acn::Internal;
 
-namespace Asn1Acn {
-namespace Internal {
-
-class ErrorMessageParser
+PathMapperTests::PathMapperTests(QObject *parent)
+    : QObject(parent)
 {
-public:
-    explicit ErrorMessageParser(const PathMapper &pathMapper = PathMapper());
-    Data::ErrorMessage parse(const QString &message) const;
+}
 
-private:
-    PathMapper m_pathMapping;
-};
+void PathMapperTests::test_missingMapping()
+{
+    PathMapper mapper;
 
-} // namespace Internal
-} // namespace Asn1Acn
+    QCOMPARE(mapper.map("Abc"), QStringLiteral("Abc"));
+}
+
+void PathMapperTests::test_mapping()
+{
+    PathMapper mapper({ {"/a/bcd", ""}, {"/x/xyz", ""} });
+
+    QCOMPARE(mapper.map("xyz"), QStringLiteral("/x/xyz"));
+    QCOMPARE(mapper.map("bcd"), QStringLiteral("/a/bcd"));
+}

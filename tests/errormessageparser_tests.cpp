@@ -75,11 +75,11 @@ void ErrorMessageParserTests::test_messageWithColumnAndLineNumber()
 
 void ErrorMessageParserTests::test_mappingSourceFiles()
 {
-    const auto parser = ErrorMessageParser({{"xyz.asn", "ABC.asn1"}});
+    const auto parser = ErrorMessageParser(PathMapper({ {"/abc/xyz.asn", ""} }));
     const auto msg = parser.parse("xyz.asn:123:987: error: Message Text");
 
     QVERIFY(msg.isValid());
-    QCOMPARE(msg.location().path(), QStringLiteral("ABC.asn1"));
+    QCOMPARE(msg.location().path(), QStringLiteral("/abc/xyz.asn"));
     QCOMPARE(msg.location().line(), 123);
     QCOMPARE(msg.location().column(), 987);
 }

@@ -24,25 +24,23 @@
 ****************************************************************************/
 #pragma once
 
-#include <QString>
-#include <QMap>
-
-#include "data/errormessage.h"
-
-#include "pathmapper.h"
+#include <QObject>
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class ErrorMessageParser
+class PathMapperTests : public QObject
 {
+    Q_OBJECT
 public:
-    explicit ErrorMessageParser(const PathMapper &pathMapper = PathMapper());
-    Data::ErrorMessage parse(const QString &message) const;
+    explicit PathMapperTests(QObject *parent = 0);
 
-private:
-    PathMapper m_pathMapping;
+private slots:
+    void test_missingMapping();
+    void test_mapping();
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn
