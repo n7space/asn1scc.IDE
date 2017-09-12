@@ -26,6 +26,8 @@
 
 #include <utils/qtcassert.h>
 
+#include "visitor.h"
+
 using namespace Asn1Acn::Internal::Data;
 
 File::File(const QString &filePath)
@@ -35,6 +37,11 @@ File::File(const QString &filePath)
 
 File::~File()
 {
+}
+
+QVariant File::accept(const Visitor &visitor) const
+{
+    return visitor.visit(*this);
 }
 
 DefinitionsPtr File::definitions(const QString &name) const

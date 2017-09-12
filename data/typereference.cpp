@@ -24,6 +24,8 @@
 ****************************************************************************/
 #include "typereference.h"
 
+#include "visitor.h"
+
 using namespace Asn1Acn::Internal::Data;
 
 TypeReference::TypeReference(const Type dataType, const SourceLocation &location)
@@ -40,6 +42,11 @@ TypeReference::TypeReference(const QString &name, const QString &module, const S
 
 TypeReference::~TypeReference()
 {
+}
+
+QVariant TypeReference::accept(const Visitor &visitor) const
+{
+    return visitor.visit(*this);
 }
 
 int TypeReference::childrenCount() const

@@ -24,6 +24,8 @@
 ****************************************************************************/
 #include "typeassignment.h"
 
+#include "visitor.h"
+
 using namespace Asn1Acn::Internal::Data;
 
 TypeAssignment::TypeAssignment(const QString &name, const SourceLocation &location, const TypeReference &reference)
@@ -34,6 +36,11 @@ TypeAssignment::TypeAssignment(const QString &name, const SourceLocation &locati
 
 TypeAssignment::~TypeAssignment()
 {
+}
+
+QVariant TypeAssignment::accept(const Visitor &visitor) const
+{
+    return visitor.visit(*this);
 }
 
 int TypeAssignment::childrenCount() const

@@ -44,6 +44,8 @@ public:
     TypeReference() : TypeReference(Type::UserDefined, {}) {}
     ~TypeReference() override;
 
+    QVariant accept(const Visitor &visitor) const override;
+
     int childrenCount() const override;
     int childIndex(const NodeConstPtr &child) const override;
 

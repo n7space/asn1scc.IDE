@@ -24,50 +24,30 @@
 ****************************************************************************/
 #pragma once
 
-#include <map>
-#include <list>
-#include <memory>
-
-#include <QString>
-#include <QStringList>
-
-#include "typeassignment.h"
-#include "node.h"
+#include <QVariant>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-class Definitions : public Node
+class Definitions;
+class File;
+class TypeAssignment;
+class TypeReference;
+
+class Visitor
 {
+protected:
+    Visitor() {}
+
 public:
-    Definitions(const QString &name, const SourceLocation &location);
-    ~Definitions() override;
+    virtual ~Visitor();
 
-    QVariant accept(const Visitor &visitor) const override;
-
-    const QString &name() const { return m_name; }
-
-    int childrenCount() const override;
-    int childIndex(const NodeConstPtr &child) const override;
-
-    void add(const TypeAssignmentPtr &type);
-    void addImportedType(const QString &typeName);
-
-    using Types = std::list<TypeAssignmentPtr>;
-
-    const Types &types() const { return m_types; }
-    TypeAssignmentPtr type(const QString &name) const;
-    const QStringList &importedTypes() { return m_importedTypes; }
-
-private:
-    QString m_name;
-    Types m_types;
-    std::map<QString, TypeAssignmentPtr> m_typeByNameMap;
-    QStringList m_importedTypes;
+    virtual QVariant visit(const Definitions &defs) const = 0;
+    virtual QVariant visit(const File &file) const = 0;
+    virtual QVariant visit(const TypeAssignment &type) const = 0;
+    virtual QVariant visit(const TypeReference &ref) const = 0;
 };
-
-using DefinitionsPtr = std::shared_ptr<Definitions>;
 
 } // namespace Data
 } // namespace Internal

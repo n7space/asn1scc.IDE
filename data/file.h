@@ -41,6 +41,8 @@ public:
     File(const QString &filePath);
     ~File() override;
 
+    QVariant accept(const Visitor &visitor) const override;
+
     void add(const DefinitionsPtr &defs);
 
     using DefinitionsList = std::vector<DefinitionsPtr>;

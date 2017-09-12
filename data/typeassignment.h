@@ -42,6 +42,8 @@ public:
     TypeAssignment(const QString &name, const SourceLocation &location, const TypeReference &reference);
     ~TypeAssignment() override;
 
+    QVariant accept(const Visitor &visitor) const override;
+
     const QString &name() const { return m_name; }
     const TypeReference &reference() const { return m_reference; }
 

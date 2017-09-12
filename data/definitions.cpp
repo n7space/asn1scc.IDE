@@ -26,6 +26,8 @@
 
 #include <utils/qtcassert.h>
 
+#include "visitor.h"
+
 using namespace Asn1Acn::Internal::Data;
 
 Definitions::Definitions(const QString &name, const SourceLocation &location)
@@ -35,6 +37,11 @@ Definitions::Definitions(const QString &name, const SourceLocation &location)
 
 Definitions::~Definitions()
 {
+}
+
+QVariant Definitions::accept(const Visitor &visitor) const
+{
+    return visitor.visit(*this);
 }
 
 void Definitions::add(const TypeAssignmentPtr &type)

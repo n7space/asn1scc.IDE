@@ -71,6 +71,7 @@ SOURCES += \
     data/typeassignment.cpp \
     data/typereference.cpp \
     data/definitions.cpp \
+    data/visitor.cpp \
     \
     options-pages/general.cpp \
     options-pages/service.cpp \
@@ -140,6 +141,7 @@ HEADERS += \
     data/errormessage.h \
     data/node.h \
     data/file.h \
+    data/visitor.h \
     \
     options-pages/general.h \
     options-pages/service.h \
