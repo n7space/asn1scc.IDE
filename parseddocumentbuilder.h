@@ -28,7 +28,6 @@
 #include <memory>
 #include <vector>
 
-#include <QHash>
 #include <QObject>
 #include <QString>
 

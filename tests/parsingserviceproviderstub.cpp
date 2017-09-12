@@ -35,17 +35,15 @@ ParsingServiceProviderStub::ParsingServiceProviderStub(QObject *parent)
 {
 }
 
-QNetworkReply *ParsingServiceProviderStub::requestAst(const QHash<QString, DocumentSource> &documents) const
+QNetworkReply *ParsingServiceProviderStub::requestAst(const QList<DocumentSource> &documents) const
 {
     NetworkReply *reply = new NetworkReply;
 
-    QString key = *(documents.keyBegin());
+    QString key = documents.begin()->fileName();
     if (key == "FAILED")
         reply->setErrored();
 
-    DocumentSource sourceInfo = documents.value(key);
-
-    reply->write(sourceInfo.contents().toUtf8());
+    reply->write(documents.begin()->contents().toUtf8());
     reply->run();
 
     return reply;

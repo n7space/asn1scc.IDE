@@ -65,7 +65,6 @@ private:
 
     Data::SourceLocation getLocationFromModule(const Data::DefinitionsPtr &definition,
                                                const QString &typeAssignmentName) const;
-    Data::SourceLocation buildLocation(const Data::SourceLocation& location) const;
 
     DocumentSource m_source;
     Data::ModulePtr m_parsedData;

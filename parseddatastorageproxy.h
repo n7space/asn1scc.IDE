@@ -27,7 +27,6 @@
 
 #include <memory>
 
-#include <QHash>
 #include <QString>
 
 #include "parseddocument.h"

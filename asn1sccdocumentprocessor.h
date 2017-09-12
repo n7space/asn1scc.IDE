@@ -28,7 +28,6 @@
 #include <functional>
 #include <memory>
 
-#include <QHash>
 #include <QString>
 #include <QFileInfo>
 #include <QList>
@@ -50,7 +49,7 @@ class Asn1SccDocumentProcessor
 public:
 
     using State = DocumentProcessor::State;
-    using DocumentBuilderCreator = std::function<ParsedDocumentBuilder *(const QHash<QString, DocumentSource> &documents)>;
+    using DocumentBuilderCreator = std::function<ParsedDocumentBuilder *(const QList<DocumentSource> &documents)>;
 
     static Asn1SccDocumentProcessor *create(const QString &projectName);
 
@@ -72,7 +71,7 @@ private slots:
 private:
     void createFallbackResults();
 
-    QHash<QString, DocumentSource> m_documents;
+    QList<DocumentSource> m_documents;
     QString m_projectName;
 
     std::vector<std::unique_ptr<ParsedDocument>> m_results;

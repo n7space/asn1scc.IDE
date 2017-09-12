@@ -52,6 +52,7 @@ private slots:
     void test_multipleTypeAssignments();
     void test_importedType();
     void test_multipleImportedType();
+    void test_pathMapping();
 
 private:
     void setXmlData(const QString& str);
@@ -59,6 +60,7 @@ private:
     void parse(const QString& xmlData);
 
     QXmlStreamReader m_xmlReader;
+    PathMapper m_pathMapper;
     std::map<QString, Data::ModulePtr> m_parsedData;
 };
 

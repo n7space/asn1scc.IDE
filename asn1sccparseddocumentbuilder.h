@@ -27,7 +27,7 @@
 
 #include <memory>
 
-#include <QHash>
+#include <QList>
 #include <QString>
 #include <QByteArray>
 
@@ -46,10 +46,10 @@ class Asn1SccParsedDocumentBuilder
     Q_OBJECT
 
 public:
-    static ParsedDocumentBuilder *create(const QHash<QString, DocumentSource> &documents);
+    static ParsedDocumentBuilder *create(const QList<DocumentSource> &documents);
 
     Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider,
-                                 const QHash<QString, DocumentSource> &documents);
+                                 const QList<DocumentSource> &documents);
     void run() override;
 
     std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
@@ -68,7 +68,7 @@ private:
 
     ParsingServiceProvider *m_serviceProvider;
 
-    const QHash<QString, DocumentSource> &m_rawDocuments;
+    QList<DocumentSource> m_documentSources;
     std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
     std::vector<Data::ErrorMessage> m_errorMessages;

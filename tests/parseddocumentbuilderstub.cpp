@@ -28,14 +28,14 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
 
-ParsedDocumentBuilderStub::ParsedDocumentBuilderStub(const QHash<QString, DocumentSource> &documents)
+ParsedDocumentBuilderStub::ParsedDocumentBuilderStub(const QList<DocumentSource> &documents)
     : m_rawDocuments(documents)
 {
 }
 
 void ParsedDocumentBuilderStub::run()
 {
-    QString key = *m_rawDocuments.keyBegin();
+    QString key = m_rawDocuments.begin()->fileName();
 
     if (key == "ERROR") {
         emit errored();
@@ -43,7 +43,7 @@ void ParsedDocumentBuilderStub::run()
         emit failed();
     } else if (key == "SUCCESS") {
         auto modules = std::make_unique<Data::Module>(key);
-        std::unique_ptr<ParsedDocument> parsedDocument(new ParsedDocument(std::move(modules), m_rawDocuments.value(key)));
+        std::unique_ptr<ParsedDocument> parsedDocument(new ParsedDocument(std::move(modules), m_rawDocuments.front()));
         m_parsedDocuments.push_back(std::move(parsedDocument));
 
         emit finished();

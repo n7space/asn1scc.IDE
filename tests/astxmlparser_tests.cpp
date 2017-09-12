@@ -278,6 +278,27 @@ void AstXmlParserTests::test_multipleImportedType()
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->importedTypes().at(1), QStringLiteral("Imported2"));
 }
 
+void AstXmlParserTests::test_pathMapping()
+{
+    m_pathMapper = PathMapper({ {"/xyz/Test2.asn", ""} });
+    parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
+          R"(<ASN1AST>)"
+          R"(  <Asn1File FileName="Test2.asn">)"
+          R"(    <Asn1Module ID="TestDefinitions">)"
+          R"(      <TypeAssignments>)"
+          R"(        <TypeAssignment Name="MyInt" Line="4" CharPositionInLine="10">)"
+          R"(          <Type Line="3" CharPositionInLine="19">)"
+          R"(            <ReferenceType ReferencedTypeName="ThirdInt" Min="10" Max="10" ReferencedModName="MYMOD"/>"
+          R"(          </Type>)"
+          R"(        </TypeAssignment>)"
+          R"(      </TypeAssignments>)"
+          R"(    </Asn1Module>)"
+          R"(  </Asn1File>)"
+          R"(</ASN1AST>)");
+
+    QCOMPARE(m_parsedData["/xyz/Test2.asn"]->definitions("TestDefinitions")->type("MyInt")->reference().location().path(), QStringLiteral("/xyz/Test2.asn"));
+}
+
 void AstXmlParserTests::parsingFails(const QString& xmlData)
 {
     setXmlData(xmlData);
@@ -288,7 +309,7 @@ void AstXmlParserTests::parsingFails(const QString& xmlData)
 void AstXmlParserTests::parse(const QString& xmlData)
 {
     setXmlData(xmlData);
-    AstXmlParser parser(m_xmlReader);
+    AstXmlParser parser(m_xmlReader, m_pathMapper);
     QVERIFY(parser.parse());
     m_parsedData = parser.takeData();
 }

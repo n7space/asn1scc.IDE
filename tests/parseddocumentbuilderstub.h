@@ -27,7 +27,6 @@
 
 #include <memory>
 
-#include <QHash>
 #include <QString>
 
 #include "../parseddocument.h"
@@ -44,7 +43,7 @@ class ParsedDocumentBuilderStub
     Q_OBJECT
 
 public:
-    ParsedDocumentBuilderStub(const QHash<QString, DocumentSource> &documents);
+    ParsedDocumentBuilderStub(const QList<DocumentSource> &documents);
 
     void run() override;
 
@@ -52,7 +51,7 @@ public:
     const std::vector<Data::ErrorMessage> &errorMessages() const override;
 
 private:
-    const QHash<QString, DocumentSource> &m_rawDocuments;
+    const QList<DocumentSource> &m_rawDocuments;
     std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
     std::vector<Data::ErrorMessage> m_errorMessages;

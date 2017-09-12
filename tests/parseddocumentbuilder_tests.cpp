@@ -48,10 +48,7 @@ ParsedDocumentBuilderTests::~ParsedDocumentBuilderTests()
 
 void ParsedDocumentBuilderTests::test_failed()
 {
-    DocumentSource sourceInfo("FAILED", "FAILED");
-
-    QHash<QString, DocumentSource> documents;
-    documents.insert("FAILED", sourceInfo);
+    const QList<DocumentSource> documents = { {"FAILED", "FAILED"} };
 
     Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider, documents);
     QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);
@@ -74,10 +71,9 @@ void ParsedDocumentBuilderTests::test_failed()
 
 void ParsedDocumentBuilderTests::test_error()
 {
-    DocumentSource sourceInfo("ERROR", "{\"ErrorCode\":2,\"Files\":null,\"Messages\":[\"Asn1.asn:8:13: error: No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'\"]}");
+    const DocumentSource sourceInfo("ERROR", "{\"ErrorCode\":2,\"Files\":null,\"Messages\":[\"Asn1.asn:8:13: error: No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'\"]}");
 
-    QHash<QString, DocumentSource> documents;
-    documents.insert("ERROR", sourceInfo);
+    const QList<DocumentSource> documents = { sourceInfo };
 
     Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider, documents);
     QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);
@@ -106,7 +102,7 @@ void ParsedDocumentBuilderTests::test_error()
 
 void ParsedDocumentBuilderTests::test_success()
 {
-    DocumentSource sourceInfo("SUCCESS",
+    const DocumentSource sourceInfo("SUCCESS",
                           "{\"ErrorCode\":0,\"Files\":[{\"Contents\":\"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?>\\u000a<ASN1AST>\\u000a    "
                           "<Asn1File FileName=\\\"emptyAsn2.asn\\\">\\u000a        <Asn1Module ID=\\\"EmptyAsn2\\\">\\u000a        "
                           "<ExportedTypes>\\u000a            <ExportedType Name=\\\"AData\\\" \\/>\\u000a            "
@@ -120,8 +116,7 @@ void ParsedDocumentBuilderTests::test_success()
                           "<\\/Type>\\u000a            <\\/TypeAssignment>\\u000a        <\\/TypeAssignments>\\u000a        <VariablesAssignments>\\u000a        "
                           "<\\/VariablesAssignments>\\u000a        <\\/Asn1Module>\\u000a    <\\/Asn1File>\\u000a<\\/ASN1AST>\",\"Name\":\"AST.xml\"}],\"Messages\":null}");
 
-    QHash<QString, DocumentSource> documents;
-    documents.insert("SUCCESS", sourceInfo);
+    const QList<DocumentSource> documents = { sourceInfo };
 
     Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider, documents);
     QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);

@@ -33,13 +33,15 @@
 
 #include "data/module.h"
 
+#include "pathmapper.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
 class AstXmlParser
 {
 public:
-    explicit AstXmlParser(QXmlStreamReader &xmlReader);
+    explicit AstXmlParser(QXmlStreamReader &xmlReader, const PathMapper &mapper = PathMapper());
 
     bool parse();
 
@@ -83,6 +85,8 @@ private:
     QString m_currentFile;
     QString m_currentModule;
     Data::Definitions* m_currentDefinitions;
+
+    PathMapper m_pathMapper;
 };
 
 } // namespace Internal

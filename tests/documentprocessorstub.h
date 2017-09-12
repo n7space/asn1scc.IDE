@@ -29,6 +29,7 @@
 #include <vector>
 
 #include <QString>
+#include <QList>
 
 #include "../parseddocument.h"
 
@@ -62,7 +63,7 @@ private:
     State m_state;
     QString m_projectName;
 
-    QHash<QString, DocumentSource> m_documents;
+    QList<DocumentSource> m_documents;
     std::vector<std::unique_ptr<ParsedDocument>> m_results;
     std::vector<Data::ErrorMessage> m_errorMessages;
 };

@@ -36,7 +36,7 @@ DocumentProcessorTests::DocumentProcessorTests(QObject *parent)
     : QObject(parent)
     , m_fileContent("Document content")
     , m_fileDir("/test/dir/")
-    , m_docBuilderCreator([](const QHash<QString, DocumentSource> &documents)->ParsedDocumentBuilder *
+    , m_docBuilderCreator([](const QList<DocumentSource> &documents)->ParsedDocumentBuilder *
                           { return new ParsedDocumentBuilderStub(documents); })
 {
 }

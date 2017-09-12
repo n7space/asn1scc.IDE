@@ -42,21 +42,21 @@
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create(const QHash<QString, DocumentSource> &documents)
+ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create(const QList<DocumentSource> &documents)
 {
     auto serviceProvider = ExtensionSystem::PluginManager::getObject<ParsingServiceProvider>();
     return new Asn1SccParsedDocumentBuilder(serviceProvider, documents);
 }
 
-Asn1SccParsedDocumentBuilder::Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider, const QHash<QString, DocumentSource> & documents)
+Asn1SccParsedDocumentBuilder::Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider, const QList<DocumentSource> &documents)
     : m_serviceProvider(serviceProvider)
-    , m_rawDocuments(documents)
+    , m_documentSources(documents)
 {
 }
 
 void Asn1SccParsedDocumentBuilder::run()
 {
-    QNetworkReply *reply = m_serviceProvider->requestAst(m_rawDocuments);
+    QNetworkReply *reply = m_serviceProvider->requestAst(m_documentSources);
 
     QObject::connect(reply, &QNetworkReply::finished,
                      this, &Asn1SccParsedDocumentBuilder::requestFinished);
@@ -87,20 +87,30 @@ void Asn1SccParsedDocumentBuilder::parseResponse(const QByteArray &jsonData)
     }
 }
 
+namespace {
+
+QMap<QString, DocumentSource> buildPathToSourceMapping(const QList<DocumentSource> &sources)
+{
+    QMap<QString, DocumentSource> res;
+    for (const auto &doc : sources)
+        res[doc.filePath()] = doc;
+    return res;
+}
+
+} // namespace
+
 void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
 {
     QXmlStreamReader reader;
     reader.addData(textData);
 
-    AstXmlParser parser(reader);
+    AstXmlParser parser(reader, PathMapper(m_documentSources));
     parser.parse();
 
+    const auto mapping = buildPathToSourceMapping(m_documentSources);
     auto parsedData = parser.takeData();
-    for (const auto &item : parsedData) {
-        const QString &fileName = item.first;
-        const DocumentSource &sourceInfo = m_rawDocuments[fileName];
-        m_parsedDocuments.push_back(std::make_unique<ParsedDocument>(item.second, sourceInfo));
-    }
+    for (const auto &item : parsedData)
+        m_parsedDocuments.push_back(std::make_unique<ParsedDocument>(item.second, mapping[item.first]));
 }
 
 std::vector<std::unique_ptr<ParsedDocument>> Asn1SccParsedDocumentBuilder::takeDocuments()
@@ -115,7 +125,7 @@ bool Asn1SccParsedDocumentBuilder::responseContainsAst(const QJsonObject &json)
 
 void Asn1SccParsedDocumentBuilder::storeErrorMessages(const QJsonObject &json)
 {
-    const auto parser = ErrorMessageParser(PathMapper(m_rawDocuments.values()));
+    const auto parser = ErrorMessageParser(PathMapper(m_documentSources));
     for (const auto message : json[QLatin1Literal("Messages")].toArray()) {
         const auto msg = parser.parse(message.toString());
         if (msg.isValid())
