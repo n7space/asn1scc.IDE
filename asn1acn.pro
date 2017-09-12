@@ -218,6 +218,7 @@ SOURCES += \
     tests/projectcontenthandler_tests.cpp \
     tests/parseddatastorage_tests.cpp \
     tests/modeltree_tests.cpp \
+    tests/autocompleter_tests.cpp \
     \
     tests/networkreply.cpp \
     tests/parsingserviceproviderstub.cpp \
@@ -237,6 +238,7 @@ HEADERS += \
     tests/projectcontenthandler_tests.h \
     tests/parseddatastorage_tests.h \
     tests/modeltree_tests.h \
+    tests/autocompleter_tests.h \
     \
     tests/networkreply.h \
     tests/parsingserviceproviderstub.h \

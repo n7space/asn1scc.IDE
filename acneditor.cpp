@@ -60,7 +60,7 @@ AcnEditorFactory::AcnEditorFactory()
 
     setCompletionAssistProvider(new Completion::AcnCompletionAssistProvider);
     setIndenterCreator([]() { return new Indenter; });
-    setAutoCompleterCreator([]() { return new AutoCompleter; });
+    setAutoCompleterCreator([]() { return new Completion::AutoCompleter; });
 
     addHoverHandler(new TextEditor::BaseHoverHandler); // TODO maybe better tips?
 
