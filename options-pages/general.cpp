@@ -26,8 +26,8 @@
 
 #include <QWidget>
 
-#include "../asn1acnconstants.h"
-#include "../tr.h"
+#include <asn1acnconstants.h>
+#include <tr.h>
 
 #include "generalwidget.h"
 

@@ -25,15 +25,12 @@
 
 #include "projectcontenthandler_tests.h"
 
-#include <QTest>
-
 #include <QtTest>
-
 #include <QSignalSpy>
 
-#include "sourcereadermock.h"
+#include <projectcontenthandler.h>
 
-#include "../projectcontenthandler.h"
+#include "sourcereadermock.h"
 #include "documentprocessorstub.h"
 
 using namespace Asn1Acn::Internal;

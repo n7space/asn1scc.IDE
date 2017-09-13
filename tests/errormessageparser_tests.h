@@ -26,7 +26,7 @@
 
 #include <QObject>
 
-#include "../astxmlparser.h"
+#include "../errormessageparser.h"
 
 namespace Asn1Acn {
 namespace Internal {

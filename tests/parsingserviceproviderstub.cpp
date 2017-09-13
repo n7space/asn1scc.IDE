@@ -25,7 +25,7 @@
 
 #include "parsingserviceproviderstub.h"
 
-#include "../documentsource.h"
+#include <documentsource.h>
 
 using namespace Asn1Acn::Internal::Tests;
 using namespace Asn1Acn::Internal;

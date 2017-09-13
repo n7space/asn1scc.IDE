@@ -22,12 +22,12 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <QObject>
 
-#include "../asn1sccparseddocumentbuilder.h"
+#include <asn1sccparseddocumentbuilder.h>
+
 #include "parsingserviceproviderstub.h"
 
 namespace Asn1Acn {

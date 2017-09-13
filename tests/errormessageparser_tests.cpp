@@ -26,7 +26,7 @@
 
 #include <QtTest>
 
-#include "../errormessageparser.h"
+#include <errormessageparser.h>
 
 using namespace Asn1Acn::Internal::Tests;
 using namespace Asn1Acn::Internal;

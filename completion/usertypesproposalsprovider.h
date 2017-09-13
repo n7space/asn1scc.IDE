@@ -22,15 +22,15 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <memory>
 
 #include <texteditor/codeassist/assistproposalitem.h>
 
+#include <data/file.h>
+
 #include "proposalsprovider.h"
-#include "../data/file.h"
 
 namespace Asn1Acn {
 namespace Internal {

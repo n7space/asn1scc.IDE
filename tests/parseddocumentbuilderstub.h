@@ -29,9 +29,9 @@
 
 #include <QString>
 
-#include "../parseddocument.h"
-#include "../documentsource.h"
-#include "../parseddocumentbuilder.h"
+#include <parseddocument.h>
+#include <documentsource.h>
+#include <parseddocumentbuilder.h>
 
 namespace Asn1Acn {
 namespace Internal {

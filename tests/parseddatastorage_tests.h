@@ -27,8 +27,8 @@
 
 #include <QObject>
 
-#include "../parseddatastorage.h"
-#include "../parseddatastorageproxy.h"
+#include <parseddatastorage.h>
+#include <parseddatastorageproxy.h>
 
 namespace Asn1Acn {
 namespace Internal {

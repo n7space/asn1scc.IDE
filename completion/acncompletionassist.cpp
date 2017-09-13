@@ -25,7 +25,7 @@
 
 #include "acncompletionassist.h"
 
-#include "../asn1acnconstants.h"
+#include <asn1acnconstants.h>
 
 #include "acnbuiltinsproposalsprovider.h"
 

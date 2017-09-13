@@ -29,8 +29,8 @@
 
 #include <QtTest>
 
-#include "../parseddocument.h"
-#include "../documentsource.h"
+#include <parseddocument.h>
+#include <documentsource.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;

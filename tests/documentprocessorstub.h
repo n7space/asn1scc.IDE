@@ -31,9 +31,8 @@
 #include <QString>
 #include <QList>
 
-#include "../parseddocument.h"
-
-#include "../documentprocessor.h"
+#include <parseddocument.h>
+#include <documentprocessor.h>
 
 namespace Asn1Acn {
 namespace Internal {

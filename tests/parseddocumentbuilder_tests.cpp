@@ -26,10 +26,10 @@
 #include "parseddocumentbuilder_tests.h"
 
 #include <QtTest>
-
 #include <QSignalSpy>
 
-#include "../parseddocument.h"
+#include <parseddocument.h>
+
 #include "parseddocumentbuilderstub.h"
 
 using namespace Asn1Acn::Internal;

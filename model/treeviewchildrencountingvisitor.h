@@ -26,7 +26,7 @@
 
 #include <QVariant>
 
-#include "../data/visitor.h"
+#include <data/visitor.h>
 
 namespace Asn1Acn {
 namespace Internal {

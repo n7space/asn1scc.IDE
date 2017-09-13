@@ -24,10 +24,10 @@
 ****************************************************************************/
 #include "displayrolevisitor.h"
 
-#include "../data/definitions.h"
-#include "../data/file.h"
-#include "../data/typeassignment.h"
-#include "../data/typereference.h"
+#include <data/definitions.h>
+#include <data/file.h>
+#include <data/typeassignment.h>
+#include <data/typereference.h>
 
 using namespace Asn1Acn::Internal::Model;
 using namespace Asn1Acn::Internal::Data;

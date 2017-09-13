@@ -27,9 +27,9 @@
 
 #include <QObject>
 
-#include "../documentprocessor.h"
-#include "../parseddatastorage.h"
-#include "../modeltree.h"
+#include <documentprocessor.h>
+#include <parseddatastorage.h>
+#include <modeltree.h>
 
 namespace Asn1Acn {
 namespace Internal {

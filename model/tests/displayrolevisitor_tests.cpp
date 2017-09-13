@@ -26,11 +26,11 @@
 
 #include <QtTest>
 
-#include "../../data/type.h"
-#include "../../data/typereference.h"
-#include "../../data/definitions.h"
-#include "../../data/typeassignment.h"
-#include "../../data/file.h"
+#include <data/type.h>
+#include <data/typereference.h>
+#include <data/definitions.h>
+#include <data/typeassignment.h>
+#include <data/file.h>
 
 using namespace Asn1Acn::Internal::Model::Tests;
 using namespace Asn1Acn::Internal::Model;

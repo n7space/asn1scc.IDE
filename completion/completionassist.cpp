@@ -33,15 +33,14 @@
 #include <texteditor/codeassist/genericproposal.h>
 #include <texteditor/codeassist/genericproposalmodel.h>
 
+#include <asn1acnconstants.h>
+#include <parseddatastorage.h>
+#include <parseddocument.h>
+#include <acneditor.h>
+#include <asneditor.h>
+
 #include "asnbuiltinsproposalsprovider.h"
 #include "acnbuiltinsproposalsprovider.h"
-
-#include "../asn1acnconstants.h"
-#include "../parseddatastorage.h"
-#include "../parseddocument.h"
-
-#include "../acneditor.h"
-#include "../asneditor.h"
 
 using namespace Asn1Acn::Internal::Completion;
 

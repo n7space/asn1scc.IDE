@@ -29,7 +29,7 @@
 
 #include <coreplugin/dialogs/ioptionspage.h>
 
-#include "../settings/service.h"
+#include <settings/service.h>
 
 #include "ui_service.h"
 

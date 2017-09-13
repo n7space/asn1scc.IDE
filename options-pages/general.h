@@ -29,7 +29,7 @@
 
 #include <coreplugin/dialogs/ioptionspage.h>
 
-#include "../settings/general.h"
+#include <settings/general.h>
 
 namespace Asn1Acn {
 namespace Internal {

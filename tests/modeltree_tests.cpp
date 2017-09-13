@@ -26,11 +26,10 @@
 #include "modeltree_tests.h"
 
 #include <QtTest>
-
 #include <QSignalSpy>
 
-#include "../modeltreenode.h"
-#include "../parseddocument.h"
+#include <modeltreenode.h>
+#include <parseddocument.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;

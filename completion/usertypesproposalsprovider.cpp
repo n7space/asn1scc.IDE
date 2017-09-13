@@ -22,10 +22,9 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #include "usertypesproposalsprovider.h"
 
-#include "../data/definitions.h"
+#include <data/definitions.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Completion;

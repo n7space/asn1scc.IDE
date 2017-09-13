@@ -22,17 +22,17 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #include "acnsnippetprovider.h"
 
-#include "autocompleter.h"
-#include "../asn1acnconstants.h"
+#include <QLatin1String>
+#include <QCoreApplication>
 
 #include <texteditor/snippets/snippeteditor.h>
 #include <texteditor/textdocument.h>
 
-#include <QLatin1String>
-#include <QCoreApplication>
+#include <asn1acnconstants.h>
+
+#include "autocompleter.h"
 
 using namespace Asn1Acn::Internal::Completion;
 

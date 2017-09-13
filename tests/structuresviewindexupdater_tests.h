@@ -27,10 +27,10 @@
 
 #include <QObject>
 
-#include "../overviewmodel.h"
-#include "../structuresviewindexupdater.h"
+#include <overviewmodel.h>
+#include <modeltreenode.h>
 
-#include "../modeltreenode.h"
+#include "../structuresviewindexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {

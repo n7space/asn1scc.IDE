@@ -24,8 +24,8 @@
 ****************************************************************************/
 #include "treeviewchildrencountingvisitor.h"
 
-#include "../data/definitions.h"
-#include "../data/file.h"
+#include <data/definitions.h>
+#include <data/file.h>
 
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::Model;

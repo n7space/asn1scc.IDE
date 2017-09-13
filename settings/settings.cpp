@@ -25,7 +25,7 @@
 
 #include "settings.h"
 
-#include "../asn1acnconstants.h"
+#include <asn1acnconstants.h>
 
 using namespace Asn1Acn::Internal::Settings;
 

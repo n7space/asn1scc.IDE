@@ -22,10 +22,9 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #include "asncompletionassist.h"
 
-#include "../asn1acnconstants.h"
+#include <asn1acnconstants.h>
 
 #include "asnbuiltinsproposalsprovider.h"
 

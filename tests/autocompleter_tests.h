@@ -27,7 +27,7 @@
 
 #include <QObject>
 
-#include "../completion/autocompleter.h"
+#include <completion/autocompleter.h>
 
 namespace Asn1Acn {
 namespace Internal {
