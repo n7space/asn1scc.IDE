@@ -109,8 +109,8 @@ void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
 
     const auto mapping = buildPathToSourceMapping(m_documentSources);
     auto parsedData = parser.takeData();
-    for (const auto &item : parsedData)
-        m_parsedDocuments.push_back(std::make_unique<ParsedDocument>(item.second, mapping[item.first]));
+    for (auto &item : parsedData)
+        m_parsedDocuments.push_back(std::make_unique<ParsedDocument>(std::move(item.second), mapping[item.first]));
 }
 
 std::vector<std::unique_ptr<ParsedDocument>> Asn1SccParsedDocumentBuilder::takeDocuments()

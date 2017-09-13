@@ -43,7 +43,6 @@ QVariant DisplayRoleVisitor::visit(const Definitions &defs) const
 
 QVariant DisplayRoleVisitor::visit(const File &file) const
 {
-    // TODO assert? (we never gonna display files)
     return file.name();
 }
 

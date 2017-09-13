@@ -47,15 +47,10 @@ public:
     const QString &name() const { return m_name; }
     const TypeReference &reference() const { return m_reference; }
 
-    int childrenCount() const override;
-    int childIndex(const NodeConstPtr &child) const override;
-
 private:
     QString m_name;
     TypeReference m_reference;
 };
-
-using TypeAssignmentPtr = std::shared_ptr<TypeAssignment>;
 
 } // namespace Data
 } // namespace Internal

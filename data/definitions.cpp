@@ -44,11 +44,11 @@ QVariant Definitions::accept(const Visitor &visitor) const
     return visitor.visit(*this);
 }
 
-void Definitions::add(const TypeAssignmentPtr &type)
+void Definitions::add(std::unique_ptr<TypeAssignment> type)
 {
-    m_typeByNameMap.insert({ type->name(), type });
-    m_types.push_back(type);
-    type->setParent(shared_from_this());
+    type->setParent(this);
+    m_typeByNameMap[type->name()] = type.get();
+    m_types.push_back(std::move(type));
 }
 
 void Definitions::addImportedType(const QString &typeName)
@@ -56,22 +56,9 @@ void Definitions::addImportedType(const QString &typeName)
     m_importedTypes.append(typeName);
 }
 
-TypeAssignmentPtr Definitions::type(const QString &name) const
+const TypeAssignment *Definitions::type(const QString &name) const
 {
     const auto it = m_typeByNameMap.find(name);
-    if (it == m_typeByNameMap.end())
-        return {};
+    QTC_ASSERT(it != m_typeByNameMap.end(), return nullptr);
     return it->second;
-}
-
-int Definitions::childrenCount() const
-{
-    return static_cast<int>(m_types.size());
-}
-
-int Definitions::childIndex(const NodeConstPtr &child) const
-{
-    const auto it = std::find(m_types.begin(), m_types.end(), child);
-    QTC_ASSERT(it != m_types.end(), return -1);
-    return std::distance(m_types.begin(), it);
 }

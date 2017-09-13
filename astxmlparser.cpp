@@ -119,7 +119,7 @@ void AstXmlParser::readTypeAssignment()
     const auto name = readNameAttribute();
     const auto reference = readTypeReference();
 
-    m_currentDefinitions->add(std::make_shared<Data::TypeAssignment>(name, location, reference));
+    m_currentDefinitions->add(std::make_unique<Data::TypeAssignment>(name, location, reference));
 
     m_xmlReader.skipCurrentElement();
 }

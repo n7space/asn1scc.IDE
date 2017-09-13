@@ -42,14 +42,3 @@ QVariant TypeAssignment::accept(const Visitor &visitor) const
 {
     return visitor.visit(*this);
 }
-
-int TypeAssignment::childrenCount() const
-{
-    return 0;
-}
-
-int TypeAssignment::childIndex(const NodeConstPtr &child) const
-{
-    Q_UNUSED(child);
-    return -1;
-}

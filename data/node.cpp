@@ -24,14 +24,8 @@
 ****************************************************************************/
 #include "node.h"
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Data {
+using namespace Asn1Acn::Internal::Data;
 
 Node::~Node()
 {
 }
-
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn

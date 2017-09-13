@@ -51,8 +51,8 @@ void DocumentProcessorStub::run()
     m_state = createState();
 
     for (const auto &doc : m_documents) {
-        auto modules = std::make_shared<Data::File>(doc.fileName());
-        m_results.push_back(std::make_unique<ParsedDocument>(modules, doc));
+        auto modules = std::make_unique<Data::File>(doc.fileName());
+        m_results.push_back(std::make_unique<ParsedDocument>(std::move(modules), doc));
     }
 
     emit processingFinished(m_projectName);

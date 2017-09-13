@@ -46,9 +46,6 @@ public:
 
     QVariant accept(const Visitor &visitor) const override;
 
-    int childrenCount() const override;
-    int childIndex(const NodeConstPtr &child) const override;
-
     const QString &name() const { return m_name; }
     const QString &module() const { return m_module; }
     Type type() const { return m_type; }

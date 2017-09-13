@@ -39,14 +39,14 @@ namespace Completion {
 class UserTypesProposalsProvider : public ProposalsProvider
 {
 public:
-    UserTypesProposalsProvider(const Data::FilePtr &data);
+    UserTypesProposalsProvider(const Data::File *data);
 
 private:
     Proposals createProposals() const override;
     Proposals createImportedTypes(const QList<QString> &importedProposals) const;
     Proposals createInternalTypes(const Data::Definitions::Types &types) const;
 
-    Data::FilePtr m_data;
+    const Data::File *m_data;
 };
 
 } /* nameapsce Completion */

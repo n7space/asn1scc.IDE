@@ -25,7 +25,7 @@
 #pragma once
 
 #include <map>
-#include <list>
+#include <vector>
 #include <memory>
 
 #include <QString>
@@ -48,26 +48,21 @@ public:
 
     const QString &name() const { return m_name; }
 
-    int childrenCount() const override;
-    int childIndex(const NodeConstPtr &child) const override;
-
-    void add(const TypeAssignmentPtr &type);
+    void add(std::unique_ptr<TypeAssignment> type);
     void addImportedType(const QString &typeName);
 
-    using Types = std::list<TypeAssignmentPtr>;
+    using Types = std::vector<std::unique_ptr<TypeAssignment>>;
 
     const Types &types() const { return m_types; }
-    TypeAssignmentPtr type(const QString &name) const;
-    const QStringList &importedTypes() { return m_importedTypes; }
+    const TypeAssignment *type(const QString &name) const;
+    const QStringList &importedTypes() const { return m_importedTypes; }
 
 private:
     QString m_name;
     Types m_types;
-    std::map<QString, TypeAssignmentPtr> m_typeByNameMap;
+    std::map<QString, TypeAssignment*> m_typeByNameMap;
     QStringList m_importedTypes;
 };
-
-using DefinitionsPtr = std::shared_ptr<Definitions>;
 
 } // namespace Data
 } // namespace Internal

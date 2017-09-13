@@ -44,7 +44,7 @@ class ParsedDocument
 {
 public:
     ParsedDocument(const DocumentSource &source = {});
-    ParsedDocument(const Data::FilePtr &parsedData, const DocumentSource &source);
+    ParsedDocument(std::unique_ptr<Data::File> parsedData, const DocumentSource &source);
 
     const DocumentSource &source() const;
 
@@ -56,18 +56,18 @@ public:
     Completion::UserTypesProposalsProvider getProposalsProvider() const;
 
 private:
-    ModelTreeNode::ModelTreeNodePtr createDefinition(const Data::DefinitionsPtr &definition) const;
-    void attachTypesToDefiniton(const Data::Definitions::Types types,
+    ModelTreeNode::ModelTreeNodePtr createDefinition(const Data::Definitions &definition) const;
+    void attachTypesToDefiniton(const Data::Definitions::Types &types,
                                 ModelTreeNode::ModelTreeNodePtr definitionNode) const;
 
     void populateReferences();
-    void populateReferencesFromModule(const Data::DefinitionsPtr &moduleDefinition);
+    void populateReferencesFromModule(const Data::Definitions &moduleDefinition);
 
-    Data::SourceLocation getLocationFromModule(const Data::DefinitionsPtr &definition,
+    Data::SourceLocation getLocationFromModule(const Data::Definitions &definition,
                                                const QString &typeAssignmentName) const;
 
     DocumentSource m_source;
-    Data::FilePtr m_parsedData;
+    std::unique_ptr<Data::File> m_parsedData;
 
     QMultiHash<int, Data::TypeReference> m_referenceLookup;
 };

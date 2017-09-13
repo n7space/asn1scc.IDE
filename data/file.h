@@ -43,23 +43,18 @@ public:
 
     QVariant accept(const Visitor &visitor) const override;
 
-    void add(const DefinitionsPtr &defs);
+    void add(std::unique_ptr<Definitions> defs);
 
-    using DefinitionsList = std::vector<DefinitionsPtr>;
+    using DefinitionsList = std::vector<std::unique_ptr<Definitions>>;
     const DefinitionsList &definitionsList() const { return m_definitionsList; }
-    DefinitionsPtr definitions(const QString &name) const;
-
-    int childrenCount() const override;
-    int childIndex(const NodeConstPtr &child) const override;
+    const Definitions* definitions(const QString &name) const;
 
     const QString &name() const { return location().path(); }
 
 private:
     DefinitionsList m_definitionsList;
-    std::map<QString, DefinitionsPtr> m_definitionsByNameMap;
+    std::map<QString, Definitions*> m_definitionsByNameMap;
 };
-
-using FilePtr = std::shared_ptr<File>;
 
 } // namespace Data
 } // namespace Internal

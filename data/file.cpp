@@ -44,29 +44,16 @@ QVariant File::accept(const Visitor &visitor) const
     return visitor.visit(*this);
 }
 
-DefinitionsPtr File::definitions(const QString &name) const
+const Definitions *File::definitions(const QString &name) const
 {
     const auto it = m_definitionsByNameMap.find(name);
-    if (it == m_definitionsByNameMap.end())
-        return {};
+    QTC_ASSERT(it != m_definitionsByNameMap.end(), return nullptr);
     return it->second;
 }
 
-int File::childrenCount() const
+void File::add(std::unique_ptr<Definitions> defs)
 {
-    return static_cast<int>(m_definitionsList.size());
-}
-
-void File::add(const DefinitionsPtr &defs)
-{
-    m_definitionsByNameMap[defs->name()] = defs;
-    m_definitionsList.push_back(defs);
-    defs->setParent(shared_from_this());
-}
-
-int File::childIndex(const NodeConstPtr &child) const
-{
-    const auto it = std::find(m_definitionsList.begin(), m_definitionsList.end(), child);
-    QTC_ASSERT(it != m_definitionsList.end(), return -1);
-    return std::distance(m_definitionsList.begin(), it);
+    defs->setParent(this);
+    m_definitionsByNameMap[defs->name()] = defs.get();
+    m_definitionsList.push_back(std::move(defs));
 }

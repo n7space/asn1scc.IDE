@@ -48,14 +48,3 @@ QVariant TypeReference::accept(const Visitor &visitor) const
 {
     return visitor.visit(*this);
 }
-
-int TypeReference::childrenCount() const
-{
-    return 0;
-}
-
-int TypeReference::childIndex(const NodeConstPtr &child) const
-{
-    Q_UNUSED(child);
-    return -1;
-}
