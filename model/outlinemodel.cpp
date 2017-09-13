@@ -63,7 +63,7 @@ QVariant OutlineModel::data(const QModelIndex &index, int role) const
         return QVariant();
     case Qt::DisplayRole:
     case Qt::ToolTipRole:
-        return node->accept(DisplayRoleVisitor());
+        return node->valueFor<DisplayRoleVisitor>();
     }
 
     return QVariant();
@@ -94,7 +94,7 @@ QModelIndex OutlineModel::index(int row, int column, const QModelIndex &parent) 
     if (parentNode == nullptr)
         return QModelIndex();
 
-    const auto node = parentNode->accept(ChildReturningVisitor(row)).value<void *>();
+    const auto node = parentNode->valueFor<ChildReturningVisitor>(row);
     if (node == nullptr)
         return QModelIndex();
 
@@ -112,7 +112,7 @@ QModelIndex OutlineModel::parent(const QModelIndex &index) const
     if (parent == nullptr)
         return QModelIndex();
 
-    return createIndex(parent->accept(IndexFindingVisitor(node)).toInt(), 0, parent);
+    return createIndex(parent->valueFor<IndexFindingVisitor>(node), 0, parent);
 }
 
 int OutlineModel::rowCount(const QModelIndex &parent) const
@@ -120,7 +120,7 @@ int OutlineModel::rowCount(const QModelIndex &parent) const
     if (parent.column() > 0)
         return 0;
     auto node = dataNode(parent);
-    return node ? node->accept(ChildrenCountingVisitor()).toInt() : 0;
+    return node ? node->valueFor<ChildrenCountingVisitor>() : 0;
 }
 
 int OutlineModel::columnCount(const QModelIndex &parent) const

@@ -24,21 +24,24 @@
 ****************************************************************************/
 #pragma once
 
-#include <data/visitor.h>
+#include <QString>
+
+#include <data/visitorwithvalue.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Model {
 
-class DisplayRoleVisitor : public Data::Visitor
+class DisplayRoleVisitor : public Data::VisitorWithValue<QString>
 {
 public:
     ~DisplayRoleVisitor() override;
 
-    QVariant visit(const Data::Definitions &defs) const override;
-    QVariant visit(const Data::File &file) const override;
-    QVariant visit(const Data::TypeAssignment &type) const override;
-    QVariant visit(const Data::TypeReference &ref) const override;
+private:
+    QString valueFor(const Data::Definitions &defs) const override;
+    QString valueFor(const Data::File &file) const override;
+    QString valueFor(const Data::TypeAssignment &type) const override;
+    QString valueFor(const Data::TypeReference &ref) const override;
 };
 
 } // namespace Outline

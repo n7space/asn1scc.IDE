@@ -41,7 +41,7 @@ public:
     File(const QString &filePath);
     ~File() override;
 
-    QVariant accept(const Visitor &visitor) const override;
+    void accept(Visitor &visitor) const override;
 
     void add(std::unique_ptr<Definitions> defs);
 

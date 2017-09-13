@@ -39,9 +39,9 @@ Definitions::~Definitions()
 {
 }
 
-QVariant Definitions::accept(const Visitor &visitor) const
+void Definitions::accept(Visitor &visitor) const
 {
-    return visitor.visit(*this);
+    visitor.visit(*this);
 }
 
 void Definitions::add(std::unique_ptr<TypeAssignment> type)

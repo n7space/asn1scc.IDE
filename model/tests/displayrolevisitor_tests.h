@@ -46,9 +46,6 @@ private slots:
     void test_typeReferenceBuiltIn();
     void test_typeReferenceBuiltIn_data();
     void test_typeReferenceUserDefined();
-
-private:
-    DisplayRoleVisitor m_visitor;
 };
 
 } // namespace Tests

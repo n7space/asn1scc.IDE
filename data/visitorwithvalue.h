@@ -24,32 +24,33 @@
 ****************************************************************************/
 #pragma once
 
-#include <memory>
-
-#include <QString>
-
-#include "sourcelocation.h"
-#include "typereference.h"
-#include "node.h"
+#include "visitor.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-class TypeAssignment : public Node
+template <typename Value>
+class VisitorWithValue : public Visitor
 {
 public:
-    TypeAssignment(const QString &name, const SourceLocation &location, const TypeReference &reference);
-    ~TypeAssignment() override;
+    using ValueType = Value;
 
-    void accept(Visitor &visitor) const override;
+    const Value &value() const { return m_value; }
 
-    const QString &name() const { return m_name; }
-    const TypeReference &reference() const { return m_reference; }
+    void visit(const Definitions &defs) override final { m_value = valueFor(defs); }
+    void visit(const File &file) override final { m_value = valueFor(file); }
+    void visit(const TypeAssignment &type) override final { m_value = valueFor(type); }
+    void visit(const TypeReference &ref) override final { m_value = valueFor(ref); }
+
+protected:
+    virtual Value valueFor(const Definitions &defs) const = 0;
+    virtual Value valueFor(const File &file) const = 0;
+    virtual Value valueFor(const TypeAssignment &type) const = 0;
+    virtual Value valueFor(const TypeReference &ref) const = 0;
 
 private:
-    QString m_name;
-    TypeReference m_reference;
+    Value m_value;
 };
 
 } // namespace Data

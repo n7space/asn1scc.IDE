@@ -24,8 +24,6 @@
 ****************************************************************************/
 #pragma once
 
-#include <QVariant>
-
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
@@ -43,10 +41,10 @@ protected:
 public:
     virtual ~Visitor();
 
-    virtual QVariant visit(const Definitions &defs) const = 0;
-    virtual QVariant visit(const File &file) const = 0;
-    virtual QVariant visit(const TypeAssignment &type) const = 0;
-    virtual QVariant visit(const TypeReference &ref) const = 0;
+    virtual void visit(const Definitions &defs) = 0;
+    virtual void visit(const File &file) = 0;
+    virtual void visit(const TypeAssignment &type) = 0;
+    virtual void visit(const TypeReference &ref) = 0;
 };
 
 } // namespace Data

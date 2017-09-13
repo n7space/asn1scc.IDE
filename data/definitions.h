@@ -44,7 +44,7 @@ public:
     Definitions(const QString &name, const SourceLocation &location);
     ~Definitions() override;
 
-    QVariant accept(const Visitor &visitor) const override;
+    void accept(Visitor &visitor) const override;
 
     const QString &name() const { return m_name; }
 

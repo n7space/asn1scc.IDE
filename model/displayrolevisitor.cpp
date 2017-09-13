@@ -36,22 +36,24 @@ DisplayRoleVisitor::~DisplayRoleVisitor()
 {
 }
 
-QVariant DisplayRoleVisitor::visit(const Definitions &defs) const
+QString DisplayRoleVisitor::valueFor(const Definitions &defs) const
 {
     return defs.name();
 }
 
-QVariant DisplayRoleVisitor::visit(const File &file) const
+QString DisplayRoleVisitor::valueFor(const File &file) const
 {
     return file.location().path();
 }
 
-QVariant DisplayRoleVisitor::visit(const TypeAssignment &type) const
+QString DisplayRoleVisitor::valueFor(const TypeAssignment &type) const
 {
-    return QString(type.name() + ": " + type.reference().accept(*this).toString());
+    DisplayRoleVisitor typeVisitor;
+    type.reference().accept(typeVisitor);
+    return type.name() + ": " + typeVisitor.value();
 }
 
-QVariant DisplayRoleVisitor::visit(const TypeReference &ref) const
+QString DisplayRoleVisitor::valueFor(const TypeReference &ref) const
 {
     switch (ref.type()) {
     case Type::Boolean:
@@ -79,7 +81,7 @@ QVariant DisplayRoleVisitor::visit(const TypeReference &ref) const
     case Type::SequenceOf:
         return "SEQUENCE OF";
     case Type::UserDefined:
-        return QString(ref.module() + "." + ref.name());
+        return ref.module() + "." + ref.name();
     }
-    return QVariant();
+    return {};
 }

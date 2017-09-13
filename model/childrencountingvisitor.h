@@ -24,23 +24,22 @@
 ****************************************************************************/
 #pragma once
 
-#include <QVariant>
-
-#include <data/visitor.h>
+#include <data/visitorwithvalue.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Model {
 
-class ChildrenCountingVisitor : public Data::Visitor
+class ChildrenCountingVisitor : public Data::VisitorWithValue<int>
 {
 public:
     ~ChildrenCountingVisitor() override;
 
-    QVariant visit(const Data::Definitions &defs) const override;
-    QVariant visit(const Data::File &file) const override;
-    QVariant visit(const Data::TypeAssignment &type) const override;
-    QVariant visit(const Data::TypeReference &ref) const override;
+private:
+    int valueFor(const Data::Definitions &defs) const override;
+    int valueFor(const Data::File &file) const override;
+    int valueFor(const Data::TypeAssignment &type) const override;
+    int valueFor(const Data::TypeReference &ref) const override;
 };
 
 } // namespace Model

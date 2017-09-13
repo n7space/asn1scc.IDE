@@ -44,7 +44,7 @@ TypeReference::~TypeReference()
 {
 }
 
-QVariant TypeReference::accept(const Visitor &visitor) const
+void TypeReference::accept(Visitor &visitor) const
 {
-    return visitor.visit(*this);
+    visitor.visit(*this);
 }

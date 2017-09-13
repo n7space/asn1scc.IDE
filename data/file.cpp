@@ -39,9 +39,9 @@ File::~File()
 {
 }
 
-QVariant File::accept(const Visitor &visitor) const
+void File::accept(Visitor &visitor) const
 {
-    return visitor.visit(*this);
+    visitor.visit(*this);
 }
 
 const Definitions *File::definitions(const QString &name) const

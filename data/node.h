@@ -24,8 +24,6 @@
 ****************************************************************************/
 #pragma once
 
-#include <QVariant>
-
 #include "sourcelocation.h"
 
 namespace Asn1Acn {
@@ -44,7 +42,15 @@ protected:
 public:
     virtual ~Node();
 
-    virtual QVariant accept(const Visitor &visitor) const = 0;
+    virtual void accept(Visitor &visitor) const = 0;
+
+    template <typename VisitorType, typename... Args>
+    typename VisitorType::ValueType valueFor(Args... args) const
+    {
+        VisitorType visitor(args...);
+        this->accept(visitor);
+        return visitor.value();
+    }
 
     const SourceLocation& location() const { return m_location; }
 

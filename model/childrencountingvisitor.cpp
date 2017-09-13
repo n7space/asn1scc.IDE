@@ -34,23 +34,23 @@ ChildrenCountingVisitor::~ChildrenCountingVisitor()
 {
 }
 
-QVariant ChildrenCountingVisitor::visit(const Definitions &defs) const
+int ChildrenCountingVisitor::valueFor(const Definitions &defs) const
 {
     return static_cast<int>(defs.types().size());
 }
 
-QVariant ChildrenCountingVisitor::visit(const File &file) const
+int ChildrenCountingVisitor::valueFor(const File &file) const
 {
     return static_cast<int>(file.definitionsList().size());
 }
 
-QVariant ChildrenCountingVisitor::visit(const TypeAssignment &type) const
+int ChildrenCountingVisitor::valueFor(const TypeAssignment &type) const
 {
     Q_UNUSED(type);
     return 0;
 }
 
-QVariant ChildrenCountingVisitor::visit(const TypeReference &ref) const
+int ChildrenCountingVisitor::valueFor(const TypeReference &ref) const
 {
     Q_UNUSED(ref);
     return 0;

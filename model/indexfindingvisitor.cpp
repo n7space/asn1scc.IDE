@@ -51,23 +51,23 @@ int IndexFindingVisitor::findIndexIn(const Collection &items) const
     return std::distance(std::begin(items), it);
 }
 
-QVariant IndexFindingVisitor::visit(const Definitions &defs) const
+int IndexFindingVisitor::valueFor(const Definitions &defs) const
 {
     return findIndexIn(defs.types());
 }
 
-QVariant IndexFindingVisitor::visit(const File &file) const
+int IndexFindingVisitor::valueFor(const File &file) const
 {
     return findIndexIn(file.definitionsList());
 }
 
-QVariant IndexFindingVisitor::visit(const TypeAssignment &type) const
+int IndexFindingVisitor::valueFor(const TypeAssignment &type) const
 {
     Q_UNUSED(type);
     return -1;
 }
 
-QVariant IndexFindingVisitor::visit(const TypeReference &ref) const
+int IndexFindingVisitor::valueFor(const TypeReference &ref) const
 {
     Q_UNUSED(ref);
     return -1;

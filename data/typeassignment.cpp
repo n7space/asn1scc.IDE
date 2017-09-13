@@ -38,7 +38,7 @@ TypeAssignment::~TypeAssignment()
 {
 }
 
-QVariant TypeAssignment::accept(const Visitor &visitor) const
+void TypeAssignment::accept(Visitor &visitor) const
 {
-    return visitor.visit(*this);
+    visitor.visit(*this);
 }

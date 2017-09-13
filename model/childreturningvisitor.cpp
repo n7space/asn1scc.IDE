@@ -39,26 +39,24 @@ ChildReturningVisitor::~ChildReturningVisitor()
 {
 }
 
-QVariant ChildReturningVisitor::visit(const Definitions &defs) const
+Node *ChildReturningVisitor::valueFor(const Definitions &defs) const
 {
-    const auto node = defs.types().at(m_index).get();
-    return QVariant::fromValue(static_cast<void *>(node));
+    return defs.types().at(m_index).get();
 }
 
-QVariant ChildReturningVisitor::visit(const File &file) const
+Node *ChildReturningVisitor::valueFor(const File &file) const
 {
-    const auto node = file.definitionsList().at(m_index).get();
-    return QVariant::fromValue(static_cast<void *>(node));
+    return file.definitionsList().at(m_index).get();
 }
 
-QVariant ChildReturningVisitor::visit(const TypeAssignment &type) const
+Node *ChildReturningVisitor::valueFor(const TypeAssignment &type) const
 {
     Q_UNUSED(type);
-    return QVariant::fromValue(nullptr);
+    return nullptr;
 }
 
-QVariant ChildReturningVisitor::visit(const TypeReference &ref) const
+Node *ChildReturningVisitor::valueFor(const TypeReference &ref) const
 {
     Q_UNUSED(ref);
-    return QVariant::fromValue(nullptr);
+    return nullptr;
 }

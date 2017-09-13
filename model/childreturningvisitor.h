@@ -24,26 +24,25 @@
 ****************************************************************************/
 #pragma once
 
-#include <QVariant>
-
-#include <data/visitor.h>
+#include <data/node.h>
+#include <data/visitorwithvalue.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Model {
 
-class ChildReturningVisitor : public Data::Visitor
+class ChildReturningVisitor : public Data::VisitorWithValue<Data::Node *>
 {
 public:
     ChildReturningVisitor(int index);
     ~ChildReturningVisitor() override;
 
-    QVariant visit(const Data::Definitions &defs) const override;
-    QVariant visit(const Data::File &file) const override;
-    QVariant visit(const Data::TypeAssignment &type) const override;
-    QVariant visit(const Data::TypeReference &ref) const override;
-
 private:
+    Data::Node *valueFor(const Data::Definitions &defs) const override;
+    Data::Node *valueFor(const Data::File &file) const override;
+    Data::Node *valueFor(const Data::TypeAssignment &type) const override;
+    Data::Node *valueFor(const Data::TypeReference &ref) const override;
+
     int m_index;
 };
 
