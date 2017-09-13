@@ -22,38 +22,43 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "childreturningvisitor.h"
 
-#include <memory>
-#include <map>
-#include <vector>
+#include <data/definitions.h>
+#include <data/file.h>
 
-#include "definitions.h"
-#include "node.h"
+using namespace Asn1Acn::Internal::Data;
+using namespace Asn1Acn::Internal::Model;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Data {
-
-class File : public Node
+ChildReturningVisitor::ChildReturningVisitor(int index)
+    : m_index(index)
 {
-public:
-    File(const QString &filePath);
-    ~File() override;
+}
 
-    QVariant accept(const Visitor &visitor) const override;
+ChildReturningVisitor::~ChildReturningVisitor()
+{
+}
 
-    void add(std::unique_ptr<Definitions> defs);
+QVariant ChildReturningVisitor::visit(const Definitions &defs) const
+{
+    const auto node = defs.types().at(m_index).get();
+    return QVariant::fromValue(static_cast<void *>(node));
+}
 
-    using DefinitionsList = std::vector<std::unique_ptr<Definitions>>;
-    const DefinitionsList &definitionsList() const { return m_definitionsList; }
-    const Definitions* definitions(const QString &name) const;
+QVariant ChildReturningVisitor::visit(const File &file) const
+{
+    const auto node = file.definitionsList().at(m_index).get();
+    return QVariant::fromValue(static_cast<void *>(node));
+}
 
-private:
-    DefinitionsList m_definitionsList;
-    std::map<QString, Definitions*> m_definitionsByNameMap;
-};
+QVariant ChildReturningVisitor::visit(const TypeAssignment &type) const
+{
+    Q_UNUSED(type);
+    return QVariant::fromValue(nullptr);
+}
 
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+QVariant ChildReturningVisitor::visit(const TypeReference &ref) const
+{
+    Q_UNUSED(ref);
+    return QVariant::fromValue(nullptr);
+}

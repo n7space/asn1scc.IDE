@@ -22,38 +22,36 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "childrencountingvisitor.h"
 
-#include <memory>
-#include <map>
-#include <vector>
+#include <data/definitions.h>
+#include <data/file.h>
 
-#include "definitions.h"
-#include "node.h"
+using namespace Asn1Acn::Internal::Data;
+using namespace Asn1Acn::Internal::Model;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Data {
-
-class File : public Node
+ChildrenCountingVisitor::~ChildrenCountingVisitor()
 {
-public:
-    File(const QString &filePath);
-    ~File() override;
+}
 
-    QVariant accept(const Visitor &visitor) const override;
+QVariant ChildrenCountingVisitor::visit(const Definitions &defs) const
+{
+    return static_cast<int>(defs.types().size());
+}
 
-    void add(std::unique_ptr<Definitions> defs);
+QVariant ChildrenCountingVisitor::visit(const File &file) const
+{
+    return static_cast<int>(file.definitionsList().size());
+}
 
-    using DefinitionsList = std::vector<std::unique_ptr<Definitions>>;
-    const DefinitionsList &definitionsList() const { return m_definitionsList; }
-    const Definitions* definitions(const QString &name) const;
+QVariant ChildrenCountingVisitor::visit(const TypeAssignment &type) const
+{
+    Q_UNUSED(type);
+    return 0;
+}
 
-private:
-    DefinitionsList m_definitionsList;
-    std::map<QString, Definitions*> m_definitionsByNameMap;
-};
-
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+QVariant ChildrenCountingVisitor::visit(const TypeReference &ref) const
+{
+    Q_UNUSED(ref);
+    return 0;
+}

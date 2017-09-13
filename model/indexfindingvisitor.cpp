@@ -22,7 +22,9 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "treeviewchildrencountingvisitor.h"
+#include "indexfindingvisitor.h"
+
+#include <utils/qtcassert.h>
 
 #include <data/definitions.h>
 #include <data/file.h>
@@ -30,28 +32,43 @@
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::Model;
 
-TreeViewChildrenCountingVisitor::~TreeViewChildrenCountingVisitor()
+IndexFindingVisitor::IndexFindingVisitor(const Node *child)
+    : m_child(child)
 {
 }
 
-QVariant TreeViewChildrenCountingVisitor::visit(const Data::Definitions &defs) const
+IndexFindingVisitor::~IndexFindingVisitor()
 {
-    return static_cast<int>(defs.types().size());
 }
 
-QVariant TreeViewChildrenCountingVisitor::visit(const Data::File &file) const
+template <typename Collection>
+int IndexFindingVisitor::findIndexIn(const Collection &items) const
 {
-    return static_cast<int>(file.definitionsList().size());
+    using ValueType = typename Collection::value_type;
+    const auto it = std::find_if(std::begin(items), std::end(items),
+                                 [this](const ValueType &item){ return item.get() == m_child; });
+    QTC_ASSERT(it != items.end(), return -1);
+    return std::distance(std::begin(items), it);
 }
 
-QVariant TreeViewChildrenCountingVisitor::visit(const Data::TypeAssignment &type) const
+QVariant IndexFindingVisitor::visit(const Definitions &defs) const
+{
+    return findIndexIn(defs.types());
+}
+
+QVariant IndexFindingVisitor::visit(const File &file) const
+{
+    return findIndexIn(file.definitionsList());
+}
+
+QVariant IndexFindingVisitor::visit(const TypeAssignment &type) const
 {
     Q_UNUSED(type);
-    return 0;
+    return -1;
 }
 
-QVariant TreeViewChildrenCountingVisitor::visit(const Data::TypeReference &ref) const
+QVariant IndexFindingVisitor::visit(const TypeReference &ref) const
 {
     Q_UNUSED(ref);
-    return 0;
+    return -1;
 }

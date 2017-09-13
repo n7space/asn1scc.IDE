@@ -27,20 +27,28 @@
 #include <QVariant>
 
 #include <data/visitor.h>
+#include <data/node.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Model {
 
-class TreeViewChildrenCountingVisitor : public Data::Visitor
+class IndexFindingVisitor : public Data::Visitor
 {
 public:
-    ~TreeViewChildrenCountingVisitor() override;
+    IndexFindingVisitor(const Data::Node *child);
+    ~IndexFindingVisitor() override;
 
     QVariant visit(const Data::Definitions &defs) const override;
     QVariant visit(const Data::File &file) const override;
     QVariant visit(const Data::TypeAssignment &type) const override;
     QVariant visit(const Data::TypeReference &ref) const override;
+
+private:
+    const Data::Node *m_child;
+
+    template <typename Collection>
+    int findIndexIn(const Collection &items) const;
 };
 
 } // namespace Model

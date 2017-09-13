@@ -24,36 +24,25 @@
 ****************************************************************************/
 #pragma once
 
-#include <memory>
-#include <map>
-#include <vector>
+#include <QVariant>
 
-#include "definitions.h"
-#include "node.h"
+#include <data/visitor.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace Model {
 
-class File : public Node
+class ChildrenCountingVisitor : public Data::Visitor
 {
 public:
-    File(const QString &filePath);
-    ~File() override;
+    ~ChildrenCountingVisitor() override;
 
-    QVariant accept(const Visitor &visitor) const override;
-
-    void add(std::unique_ptr<Definitions> defs);
-
-    using DefinitionsList = std::vector<std::unique_ptr<Definitions>>;
-    const DefinitionsList &definitionsList() const { return m_definitionsList; }
-    const Definitions* definitions(const QString &name) const;
-
-private:
-    DefinitionsList m_definitionsList;
-    std::map<QString, Definitions*> m_definitionsByNameMap;
+    QVariant visit(const Data::Definitions &defs) const override;
+    QVariant visit(const Data::File &file) const override;
+    QVariant visit(const Data::TypeAssignment &type) const override;
+    QVariant visit(const Data::TypeReference &ref) const override;
 };
 
-} // namespace Data
+} // namespace Model
 } // namespace Internal
 } // namespace Asn1Acn

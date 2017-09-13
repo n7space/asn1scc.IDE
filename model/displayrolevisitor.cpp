@@ -43,7 +43,7 @@ QVariant DisplayRoleVisitor::visit(const Definitions &defs) const
 
 QVariant DisplayRoleVisitor::visit(const File &file) const
 {
-    return file.name();
+    return file.location().path();
 }
 
 QVariant DisplayRoleVisitor::visit(const TypeAssignment &type) const

@@ -24,36 +24,36 @@
 ****************************************************************************/
 #pragma once
 
-#include <memory>
-#include <map>
-#include <vector>
+#include <QAbstractItemModel>
 
-#include "definitions.h"
-#include "node.h"
+#include <data/node.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace Model {
 
-class File : public Node
+class OutlineModel : public QAbstractItemModel
 {
+    Q_OBJECT
 public:
-    File(const QString &filePath);
-    ~File() override;
+    explicit OutlineModel(QObject *parent = 0);
+    ~OutlineModel();
 
-    QVariant accept(const Visitor &visitor) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
 
-    void add(std::unique_ptr<Definitions> defs);
-
-    using DefinitionsList = std::vector<std::unique_ptr<Definitions>>;
-    const DefinitionsList &definitionsList() const { return m_definitionsList; }
-    const Definitions* definitions(const QString &name) const;
+    void setRoot(const Data::Node *root);
 
 private:
-    DefinitionsList m_definitionsList;
-    std::map<QString, Definitions*> m_definitionsByNameMap;
+    static const Data::Node *dataNode(const QModelIndex &index);
+    const Data::Node *m_root;
 };
 
-} // namespace Data
+} // Model
 } // namespace Internal
 } // namespace Asn1Acn

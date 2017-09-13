@@ -38,10 +38,10 @@ OverviewModel::OverviewModel(QObject *parent) :
     m_rootItem(nullptr)
 {
     connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            this, &OverviewModel::invalidated);
+            [this](){ beginResetModel(); });
 
     connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            this, &OverviewModel::validated);
+            [this](){ endResetModel(); });
 }
 
 OverviewModel::~OverviewModel()
@@ -129,16 +129,6 @@ QModelIndex OverviewModel::parent(const QModelIndex &index) const
         return QModelIndex();
 
     return createIndex(parent->indexInParent(), 0, parent);
-}
-
-void OverviewModel::invalidated()
-{
-    beginResetModel();
-}
-
-void OverviewModel::validated()
-{
-    endResetModel();
 }
 
 void OverviewModel::setRootNode(ModelTreeNode::ModelTreeNodePtr root)
