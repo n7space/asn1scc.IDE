@@ -42,6 +42,7 @@ public:
     int valueFor(const Data::TypeAssignment &type) const override;
     int valueFor(const Data::TypeReference &ref) const override;
     int valueFor(const Data::Project &project) const override;
+    int valueFor(const Data::Root &root) const override;
 
 private:
     const Data::Node *m_child;

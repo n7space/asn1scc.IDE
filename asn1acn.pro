@@ -68,6 +68,7 @@ SOURCES += \
     completion/builtinsproposalsprovider.cpp \
     \
     data/node.cpp \
+    data/root.cpp \
     data/file.cpp \
     data/project.cpp \
     data/typeassignment.cpp \
@@ -148,6 +149,7 @@ HEADERS += \
     data/type.h \
     data/errormessage.h \
     data/node.h \
+    data/root.h \
     data/file.h \
     data/project.h \
     data/visitor.h \

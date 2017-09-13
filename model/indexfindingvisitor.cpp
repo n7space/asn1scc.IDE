@@ -29,6 +29,7 @@
 #include <data/definitions.h>
 #include <data/file.h>
 #include <data/project.h>
+#include <data/root.h>
 
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::Model;
@@ -65,6 +66,11 @@ int IndexFindingVisitor::valueFor(const File &file) const
 int IndexFindingVisitor::valueFor(const Project &project) const
 {
     return findIndexIn(project.files());
+}
+
+int IndexFindingVisitor::valueFor(const Root &root) const
+{
+    return findIndexIn(root.projects());
 }
 
 int IndexFindingVisitor::valueFor(const TypeAssignment &type) const

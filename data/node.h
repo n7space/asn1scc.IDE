@@ -37,6 +37,7 @@ class Node
 protected:
     Node(const SourceLocation& location)
         : m_location(location)
+        , m_parent(nullptr)
     {}
 
 public:

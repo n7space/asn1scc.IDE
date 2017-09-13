@@ -27,6 +27,7 @@
 #include <data/definitions.h>
 #include <data/file.h>
 #include <data/project.h>
+#include <data/root.h>
 
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::Model;
@@ -60,4 +61,9 @@ int ChildrenCountingVisitor::valueFor(const TypeReference &ref) const
 {
     Q_UNUSED(ref);
     return 0;
+}
+
+int ChildrenCountingVisitor::valueFor(const Root &root) const
+{
+    return static_cast<int>(root.projects().size());
 }

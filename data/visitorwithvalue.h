@@ -43,8 +43,10 @@ public:
     void visit(const TypeAssignment &type) override final { m_value = valueFor(type); }
     void visit(const TypeReference &ref) override final { m_value = valueFor(ref); }
     void visit(const Project &project) override final { m_value = valueFor(project); }
+    void visit(const Root &root) override final { m_value = valueFor(root); }
 
 protected:
+    virtual Value valueFor(const Root &root) const = 0;
     virtual Value valueFor(const Definitions &defs) const = 0;
     virtual Value valueFor(const File &file) const = 0;
     virtual Value valueFor(const TypeAssignment &type) const = 0;

@@ -91,3 +91,9 @@ QString DisplayRoleVisitor::valueFor(const Project &project) const
 {
     return project.name();
 }
+
+QString DisplayRoleVisitor::valueFor(const Root &root) const
+{
+    Q_UNUSED(root);
+    return {};
+}

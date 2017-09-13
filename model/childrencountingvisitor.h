@@ -36,6 +36,7 @@ public:
     ~ChildrenCountingVisitor() override;
 
 private:
+    int valueFor(const Data::Root &root) const override;
     int valueFor(const Data::Definitions &defs) const override;
     int valueFor(const Data::File &file) const override;
     int valueFor(const Data::TypeAssignment &type) const override;

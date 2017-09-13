@@ -38,6 +38,7 @@ public:
     ~DisplayRoleVisitor() override;
 
 private:
+    QString valueFor(const Data::Root &root) const override;
     QString valueFor(const Data::Definitions &defs) const override;
     QString valueFor(const Data::File &file) const override;
     QString valueFor(const Data::TypeAssignment &type) const override;

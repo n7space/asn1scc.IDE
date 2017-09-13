@@ -24,30 +24,42 @@
 ****************************************************************************/
 #pragma once
 
-#include <data/node.h>
-#include <data/visitorwithvalue.h>
+#include <memory>
+#include <vector>
+#include <map>
+
+#include <QString>
+
+#include "node.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Model {
+namespace Data {
 
-class ChildReturningVisitor : public Data::VisitorWithValue<Data::Node *>
+class Project;
+
+class Root : public Node
 {
 public:
-    ChildReturningVisitor(int index);
-    ~ChildReturningVisitor() override;
+    Root();
+    ~Root() override;
+
+    static Root &instance();
+
+    void accept(Visitor &visitor) const override;
+
+    void add(std::unique_ptr<Project> project);
+
+    using Projects = std::vector<std::unique_ptr<Project>>;
+    const Projects &projects() const { return m_projects; }
+
+    const Project *project(const QString &name) const;
 
 private:
-    Data::Node *valueFor(const Data::Definitions &defs) const override;
-    Data::Node *valueFor(const Data::File &file) const override;
-    Data::Node *valueFor(const Data::TypeAssignment &type) const override;
-    Data::Node *valueFor(const Data::TypeReference &ref) const override;
-    Data::Node *valueFor(const Data::Project &project) const override;
-    Data::Node *valueFor(const Data::Root &root) const override;
-
-    int m_index;
+    Projects m_projects;
+    std::map<QString, Project*> m_nameToProjectMap;
 };
 
-} // namespace Model
+} // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn

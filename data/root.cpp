@@ -22,53 +22,47 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "childreturningvisitor.h"
+#include "root.h"
 
-#include <data/definitions.h>
-#include <data/file.h>
-#include <data/project.h>
-#include <data/root.h>
+#include <QFileInfo>
+
+#include <utils/qtcassert.h>
+
+#include "visitor.h"
+#include "project.h"
 
 using namespace Asn1Acn::Internal::Data;
-using namespace Asn1Acn::Internal::Model;
 
-ChildReturningVisitor::ChildReturningVisitor(int index)
-    : m_index(index)
+Root::Root()
+    : Node({})
 {
 }
 
-ChildReturningVisitor::~ChildReturningVisitor()
+Root::~Root()
 {
 }
 
-Node *ChildReturningVisitor::valueFor(const Definitions &defs) const
+Root &Root::instance()
 {
-    return defs.types().at(m_index).get();
+    static Root root;
+    return root;
 }
 
-Node *ChildReturningVisitor::valueFor(const File &file) const
+void Root::accept(Visitor &visitor) const
 {
-    return file.definitionsList().at(m_index).get();
+    visitor.visit(*this);
 }
 
-Node *ChildReturningVisitor::valueFor(const TypeAssignment &type) const
+void Root::add(std::unique_ptr<Project> project)
 {
-    Q_UNUSED(type);
-    return nullptr;
+    project->setParent(this);
+    m_nameToProjectMap[project->name()] = project.get();
+    m_projects.push_back(std::move(project));
 }
 
-Node *ChildReturningVisitor::valueFor(const TypeReference &ref) const
+const Project *Root::project(const QString &name) const
 {
-    Q_UNUSED(ref);
-    return nullptr;
-}
-
-Node *ChildReturningVisitor::valueFor(const Project &project) const
-{
-    return project.files().at(m_index).get();
-}
-
-Node *ChildReturningVisitor::valueFor(const Root &root) const
-{
-    return root.projects().at(m_index).get();
+    const auto it = m_nameToProjectMap.find(name);
+    QTC_ASSERT(it != m_nameToProjectMap.end(), return nullptr);
+    return it->second;
 }

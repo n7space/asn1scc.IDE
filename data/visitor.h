@@ -30,6 +30,7 @@ namespace Data {
 
 class Definitions;
 class File;
+class Root;
 class TypeAssignment;
 class TypeReference;
 class Project;
@@ -42,6 +43,7 @@ protected:
 public:
     virtual ~Visitor();
 
+    virtual void visit(const Root &root) = 0;
     virtual void visit(const Definitions &defs) = 0;
     virtual void visit(const File &file) = 0;
     virtual void visit(const TypeAssignment &type) = 0;
