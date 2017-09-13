@@ -74,6 +74,7 @@ SOURCES += \
     data/visitor.cpp \
     \
     model/displayrolevisitor.cpp \
+    model/treeviewchildrencountingvisitor.cpp \
     \
     options-pages/general.cpp \
     options-pages/service.cpp \
@@ -146,6 +147,7 @@ HEADERS += \
     data/visitor.h \
     \
     model/displayrolevisitor.h \
+    model/treeviewchildrencountingvisitor.h \
     \
     options-pages/general.h \
     options-pages/service.h \
