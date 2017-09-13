@@ -108,7 +108,8 @@ SOURCES += \
     structuresviewindexupdater.cpp \
     filesourcereader.cpp \
     errormessageparser.cpp \
-    editoroutline.cpp
+    editoroutline.cpp \
+    typeslocator.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -189,7 +190,8 @@ HEADERS += \
     modeltreeproxy.h \
     errormessageparser.h \
     editoroutline.h \
-    overviewactivatehandler.h
+    overviewactivatehandler.h \
+    typeslocator.h
 
 FORMS += \
     options-pages/general.ui \

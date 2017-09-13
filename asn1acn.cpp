@@ -55,6 +55,7 @@
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
 #include "asn1acnconstants.h"
+#include "typeslocator.h"
 #include "tr.h"
 #include "tools.h"
 
@@ -116,6 +117,8 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new OptionsPages::General(generalSettings));
     addAutoReleasedObject(new OptionsPages::Service(serviceSettings));
+
+    addAutoReleasedObject(new TypesLocator);
 
     Asn1SccServiceProvider *sp = new Asn1SccServiceProvider(serviceSettings);
     addAutoReleasedObject(sp);
