@@ -23,12 +23,12 @@
       "type": "object",
       "properties": {
         "from": { "$ref": "#/definitions/asn1TypeName" },
-        "type": {
+        "types": {
           "types": "array",
           "items": { "$ref": "#/definitions/asn1TypeName" }
         }
       },
-      "required": ["from", "type"],
+      "required": ["from", "types"],
       "additionalProperties": false
     }
   },
