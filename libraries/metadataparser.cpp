@@ -36,6 +36,13 @@ MetadataParser::MetadataParser(const QByteArray &data)
 
 namespace {
 
+template <typename Func>
+void foreachItem(const QJsonValue &value, Func f)
+{
+    for (const auto &item : value.toArray())
+        f(item);
+}
+
 QString readName(const QJsonObject &object)
 {
     const auto name = object["name"].toString();
@@ -49,12 +56,21 @@ QString readDescription(const QJsonObject &object)
     return object["description"].toString();
 }
 
+QStringList toStringList(const QJsonValue &value)
+{
+  QStringList result;
+  foreachItem(value, [&result](const QJsonValue &item) {
+      result.append(item.toString());
+    });
+  return result;
+}
+
 Metadata::Import readImport(const QJsonObject &object)
 {
     const auto import = Metadata::Import{object["from"].toString(),
-                                         object["type"].toString()};
-    if (import.from().isEmpty() || import.type().isEmpty())
-        throw MetadataParser::Error("'from' and 'type' must be present and not-empty");
+                                         toStringList(object["types"])};
+    if (import.from().isEmpty() || import.types().isEmpty())
+        throw MetadataParser::Error("'from' and 'types' must be present and not-empty");
     return import;
 }
 
@@ -62,13 +78,6 @@ template <typename T>
 T readNamedType(const QJsonObject &object)
 {
     return T{readName(object), readDescription(object)};
-}
-
-template <typename Func>
-void foreachItem(const QJsonValue &value, Func f)
-{
-    for (const auto &item : value.toArray())
-        f(item);
 }
 
 Metadata::Element readElement(const QJsonObject &object)

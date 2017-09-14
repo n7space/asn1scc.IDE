@@ -23,7 +23,10 @@
       "type": "object",
       "properties": {
         "from": { "$ref": "#/definitions/asn1TypeName" },
-        "type": { "$ref": "#/definitions/asn1TypeName" }
+        "type": {
+          "types": "array",
+          "items": { "$ref": "#/definitions/asn1TypeName" }
+        }
       },
       "required": ["from", "type"],
       "additionalProperties": false
