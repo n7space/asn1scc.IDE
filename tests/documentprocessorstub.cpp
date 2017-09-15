@@ -34,7 +34,8 @@ using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
 
 DocumentProcessorStub::DocumentProcessorStub(const QString &project)
-    : m_projectName(project)
+    : m_state(State::Unfinished)
+    , m_projectName(project)
 {
 }
 
@@ -44,17 +45,12 @@ void DocumentProcessorStub::addToRun(const QString &filePath, const QString &doc
     DocumentSource fileInfo(filePath, docContent);
 
     m_documents.insert(fileName, fileInfo);
-
-    if (docContent.contains("SUCCESS"))
-        m_state = State::Successful;
-    else if (docContent.contains("FAILED"))
-        m_state = State::Failed;
-    else if (docContent.contains("ERROR"))
-        m_state = State::Errored;
 }
 
 void DocumentProcessorStub::run()
 {
+    m_state = createState();
+
     for (auto it = m_documents.begin(); it != m_documents.cend(); ++it) {
         auto modules = std::make_unique<Data::Modules>();
         std::unique_ptr<ParsedDocument> parsedDocument(new ParsedDocument(std::move(modules), it.value()));
@@ -77,4 +73,23 @@ DocumentProcessorStub::State DocumentProcessorStub::state()
 const std::vector<Data::ErrorMessage> &DocumentProcessorStub::errorMessages() const
 {
     return m_errorMessages;
+}
+
+DocumentProcessorStub::State DocumentProcessorStub::createState()
+{
+    if (m_documents.empty())
+        return State::Successful;
+
+    const QString content = m_documents.values()[0].contents();
+
+    if (content.contains("SUCCESS"))
+        return State::Successful;
+
+    if (content.contains("FAILED"))
+        return State::Failed;
+
+    if (content.contains("ERROR"))
+        return State::Errored;
+
+    return State::Errored;
 }

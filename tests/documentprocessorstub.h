@@ -57,6 +57,8 @@ public:
     State state() override;
 
 private:
+    State createState();
+
     State m_state;
     QString m_projectName;
 
