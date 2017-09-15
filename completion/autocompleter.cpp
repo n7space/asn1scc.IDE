@@ -30,10 +30,6 @@
 
 using namespace Asn1Acn::Internal::Completion;
 
-AutoCompleter::AutoCompleter()
-{
-}
-
 bool AutoCompleter::isInComment(const QTextCursor &cursor) const
 {
     // TODO: This doesn't handle '--' inside quotes
@@ -130,7 +126,65 @@ bool AutoCompleter::contextAllowsAutoQuotes(const QTextCursor &cursor, const QSt
 int AutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor,
                                                        const TextEditor::TabSettings &tabSettings)
 {
+    if (tryInsertEndKeyword(cursor))
+        return 1;
+
     auto block = cursor.document()->lastBlock();
     TextEditor::TextDocumentLayout::setBraceDepth(block, 1); // TODO - workaround to reuse code from base class
+
     return TextEditor::AutoCompleter::paragraphSeparatorAboutToBeInserted(cursor, tabSettings);
+}
+
+
+bool AutoCompleter::tryInsertEndKeyword(QTextCursor &cursor) const
+{
+    if (!shouldInsertEndKeyword(cursor))
+        return false;
+
+    insertEndKeyword(cursor);
+
+    return true;
+}
+
+bool AutoCompleter::shouldInsertEndKeyword(QTextCursor &cursor) const
+{
+    return containsBeginKeyword(cursor) && beginKeywordMismatched(cursor);
+}
+
+bool AutoCompleter::containsBeginKeyword(QTextCursor &cursor) const
+{
+    QTextCursor moved = cursor;
+
+    moved.select(QTextCursor::LineUnderCursor);
+
+    QString line = moved.selectedText();
+    QStringList words = line.trimmed().split(" ");
+
+    return words.last() == QLatin1String("BEGIN");
+}
+
+bool AutoCompleter::beginKeywordMismatched(QTextCursor &cursor) const
+{
+    QTextCursor moved = cursor;
+
+    while(moved.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor)) {
+        if (moved.selectedText() == QLatin1String("END"))
+            return false;
+
+        if (moved.selectedText() == QLatin1String("BEGIN"))
+            return true;
+
+        moved.clearSelection();
+    }
+
+    return true;
+}
+
+void AutoCompleter::insertEndKeyword(QTextCursor &cursor) const
+{
+    const int pos = cursor.position();
+
+    cursor.insertBlock();
+    cursor.insertText(QLatin1String("END"));
+    cursor.setPosition(pos);
 }

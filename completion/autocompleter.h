@@ -34,7 +34,6 @@ namespace Completion {
 class AutoCompleter : public TextEditor::AutoCompleter
 {
 public:
-    AutoCompleter();
 
     bool isInComment(const QTextCursor &cursor) const override;
     bool isInString(const QTextCursor &cursor) const override;
@@ -53,6 +52,13 @@ public:
                                             const TextEditor::TabSettings &tabSettings) override;
     bool contextAllowsAutoBrackets(const QTextCursor &cursor, const QString &textToInsert) const override;
     bool contextAllowsAutoQuotes(const QTextCursor &cursor, const QString &textToInsert) const override;
+
+private:
+    bool tryInsertEndKeyword(QTextCursor &cursor) const;
+    bool shouldInsertEndKeyword(QTextCursor &cursor) const;
+    bool containsBeginKeyword(QTextCursor &cursor) const;
+    bool beginKeywordMismatched(QTextCursor &cursor) const;
+    void insertEndKeyword(QTextCursor &cursor) const;
 };
 
 } /* nameapsce Completion */
