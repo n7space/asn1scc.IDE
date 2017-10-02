@@ -36,7 +36,6 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
 
-static const int RESPONSE_WAIT_TIME_MS = 600;
 static const QString FILE_PATH("/test/file1.asn");
 
 StructuresViewIndexUpdaterTests::StructuresViewIndexUpdaterTests(QObject *parent)
