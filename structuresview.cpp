@@ -57,7 +57,7 @@ void StructuresViewWidget::modelUpdated()
 
 std::shared_ptr<OverviewIndexUpdater> StructuresViewWidget::createIndexUpdater() const
 {
-    auto indexUpdater = std::make_unique<StructuresViewIndexUpdater>(m_model);
+    auto indexUpdater = std::make_shared<StructuresViewIndexUpdater>(m_model);
 
     connect(indexUpdater.get(), &OverviewIndexUpdater::currentIndexUpdated,
             this, &StructuresViewWidget::updateSelectionInTree);
