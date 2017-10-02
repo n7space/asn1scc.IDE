@@ -26,6 +26,7 @@
 
 #include <data/definitions.h>
 #include <data/file.h>
+#include <data/project.h>
 
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::Model;
@@ -59,4 +60,9 @@ Node *ChildReturningVisitor::valueFor(const TypeReference &ref) const
 {
     Q_UNUSED(ref);
     return nullptr;
+}
+
+Node *ChildReturningVisitor::valueFor(const Project &project) const
+{
+    return project.files().at(m_index).get();
 }

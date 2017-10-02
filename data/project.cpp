@@ -22,29 +22,39 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "project.h"
 
-#include <QString>
+#include <utils/qtcassert.h>
 
-#include <data/visitorwithvalue.h>
+#include "visitor.h"
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Model {
+using namespace Asn1Acn::Internal::Data;
 
-class DisplayRoleVisitor : public Data::VisitorWithValue<QString>
+Project::Project(const QString &projectName)
+    : Node({})
+    , m_name(projectName)
 {
-public:
-    ~DisplayRoleVisitor() override;
+}
 
-private:
-    QString valueFor(const Data::Definitions &defs) const override;
-    QString valueFor(const Data::File &file) const override;
-    QString valueFor(const Data::TypeAssignment &type) const override;
-    QString valueFor(const Data::TypeReference &ref) const override;
-    QString valueFor(const Data::Project &project) const override;
-};
+Project::~Project()
+{
+}
 
-} // namespace Outline
-} // namespace Internal
-} // namespace Asn1Acn
+void Project::accept(Visitor &visitor) const
+{
+    visitor.visit(*this);
+}
+
+void Project::add(std::unique_ptr<File> file)
+{
+    file->setParent(this);
+    m_filesByPathMap[file->location().path()] = file.get();
+    m_files.push_back(std::move(file));
+}
+
+const File* Project::file(const QString &path) const
+{
+    const auto it = m_filesByPathMap.find(path);
+    QTC_ASSERT(it != m_filesByPathMap.end(), return nullptr);
+    return it->second;
+}

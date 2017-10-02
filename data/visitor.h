@@ -32,6 +32,7 @@ class Definitions;
 class File;
 class TypeAssignment;
 class TypeReference;
+class Project;
 
 class Visitor
 {
@@ -45,6 +46,7 @@ public:
     virtual void visit(const File &file) = 0;
     virtual void visit(const TypeAssignment &type) = 0;
     virtual void visit(const TypeReference &ref) = 0;
+    virtual void visit(const Project &project) = 0;
 };
 
 } // namespace Data

@@ -24,27 +24,39 @@
 ****************************************************************************/
 #pragma once
 
-#include <QString>
+#include <memory>
+#include <map>
+#include <vector>
 
-#include <data/visitorwithvalue.h>
+#include "file.h"
+#include "node.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Model {
+namespace Data {
 
-class DisplayRoleVisitor : public Data::VisitorWithValue<QString>
+class Project : public Node
 {
 public:
-    ~DisplayRoleVisitor() override;
+    Project(const QString &projectName);
+    ~Project() override;
+
+    void accept(Visitor &visitor) const override;
+
+    const QString &name() const { return m_name; }
+
+    void add(std::unique_ptr<File> file);
+
+    using Files = std::vector<std::unique_ptr<File>>;
+    const Files &files() const { return m_files; }
+    const File* file(const QString &path) const;
 
 private:
-    QString valueFor(const Data::Definitions &defs) const override;
-    QString valueFor(const Data::File &file) const override;
-    QString valueFor(const Data::TypeAssignment &type) const override;
-    QString valueFor(const Data::TypeReference &ref) const override;
-    QString valueFor(const Data::Project &project) const override;
+    QString m_name;
+    Files m_files;
+    std::map<QString, File*> m_filesByPathMap;
 };
 
-} // namespace Outline
+} // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn

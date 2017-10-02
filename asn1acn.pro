@@ -69,6 +69,7 @@ SOURCES += \
     \
     data/node.cpp \
     data/file.cpp \
+    data/project.cpp \
     data/typeassignment.cpp \
     data/typereference.cpp \
     data/definitions.cpp \
@@ -148,6 +149,7 @@ HEADERS += \
     data/errormessage.h \
     data/node.h \
     data/file.h \
+    data/project.h \
     data/visitor.h \
     data/visitorwithvalue.h \
     \

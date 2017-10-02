@@ -26,6 +26,7 @@
 
 #include <data/definitions.h>
 #include <data/file.h>
+#include <data/project.h>
 
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::Model;
@@ -42,6 +43,11 @@ int ChildrenCountingVisitor::valueFor(const Definitions &defs) const
 int ChildrenCountingVisitor::valueFor(const File &file) const
 {
     return static_cast<int>(file.definitionsList().size());
+}
+
+int ChildrenCountingVisitor::valueFor(const Project &project) const
+{
+    return static_cast<int>(project.files().size());
 }
 
 int ChildrenCountingVisitor::valueFor(const TypeAssignment &type) const

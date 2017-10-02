@@ -28,6 +28,7 @@
 #include <data/file.h>
 #include <data/typeassignment.h>
 #include <data/typereference.h>
+#include <data/project.h>
 
 using namespace Asn1Acn::Internal::Model;
 using namespace Asn1Acn::Internal::Data;
@@ -84,4 +85,9 @@ QString DisplayRoleVisitor::valueFor(const TypeReference &ref) const
         return ref.module() + "." + ref.name();
     }
     return {};
+}
+
+QString DisplayRoleVisitor::valueFor(const Project &project) const
+{
+    return project.name();
 }
