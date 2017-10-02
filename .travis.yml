@@ -32,7 +32,7 @@ env:
 addons:
   apt:
     sources:
-    - sourceline: "ppa:beineri/opt-qt59-trusty"
+    - sourceline: "ppa:beineri/opt-qt591-trusty"
     - ubuntu-toolchain-r-test
     packages:
     - g++-6
