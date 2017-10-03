@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 2.8)
 
 project(%{JS: '%{ProjectName}'})
 
-set(ASN1ACNSOURCES %{JS: if ('%{AddAsnFile}' === 'true' && '%{AddAcnFile}' === 'true')
-                             '%{AsnFullFileName} %{AcnFullFileName}'
-                         else if ('%{AddAsnFile}' === 'true' )
-                             '%{AsnFullFileName}'
-                         else if ('%{AddAcnFile}' === 'true')
-                             '%{AcnFullFileName}'
+set(ASN1ACNSOURCES %{JS: if (%{AddAsnFile} && %{AddAcnFile})
+                             '%{AsnRelativePath}/%{AsnFile} %{AcnRelativePath}/%{AcnFile}'
+                         else if (%{AddAsnFile})
+                             '%{AsnRelativePath}/%{AsnFile}'
+                         else if (%{AddAcnFile})
+                             '%{AcnRelativePath}/%{AcnFile}'
                          else
                              ' ' })
 
