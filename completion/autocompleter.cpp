@@ -28,8 +28,6 @@
 
 #include <QTextCursor>
 
-#include <QDebug>
-
 using namespace Asn1Acn::Internal::Completion;
 
 bool AutoCompleter::isInComment(const QTextCursor &cursor) const
@@ -102,14 +100,19 @@ QString AutoCompleter::insertMatchingQuote(const QTextCursor &cursor,
                                            bool skipChars,
                                            int *skippedChars) const
 {
-    Q_UNUSED(cursor)
     const QChar quote(QLatin1Char('"'));
-    if (text.isEmpty() || text != quote)
+
+    if (text != quote)
         return QString();
+
     if (lookAhead == quote && skipChars) {
         ++*skippedChars;
         return QString();
     }
+
+    if (isInString(cursor))
+        return QString();
+
     return quote;
 }
 
@@ -128,7 +131,8 @@ bool AutoCompleter::contextAllowsAutoBrackets(const QTextCursor &cursor,
 
 bool AutoCompleter::contextAllowsAutoQuotes(const QTextCursor &cursor, const QString &textToInsert) const
 {
-    return contextAllowsAutoBrackets(cursor, textToInsert);
+    Q_UNUSED(textToInsert);
+    return !isInComment(cursor);
 }
 
 int AutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor,
