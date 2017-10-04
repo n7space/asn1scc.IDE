@@ -84,12 +84,15 @@ QVariant Model::headerData(int section, Qt::Orientation orientation, int role) c
 
 QModelIndex Model::index(int row, int column, const QModelIndex &parent) const
 {
-    if (!hasIndex(row, column, parent))
+    if (column > 0)
         return QModelIndex();
 
     const auto parentNode = dataNode(parent);
-    if (parentNode == nullptr)
+    if (parentNode == nullptr) {
+        if (row == 0 && column == 0)
+            return createIndex(row, column, const_cast<Data::Node*>(m_root));
         return QModelIndex();
+    }
 
     const auto node = nthChild(parentNode, row);
     if (node == nullptr)
