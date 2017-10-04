@@ -59,6 +59,7 @@ private:
     bool containsBeginKeyword(QTextCursor &cursor) const;
     bool beginKeywordMismatched(QTextCursor &cursor) const;
     void insertEndKeyword(QTextCursor &cursor) const;
+    int findCommentIndex(const QTextCursor &cursor) const;
 };
 
 } /* nameapsce Completion */

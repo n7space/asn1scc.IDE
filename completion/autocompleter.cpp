@@ -28,14 +28,22 @@
 
 #include <QTextCursor>
 
+#include <QDebug>
+
 using namespace Asn1Acn::Internal::Completion;
 
 bool AutoCompleter::isInComment(const QTextCursor &cursor) const
 {
-    // TODO: This doesn't handle '--' inside quotes
     QTextCursor moved = cursor;
-    moved.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-    return moved.selectedText().contains(QLatin1Literal("--"));
+
+    const int commentIdx = findCommentIndex(moved);
+    if (commentIdx == -1)
+        return false;
+
+    moved.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    moved.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, commentIdx);
+
+    return !isInString(moved);
 }
 
 bool AutoCompleter::isInString(const QTextCursor &cursor) const
@@ -135,6 +143,13 @@ int AutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor,
     return TextEditor::AutoCompleter::paragraphSeparatorAboutToBeInserted(cursor, tabSettings);
 }
 
+int AutoCompleter::findCommentIndex(const QTextCursor &cursor) const
+{
+    QTextCursor moved = cursor;
+    moved.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+
+    return moved.selectedText().indexOf(QLatin1Literal("--"));
+}
 
 bool AutoCompleter::tryInsertEndKeyword(QTextCursor &cursor) const
 {
