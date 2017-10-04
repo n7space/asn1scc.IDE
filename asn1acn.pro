@@ -85,6 +85,7 @@ SOURCES += \
     tree-views/model.cpp \
     tree-views/treeviewwidget.cpp \
     tree-views/activatehandler.cpp \
+    tree-views/indexupdater.cpp \
     \
     options-pages/general.cpp \
     options-pages/service.cpp \
@@ -167,6 +168,7 @@ HEADERS += \
     tree-views/model.h \
     tree-views/treeviewwidget.h \
     tree-views/activatehandler.h \
+    tree-views/indexupdater.h \
     \
     options-pages/general.h \
     options-pages/service.h \
