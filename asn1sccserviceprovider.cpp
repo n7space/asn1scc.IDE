@@ -64,7 +64,7 @@ Asn1SccServiceProvider::~Asn1SccServiceProvider()
         stop();
 }
 
-QNetworkReply *Asn1SccServiceProvider::requestAst(const QList<DocumentSource> &documents) const
+QNetworkReply *Asn1SccServiceProvider::requestAst(const QList<Data::Source> &documents) const
 {
     QNetworkRequest astRequest(QUrl(m_settings->baseUri + "ast"));
     astRequest.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
@@ -109,7 +109,7 @@ QStringList Asn1SccServiceProvider::additionalArguments() const
     return arguments;
 }
 
-QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QList<DocumentSource> &documents) const
+QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QList<Data::Source> &documents) const
 {
     QJsonArray documentArray;
 

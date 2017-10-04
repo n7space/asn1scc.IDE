@@ -29,12 +29,12 @@
 #include <QString>
 #include <QList>
 
-#include "data/file.h"
-#include "data/definitions.h"
-#include "data/typereference.h"
+#include <data/file.h>
+#include <data/definitions.h>
+#include <data/typereference.h>
+#include <data/source.h>
 
 #include "modeltreenode.h"
-#include "documentsource.h"
 #include "completion/usertypesproposalsprovider.h"
 
 namespace Asn1Acn {
@@ -43,10 +43,10 @@ namespace Internal {
 class ParsedDocument
 {
 public:
-    ParsedDocument(const DocumentSource &source = {});
-    ParsedDocument(std::unique_ptr<Data::File> parsedData, const DocumentSource &source);
+    ParsedDocument(const Data::Source &source);
+    ParsedDocument(std::unique_ptr<Data::File> parsedData, const Data::Source &source);
 
-    const DocumentSource &source() const;
+    const Data::Source &source() const { return m_source; }
 
     void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const;
 
@@ -66,7 +66,7 @@ private:
     Data::SourceLocation getLocationFromModule(const Data::Definitions &definition,
                                                const QString &typeAssignmentName) const;
 
-    DocumentSource m_source;
+    Data::Source m_source;
     std::unique_ptr<Data::File> m_parsedData;
 
     QMultiHash<int, Data::TypeReference> m_referenceLookup;

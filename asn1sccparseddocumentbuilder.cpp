@@ -38,17 +38,16 @@
 
 #include "astxmlparser.h"
 #include "errormessageparser.h"
-#include "documentsource.h"
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create(const QList<DocumentSource> &documents)
+ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create(const QList<Data::Source> &documents)
 {
     auto serviceProvider = ExtensionSystem::PluginManager::getObject<ParsingServiceProvider>();
     return new Asn1SccParsedDocumentBuilder(serviceProvider, documents);
 }
 
-Asn1SccParsedDocumentBuilder::Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider, const QList<DocumentSource> &documents)
+Asn1SccParsedDocumentBuilder::Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider, const QList<Data::Source> &documents)
     : m_serviceProvider(serviceProvider)
     , m_documentSources(documents)
 {
@@ -89,11 +88,11 @@ void Asn1SccParsedDocumentBuilder::parseResponse(const QByteArray &jsonData)
 
 namespace {
 
-QMap<QString, DocumentSource> buildPathToSourceMapping(const QList<DocumentSource> &sources)
+QMap<QString, Data::Source> buildPathToSourceMapping(const QList<Data::Source> &sources)
 {
-    QMap<QString, DocumentSource> res;
+    QMap<QString, Data::Source> res;
     for (const auto &doc : sources)
-        res[doc.filePath()] = doc;
+        res.insert(doc.filePath(), doc);
     return res;
 }
 
@@ -110,7 +109,7 @@ void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
     const auto mapping = buildPathToSourceMapping(m_documentSources);
     auto parsedData = parser.takeData();
     for (auto &item : parsedData)
-        m_parsedDocuments.push_back(std::make_unique<ParsedDocument>(std::move(item.second), mapping[item.first]));
+        m_parsedDocuments.push_back(std::make_unique<ParsedDocument>(std::move(item.second), mapping.value(item.first, Data::Source("TODO", "TODO")))); // TODO will be simplified
 }
 
 std::vector<std::unique_ptr<ParsedDocument>> Asn1SccParsedDocumentBuilder::takeDocuments()

@@ -41,7 +41,7 @@ DocumentProcessorStub::DocumentProcessorStub(const QString &project)
 
 void DocumentProcessorStub::addToRun(const QString &filePath, const QString &docContent)
 {
-    const DocumentSource fileInfo(filePath, docContent);
+    const Data::Source fileInfo(filePath, docContent);
 
     m_documents.append(fileInfo);
 }

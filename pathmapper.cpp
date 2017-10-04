@@ -26,7 +26,7 @@
 
 using namespace Asn1Acn::Internal;
 
-PathMapper::PathMapper(const QList<DocumentSource> &documents)
+PathMapper::PathMapper(const QList<Data::Source> &documents)
 {
     for (const auto &doc : documents)
         m_mapping[doc.fileName()] = doc.filePath();

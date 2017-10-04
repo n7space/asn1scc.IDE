@@ -36,7 +36,8 @@
 #include <QTimer>
 #include <QList>
 
-#include "documentsource.h"
+#include <data/source.h>
+
 #include "settings/service.h"
 
 #include "parsingserviceprovider.h"
@@ -53,7 +54,7 @@ public:
     Asn1SccServiceProvider(Settings::ServiceConstPtr settings);
     ~Asn1SccServiceProvider();
 
-    QNetworkReply *requestAst(const QList<DocumentSource> &documents) const override;
+    QNetworkReply *requestAst(const QList<Data::Source> &documents) const override;
 
     void start();
     void stop();
@@ -68,7 +69,7 @@ private:
     void updateConfigFromSettings();
     QStringList additionalArguments() const;
 
-    QJsonDocument buildAstRequestData(const QList<DocumentSource> &documents) const;
+    QJsonDocument buildAstRequestData(const QList<Data::Source> &documents) const;
 
     QProcess *m_asn1sccService;
     QTimer m_stayAliveTimer;

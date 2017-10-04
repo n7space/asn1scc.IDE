@@ -33,9 +33,10 @@
 #include <QList>
 #include <QTextDocument>
 
+#include <data/source.h>
+
 #include "parseddocument.h"
 #include "parseddocumentbuilder.h"
-#include "documentsource.h"
 
 #include "documentprocessor.h"
 
@@ -49,7 +50,7 @@ class Asn1SccDocumentProcessor
 public:
 
     using State = DocumentProcessor::State;
-    using DocumentBuilderCreator = std::function<ParsedDocumentBuilder *(const QList<DocumentSource> &documents)>;
+    using DocumentBuilderCreator = std::function<ParsedDocumentBuilder *(const QList<Data::Source> &documents)>;
 
     static Asn1SccDocumentProcessor *create(const QString &projectName);
 
@@ -71,7 +72,7 @@ private slots:
 private:
     void createFallbackResults();
 
-    QList<DocumentSource> m_documents;
+    QList<Data::Source> m_documents;
     QString m_projectName;
 
     std::vector<std::unique_ptr<ParsedDocument>> m_results;

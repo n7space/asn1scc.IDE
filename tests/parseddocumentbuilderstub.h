@@ -30,7 +30,6 @@
 #include <QString>
 
 #include <parseddocument.h>
-#include <documentsource.h>
 #include <parseddocumentbuilder.h>
 
 namespace Asn1Acn {
@@ -43,7 +42,7 @@ class ParsedDocumentBuilderStub
     Q_OBJECT
 
 public:
-    ParsedDocumentBuilderStub(const QList<DocumentSource> &documents);
+    ParsedDocumentBuilderStub(const QList<Data::Source> &documents);
 
     void run() override;
 
@@ -51,7 +50,7 @@ public:
     const std::vector<Data::ErrorMessage> &errorMessages() const override;
 
 private:
-    const QList<DocumentSource> &m_rawDocuments;
+    const QList<Data::Source> &m_rawDocuments;
     std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
     std::vector<Data::ErrorMessage> m_errorMessages;

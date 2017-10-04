@@ -62,7 +62,7 @@ private:
     State m_state;
     QString m_projectName;
 
-    QList<DocumentSource> m_documents;
+    QList<Data::Source> m_documents;
     std::vector<std::unique_ptr<ParsedDocument>> m_results;
     std::vector<Data::ErrorMessage> m_errorMessages;
 };

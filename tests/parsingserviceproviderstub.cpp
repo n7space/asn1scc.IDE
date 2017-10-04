@@ -22,10 +22,7 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #include "parsingserviceproviderstub.h"
-
-#include <documentsource.h>
 
 using namespace Asn1Acn::Internal::Tests;
 using namespace Asn1Acn::Internal;
@@ -35,7 +32,7 @@ ParsingServiceProviderStub::ParsingServiceProviderStub(QObject *parent)
 {
 }
 
-QNetworkReply *ParsingServiceProviderStub::requestAst(const QList<DocumentSource> &documents) const
+QNetworkReply *ParsingServiceProviderStub::requestAst(const QList<Data::Source> &documents) const
 {
     NetworkReply *reply = new NetworkReply;
 

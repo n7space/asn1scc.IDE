@@ -40,7 +40,7 @@ LinkCreator::LinkCreator(const TextEditor::TextDocument &document)
     ParsedDataStorage *storage = ParsedDataStorage::instance();
     m_parsedDocument = storage->getFileForPath(m_documentPath);
     if (m_parsedDocument == nullptr)
-        m_parsedDocument = std::make_shared<ParsedDocument>();
+        m_parsedDocument = std::make_shared<ParsedDocument>(Data::Source(m_documentPath, ""));
 }
 
 LinkCreator::Link LinkCreator::createHighlightLink(const QTextCursor &cursor) const

@@ -36,7 +36,7 @@ DocumentProcessorTests::DocumentProcessorTests(QObject *parent)
     : QObject(parent)
     , m_fileContent("Document content")
     , m_fileDir("/test/dir/")
-    , m_docBuilderCreator([](const QList<DocumentSource> &documents)->ParsedDocumentBuilder *
+    , m_docBuilderCreator([](const QList<Data::Source> &documents)->ParsedDocumentBuilder *
                           { return new ParsedDocumentBuilderStub(documents); })
 {
 }
@@ -117,7 +117,7 @@ void DocumentProcessorTests::examine(DocumentProcessor *dp,
     const std::vector<std::unique_ptr<ParsedDocument>> results = dp->takeResults();
     QCOMPARE(results.size(), static_cast<size_t>(1));
 
-    const DocumentSource resultInfo = results.at(0)->source();
+    const Data::Source resultInfo = results.at(0)->source();
     QCOMPARE(resultInfo.contents(), m_fileContent);
     QCOMPARE(resultInfo.fileName(), fileName);
     QCOMPARE(resultInfo.filePath(), filePath);

@@ -46,10 +46,10 @@ class Asn1SccParsedDocumentBuilder
     Q_OBJECT
 
 public:
-    static ParsedDocumentBuilder *create(const QList<DocumentSource> &documents);
+    static ParsedDocumentBuilder *create(const QList<Data::Source> &documents);
 
     Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider,
-                                 const QList<DocumentSource> &documents);
+                                 const QList<Data::Source> &documents);
     void run() override;
 
     std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
@@ -68,7 +68,7 @@ private:
 
     ParsingServiceProvider *m_serviceProvider;
 
-    QList<DocumentSource> m_documentSources;
+    QList<Data::Source> m_documentSources;
     std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
 
     std::vector<Data::ErrorMessage> m_errorMessages;

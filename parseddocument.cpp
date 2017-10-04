@@ -31,22 +31,17 @@
 
 using namespace Asn1Acn::Internal;
 
-ParsedDocument::ParsedDocument(std::unique_ptr<Data::File> parsedData, const DocumentSource &source) :
+ParsedDocument::ParsedDocument(std::unique_ptr<Data::File> parsedData, const Data::Source &source) :
     m_source(source),
     m_parsedData(std::move(parsedData))
 {
     populateReferences();
 }
 
-ParsedDocument::ParsedDocument(const DocumentSource &source) :
+ParsedDocument::ParsedDocument(const Data::Source &source) :
     m_source(source),
     m_parsedData(nullptr)
 {
-}
-
-const DocumentSource &ParsedDocument::source() const
-{
-    return m_source;
 }
 
 void ParsedDocument::bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const

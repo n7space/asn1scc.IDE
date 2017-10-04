@@ -169,7 +169,7 @@ void ModelTreeTests::test_updateNode()
 
     QCOMPARE(node->childrenCount(), nodesCnt);
 
-    std::shared_ptr<ParsedDocument> parsedDocument(new ParsedDocument());
+    std::shared_ptr<ParsedDocument> parsedDocument(new ParsedDocument(Data::Source("TODO", "TODO")));
     ModelTreeProxy::updateModelTreeNode(tree, path, parsedDocument);
 
     QCOMPARE(node->childrenCount(), 0);

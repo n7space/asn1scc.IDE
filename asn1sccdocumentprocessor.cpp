@@ -33,7 +33,7 @@ using namespace Asn1Acn::Internal;
 Asn1SccDocumentProcessor *Asn1SccDocumentProcessor::create(const QString &projectName)
 {
     return new Asn1SccDocumentProcessor(projectName,
-                                        [](const QList<DocumentSource> &documents)->ParsedDocumentBuilder *
+                                        [](const QList<Data::Source> &documents)->ParsedDocumentBuilder *
                                         { return Asn1SccParsedDocumentBuilder::create(documents); });
 }
 
@@ -52,7 +52,7 @@ Asn1SccDocumentProcessor::~Asn1SccDocumentProcessor()
 
 void Asn1SccDocumentProcessor::addToRun(const QString &filePath, const QString &docContent)
 {
-    const DocumentSource fileInfo(filePath, docContent);
+    const Data::Source fileInfo(filePath, docContent);
     m_documents.append(fileInfo);
 }
 

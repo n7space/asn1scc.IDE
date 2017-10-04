@@ -31,10 +31,10 @@
 #include <QObject>
 #include <QString>
 
-#include "data/errormessage.h"
+#include <data/errormessage.h>
+#include <data/source.h>
 
 #include "parseddocument.h"
-#include "documentsource.h"
 
 namespace Asn1Acn {
 namespace Internal {

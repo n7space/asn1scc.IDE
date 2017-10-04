@@ -75,6 +75,7 @@ SOURCES += \
     data/typereference.cpp \
     data/definitions.cpp \
     data/visitor.cpp \
+    data/source.cpp \
     \
     tree-views/displayrolevisitor.cpp \
     tree-views/childrencountingvisitor.cpp \
@@ -117,7 +118,6 @@ SOURCES += \
     asn1acnjsextension.cpp \
     asn1sccserviceprovider.cpp \
     asn1sccparseddocumentbuilder.cpp \
-    documentsource.cpp \
     projectcontenthandler.cpp \
     indenter.cpp \
     tools.cpp \
@@ -157,6 +157,7 @@ HEADERS += \
     data/project.h \
     data/visitor.h \
     data/visitorwithvalue.h \
+    data/source.h \
     \
     tree-views/displayrolevisitor.h \
     tree-views/childrencountingvisitor.h \
@@ -206,7 +207,6 @@ HEADERS += \
     asn1acnjsextension.h \
     asn1sccserviceprovider.h \
     asn1sccparseddocumentbuilder.h \
-    documentsource.h \
     projectcontenthandler.h \
     indenter.h \
     tr.h \

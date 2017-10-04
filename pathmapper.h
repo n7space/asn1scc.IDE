@@ -27,7 +27,7 @@
 #include <QString>
 #include <QMap>
 
-#include "documentsource.h"
+#include <data/source.h>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -35,7 +35,7 @@ namespace Internal {
 class PathMapper
 {
 public:
-    explicit PathMapper(const QList<DocumentSource> &documents = {});
+    explicit PathMapper(const QList<Data::Source> &documents = {});
 
     QString map(const QString &path) const;
 

@@ -22,29 +22,19 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "source.h"
 
-#pragma once
+#include <QFileInfo>
 
-#include <QString>
+using namespace Asn1Acn::Internal::Data;
 
-namespace Asn1Acn {
-namespace Internal {
-
-class DocumentSource
+Source::Source(const QString &path, const QString &contents)
+    : m_filePath(path)
+    , m_contents(contents)
 {
-public:
-    DocumentSource() = default;
-    DocumentSource(const QString &path, const QString &contents);
+}
 
-    const QString &filePath() const { return m_filePath; }
-    const QString &contents() const { return m_contents; }
-
-    QString fileName() const;
-
-private:
-    QString m_filePath;
-    QString m_contents;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+QString Source::fileName() const
+{
+    return QFileInfo(filePath()).fileName();
+}

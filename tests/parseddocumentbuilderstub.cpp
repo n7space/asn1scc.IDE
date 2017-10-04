@@ -28,7 +28,7 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
 
-ParsedDocumentBuilderStub::ParsedDocumentBuilderStub(const QList<DocumentSource> &documents)
+ParsedDocumentBuilderStub::ParsedDocumentBuilderStub(const QList<Data::Source> &documents)
     : m_rawDocuments(documents)
 {
 }
