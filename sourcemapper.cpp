@@ -22,25 +22,20 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "sourcemapper.h"
 
-#include <QObject>
+using namespace Asn1Acn::Internal;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Tests {
-
-class PathMapperTests : public QObject
+SourceMapper::SourceMapper(const QList<Data::Source> &documents)
 {
-    Q_OBJECT
-public:
-    explicit PathMapperTests(QObject *parent = 0);
+    for (const auto &doc : documents)
+        m_mapping.insert({doc.fileName(), doc});
+}
 
-private slots:
-    void test_missingMapping();
-    void test_mapping();
-};
-
-} // namespace Tests
-} // namespace Internal
-} // namespace Asn1Acn
+Data::Source SourceMapper::findByFileName(const QString &fileName) const
+{
+    const auto it = m_mapping.find(fileName);
+    if (it == m_mapping.end())
+        return { fileName, QString() };
+    return it->second;
+}

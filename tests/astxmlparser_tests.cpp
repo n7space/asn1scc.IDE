@@ -277,7 +277,7 @@ void AstXmlParserTests::test_multipleImportedType()
 
 void AstXmlParserTests::test_pathMapping()
 {
-    m_pathMapper = PathMapper({ {"/xyz/Test2.asn", ""} });
+    m_pathMapper = SourceMapper({ {"/xyz/Test2.asn", ""} });
     parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
           R"(<ASN1AST>)"
           R"(  <Asn1File FileName="Test2.asn">)"

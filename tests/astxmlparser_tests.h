@@ -60,7 +60,7 @@ private:
     void parse(const QString& xmlData);
 
     QXmlStreamReader m_xmlReader;
-    PathMapper m_pathMapper;
+    SourceMapper m_pathMapper;
     std::map<QString, std::unique_ptr<Data::File>> m_parsedData;
 };
 

@@ -29,7 +29,7 @@
 
 #include "data/errormessage.h"
 
-#include "pathmapper.h"
+#include "sourcemapper.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -37,11 +37,11 @@ namespace Internal {
 class ErrorMessageParser
 {
 public:
-    explicit ErrorMessageParser(const PathMapper &pathMapper = PathMapper());
+    explicit ErrorMessageParser(const SourceMapper &pathMapper = SourceMapper());
     Data::ErrorMessage parse(const QString &message) const;
 
 private:
-    PathMapper m_pathMapping;
+    SourceMapper m_pathMapping;
 };
 
 } // namespace Internal

@@ -33,7 +33,7 @@
 
 #include "data/file.h"
 
-#include "pathmapper.h"
+#include "sourcemapper.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -41,7 +41,7 @@ namespace Internal {
 class AstXmlParser
 {
 public:
-    explicit AstXmlParser(QXmlStreamReader &xmlReader, const PathMapper &mapper = PathMapper());
+    explicit AstXmlParser(QXmlStreamReader &xmlReader, const SourceMapper &mapper = SourceMapper());
 
     bool parse();
 
@@ -86,7 +86,7 @@ private:
     QString m_currentModule;
     Data::Definitions* m_currentDefinitions;
 
-    PathMapper m_pathMapper;
+    SourceMapper m_pathMapper;
 };
 
 } // namespace Internal

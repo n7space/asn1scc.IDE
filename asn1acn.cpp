@@ -70,7 +70,7 @@
 #include "tests/parseddatastorage_tests.h"
 #include "tests/modeltree_tests.h"
 #include "tests/autocompleter_tests.h"
-#include "tests/pathmapper_tests.h"
+#include "tests/sourcemapper_tests.h"
 #include "libraries/tests/metadataparser_tests.h"
 #include "tree-views/tests/displayrolevisitor_tests.h"
 #endif
@@ -200,7 +200,7 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
             << new Tests::ParsedDataStorageTests
             << new Tests::ModelTreeTests
             << new Tests::AutoCompleterTests
-            << new Tests::PathMapperTests
+            << new Tests::SourceMapperTests
                ;
 }
 #endif

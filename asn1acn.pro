@@ -127,7 +127,7 @@ SOURCES += \
     structuresviewindexupdater.cpp \
     filesourcereader.cpp \
     errormessageparser.cpp \
-    pathmapper.cpp \
+    sourcemapper.cpp \
     typeslocator.cpp \
     editoroutline.cpp
 
@@ -224,7 +224,7 @@ HEADERS += \
     modeltreeproxy.h \
     errormessageparser.h \
     editoroutline.h \
-    pathmapper.h \
+    sourcemapper.h \
     overviewactivatehandler.h \
     typeslocator.h
 
@@ -258,7 +258,7 @@ SOURCES += \
     tests/parseddatastorage_tests.cpp \
     tests/modeltree_tests.cpp \
     tests/autocompleter_tests.cpp \
-    tests/pathmapper_tests.cpp \
+    tests/sourcemapper_tests.cpp \
     \
     tests/networkreply.cpp \
     tests/parsingserviceproviderstub.cpp \
@@ -281,7 +281,7 @@ HEADERS += \
     tests/parseddatastorage_tests.h \
     tests/modeltree_tests.h \
     tests/autocompleter_tests.h \
-    tests/pathmapper_tests.h \
+    tests/sourcemapper_tests.h \
     \
     tests/networkreply.h \
     tests/parsingserviceproviderstub.h \

@@ -22,31 +22,28 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "pathmapper_tests.h"
+#pragma once
 
-#include <QtTest>
+#include <map>
 
-#include "../pathmapper.h"
+#include <QString>
+#include <QList>
 
-using namespace Asn1Acn::Internal::Tests;
-using namespace Asn1Acn::Internal;
+#include <data/source.h>
 
-PathMapperTests::PathMapperTests(QObject *parent)
-    : QObject(parent)
+namespace Asn1Acn {
+namespace Internal {
+
+class SourceMapper
 {
-}
+public:
+    explicit SourceMapper(const QList<Data::Source> &documents = {});
 
-void PathMapperTests::test_missingMapping()
-{
-    PathMapper mapper;
+    Data::Source findByFileName(const QString &fileName) const;
 
-    QCOMPARE(mapper.map("Abc"), QStringLiteral("Abc"));
-}
+private:
+    std::map<QString, Data::Source> m_mapping;
+};
 
-void PathMapperTests::test_mapping()
-{
-    PathMapper mapper({ {"/a/bcd", ""}, {"/x/xyz", ""} });
-
-    QCOMPARE(mapper.map("xyz"), QStringLiteral("/x/xyz"));
-    QCOMPARE(mapper.map("bcd"), QStringLiteral("/a/bcd"));
-}
+} // namespace Internal
+} // namespace Asn1Acn

@@ -28,7 +28,7 @@
 
 using namespace Asn1Acn::Internal;
 
-AstXmlParser::AstXmlParser(QXmlStreamReader &xmlReader, const PathMapper &mapper)
+AstXmlParser::AstXmlParser(QXmlStreamReader &xmlReader, const SourceMapper &mapper)
     : m_xmlReader(xmlReader)
     , m_currentDefinitions(nullptr)
     , m_pathMapper(mapper)
@@ -58,7 +58,7 @@ void AstXmlParser::readAsn1File()
 void AstXmlParser::updateCurrentFile()
 {
     m_currentFile = m_xmlReader.attributes().value(QStringLiteral("FileName")).toString();
-    m_currentFile = m_pathMapper.map(m_currentFile);
+    m_currentFile = m_pathMapper.findByFileName(m_currentFile).filePath();
     m_data.insert(std::make_pair(m_currentFile, std::make_unique<Data::File>(m_currentFile)));
 }
 

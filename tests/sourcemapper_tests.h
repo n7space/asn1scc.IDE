@@ -24,24 +24,23 @@
 ****************************************************************************/
 #pragma once
 
-#include <QString>
-#include <QMap>
-
-#include <data/source.h>
+#include <QObject>
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class PathMapper
+class SourceMapperTests : public QObject
 {
+    Q_OBJECT
 public:
-    explicit PathMapper(const QList<Data::Source> &documents = {});
+    explicit SourceMapperTests(QObject *parent = 0);
 
-    QString map(const QString &path) const;
-
-private:
-    QMap<QString, QString> m_mapping;
+private slots:
+    void test_missingMapping();
+    void test_mapping();
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

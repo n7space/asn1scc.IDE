@@ -22,17 +22,31 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "pathmapper.h"
+#include "sourcemapper_tests.h"
 
+#include <QtTest>
+
+#include "../sourcemapper.h"
+
+using namespace Asn1Acn::Internal::Tests;
 using namespace Asn1Acn::Internal;
 
-PathMapper::PathMapper(const QList<Data::Source> &documents)
+SourceMapperTests::SourceMapperTests(QObject *parent)
+    : QObject(parent)
 {
-    for (const auto &doc : documents)
-        m_mapping[doc.fileName()] = doc.filePath();
 }
 
-QString PathMapper::map(const QString &path) const
+void SourceMapperTests::test_missingMapping()
 {
-    return m_mapping.value(path, path);
+    SourceMapper mapper;
+
+    QCOMPARE(mapper.findByFileName("Abc").filePath(), QStringLiteral("Abc"));
+}
+
+void SourceMapperTests::test_mapping()
+{
+    SourceMapper mapper({ {"/a/bcd", ""}, {"/x/xyz", ""} });
+
+    QCOMPARE(mapper.findByFileName("xyz").filePath(), QStringLiteral("/x/xyz"));
+    QCOMPARE(mapper.findByFileName("bcd").filePath(), QStringLiteral("/a/bcd"));
 }
