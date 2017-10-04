@@ -22,39 +22,25 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "activatehandler.h"
 
-#include <QAbstractItemModel>
+#include <coreplugin/editormanager/editormanager.h>
 
-#include <data/node.h>
+#include <model/outlinemodel.h>
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Model {
+using namespace Asn1Acn::Internal::TreeViews;
 
-class OutlineModel : public QAbstractItemModel
+void ActivateHandler::gotoSymbol(const QModelIndex &index)
 {
-    Q_OBJECT
-public:
-    explicit OutlineModel(QObject *parent = 0);
-    ~OutlineModel();
+    if (!index.isValid())
+        return;
 
-    QVariant data(const QModelIndex &index, int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-    int rowCount(const QModelIndex &parent) const override;
-    int columnCount(const QModelIndex &parent) const override;
+    const auto node = Model::OutlineModel::dataNode(index);
+    if (!node)
+        return;
 
-    void setRoot(const Data::Node *root);
-
-    static const Data::Node *dataNode(const QModelIndex &index);
-
-private:
-    const Data::Node *m_root;
-};
-
-} // Model
-} // namespace Internal
-} // namespace Asn1Acn
+    const auto location = node->location();
+    Core::EditorManager::openEditorAt(location.path(),
+                                      location.line(),
+                                      location.column());
+}

@@ -24,37 +24,58 @@
 ****************************************************************************/
 #pragma once
 
-#include <QAbstractItemModel>
+#include <memory>
 
-#include <data/node.h>
+#include <QModelIndex>
+
+#include <texteditor/ioutlinewidget.h>
+#include <utils/navigationtreeview.h>
+
+#include <model/outlinemodel.h> // TODO more generic model
+
+//#include "overviewmodel.h"
+//#include "overviewindexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Model {
+namespace TreeViews {
 
-class OutlineModel : public QAbstractItemModel
+class TreeView : public Utils::NavigationTreeView
 {
     Q_OBJECT
 public:
-    explicit OutlineModel(QObject *parent = 0);
-    ~OutlineModel();
+    TreeView(QWidget *parent);
 
-    QVariant data(const QModelIndex &index, int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-    int rowCount(const QModelIndex &parent) const override;
-    int columnCount(const QModelIndex &parent) const override;
-
-    void setRoot(const Data::Node *root);
-
-    static const Data::Node *dataNode(const QModelIndex &index);
-
-private:
-    const Data::Node *m_root;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 };
 
-} // Model
+class TreeViewWidget : public TextEditor::IOutlineWidget
+{
+    Q_OBJECT
+public:
+    TreeViewWidget(Model::OutlineModel *model); // TODO more generic model
+
+    QList<QAction *> filterMenuActions() const override;
+    void setCursorSynchronization(bool syncWithCursor) override;
+
+private: // TODO protected?
+    TreeView *m_treeView;
+    Model::OutlineModel *m_model;
+    /* TODO
+     *     std::shared_ptr<OverviewIndexUpdater> m_indexUpdater;
+    QModelIndex m_currentIndex;
+
+     * */
+
+private slots:
+    void onItemActivated(const QModelIndex &index);
+};
+
+/*
+protected slots:
+    void updateSelectionInTree(const QModelIndex &index);
+*/
+
+} // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

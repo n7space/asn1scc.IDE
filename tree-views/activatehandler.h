@@ -24,37 +24,16 @@
 ****************************************************************************/
 #pragma once
 
-#include <QAbstractItemModel>
-
-#include <data/node.h>
+#include <QModelIndex>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Model {
+namespace TreeViews {
 
-class OutlineModel : public QAbstractItemModel
-{
-    Q_OBJECT
-public:
-    explicit OutlineModel(QObject *parent = 0);
-    ~OutlineModel();
+namespace ActivateHandler {
+void gotoSymbol(const QModelIndex &index);
+}
 
-    QVariant data(const QModelIndex &index, int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-    int rowCount(const QModelIndex &parent) const override;
-    int columnCount(const QModelIndex &parent) const override;
-
-    void setRoot(const Data::Node *root);
-
-    static const Data::Node *dataNode(const QModelIndex &index);
-
-private:
-    const Data::Node *m_root;
-};
-
-} // Model
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace TreeViews */
+} /* namespace Internal */
+} /* namespace Asn1Acn */
