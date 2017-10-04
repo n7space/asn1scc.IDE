@@ -99,7 +99,7 @@ QModelIndex IndexUpdater::getTargetIndexFromFileIndex(const QModelIndex &fileInd
             return index;
     }
 
-    return fileIndex;
+    return QModelIndex();
 }
 
 QModelIndex IndexUpdater::getTargetIndexFromModuleIndex(const QModelIndex &moduleIndex, int line) const

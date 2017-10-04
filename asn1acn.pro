@@ -86,6 +86,7 @@ SOURCES += \
     tree-views/treeviewwidget.cpp \
     tree-views/activatehandler.cpp \
     tree-views/indexupdater.cpp \
+    tree-views/outlineindexupdater.cpp \
     \
     options-pages/general.cpp \
     options-pages/service.cpp \
@@ -169,6 +170,7 @@ HEADERS += \
     tree-views/treeviewwidget.h \
     tree-views/activatehandler.h \
     tree-views/indexupdater.h \
+    tree-views/outlineindexupdater.h \
     \
     options-pages/general.h \
     options-pages/service.h \
@@ -249,6 +251,7 @@ SOURCES += \
     libraries/tests/metadataparser_tests.cpp \
     \
     tree-views/tests/displayrolevisitor_tests.cpp \
+    tree-views/tests/outlineindexupdater_tests.cpp \
     \
     tests/astxmlparser_tests.cpp \
     tests/errormessageparser_tests.cpp \
@@ -272,6 +275,7 @@ HEADERS += \
     libraries/tests/metadataparser_tests.h \
     \
     tree-views/tests/displayrolevisitor_tests.h \
+    tree-views/tests/outlineindexupdater_tests.h \
     \
     tests/astxmlparser_tests.h \
     tests/errormessageparser_tests.h \

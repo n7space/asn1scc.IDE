@@ -25,48 +25,48 @@
 #pragma once
 
 #include <QObject>
-#include <QTimer>
-#include <QModelIndex>
 
-#include <texteditor/texteditor.h>
+#include <data/node.h>
+
+#include "../outlineindexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
+namespace Tests {
 
-class Model;
-
-class IndexUpdater : public QObject
+class OutlineIndexUpdaterTests : public QObject
 {
     Q_OBJECT
-protected:
-    explicit IndexUpdater(const Model *model);
-
 public:
-    virtual ~IndexUpdater() = default;
+    explicit OutlineIndexUpdaterTests(QObject *parent = 0);
+    ~OutlineIndexUpdaterTests();
 
-    void setEditor(TextEditor::TextEditorWidget *editorWidget);
-    void updateCurrentIndex();
+private slots:
+    void test_setEmptyEditor();
+    void test_setNonEmpytEditorInitialCursorPosition();
+    void test_setNonEmpytEditorChangedPosition();
 
-signals:
-    void currentIndexUpdated(const QModelIndex &modelIndex);
+    void test_cursorMovedToModule();
+    void test_cursorMovedToTypeDefinition();
+    void test_cursorMovedToEmptyLine();
 
-protected:
-    virtual QModelIndex getCurrentFileIndex() const = 0;
-    const Model *const m_model;
+    void test_forceUpdate();
+    void test_forceUpdateAfterCursorMoved();
+
+    void test_removeEditorAfterLineUpdate();
 
 private:
-    void updateNow();
-    void createUpdateTimer();
+    Data::Node *createModelNodes();
+    TextEditor::TextEditorWidget *createEditorWidget();
 
-    int getCurrentLine() const;
-    QModelIndex getTargetIndexFromFileIndex(const QModelIndex &fileIndex) const;
-    QModelIndex getTargetIndexFromModuleIndex(const QModelIndex &moduleIndex, int line) const;
-
+    Data::Node *m_data;
+    Model *m_model;
+    OutlineIndexUpdater *m_indexUpdater;
     TextEditor::TextEditorWidget *m_editorWidget;
-    QTimer *m_updateIndexTimer;
 };
 
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Tests
+} // namespace TreeViews
+} // namespace Internal
+} // namespace Asn1Acn
