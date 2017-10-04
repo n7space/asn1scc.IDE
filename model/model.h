@@ -24,24 +24,43 @@
 ****************************************************************************/
 #pragma once
 
-#include "model.h"
+#include <QAbstractItemModel>
+
+#include <data/node.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Model {
 
-class OutlineModel : public Model
+class Model : public QAbstractItemModel
 {
     Q_OBJECT
+protected:
+    explicit Model(QObject *parent = 0);
+
 public:
-    explicit OutlineModel(QObject *parent = 0);
-    ~OutlineModel();
+    ~Model();
+
+    QVariant data(const QModelIndex &index, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+
+    void setRoot(const Data::Node *root);
+
+    static const Data::Node *dataNode(const QModelIndex &index);
+
+protected:
+    virtual Data::Node *parentOf(const Data::Node *node) const = 0;
+    virtual int childrenCount(const Data::Node *node) const = 0;
+    virtual int indexInParent(const Data::Node *parent, const Data::Node *node) const = 0;
+    virtual Data::Node *nthChild(const Data::Node *node, int n) const = 0;
 
 private:
-    Data::Node *parentOf(const Data::Node *node) const override;
-    int childrenCount(const Data::Node *node) const override;
-    int indexInParent(const Data::Node *parent, const Data::Node *node) const override;
-    Data::Node *nthChild(const Data::Node *node, int n) const override;
+    const Data::Node *m_root;
 };
 
 } // namespace Model

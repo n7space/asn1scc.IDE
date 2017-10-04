@@ -33,110 +33,30 @@ using namespace Asn1Acn::Internal::Model;
 using namespace Asn1Acn::Internal::Data;
 
 OutlineModel::OutlineModel(QObject *parent)
-    : QAbstractItemModel(parent)
-    , m_root(nullptr)
+    : Model(parent)
 {
-    // TODO - connect to some global index store?
-    /*
-     connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            [this](){ beginResetModel(); });
-
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            [this](){ endResetModel(); });
-     * */
 }
 
 OutlineModel::~OutlineModel()
 {
 }
 
-QVariant OutlineModel::data(const QModelIndex &index, int role) const
+Node *OutlineModel::parentOf(const Node *node) const
 {
-    if (!index.isValid())
-        return QVariant();
-
-    const auto node = dataNode(index);
-
-    switch (role) {
-    case Qt::DecorationRole:
-        // TODO icons visitor
-        return QVariant();
-    case Qt::DisplayRole:
-    case Qt::ToolTipRole:
-        return node->valueFor<DisplayRoleVisitor>();
-    }
-
-    return QVariant();
+    return node ? node->parent() : nullptr;
 }
 
-Qt::ItemFlags OutlineModel::flags(const QModelIndex &index) const
+int OutlineModel::childrenCount(const Node *node) const
 {
-    if (!index.isValid())
-        return 0;
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
-}
-
-QVariant OutlineModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    Q_UNUSED(section);
-    Q_UNUSED(orientation);
-    Q_UNUSED(role);
-
-    return QVariant();
-}
-
-QModelIndex OutlineModel::index(int row, int column, const QModelIndex &parent) const
-{
-    if (!hasIndex(row, column, parent))
-        return QModelIndex();
-
-    const auto parentNode = dataNode(parent);
-    if (parentNode == nullptr)
-        return QModelIndex();
-
-    const auto node = parentNode->valueFor<ChildReturningVisitor>(row);
-    if (node == nullptr)
-        return QModelIndex();
-
-    return createIndex(row, column, node);
-}
-
-QModelIndex OutlineModel::parent(const QModelIndex &index) const
-{
-    if (!index.isValid())
-        return QModelIndex();
-
-    const auto node = dataNode(index);
-    const auto parent = node->parent(); // TODO should be an extension point with visitor for Types View
-
-    if (parent == nullptr)
-        return QModelIndex();
-
-    return createIndex(parent->valueFor<IndexFindingVisitor>(node), 0, parent);
-}
-
-int OutlineModel::rowCount(const QModelIndex &parent) const
-{
-    if (parent.column() > 0)
-        return 0;
-    auto node = dataNode(parent);
     return node ? node->valueFor<ChildrenCountingVisitor>() : 0;
 }
 
-int OutlineModel::columnCount(const QModelIndex &parent) const
+int OutlineModel::indexInParent(const Node *parent, const Node *node) const
 {
-    Q_UNUSED(parent);
-    return 1;
+    return parent ? parent->valueFor<IndexFindingVisitor>(node) : 0;
 }
 
-void OutlineModel::setRoot(const Node *root)
+Node *OutlineModel::nthChild(const Node *node, int n) const
 {
-    beginResetModel();
-    m_root = root;
-    endResetModel();
-}
-
-const Node *OutlineModel::dataNode(const QModelIndex &index)
-{
-    return static_cast<Node*>(index.internalPointer());
+    return node ? node->valueFor<ChildReturningVisitor>(n) : nullptr;
 }

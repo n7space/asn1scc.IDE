@@ -81,6 +81,7 @@ SOURCES += \
     model/childreturningvisitor.cpp \
     model/indexfindingvisitor.cpp \
     model/outlinemodel.cpp \
+    model/model.cpp \
     \
     tree-views/treeviewwidget.cpp \
     tree-views/activatehandler.cpp \
@@ -163,6 +164,7 @@ HEADERS += \
     model/childreturningvisitor.h \
     model/indexfindingvisitor.h \
     model/outlinemodel.h \
+    model/model.h \
     \
     tree-views/treeviewwidget.h \
     tree-views/activatehandler.h \

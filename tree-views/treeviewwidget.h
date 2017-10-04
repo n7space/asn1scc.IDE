@@ -31,10 +31,9 @@
 #include <texteditor/ioutlinewidget.h>
 #include <utils/navigationtreeview.h>
 
-#include <model/outlinemodel.h> // TODO more generic model
+#include <model/model.h>
 
-//#include "overviewmodel.h"
-//#include "overviewindexupdater.h"
+//#include "overviewindexupdater.h" TODO
 
 namespace Asn1Acn {
 namespace Internal {
@@ -53,14 +52,14 @@ class TreeViewWidget : public TextEditor::IOutlineWidget
 {
     Q_OBJECT
 public:
-    TreeViewWidget(Model::OutlineModel *model); // TODO more generic model
+    TreeViewWidget(Model::Model *model);
 
     QList<QAction *> filterMenuActions() const override;
     void setCursorSynchronization(bool syncWithCursor) override;
 
 private: // TODO protected?
     TreeView *m_treeView;
-    Model::OutlineModel *m_model;
+    Model::Model *m_model;
     /* TODO
      *     std::shared_ptr<OverviewIndexUpdater> m_indexUpdater;
     QModelIndex m_currentIndex;
