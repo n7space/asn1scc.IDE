@@ -3,12 +3,12 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-%{JS: if ('%{AddAsnFile}' === 'true' && '%{AddAcnFile}' === 'true')
-        'DISTFILES += \\\\ \n %{AsnFullFileName} \\\\ \n %{AcnFullFileName}'
-      else if ('%{AddAsnFile}' === 'true' )
-        'DISTFILES += \\\\ \n %{AsnFullFileName}'
-      else if ('%{AddAcnFile}' === 'true')
-        'DISTFILES += \\\\ \n %{AcnFullFileName}'
+%{JS: if (%{AddAsnFile} && %{AddAcnFile})
+        'DISTFILES += \\\\ \n %{AsnRelativePath}/%{AsnFile} \\\\ \n %{AcnRelativePath}/%{AcnFile}'
+      else if (%{AddAsnFile})
+        'DISTFILES += \\\\ \n %{AsnRelativePath}/%{AsnFile}'
+      else if (%{AddAcnFile})
+        'DISTFILES += \\\\ \n %{AcnRelativePath}/%{AcnFile}'
       else
         'DISTFILES += ' }
 
