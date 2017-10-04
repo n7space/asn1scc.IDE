@@ -30,7 +30,7 @@
 #include <data/root.h>
 
 using namespace Asn1Acn::Internal::Data;
-using namespace Asn1Acn::Internal::Model;
+using namespace Asn1Acn::Internal::TreeViews;
 
 ChildReturningVisitor::ChildReturningVisitor(int index)
     : m_index(index)

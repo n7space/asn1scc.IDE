@@ -24,45 +24,31 @@
 ****************************************************************************/
 #pragma once
 
-#include <QAbstractItemModel>
+#include <QObject>
 
-#include <data/node.h>
+#include "../displayrolevisitor.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Model {
+namespace TreeViews {
+namespace Tests {
 
-class Model : public QAbstractItemModel
+class DisplayRoleVisitorTests : public QObject
 {
     Q_OBJECT
-protected:
-    explicit Model(QObject *parent = 0);
-
 public:
-    ~Model();
+    explicit DisplayRoleVisitorTests(QObject *parent = nullptr);
 
-    QVariant data(const QModelIndex &index, int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-    int rowCount(const QModelIndex &parent) const override;
-    int columnCount(const QModelIndex &parent) const override;
-
-    void setRoot(const Data::Node *root);
-
-    static const Data::Node *dataNode(const QModelIndex &index);
-
-protected:
-    virtual Data::Node *parentOf(const Data::Node *node) const = 0;
-    virtual int childrenCount(const Data::Node *node) const = 0;
-    virtual int indexInParent(const Data::Node *parent, const Data::Node *node) const = 0;
-    virtual Data::Node *nthChild(const Data::Node *node, int n) const = 0;
-
-private:
-    const Data::Node *m_root;
+private slots:
+    void test_definitions();
+    void test_file();
+    void test_typeAssignment();
+    void test_typeReferenceBuiltIn();
+    void test_typeReferenceBuiltIn_data();
+    void test_typeReferenceUserDefined();
 };
 
-} // namespace Model
+} // namespace Tests
+} // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

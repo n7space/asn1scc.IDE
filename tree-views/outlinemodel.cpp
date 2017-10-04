@@ -22,33 +22,41 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "outlinemodel.h"
 
-#include <QObject>
+#include "childrencountingvisitor.h"
+#include "displayrolevisitor.h"
+#include "childreturningvisitor.h"
+#include "indexfindingvisitor.h"
 
-#include "../displayrolevisitor.h"
+using namespace Asn1Acn::Internal::TreeViews;
+using namespace Asn1Acn::Internal::Data;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Model {
-namespace Tests {
-
-class DisplayRoleVisitorTests : public QObject
+OutlineModel::OutlineModel(QObject *parent)
+    : Model(parent)
 {
-    Q_OBJECT
-public:
-    explicit DisplayRoleVisitorTests(QObject *parent = nullptr);
+}
 
-private slots:
-    void test_definitions();
-    void test_file();
-    void test_typeAssignment();
-    void test_typeReferenceBuiltIn();
-    void test_typeReferenceBuiltIn_data();
-    void test_typeReferenceUserDefined();
-};
+OutlineModel::~OutlineModel()
+{
+}
 
-} // namespace Tests
-} // namespace Outline
-} // namespace Internal
-} // namespace Asn1Acn
+Node *OutlineModel::parentOf(const Node *node) const
+{
+    return node ? node->parent() : nullptr;
+}
+
+int OutlineModel::childrenCount(const Node *node) const
+{
+    return node ? node->valueFor<ChildrenCountingVisitor>() : 0;
+}
+
+int OutlineModel::indexInParent(const Node *parent, const Node *node) const
+{
+    return parent ? parent->valueFor<IndexFindingVisitor>(node) : 0;
+}
+
+Node *OutlineModel::nthChild(const Node *node, int n) const
+{
+    return node ? node->valueFor<ChildReturningVisitor>(n) : nullptr;
+}

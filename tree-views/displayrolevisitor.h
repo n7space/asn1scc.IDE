@@ -24,26 +24,28 @@
 ****************************************************************************/
 #pragma once
 
+#include <QString>
+
 #include <data/visitorwithvalue.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Model {
+namespace TreeViews {
 
-class ChildrenCountingVisitor : public Data::VisitorWithValue<int>
+class DisplayRoleVisitor : public Data::VisitorWithValue<QString>
 {
 public:
-    ~ChildrenCountingVisitor() override;
+    ~DisplayRoleVisitor() override;
 
 private:
-    int valueFor(const Data::Root &root) const override;
-    int valueFor(const Data::Definitions &defs) const override;
-    int valueFor(const Data::File &file) const override;
-    int valueFor(const Data::TypeAssignment &type) const override;
-    int valueFor(const Data::TypeReference &ref) const override;
-    int valueFor(const Data::Project &project) const override;
+    QString valueFor(const Data::Root &root) const override;
+    QString valueFor(const Data::Definitions &defs) const override;
+    QString valueFor(const Data::File &file) const override;
+    QString valueFor(const Data::TypeAssignment &type) const override;
+    QString valueFor(const Data::TypeReference &ref) const override;
+    QString valueFor(const Data::Project &project) const override;
 };
 
-} // namespace Model
+} // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

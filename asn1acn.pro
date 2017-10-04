@@ -76,13 +76,12 @@ SOURCES += \
     data/definitions.cpp \
     data/visitor.cpp \
     \
-    model/displayrolevisitor.cpp \
-    model/childrencountingvisitor.cpp \
-    model/childreturningvisitor.cpp \
-    model/indexfindingvisitor.cpp \
-    model/outlinemodel.cpp \
-    model/model.cpp \
-    \
+    tree-views/displayrolevisitor.cpp \
+    tree-views/childrencountingvisitor.cpp \
+    tree-views/childreturningvisitor.cpp \
+    tree-views/indexfindingvisitor.cpp \
+    tree-views/outlinemodel.cpp \
+    tree-views/model.cpp \
     tree-views/treeviewwidget.cpp \
     tree-views/activatehandler.cpp \
     \
@@ -159,13 +158,12 @@ HEADERS += \
     data/visitor.h \
     data/visitorwithvalue.h \
     \
-    model/displayrolevisitor.h \
-    model/childrencountingvisitor.h \
-    model/childreturningvisitor.h \
-    model/indexfindingvisitor.h \
-    model/outlinemodel.h \
-    model/model.h \
-    \
+    tree-views/displayrolevisitor.h \
+    tree-views/childrencountingvisitor.h \
+    tree-views/childreturningvisitor.h \
+    tree-views/indexfindingvisitor.h \
+    tree-views/outlinemodel.h \
+    tree-views/model.h \
     tree-views/treeviewwidget.h \
     tree-views/activatehandler.h \
     \
@@ -248,7 +246,7 @@ equals(TEST, 1) {
 SOURCES += \
     libraries/tests/metadataparser_tests.cpp \
     \
-    model/tests/displayrolevisitor_tests.cpp \
+    tree-views/tests/displayrolevisitor_tests.cpp \
     \
     tests/astxmlparser_tests.cpp \
     tests/errormessageparser_tests.cpp \
@@ -271,7 +269,7 @@ SOURCES += \
 HEADERS += \
     libraries/tests/metadataparser_tests.h \
     \
-    model/tests/displayrolevisitor_tests.h \
+    tree-views/tests/displayrolevisitor_tests.h \
     \
     tests/astxmlparser_tests.h \
     tests/errormessageparser_tests.h \

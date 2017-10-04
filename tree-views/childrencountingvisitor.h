@@ -24,26 +24,26 @@
 ****************************************************************************/
 #pragma once
 
-#include "model.h"
+#include <data/visitorwithvalue.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Model {
+namespace TreeViews {
 
-class OutlineModel : public Model
+class ChildrenCountingVisitor : public Data::VisitorWithValue<int>
 {
-    Q_OBJECT
 public:
-    explicit OutlineModel(QObject *parent = 0);
-    ~OutlineModel();
+    ~ChildrenCountingVisitor() override;
 
 private:
-    Data::Node *parentOf(const Data::Node *node) const override;
-    int childrenCount(const Data::Node *node) const override;
-    int indexInParent(const Data::Node *parent, const Data::Node *node) const override;
-    Data::Node *nthChild(const Data::Node *node, int n) const override;
+    int valueFor(const Data::Root &root) const override;
+    int valueFor(const Data::Definitions &defs) const override;
+    int valueFor(const Data::File &file) const override;
+    int valueFor(const Data::TypeAssignment &type) const override;
+    int valueFor(const Data::TypeReference &ref) const override;
+    int valueFor(const Data::Project &project) const override;
 };
 
-} // namespace Model
+} // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

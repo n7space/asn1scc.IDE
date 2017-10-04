@@ -55,7 +55,7 @@ void TreeView::contextMenuEvent(QContextMenuEvent *event)
     event->accept();
 }
 
-TreeViewWidget::TreeViewWidget(Model::Model *model)
+TreeViewWidget::TreeViewWidget(Model *model)
     : m_treeView(new TreeView(this))
     , m_model(model)
 {

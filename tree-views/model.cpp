@@ -26,7 +26,7 @@
 
 #include "displayrolevisitor.h"
 
-using namespace Asn1Acn::Internal::Model;
+using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
 
 Model::Model(QObject *parent)

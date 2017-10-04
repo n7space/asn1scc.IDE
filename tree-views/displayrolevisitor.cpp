@@ -30,7 +30,7 @@
 #include <data/typereference.h>
 #include <data/project.h>
 
-using namespace Asn1Acn::Internal::Model;
+using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
 
 DisplayRoleVisitor::~DisplayRoleVisitor()

@@ -24,33 +24,45 @@
 ****************************************************************************/
 #pragma once
 
-#include <data/visitorwithvalue.h>
+#include <QAbstractItemModel>
+
 #include <data/node.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Model {
+namespace TreeViews {
 
-class IndexFindingVisitor : public Data::VisitorWithValue<int>
+class Model : public QAbstractItemModel
 {
-public:
-    IndexFindingVisitor(const Data::Node *child);
-    ~IndexFindingVisitor() override;
+    Q_OBJECT
+protected:
+    explicit Model(QObject *parent = 0);
 
-    int valueFor(const Data::Definitions &defs) const override;
-    int valueFor(const Data::File &file) const override;
-    int valueFor(const Data::TypeAssignment &type) const override;
-    int valueFor(const Data::TypeReference &ref) const override;
-    int valueFor(const Data::Project &project) const override;
-    int valueFor(const Data::Root &root) const override;
+public:
+    ~Model();
+
+    QVariant data(const QModelIndex &index, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+
+    void setRoot(const Data::Node *root);
+
+    static const Data::Node *dataNode(const QModelIndex &index);
+
+protected:
+    virtual Data::Node *parentOf(const Data::Node *node) const = 0;
+    virtual int childrenCount(const Data::Node *node) const = 0;
+    virtual int indexInParent(const Data::Node *parent, const Data::Node *node) const = 0;
+    virtual Data::Node *nthChild(const Data::Node *node, int n) const = 0;
 
 private:
-    const Data::Node *m_child;
-
-    template <typename Collection>
-    int findIndexIn(const Collection &items) const;
+    const Data::Node *m_root;
 };
 
-} // namespace Model
+} // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

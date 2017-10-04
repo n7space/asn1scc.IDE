@@ -29,7 +29,7 @@
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Model {
+namespace TreeViews {
 
 class ChildReturningVisitor : public Data::VisitorWithValue<Data::Node *>
 {
@@ -48,6 +48,6 @@ private:
     int m_index;
 };
 
-} // namespace Model
+} // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

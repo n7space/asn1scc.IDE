@@ -22,30 +22,48 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "childrencountingvisitor.h"
 
-#include <QString>
+#include <data/definitions.h>
+#include <data/file.h>
+#include <data/project.h>
+#include <data/root.h>
 
-#include <data/visitorwithvalue.h>
+using namespace Asn1Acn::Internal::Data;
+using namespace Asn1Acn::Internal::TreeViews;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Model {
-
-class DisplayRoleVisitor : public Data::VisitorWithValue<QString>
+ChildrenCountingVisitor::~ChildrenCountingVisitor()
 {
-public:
-    ~DisplayRoleVisitor() override;
+}
 
-private:
-    QString valueFor(const Data::Root &root) const override;
-    QString valueFor(const Data::Definitions &defs) const override;
-    QString valueFor(const Data::File &file) const override;
-    QString valueFor(const Data::TypeAssignment &type) const override;
-    QString valueFor(const Data::TypeReference &ref) const override;
-    QString valueFor(const Data::Project &project) const override;
-};
+int ChildrenCountingVisitor::valueFor(const Definitions &defs) const
+{
+    return static_cast<int>(defs.types().size());
+}
 
-} // namespace Outline
-} // namespace Internal
-} // namespace Asn1Acn
+int ChildrenCountingVisitor::valueFor(const File &file) const
+{
+    return static_cast<int>(file.definitionsList().size());
+}
+
+int ChildrenCountingVisitor::valueFor(const Project &project) const
+{
+    return static_cast<int>(project.files().size());
+}
+
+int ChildrenCountingVisitor::valueFor(const TypeAssignment &type) const
+{
+    Q_UNUSED(type);
+    return 0;
+}
+
+int ChildrenCountingVisitor::valueFor(const TypeReference &ref) const
+{
+    Q_UNUSED(ref);
+    return 0;
+}
+
+int ChildrenCountingVisitor::valueFor(const Root &root) const
+{
+    return static_cast<int>(root.projects().size());
+}

@@ -31,7 +31,7 @@
 #include <texteditor/ioutlinewidget.h>
 #include <utils/navigationtreeview.h>
 
-#include <model/model.h>
+#include "model.h"
 
 //#include "overviewindexupdater.h" TODO
 
@@ -52,14 +52,14 @@ class TreeViewWidget : public TextEditor::IOutlineWidget
 {
     Q_OBJECT
 public:
-    TreeViewWidget(Model::Model *model);
+    TreeViewWidget(Model *model);
 
     QList<QAction *> filterMenuActions() const override;
     void setCursorSynchronization(bool syncWithCursor) override;
 
 private: // TODO protected?
     TreeView *m_treeView;
-    Model::Model *m_model;
+    Model *m_model;
     /* TODO
      *     std::shared_ptr<OverviewIndexUpdater> m_indexUpdater;
     QModelIndex m_currentIndex;

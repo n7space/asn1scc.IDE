@@ -32,8 +32,8 @@
 #include <data/typeassignment.h>
 #include <data/file.h>
 
-using namespace Asn1Acn::Internal::Model::Tests;
-using namespace Asn1Acn::Internal::Model;
+using namespace Asn1Acn::Internal::TreeViews::Tests;
+using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
 
 DisplayRoleVisitorTests::DisplayRoleVisitorTests(QObject *parent)

@@ -26,7 +26,7 @@
 
 #include <coreplugin/editormanager/editormanager.h>
 
-#include <model/model.h>
+#include "model.h"
 
 using namespace Asn1Acn::Internal::TreeViews;
 
@@ -35,7 +35,7 @@ void ActivateHandler::gotoSymbol(const QModelIndex &index)
     if (!index.isValid())
         return;
 
-    const auto node = Model::Model::dataNode(index);
+    const auto node = Model::dataNode(index);
     if (!node)
         return;
 
