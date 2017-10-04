@@ -28,6 +28,7 @@
 #include <map>
 #include <vector>
 
+#include "source.h"
 #include "definitions.h"
 #include "node.h"
 
@@ -38,18 +39,21 @@ namespace Data {
 class File : public Node
 {
 public:
-    File(const QString &filePath);
+    File(const Source &source);
     ~File() override;
 
     void accept(Visitor &visitor) const override;
 
     void add(std::unique_ptr<Definitions> defs);
 
+    const Source &source() const { return m_source; }
+
     using DefinitionsList = std::vector<std::unique_ptr<Definitions>>;
     const DefinitionsList &definitionsList() const { return m_definitionsList; }
     const Definitions* definitions(const QString &name) const;
 
 private:
+    Source m_source;
     DefinitionsList m_definitionsList;
     std::map<QString, Definitions*> m_definitionsByNameMap;
 };

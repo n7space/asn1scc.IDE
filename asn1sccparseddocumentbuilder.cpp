@@ -86,18 +86,6 @@ void Asn1SccParsedDocumentBuilder::parseResponse(const QByteArray &jsonData)
     }
 }
 
-namespace {
-
-QMap<QString, Data::Source> buildPathToSourceMapping(const QList<Data::Source> &sources)
-{
-    QMap<QString, Data::Source> res;
-    for (const auto &doc : sources)
-        res.insert(doc.filePath(), doc);
-    return res;
-}
-
-} // namespace
-
 void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
 {
     QXmlStreamReader reader;
@@ -106,10 +94,9 @@ void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
     AstXmlParser parser(reader, SourceMapper(m_documentSources));
     parser.parse();
 
-    const auto mapping = buildPathToSourceMapping(m_documentSources);
     auto parsedData = parser.takeData();
     for (auto &item : parsedData)
-        m_parsedDocuments.push_back(std::make_unique<ParsedDocument>(std::move(item.second), mapping.value(item.first, Data::Source("TODO", "TODO")))); // TODO will be simplified
+        m_parsedDocuments.push_back(std::make_unique<ParsedDocument>(std::move(item.second)));
 }
 
 std::vector<std::unique_ptr<ParsedDocument>> Asn1SccParsedDocumentBuilder::takeDocuments()

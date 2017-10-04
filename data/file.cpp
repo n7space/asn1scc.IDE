@@ -30,8 +30,9 @@
 
 using namespace Asn1Acn::Internal::Data;
 
-File::File(const QString &filePath)
-    : Node({filePath, 0, 0})
+File::File(const Source &source)
+    : Node({source.filePath(), 0, 0})
+    , m_source(source)
 {
 }
 

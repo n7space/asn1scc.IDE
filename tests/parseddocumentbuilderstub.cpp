@@ -42,8 +42,8 @@ void ParsedDocumentBuilderStub::run()
     } else if (key == "FAILED") {
         emit failed();
     } else if (key == "SUCCESS") {
-        auto modules = std::make_unique<Data::File>(key);
-        std::unique_ptr<ParsedDocument> parsedDocument(new ParsedDocument(std::move(modules), m_rawDocuments.front()));
+        auto modules = std::make_unique<Data::File>(m_rawDocuments.front());
+        auto parsedDocument = std::make_unique<ParsedDocument>(std::move(modules));
         m_parsedDocuments.push_back(std::move(parsedDocument));
 
         emit finished();

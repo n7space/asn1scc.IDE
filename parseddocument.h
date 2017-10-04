@@ -43,8 +43,8 @@ namespace Internal {
 class ParsedDocument
 {
 public:
-    ParsedDocument(const Data::Source &source);
-    ParsedDocument(std::unique_ptr<Data::File> parsedData, const Data::Source &source);
+    explicit ParsedDocument(const Data::Source &source);
+    explicit ParsedDocument(std::unique_ptr<Data::File> parsedData);
 
     const Data::Source &source() const { return m_source; }
 
