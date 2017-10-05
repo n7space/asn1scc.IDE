@@ -30,6 +30,8 @@
 #include <QTextCursor>
 #include <QTextDocument>
 
+#include <texteditor/tabsettings.h>
+
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
 
@@ -77,6 +79,30 @@ void AutoCompleterTests::test_cursorInEscapedString()
     delete document;
 }
 
+void AutoCompleterTests::test_cursorInCommentInString()
+{
+    QTextDocument *document = new QTextDocument("\"Text not commented -- text commented\"");
+    QTextCursor cursor(document);
+    cursor.setPosition(25);
+
+    QVERIFY(m_completer->isInString(cursor));
+    QVERIFY(!m_completer->isInComment(cursor));
+
+    delete document;
+}
+
+void AutoCompleterTests::test_cursorNotInCommentInString()
+{
+    QTextDocument *document = new QTextDocument("\"Text not commented -- text commented\"");
+    QTextCursor cursor(document);
+    cursor.setPosition(10);
+
+    QVERIFY(m_completer->isInString(cursor));
+    QVERIFY(!m_completer->isInComment(cursor));
+
+    delete document;
+}
+
 void AutoCompleterTests::test_cursorInComment()
 {
     QTextDocument *document = new QTextDocument("Not in comment -- In comment");
@@ -104,7 +130,7 @@ void AutoCompleterTests::test_insertMatchingBraceEmptyString()
     int skippedChars = 5;
     QString ret = m_completer->insertMatchingBrace(QTextCursor(), QString(), QChar(), true, &skippedChars);
 
-    QCOMPARE(QString(), ret);
+    QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 5);
 }
 
@@ -113,7 +139,7 @@ void AutoCompleterTests::test_insertMatchingBraceForLeftBrace()
     int skippedChars = 5;
     QString ret = m_completer->insertMatchingBrace(QTextCursor(), QString("("), QChar(), true, &skippedChars);
 
-    QCOMPARE(QStringLiteral(")"), ret);
+    QCOMPARE(ret, QStringLiteral(")"));
     QCOMPARE(skippedChars, 5);
 }
 
@@ -122,7 +148,7 @@ void AutoCompleterTests::test_insertMatchingBraceForRigthBrace()
     int skippedChars = 5;
     QString ret = m_completer->insertMatchingBrace(QTextCursor(), QString(")"), QChar(')'), true, &skippedChars);
 
-    QCOMPARE(QString(), ret);
+    QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 6);
 }
 
@@ -131,7 +157,7 @@ void AutoCompleterTests::test_insertMatchingBraceForText()
     int skippedChars = 5;
     QString ret = m_completer->insertMatchingBrace(QTextCursor(), QString("Test string"), QChar(')'), true, &skippedChars);
 
-    QCOMPARE(QString(), ret);
+    QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 5);
 }
 
@@ -140,16 +166,16 @@ void AutoCompleterTests::test_insertMatchingQuoteEmptyString()
     int skippedChars = 5;
     QString ret = m_completer->insertMatchingQuote(QTextCursor(), QString(), QChar(), true, &skippedChars);
 
-    QCOMPARE(QString(), ret);
+    QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 5);
 }
 
 void AutoCompleterTests::test_insertMatchingQuoteForText()
 {
     int skippedChars = 5;
-    QString ret = m_completer->insertMatchingQuote(QTextCursor(), QString("Test string"), QChar(')'), true, &skippedChars);
+    QString ret = m_completer->insertMatchingQuote(QTextCursor(), QString("Test string"), QChar('"'), true, &skippedChars);
 
-    QCOMPARE(QString(), ret);
+    QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 5);
 }
 
@@ -158,7 +184,7 @@ void AutoCompleterTests::test_insertMatchingQuoteForSkippedQuote()
     int skippedChars = 5;
     QString ret = m_completer->insertMatchingQuote(QTextCursor(), QString("\""), QChar('"'), true, &skippedChars);
 
-    QCOMPARE(QString(), ret);
+    QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 6);
 }
 
@@ -167,12 +193,142 @@ void AutoCompleterTests::test_insertMatchingQuoteForQuote()
     int skippedChars = 5;
     QString ret = m_completer->insertMatchingQuote(QTextCursor(), QString("\""), QChar(), false, &skippedChars);
 
-    QCOMPARE(QString("\""), ret);
+    QCOMPARE(ret, QString("\""));
     QCOMPARE(skippedChars, 5);
+}
+
+void AutoCompleterTests::test_insertQuoteInsideMatchedQuotes()
+{
+    int skippedChars = 0;
+    QTextDocument *document = new QTextDocument("\"\"");
+    QTextCursor cursor(document);
+    cursor.setPosition(1);
+
+    QString ret = m_completer->insertMatchingQuote(cursor, QString("\""), QChar(), false, &skippedChars);
+
+    QCOMPARE(ret, QString());
+
+    delete document;
 }
 
 void AutoCompleterTests::test_insertParagraphSepareator()
 {
     QString ret = m_completer->insertParagraphSeparator(QTextCursor());
-    QCOMPARE(QString("}"), ret);
+    QCOMPARE(ret, QString("}"));
 }
+
+void AutoCompleterTests::test_insertEndForBegin()
+{
+    QString text("Autocomplete DEFINITIONS ::= BEGIN");
+
+    QTextDocument *document = new QTextDocument(text);
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::EndOfLine);
+
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+
+    QString expected = text + QString("\nEND");
+
+    QCOMPARE(ret, 1);
+    QCOMPARE(document->toPlainText(), expected);
+
+    delete document;
+}
+
+void AutoCompleterTests::test_insertEndForBeginAlreadyPaired()
+{
+    QString text("Autocomplete DEFINITIONS ::= BEGIN\n"
+                 "MyDef ::= INTEGER\n"
+                 "END\n");
+
+    QTextDocument *document = new QTextDocument(text);
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::EndOfLine);
+
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+
+    QString expected = text;
+
+    QCOMPARE(ret, 0);
+    QCOMPARE(document->toPlainText(), expected);
+
+    delete document;
+}
+
+void AutoCompleterTests::test_insertEndForCommentedBegin()
+{
+    QString text("-- Autocomplete DEFINITIONS ::= BEGIN");
+
+    QTextDocument *document = new QTextDocument(text);
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::EndOfLine);
+
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+
+    QString expected = text;
+
+    QCOMPARE(ret, 0);
+    QCOMPARE(document->toPlainText(), expected);
+
+    delete document;
+}
+
+void AutoCompleterTests::test_insertEndForBeginInString()
+{
+    QString text("\"Autocomplete DEFINITIONS ::= BEGIN\"");
+
+    QTextDocument *document = new QTextDocument(text);
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::EndOfLine);
+
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+
+    QString expected = text;
+
+    QCOMPARE(ret, 0);
+    QCOMPARE(document->toPlainText(), expected);
+
+    delete document;
+}
+
+void AutoCompleterTests::test_insertEndForBeginNotInTheEndOfLine()
+{
+    QString text("\"AutoBEGIN DEFINITIONS ::= \"");
+
+    QTextDocument *document = new QTextDocument(text);
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::EndOfLine);
+
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+
+    QString expected = text;
+
+    QCOMPARE(ret, 0);
+    QCOMPARE(document->toPlainText(), expected);
+
+    delete document;
+}
+
+void AutoCompleterTests::test_insertEndForBeginWhenEndIsCommented()
+{
+    QString text("Autocomplete DEFINITIONS ::= BEGIN\n"
+                 "MyDef ::= INTEGER\n"
+                 "-- END\n");
+
+    QTextDocument *document = new QTextDocument(text);
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::EndOfLine);
+
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+
+    QString expected("Autocomplete DEFINITIONS ::= BEGIN\n"
+                     "END\n"
+                     "MyDef ::= INTEGER\n"
+                     "-- END\n");
+
+    QCOMPARE(ret, 1);
+    QCOMPARE(document->toPlainText(), expected);
+
+    delete document;
+}
+
