@@ -32,10 +32,15 @@ using namespace Asn1Acn::Internal::Completion;
 
 bool AutoCompleter::isInComment(const QTextCursor &cursor) const
 {
-    // TODO: This doesn't handle '--' inside quotes
     QTextCursor moved = cursor;
-    moved.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
-    return moved.selectedText().contains(QLatin1Literal("--"));
+
+    int idx = findWordIndexInCurrentLine(moved, QLatin1String("--"));
+    if (idx == -1)
+        return false;
+
+    moveCursorInCurrentLine(moved, idx);
+
+    return !isInString(moved);
 }
 
 bool AutoCompleter::isInString(const QTextCursor &cursor) const
@@ -94,14 +99,19 @@ QString AutoCompleter::insertMatchingQuote(const QTextCursor &cursor,
                                            bool skipChars,
                                            int *skippedChars) const
 {
-    Q_UNUSED(cursor)
     const QChar quote(QLatin1Char('"'));
-    if (text.isEmpty() || text != quote)
+
+    if (text != quote)
         return QString();
+
     if (lookAhead == quote && skipChars) {
         ++*skippedChars;
         return QString();
     }
+
+    if (isInString(cursor))
+        return QString();
+
     return quote;
 }
 
@@ -120,7 +130,8 @@ bool AutoCompleter::contextAllowsAutoBrackets(const QTextCursor &cursor,
 
 bool AutoCompleter::contextAllowsAutoQuotes(const QTextCursor &cursor, const QString &textToInsert) const
 {
-    return contextAllowsAutoBrackets(cursor, textToInsert);
+    Q_UNUSED(textToInsert);
+    return !isInComment(cursor);
 }
 
 int AutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor,
@@ -135,7 +146,6 @@ int AutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor,
     return TextEditor::AutoCompleter::paragraphSeparatorAboutToBeInserted(cursor, tabSettings);
 }
 
-
 bool AutoCompleter::tryInsertEndKeyword(QTextCursor &cursor) const
 {
     if (!shouldInsertEndKeyword(cursor))
@@ -148,7 +158,7 @@ bool AutoCompleter::tryInsertEndKeyword(QTextCursor &cursor) const
 
 bool AutoCompleter::shouldInsertEndKeyword(QTextCursor &cursor) const
 {
-    return containsBeginKeyword(cursor) && beginKeywordMismatched(cursor);
+    return containsBeginKeyword(cursor) && contextAllowsEndKeyword(cursor) && beginKeywordMismatched(cursor);
 }
 
 bool AutoCompleter::containsBeginKeyword(QTextCursor &cursor) const
@@ -163,18 +173,35 @@ bool AutoCompleter::containsBeginKeyword(QTextCursor &cursor) const
     return words.last() == QLatin1String("BEGIN");
 }
 
+bool AutoCompleter::contextAllowsEndKeyword(const QTextCursor &cursor) const
+{
+    QTextCursor moved = cursor;
+
+    const int idx = findWordIndexInCurrentLine(moved, QLatin1String("BEGIN"));
+    if (idx == -1)
+        return false;
+
+    moveCursorInCurrentLine(moved, idx);
+
+    return !isInComment(moved) && !isInString(moved);
+}
+
 bool AutoCompleter::beginKeywordMismatched(QTextCursor &cursor) const
 {
     QTextCursor moved = cursor;
 
     while(moved.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor)) {
-        if (moved.selectedText() == QLatin1String("END"))
+        QString text = moved.selectedText();
+        moved.clearSelection();
+
+        if (isInComment(moved) || isInString(moved))
+            continue;
+
+        if (text == QLatin1String("END"))
             return false;
 
-        if (moved.selectedText() == QLatin1String("BEGIN"))
+        if (text == QLatin1String("BEGIN"))
             return true;
-
-        moved.clearSelection();
     }
 
     return true;
@@ -187,4 +214,18 @@ void AutoCompleter::insertEndKeyword(QTextCursor &cursor) const
     cursor.insertBlock();
     cursor.insertText(QLatin1String("END"));
     cursor.setPosition(pos);
+}
+
+int AutoCompleter::findWordIndexInCurrentLine(const QTextCursor &cursor, const QLatin1String &word) const
+{
+    QTextCursor moved = cursor;
+    moved.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+
+    return moved.selectedText().indexOf(word);
+}
+
+void AutoCompleter::moveCursorInCurrentLine(QTextCursor &cursor, const int position) const
+{
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, position);
 }

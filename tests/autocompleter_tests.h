@@ -43,10 +43,13 @@ public:
 private slots:
     void test_cursorInComment();
     void test_cursorNotInComment();
-    void test_cursorInEscapedString();
 
     void test_cursorInString();
     void test_cursorNotInString();
+    void test_cursorInEscapedString();
+
+    void test_cursorInCommentInString();
+    void test_cursorNotInCommentInString();
 
     void test_insertMatchingBraceEmptyString();
     void test_insertMatchingBraceForLeftBrace();
@@ -57,8 +60,16 @@ private slots:
     void test_insertMatchingQuoteForText();
     void test_insertMatchingQuoteForSkippedQuote();
     void test_insertMatchingQuoteForQuote();
+    void test_insertQuoteInsideMatchedQuotes();
 
     void test_insertParagraphSepareator();
+
+    void test_insertEndForBegin();
+    void test_insertEndForBeginAlreadyPaired();
+    void test_insertEndForCommentedBegin();
+    void test_insertEndForBeginInString();
+    void test_insertEndForBeginNotInTheEndOfLine();
+    void test_insertEndForBeginWhenEndIsCommented();
 
 private:
     Completion::AutoCompleter *m_completer;
