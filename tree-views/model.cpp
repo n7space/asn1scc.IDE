@@ -104,10 +104,10 @@ QModelIndex Model::parent(const QModelIndex &index) const
     const auto node = dataNode(index);
     const auto parent = parentOf(node);
 
-    if (parent == nullptr)
+    if (parent == m_root || parent == nullptr)
         return QModelIndex();
 
-    return createIndex(indexInParent(parent, node), 0, parent);
+    return createIndex(indexInParent(parentOf(parent), parent), index.column(), parent);
 }
 
 int Model::rowCount(const QModelIndex &parent) const

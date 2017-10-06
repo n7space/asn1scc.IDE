@@ -75,6 +75,7 @@
 #include "libraries/tests/metadataparser_tests.h"
 #include "tree-views/tests/displayrolevisitor_tests.h"
 #include "tree-views/tests/outlineindexupdater_tests.h"
+#include "tree-views/tests/outlinemodel_tests.h"
 #endif
 
 #include "asn1acn.h"
@@ -193,6 +194,7 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
             << new Libraries::Tests::MetadataParserTests
             << new TreeViews::Tests::DisplayRoleVisitorTests
             << new TreeViews::Tests::OutlineIndexUpdaterTests
+            << new TreeViews::Tests::OutlineModelTests
             << new Tests::AstXmlParserTests
             << new Tests::ErrorMessageParserTests
             << new Tests::OverviewIndexUpdaterTests

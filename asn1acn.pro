@@ -256,6 +256,8 @@ equals(TEST, 1) {
 SOURCES += \
     libraries/tests/metadataparser_tests.cpp \
     \
+    tree-views/tests/3rdparty/modeltest.cpp \
+    tree-views/tests/outlinemodel_tests.cpp \
     tree-views/tests/displayrolevisitor_tests.cpp \
     tree-views/tests/outlineindexupdater_tests.cpp \
     \
@@ -280,6 +282,8 @@ SOURCES += \
 HEADERS += \
     libraries/tests/metadataparser_tests.h \
     \
+    tree-views/tests/3rdparty/modeltest.h \
+    tree-views/tests/outlinemodel_tests.h \
     tree-views/tests/displayrolevisitor_tests.h \
     tree-views/tests/outlineindexupdater_tests.h \
     \
