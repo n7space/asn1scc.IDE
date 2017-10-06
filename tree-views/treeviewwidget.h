@@ -24,16 +24,14 @@
 ****************************************************************************/
 #pragma once
 
-#include <memory>
-
 #include <QModelIndex>
+#include <QPointer>
 
 #include <texteditor/ioutlinewidget.h>
 #include <utils/navigationtreeview.h>
 
 #include "model.h"
-
-//#include "overviewindexupdater.h" TODO
+#include "indexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -52,28 +50,18 @@ class TreeViewWidget : public TextEditor::IOutlineWidget
 {
     Q_OBJECT
 public:
-    TreeViewWidget(Model *model);
+    TreeViewWidget(Model *model, IndexUpdater *IndexUpdater);
 
     QList<QAction *> filterMenuActions() const override;
     void setCursorSynchronization(bool syncWithCursor) override;
 
-private: // TODO protected?
+public slots:
+    void updateSelection(const QModelIndex &index);
+
+private:
     TreeView *m_treeView;
-    Model *m_model;
-    /* TODO
-     *     std::shared_ptr<OverviewIndexUpdater> m_indexUpdater;
-    QModelIndex m_currentIndex;
-
-     * */
-
-private slots:
-    void onItemActivated(const QModelIndex &index);
+    QPointer<IndexUpdater> m_indexUpdater;
 };
-
-/*
-protected slots:
-    void updateSelectionInTree(const QModelIndex &index);
-*/
 
 } // namespace TreeViews
 } // namespace Internal
