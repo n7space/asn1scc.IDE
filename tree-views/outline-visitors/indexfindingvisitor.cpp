@@ -32,7 +32,7 @@
 #include <data/root.h>
 
 using namespace Asn1Acn::Internal::Data;
-using namespace Asn1Acn::Internal::TreeViews;
+using namespace Asn1Acn::Internal::TreeViews::OutlineVisitors;
 
 IndexFindingVisitor::IndexFindingVisitor(const Node *child)
     : m_child(child)

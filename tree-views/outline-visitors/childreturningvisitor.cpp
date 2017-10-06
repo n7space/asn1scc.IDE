@@ -22,41 +22,53 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "outlinemodel.h"
+#include "childreturningvisitor.h"
 
-#include "outline-visitors/childrencountingvisitor.h"
-#include "outline-visitors/childreturningvisitor.h"
-#include "outline-visitors/indexfindingvisitor.h"
+#include <data/definitions.h>
+#include <data/file.h>
+#include <data/project.h>
+#include <data/root.h>
 
-using namespace Asn1Acn::Internal::TreeViews::OutlineVisitors;
-using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
+using namespace Asn1Acn::Internal::TreeViews::OutlineVisitors;
 
-OutlineModel::OutlineModel(QObject *parent)
-    : Model(parent)
+ChildReturningVisitor::ChildReturningVisitor(int index)
+    : m_index(index)
 {
 }
 
-OutlineModel::~OutlineModel()
+ChildReturningVisitor::~ChildReturningVisitor()
 {
 }
 
-Node *OutlineModel::parentOf(const Node *node) const
+Node *ChildReturningVisitor::valueFor(const Definitions &defs) const
 {
-    return node ? node->parent() : nullptr;
+    return defs.types().at(m_index).get();
 }
 
-int OutlineModel::childrenCount(const Node *node) const
+Node *ChildReturningVisitor::valueFor(const File &file) const
 {
-    return node ? node->valueFor<ChildrenCountingVisitor>() : 0;
+    return file.definitionsList().at(m_index).get();
 }
 
-int OutlineModel::indexInParent(const Node *parent, const Node *node) const
+Node *ChildReturningVisitor::valueFor(const TypeAssignment &type) const
 {
-    return parent ? parent->valueFor<IndexFindingVisitor>(node) : 0;
+    Q_UNUSED(type);
+    return nullptr;
 }
 
-Node *OutlineModel::nthChild(const Node *node, int n) const
+Node *ChildReturningVisitor::valueFor(const TypeReference &ref) const
 {
-    return node ? node->valueFor<ChildReturningVisitor>(n) : nullptr;
+    Q_UNUSED(ref);
+    return nullptr;
+}
+
+Node *ChildReturningVisitor::valueFor(const Project &project) const
+{
+    return project.files().at(m_index).get();
+}
+
+Node *ChildReturningVisitor::valueFor(const Root &root) const
+{
+    return root.projects().at(m_index).get();
 }

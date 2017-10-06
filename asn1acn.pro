@@ -77,11 +77,12 @@ SOURCES += \
     data/visitor.cpp \
     data/source.cpp \
     \
+    tree-views/outline-visitors/childrencountingvisitor.cpp \
+    tree-views/outline-visitors/childreturningvisitor.cpp \
+    tree-views/outline-visitors/indexfindingvisitor.cpp \
+    \
     tree-views/displayrolevisitor.cpp \
     tree-views/decorationrolevisitor.cpp \
-    tree-views/childrencountingvisitor.cpp \
-    tree-views/childreturningvisitor.cpp \
-    tree-views/indexfindingvisitor.cpp \
     tree-views/outlinemodel.cpp \
     tree-views/model.cpp \
     tree-views/treeviewwidget.cpp \
@@ -164,11 +165,12 @@ HEADERS += \
     data/visitorwithvalue.h \
     data/source.h \
     \
+    tree-views/outline-visitors/childrencountingvisitor.h \
+    tree-views/outline-visitors/childreturningvisitor.h \
+    tree-views/outline-visitors/indexfindingvisitor.h \
+    \
     tree-views/displayrolevisitor.h \
-    tree-views/decorationrolevisitor.h \
-    tree-views/childrencountingvisitor.h \
-    tree-views/childreturningvisitor.h \
-    tree-views/indexfindingvisitor.h \
+    tree-views/decorationrolevisitor.h \   
     tree-views/outlinemodel.h \
     tree-views/model.h \
     tree-views/treeviewwidget.h \

@@ -22,48 +22,37 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "childrencountingvisitor.h"
+#pragma once
 
-#include <data/definitions.h>
-#include <data/file.h>
-#include <data/project.h>
-#include <data/root.h>
+#include <data/visitorwithvalue.h>
+#include <data/node.h>
 
-using namespace Asn1Acn::Internal::Data;
-using namespace Asn1Acn::Internal::TreeViews;
+namespace Asn1Acn {
+namespace Internal {
+namespace TreeViews {
+namespace OutlineVisitors {
 
-ChildrenCountingVisitor::~ChildrenCountingVisitor()
+class IndexFindingVisitor : public Data::VisitorWithValue<int>
 {
-}
+public:
+    IndexFindingVisitor(const Data::Node *child);
+    ~IndexFindingVisitor() override;
 
-int ChildrenCountingVisitor::valueFor(const Definitions &defs) const
-{
-    return static_cast<int>(defs.types().size());
-}
+    int valueFor(const Data::Definitions &defs) const override;
+    int valueFor(const Data::File &file) const override;
+    int valueFor(const Data::TypeAssignment &type) const override;
+    int valueFor(const Data::TypeReference &ref) const override;
+    int valueFor(const Data::Project &project) const override;
+    int valueFor(const Data::Root &root) const override;
 
-int ChildrenCountingVisitor::valueFor(const File &file) const
-{
-    return static_cast<int>(file.definitionsList().size());
-}
+private:
+    const Data::Node *m_child;
 
-int ChildrenCountingVisitor::valueFor(const Project &project) const
-{
-    return static_cast<int>(project.files().size());
-}
+    template <typename Collection>
+    int findIndexIn(const Collection &items) const;
+};
 
-int ChildrenCountingVisitor::valueFor(const TypeAssignment &type) const
-{
-    Q_UNUSED(type);
-    return 0;
-}
-
-int ChildrenCountingVisitor::valueFor(const TypeReference &ref) const
-{
-    Q_UNUSED(ref);
-    return 0;
-}
-
-int ChildrenCountingVisitor::valueFor(const Root &root) const
-{
-    return static_cast<int>(root.projects().size());
-}
+} // namespace OutlineVisitors
+} // namespace TreeViews
+} // namespace Internal
+} // namespace Asn1Acn

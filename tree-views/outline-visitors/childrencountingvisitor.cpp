@@ -22,7 +22,7 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "childreturningvisitor.h"
+#include "childrencountingvisitor.h"
 
 #include <data/definitions.h>
 #include <data/file.h>
@@ -30,45 +30,40 @@
 #include <data/root.h>
 
 using namespace Asn1Acn::Internal::Data;
-using namespace Asn1Acn::Internal::TreeViews;
+using namespace Asn1Acn::Internal::TreeViews::OutlineVisitors;
 
-ChildReturningVisitor::ChildReturningVisitor(int index)
-    : m_index(index)
+ChildrenCountingVisitor::~ChildrenCountingVisitor()
 {
 }
 
-ChildReturningVisitor::~ChildReturningVisitor()
+int ChildrenCountingVisitor::valueFor(const Definitions &defs) const
 {
+    return static_cast<int>(defs.types().size());
 }
 
-Node *ChildReturningVisitor::valueFor(const Definitions &defs) const
+int ChildrenCountingVisitor::valueFor(const File &file) const
 {
-    return defs.types().at(m_index).get();
+    return static_cast<int>(file.definitionsList().size());
 }
 
-Node *ChildReturningVisitor::valueFor(const File &file) const
+int ChildrenCountingVisitor::valueFor(const Project &project) const
 {
-    return file.definitionsList().at(m_index).get();
+    return static_cast<int>(project.files().size());
 }
 
-Node *ChildReturningVisitor::valueFor(const TypeAssignment &type) const
+int ChildrenCountingVisitor::valueFor(const TypeAssignment &type) const
 {
     Q_UNUSED(type);
-    return nullptr;
+    return 0;
 }
 
-Node *ChildReturningVisitor::valueFor(const TypeReference &ref) const
+int ChildrenCountingVisitor::valueFor(const TypeReference &ref) const
 {
     Q_UNUSED(ref);
-    return nullptr;
+    return 0;
 }
 
-Node *ChildReturningVisitor::valueFor(const Project &project) const
+int ChildrenCountingVisitor::valueFor(const Root &root) const
 {
-    return project.files().at(m_index).get();
-}
-
-Node *ChildReturningVisitor::valueFor(const Root &root) const
-{
-    return root.projects().at(m_index).get();
+    return static_cast<int>(root.projects().size());
 }

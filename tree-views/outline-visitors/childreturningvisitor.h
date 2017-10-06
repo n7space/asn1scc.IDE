@@ -24,26 +24,32 @@
 ****************************************************************************/
 #pragma once
 
+#include <data/node.h>
 #include <data/visitorwithvalue.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
+namespace OutlineVisitors {
 
-class ChildrenCountingVisitor : public Data::VisitorWithValue<int>
+class ChildReturningVisitor : public Data::VisitorWithValue<Data::Node *>
 {
 public:
-    ~ChildrenCountingVisitor() override;
+    ChildReturningVisitor(int index);
+    ~ChildReturningVisitor() override;
 
 private:
-    int valueFor(const Data::Root &root) const override;
-    int valueFor(const Data::Definitions &defs) const override;
-    int valueFor(const Data::File &file) const override;
-    int valueFor(const Data::TypeAssignment &type) const override;
-    int valueFor(const Data::TypeReference &ref) const override;
-    int valueFor(const Data::Project &project) const override;
+    Data::Node *valueFor(const Data::Definitions &defs) const override;
+    Data::Node *valueFor(const Data::File &file) const override;
+    Data::Node *valueFor(const Data::TypeAssignment &type) const override;
+    Data::Node *valueFor(const Data::TypeReference &ref) const override;
+    Data::Node *valueFor(const Data::Project &project) const override;
+    Data::Node *valueFor(const Data::Root &root) const override;
+
+    int m_index;
 };
 
+} // namespace OutlineVisitors
 } // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn
