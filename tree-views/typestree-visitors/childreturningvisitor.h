@@ -24,37 +24,27 @@
 ****************************************************************************/
 #pragma once
 
-#include <data/visitorwithvalue.h>
-#include <data/node.h>
+#include <tree-views/outline-visitors/childreturningvisitor.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
-namespace OutlineVisitors {
+namespace TypesTree {
 
-class IndexFindingVisitor : public Data::VisitorWithValue<int>
+class ChildReturningVisitor : public OutlineVisitors::ChildReturningVisitor
 {
 public:
-    IndexFindingVisitor(const Data::Node *child);
-    ~IndexFindingVisitor() override;
-
-    const Data::Node *child() const { return m_child; }
+    ChildReturningVisitor(int index);
+    ~ChildReturningVisitor() override;
 
 private:
-    int valueFor(const Data::Definitions &defs) const override;
-    int valueFor(const Data::File &file) const override;
-    int valueFor(const Data::TypeAssignment &type) const override;
-    int valueFor(const Data::TypeReference &ref) const override;
-    int valueFor(const Data::Project &project) const override;
-    int valueFor(const Data::Root &root) const override;
+    Data::Node *valueFor(const Data::File &file) const override;
+    Data::Node *valueFor(const Data::Project &project) const override;
 
-    const Data::Node *m_child;
-
-    template <typename Collection>
-    int findIndexIn(const Collection &items) const;
+    int m_index;
 };
 
-} // namespace OutlineVisitors
+} // namespace TypesTree
 } // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

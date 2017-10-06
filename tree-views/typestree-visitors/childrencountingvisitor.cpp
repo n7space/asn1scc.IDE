@@ -22,39 +22,31 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "childrencountingvisitor.h"
 
-#include <data/visitorwithvalue.h>
-#include <data/node.h>
+#include <algorithm>
 
-namespace Asn1Acn {
-namespace Internal {
-namespace TreeViews {
-namespace OutlineVisitors {
+#include <utils/qtcassert.h>
 
-class IndexFindingVisitor : public Data::VisitorWithValue<int>
+#include <data/project.h>
+
+using namespace Asn1Acn::Internal::Data;
+using namespace Asn1Acn::Internal::TreeViews;
+using namespace Asn1Acn::Internal::TreeViews::TypesTree;
+
+ChildrenCountingVisitor::~ChildrenCountingVisitor()
 {
-public:
-    IndexFindingVisitor(const Data::Node *child);
-    ~IndexFindingVisitor() override;
+}
 
-    const Data::Node *child() const { return m_child; }
+int ChildrenCountingVisitor::valueFor(const File &file) const
+{
+    Q_UNUSED(file);
+    QTC_ASSERT(false && "This visitor should not be called for Data::File", return 0);
+}
 
-private:
-    int valueFor(const Data::Definitions &defs) const override;
-    int valueFor(const Data::File &file) const override;
-    int valueFor(const Data::TypeAssignment &type) const override;
-    int valueFor(const Data::TypeReference &ref) const override;
-    int valueFor(const Data::Project &project) const override;
-    int valueFor(const Data::Root &root) const override;
-
-    const Data::Node *m_child;
-
-    template <typename Collection>
-    int findIndexIn(const Collection &items) const;
-};
-
-} // namespace OutlineVisitors
-} // namespace TreeViews
-} // namespace Internal
-} // namespace Asn1Acn
+int ChildrenCountingVisitor::valueFor(const Project &project) const
+{
+    return std::accumulate(project.files().begin(), project.files().end(), 0, [](int n, const std::unique_ptr<File> &file) {
+        return n + file->valueFor<OutlineVisitors::ChildrenCountingVisitor>();
+    });
+}

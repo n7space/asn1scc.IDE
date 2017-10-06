@@ -38,6 +38,8 @@ public:
     ChildReturningVisitor(int index);
     ~ChildReturningVisitor() override;
 
+    int index() const { return m_index; }
+
 private:
     Data::Node *valueFor(const Data::Definitions &defs) const override;
     Data::Node *valueFor(const Data::File &file) const override;

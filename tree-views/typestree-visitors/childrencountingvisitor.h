@@ -25,36 +25,25 @@
 #pragma once
 
 #include <data/visitorwithvalue.h>
-#include <data/node.h>
+
+#include <tree-views/outline-visitors/childrencountingvisitor.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
-namespace OutlineVisitors {
+namespace TypesTree {
 
-class IndexFindingVisitor : public Data::VisitorWithValue<int>
+class ChildrenCountingVisitor : public OutlineVisitors::ChildrenCountingVisitor
 {
 public:
-    IndexFindingVisitor(const Data::Node *child);
-    ~IndexFindingVisitor() override;
-
-    const Data::Node *child() const { return m_child; }
+    ~ChildrenCountingVisitor() override;
 
 private:
-    int valueFor(const Data::Definitions &defs) const override;
     int valueFor(const Data::File &file) const override;
-    int valueFor(const Data::TypeAssignment &type) const override;
-    int valueFor(const Data::TypeReference &ref) const override;
     int valueFor(const Data::Project &project) const override;
-    int valueFor(const Data::Root &root) const override;
-
-    const Data::Node *m_child;
-
-    template <typename Collection>
-    int findIndexIn(const Collection &items) const;
 };
 
-} // namespace OutlineVisitors
+} // namespace TypesTree
 } // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

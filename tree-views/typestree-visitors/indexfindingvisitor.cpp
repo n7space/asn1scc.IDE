@@ -26,16 +26,17 @@
 
 #include <utils/qtcassert.h>
 
-#include <data/definitions.h>
-#include <data/file.h>
 #include <data/project.h>
-#include <data/root.h>
+#include <data/file.h>
+
+#include <tree-views/outline-visitors/childrencountingvisitor.h>
 
 using namespace Asn1Acn::Internal::Data;
-using namespace Asn1Acn::Internal::TreeViews::OutlineVisitors;
+using namespace Asn1Acn::Internal::TreeViews;
+using namespace Asn1Acn::Internal::TreeViews::TypesTree;
 
 IndexFindingVisitor::IndexFindingVisitor(const Node *child)
-    : m_child(child)
+    : OutlineVisitors::IndexFindingVisitor(child)
 {
 }
 
@@ -43,45 +44,20 @@ IndexFindingVisitor::~IndexFindingVisitor()
 {
 }
 
-template <typename Collection>
-int IndexFindingVisitor::findIndexIn(const Collection &items) const
-{
-    using ValueType = typename Collection::value_type;
-    const auto it = std::find_if(std::begin(items), std::end(items),
-                                 [this](const ValueType &item){ return item.get() == m_child; });
-    if (it == items.end())
-        return -1;
-    return std::distance(std::begin(items), it);
-}
-
-int IndexFindingVisitor::valueFor(const Definitions &defs) const
-{
-    return findIndexIn(defs.types());
-}
-
 int IndexFindingVisitor::valueFor(const File &file) const
 {
-    return findIndexIn(file.definitionsList());
+    Q_UNUSED(file);
+    QTC_ASSERT(false && "This visitor should not be called for Data::File", return 0);
 }
 
 int IndexFindingVisitor::valueFor(const Project &project) const
 {
-    return findIndexIn(project.files());
-}
-
-int IndexFindingVisitor::valueFor(const Root &root) const
-{
-    return findIndexIn(root.projects());
-}
-
-int IndexFindingVisitor::valueFor(const TypeAssignment &type) const
-{
-    Q_UNUSED(type);
-    return -1;
-}
-
-int IndexFindingVisitor::valueFor(const TypeReference &ref) const
-{
-    Q_UNUSED(ref);
-    return -1;
+    int offset = 0;
+    for (const auto &file : project.files()) {
+        const int idx = file->valueFor<OutlineVisitors::IndexFindingVisitor>(child());
+        if (idx != -1)
+            return offset + idx;
+        offset += file->valueFor<OutlineVisitors::ChildrenCountingVisitor>();
+    }
+    QTC_ASSERT(false && "Child not found", return -1);
 }

@@ -81,6 +81,10 @@ SOURCES += \
     tree-views/outline-visitors/childreturningvisitor.cpp \
     tree-views/outline-visitors/indexfindingvisitor.cpp \
     \
+    tree-views/typestree-visitors/childrencountingvisitor.cpp \
+    tree-views/typestree-visitors/childreturningvisitor.cpp \
+    tree-views/typestree-visitors/indexfindingvisitor.cpp \
+    \
     tree-views/displayrolevisitor.cpp \
     tree-views/decorationrolevisitor.cpp \
     tree-views/outlinemodel.cpp \
@@ -168,6 +172,10 @@ HEADERS += \
     tree-views/outline-visitors/childrencountingvisitor.h \
     tree-views/outline-visitors/childreturningvisitor.h \
     tree-views/outline-visitors/indexfindingvisitor.h \
+    \
+    tree-views/typestree-visitors/childrencountingvisitor.h \
+    tree-views/typestree-visitors/childreturningvisitor.h \
+    tree-views/typestree-visitors/indexfindingvisitor.h \
     \
     tree-views/displayrolevisitor.h \
     tree-views/decorationrolevisitor.h \   
