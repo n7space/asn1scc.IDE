@@ -38,10 +38,10 @@ OverviewModel::OverviewModel(QObject *parent) :
     m_rootItem(nullptr)
 {
     connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            [this](){ beginResetModel(); });
+            this, &OverviewModel::beginResetModel);
 
     connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            [this](){ endResetModel(); });
+            this, &OverviewModel::endResetModel);
 }
 
 OverviewModel::~OverviewModel()
