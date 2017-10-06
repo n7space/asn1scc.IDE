@@ -33,14 +33,16 @@
 #include <texteditor/codeassist/genericproposal.h>
 #include <texteditor/codeassist/genericproposalmodel.h>
 
-#include <asn1acnconstants.h>
-#include <parseddatastorage.h>
-#include <parseddocument.h>
-#include <acneditor.h>
-#include <asneditor.h>
+#include "data/file.h"
+
+#include "asn1acnconstants.h"
+#include "parseddatastorage.h"
+#include "acneditor.h"
+#include "asneditor.h"
 
 #include "asnbuiltinsproposalsprovider.h"
 #include "acnbuiltinsproposalsprovider.h"
+#include "usertypesproposalsprovider.h"
 
 using namespace Asn1Acn::Internal::Completion;
 
@@ -73,11 +75,13 @@ void CompletionAssistProcessor::appendProposalsFromUserTypes(Proposals &proposal
 {
     ParsedDataStorage *storage = ParsedDataStorage::instance();
 
-    std::shared_ptr<ParsedDocument> doc = storage->getFileForPath(fileName);
-    if (doc == nullptr)
+    // TODO: How to handle files in multiple projects when only data tree will stay?
+    std::shared_ptr<Data::File> file = storage->getFileForPath(fileName);
+    if (file == nullptr)
         return;
 
-    proposals.append(doc->getProposalsProvider().takeProposals());
+    Completion::UserTypesProposalsProvider proposalsProvider(file.get());
+    proposals.append(proposalsProvider.takeProposals());
 }
 
 void CompletionAssistProcessor::appendProposalsFromSnippets(Proposals &proposals) const

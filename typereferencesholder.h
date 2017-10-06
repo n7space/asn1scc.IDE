@@ -22,43 +22,33 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <vector>
-#include <memory>
-
-#include <QObject>
+#include <QHash>
 #include <QString>
 
 #include "data/file.h"
-#include "data/errormessage.h"
+#include "data/definitions.h"
+#include "data/typereference.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class DocumentProcessor
-        : public QObject
+class TypeReferencesHolder
 {
-    Q_OBJECT
 public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored
-    };
+    void addReference(const QString &path, const Data::File &file);
+    void removeReference(const QString &path);
 
-    virtual ~DocumentProcessor() = default;
+    Data::TypeReference getTypeReference(const QString &path, const int line, const int col) const;
 
-    virtual void addToRun(const QString &filePath, const QString &docContent) = 0;
-    virtual void run() = 0;
-    virtual std::vector<std::unique_ptr<Data::File>> takeResults() = 0;
-    virtual const std::vector<Data::ErrorMessage> &errorMessages() const = 0;
+private:
+    using ReferenceLookup = QMultiHash<int, Data::TypeReference>;
 
-    virtual State state() = 0;
+    void createReferencesFromModule(const Data::Definitions &moduleDefinition, ReferenceLookup &lookup) const;
 
-signals:
-    void processingFinished(const QString &projectName) const;
+    QHash<QString, ReferenceLookup> m_references;
 };
 
 } // namespace Internal

@@ -30,8 +30,9 @@
 #include <QMutex>
 #include <QString>
 
+#include "data/file.h"
+
 #include "modeltreenode.h"
-#include "parseddocument.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -74,7 +75,7 @@ private:
     void treeAboutToChange();
     void treeChanged();
 
-    void updateModelTreeNode(const QString &filePath, std::shared_ptr<ParsedDocument> document);
+    void updateModelTreeNode(const QString &filePath, std::shared_ptr<Data::File> document);
 
     ModelTreeNode::ModelTreeNodePtr m_treeRoot;
 

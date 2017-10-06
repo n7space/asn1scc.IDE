@@ -27,6 +27,7 @@
 
 #include "utils/qtcassert.h"
 
+#include "parseddocument.h"
 #include "parseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
@@ -72,9 +73,12 @@ void ModelTree::addNodeToProject(const QString &projectName,
     projectNode->addChild(node);
 
     ParsedDataStorage *storage = ParsedDataStorage::instance();
-    std::shared_ptr<ParsedDocument> document = storage->getFileForPath(node->name());
-    if (document != nullptr)
-        document->bindModelTreeNode(node);
+    std::shared_ptr<Data::File> file = storage->getFileForPath(node->name());
+
+    if (file == nullptr)
+        return;
+
+    ParsedDocument::bindModelTreeNode(file, node);
 }
 
 void ModelTree::removeNodeFromProject(const QString &projectName, const QString &fileName)
@@ -152,7 +156,7 @@ bool ModelTree::isValid() const
 }
 
 void ModelTree::updateModelTreeNode(const QString &filePath,
-                                    std::shared_ptr<ParsedDocument> document)
+                                    std::shared_ptr<Data::File> document)
 {
     QMutexLocker locker(&m_dataMutex);
 
@@ -162,7 +166,7 @@ void ModelTree::updateModelTreeNode(const QString &filePath,
         ModelTreeNode::ModelTreeNodePtr fileNode = projectNode->getChildByName(filePath);
         if (fileNode != nullptr) {
             fileNode->removeChildren();
-            document->bindModelTreeNode(fileNode);
+            ParsedDocument::bindModelTreeNode(document, fileNode);
         }
     }
 }

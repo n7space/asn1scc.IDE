@@ -33,8 +33,7 @@
 
 #include <data/errormessage.h>
 #include <data/source.h>
-
-#include "parseddocument.h"
+#include <data/file.h>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -49,7 +48,7 @@ public:
 
     virtual void run() = 0;
 
-    virtual std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() = 0;
+    virtual std::vector<std::unique_ptr<Data::File>> takeDocuments() = 0;
     virtual const std::vector<Data::ErrorMessage> &errorMessages() const = 0;
 
 signals:

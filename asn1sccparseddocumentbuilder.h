@@ -31,7 +31,6 @@
 #include <QString>
 #include <QByteArray>
 
-#include "parseddocument.h"
 #include "asn1sccserviceprovider.h"
 #include "parseddocumentbuilder.h"
 
@@ -52,7 +51,7 @@ public:
                                  const QList<Data::Source> &documents);
     void run() override;
 
-    std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
+    std::vector<std::unique_ptr<Data::File>> takeDocuments() override;
     const std::vector<Data::ErrorMessage> &errorMessages() const override { return m_errorMessages; }
 
 private slots:
@@ -69,7 +68,7 @@ private:
     ParsingServiceProvider *m_serviceProvider;
 
     QList<Data::Source> m_documentSources;
-    std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
+    std::vector<std::unique_ptr<Data::File>> m_parsedDocuments;
 
     std::vector<Data::ErrorMessage> m_errorMessages;
 };

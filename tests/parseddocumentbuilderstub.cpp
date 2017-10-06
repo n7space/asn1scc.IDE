@@ -43,14 +43,13 @@ void ParsedDocumentBuilderStub::run()
         emit failed();
     } else if (key == "SUCCESS") {
         auto modules = std::make_unique<Data::File>(m_rawDocuments.front());
-        auto parsedDocument = std::make_unique<ParsedDocument>(std::move(modules));
-        m_parsedDocuments.push_back(std::move(parsedDocument));
+        m_parsedDocuments.push_back(std::move(modules));
 
         emit finished();
     }
 }
 
-std::vector<std::unique_ptr<ParsedDocument>> ParsedDocumentBuilderStub::takeDocuments()
+std::vector<std::unique_ptr<Data::File>> ParsedDocumentBuilderStub::takeDocuments()
 {
     return std::move(m_parsedDocuments);
 }

@@ -47,7 +47,7 @@ void DocumentProcessorTests::test_unstarted()
 
     QCOMPARE(dp->state(), DocumentProcessor::State::Unfinished);
 
-    const std::vector<std::unique_ptr<ParsedDocument>> results = dp->takeResults();
+    const std::vector<std::unique_ptr<Data::File>> results = dp->takeResults();
     QCOMPARE(results.size(), static_cast<size_t>(0));
 
     delete dp;
@@ -114,7 +114,7 @@ void DocumentProcessorTests::examine(DocumentProcessor *dp,
     QCOMPARE(signalArg.type(), QVariant::String);
     QCOMPARE(qvariant_cast<QString>(signalArg), m_projectName);
 
-    const std::vector<std::unique_ptr<ParsedDocument>> results = dp->takeResults();
+    const std::vector<std::unique_ptr<Data::File>> results = dp->takeResults();
     QCOMPARE(results.size(), static_cast<size_t>(1));
 
     const Data::Source resultInfo = results.at(0)->source();

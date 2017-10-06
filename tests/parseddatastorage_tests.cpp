@@ -29,8 +29,6 @@
 
 #include <QtTest>
 
-#include <parseddocument.h>
-
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
 
@@ -186,7 +184,7 @@ void ParsedDataStorageTests::test_updateFileInOneProject()
 
     QCOMPARE(ParsedDataStorageProxy::getDocumentsCount(storage), 1);
 
-    const QList<std::shared_ptr<ParsedDocument>> files = storage->getFilesFromProject(project);
+    const QList<std::shared_ptr<Data::File>> files = storage->getFilesFromProject(project);
 
     QCOMPARE(files.size(), 1);
     const Data::Source received = files.at(0)->source();
@@ -216,7 +214,7 @@ void ParsedDataStorageTests::test_updateFileInMultipleProjects()
     const QString refreshedContent = "changed content";
     addFileToProject(storage, firstProject, refreshedContent, path);
 
-    QList<std::shared_ptr<ParsedDocument>> files = storage->getFilesFromProject(firstProject);
+    QList<std::shared_ptr<Data::File>> files = storage->getFilesFromProject(firstProject);
     QCOMPARE(files.size(), 1);
 
     const Data::Source received = files.at(0)->source();
@@ -235,7 +233,7 @@ void ParsedDataStorageTests::test_getFilesFromNonExistingProject()
 {
     ParsedDataStorage *storage = ParsedDataStorageProxy::create();
 
-    const QList<std::shared_ptr<ParsedDocument>> files = storage->getFilesFromProject("");
+    const QList<std::shared_ptr<Data::File>> files = storage->getFilesFromProject("");
     QVERIFY(files.empty());
 
     ParsedDataStorageProxy::finish(storage);
@@ -247,7 +245,7 @@ void ParsedDataStorageTests::addFileToProject(ParsedDataStorage *storage,
                                               const QString &filePath)
 {
     const Data::Source info(filePath, fileContent);
-    auto parsedDocument = std::make_unique<ParsedDocument>(std::make_unique<Data::File>(info));
+    auto parsedDocument = std::make_unique<Data::File>(info);
     ParsedDataStorageProxy::addFileToProject(storage, project, std::move(parsedDocument));
 }
 

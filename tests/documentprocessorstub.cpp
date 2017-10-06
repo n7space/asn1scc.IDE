@@ -52,13 +52,13 @@ void DocumentProcessorStub::run()
 
     for (const auto &doc : m_documents) {
         auto modules = std::make_unique<Data::File>(doc);
-        m_results.push_back(std::make_unique<ParsedDocument>(std::move(modules)));
+        m_results.push_back(std::move(modules));
     }
 
     emit processingFinished(m_projectName);
 }
 
-std::vector<std::unique_ptr<ParsedDocument>> DocumentProcessorStub::takeResults()
+std::vector<std::unique_ptr<Data::File>> DocumentProcessorStub::takeResults()
 {
     return std::move(m_results);
 }

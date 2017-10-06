@@ -29,8 +29,9 @@
 
 #include <QString>
 
-#include <parseddocument.h>
-#include <parseddocumentbuilder.h>
+#include "data/file.h"
+
+#include "parseddocumentbuilder.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -46,12 +47,12 @@ public:
 
     void run() override;
 
-    std::vector<std::unique_ptr<ParsedDocument>> takeDocuments() override;
+    std::vector<std::unique_ptr<Data::File>> takeDocuments() override;
     const std::vector<Data::ErrorMessage> &errorMessages() const override;
 
 private:
     const QList<Data::Source> &m_rawDocuments;
-    std::vector<std::unique_ptr<ParsedDocument>> m_parsedDocuments;
+    std::vector<std::unique_ptr<Data::File>> m_parsedDocuments;
 
     std::vector<Data::ErrorMessage> m_errorMessages;
 };

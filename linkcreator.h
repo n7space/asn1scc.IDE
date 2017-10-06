@@ -32,10 +32,9 @@
 
 #include <texteditor/texteditor.h>
 
+#include "data/file.h"
 #include "data/typereference.h"
 #include "data/sourcelocation.h"
-
-#include "parseddocument.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -63,7 +62,7 @@ private:
                                                       const QString &moduleName) const;
 
     const QString m_documentPath;
-    std::shared_ptr<ParsedDocument> m_parsedDocument;
+    std::shared_ptr<Data::File> m_parsedDocument;
     const TextEditor::TextDocument &m_textDocument;
 };
 

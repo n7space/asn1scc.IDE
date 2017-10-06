@@ -25,7 +25,6 @@
 
 #include "asn1sccdocumentprocessor.h"
 
-#include "parseddocument.h"
 #include "asn1sccparseddocumentbuilder.h"
 
 using namespace Asn1Acn::Internal;
@@ -75,7 +74,7 @@ Asn1SccDocumentProcessor::State Asn1SccDocumentProcessor::state()
     return m_state;
 }
 
-std::vector<std::unique_ptr<ParsedDocument>> Asn1SccDocumentProcessor::takeResults()
+std::vector<std::unique_ptr<Data::File>> Asn1SccDocumentProcessor::takeResults()
 {
     return std::move(m_results);
 }
@@ -107,7 +106,7 @@ void Asn1SccDocumentProcessor::onBuilderErrored()
 void Asn1SccDocumentProcessor::createFallbackResults()
 {
     for (const auto& source : m_documents)
-        m_results.push_back(std::make_unique<ParsedDocument>(source));
+        m_results.push_back(std::make_unique<Data::File>(source));
 }
 
 const std::vector<Data::ErrorMessage> &Asn1SccDocumentProcessor::errorMessages() const

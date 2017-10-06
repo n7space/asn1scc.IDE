@@ -28,8 +28,7 @@
 #include <QtTest>
 #include <QSignalSpy>
 
-#include <modeltreenode.h>
-#include <parseddocument.h>
+#include "modeltreenode.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
@@ -169,7 +168,7 @@ void ModelTreeTests::test_updateNode()
 
     QCOMPARE(node->childrenCount(), nodesCnt);
 
-    std::shared_ptr<ParsedDocument> parsedDocument(new ParsedDocument(Data::Source("TODO", "TODO")));
+    std::shared_ptr<Data::File> parsedDocument(new Data::File(Data::Source("TODO", "TODO")));
     ModelTreeProxy::updateModelTreeNode(tree, path, parsedDocument);
 
     QCOMPARE(node->childrenCount(), 0);
