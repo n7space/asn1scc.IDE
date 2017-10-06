@@ -24,24 +24,27 @@
 ****************************************************************************/
 #pragma once
 
-#include <tree-views/outline-visitors/childreturningvisitor.h>
+#include <data/node.h>
+#include <data/visitorwithvalue.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
 namespace TypesTreeVisitors {
 
-class ChildReturningVisitor : public OutlineVisitors::ChildReturningVisitor
+class ParentReturningVisitor : public Data::VisitorWithValue<Data::Node *>
 {
 public:
-    ChildReturningVisitor(int index);
-    ~ChildReturningVisitor() override;
+    ParentReturningVisitor();
+    ~ParentReturningVisitor() override;
 
 private:
+    Data::Node *valueFor(const Data::Definitions &defs) const override;
     Data::Node *valueFor(const Data::File &file) const override;
+    Data::Node *valueFor(const Data::TypeAssignment &type) const override;
+    Data::Node *valueFor(const Data::TypeReference &ref) const override;
     Data::Node *valueFor(const Data::Project &project) const override;
-
-    int m_index;
+    Data::Node *valueFor(const Data::Root &root) const override;
 };
 
 } // namespace TypesTreeVisitors

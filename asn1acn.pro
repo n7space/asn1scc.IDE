@@ -81,6 +81,7 @@ SOURCES += \
     tree-views/outline-visitors/childreturningvisitor.cpp \
     tree-views/outline-visitors/indexfindingvisitor.cpp \
     \
+    tree-views/typestree-visitors/parentreturningvisitor.cpp \
     tree-views/typestree-visitors/childrencountingvisitor.cpp \
     tree-views/typestree-visitors/childreturningvisitor.cpp \
     tree-views/typestree-visitors/indexfindingvisitor.cpp \
@@ -88,6 +89,7 @@ SOURCES += \
     tree-views/displayrolevisitor.cpp \
     tree-views/decorationrolevisitor.cpp \
     tree-views/outlinemodel.cpp \
+    tree-views/typestreemodel.cpp \
     tree-views/model.cpp \
     tree-views/treeviewwidget.cpp \
     tree-views/activatehandler.cpp \
@@ -173,6 +175,7 @@ HEADERS += \
     tree-views/outline-visitors/childreturningvisitor.h \
     tree-views/outline-visitors/indexfindingvisitor.h \
     \
+    tree-views/typestree-visitors/parentreturningvisitor.h \
     tree-views/typestree-visitors/childrencountingvisitor.h \
     tree-views/typestree-visitors/childreturningvisitor.h \
     tree-views/typestree-visitors/indexfindingvisitor.h \
@@ -180,6 +183,7 @@ HEADERS += \
     tree-views/displayrolevisitor.h \
     tree-views/decorationrolevisitor.h \   
     tree-views/outlinemodel.h \
+    tree-views/typestreemodel.h \
     tree-views/model.h \
     tree-views/treeviewwidget.h \
     tree-views/activatehandler.h \
@@ -268,6 +272,7 @@ SOURCES += \
     \
     tree-views/tests/3rdparty/modeltest.cpp \
     tree-views/tests/outlinemodel_tests.cpp \
+    tree-views/tests/typestreemodel_tests.cpp \
     tree-views/tests/displayrolevisitor_tests.cpp \
     tree-views/tests/outlineindexupdater_tests.cpp \
     \
@@ -294,6 +299,7 @@ HEADERS += \
     \
     tree-views/tests/3rdparty/modeltest.h \
     tree-views/tests/outlinemodel_tests.h \
+    tree-views/tests/typestreemodel_tests.h \
     tree-views/tests/displayrolevisitor_tests.h \
     tree-views/tests/outlineindexupdater_tests.h \
     \

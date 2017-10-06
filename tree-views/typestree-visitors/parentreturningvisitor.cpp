@@ -22,42 +22,53 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "childreturningvisitor.h"
+#include "parentreturningvisitor.h"
 
 #include <utils/qtcassert.h>
 
+#include <data/definitions.h>
 #include <data/project.h>
-#include <data/file.h>
-
-#include <tree-views/outline-visitors/childrencountingvisitor.h>
+#include <data/root.h>
 
 using namespace Asn1Acn::Internal::Data;
-using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::TreeViews::TypesTreeVisitors;
 
-ChildReturningVisitor::ChildReturningVisitor(int index)
-    : OutlineVisitors::ChildReturningVisitor(index)
+ParentReturningVisitor::ParentReturningVisitor()
 {
 }
 
-ChildReturningVisitor::~ChildReturningVisitor()
+ParentReturningVisitor::~ParentReturningVisitor()
 {
 }
 
-Node *ChildReturningVisitor::valueFor(const File &file) const
+Node *ParentReturningVisitor::valueFor(const Definitions &defs) const
+{
+    const auto file = defs.parent();
+    return file ? file->parent() : nullptr;
+}
+
+Node *ParentReturningVisitor::valueFor(const File &file) const
 {
     Q_UNUSED(file);
-    QTC_ASSERT(false && "This visitor should not be called for Data::File", return nullptr);
+    QTC_ASSERT(false && "This visitor should not be called for Data::File", return 0);
 }
 
-Node *ChildReturningVisitor::valueFor(const Project &project) const
+Node *ParentReturningVisitor::valueFor(const TypeAssignment &type) const
 {
-    int idx = index();
-    for (const auto &file : project.files()) {
-        const int childCount = file->valueFor<OutlineVisitors::ChildrenCountingVisitor>();
-        if (idx < childCount)
-            return file->valueFor<OutlineVisitors::ChildReturningVisitor>(idx);
-        idx -= childCount;
-    }
-    QTC_ASSERT(false && "Child not found", return nullptr);
+    return type.parent();
+}
+
+Node *ParentReturningVisitor::valueFor(const TypeReference &ref) const
+{
+    return ref.parent();
+}
+
+Node *ParentReturningVisitor::valueFor(const Project &project) const
+{
+    return project.parent();
+}
+
+Node *ParentReturningVisitor::valueFor(const Root &root) const
+{
+    return root.parent();
 }

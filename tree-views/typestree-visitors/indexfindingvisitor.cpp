@@ -33,7 +33,7 @@
 
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::TreeViews;
-using namespace Asn1Acn::Internal::TreeViews::TypesTree;
+using namespace Asn1Acn::Internal::TreeViews::TypesTreeVisitors;
 
 IndexFindingVisitor::IndexFindingVisitor(const Node *child)
     : OutlineVisitors::IndexFindingVisitor(child)

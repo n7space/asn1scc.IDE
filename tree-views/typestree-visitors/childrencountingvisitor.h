@@ -31,7 +31,7 @@
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
-namespace TypesTree {
+namespace TypesTreeVisitors {
 
 class ChildrenCountingVisitor : public OutlineVisitors::ChildrenCountingVisitor
 {
@@ -43,7 +43,7 @@ private:
     int valueFor(const Data::Project &project) const override;
 };
 
-} // namespace TypesTree
+} // namespace TypesTreeVisitors
 } // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

@@ -24,27 +24,26 @@
 ****************************************************************************/
 #pragma once
 
-#include <tree-views/outline-visitors/childreturningvisitor.h>
+#include "model.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
-namespace TypesTreeVisitors {
 
-class ChildReturningVisitor : public OutlineVisitors::ChildReturningVisitor
+class TypesTreeModel : public Model
 {
+    Q_OBJECT
 public:
-    ChildReturningVisitor(int index);
-    ~ChildReturningVisitor() override;
+    explicit TypesTreeModel(QObject *parent = 0);
+    ~TypesTreeModel();
 
 private:
-    Data::Node *valueFor(const Data::File &file) const override;
-    Data::Node *valueFor(const Data::Project &project) const override;
-
-    int m_index;
+    Data::Node *parentOf(const Data::Node *node) const override;
+    int childrenCount(const Data::Node *node) const override;
+    int indexInParent(const Data::Node *parent, const Data::Node *node) const override;
+    Data::Node *nthChild(const Data::Node *node, int n) const override;
 };
 
-} // namespace TypesTreeVisitors
 } // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

@@ -22,31 +22,42 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "childrencountingvisitor.h"
+#include "typestreemodel.h"
 
-#include <algorithm>
+#include "typestree-visitors/childrencountingvisitor.h"
+#include "typestree-visitors/childreturningvisitor.h"
+#include "typestree-visitors/indexfindingvisitor.h"
+#include "typestree-visitors/parentreturningvisitor.h"
 
-#include <utils/qtcassert.h>
-
-#include <data/project.h>
-
-using namespace Asn1Acn::Internal::Data;
-using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::TreeViews::TypesTreeVisitors;
+using namespace Asn1Acn::Internal::TreeViews;
+using namespace Asn1Acn::Internal::Data;
 
-ChildrenCountingVisitor::~ChildrenCountingVisitor()
+TypesTreeModel::TypesTreeModel(QObject *parent)
+    : Model(parent)
 {
 }
 
-int ChildrenCountingVisitor::valueFor(const File &file) const
+TypesTreeModel::~TypesTreeModel()
 {
-    Q_UNUSED(file);
-    QTC_ASSERT(false && "This visitor should not be called for Data::File", return 0);
 }
 
-int ChildrenCountingVisitor::valueFor(const Project &project) const
+Node *TypesTreeModel::parentOf(const Node *node) const
 {
-    return std::accumulate(project.files().begin(), project.files().end(), 0, [](int n, const std::unique_ptr<File> &file) {
-        return n + file->valueFor<OutlineVisitors::ChildrenCountingVisitor>();
-    });
+    return node ? node->valueFor<ParentReturningVisitor>() : nullptr;
+}
+
+int TypesTreeModel::childrenCount(const Node *node) const
+{
+    return node ? node->valueFor<ChildrenCountingVisitor>() : 0;
+}
+
+int TypesTreeModel::indexInParent(const Node *parent, const Node *node) const
+{
+    return parent ? parent->valueFor<IndexFindingVisitor>(node) : 0;
+}
+
+Node *TypesTreeModel::nthChild(const Node *node, int n) const
+{
+    return node ? node->valueFor<ChildReturningVisitor>(n) : nullptr;
 }
