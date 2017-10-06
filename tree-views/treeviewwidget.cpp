@@ -70,6 +70,9 @@ TreeViewWidget::TreeViewWidget(Model *model, IndexUpdater *indexUpdater)
 
     connect(m_treeView, &QAbstractItemView::activated,
             [this](const QModelIndex &index){ ActivateHandler::gotoSymbol(index); });
+
+    connect(model, &Model::modelReset,
+            m_treeView, &TreeView::expandAll);
 }
 
 QList<QAction *> TreeViewWidget::filterMenuActions() const

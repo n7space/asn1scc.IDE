@@ -22,99 +22,47 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #include "editoroutline.h"
 
+#include <texteditor/textdocument.h>
+#include <utils/fileutils.h>
 #include <coreplugin/editormanager/editormanager.h>
 
-#include "utils/qtcassert.h"
+#include <tree-views/outlinemodel.h>
+#include <tree-views/outlineindexupdater.h>
 
-#include "editor.h"
-#include "modeltree.h"
-
-#include "overviewactivatehandler.h"
-
-#include <QDebug>
+#include <editor.h>
+#include <parseddatastorage.h>
 
 using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::TreeViews;
 
 static const int MINIMUM_COMBO_CONTENTS_LENGHT = 22;
 static const int MAXIMUM_COMBO_VISIBLE_ITEMS = 40;
 
-EditorOutline::EditorOutline(TextEditor::TextEditorWidget *textEditorWidget)
-    : QObject(textEditorWidget)
-    , m_model(new OverviewModel(this))
-    , m_indexUpdater(std::make_shared<OverviewIndexUpdater>(m_model))
-    , m_combo(new Utils::TreeViewComboBox)
+EditorOutline::EditorOutline(EditorWidget *editorWidget)
+    : QObject(editorWidget)
+    , m_editorWidget(editorWidget)
+    , m_model(new OutlineModel(this))
+    , m_indexUpdater(new OutlineIndexUpdater(m_model, this))
 {
-    setupCombo();
-
-    m_editorWidget = qobject_cast<EditorWidget *>(textEditorWidget);
-    QTC_ASSERT(m_editorWidget, return);
-
     m_indexUpdater->setEditor(m_editorWidget);
 
     connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
-            this, &EditorOutline::onEditorChanged);
+            this, &EditorOutline::onEditorChanged);//view(), &Utils::TreeViewComboBoxView::expandAll);
 
-    connect(m_indexUpdater.get(), &OverviewIndexUpdater::currentIndexUpdated,
-            this, &EditorOutline::updateSelectionInTree);
-
-    connect(m_model, &QAbstractItemModel::modelReset,
-            this, &EditorOutline::modelUpdated);
-}
-
-QWidget *EditorOutline::takeWidget() const
-{
-    return m_combo;
-}
-
-OverviewModel *EditorOutline::model() const
-{
-    return m_model;
-}
-
-const std::shared_ptr<OverviewIndexUpdater> &EditorOutline::indexUpdater() const
-{
-    return m_indexUpdater;
-}
-
-void EditorOutline::itemActivated()
-{
-    OverviewActivateHandler::gotoSymbol(m_combo->view()->currentIndex());
-}
-
-void EditorOutline::updateSelectionInTree(const QModelIndex &index)
-{
-    if (index.isValid())
-        m_combo->setCurrentIndex(index);
-    else
-        m_combo->QComboBox::setCurrentIndex(0);
+    connect(ParsedDataStorage::instance(), &ParsedDataStorage::fileUpdated,
+            [this](const QString &filePath, std::shared_ptr<Data::File> newFile) {
+        if (m_editorWidget->textDocument()->filePath().toString() == filePath)
+            m_model->setRoot(newFile.get());
+    });
 }
 
 void EditorOutline::onEditorChanged()
 {
-    m_combo->view()->expandAll();
-}
+    const QString &path = m_editorWidget->textDocument()->filePath().toString();
 
-void EditorOutline::modelUpdated()
-{
-    m_combo->view()->expandAll();
-    m_indexUpdater->updateCurrentIndex();
-}
+    const auto file = ParsedDataStorage::instance()->getFileForPath(path);
 
-void EditorOutline::setupCombo()
-{
-    m_combo->setModel(m_model);
-    m_combo->setMinimumContentsLength(MINIMUM_COMBO_CONTENTS_LENGHT);
-
-    auto policy = m_combo->sizePolicy();
-    policy.setHorizontalPolicy(QSizePolicy::Expanding);
-    m_combo->setSizePolicy(policy);
-
-    m_combo->setMaxVisibleItems(MAXIMUM_COMBO_VISIBLE_ITEMS);
-    m_combo->setContextMenuPolicy(Qt::NoContextMenu);
-
-    connect(m_combo, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
-            this, &EditorOutline::itemActivated);
+    m_model->setRoot(file.get());
 }

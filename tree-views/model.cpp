@@ -84,15 +84,10 @@ QVariant Model::headerData(int section, Qt::Orientation orientation, int role) c
 
 QModelIndex Model::index(int row, int column, const QModelIndex &parent) const
 {
-    if (column > 0)
+    if (!hasIndex(row, column, parent))
         return QModelIndex();
 
     const auto parentNode = dataNode(parent);
-    if (parentNode == nullptr) {
-        if (row == 0 && column == 0)
-            return createIndex(row, column, const_cast<Data::Node*>(m_root));
-        return QModelIndex();
-    }
 
     const auto node = nthChild(parentNode, row);
     if (node == nullptr)
@@ -117,10 +112,7 @@ QModelIndex Model::parent(const QModelIndex &index) const
 
 int Model::rowCount(const QModelIndex &parent) const
 {
-    if (parent.column() > 0)
-        return 0;
-    auto node = dataNode(parent);
-    return childrenCount(node);
+    return childrenCount(dataNode(parent));
 }
 
 int Model::columnCount(const QModelIndex &parent) const
@@ -136,7 +128,7 @@ void Model::setRoot(const Node *root)
     endResetModel();
 }
 
-const Node *Model::dataNode(const QModelIndex &index)
+const Node *Model::dataNode(const QModelIndex &index) const
 {
-    return static_cast<Node*>(index.internalPointer());
+    return index.isValid() ? static_cast<Node*>(index.internalPointer()) : m_root;
 }

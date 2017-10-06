@@ -47,9 +47,10 @@
 #include "options-pages/general.h"
 #include "options-pages/service.h"
 
+#include "tree-views/outlinewidget.h"
+
 #include "asneditor.h"
 #include "acneditor.h"
-#include "outline.h"
 #include "structuresview.h"
 #include "projectwatcher.h"
 #include "asn1acnjsextension.h"
@@ -114,9 +115,9 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new AcnEditorFactory);
 
-    addAutoReleasedObject(new OutlineWidgetFactory);
-
     addAutoReleasedObject(new ProjectWatcher);
+
+    addAutoReleasedObject(new TreeViews::OutlineWidgetFactory);
 
     addAutoReleasedObject(new OptionsPages::General(generalSettings));
     addAutoReleasedObject(new OptionsPages::Service(serviceSettings));

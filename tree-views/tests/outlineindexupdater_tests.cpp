@@ -49,7 +49,7 @@ OutlineIndexUpdaterTests::OutlineIndexUpdaterTests(QObject *parent)
     m_model = new OutlineModel;
     m_model->setRoot(createModelNodes());
 
-    m_indexUpdater = new OutlineIndexUpdater(m_model);
+    m_indexUpdater = new OutlineIndexUpdater(m_model, nullptr);
 
     m_editorWidget = createEditorWidget();
 }
@@ -153,7 +153,7 @@ void OutlineIndexUpdaterTests::test_setNonEmpytEditorChangedPosition()
     const QModelIndex index = qvariant_cast<QModelIndex>(result);
     QCOMPARE(index.isValid(), true);
 
-    const auto node = Model::dataNode(index);
+    const auto node = m_model->dataNode(index);
     const Data::SourceLocation location = node->location();
     QCOMPARE(location.line(), lineNumber);
 }
@@ -194,7 +194,7 @@ void OutlineIndexUpdaterTests::test_cursorMovedToTypeDefinition()
     const QModelIndex index = qvariant_cast<QModelIndex>(result);
     QCOMPARE(index.isValid(), true);
 
-    const auto node = Model::dataNode(index);
+    const auto node = m_model->dataNode(index);
     const Data::SourceLocation location = node->location();
     QCOMPARE(location.line(), lineNumber);
 }
@@ -234,7 +234,7 @@ void OutlineIndexUpdaterTests::test_forceUpdate()
     const QModelIndex index = qvariant_cast<QModelIndex>(result);
     QCOMPARE(index.isValid(), true);
 
-    const auto node = Model::dataNode(index);
+    const auto node = m_model->dataNode(index);
     const Data::SourceLocation location = node->location();
     QCOMPARE(location.line(), lineNumber);
 }
@@ -256,7 +256,7 @@ void OutlineIndexUpdaterTests::test_forceUpdateAfterCursorMoved()
     const QModelIndex index = qvariant_cast<QModelIndex>(result);
     QCOMPARE(index.isValid(), true);
 
-    const auto node = Model::dataNode(index);
+    const auto node = m_model->dataNode(index);
     const Data::SourceLocation location = node->location();
     QCOMPARE(location.line(), lineNumber);
 }

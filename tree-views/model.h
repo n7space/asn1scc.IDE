@@ -51,7 +51,7 @@ public:
 
     void setRoot(const Data::Node *root);
 
-    static const Data::Node *dataNode(const QModelIndex &index);
+    const Data::Node *dataNode(const QModelIndex &index) const;
 
 protected:
     virtual Data::Node *parentOf(const Data::Node *node) const = 0;

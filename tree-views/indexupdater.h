@@ -40,7 +40,7 @@ class IndexUpdater : public QObject
 {
     Q_OBJECT
 protected:
-    explicit IndexUpdater(const Model *model);
+    explicit IndexUpdater(const Model *model, QObject *parent);
 
 public:
     virtual ~IndexUpdater() = default;

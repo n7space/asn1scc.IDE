@@ -30,11 +30,15 @@ using namespace Asn1Acn::Internal::TreeViews;
 
 static const int UPDATE_INTERVAL_MS = 500;
 
-IndexUpdater::IndexUpdater(const Model *model)
-    : m_model(model)
+IndexUpdater::IndexUpdater(const Model *model, QObject *parent)
+    : QObject(parent)
+    , m_model(model)
     , m_editorWidget(nullptr)
 {
     createUpdateTimer();
+
+    connect(model, &Model::modelReset,
+            this, &IndexUpdater::updateCurrentIndex);
 }
 
 void IndexUpdater::setEditor(TextEditor::TextEditorWidget *editorWidget)
@@ -106,7 +110,7 @@ QModelIndex IndexUpdater::getTargetIndexFromModuleIndex(const QModelIndex &modul
 {
     for (int row = 0; row < m_model->rowCount(moduleIndex); ++row) {
         const QModelIndex index = m_model->index(row, 0, moduleIndex);
-        const auto node = Model::dataNode(index);
+        const auto node = m_model->dataNode(index);
         const Data::SourceLocation location = node->location();
         if (location.line() == line)
             return index;

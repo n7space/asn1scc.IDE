@@ -24,32 +24,35 @@
 ****************************************************************************/
 #pragma once
 
-#include <texteditor/texteditor.h>
+#include <texteditor/ioutlinewidget.h>
 
-#include <utils/uncommentselection.h>
-
-#include "overviewmodel.h"
+#include "treeviewwidget.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class EditorOutline;
+class EditorWidget;
 
-class EditorWidget : public TextEditor::TextEditorWidget
+namespace TreeViews {
+
+class OutlineWidget : public TreeViewWidget
 {
     Q_OBJECT
-
 public:
-    explicit EditorWidget();
-    EditorOutline *outline() const;
+    OutlineWidget(EditorWidget *editor);
 
-protected:
-    void finalizeInitialization() override;
-    void contextMenuEvent(QContextMenuEvent *) override;
-
-    EditorOutline *m_editorOutline;
-    Utils::CommentDefinition m_commentDefinition;
+private:
+    EditorWidget *m_editor;
 };
 
+class OutlineWidgetFactory : public TextEditor::IOutlineWidgetFactory
+{
+    Q_OBJECT
+public:
+    bool supportsEditor(Core::IEditor *editor) const override;
+    TextEditor::IOutlineWidget *createWidget(Core::IEditor *editor) override;
+};
+
+} // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

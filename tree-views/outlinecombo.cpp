@@ -37,7 +37,6 @@ static const int MAXIMUM_COMBO_VISIBLE_ITEMS = 40;
 
 OutlineCombo::OutlineCombo(Model *model, IndexUpdater *indexUpdater)
 {
-    // TODO indexUpdater
     setModel(model);
     setMinimumContentsLength(MINIMUM_COMBO_CONTENTS_LENGHT);
 

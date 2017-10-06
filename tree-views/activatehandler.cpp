@@ -35,7 +35,11 @@ void ActivateHandler::gotoSymbol(const QModelIndex &index)
     if (!index.isValid())
         return;
 
-    const auto node = Model::dataNode(index);
+    const auto model = qobject_cast<const Model *>(index.model());
+    if (!model)
+        return;
+
+    const auto node = model->dataNode(index);
     if (!node)
         return;
 

@@ -28,12 +28,12 @@
 
 using namespace Asn1Acn::Internal::TreeViews;
 
-OutlineIndexUpdater::OutlineIndexUpdater(const Model *model)
-    : IndexUpdater(model)
+OutlineIndexUpdater::OutlineIndexUpdater(const Model *model, QObject *parent)
+    : IndexUpdater(model, parent)
 {
 }
 
 QModelIndex OutlineIndexUpdater::getCurrentFileIndex() const
 {
-    return m_model->index(0, 0, QModelIndex());
+    return QModelIndex();
 }

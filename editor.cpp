@@ -31,6 +31,8 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 
+#include <tree-views/outlinecombo.h>
+
 #include "asn1acnconstants.h"
 #include "document.h"
 #include "modeltree.h"
@@ -82,5 +84,6 @@ void EditorWidget::finalizeInitialization()
         setExtraSelections(TextEditorWidget::CodeWarningsSelection, selections);
     });
 
-    insertExtraToolBarWidget(TextEditorWidget::Left, m_editorOutline->takeWidget());
+    insertExtraToolBarWidget(TextEditorWidget::Left,
+                             new TreeViews::OutlineCombo(m_editorOutline->model(), m_editorOutline->indexUpdater()));
 }

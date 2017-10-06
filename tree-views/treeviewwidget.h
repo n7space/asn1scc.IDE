@@ -50,7 +50,7 @@ class TreeViewWidget : public TextEditor::IOutlineWidget
 {
     Q_OBJECT
 public:
-    TreeViewWidget(Model *model, IndexUpdater *IndexUpdater);
+    TreeViewWidget(Model *model, IndexUpdater *indexUpdater);
 
     QList<QAction *> filterMenuActions() const override;
     void setCursorSynchronization(bool syncWithCursor) override;

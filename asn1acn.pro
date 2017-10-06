@@ -89,6 +89,7 @@ SOURCES += \
     tree-views/indexupdater.cpp \
     tree-views/outlineindexupdater.cpp \
     tree-views/outlinecombo.cpp \
+    tree-views/outlinewidget.cpp \
     \
     options-pages/general.cpp \
     options-pages/service.cpp \
@@ -104,7 +105,6 @@ SOURCES += \
     asn1acn.cpp \
     asneditor.cpp \
     asndocument.cpp \
-    outline.cpp \
     acneditor.cpp \
     acndocument.cpp \
     editor.cpp \
@@ -176,6 +176,7 @@ HEADERS += \
     tree-views/indexupdater.h \
     tree-views/outlineindexupdater.h \
     tree-views/outlinecombo.h \
+    tree-views/outlinewidget.h \
     \
     options-pages/general.h \
     options-pages/service.h \
@@ -198,7 +199,6 @@ HEADERS += \
     asn1acn.h \
     asneditor.h \
     asndocument.h \
-    outline.h \
     acneditor.h \
     acndocument.h \
     editor.h \

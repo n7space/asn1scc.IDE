@@ -22,50 +22,37 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <QObject>
-
-#include <texteditor/texteditor.h>
-#include <utils/treeviewcombobox.h>
-
-#include "overviewmodel.h"
-#include "overviewindexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
 class EditorWidget;
 
+namespace TreeViews {
+class Model;
+class IndexUpdater;
+}
+
 class EditorOutline : public QObject
 {
     Q_OBJECT
 public:
-    EditorOutline(TextEditor::TextEditorWidget *editorWidget);
+    EditorOutline(EditorWidget *editorWidget);
 
-    QWidget *takeWidget() const;
-
-    OverviewModel *model() const;
-    const std::shared_ptr<OverviewIndexUpdater> &indexUpdater() const;
-
-public slots:
-    void modelUpdated();
+    TreeViews::Model *model() const { return m_model; }
+    TreeViews::IndexUpdater *indexUpdater() const { return m_indexUpdater; }
 
 private slots:
-    void updateSelectionInTree(const QModelIndex &index);
-    void itemActivated();
     void onEditorChanged();
 
 private:
-    void setupCombo();
-
     EditorWidget *m_editorWidget;
 
-    OverviewModel *m_model;
-    std::shared_ptr<OverviewIndexUpdater> m_indexUpdater;
-
-    Utils::TreeViewComboBox *m_combo;
+    TreeViews::Model *m_model;
+    TreeViews::IndexUpdater *m_indexUpdater;
 };
 
 } /* namespace Asn1Acn */
