@@ -88,6 +88,7 @@ SOURCES += \
     tree-views/activatehandler.cpp \
     tree-views/indexupdater.cpp \
     tree-views/outlineindexupdater.cpp \
+    tree-views/outlinecombo.cpp \
     \
     options-pages/general.cpp \
     options-pages/service.cpp \
@@ -174,6 +175,7 @@ HEADERS += \
     tree-views/activatehandler.h \
     tree-views/indexupdater.h \
     tree-views/outlineindexupdater.h \
+    tree-views/outlinecombo.h \
     \
     options-pages/general.h \
     options-pages/service.h \
