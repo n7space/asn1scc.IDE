@@ -25,6 +25,7 @@
 #include "model.h"
 
 #include "displayrolevisitor.h"
+#include "decorationrolevisitor.h"
 
 using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
@@ -56,8 +57,7 @@ QVariant Model::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case Qt::DecorationRole:
-        // TODO icons visitor
-        return QVariant();
+        return node->valueFor<DecorationRoleVisitor>();
     case Qt::DisplayRole:
     case Qt::ToolTipRole:
         return node->valueFor<DisplayRoleVisitor>();

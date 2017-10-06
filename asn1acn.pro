@@ -78,6 +78,7 @@ SOURCES += \
     data/source.cpp \
     \
     tree-views/displayrolevisitor.cpp \
+    tree-views/decorationrolevisitor.cpp \
     tree-views/childrencountingvisitor.cpp \
     tree-views/childreturningvisitor.cpp \
     tree-views/indexfindingvisitor.cpp \
@@ -162,6 +163,7 @@ HEADERS += \
     data/source.h \
     \
     tree-views/displayrolevisitor.h \
+    tree-views/decorationrolevisitor.h \
     tree-views/childrencountingvisitor.h \
     tree-views/childreturningvisitor.h \
     tree-views/indexfindingvisitor.h \
