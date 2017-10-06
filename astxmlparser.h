@@ -80,11 +80,11 @@ private:
 
     bool nextRequiredElementIs(const QString &name);
 
-    QXmlStreamReader& m_xmlReader;
+    QXmlStreamReader &m_xmlReader;
     std::map<QString, std::unique_ptr<Data::File>> m_data;
     QString m_currentFile;
     QString m_currentModule;
-    Data::Definitions* m_currentDefinitions;
+    Data::Definitions *m_currentDefinitions;
 
     SourceMapper m_pathMapper;
 };

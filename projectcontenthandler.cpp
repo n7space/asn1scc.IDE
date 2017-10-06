@@ -144,8 +144,8 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
 {
     DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
-    QList<std::shared_ptr<ParsedDocument>> files = m_storage->getFilesFromProject(projectName);
-    foreach (const std::shared_ptr<ParsedDocument> &file, files) {
+    QList<std::shared_ptr<Data::File>> files = m_storage->getFilesFromProject(projectName);
+    foreach (const std::shared_ptr<Data::File> &file, files) {
         if (file->source().filePath() == path)
             docProcessor->addToRun(path, content);
         else
@@ -207,14 +207,14 @@ void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName
 }
 
 void ProjectContentHandler::handleFilesProcesedWithSuccess(const QString &projectName,
-                                                           std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments)
+                                                           std::vector<std::unique_ptr<Data::File>> parsedDocuments)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++)
         ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
 }
 
 void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projectName,
-                                                           std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments)
+                                                           std::vector<std::unique_ptr<Data::File>> parsedDocuments)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++) {
         auto filePath = parsedDocuments[i]->source().filePath();

@@ -96,10 +96,10 @@ void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
 
     auto parsedData = parser.takeData();
     for (auto &item : parsedData)
-        m_parsedDocuments.push_back(std::make_unique<ParsedDocument>(std::move(item.second)));
+        m_parsedDocuments.push_back(std::move(item.second));
 }
 
-std::vector<std::unique_ptr<ParsedDocument>> Asn1SccParsedDocumentBuilder::takeDocuments()
+std::vector<std::unique_ptr<Data::File>> Asn1SccParsedDocumentBuilder::takeDocuments()
 {
     return std::move(m_parsedDocuments);
 }

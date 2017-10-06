@@ -43,33 +43,12 @@ namespace Internal {
 class ParsedDocument
 {
 public:
-    explicit ParsedDocument(const Data::Source &source);
-    explicit ParsedDocument(std::unique_ptr<Data::File> parsedData);
-
-    const Data::Source &source() const { return m_source; }
-
-    void bindModelTreeNode(ModelTreeNode::ModelTreeNodePtr moduleNode) const;
-
-    Data::TypeReference getTypeReference(const int line, const int col) const;
-    Data::SourceLocation getDefinitionLocation(const QString& typeAssignmentName, const QString& definitionsName) const;
-
-    Completion::UserTypesProposalsProvider getProposalsProvider() const;
+    static void bindModelTreeNode(const std::shared_ptr<Data::File> &file, ModelTreeNode::ModelTreeNodePtr moduleNode);
 
 private:
-    ModelTreeNode::ModelTreeNodePtr createDefinition(const Data::Definitions &definition) const;
-    void attachTypesToDefiniton(const Data::Definitions::Types &types,
-                                ModelTreeNode::ModelTreeNodePtr definitionNode) const;
-
-    void populateReferences();
-    void populateReferencesFromModule(const Data::Definitions &moduleDefinition);
-
-    Data::SourceLocation getLocationFromModule(const Data::Definitions &definition,
-                                               const QString &typeAssignmentName) const;
-
-    Data::Source m_source;
-    std::unique_ptr<Data::File> m_parsedData;
-
-    QMultiHash<int, Data::TypeReference> m_referenceLookup;
+    static ModelTreeNode::ModelTreeNodePtr createDefinition(const Data::Definitions &definition);
+    static void attachTypesToDefiniton(const Data::Definitions::Types &types,
+                                       ModelTreeNode::ModelTreeNodePtr definitionNode);
 };
 
 } // namespace Internal

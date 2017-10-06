@@ -25,11 +25,10 @@
 
 #pragma once
 
-#include <utils/navigationtreeview.h>
-
 #include <memory>
 
-#include "parseddocument.h"
+#include <utils/navigationtreeview.h>
+
 #include "modeltreenode.h"
 
 namespace Asn1Acn {

@@ -84,8 +84,8 @@ private:
     void startProcessing(DocumentProcessor *dp);
     void allProcessingFinished();
 
-    void handleFilesProcesedWithSuccess(const QString &projectName, std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments);
-    void handleFilesProcesedWithFailure(const QString &projectName, std::vector<std::unique_ptr<ParsedDocument>> parsedDocuments);
+    void handleFilesProcesedWithSuccess(const QString &projectName, std::vector<std::unique_ptr<Data::File>> parsedDocuments);
+    void handleFilesProcesedWithFailure(const QString &projectName, std::vector<std::unique_ptr<Data::File>> parsedDocuments);
 
     ModelTree *m_tree;
     ParsedDataStorage *m_storage;

@@ -31,7 +31,6 @@
 #include <QString>
 #include <QList>
 
-#include <parseddocument.h>
 #include <documentprocessor.h>
 
 namespace Asn1Acn {
@@ -51,7 +50,7 @@ public:
 
     void addToRun(const QString &filePath, const QString &docContent) override;
     void run() override;
-    std::vector<std::unique_ptr<ParsedDocument>> takeResults() override;
+    std::vector<std::unique_ptr<Data::File>> takeResults() override;
     const std::vector<Data::ErrorMessage> &errorMessages() const override;
 
     State state() override;
@@ -63,7 +62,7 @@ private:
     QString m_projectName;
 
     QList<Data::Source> m_documents;
-    std::vector<std::unique_ptr<ParsedDocument>> m_results;
+    std::vector<std::unique_ptr<Data::File>> m_results;
     std::vector<Data::ErrorMessage> m_errorMessages;
 };
 

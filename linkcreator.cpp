@@ -40,7 +40,7 @@ LinkCreator::LinkCreator(const TextEditor::TextDocument &document)
     ParsedDataStorage *storage = ParsedDataStorage::instance();
     m_parsedDocument = storage->getFileForPath(m_documentPath);
     if (m_parsedDocument == nullptr)
-        m_parsedDocument = std::make_shared<ParsedDocument>(Data::Source(m_documentPath, ""));
+        m_parsedDocument = std::make_shared<Data::File>(Data::Source(m_documentPath, ""));
 }
 
 LinkCreator::Link LinkCreator::createHighlightLink(const QTextCursor &cursor) const
@@ -64,7 +64,9 @@ Data::TypeReference LinkCreator::getSymbolTypeReference(const QTextCursor &curso
     if (!m_textDocument.characterAt(cursor.position()).isLetterOrNumber())
         return Data::TypeReference();
 
-    return m_parsedDocument->getTypeReference(cursor.blockNumber() + 1, cursor.columnNumber());
+    return ParsedDataStorage::instance()->getTypeReference(m_documentPath,
+                                                           cursor.blockNumber() + 1,
+                                                           cursor.columnNumber());
 }
 
 LinkCreator::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSource, const QTextCursor &cursor) const
@@ -86,8 +88,9 @@ LinkCreator::Link LinkCreator::getTargetSymbolLink(const Data::TypeReference &sy
 {
     Link target = symbol;
 
-    Data::SourceLocation targetLocation = m_parsedDocument->getDefinitionLocation(symbolSource.name(),
-                                                                                  symbolSource.module());
+    Data::SourceLocation targetLocation = ParsedDataStorage::instance()->getDefinitionLocation(m_documentPath,
+                                                                                               symbolSource.name(),
+                                                                                               symbolSource.module());
 
     if (!targetLocation.isValid()) {
         targetLocation = getTargetLocation(symbolSource.name(), symbolSource.module());
@@ -121,16 +124,20 @@ Data::SourceLocation LinkCreator::getTargetLocationFromProject(const QString &pr
                                                                const QString &typeName,
                                                                const QString &moduleName) const
 {
-    QList<std::shared_ptr<ParsedDocument>> documents = ParsedDataStorage::instance()->getFilesFromProject(projectName);
-    for (const std::shared_ptr<ParsedDocument> &document : documents) {
-        if (document->source().filePath() == m_documentPath)
+    const auto storage = ParsedDataStorage::instance();
+
+    QList<std::shared_ptr<Data::File>> documents = storage->getFilesFromProject(projectName);
+    for (const auto &document : documents) {
+        const QString currentPath = document->source().filePath();
+
+        if (currentPath == m_documentPath)
             continue;
 
-        const auto location = document->getDefinitionLocation(typeName, moduleName);
+        const auto location = storage->getDefinitionLocation(currentPath, typeName, moduleName);
 
         // can not simply return location, as it contains only file name and not file path
         if (location.isValid())
-            return Data::SourceLocation(document->source().filePath(), location.line(), location.column());
+            return Data::SourceLocation(currentPath, location.line(), location.column());
     }
 
     return Data::SourceLocation();

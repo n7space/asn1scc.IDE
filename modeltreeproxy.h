@@ -75,7 +75,7 @@ protected:
         model->treeChanged();
     }
 
-    void updateModelTreeNode(ModelTree *model, const QString &filePath, std::shared_ptr<ParsedDocument> document)
+    void updateModelTreeNode(ModelTree *model, const QString &filePath, std::shared_ptr<Data::File> document)
     {
         model->updateModelTreeNode(filePath, document);
     }

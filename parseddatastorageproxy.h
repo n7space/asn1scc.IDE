@@ -29,7 +29,6 @@
 
 #include <QString>
 
-#include "parseddocument.h"
 #include "parseddatastorage.h"
 
 namespace Asn1Acn {
@@ -59,7 +58,7 @@ protected:
         storage->removeProject(projectName);
     }
 
-    void addFileToProject(ParsedDataStorage *storage, const QString &projectName, std::unique_ptr<ParsedDocument> file)
+    void addFileToProject(ParsedDataStorage *storage, const QString &projectName, std::unique_ptr<Data::File> file)
     {
         storage->addFileToProject(projectName, std::move(file));
     }
@@ -79,7 +78,7 @@ protected:
         return storage->getDocumentsCount();
     }
 
-    void refreshFileInProjects(ParsedDataStorage *storage, std::shared_ptr<ParsedDocument> file, const QString &filePath)
+    void refreshFileInProjects(ParsedDataStorage *storage, std::shared_ptr<Data::File> file, const QString &filePath)
     {
         storage->refreshFileInProjects(file, filePath);
     }

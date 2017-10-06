@@ -31,8 +31,10 @@
 
 #include <memory>
 
-#include "parseddocument.h"
+#include "data/file.h"
+
 #include "modeltreenode.h"
+#include "typereferencesholder.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -51,34 +53,43 @@ class ParsedDataStorage : public QObject
 public:
     static ParsedDataStorage *instance();
 
-    std::shared_ptr<ParsedDocument> getFileForPath(const QString &filePath) const;
+    std::shared_ptr<Data::File> getFileForPath(const QString &filePath) const;
 
     QStringList getProjectsForFile(const QString &filePath) const;
-    QList<std::shared_ptr<ParsedDocument>> getFilesFromProject(const QString &projectName) const;
+    QList<std::shared_ptr<Data::File>> getFilesFromProject(const QString &projectName) const;
+
+    Data::TypeReference getTypeReference(const QString &path, const int line, const int col) const;
+    Data::SourceLocation getDefinitionLocation(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const;
 
 signals:
-    void fileUpdated(const QString &filePath, std::shared_ptr<ParsedDocument> newFile);
+    void fileUpdated(const QString &filePath, std::shared_ptr<Data::File> newFile);
 
 private:
     void addProject(const QString &projectName);
     void removeProject(const QString &projectName);
 
-    void addFileToProject(const QString &projectName, std::unique_ptr<ParsedDocument> file);
+    void addFileToProject(const QString &projectName, std::unique_ptr<Data::File> file);
     void removeFileFromProject(const QString &projectName, const QString &filePath);
 
     int getProjectsCount();
     int getDocumentsCount();
 
-    using Project = QHash<QString, std::shared_ptr<ParsedDocument>>;
+    using Project = QHash<QString, std::shared_ptr<Data::File>>;
 
-    void refreshFileInProjects(std::shared_ptr<ParsedDocument> file, const QString &filePath);
+    void refreshFileInProjects(std::shared_ptr<Data::File> file, const QString &filePath);
 
     QStringList getProjectsForFileInternal(const QString &filePath) const;
-    QList<std::shared_ptr<ParsedDocument>> getFilesFromProjectInternal(const QString &projectName) const;
+    QList<std::shared_ptr<Data::File>> getFilesFromProjectInternal(const QString &projectName) const;
     void removeFileFromProjectInternal(const QString &projectName, const QString &filePath);
 
-    QHash<QString, std::shared_ptr<ParsedDocument>> m_documents;
+    Data::SourceLocation getLocationFromModule(const Data::Definitions &moduleDefinition,
+                                               const QString &typeAssignmentName) const;
+
+    QHash<QString, std::shared_ptr<Data::File>> m_documents;
     QHash<QString, Project> m_projects;
+
+    TypeReferencesHolder m_typeReferences;
+
     mutable QMutex m_documentsMutex;
 };
 

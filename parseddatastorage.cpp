@@ -27,6 +27,8 @@
 
 #include "utils/qtcassert.h"
 
+#include "data/file.h"
+
 using namespace Asn1Acn::Internal;
 
 ParsedDataStorage *ParsedDataStorage::instance()
@@ -35,7 +37,7 @@ ParsedDataStorage *ParsedDataStorage::instance()
     return &instance_;
 }
 
-std::shared_ptr<ParsedDocument>
+std::shared_ptr<Data::File>
 ParsedDataStorage::getFileForPath(const QString &filePath) const
 {
     QMutexLocker locker(&m_documentsMutex);
@@ -55,8 +57,8 @@ void ParsedDataStorage::removeProject(const QString &projectName)
 {
     QMutexLocker locker(&m_documentsMutex);
 
-    QList<std::shared_ptr<ParsedDocument>> files = getFilesFromProjectInternal(projectName);
-    foreach (const std::shared_ptr<ParsedDocument> &file, files)
+    QList<std::shared_ptr<Data::File>> files = getFilesFromProjectInternal(projectName);
+    foreach (const std::shared_ptr<Data::File> &file, files)
         removeFileFromProjectInternal(projectName, file->source().filePath());
 
     m_projects.remove(projectName);
@@ -68,15 +70,31 @@ QStringList ParsedDataStorage::getProjectsForFile(const QString &filePath) const
     return getProjectsForFileInternal(filePath);
 }
 
-QList<std::shared_ptr<ParsedDocument>> ParsedDataStorage::getFilesFromProject(const QString &projectName) const
+QList<std::shared_ptr<Data::File>> ParsedDataStorage::getFilesFromProject(const QString &projectName) const
 {
     QMutexLocker locker(&m_documentsMutex);
     return getFilesFromProjectInternal(projectName);
 }
 
-void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique_ptr<ParsedDocument> file)
+Data::TypeReference ParsedDataStorage::getTypeReference(const QString &path, const int line, const int col) const
 {
-    std::shared_ptr<ParsedDocument> newFile = std::move(file);
+    return m_typeReferences.getTypeReference(path, line, col);
+}
+
+Data::SourceLocation ParsedDataStorage::getDefinitionLocation(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const
+{
+    if (!m_documents.contains(path))
+        return Data::SourceLocation();
+
+    const auto &definitions = m_documents.value(path)->definitions(definitionsName);
+    if (!definitions)
+        return {};
+    return getLocationFromModule(*definitions, typeAssignmentName);
+}
+
+void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique_ptr<Data::File> file)
+{
+    std::shared_ptr<Data::File> newFile = std::move(file);
     QString filePath = newFile->source().filePath();
 
     {
@@ -89,6 +107,7 @@ void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique
             p.insert(filePath, newFile);
 
         m_documents.insert(filePath, newFile);
+        m_typeReferences.addReference(filePath, *newFile);
     }
 
     emit fileUpdated(filePath, newFile);
@@ -110,7 +129,7 @@ int ParsedDataStorage::getDocumentsCount()
     return m_documents.size();
 }
 
-void ParsedDataStorage::refreshFileInProjects(std::shared_ptr<ParsedDocument> file, const QString &filePath)
+void ParsedDataStorage::refreshFileInProjects(std::shared_ptr<Data::File> file, const QString &filePath)
 {
     QStringList projects = getProjectsForFileInternal(filePath);
     foreach (const QString &project, projects)
@@ -124,8 +143,10 @@ void ParsedDataStorage::removeFileFromProjectInternal(const QString &projectName
         p.remove(filePath);
 
     QStringList projects = getProjectsForFileInternal(filePath);
-    if (projects.empty())
+    if (projects.empty()) {
         m_documents.remove(filePath);
+        m_typeReferences.removeReference(filePath);
+    }
 }
 
 QStringList ParsedDataStorage::getProjectsForFileInternal(const QString &filePath) const
@@ -143,12 +164,21 @@ QStringList ParsedDataStorage::getProjectsForFileInternal(const QString &filePat
     return res;
 }
 
-QList<std::shared_ptr<ParsedDocument>> ParsedDataStorage::getFilesFromProjectInternal(const QString &projectName) const
+QList<std::shared_ptr<Data::File>> ParsedDataStorage::getFilesFromProjectInternal(const QString &projectName) const
 {
     if (!m_projects.contains(projectName))
-        return QList<std::shared_ptr<ParsedDocument>>();
+        return QList<std::shared_ptr<Data::File>>();
 
     Project p = m_projects.value(projectName);
 
     return p.values();
+}
+
+Data::SourceLocation ParsedDataStorage::getLocationFromModule(const Data::Definitions &moduleDefinition,
+                                                              const QString &typeAssignmentName) const
+{
+    const auto type = moduleDefinition.type(typeAssignmentName);
+    if (!type)
+        return {};
+    return type->location();
 }

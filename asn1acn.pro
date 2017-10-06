@@ -132,7 +132,8 @@ SOURCES += \
     errormessageparser.cpp \
     sourcemapper.cpp \
     typeslocator.cpp \
-    editoroutline.cpp
+    editoroutline.cpp \
+    typereferencesholder.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -232,7 +233,8 @@ HEADERS += \
     editoroutline.h \
     sourcemapper.h \
     overviewactivatehandler.h \
-    typeslocator.h
+    typeslocator.h \
+    typereferencesholder.h
 
 FORMS += \
     options-pages/general.ui \
