@@ -57,8 +57,12 @@ private:
     bool tryInsertEndKeyword(QTextCursor &cursor) const;
     bool shouldInsertEndKeyword(QTextCursor &cursor) const;
     bool containsBeginKeyword(QTextCursor &cursor) const;
+    bool contextAllowsEndKeyword(const QTextCursor &cursor) const;
     bool beginKeywordMismatched(QTextCursor &cursor) const;
     void insertEndKeyword(QTextCursor &cursor) const;
+
+    int findWordIndexInCurrentLine(const QTextCursor &cursor, const QLatin1String &word) const;
+    void moveCursorInCurrentLine(QTextCursor &cursor, const int position) const;
 };
 
 } /* nameapsce Completion */
