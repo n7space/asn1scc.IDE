@@ -72,7 +72,7 @@ void ModelTree::addNodeToProject(const QString &projectName,
 
     projectNode->addChild(node);
 
-    const auto file = ParsedDataStorage::instance()->getFileForPath(node->name());
+    const auto file = ParsedDataStorage::instance()->getFileForPathFromProject(projectName, node->name());
     if (file == nullptr)
         return;
 

@@ -75,8 +75,7 @@ void CompletionAssistProcessor::appendProposalsFromUserTypes(Proposals &proposal
 {
     ParsedDataStorage *storage = ParsedDataStorage::instance();
 
-    // TODO: How to handle same file added in multiple projects?
-    const auto file = storage->getFileForPath(fileName);
+    const auto file = storage->getAnyFileForPath(fileName);
     if (file == nullptr)
         return;
 

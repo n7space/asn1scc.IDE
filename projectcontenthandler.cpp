@@ -149,7 +149,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
         if (p == path) {
             docProcessor->addToRun(path, content);
         } else {
-            const auto file = m_storage->getFileForPath(p);
+            const auto file = m_storage->getFileForPathFromProject(projectName, p);
             docProcessor->addToRun(p, file->source().contents());
         }
     }
@@ -163,7 +163,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChang
     DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
     foreach (const QString &path, filePaths) {
-        auto parsedDoc = m_storage->getFileForPath(path);
+        auto parsedDoc = m_storage->getFileForPathFromProject(projectName, path);
         if (parsedDoc != nullptr)
             docProcessor->addToRun(path, parsedDoc->source().contents());
         else
@@ -220,7 +220,7 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++) {
         auto filePath = parsedDocuments[i]->source().filePath();
-        if (m_storage->getFileForPath(filePath) != nullptr)
+        if (m_storage->getFileForPathFromProject(projectName, filePath) != nullptr)
             continue;
 
         ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));

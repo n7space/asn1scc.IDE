@@ -62,7 +62,7 @@ void EditorOutline::onEditorChanged()
 {
     const QString &path = m_editorWidget->textDocument()->filePath().toString();
 
-    const auto file = ParsedDataStorage::instance()->getFileForPath(path);
+    const auto file = ParsedDataStorage::instance()->getAnyFileForPath(path);
 
     m_model->setRoot(file);
 }

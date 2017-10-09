@@ -87,8 +87,13 @@ void ParsedDataStorageTests::test_addAndRemoveFileFromProject()
     QCOMPARE(ParsedDataStorageProxy::getProjectsCount(storage), 1);
     QCOMPARE(ParsedDataStorageProxy::getDocumentsCount(storage), 1);
 
-    auto document = storage->getFileForPath(path);
-    QVERIFY(document != nullptr);
+    auto documentFromProject = storage->getFileForPathFromProject(project, path);
+    QVERIFY(documentFromProject != nullptr);
+
+    auto documentAny = storage->getAnyFileForPath(path);
+    QVERIFY(documentAny != nullptr);
+
+    QVERIFY(documentFromProject == documentAny);
 
     auto projects = storage->getProjectsForFile(path);
     QVERIFY(projects.contains(project));
@@ -100,8 +105,8 @@ void ParsedDataStorageTests::test_addAndRemoveFileFromProject()
 
     QCOMPARE(ParsedDataStorageProxy::getDocumentsCount(storage), 0);
 
-    document = storage->getFileForPath(path);
-    QVERIFY(document == nullptr);
+    documentFromProject = storage->getFileForPathFromProject(project, path);
+    QVERIFY(documentFromProject == nullptr);
 
     projects = storage->getProjectsForFile(path);
     QVERIFY(projects.empty());
@@ -181,11 +186,15 @@ void ParsedDataStorageTests::test_updateFileInOneProject()
 
     QCOMPARE(ParsedDataStorageProxy::getDocumentsCount(storage), 1);
 
-    auto files = storage->getFilesPathsFromProject(project);
+    const auto files = storage->getFilesPathsFromProject(project);
     QCOMPARE(static_cast<int>(files.size()), 1);
 
-    const auto received = storage->getFileForPath(files.at(0))->source();
-    QCOMPARE(received.contents(), refreshedContent);
+    const QString path = files.at(0);
+    const auto documentAny = storage->getAnyFileForPath(path);
+    const auto documentFromProject = storage->getFileForPathFromProject(project, path);
+
+    QVERIFY(documentAny == documentFromProject);
+    QCOMPARE(documentAny->source().contents(), refreshedContent);
 
     ParsedDataStorageProxy::finish(storage);
 }
@@ -214,13 +223,13 @@ void ParsedDataStorageTests::test_updateFileInMultipleProjects()
     auto files = storage->getFilesPathsFromProject(firstProject);
     QCOMPARE(static_cast<int>(files.size()), 1);
 
-    const auto received = storage->getFileForPath(files.at(0))->source();
+    const auto received = storage->getFileForPathFromProject(firstProject, files.at(0))->source();
     QCOMPARE(received.contents(), refreshedContent);
 
     files = storage->getFilesPathsFromProject(secondProject);
     QCOMPARE(static_cast<int>(files.size()), 1);
 
-    const auto receivedSecond = storage->getFileForPath(files.at(0))->source();
+    const auto receivedSecond = storage->getFileForPathFromProject(secondProject, files.at(0))->source();
     QCOMPARE(receivedSecond.contents(), refreshedContent);
 
     ParsedDataStorageProxy::finish(storage);
