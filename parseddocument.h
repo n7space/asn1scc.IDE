@@ -43,7 +43,7 @@ namespace Internal {
 class ParsedDocument
 {
 public:
-    static void bindModelTreeNode(const std::shared_ptr<Data::File> &file, ModelTreeNode::ModelTreeNodePtr moduleNode);
+    static void bindModelTreeNode(const Data::File *file, ModelTreeNode::ModelTreeNodePtr moduleNode);
 
 private:
     static ModelTreeNode::ModelTreeNodePtr createDefinition(const Data::Definitions &definition);

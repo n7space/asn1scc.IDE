@@ -31,6 +31,7 @@
 
 #include <memory>
 
+#include "data/root.h"
 #include "data/file.h"
 
 #include "modeltreenode.h"
@@ -45,7 +46,7 @@ class ParsedDataStorage : public QObject
 {
     Q_OBJECT
 
-    ParsedDataStorage() = default;
+    ParsedDataStorage();
     ~ParsedDataStorage() = default;
 
     friend class ParsedDataStorageProxy;
@@ -53,16 +54,16 @@ class ParsedDataStorage : public QObject
 public:
     static ParsedDataStorage *instance();
 
-    std::shared_ptr<Data::File> getFileForPath(const QString &filePath) const;
+    const Data::File *getFileForPath(const QString &filePath) const;
 
-    QStringList getProjectsForFile(const QString &filePath) const;
-    QList<std::shared_ptr<Data::File>> getFilesFromProject(const QString &projectName) const;
+    const QStringList getProjectsForFile(const QString &filePath) const;
+    const QStringList getFilesPathsFromProject(const QString &projectName) const;
 
     Data::TypeReference getTypeReference(const QString &path, const int line, const int col) const;
     Data::SourceLocation getDefinitionLocation(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const;
 
 signals:
-    void fileUpdated(const QString &filePath, std::shared_ptr<Data::File> newFile);
+    void fileUpdated(const QString &filePath, const Data::File *newFile);
 
 private:
     void addProject(const QString &projectName);
@@ -74,19 +75,16 @@ private:
     int getProjectsCount();
     int getDocumentsCount();
 
-    using Project = QHash<QString, std::shared_ptr<Data::File>>;
-
-    void refreshFileInProjects(std::shared_ptr<Data::File> file, const QString &filePath);
-
-    QStringList getProjectsForFileInternal(const QString &filePath) const;
-    QList<std::shared_ptr<Data::File>> getFilesFromProjectInternal(const QString &projectName) const;
+    const QStringList getProjectsForFileInternal(const QString &filePath) const;
+    const QStringList getFilesPathsFromProjectInternal(const QString &projectName) const;
     void removeFileFromProjectInternal(const QString &projectName, const QString &filePath);
+
+    const Data::File *getFileForPathInternal(const QString &filePath) const;
 
     Data::SourceLocation getLocationFromModule(const Data::Definitions &moduleDefinition,
                                                const QString &typeAssignmentName) const;
 
-    QHash<QString, std::shared_ptr<Data::File>> m_documents;
-    QHash<QString, Project> m_projects;
+    std::unique_ptr<Data::Root> m_root;
 
     TypeReferencesHolder m_typeReferences;
 

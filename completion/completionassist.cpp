@@ -75,12 +75,12 @@ void CompletionAssistProcessor::appendProposalsFromUserTypes(Proposals &proposal
 {
     ParsedDataStorage *storage = ParsedDataStorage::instance();
 
-    // TODO: How to handle files in multiple projects when only data tree will stay?
-    std::shared_ptr<Data::File> file = storage->getFileForPath(fileName);
+    // TODO: How to handle same file added in multiple projects?
+    const auto file = storage->getFileForPath(fileName);
     if (file == nullptr)
         return;
 
-    Completion::UserTypesProposalsProvider proposalsProvider(file.get());
+    Completion::UserTypesProposalsProvider proposalsProvider(file);
     proposals.append(proposalsProvider.takeProposals());
 }
 

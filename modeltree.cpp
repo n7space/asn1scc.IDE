@@ -72,9 +72,7 @@ void ModelTree::addNodeToProject(const QString &projectName,
 
     projectNode->addChild(node);
 
-    ParsedDataStorage *storage = ParsedDataStorage::instance();
-    std::shared_ptr<Data::File> file = storage->getFileForPath(node->name());
-
+    const auto file = ParsedDataStorage::instance()->getFileForPath(node->name());
     if (file == nullptr)
         return;
 
@@ -156,7 +154,7 @@ bool ModelTree::isValid() const
 }
 
 void ModelTree::updateModelTreeNode(const QString &filePath,
-                                    std::shared_ptr<Data::File> document)
+                                    const Data::File *document)
 {
     QMutexLocker locker(&m_dataMutex);
 

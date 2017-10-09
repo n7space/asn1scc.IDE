@@ -52,9 +52,9 @@ EditorOutline::EditorOutline(EditorWidget *editorWidget)
             this, &EditorOutline::onEditorChanged);//view(), &Utils::TreeViewComboBoxView::expandAll);
 
     connect(ParsedDataStorage::instance(), &ParsedDataStorage::fileUpdated,
-            [this](const QString &filePath, std::shared_ptr<Data::File> newFile) {
+            [this](const QString &filePath, const Data::File *newFile) {
         if (m_editorWidget->textDocument()->filePath().toString() == filePath)
-            m_model->setRoot(newFile.get());
+            m_model->setRoot(newFile);
     });
 }
 
@@ -64,5 +64,5 @@ void EditorOutline::onEditorChanged()
 
     const auto file = ParsedDataStorage::instance()->getFileForPath(path);
 
-    m_model->setRoot(file.get());
+    m_model->setRoot(file);
 }

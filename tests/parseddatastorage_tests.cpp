@@ -93,8 +93,8 @@ void ParsedDataStorageTests::test_addAndRemoveFileFromProject()
     auto projects = storage->getProjectsForFile(path);
     QVERIFY(projects.contains(project));
 
-    auto files = storage->getFilesFromProject(project);
-    QCOMPARE(files.size(), 1);
+    auto files = storage->getFilesPathsFromProject(project);
+    QCOMPARE(static_cast<int>(files.size()), 1);
 
     ParsedDataStorageProxy::removeFileFromProject(storage, project, path);
 
@@ -106,8 +106,8 @@ void ParsedDataStorageTests::test_addAndRemoveFileFromProject()
     projects = storage->getProjectsForFile(path);
     QVERIFY(projects.empty());
 
-    files = storage->getFilesFromProject(project);
-    QCOMPARE(files.size(), 0);
+    files = storage->getFilesPathsFromProject(project);
+    QCOMPARE(static_cast<int>(files.size()), 0);
 
     ParsedDataStorageProxy::removeProject(storage, project);
     QCOMPARE(ParsedDataStorageProxy::getProjectsCount(storage), 0);
@@ -132,16 +132,13 @@ void ParsedDataStorageTests::test_addAndRemoveMultipleFilesFromProject()
     addFileToProject(storage, secondProject, "content", path);
 
     QCOMPARE(ParsedDataStorageProxy::getProjectsCount(storage), 2);
-    QCOMPARE(ParsedDataStorageProxy::getDocumentsCount(storage), 1);
+    QCOMPARE(ParsedDataStorageProxy::getDocumentsCount(storage), 2);
 
     auto projects = storage->getProjectsForFile(path);
     QCOMPARE(projects.size(), 2);
 
-    auto files = storage->getFilesFromProject(firstProject);
-    QCOMPARE(files.size(), 1);
-
-    files = storage->getFilesFromProject(secondProject);
-    QCOMPARE(files.size(), 1);
+    auto files = storage->getFilesPathsFromProject(firstProject);
+    QCOMPARE(static_cast<int>(files.size()), 1);
 
     ParsedDataStorageProxy::finish(storage);
 }
@@ -184,11 +181,10 @@ void ParsedDataStorageTests::test_updateFileInOneProject()
 
     QCOMPARE(ParsedDataStorageProxy::getDocumentsCount(storage), 1);
 
-    const QList<std::shared_ptr<Data::File>> files = storage->getFilesFromProject(project);
+    auto files = storage->getFilesPathsFromProject(project);
+    QCOMPARE(static_cast<int>(files.size()), 1);
 
-    QCOMPARE(files.size(), 1);
-    const Data::Source received = files.at(0)->source();
-
+    const auto received = storage->getFileForPath(files.at(0))->source();
     QCOMPARE(received.contents(), refreshedContent);
 
     ParsedDataStorageProxy::finish(storage);
@@ -213,17 +209,18 @@ void ParsedDataStorageTests::test_updateFileInMultipleProjects()
 
     const QString refreshedContent = "changed content";
     addFileToProject(storage, firstProject, refreshedContent, path);
+    addFileToProject(storage, secondProject, refreshedContent, path);
 
-    QList<std::shared_ptr<Data::File>> files = storage->getFilesFromProject(firstProject);
-    QCOMPARE(files.size(), 1);
+    auto files = storage->getFilesPathsFromProject(firstProject);
+    QCOMPARE(static_cast<int>(files.size()), 1);
 
-    const Data::Source received = files.at(0)->source();
+    const auto received = storage->getFileForPath(files.at(0))->source();
     QCOMPARE(received.contents(), refreshedContent);
 
-    files = storage->getFilesFromProject(secondProject);
-    QCOMPARE(files.size(), 1);
-    const Data::Source receivedSecond = files.at(0)->source();
+    files = storage->getFilesPathsFromProject(secondProject);
+    QCOMPARE(static_cast<int>(files.size()), 1);
 
+    const auto receivedSecond = storage->getFileForPath(files.at(0))->source();
     QCOMPARE(receivedSecond.contents(), refreshedContent);
 
     ParsedDataStorageProxy::finish(storage);
@@ -233,7 +230,7 @@ void ParsedDataStorageTests::test_getFilesFromNonExistingProject()
 {
     ParsedDataStorage *storage = ParsedDataStorageProxy::create();
 
-    const QList<std::shared_ptr<Data::File>> files = storage->getFilesFromProject("");
+    const auto files = storage->getFilesPathsFromProject("");
     QVERIFY(files.empty());
 
     ParsedDataStorageProxy::finish(storage);

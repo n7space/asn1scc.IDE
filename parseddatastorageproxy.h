@@ -77,11 +77,6 @@ protected:
     {
         return storage->getDocumentsCount();
     }
-
-    void refreshFileInProjects(ParsedDataStorage *storage, std::shared_ptr<Data::File> file, const QString &filePath)
-    {
-        storage->refreshFileInProjects(file, filePath);
-    }
 };
 
 } // namespace Internal

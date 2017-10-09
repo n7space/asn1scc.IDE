@@ -168,12 +168,13 @@ void ModelTreeTests::test_updateNode()
 
     QCOMPARE(node->childrenCount(), nodesCnt);
 
-    std::shared_ptr<Data::File> parsedDocument(new Data::File(Data::Source("TODO", "TODO")));
+    Data::File *parsedDocument = new Data::File(Data::Source("TODO", "TODO"));
     ModelTreeProxy::updateModelTreeNode(tree, path, parsedDocument);
 
     QCOMPARE(node->childrenCount(), 0);
 
     ModelTreeProxy::finish(tree);
+    delete parsedDocument;
 }
 
 void ModelTreeTests::addProjectNode(ModelTree *tree, const QString &projectName)

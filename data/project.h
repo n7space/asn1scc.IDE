@@ -46,6 +46,7 @@ public:
     const QString &name() const { return m_name; }
 
     void add(std::unique_ptr<File> file);
+    void remove(const QString &path);
 
     using Files = std::vector<std::unique_ptr<File>>;
     const Files &files() const { return m_files; }

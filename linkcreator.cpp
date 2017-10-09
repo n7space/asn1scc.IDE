@@ -37,10 +37,6 @@ using namespace Asn1Acn::Internal;
 LinkCreator::LinkCreator(const TextEditor::TextDocument &document)
     : m_documentPath(document.filePath().toString()), m_textDocument(document)
 {
-    ParsedDataStorage *storage = ParsedDataStorage::instance();
-    m_parsedDocument = storage->getFileForPath(m_documentPath);
-    if (m_parsedDocument == nullptr)
-        m_parsedDocument = std::make_shared<Data::File>(Data::Source(m_documentPath, ""));
 }
 
 LinkCreator::Link LinkCreator::createHighlightLink(const QTextCursor &cursor) const
@@ -126,18 +122,17 @@ Data::SourceLocation LinkCreator::getTargetLocationFromProject(const QString &pr
 {
     const auto storage = ParsedDataStorage::instance();
 
-    QList<std::shared_ptr<Data::File>> documents = storage->getFilesFromProject(projectName);
-    for (const auto &document : documents) {
-        const QString currentPath = document->source().filePath();
-
-        if (currentPath == m_documentPath)
+    const auto paths = storage->getFilesPathsFromProject(projectName);
+    for (const auto &path : paths) {
+        if (path == m_documentPath)
             continue;
 
-        const auto location = storage->getDefinitionLocation(currentPath, typeName, moduleName);
+        const auto location = storage->getDefinitionLocation(path, typeName, moduleName);
 
+        // TODO: does comment below holds true?
         // can not simply return location, as it contains only file name and not file path
         if (location.isValid())
-            return Data::SourceLocation(currentPath, location.line(), location.column());
+            return Data::SourceLocation(path, location.line(), location.column());
     }
 
     return Data::SourceLocation();
