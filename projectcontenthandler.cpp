@@ -144,12 +144,14 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
 {
     DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
-    const auto files = m_storage->getFilesFromProject(projectName);
-    foreach (const std::shared_ptr<Data::File> &file, files) {
-        if (file->source().filePath() == path)
+    const auto paths = m_storage->getFilesPathsFromProject(projectName);
+    foreach (const auto p, paths) {
+        if (p == path) {
             docProcessor->addToRun(path, content);
-        else
-            docProcessor->addToRun(file->source().filePath(), file->source().contents());
+        } else {
+            const auto file = m_storage->getFileForPath(p);
+            docProcessor->addToRun(p, file->source().contents());
+        }
     }
 
     return docProcessor;

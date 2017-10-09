@@ -154,7 +154,7 @@ bool ModelTree::isValid() const
 }
 
 void ModelTree::updateModelTreeNode(const QString &filePath,
-                                    std::shared_ptr<Data::File> document)
+                                    const Data::File *document)
 {
     QMutexLocker locker(&m_dataMutex);
 
@@ -164,7 +164,7 @@ void ModelTree::updateModelTreeNode(const QString &filePath,
         ModelTreeNode::ModelTreeNodePtr fileNode = projectNode->getChildByName(filePath);
         if (fileNode != nullptr) {
             fileNode->removeChildren();
-            ParsedDocument::bindModelTreeNode(document.get(), fileNode);
+            ParsedDocument::bindModelTreeNode(document, fileNode);
         }
     }
 }

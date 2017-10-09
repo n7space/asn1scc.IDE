@@ -46,7 +46,7 @@ int ChildrenCountingVisitor::valueFor(const File &file) const
 
 int ChildrenCountingVisitor::valueFor(const Project &project) const
 {
-    return std::accumulate(project.files().begin(), project.files().end(), 0, [](int n, const std::shared_ptr<File> &file) {
+    return std::accumulate(project.files().begin(), project.files().end(), 0, [](int n, const std::unique_ptr<File> &file) {
         return n + file->valueFor<OutlineVisitors::ChildrenCountingVisitor>();
     });
 }

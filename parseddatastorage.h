@@ -56,14 +56,14 @@ public:
 
     const Data::File *getFileForPath(const QString &filePath) const;
 
-    QStringList getProjectsForFile(const QString &filePath) const;
-    const std::vector<std::shared_ptr<Data::File>> getFilesFromProject(const QString &projectName) const;
+    const QStringList getProjectsForFile(const QString &filePath) const;
+    const QStringList getFilesPathsFromProject(const QString &projectName) const;
 
     Data::TypeReference getTypeReference(const QString &path, const int line, const int col) const;
     Data::SourceLocation getDefinitionLocation(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const;
 
 signals:
-    void fileUpdated(const QString &filePath, std::shared_ptr<Data::File> newFile);
+    void fileUpdated(const QString &filePath, const Data::File *newFile);
 
 private:
     void addProject(const QString &projectName);
@@ -75,12 +75,8 @@ private:
     int getProjectsCount();
     int getDocumentsCount();
 
-    using Project = QHash<QString, std::shared_ptr<Data::File>>;
-
-    void refreshFileInProjects(std::shared_ptr<Data::File> file, const QString &filePath);
-
-    QStringList getProjectsForFileInternal(const QString &filePath) const;
-    const std::vector<std::shared_ptr<Data::File>> getFilesFromProjectInternal(const QString &projectName) const;
+    const QStringList getProjectsForFileInternal(const QString &filePath) const;
+    const QStringList getFilesPathsFromProjectInternal(const QString &projectName) const;
     void removeFileFromProjectInternal(const QString &projectName, const QString &filePath);
 
     const Data::File *getFileForPathInternal(const QString &filePath) const;

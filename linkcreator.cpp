@@ -122,18 +122,17 @@ Data::SourceLocation LinkCreator::getTargetLocationFromProject(const QString &pr
 {
     const auto storage = ParsedDataStorage::instance();
 
-    const auto documents = storage->getFilesFromProject(projectName);
-    for (const auto &document : documents) {
-        const QString currentPath = document->source().filePath();
-
-        if (currentPath == m_documentPath)
+    const auto paths = storage->getFilesPathsFromProject(projectName);
+    for (const auto &path : paths) {
+        if (path == m_documentPath)
             continue;
 
-        const auto location = storage->getDefinitionLocation(currentPath, typeName, moduleName);
+        const auto location = storage->getDefinitionLocation(path, typeName, moduleName);
 
+        // TODO: does comment below holds true?
         // can not simply return location, as it contains only file name and not file path
         if (location.isValid())
-            return Data::SourceLocation(currentPath, location.line(), location.column());
+            return Data::SourceLocation(path, location.line(), location.column());
     }
 
     return Data::SourceLocation();

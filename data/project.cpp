@@ -45,7 +45,7 @@ void Project::accept(Visitor &visitor) const
     visitor.visit(*this);
 }
 
-void Project::add(std::shared_ptr<File> file)
+void Project::add(std::unique_ptr<File> file)
 {
     // TODO: It could be better if there would be just std::map<QString, std::unique_ptr<File>> and no vector,
     // so adding file once again could overwrite old version with no explicit remove call?

@@ -64,18 +64,18 @@ void ParsedDataStorage::removeProject(const QString &projectName)
     m_root->remove(projectName);
 }
 
-QStringList ParsedDataStorage::getProjectsForFile(const QString &filePath) const
+const QStringList ParsedDataStorage::getProjectsForFile(const QString &filePath) const
 {
     QMutexLocker locker(&m_documentsMutex);
 
     return getProjectsForFileInternal(filePath);
 }
 
-const std::vector<std::shared_ptr<Data::File>> ParsedDataStorage::getFilesFromProject(const QString &projectName) const
+const QStringList ParsedDataStorage::getFilesPathsFromProject(const QString &projectName) const
 {
     QMutexLocker locker(&m_documentsMutex);
 
-    return getFilesFromProjectInternal(projectName);
+    return getFilesPathsFromProjectInternal(projectName);
 }
 
 Data::TypeReference ParsedDataStorage::getTypeReference(const QString &path, const int line, const int col) const
@@ -108,13 +108,14 @@ void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique
     if (project == nullptr)
         return;
 
-    std::shared_ptr<Data::File> newFile = std::move(file);
-    QString filePath = newFile->source().filePath();
+    QString filePath = file->source().filePath();
+    project->add(std::move(file));
 
-    project->add(newFile);
-    m_typeReferences.addReference(filePath, *newFile);
+    const Data::File *rawFile = getFileForPathInternal(filePath);
 
-    emit fileUpdated(filePath, newFile);
+    m_typeReferences.addReference(filePath, *rawFile);
+
+    emit fileUpdated(filePath, rawFile);
 }
 
 void ParsedDataStorage::removeFileFromProject(const QString &projectName, const QString &filePath)
@@ -155,7 +156,7 @@ void ParsedDataStorage::removeFileFromProjectInternal(const QString &projectName
     m_typeReferences.removeReference(filePath);
 }
 
-QStringList ParsedDataStorage::getProjectsForFileInternal(const QString &filePath) const
+const QStringList ParsedDataStorage::getProjectsForFileInternal(const QString &filePath) const
 {
     QStringList res;
 
@@ -168,13 +169,17 @@ QStringList ParsedDataStorage::getProjectsForFileInternal(const QString &filePat
     return res;
 }
 
-const std::vector<std::shared_ptr<Data::File>> ParsedDataStorage::getFilesFromProjectInternal(const QString &projectName) const
-{
+const QStringList ParsedDataStorage::getFilesPathsFromProjectInternal(const QString &projectName) const
+{   
     const auto project = m_root->project(projectName);
     if (project == nullptr)
-        return std::vector<std::shared_ptr<Data::File>>();
+        return QStringList();
 
-    return project->files();
+    QStringList ret;
+    for (const auto &file : project->files())
+        ret.append(file->source().filePath());
+
+    return ret;
 }
 
 const Data::File *ParsedDataStorage::getFileForPathInternal(const QString &filePath) const

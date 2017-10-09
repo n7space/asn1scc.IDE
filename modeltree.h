@@ -75,7 +75,7 @@ private:
     void treeAboutToChange();
     void treeChanged();
 
-    void updateModelTreeNode(const QString &filePath, std::shared_ptr<Data::File> document);
+    void updateModelTreeNode(const QString &filePath, const Data::File *document);
 
     ModelTreeNode::ModelTreeNodePtr m_treeRoot;
 
