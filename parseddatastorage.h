@@ -22,9 +22,9 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
+#include <QObject>
 #include <QHash>
 #include <QMutex>
 #include <QString>
@@ -34,7 +34,6 @@
 #include "data/root.h"
 #include "data/file.h"
 
-#include "modeltreenode.h"
 #include "typereferencesholder.h"
 
 namespace Asn1Acn {

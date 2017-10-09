@@ -117,14 +117,12 @@ SOURCES += \
     acneditor.cpp \
     acndocument.cpp \
     editor.cpp \
-    overviewmodel.cpp \
     asn1sccdocumentprocessor.cpp \
     parseddatastorage.cpp \
     parseddocument.cpp \
     astxmlparser.cpp \
     modeltreenode.cpp \
     projectwatcher.cpp \
-    overviewwidget.cpp \
     document.cpp \
     modeltree.cpp \
     asn1acnjsextension.cpp \
@@ -135,8 +133,6 @@ SOURCES += \
     tools.cpp \
     icons.cpp \
     linkcreator.cpp \
-    overviewindexupdater.cpp \
-    structuresviewindexupdater.cpp \
     filesourcereader.cpp \
     errormessageparser.cpp \
     sourcemapper.cpp \
@@ -219,14 +215,12 @@ HEADERS += \
     acneditor.h \
     acndocument.h \
     editor.h \
-    overviewmodel.h \
     asn1sccdocumentprocessor.h \
     parseddatastorage.h \
     parseddocument.h \
     astxmlparser.h \
     modeltreenode.h \
     projectwatcher.h \
-    overviewwidget.h \
     document.h \
     modeltree.h \
     asn1acnjsextension.h \
@@ -238,8 +232,6 @@ HEADERS += \
     linkcreator.h \
     tools.h \
     icons.h \
-    overviewindexupdater.h \
-    structuresviewindexupdater.h \
     parsingserviceprovider.h \
     parseddocumentbuilder.h \
     documentprocessor.h \
@@ -250,7 +242,6 @@ HEADERS += \
     errormessageparser.h \
     editoroutline.h \
     sourcemapper.h \
-    overviewactivatehandler.h \
     typeslocator.h \
     typereferencesholder.h
 
@@ -280,8 +271,6 @@ SOURCES += \
     \
     tests/astxmlparser_tests.cpp \
     tests/errormessageparser_tests.cpp \
-    tests/overviewindexupdater_tests.cpp \
-    tests/structuresviewindexupdater_tests.cpp \
     tests/parseddocumentbuilder_tests.cpp \
     tests/documentprocessor_tests.cpp \
     tests/projectcontenthandler_tests.cpp \
@@ -307,8 +296,6 @@ HEADERS += \
     \
     tests/astxmlparser_tests.h \
     tests/errormessageparser_tests.h \
-    tests/overviewindexupdater_tests.h \
-    tests/structuresviewindexupdater_tests.h \
     tests/parseddocumentbuilder_tests.h \
     tests/documentprocessor_tests.h \
     tests/projectcontenthandler_tests.h \

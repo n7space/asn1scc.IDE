@@ -31,7 +31,6 @@
 
 #include <projectexplorer/project.h>
 
-#include "modeltree.h"
 #include "parseddatastorage.h"
 
 namespace Asn1Acn {

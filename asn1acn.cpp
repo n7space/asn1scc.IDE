@@ -63,8 +63,6 @@
 #ifdef WITH_TESTS
 #include "tests/astxmlparser_tests.h"
 #include "tests/errormessageparser_tests.h"
-#include "tests/overviewindexupdater_tests.h"
-#include "tests/structuresviewindexupdater_tests.h"
 #include "tests/parseddocumentbuilder_tests.h"
 #include "tests/documentprocessor_tests.h"
 #include "tests/projectcontenthandler_tests.h"
@@ -199,8 +197,6 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
             << new TreeViews::Tests::TypesTreeModelTests
             << new Tests::AstXmlParserTests
             << new Tests::ErrorMessageParserTests
-            << new Tests::OverviewIndexUpdaterTests
-            << new Tests::StructuresViewIndexUpdaterTests
             << new Tests::ParsedDocumentBuilderTests
             << new Tests::DocumentProcessorTests
             << new Tests::ProjectContentHandlerTests

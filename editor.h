@@ -28,8 +28,6 @@
 
 #include <utils/uncommentselection.h>
 
-#include "overviewmodel.h"
-
 namespace Asn1Acn {
 namespace Internal {
 

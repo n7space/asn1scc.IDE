@@ -35,8 +35,6 @@
 
 #include "asn1acnconstants.h"
 #include "document.h"
-#include "modeltree.h"
-#include "overviewmodel.h"
 
 #include "editoroutline.h"
 
