@@ -47,8 +47,6 @@ void Project::accept(Visitor &visitor) const
 
 void Project::add(std::unique_ptr<File> file)
 {
-    // TODO: It could be better if there would be just std::map<QString, std::unique_ptr<File>> and no vector,
-    // so adding file once again could overwrite old version with no explicit remove call?
     remove(file->source().filePath());
 
     file->setParent(this);
