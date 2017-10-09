@@ -60,9 +60,23 @@ void Root::add(std::unique_ptr<Project> project)
     m_projects.push_back(std::move(project));
 }
 
-const Project *Root::project(const QString &name) const
+void Root::remove(const QString &name)
 {
-    const auto it = m_nameToProjectMap.find(name);
+    const auto mapIt = m_nameToProjectMap.find(name);
+    if (mapIt != m_nameToProjectMap.end())
+        m_nameToProjectMap.erase(mapIt);
+
+    for (auto vecIt = m_projects.begin(); vecIt != m_projects.end(); vecIt++) {
+        if ((*vecIt)->name() == name) {
+            m_projects.erase(vecIt);
+            break;
+        }
+    }
+}
+
+Project *Root::project(const QString &name) const
+{
+    auto it = m_nameToProjectMap.find(name);
     QTC_ASSERT(it != m_nameToProjectMap.end(), return nullptr);
     return it->second;
 }

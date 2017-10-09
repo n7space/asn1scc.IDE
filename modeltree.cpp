@@ -72,9 +72,7 @@ void ModelTree::addNodeToProject(const QString &projectName,
 
     projectNode->addChild(node);
 
-    ParsedDataStorage *storage = ParsedDataStorage::instance();
-    std::shared_ptr<Data::File> file = storage->getFileForPath(node->name());
-
+    const auto file = ParsedDataStorage::instance()->getFileForPath(node->name());
     if (file == nullptr)
         return;
 
@@ -166,7 +164,7 @@ void ModelTree::updateModelTreeNode(const QString &filePath,
         ModelTreeNode::ModelTreeNodePtr fileNode = projectNode->getChildByName(filePath);
         if (fileNode != nullptr) {
             fileNode->removeChildren();
-            ParsedDocument::bindModelTreeNode(document, fileNode);
+            ParsedDocument::bindModelTreeNode(document.get(), fileNode);
         }
     }
 }

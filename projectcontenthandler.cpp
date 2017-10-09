@@ -144,7 +144,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
 {
     DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
-    QList<std::shared_ptr<Data::File>> files = m_storage->getFilesFromProject(projectName);
+    const auto files = m_storage->getFilesFromProject(projectName);
     foreach (const std::shared_ptr<Data::File> &file, files) {
         if (file->source().filePath() == path)
             docProcessor->addToRun(path, content);

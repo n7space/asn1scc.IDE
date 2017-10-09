@@ -45,9 +45,12 @@ public:
 
     const QString &name() const { return m_name; }
 
-    void add(std::unique_ptr<File> file);
+    // TODO: temporary changed for shared_ptr,
+    // as File is shared with ParsedDataStorage
+    void add(std::shared_ptr<File> file);
+    void remove(const QString &path);
 
-    using Files = std::vector<std::unique_ptr<File>>;
+    using Files = std::vector<std::shared_ptr<File>>;
     const Files &files() const { return m_files; }
     const File* file(const QString &path) const;
 

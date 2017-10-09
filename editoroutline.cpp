@@ -64,5 +64,5 @@ void EditorOutline::onEditorChanged()
 
     const auto file = ParsedDataStorage::instance()->getFileForPath(path);
 
-    m_model->setRoot(file.get());
+    m_model->setRoot(file);
 }

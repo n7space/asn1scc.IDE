@@ -49,11 +49,12 @@ public:
     void accept(Visitor &visitor) const override;
 
     void add(std::unique_ptr<Project> project);
+    void remove(const QString &name);
 
     using Projects = std::vector<std::unique_ptr<Project>>;
     const Projects &projects() const { return m_projects; }
 
-    const Project *project(const QString &name) const;
+    Project *project(const QString &name) const;
 
 private:
     Projects m_projects;

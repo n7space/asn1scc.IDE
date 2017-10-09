@@ -31,8 +31,7 @@
 
 using namespace Asn1Acn::Internal;
 
-void ParsedDocument::bindModelTreeNode(const std::shared_ptr<Data::File> &file,
-                                       ModelTreeNode::ModelTreeNodePtr moduleNode)
+void ParsedDocument::bindModelTreeNode(const Data::File *file, ModelTreeNode::ModelTreeNodePtr moduleNode)
 {
     if (file == nullptr)
         return;

@@ -62,7 +62,6 @@ private:
                                                       const QString &moduleName) const;
 
     const QString m_documentPath;
-    std::shared_ptr<Data::File> m_parsedDocument;
     const TextEditor::TextDocument &m_textDocument;
 };
 
