@@ -37,7 +37,7 @@ public:
     explicit OutlineIndexUpdater(const Model *model, QObject *parent);
 
 protected:
-    QModelIndex getCurrentFileIndex() const override;
+    QModelIndex currentRootIndex() const override;
 
 };
 

@@ -33,7 +33,7 @@ OutlineIndexUpdater::OutlineIndexUpdater(const Model *model, QObject *parent)
 {
 }
 
-QModelIndex OutlineIndexUpdater::getCurrentFileIndex() const
+QModelIndex OutlineIndexUpdater::currentRootIndex() const
 {
     return QModelIndex();
 }

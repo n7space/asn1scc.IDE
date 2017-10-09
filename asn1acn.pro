@@ -95,6 +95,7 @@ SOURCES += \
     tree-views/activatehandler.cpp \
     tree-views/indexupdater.cpp \
     tree-views/outlineindexupdater.cpp \
+    tree-views/typestreeindexupdater.cpp \
     tree-views/outlinecombo.cpp \
     tree-views/outlinewidget.cpp \
     \
@@ -184,6 +185,7 @@ HEADERS += \
     tree-views/decorationrolevisitor.h \   
     tree-views/outlinemodel.h \
     tree-views/typestreemodel.h \
+    tree-views/typestreeindexupdater.h \
     tree-views/model.h \
     tree-views/treeviewwidget.h \
     tree-views/activatehandler.h \

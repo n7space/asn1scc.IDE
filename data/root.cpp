@@ -42,12 +42,6 @@ Root::~Root()
 {
 }
 
-Root &Root::instance()
-{
-    static Root root;
-    return root;
-}
-
 void Root::accept(Visitor &visitor) const
 {
     visitor.visit(*this);

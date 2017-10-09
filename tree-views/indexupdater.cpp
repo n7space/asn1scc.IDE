@@ -24,6 +24,8 @@
 ****************************************************************************/
 #include "indexupdater.h"
 
+#include <texteditor/textdocument.h>
+
 #include "model.h"
 
 using namespace Asn1Acn::Internal::TreeViews;
@@ -79,7 +81,7 @@ void IndexUpdater::updateNow()
 
     QModelIndex index;
     if (m_editorWidget != nullptr)
-        index = getTargetIndexFromFileIndex(getCurrentFileIndex());
+        index = getTargetIndexFromRootIndex(currentRootIndex());
 
     emit currentIndexUpdated(index);
 }
@@ -92,12 +94,12 @@ int IndexUpdater::getCurrentLine() const
     return line;
 }
 
-QModelIndex IndexUpdater::getTargetIndexFromFileIndex(const QModelIndex &fileIndex) const
+QModelIndex IndexUpdater::getTargetIndexFromRootIndex(const QModelIndex &rootIndex) const
 {
     const int line = getCurrentLine();
 
-    for (int row = 0; row < m_model->rowCount(fileIndex); ++row) {
-        const QModelIndex moduleIndex = m_model->index(row, 0, fileIndex);
+    for (int row = 0; row < m_model->rowCount(rootIndex); ++row) {
+        const QModelIndex moduleIndex = m_model->index(row, 0, rootIndex);
         const QModelIndex index = getTargetIndexFromModuleIndex(moduleIndex, line);
         if (index.isValid())
             return index;
@@ -117,4 +119,9 @@ QModelIndex IndexUpdater::getTargetIndexFromModuleIndex(const QModelIndex &modul
     }
 
     return QModelIndex();
+}
+
+Utils::FileName IndexUpdater::currentFileName() const
+{
+    return m_editorWidget->textDocument()->filePath();
 }

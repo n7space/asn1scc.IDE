@@ -54,6 +54,7 @@ class ParsedDataStorage : public QObject
 public:
     static ParsedDataStorage *instance();
 
+    const Data::Root *root() const { return m_root.get(); }
     const Data::File *getFileForPath(const QString &filePath) const;
 
     const QStringList getProjectsForFile(const QString &filePath) const;

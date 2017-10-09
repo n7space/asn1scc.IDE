@@ -24,41 +24,22 @@
 ****************************************************************************/
 #pragma once
 
-#include <memory>
-#include <vector>
-#include <map>
-
-#include <QString>
-
-#include "node.h"
+#include "indexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace TreeViews {
 
-class Project;
-
-class Root : public Node
+class TypesTreeIndexUpdater : public IndexUpdater
 {
+    Q_OBJECT
 public:
-    Root();
-    ~Root() override;
+    explicit TypesTreeIndexUpdater(const Model *model, QObject *parent);
 
-    void accept(Visitor &visitor) const override;
-
-    void add(std::unique_ptr<Project> project);
-    void remove(const QString &name);
-
-    using Projects = std::vector<std::unique_ptr<Project>>;
-    const Projects &projects() const { return m_projects; }
-
-    Project *project(const QString &name) const;
-
-private:
-    Projects m_projects;
-    std::map<QString, Project*> m_nameToProjectMap;
+protected:
+    QModelIndex currentRootIndex() const override;
 };
 
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace TreeViews */
+} /* namespace Asn1Acn */
+} /* namespace Internal */

@@ -29,6 +29,7 @@
 #include <QModelIndex>
 
 #include <texteditor/texteditor.h>
+#include <utils/fileutils.h>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -52,7 +53,8 @@ signals:
     void currentIndexUpdated(const QModelIndex &modelIndex);
 
 protected:
-    virtual QModelIndex getCurrentFileIndex() const = 0;
+    virtual QModelIndex currentRootIndex() const = 0;
+    Utils::FileName currentFileName() const;
     const Model *const m_model;
 
 private:
@@ -60,7 +62,7 @@ private:
     void createUpdateTimer();
 
     int getCurrentLine() const;
-    QModelIndex getTargetIndexFromFileIndex(const QModelIndex &fileIndex) const;
+    QModelIndex getTargetIndexFromRootIndex(const QModelIndex &rootIndex) const;
     QModelIndex getTargetIndexFromModuleIndex(const QModelIndex &moduleIndex, int line) const;
 
     TextEditor::TextEditorWidget *m_editorWidget;

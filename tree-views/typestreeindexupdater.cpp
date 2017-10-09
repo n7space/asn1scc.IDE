@@ -22,43 +22,34 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "typestreeindexupdater.h"
 
-#include <memory>
-#include <vector>
-#include <map>
+#include <projectexplorer/session.h>
+#include <projectexplorer/project.h>
 
-#include <QString>
+#include <parseddatastorage.h>
+#include <data/root.h>
+#include <data/project.h>
 
-#include "node.h"
+#include "typestree-visitors/indexfindingvisitor.h"
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Data {
+#include "model.h"
 
-class Project;
+using namespace Asn1Acn::Internal::TreeViews;
 
-class Root : public Node
+TypesTreeIndexUpdater::TypesTreeIndexUpdater(const Model *model, QObject *parent)
+    : IndexUpdater(model, parent)
 {
-public:
-    Root();
-    ~Root() override;
+}
 
-    void accept(Visitor &visitor) const override;
-
-    void add(std::unique_ptr<Project> project);
-    void remove(const QString &name);
-
-    using Projects = std::vector<std::unique_ptr<Project>>;
-    const Projects &projects() const { return m_projects; }
-
-    Project *project(const QString &name) const;
-
-private:
-    Projects m_projects;
-    std::map<QString, Project*> m_nameToProjectMap;
-};
-
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+QModelIndex TypesTreeIndexUpdater::currentRootIndex() const
+{
+    const auto &root = ParsedDataStorage::instance()->root();
+    const auto project = ProjectExplorer::SessionManager::projectForFile(currentFileName());
+    if (!project)
+        return QModelIndex();
+    const auto projectNode = root->project(project->displayName());
+    if (!projectNode)
+        return QModelIndex();
+    return m_model->index(root->valueFor<TypesTreeVisitors::IndexFindingVisitor>(projectNode), 0, QModelIndex());
+}
