@@ -48,10 +48,10 @@
 #include "options-pages/service.h"
 
 #include "tree-views/outlinewidget.h"
+#include "tree-views/typestreewidget.h"
 
 #include "asneditor.h"
 #include "acneditor.h"
-#include "structuresview.h"
 #include "projectwatcher.h"
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
@@ -111,7 +111,6 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     const auto serviceSettings = Settings::load<Settings::Service>();
 
     addAutoReleasedObject(new AsnEditorFactory);
-    addAutoReleasedObject(new StructuresViewFactory);
     addAutoReleasedObject(new Completion::AsnSnippetProvider);
     addAutoReleasedObject(new Completion::AcnSnippetProvider);
 
@@ -120,6 +119,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(new ProjectWatcher);
 
     addAutoReleasedObject(new TreeViews::OutlineWidgetFactory);
+    addAutoReleasedObject(new TreeViews::TypesTreeWidgetFactory);
 
     addAutoReleasedObject(new OptionsPages::General(generalSettings));
     addAutoReleasedObject(new OptionsPages::Service(serviceSettings));

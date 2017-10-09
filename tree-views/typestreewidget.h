@@ -22,40 +22,37 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
-
-#include <memory>
 
 #include <coreplugin/inavigationwidgetfactory.h>
 
-#include "overviewwidget.h"
+#include "treeviewwidget.h"
 
 namespace Asn1Acn {
 namespace Internal {
+namespace TreeViews {
 
-class StructuresViewWidget : public OverviewWidget
+class TypesTreeWidget : public TreeViewWidget
 {
     Q_OBJECT
 public:
-    StructuresViewWidget();
-    ~StructuresViewWidget();
-
-private slots:
-    void modelUpdated();
-
-private:
-    std::shared_ptr<OverviewIndexUpdater> createIndexUpdater() const;
+    TypesTreeWidget(Model *model, IndexUpdater *updater);
+    ~TypesTreeWidget() override;
 };
 
-class StructuresViewFactory : public Core::INavigationWidgetFactory
+class TypesTreeWidgetFactory : public Core::INavigationWidgetFactory
 {
     Q_OBJECT
 public:
-    StructuresViewFactory();
+    TypesTreeWidgetFactory();
 
     Core::NavigationView createWidget() override;
+
+private:
+    Model *m_model;
+    IndexUpdater *m_updater;
 };
 
+} // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

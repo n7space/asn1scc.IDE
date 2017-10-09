@@ -42,7 +42,7 @@ const char SETTINGS_GROUP[] = "Asn1Acn";
 const char BASE_CONTEXT[] = "Asn1Acn.BaseContext";
 const char CONTEXT_MENU[] = "Asn1Acn.ContextMenu";
 const char WIZARD_CATEGORY[] = "O.Asn1Acn";
-const char STRUCTURES_VIEW_ID[] = "Asn1Acn.StructuresView";
+const char TYPESTREE_VIEW_ID[] = "Asn1Acn.TypesTreeView";
 
 // ASN.1 constants
 

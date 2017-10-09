@@ -98,6 +98,7 @@ SOURCES += \
     tree-views/typestreeindexupdater.cpp \
     tree-views/outlinecombo.cpp \
     tree-views/outlinewidget.cpp \
+    tree-views/typestreewidget.cpp \
     \
     options-pages/general.cpp \
     options-pages/service.cpp \
@@ -120,7 +121,6 @@ SOURCES += \
     asn1sccdocumentprocessor.cpp \
     parseddatastorage.cpp \
     parseddocument.cpp \
-    structuresview.cpp \
     astxmlparser.cpp \
     modeltreenode.cpp \
     projectwatcher.cpp \
@@ -193,6 +193,7 @@ HEADERS += \
     tree-views/outlineindexupdater.h \
     tree-views/outlinecombo.h \
     tree-views/outlinewidget.h \
+    tree-views/typestreewidget.h \
     \
     options-pages/general.h \
     options-pages/service.h \
@@ -222,7 +223,6 @@ HEADERS += \
     asn1sccdocumentprocessor.h \
     parseddatastorage.h \
     parseddocument.h \
-    structuresview.h \
     astxmlparser.h \
     modeltreenode.h \
     projectwatcher.h \
