@@ -37,9 +37,6 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
-static const int MINIMUM_COMBO_CONTENTS_LENGHT = 22;
-static const int MAXIMUM_COMBO_VISIBLE_ITEMS = 40;
-
 EditorOutline::EditorOutline(EditorWidget *editorWidget)
     : QObject(editorWidget)
     , m_editorWidget(editorWidget)
@@ -49,7 +46,7 @@ EditorOutline::EditorOutline(EditorWidget *editorWidget)
     m_indexUpdater->setEditor(m_editorWidget);
 
     connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
-            this, &EditorOutline::onEditorChanged);//view(), &Utils::TreeViewComboBoxView::expandAll);
+            this, &EditorOutline::onEditorChanged);
 
     connect(ParsedDataStorage::instance(), &ParsedDataStorage::fileUpdated,
             [this](const QString &filePath, const Data::File *newFile) {

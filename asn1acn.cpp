@@ -67,7 +67,6 @@
 #include "tests/documentprocessor_tests.h"
 #include "tests/projectcontenthandler_tests.h"
 #include "tests/parseddatastorage_tests.h"
-#include "tests/modeltree_tests.h"
 #include "tests/autocompleter_tests.h"
 #include "tests/sourcemapper_tests.h"
 #include "libraries/tests/metadataparser_tests.h"
@@ -201,7 +200,6 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
             << new Tests::DocumentProcessorTests
             << new Tests::ProjectContentHandlerTests
             << new Tests::ParsedDataStorageTests
-            << new Tests::ModelTreeTests
             << new Tests::AutoCompleterTests
             << new Tests::SourceMapperTests
                ;

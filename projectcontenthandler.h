@@ -29,8 +29,6 @@
 #include <QString>
 #include <QStringList>
 
-#include "modeltree.h"
-#include "modeltreeproxy.h"
 #include "parseddatastorage.h"
 #include "parseddatastorageproxy.h"
 #include "documentprocessor.h"
@@ -42,7 +40,6 @@ namespace Internal {
 class ProjectContentHandler
         : public QObject
         , public ParsedDataStorageProxy
-        , public ModelTreeProxy
 {
     Q_OBJECT
 
@@ -51,7 +48,6 @@ public:
 
     ProjectContentHandler(std::function<DocumentProcessor *(const QString&)>,
                           const SourceReader *sourceReader,
-                          ModelTree *tree,
                           ParsedDataStorage *storage);
 
     ~ProjectContentHandler();
@@ -70,9 +66,8 @@ private slots:
 
 private:
     void removeStaleFiles(const QString &projectName, const QStringList &filePaths);
-    void addNewFiles(const QString &projectName, const QStringList &filePaths);
 
-    QStringList getStaleFilesNames(const QString &projectName, const QStringList &filePaths) const;
+    QStringList getStaleFilesPaths(const QString &projectName, const QStringList &filePaths) const;
 
     void processFiles(const QString &projectName, const QStringList &filePaths);
 
@@ -87,7 +82,6 @@ private:
     void handleFilesProcesedWithSuccess(const QString &projectName, std::vector<std::unique_ptr<Data::File>> parsedDocuments);
     void handleFilesProcesedWithFailure(const QString &projectName, std::vector<std::unique_ptr<Data::File>> parsedDocuments);
 
-    ModelTree *m_tree;
     ParsedDataStorage *m_storage;
 
     unsigned m_projectsChanged;

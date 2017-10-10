@@ -251,8 +251,8 @@ void ParsedDataStorageTests::addFileToProject(ParsedDataStorage *storage,
                                               const QString &filePath)
 {
     const Data::Source info(filePath, fileContent);
-    auto parsedDocument = std::make_unique<Data::File>(info);
-    ParsedDataStorageProxy::addFileToProject(storage, project, std::move(parsedDocument));
+    auto document = std::make_unique<Data::File>(info);
+    ParsedDataStorageProxy::addFileToProject(storage, project, std::move(document));
 }
 
 QString ParsedDataStorageTests::pathFromName(const QString &name)

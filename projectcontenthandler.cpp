@@ -38,21 +38,17 @@ ProjectContentHandler *ProjectContentHandler::create()
 {
     return new ProjectContentHandler([](const QString &project)->DocumentProcessor* { return Asn1SccDocumentProcessor::create(project); } ,
                                      new FileSourceReader,
-                                     ModelTree::instance(),
                                      ParsedDataStorage::instance());
 }
 
 ProjectContentHandler::ProjectContentHandler(std::function<DocumentProcessor *(const QString &)> createProcessor,
                                              const SourceReader *sourceReader,
-                                             ModelTree *tree,
                                              ParsedDataStorage *storage)
-    : m_tree(tree)
-    , m_storage(storage)
+    : m_storage(storage)
     , m_projectsChanged(0)
     , m_sourceReader(sourceReader)
     , m_createProcessor(createProcessor)
 {
-    ModelTreeProxy::treeAboutToChange(m_tree);
 }
 
 ProjectContentHandler::~ProjectContentHandler()
@@ -63,24 +59,18 @@ ProjectContentHandler::~ProjectContentHandler()
 void ProjectContentHandler::handleProjectAdded(const QString &projectName)
 {
     ParsedDataStorageProxy::addProject(m_storage, projectName);
-    auto node = ModelTreeNode::makePtr(projectName);
-    ModelTreeProxy::addProjectNode(m_tree, node);
-
     allProcessingFinished();
 }
 
 void ProjectContentHandler::handleProjectRemoved(const QString &projectName)
 {
-    ModelTreeProxy::removeProjectNode(m_tree, projectName);
     ParsedDataStorageProxy::removeProject(m_storage, projectName);
-
     allProcessingFinished();
 }
 
 void ProjectContentHandler::handleFileListChanged(const QString &projectName, const QStringList &fileList)
 {
     removeStaleFiles(projectName, fileList);
-    addNewFiles(projectName, fileList);
     processFiles(projectName, fileList);
 }
 
@@ -88,6 +78,7 @@ void ProjectContentHandler::handleFileContentChanged(const QString &path, const 
 {
     QStringList projects = m_storage->getProjectsForFile(path);
 
+    // TODO: Is this conditions still needed?
     if (projects.empty()) {
         allProcessingFinished();
         return;
@@ -101,23 +92,10 @@ void ProjectContentHandler::handleFileContentChanged(const QString &path, const 
 
 void ProjectContentHandler::removeStaleFiles(const QString &projectName, const QStringList &filePaths)
 {
-    QStringList stalePaths = getStaleFilesNames(projectName, filePaths);
+    QStringList stalePaths = getStaleFilesPaths(projectName, filePaths);
 
-    foreach (const QString &stalePath, stalePaths) {
-        ModelTreeProxy::removeNodeFromProject(m_tree, projectName, stalePath);
+    foreach (const QString &stalePath, stalePaths)
         ParsedDataStorageProxy::removeFileFromProject(m_storage, projectName, stalePath);
-    }
-}
-
-void ProjectContentHandler::addNewFiles(const QString &projectName, const QStringList &filePaths)
-{
-    foreach (const QString &path, filePaths) {
-        if (m_tree->getNodeForFilepathFromProject(projectName, path) != nullptr)
-            continue;
-
-        auto node = ModelTreeNode::makePtr(path, Data::Type::UserDefined, Data::SourceLocation(path, 0, 0)); // TODO type?
-        ModelTreeProxy::addNodeToProject(m_tree, projectName, node);
-    }
 }
 
 void ProjectContentHandler::processFiles(const QString &projectName, const QStringList &filePaths)
@@ -126,9 +104,9 @@ void ProjectContentHandler::processFiles(const QString &projectName, const QStri
     startProcessing(dp);
 }
 
-QStringList ProjectContentHandler::getStaleFilesNames(const QString &projectName, const QStringList &filePaths) const
+QStringList ProjectContentHandler::getStaleFilesPaths(const QString &projectName, const QStringList &filePaths) const
 {
-    QStringList staleFileList = m_tree->getFileListFromProject(projectName);
+    QStringList staleFileList = m_storage->getFilesPathsFromProject(projectName);
     QSet<QString> pathsToRemove = staleFileList.toSet().subtract(filePaths.toSet());
 
     QStringList ret;
@@ -229,6 +207,8 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
 
 void ProjectContentHandler::allProcessingFinished()
 {
-    ModelTreeProxy::treeChanged(m_tree);
+    // IMPORTANT TODO: Previously, tree model was being informed about the fact that all processing was finished.
+    // Such event still needs to be handled by some external entity.
+
     deleteLater();
 }
