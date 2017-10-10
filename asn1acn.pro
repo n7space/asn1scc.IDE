@@ -135,7 +135,8 @@ SOURCES += \
     sourcemapper.cpp \
     typeslocator.cpp \
     editoroutline.cpp \
-    typereferencesholder.cpp
+    typereferencesholder.cpp \
+    modelvalidityguard.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -236,7 +237,8 @@ HEADERS += \
     editoroutline.h \
     sourcemapper.h \
     typeslocator.h \
-    typereferencesholder.h
+    typereferencesholder.h \
+    modelvalidityguard.h
 
 FORMS += \
     options-pages/general.ui \

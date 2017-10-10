@@ -45,10 +45,12 @@ ProjectContentHandler::ProjectContentHandler(std::function<DocumentProcessor *(c
                                              const SourceReader *sourceReader,
                                              ParsedDataStorage *storage)
     : m_storage(storage)
+    , m_guard(ModelValidityGuard::instance())
     , m_projectsChanged(0)
     , m_sourceReader(sourceReader)
     , m_createProcessor(createProcessor)
 {
+    m_guard->invalidate();
 }
 
 ProjectContentHandler::~ProjectContentHandler()
@@ -207,8 +209,6 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
 
 void ProjectContentHandler::allProcessingFinished()
 {
-    // IMPORTANT TODO: Previously, tree model was being informed about the fact that all processing was finished.
-    // Such event still needs to be handled by some external entity.
-
+    m_guard->validate();
     deleteLater();
 }

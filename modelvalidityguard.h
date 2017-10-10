@@ -22,41 +22,38 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
 #include <QObject>
+#include <QMutex>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class EditorWidget;
-
-namespace TreeViews {
-class Model;
-class IndexUpdater;
-}
-
-class EditorOutline : public QObject
+class ModelValidityGuard : public QObject
 {
     Q_OBJECT
+
+    ModelValidityGuard();
+    ~ModelValidityGuard() = default;
+
 public:
-    EditorOutline(EditorWidget *editorWidget);
+    static ModelValidityGuard *instance();
 
-    TreeViews::Model *model() const { return m_model; }
-    TreeViews::IndexUpdater *indexUpdater() const { return m_indexUpdater; }
+    void invalidate();
+    void validate();
 
-private slots:
-    void onEditorChanged();
-    void onModelReset();
+    bool isValid() const;
+
+signals:
+    void modelAboutToChange() const;
+    void modelChanged() const;
 
 private:
-    void refreshModelRoot();
-
-    EditorWidget *m_editorWidget;
-
-    TreeViews::Model *m_model;
-    TreeViews::IndexUpdater *m_indexUpdater;
+    mutable QMutex m_dataMutex;
+    int m_modifiersCnt;
 };
 
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Internal
+} // namespace Asn1Acn

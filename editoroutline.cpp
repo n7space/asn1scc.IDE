@@ -48,14 +48,22 @@ EditorOutline::EditorOutline(EditorWidget *editorWidget)
     connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
             this, &EditorOutline::onEditorChanged);
 
-    connect(ParsedDataStorage::instance(), &ParsedDataStorage::fileUpdated,
-            [this](const QString &filePath, const Data::File *newFile) {
-        if (m_editorWidget->textDocument()->filePath().toString() == filePath)
-            m_model->setRoot(newFile);
-    });
+    connect(m_model, &Model::modelReset,
+            this, &EditorOutline::onModelReset);
 }
 
 void EditorOutline::onEditorChanged()
+{
+    refreshModelRoot();
+}
+
+void EditorOutline::onModelReset()
+{
+    refreshModelRoot();
+    m_indexUpdater->updateCurrentIndex();
+}
+
+void EditorOutline::refreshModelRoot()
 {
     const QString &path = m_editorWidget->textDocument()->filePath().toString();
 

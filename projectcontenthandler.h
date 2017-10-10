@@ -33,6 +33,7 @@
 #include "parseddatastorageproxy.h"
 #include "documentprocessor.h"
 #include "sourcereader.h"
+#include "modelvalidityguard.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -83,6 +84,7 @@ private:
     void handleFilesProcesedWithFailure(const QString &projectName, std::vector<std::unique_ptr<Data::File>> parsedDocuments);
 
     ParsedDataStorage *m_storage;
+    ModelValidityGuard *m_guard;
 
     unsigned m_projectsChanged;
 

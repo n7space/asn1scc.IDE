@@ -22,41 +22,47 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
 
-#include <QObject>
+#include "modelvalidityguard.h"
 
-namespace Asn1Acn {
-namespace Internal {
+using namespace Asn1Acn::Internal;
 
-class EditorWidget;
-
-namespace TreeViews {
-class Model;
-class IndexUpdater;
+ModelValidityGuard *ModelValidityGuard::instance()
+{
+    static ModelValidityGuard instance_;
+    return &instance_;
 }
 
-class EditorOutline : public QObject
+ModelValidityGuard::ModelValidityGuard()
+    : m_modifiersCnt(0)
 {
-    Q_OBJECT
-public:
-    EditorOutline(EditorWidget *editorWidget);
+}
 
-    TreeViews::Model *model() const { return m_model; }
-    TreeViews::IndexUpdater *indexUpdater() const { return m_indexUpdater; }
+bool ModelValidityGuard::isValid() const
+{
+    QMutexLocker locker(&m_dataMutex);
 
-private slots:
-    void onEditorChanged();
-    void onModelReset();
+    return m_modifiersCnt == 0;
+}
 
-private:
-    void refreshModelRoot();
+void ModelValidityGuard::invalidate()
+{
+    QMutexLocker locker(&m_dataMutex);
 
-    EditorWidget *m_editorWidget;
+    m_modifiersCnt++;
 
-    TreeViews::Model *m_model;
-    TreeViews::IndexUpdater *m_indexUpdater;
-};
+    emit modelAboutToChange();
+}
 
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+void ModelValidityGuard::validate()
+{
+    {
+        QMutexLocker locker(&m_dataMutex);
+
+        m_modifiersCnt--;
+        if (m_modifiersCnt != 0)
+            return;
+    }
+
+    emit modelChanged();
+}
