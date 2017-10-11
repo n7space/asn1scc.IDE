@@ -38,14 +38,16 @@ ProjectContentHandler *ProjectContentHandler::create()
 {
     return new ProjectContentHandler([](const QString &project)->DocumentProcessor* { return Asn1SccDocumentProcessor::create(project); } ,
                                      new FileSourceReader,
-                                     ParsedDataStorage::instance());
+                                     ParsedDataStorage::instance(),
+                                     ModelValidityGuard::instance());
 }
 
 ProjectContentHandler::ProjectContentHandler(std::function<DocumentProcessor *(const QString &)> createProcessor,
                                              const SourceReader *sourceReader,
-                                             ParsedDataStorage *storage)
+                                             ParsedDataStorage *storage,
+                                             ModelValidityGuard *guard)
     : m_storage(storage)
-    , m_guard(ModelValidityGuard::instance())
+    , m_guard(guard)
     , m_projectsChanged(0)
     , m_sourceReader(sourceReader)
     , m_createProcessor(createProcessor)

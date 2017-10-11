@@ -49,7 +49,8 @@ public:
 
     ProjectContentHandler(std::function<DocumentProcessor *(const QString&)>,
                           const SourceReader *sourceReader,
-                          ParsedDataStorage *storage);
+                          ParsedDataStorage *storage,
+                          ModelValidityGuard *guard);
 
     ~ProjectContentHandler();
 

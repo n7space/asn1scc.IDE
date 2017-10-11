@@ -28,8 +28,6 @@
 
 #include "visitor.h"
 
-#include "QDebug"
-
 using namespace Asn1Acn::Internal::Data;
 
 Project::Project(const QString &projectName)

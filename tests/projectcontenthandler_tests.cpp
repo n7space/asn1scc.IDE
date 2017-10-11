@@ -203,7 +203,8 @@ void ProjectContentHandlerTests::addProject(const QString &projectName)
 
     ProjectContentHandler *pch = new ProjectContentHandler(m_createProcessor,
                                                            new SourceReaderMock,
-                                                           m_storage);
+                                                           m_storage,
+                                                           m_guard);
     QCOMPARE(spyAboutToUpdate.count(), 1);
     QCOMPARE(m_guard->isValid(), false);
 
@@ -220,7 +221,8 @@ void ProjectContentHandlerTests::removeProject(const QString &projectName)
 
     ProjectContentHandler *pch = new ProjectContentHandler(m_createProcessor,
                                                            new SourceReaderMock,
-                                                           m_storage);
+                                                           m_storage,
+                                                           m_guard);
     QCOMPARE(spyAboutToUpdate.count(), 1);
     QCOMPARE(m_guard->isValid(), false);
 
@@ -237,7 +239,8 @@ void ProjectContentHandlerTests::fileListChanged(const QString &projectName, con
 
     ProjectContentHandler *pch = new ProjectContentHandler(m_createProcessor,
                                                            new SourceReaderMock,
-                                                           m_storage);
+                                                           m_storage,
+                                                           m_guard);
 
     QCOMPARE(spyAboutToUpdate.count(), 1);
     QCOMPARE(m_guard->isValid(), false);
@@ -255,7 +258,8 @@ void ProjectContentHandlerTests::fileContentChanged(const QString &path, const Q
 
     ProjectContentHandler *pch = new ProjectContentHandler(m_createProcessor,
                                                            new SourceReaderMock,
-                                                           m_storage);
+                                                           m_storage,
+                                                           m_guard);
 
     QCOMPARE(spyAboutToUpdate.count(), 1);
     QCOMPARE(m_guard->isValid(), false);
