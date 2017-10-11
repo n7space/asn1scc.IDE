@@ -27,6 +27,8 @@
 #include <projectexplorer/session.h>
 #include <projectexplorer/project.h>
 
+#include <coreplugin/editormanager/editormanager.h>
+
 #include <parseddatastorage.h>
 #include <data/root.h>
 #include <data/project.h>
@@ -40,6 +42,8 @@ using namespace Asn1Acn::Internal::TreeViews;
 TypesTreeIndexUpdater::TypesTreeIndexUpdater(const Model *model, QObject *parent)
     : IndexUpdater(model, parent)
 {
+    connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
+            this, &TypesTreeIndexUpdater::onEditorChanged);
 }
 
 QModelIndex TypesTreeIndexUpdater::currentRootIndex() const
@@ -52,4 +56,12 @@ QModelIndex TypesTreeIndexUpdater::currentRootIndex() const
     if (!projectNode)
         return QModelIndex();
     return m_model->index(root->valueFor<TypesTreeVisitors::IndexFindingVisitor>(projectNode), 0, QModelIndex());
+}
+
+void TypesTreeIndexUpdater::onEditorChanged(Core::IEditor *editor)
+{
+    Q_UNUSED(editor);
+
+    TextEditor::TextEditorWidget *editorWidget = TextEditor::TextEditorWidget::currentTextEditorWidget();
+    setEditor(editorWidget);
 }

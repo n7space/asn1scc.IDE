@@ -36,6 +36,9 @@ class TypesTreeIndexUpdater : public IndexUpdater
 public:
     explicit TypesTreeIndexUpdater(const Model *model, QObject *parent);
 
+public slots:
+    void onEditorChanged(Core::IEditor *editor);
+
 protected:
     QModelIndex currentRootIndex() const override;
 };

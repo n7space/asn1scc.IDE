@@ -38,6 +38,14 @@ TypesTreeWidget::TypesTreeWidget(Model *model, IndexUpdater *updater)
     : TreeViewWidget(model, updater)
 {
     model->setRoot(ParsedDataStorage::instance()->root());
+
+    // TODO: call below could be removed,
+    // after adding cursor synchronization enable/disable button in ASN.1 Types View widget
+    connect(model, &Model::modelReset,
+            m_indexUpdater, &IndexUpdater::updateCurrentIndex);
+
+    connect(m_indexUpdater, &IndexUpdater::currentIndexUpdated,
+            this, &TreeViewWidget::updateSelection, Qt::QueuedConnection);
 }
 
 TypesTreeWidget::~TypesTreeWidget()

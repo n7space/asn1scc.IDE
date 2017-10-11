@@ -60,7 +60,7 @@ OutlineCombo::OutlineCombo(Model *model, IndexUpdater *indexUpdater)
             this, &OutlineCombo::updateSelection);
 }
 
-void OutlineCombo::updateSelection(const QModelIndex &index)
+void OutlineCombo::updateSelection(const QModelIndex index)
 {
     if (index.isValid())
         setCurrentIndex(index);

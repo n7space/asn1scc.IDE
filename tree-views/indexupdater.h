@@ -50,7 +50,7 @@ public:
     void updateCurrentIndex();
 
 signals:
-    void currentIndexUpdated(const QModelIndex &modelIndex);
+    void currentIndexUpdated(const QModelIndex modelIndex);
 
 protected:
     virtual QModelIndex currentRootIndex() const = 0;

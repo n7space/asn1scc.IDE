@@ -56,11 +56,13 @@ public:
     void setCursorSynchronization(bool syncWithCursor) override;
 
 public slots:
-    void updateSelection(const QModelIndex &index);
+    void updateSelection(const QModelIndex index);
+
+protected:
+    QPointer<IndexUpdater> m_indexUpdater;
 
 private:
     TreeView *m_treeView;
-    QPointer<IndexUpdater> m_indexUpdater;
 };
 
 } // namespace TreeViews
