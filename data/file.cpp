@@ -48,8 +48,7 @@ void File::accept(Visitor &visitor) const
 const Definitions *File::definitions(const QString &name) const
 {
     const auto it = m_definitionsByNameMap.find(name);
-    QTC_ASSERT(it != m_definitionsByNameMap.end(), return nullptr);
-    return it->second;
+    return it != m_definitionsByNameMap.end() ? it->second : nullptr;
 }
 
 void File::add(std::unique_ptr<Definitions> defs)

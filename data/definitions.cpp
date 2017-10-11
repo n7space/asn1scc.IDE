@@ -59,6 +59,5 @@ void Definitions::addImportedType(const QString &typeName)
 const TypeAssignment *Definitions::type(const QString &name) const
 {
     const auto it = m_typeByNameMap.find(name);
-    QTC_ASSERT(it != m_typeByNameMap.end(), return nullptr);
-    return it->second;
+    return it != m_typeByNameMap.end() ? it->second : nullptr;
 }

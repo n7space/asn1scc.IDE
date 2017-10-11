@@ -28,6 +28,8 @@
 
 #include "visitor.h"
 
+#include "QDebug"
+
 using namespace Asn1Acn::Internal::Data;
 
 Project::Project(const QString &projectName)
@@ -47,10 +49,12 @@ void Project::accept(Visitor &visitor) const
 
 void Project::add(std::unique_ptr<File> file)
 {
-    remove(file->source().filePath());
+    const QString path = file->location().path();
+
+    remove(path);
 
     file->setParent(this);
-    m_filesByPathMap[file->location().path()] = file.get();
+    m_filesByPathMap[path] = file.get();
     m_files.push_back(std::move(file));
 }
 
@@ -71,6 +75,6 @@ void Project::remove(const QString &path)
 const File *Project::file(const QString &path) const
 {
     const auto it = m_filesByPathMap.find(path);
-    QTC_ASSERT(it != m_filesByPathMap.end(), return nullptr);
-    return it->second;
+
+    return it != m_filesByPathMap.end() ? it->second : nullptr;
 }
