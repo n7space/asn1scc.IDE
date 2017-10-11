@@ -272,6 +272,7 @@ SOURCES += \
     tests/parseddatastorage_tests.cpp \
     tests/autocompleter_tests.cpp \
     tests/sourcemapper_tests.cpp \
+    tests/modelvalidityguard_tests.cpp \
     \
     tests/networkreply.cpp \
     tests/parsingserviceproviderstub.cpp \
@@ -296,6 +297,7 @@ HEADERS += \
     tests/parseddatastorage_tests.h \
     tests/autocompleter_tests.h \
     tests/sourcemapper_tests.h \
+    tests/modelvalidityguard_tests.h \
     \
     tests/networkreply.h \
     tests/parsingserviceproviderstub.h \

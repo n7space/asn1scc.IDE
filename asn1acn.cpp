@@ -69,6 +69,7 @@
 #include "tests/parseddatastorage_tests.h"
 #include "tests/autocompleter_tests.h"
 #include "tests/sourcemapper_tests.h"
+#include "tests/modelvalidityguard_tests.h"
 #include "libraries/tests/metadataparser_tests.h"
 #include "tree-views/tests/displayrolevisitor_tests.h"
 #include "tree-views/tests/outlineindexupdater_tests.h"
@@ -202,6 +203,7 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
             << new Tests::ParsedDataStorageTests
             << new Tests::AutoCompleterTests
             << new Tests::SourceMapperTests
+            << new Tests::ModelValidityGuardTests
                ;
 }
 #endif
