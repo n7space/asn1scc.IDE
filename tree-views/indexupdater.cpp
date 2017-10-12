@@ -97,6 +97,11 @@ QModelIndex IndexUpdater::getTargetIndexFromRootIndex(const QModelIndex &rootInd
 
     for (int row = 0; row < m_model->rowCount(rootIndex); ++row) {
         const QModelIndex moduleIndex = m_model->index(row, 0, rootIndex);
+        const auto moduleNode = m_model->dataNode(moduleIndex);
+        const Data::SourceLocation location = moduleNode->location();
+        if (location.path() != currentFileName().toString())
+            continue;
+
         const QModelIndex index = getTargetIndexFromModuleIndex(moduleIndex, line);
         if (index.isValid())
             return index;

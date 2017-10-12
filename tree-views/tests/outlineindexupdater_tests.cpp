@@ -46,12 +46,12 @@ static const int RESPONSE_WAIT_MAX_TIME_MS = 20000;
 OutlineIndexUpdaterTests::OutlineIndexUpdaterTests(QObject *parent)
     : QObject(parent)
 {
+    m_editorWidget = createEditorWidget();
+
     m_model = new OutlineModel;
-    m_model->setRoot(createModelNodes());
+    m_model->setRoot(createModelNodes(m_editorWidget->textDocument()->filePath().toString()));
 
     m_indexUpdater = new OutlineIndexUpdater(m_model, nullptr);
-
-    m_editorWidget = createEditorWidget();
 }
 
 OutlineIndexUpdaterTests::~OutlineIndexUpdaterTests()
@@ -76,6 +76,9 @@ TextEditor::TextEditorWidget *OutlineIndexUpdaterTests::createEditorWidget()
                            "\n"
                            "\n");
 
+    Utils::FileName fileName = Utils::FileName::fromString("file1.asn1");
+    document->setFilePath(fileName);
+
     QSharedPointer<TextEditor::TextDocument> documentPointer(document);
 
     TextEditor::TextEditorWidget *editorWidget = new TextEditor::TextEditorWidget;
@@ -84,18 +87,19 @@ TextEditor::TextEditorWidget *OutlineIndexUpdaterTests::createEditorWidget()
     return editorWidget;
 }
 
-Data::Node *OutlineIndexUpdaterTests::createModelNodes()
+Data::Node *OutlineIndexUpdaterTests::createModelNodes(const QString &filePath)
 {
-    const auto root = new Data::File(Data::Source("file.asn1", "CONTENTS"));
 
-    auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{"file1.asn1", 0, 0});
-    definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, Data::TypeReference{}));
-    definitions1->add(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{"file1.asn1", 3, 3}, Data::TypeReference{}));
+    const auto root = new Data::File(Data::Source(filePath, "CONTENTS"));
+
+    auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{filePath, 0, 0});
+    definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{filePath, 2, 3}, Data::TypeReference{}));
+    definitions1->add(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{filePath, 3, 3}, Data::TypeReference{}));
     root->add(std::move(definitions1));
 
-    auto definitions2 = std::make_unique<Data::Definitions>("Module2", Data::SourceLocation{"file1.asn1", 5, 0});
-    definitions2->add(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{"file1.asn1", 6, 3}, Data::TypeReference{}));
-    definitions2->add(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{"file1.asn1", 7, 3}, Data::TypeReference{}));
+    auto definitions2 = std::make_unique<Data::Definitions>("Module2", Data::SourceLocation{filePath, 5, 0});
+    definitions2->add(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{filePath, 6, 3}, Data::TypeReference{}));
+    definitions2->add(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{filePath, 7, 3}, Data::TypeReference{}));
     root->add(std::move(definitions2));
 
     m_data = root;

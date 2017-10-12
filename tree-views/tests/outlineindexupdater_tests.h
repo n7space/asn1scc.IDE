@@ -57,7 +57,7 @@ private slots:
     void test_removeEditorAfterLineUpdate();
 
 private:
-    Data::Node *createModelNodes();
+    Data::Node *createModelNodes(const QString &filePath);
     TextEditor::TextEditorWidget *createEditorWidget();
 
     Data::Node *m_data;
