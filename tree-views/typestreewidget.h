@@ -24,6 +24,8 @@
 ****************************************************************************/
 #pragma once
 
+#include <QToolButton>
+
 #include <coreplugin/inavigationwidgetfactory.h>
 
 #include "treeviewwidget.h"
@@ -38,6 +40,17 @@ class TypesTreeWidget : public TreeViewWidget
 public:
     TypesTreeWidget(Model *model, IndexUpdater *updater);
     ~TypesTreeWidget() override;
+
+    QToolButton *toggleSyncButton();
+
+private slots:
+    void toggleCursorSynchronization();
+
+private:
+    QToolButton *createToggleSyncButton();
+
+    QToolButton *m_toggleSync;
+    bool m_syncWithEditor;
 };
 
 class TypesTreeWidgetFactory : public Core::INavigationWidgetFactory

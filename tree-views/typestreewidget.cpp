@@ -26,6 +26,8 @@
 
 #include <coreplugin/editormanager/editormanager.h>
 
+#include <utils/utilsicons.h>
+
 #include <asn1acnconstants.h>
 #include <parseddatastorage.h>
 
@@ -36,13 +38,11 @@ using namespace Asn1Acn::Internal::TreeViews;
 
 TypesTreeWidget::TypesTreeWidget(Model *model, IndexUpdater *updater)
     : TreeViewWidget(model, updater)
+    , m_syncWithEditor(true)
 {
     model->setRoot(ParsedDataStorage::instance()->root());
 
-    // TODO: call below could be removed,
-    // after adding cursor synchronization enable/disable button in ASN.1 Types View widget
-    connect(model, &Model::modelReset,
-            m_indexUpdater, &IndexUpdater::updateCurrentIndex);
+    m_toggleSync = createToggleSyncButton();
 
     connect(m_indexUpdater, &IndexUpdater::currentIndexUpdated,
             this, &TreeViewWidget::updateSelection, Qt::QueuedConnection);
@@ -50,6 +50,34 @@ TypesTreeWidget::TypesTreeWidget(Model *model, IndexUpdater *updater)
 
 TypesTreeWidget::~TypesTreeWidget()
 {
+}
+
+QToolButton *TypesTreeWidget::toggleSyncButton()
+{
+    return m_toggleSync;
+}
+
+void TypesTreeWidget::toggleCursorSynchronization()
+{
+    m_syncWithEditor = !m_syncWithEditor;
+    setCursorSynchronization(m_syncWithEditor);
+}
+
+QToolButton *TypesTreeWidget::createToggleSyncButton()
+{
+    QToolButton *button = new QToolButton;
+
+    button->setIcon(Utils::Icons::LINK.icon());
+    button->setCheckable(true);
+    button->setChecked(m_syncWithEditor);
+    button->setToolTip(tr("Synchronize with Editor"));
+
+    setCursorSynchronization(m_syncWithEditor);
+
+    connect(button, &QAbstractButton::clicked,
+            this, &TypesTreeWidget::toggleCursorSynchronization);
+
+    return button;
 }
 
 TypesTreeWidgetFactory::TypesTreeWidgetFactory()
@@ -63,5 +91,11 @@ TypesTreeWidgetFactory::TypesTreeWidgetFactory()
 
 Core::NavigationView TypesTreeWidgetFactory::createWidget()
 {
-    return Core::NavigationView(new TypesTreeWidget(m_model, m_updater));
+    Core::NavigationView n;
+    TypesTreeWidget *w = new TypesTreeWidget(m_model, m_updater);
+
+    n.widget = w;
+    n.dockToolBarWidgets.append(w->toggleSyncButton());
+
+    return n;
 }
