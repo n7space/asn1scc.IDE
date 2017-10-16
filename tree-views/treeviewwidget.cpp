@@ -56,8 +56,8 @@ void TreeView::contextMenuEvent(QContextMenuEvent *event)
 }
 
 TreeViewWidget::TreeViewWidget(Model *model, IndexUpdater *indexUpdater)
-    : m_treeView(new TreeView(this))
-    , m_indexUpdater(indexUpdater)
+    : m_indexUpdater(indexUpdater)
+    , m_treeView(new TreeView(this))
 {
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
@@ -70,9 +70,6 @@ TreeViewWidget::TreeViewWidget(Model *model, IndexUpdater *indexUpdater)
 
     connect(m_treeView, &QAbstractItemView::activated,
             [this](const QModelIndex &index){ ActivateHandler::gotoSymbol(index); });
-
-    connect(model, &Model::modelReset,
-            m_treeView, &TreeView::expandAll);
 }
 
 QList<QAction *> TreeViewWidget::filterMenuActions() const
@@ -87,12 +84,12 @@ void TreeViewWidget::setCursorSynchronization(bool syncWithCursor)
 
     if (syncWithCursor)
         connect(m_indexUpdater, &IndexUpdater::currentIndexUpdated,
-                this, &TreeViewWidget::updateSelection);
+                this, &TreeViewWidget::updateSelection, Qt::QueuedConnection);
     else
         m_indexUpdater->disconnect(this);
 }
 
-void TreeViewWidget::updateSelection(const QModelIndex &index)
+void TreeViewWidget::updateSelection(const QModelIndex index)
 {
     m_treeView->setCurrentIndex(index);
     m_treeView->scrollTo(index);

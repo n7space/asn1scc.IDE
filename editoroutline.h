@@ -47,8 +47,11 @@ public:
 
 private slots:
     void onEditorChanged();
+    void onModelReset();
 
 private:
+    void refreshModelRoot();
+
     EditorWidget *m_editorWidget;
 
     TreeViews::Model *m_model;

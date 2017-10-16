@@ -24,8 +24,6 @@
 ****************************************************************************/
 #include "project.h"
 
-#include <utils/qtcassert.h>
-
 #include "visitor.h"
 
 using namespace Asn1Acn::Internal::Data;
@@ -47,12 +45,12 @@ void Project::accept(Visitor &visitor) const
 
 void Project::add(std::unique_ptr<File> file)
 {
-    // TODO: It could be better if there would be just std::map<QString, std::unique_ptr<File>> and no vector,
-    // so adding file once again could overwrite old version with no explicit remove call?
-    remove(file->source().filePath());
+    const QString path = file->location().path();
+
+    remove(path);
 
     file->setParent(this);
-    m_filesByPathMap[file->location().path()] = file.get();
+    m_filesByPathMap[path] = file.get();
     m_files.push_back(std::move(file));
 }
 
@@ -73,6 +71,6 @@ void Project::remove(const QString &path)
 const File *Project::file(const QString &path) const
 {
     const auto it = m_filesByPathMap.find(path);
-    QTC_ASSERT(it != m_filesByPathMap.end(), return nullptr);
-    return it->second;
+
+    return it != m_filesByPathMap.end() ? it->second : nullptr;
 }

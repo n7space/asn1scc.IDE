@@ -27,40 +27,25 @@
 
 #include <QObject>
 
-#include "../modeltree.h"
-#include "../modeltreeproxy.h"
+#include <modelvalidityguard.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Tests {
 
-class ModelTreeTests
-        : public QObject
-        , public ModelTreeProxy
+class ModelValidityGuardTests : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit ModelTreeTests(QObject *parent = 0);
+    explicit ModelValidityGuardTests(QObject *parent = 0);
 
 private slots:
-    void test_addAndRemoveProject();
-
-    void test_getNonexistingNode();
-    void test_getNodeFromNonexistingProject();
-    void test_getFileListFromNonexisitngProject();
-    void test_getFilesCntInNonexisitngProject();
-
-    void test_modifiersCount();
-
-    void test_addAndRemoveNodesWithinProject();
-
-    void test_updateNode();
+    void test_noModifiers();
+    void test_singleModifiers();
+    void test_multipleModifiers();
 
 private:
-    void addProjectNode(ModelTree *tree, const QString &projectName);
-    void createNodeInProject(ModelTree *tree, const QString &project, const QString &path);
-    bool nodeExistInProject(const ModelTree *tree, const QString &project, const QString &path);
+    ModelValidityGuard *m_guard;
 };
 
 } // namespace Tests

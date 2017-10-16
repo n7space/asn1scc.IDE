@@ -42,7 +42,7 @@ public:
     OutlineCombo(Model *model, IndexUpdater *indexUpdater);
 
 private slots:
-    void updateSelection(const QModelIndex &index);
+    void updateSelection(const QModelIndex index);
 };
 
 } /* namespace TreeViews */

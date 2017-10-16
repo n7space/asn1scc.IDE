@@ -43,11 +43,22 @@ ParsedDataStorage *ParsedDataStorage::instance()
     return &instance_;
 }
 
-const Data::File *ParsedDataStorage::getFileForPath(const QString &filePath) const
+const Data::File *ParsedDataStorage::getAnyFileForPath(const QString &filePath) const
 {
     QMutexLocker locker(&m_documentsMutex);
 
     return getFileForPathInternal(filePath);
+}
+
+const Data::File *ParsedDataStorage::getFileForPathFromProject(const QString &projectName, const QString &filePath)
+{
+    QMutexLocker locker(&m_documentsMutex);
+
+    const auto &project = m_root->project(projectName);
+    if (project == nullptr)
+        return nullptr;
+
+    return project->file(filePath);
 }
 
 void ParsedDataStorage::addProject(const QString &projectName)
@@ -138,10 +149,8 @@ int ParsedDataStorage::getDocumentsCount()
 
     QMutexLocker locker(&m_documentsMutex);
 
-    for (auto it = m_root->projects().begin();
-         it != m_root->projects().end(); it++) {
+    for (auto it = m_root->projects().begin(); it != m_root->projects().end(); it++)
         cnt += (*it)->files().size();
-    }
 
     return cnt;
 }

@@ -26,8 +26,6 @@
 
 #include <QFileInfo>
 
-#include <utils/qtcassert.h>
-
 #include "visitor.h"
 #include "project.h"
 
@@ -71,6 +69,5 @@ void Root::remove(const QString &name)
 Project *Root::project(const QString &name) const
 {
     auto it = m_nameToProjectMap.find(name);
-    QTC_ASSERT(it != m_nameToProjectMap.end(), return nullptr);
-    return it->second;
+    return it != m_nameToProjectMap.end() ? it->second : nullptr;
 }

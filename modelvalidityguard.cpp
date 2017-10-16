@@ -23,37 +23,46 @@
 **
 ****************************************************************************/
 
-#include "parseddocument.h"
-
-#include <memory>
-
-#include "data/definitions.h"
+#include "modelvalidityguard.h"
 
 using namespace Asn1Acn::Internal;
 
-void ParsedDocument::bindModelTreeNode(const Data::File *file, ModelTreeNode::ModelTreeNodePtr moduleNode)
+ModelValidityGuard *ModelValidityGuard::instance()
 {
-    if (file == nullptr)
-        return;
-
-    for (const auto &definitions : file->definitionsList())
-        moduleNode->addChild(createDefinition(*definitions));
+    static ModelValidityGuard instance_;
+    return &instance_;
 }
 
-ModelTreeNode::ModelTreeNodePtr
-ParsedDocument::createDefinition(const Data::Definitions &definition)
+ModelValidityGuard::ModelValidityGuard()
+    : m_modifiersCnt(0)
 {
-    auto definitionNode = ModelTreeNode::makePtr(definition.name(), Data::Type::UserDefined, definition.location());
-    attachTypesToDefiniton(definition.types(), definitionNode);
-
-    return definitionNode;
 }
 
-void ParsedDocument::attachTypesToDefiniton(const Data::Definitions::Types &types,
-                                            ModelTreeNode::ModelTreeNodePtr definitionNode)
+bool ModelValidityGuard::isValid() const
 {
-    for (const auto& type : types) {
-        auto typeNode = ModelTreeNode::makePtr(type->name(), type->reference().type(), type->location());
-        definitionNode->addChild(typeNode);
+    QMutexLocker locker(&m_dataMutex);
+
+    return m_modifiersCnt == 0;
+}
+
+void ModelValidityGuard::invalidate()
+{
+    QMutexLocker locker(&m_dataMutex);
+
+    m_modifiersCnt++;
+
+    emit modelAboutToChange();
+}
+
+void ModelValidityGuard::validate()
+{
+    {
+        QMutexLocker locker(&m_dataMutex);
+
+        m_modifiersCnt--;
+        if (m_modifiersCnt != 0)
+            return;
     }
+
+    emit modelChanged();
 }

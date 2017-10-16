@@ -25,30 +25,34 @@
 
 #pragma once
 
-#include <QMultiHash>
-#include <QString>
-#include <QList>
-
-#include <data/file.h>
-#include <data/definitions.h>
-#include <data/typereference.h>
-#include <data/source.h>
-
-#include "modeltreenode.h"
-#include "completion/usertypesproposalsprovider.h"
+#include <QObject>
+#include <QMutex>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedDocument
+class ModelValidityGuard : public QObject
 {
+    Q_OBJECT
+
+    ModelValidityGuard();
+    ~ModelValidityGuard() = default;
+
 public:
-    static void bindModelTreeNode(const Data::File *file, ModelTreeNode::ModelTreeNodePtr moduleNode);
+    static ModelValidityGuard *instance();
+
+    void invalidate();
+    void validate();
+
+    bool isValid() const;
+
+signals:
+    void modelAboutToChange() const;
+    void modelChanged() const;
 
 private:
-    static ModelTreeNode::ModelTreeNodePtr createDefinition(const Data::Definitions &definition);
-    static void attachTypesToDefiniton(const Data::Definitions::Types &types,
-                                       ModelTreeNode::ModelTreeNodePtr definitionNode);
+    mutable QMutex m_dataMutex;
+    int m_modifiersCnt;
 };
 
 } // namespace Internal

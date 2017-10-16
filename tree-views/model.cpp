@@ -27,6 +27,8 @@
 #include "displayrolevisitor.h"
 #include "decorationrolevisitor.h"
 
+#include "modelvalidityguard.h"
+
 using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
 
@@ -34,14 +36,11 @@ Model::Model(QObject *parent)
     : QAbstractItemModel(parent)
     , m_root(nullptr)
 {
-    // TODO - connect to some global index store?
-    /*
-     connect(ModelTree::instance(), &ModelTree::modelAboutToUpdate,
-            [this](){ beginResetModel(); });
+    connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelAboutToChange,
+            this, &Model::beginResetModel);
 
-    connect(ModelTree::instance(), &ModelTree::modelUpdated,
-            [this](){ endResetModel(); });
-     * */
+    connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelChanged,
+            this, &Model::endResetModel);
 }
 
 Model::~Model()
@@ -123,9 +122,7 @@ int Model::columnCount(const QModelIndex &parent) const
 
 void Model::setRoot(const Node *root)
 {
-    beginResetModel();
     m_root = root;
-    endResetModel();
 }
 
 const Node *Model::dataNode(const QModelIndex &index) const

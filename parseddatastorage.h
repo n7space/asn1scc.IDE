@@ -54,7 +54,9 @@ public:
     static ParsedDataStorage *instance();
 
     const Data::Root *root() const { return m_root.get(); }
-    const Data::File *getFileForPath(const QString &filePath) const;
+
+    const Data::File *getAnyFileForPath(const QString &filePath) const;
+    const Data::File *getFileForPathFromProject(const QString &project, const QString &path);
 
     const QStringList getProjectsForFile(const QString &filePath) const;
     const QStringList getFilesPathsFromProject(const QString &projectName) const;

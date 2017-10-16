@@ -38,21 +38,21 @@ ProjectContentHandler *ProjectContentHandler::create()
 {
     return new ProjectContentHandler([](const QString &project)->DocumentProcessor* { return Asn1SccDocumentProcessor::create(project); } ,
                                      new FileSourceReader,
-                                     ModelTree::instance(),
-                                     ParsedDataStorage::instance());
+                                     ParsedDataStorage::instance(),
+                                     ModelValidityGuard::instance());
 }
 
 ProjectContentHandler::ProjectContentHandler(std::function<DocumentProcessor *(const QString &)> createProcessor,
                                              const SourceReader *sourceReader,
-                                             ModelTree *tree,
-                                             ParsedDataStorage *storage)
-    : m_tree(tree)
-    , m_storage(storage)
+                                             ParsedDataStorage *storage,
+                                             ModelValidityGuard *guard)
+    : m_storage(storage)
+    , m_guard(guard)
     , m_projectsChanged(0)
     , m_sourceReader(sourceReader)
     , m_createProcessor(createProcessor)
 {
-    ModelTreeProxy::treeAboutToChange(m_tree);
+    m_guard->invalidate();
 }
 
 ProjectContentHandler::~ProjectContentHandler()
@@ -63,24 +63,18 @@ ProjectContentHandler::~ProjectContentHandler()
 void ProjectContentHandler::handleProjectAdded(const QString &projectName)
 {
     ParsedDataStorageProxy::addProject(m_storage, projectName);
-    auto node = ModelTreeNode::makePtr(projectName);
-    ModelTreeProxy::addProjectNode(m_tree, node);
-
     allProcessingFinished();
 }
 
 void ProjectContentHandler::handleProjectRemoved(const QString &projectName)
 {
-    ModelTreeProxy::removeProjectNode(m_tree, projectName);
     ParsedDataStorageProxy::removeProject(m_storage, projectName);
-
     allProcessingFinished();
 }
 
 void ProjectContentHandler::handleFileListChanged(const QString &projectName, const QStringList &fileList)
 {
     removeStaleFiles(projectName, fileList);
-    addNewFiles(projectName, fileList);
     processFiles(projectName, fileList);
 }
 
@@ -88,6 +82,7 @@ void ProjectContentHandler::handleFileContentChanged(const QString &path, const 
 {
     QStringList projects = m_storage->getProjectsForFile(path);
 
+    // TODO: Is this conditions still needed?
     if (projects.empty()) {
         allProcessingFinished();
         return;
@@ -101,23 +96,10 @@ void ProjectContentHandler::handleFileContentChanged(const QString &path, const 
 
 void ProjectContentHandler::removeStaleFiles(const QString &projectName, const QStringList &filePaths)
 {
-    QStringList stalePaths = getStaleFilesNames(projectName, filePaths);
+    QStringList stalePaths = getStaleFilesPaths(projectName, filePaths);
 
-    foreach (const QString &stalePath, stalePaths) {
-        ModelTreeProxy::removeNodeFromProject(m_tree, projectName, stalePath);
+    foreach (const QString &stalePath, stalePaths)
         ParsedDataStorageProxy::removeFileFromProject(m_storage, projectName, stalePath);
-    }
-}
-
-void ProjectContentHandler::addNewFiles(const QString &projectName, const QStringList &filePaths)
-{
-    foreach (const QString &path, filePaths) {
-        if (m_tree->getNodeForFilepathFromProject(projectName, path) != nullptr)
-            continue;
-
-        auto node = ModelTreeNode::makePtr(path, Data::Type::UserDefined, Data::SourceLocation(path, 0, 0)); // TODO type?
-        ModelTreeProxy::addNodeToProject(m_tree, projectName, node);
-    }
 }
 
 void ProjectContentHandler::processFiles(const QString &projectName, const QStringList &filePaths)
@@ -126,9 +108,9 @@ void ProjectContentHandler::processFiles(const QString &projectName, const QStri
     startProcessing(dp);
 }
 
-QStringList ProjectContentHandler::getStaleFilesNames(const QString &projectName, const QStringList &filePaths) const
+QStringList ProjectContentHandler::getStaleFilesPaths(const QString &projectName, const QStringList &filePaths) const
 {
-    QStringList staleFileList = m_tree->getFileListFromProject(projectName);
+    QStringList staleFileList = m_storage->getFilesPathsFromProject(projectName);
     QSet<QString> pathsToRemove = staleFileList.toSet().subtract(filePaths.toSet());
 
     QStringList ret;
@@ -149,7 +131,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(c
         if (p == path) {
             docProcessor->addToRun(path, content);
         } else {
-            const auto file = m_storage->getFileForPath(p);
+            const auto file = m_storage->getFileForPathFromProject(projectName, p);
             docProcessor->addToRun(p, file->source().contents());
         }
     }
@@ -163,7 +145,7 @@ DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChang
     DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
     foreach (const QString &path, filePaths) {
-        auto parsedDoc = m_storage->getFileForPath(path);
+        auto parsedDoc = m_storage->getFileForPathFromProject(projectName, path);
         if (parsedDoc != nullptr)
             docProcessor->addToRun(path, parsedDoc->source().contents());
         else
@@ -220,7 +202,7 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++) {
         auto filePath = parsedDocuments[i]->source().filePath();
-        if (m_storage->getFileForPath(filePath) != nullptr)
+        if (m_storage->getFileForPathFromProject(projectName, filePath) != nullptr)
             continue;
 
         ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
@@ -229,6 +211,6 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
 
 void ProjectContentHandler::allProcessingFinished()
 {
-    ModelTreeProxy::treeChanged(m_tree);
+    m_guard->validate();
     deleteLater();
 }

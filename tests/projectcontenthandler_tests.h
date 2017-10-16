@@ -29,7 +29,7 @@
 
 #include <documentprocessor.h>
 #include <parseddatastorage.h>
-#include <modeltree.h>
+#include <modelvalidityguard.h>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -62,8 +62,8 @@ private:
     void fileListChanged(const QString &projectName, const QStringList &files);
     void fileContentChanged(const QString &path, const QString &content);
 
-    ModelTree *m_tree;
     ParsedDataStorage *m_storage;
+    ModelValidityGuard *m_guard;
 
     QStringList m_fileTypes;
 
