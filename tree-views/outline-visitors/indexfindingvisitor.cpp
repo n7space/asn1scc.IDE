@@ -24,8 +24,6 @@
 ****************************************************************************/
 #include "indexfindingvisitor.h"
 
-#include <utils/qtcassert.h>
-
 #include <data/definitions.h>
 #include <data/file.h>
 #include <data/project.h>

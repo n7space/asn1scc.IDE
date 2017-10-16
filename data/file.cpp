@@ -24,8 +24,6 @@
 ****************************************************************************/
 #include "file.h"
 
-#include <utils/qtcassert.h>
-
 #include "visitor.h"
 
 using namespace Asn1Acn::Internal::Data;

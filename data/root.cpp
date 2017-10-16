@@ -26,8 +26,6 @@
 
 #include <QFileInfo>
 
-#include <utils/qtcassert.h>
-
 #include "visitor.h"
 #include "project.h"
 
