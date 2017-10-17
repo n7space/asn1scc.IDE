@@ -172,6 +172,7 @@ HEADERS += \
     data/project.h \
     data/visitor.h \
     data/visitorwithvalue.h \
+    data/importedtype.h \
     \
     data/types/type.h \
     data/types/userdefinedtype.h \

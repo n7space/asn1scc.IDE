@@ -49,9 +49,9 @@ void Definitions::add(std::unique_ptr<TypeAssignment> type)
     m_types.push_back(std::move(type));
 }
 
-void Definitions::addImportedType(const QString &typeName)
+void Definitions::addImportedType(const ImportedType &type)
 {
-    m_importedTypes.append(typeName);
+    m_importedTypes.push_back(type);
 }
 
 const TypeAssignment *Definitions::type(const QString &name) const

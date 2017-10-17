@@ -61,15 +61,15 @@ private:
 
     void updateCurrentFile();
     void createNewAsn1Module();
-    QString readAsnModuleId();
+    QString readIdAttribute();
     QString readNameAttribute();
     int readLineAttribute();
     int readCharPossitionInLineAttribute();
 
     void readImportedModule();
     void readImportedVariables();
-    void readImportedTypes();
-    void readImportedType();
+    void readImportedTypes(const QString &moduleName);
+    void readImportedType(const QString &moduleName);
 
     Data::SourceLocation readLocationFromAttributes();
 

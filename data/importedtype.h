@@ -24,46 +24,25 @@
 ****************************************************************************/
 #pragma once
 
-#include <map>
-#include <vector>
-#include <memory>
-
 #include <QString>
-#include <QStringList>
-
-#include "typeassignment.h"
-#include "importedtype.h"
-#include "node.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-class Definitions : public Node
+class ImportedType
 {
 public:
-    Definitions(const QString &name, const SourceLocation &location);
-    ~Definitions() override;
+    ImportedType(const QString &module, const QString &name)
+        : m_module(module), m_name(name)
+    {}
 
-    void accept(Visitor &visitor) const override;
-
+    const QString &module() const { return m_module; }
     const QString &name() const { return m_name; }
 
-    void add(std::unique_ptr<TypeAssignment> type);
-    void addImportedType(const ImportedType &type);
-
-    using Types = std::vector<std::unique_ptr<TypeAssignment>>;
-    using ImportedTypes = std::vector<ImportedType>;
-
-    const Types &types() const { return m_types; }
-    const TypeAssignment *type(const QString &name) const;
-    const ImportedTypes &importedTypes() const { return m_importedTypes; }
-
 private:
+    QString m_module;
     QString m_name;
-    Types m_types;
-    std::map<QString, TypeAssignment*> m_typeByNameMap;
-    ImportedTypes m_importedTypes;
 };
 
 } // namespace Data

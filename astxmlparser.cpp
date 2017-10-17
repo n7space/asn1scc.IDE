@@ -87,7 +87,7 @@ void AstXmlParser::readAsn1ModuleChildren()
 void AstXmlParser::createNewAsn1Module()
 {
     const auto location = Data::SourceLocation(m_currentFile, 0, 0); // TODO location of DEFINITIONS begin (fix in asn1scc required)
-    m_currentModule = readAsnModuleId();
+    m_currentModule = readIdAttribute();
     auto module = std::make_unique<Data::Definitions>(m_currentModule, location);
     m_currentDefinitions = module.get();
     m_data[m_currentFile]->add(std::move(module));
@@ -99,7 +99,7 @@ void AstXmlParser::readAsn1Module()
     readAsn1ModuleChildren();
 }
 
-QString AstXmlParser::readAsnModuleId()
+QString AstXmlParser::readIdAttribute()
 {
     return m_xmlReader.attributes().value("ID").toString();
 }
@@ -161,10 +161,11 @@ void AstXmlParser::readImportedModules()
 
 void AstXmlParser::readImportedModule()
 {
+    const auto moduleName = readIdAttribute();
     while (m_xmlReader.readNextStartElement())
     {
         if (m_xmlReader.name() == QStringLiteral("ImportedTypes"))
-            readImportedTypes();
+            readImportedTypes(moduleName);
         else if (m_xmlReader.name() == QStringLiteral("ImportedVariables"))
             readImportedVariables();
         else
@@ -177,15 +178,15 @@ void AstXmlParser::readImportedVariables()
     m_xmlReader.skipCurrentElement();
 }
 
-void AstXmlParser::readImportedTypes()
+void AstXmlParser::readImportedTypes(const QString &moduleName)
 {
     while (nextRequiredElementIs("ImportedType"))
-        readImportedType();
+        readImportedType(moduleName);
 }
 
-void AstXmlParser::readImportedType()
+void AstXmlParser::readImportedType(const QString &moduleName)
 {
-    m_currentDefinitions->addImportedType(readNameAttribute());
+    m_currentDefinitions->addImportedType({moduleName, readNameAttribute()});
     m_xmlReader.skipCurrentElement();
 }
 

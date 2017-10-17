@@ -53,9 +53,9 @@ void UserTypesProposalsBuilder::appendInternalTypes(const Data::Definitions::Typ
         addProposal(type->name(), type->valueFor<TreeViews::DecorationRoleVisitor>());
 }
 
-void UserTypesProposalsBuilder::appendImportedTypes(const QList<QString> &importedProposals)
+void UserTypesProposalsBuilder::appendImportedTypes(const Data::Definitions::ImportedTypes &importedTypes)
 {
     const auto icon = QIcon(":/codemodel/images/member.png");
-    foreach(const QString &typeName, importedProposals)
-        addProposal(typeName, icon);
+    foreach(const auto &type, importedTypes)
+        addProposal(type.name(), icon); // TODO better icon!
 }

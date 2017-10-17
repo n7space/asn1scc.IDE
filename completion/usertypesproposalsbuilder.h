@@ -43,7 +43,7 @@ public:
 
 private:
     void fillProposals() override;
-    void appendImportedTypes(const QList<QString> &importedProposals);
+    void appendImportedTypes(const Data::Definitions::ImportedTypes &importedTypes);
     void appendInternalTypes(const Data::Definitions::Types &types);
 
     const Data::File *m_data;
