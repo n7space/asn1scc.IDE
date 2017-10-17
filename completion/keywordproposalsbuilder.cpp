@@ -22,10 +22,12 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "keywordproposalsbuilder.h"
+
 #include <QString>
 #include <QStringList>
 
-#include "keywordproposalsbuilder.h"
+#include <utils/icon.h>
 
 using namespace Asn1Acn::Internal::Completion;
 
@@ -33,24 +35,34 @@ KeywordProposalsBuilder::KeywordProposalsBuilder(const QStringList &keywords,
                                                  const QStringList &types,
                                                  const QStringList &builtin,
                                                  const QStringList &attributes)
-    : ProposalsBuilder(":/codemodel/images/keyword.png")
-    , m_keywords(keywords)
+    : m_keywords(keywords)
     , m_types(types)
     , m_builtin(builtin)
     , m_attributes(attributes)
 {
 }
 
-void KeywordProposalsBuilder::fillProposals()
+static QIcon buildIcon(Utils::Theme::Color theme)
 {
-    appendProposalsGroup(m_keywords);
-    appendProposalsGroup(m_types);
-    appendProposalsGroup(m_builtin);
-    appendProposalsGroup(m_attributes);
+    return Utils::Icon({{QLatin1String(":/codemodel/images/keyword.png"),
+                         theme}}, Utils::Icon::Tint).icon();
 }
 
-void KeywordProposalsBuilder::appendProposalsGroup(const QStringList &group)
+void KeywordProposalsBuilder::fillProposals()
+{
+    const static QIcon keywordIcon(buildIcon(Utils::Theme::IconsCodeModelKeywordColor));
+    const static QIcon typesIcon(buildIcon(Utils::Theme::IconsCodeModelClassColor));
+    const static QIcon builtinIcon(buildIcon(Utils::Theme::IconsCodeModelMacroColor));
+    const static QIcon attributeIcon(buildIcon(Utils::Theme::IconsCodeModelAttributeColor));
+
+    appendProposalsGroup(m_keywords, keywordIcon);
+    appendProposalsGroup(m_types, typesIcon);
+    appendProposalsGroup(m_builtin, builtinIcon);
+    appendProposalsGroup(m_attributes, attributeIcon);
+}
+
+void KeywordProposalsBuilder::appendProposalsGroup(const QStringList &group, const QIcon &icon)
 {
     foreach(const QString &word, group)
-        addProposal(word);
+        addProposal(word, icon);
 }

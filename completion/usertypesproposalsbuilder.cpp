@@ -30,8 +30,7 @@ using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Completion;
 
 UserTypesProposalsBuilder::UserTypesProposalsBuilder(const Data::File *data)
-    : ProposalsBuilder(":/codemodel/images/member.png")
-    , m_data(data)
+    : m_data(data)
 {
 }
 
@@ -48,12 +47,14 @@ void UserTypesProposalsBuilder::fillProposals()
 
 void UserTypesProposalsBuilder::appendInternalTypes(const Data::Definitions::Types &types)
 {
+    const auto icon = QIcon(":/codemodel/images/member.png");
     for (const auto &type : types)
-        addProposal(type->name());
+        addProposal(type->name(), icon);
 }
 
 void UserTypesProposalsBuilder::appendImportedTypes(const QList<QString> &importedProposals)
 {
+    const auto icon = QIcon(":/codemodel/images/member.png");
     foreach(const QString &typeName, importedProposals)
-        addProposal(typeName);
+        addProposal(typeName, icon);
 }

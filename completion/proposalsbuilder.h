@@ -40,13 +40,11 @@ namespace Completion {
 class ProposalsBuilder
 {
 public:
-    ProposalsBuilder(const QString &iconPath);
     Proposals buildProposals();
+    virtual ~ProposalsBuilder();
 
 protected:
-    void addProposal(const QString &text);
-
-    QIcon m_memberIcon;
+    void addProposal(const QString &text, const QIcon &icon);
 
 private:
     virtual void fillProposals() = 0;

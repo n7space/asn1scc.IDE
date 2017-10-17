@@ -26,8 +26,7 @@
 
 using namespace Asn1Acn::Internal::Completion;
 
-ProposalsBuilder::ProposalsBuilder(const QString &iconPath)
-    : m_memberIcon(iconPath)
+ProposalsBuilder::~ProposalsBuilder()
 {
 }
 
@@ -38,12 +37,12 @@ Proposals ProposalsBuilder::buildProposals()
     return m_proposals;
 }
 
-void ProposalsBuilder::addProposal(const QString &text)
+void ProposalsBuilder::addProposal(const QString &text, const QIcon &icon)
 {
     auto proposalItem = new TextEditor::AssistProposalItem;
 
     proposalItem->setText(text);
-    proposalItem->setIcon(m_memberIcon);
+    proposalItem->setIcon(icon);
 
     m_proposals.append(proposalItem);
 }

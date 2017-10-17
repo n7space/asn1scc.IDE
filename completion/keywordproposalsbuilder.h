@@ -46,7 +46,7 @@ public:
 
 private:
     void fillProposals() override;
-    void appendProposalsGroup(const QStringList &proposalsGroup);
+    void appendProposalsGroup(const QStringList &proposalsGroup, const QIcon &icon);
 
     const QStringList &m_keywords;
     const QStringList &m_types;
