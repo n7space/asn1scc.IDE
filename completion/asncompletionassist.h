@@ -22,10 +22,7 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
-
-#include <coreplugin/id.h>
 
 #include "completionassist.h"
 
@@ -47,7 +44,6 @@ class AsnCompletionAssistProvider : public CompletionAssistProvider
     Q_OBJECT
 
 public:
-    bool supportsEditor(Core::Id editorId) const override;
     TextEditor::IAssistProcessor *createProcessor() const override;
 };
 

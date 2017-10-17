@@ -42,11 +42,6 @@ std::unique_ptr<BuiltinsProposalsProvider> AcnCompletionAssistProcessor::getBuil
     return std::move(provider);
 }
 
-bool AcnCompletionAssistProvider::supportsEditor(Core::Id editorId) const
-{
-    return editorId == Constants::ACNEDITOR_ID;
-}
-
 TextEditor::IAssistProcessor *AcnCompletionAssistProvider::createProcessor() const
 {
     return new AcnCompletionAssistProcessor;

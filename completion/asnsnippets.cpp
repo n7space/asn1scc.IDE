@@ -22,33 +22,32 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "acnsnippetprovider.h"
+#include "asnsnippets.h"
 
 #include <QLatin1String>
 #include <QCoreApplication>
 
-#include <texteditor/snippets/snippeteditor.h>
 #include <texteditor/textdocument.h>
+#include <texteditor/texteditor.h>
+#include <texteditor/snippets/snippetprovider.h>
 
 #include <asn1acnconstants.h>
 
 #include "autocompleter.h"
+#include "tr.h"
 
 using namespace Asn1Acn::Internal::Completion;
 
-QString AcnSnippetProvider::groupId() const
-{
-    return QLatin1String(Constants::ACN_SNIPPETS_GROUP_ID);
-}
-
-QString AcnSnippetProvider::displayName() const
-{
-    return QCoreApplication::translate("Asn1Acn::Internal::AcnSnippetProvider", "ACN");
-}
-
-void AcnSnippetProvider::decorateEditor(TextEditor::SnippetEditorWidget *editor) const
+static void decorateEditor(TextEditor::TextEditorWidget *editor)
 {
     editor->setAutoCompleter(new AutoCompleter);
-    editor->textDocument()->setMimeType(Constants::ACN_MIMETYPE);
+    editor->textDocument()->setMimeType(Asn1Acn::Constants::ASN1_MIMETYPE);
     editor->configureGenericHighlighter();
+}
+
+void AsnSnippets::registerGroup()
+{
+    TextEditor::SnippetProvider::registerGroup(QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID),
+                                               Tr::tr("ASN.1"),
+                                               &decorateEditor);
 }

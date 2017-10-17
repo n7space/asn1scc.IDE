@@ -42,7 +42,7 @@ public:
 
     TypesLocator();
 
-    void accept(Entry selection) const override;
+    void accept(Entry selection, QString *newText, int *selectionStart, int *selectionLength) const override;
     void refresh(QFutureInterface<void> &future) override;
 
     QList<Entry> matchesFor(QFutureInterface<Entry> &future, const QString &entry) override;

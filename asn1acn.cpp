@@ -37,8 +37,8 @@
 
 #include <texteditor/texteditorconstants.h>
 
-#include "completion/asnsnippetprovider.h"
-#include "completion/acnsnippetprovider.h"
+#include "completion/asnsnippets.h"
+#include "completion/acnsnippets.h"
 
 #include "settings/settings.h"
 #include "settings/general.h"
@@ -108,10 +108,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     const auto generalSettings = Settings::load<Settings::General>();
     const auto serviceSettings = Settings::load<Settings::Service>();
 
-    addAutoReleasedObject(new AsnEditorFactory);
-    addAutoReleasedObject(new Completion::AsnSnippetProvider);
-    addAutoReleasedObject(new Completion::AcnSnippetProvider);
-
+    addAutoReleasedObject(new AsnEditorFactory);  
     addAutoReleasedObject(new AcnEditorFactory);
 
     addAutoReleasedObject(new ProjectWatcher);
@@ -123,6 +120,9 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(new OptionsPages::Service(serviceSettings));
 
     addAutoReleasedObject(new TypesLocator);
+
+    Completion::AsnSnippets::registerGroup();
+    Completion::AcnSnippets::registerGroup();
 
     Asn1SccServiceProvider *sp = new Asn1SccServiceProvider(serviceSettings);
     addAutoReleasedObject(sp);

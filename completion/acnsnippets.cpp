@@ -22,27 +22,33 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "acnsnippets.h"
+#include "acnsnippets.h"
 
-#pragma once
+#include <QLatin1String>
+#include <QCoreApplication>
 
-#include <texteditor/snippets/isnippetprovider.h>
+#include <texteditor/textdocument.h>
+#include <texteditor/snippets/snippetprovider.h>
+#include <texteditor/texteditor.h>
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Completion {
+#include <asn1acnconstants.h>
 
-class AcnSnippetProvider : public TextEditor::ISnippetProvider
+#include "autocompleter.h"
+#include "tr.h"
+
+using namespace Asn1Acn::Internal::Completion;
+
+static void decorateEditor(TextEditor::TextEditorWidget *editor)
 {
-    Q_OBJECT
+    editor->setAutoCompleter(new AutoCompleter);
+    editor->textDocument()->setMimeType(Asn1Acn::Constants::ACN_MIMETYPE);
+    editor->configureGenericHighlighter();
+}
 
-public:
-    ~AcnSnippetProvider() final = default;
-
-    QString groupId() const override final;
-    QString displayName() const override final;
-    void decorateEditor(TextEditor::SnippetEditorWidget *editor) const override final;
-};
-
-} /* nameapsce Completion */
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+void AcnSnippets::registerGroup()
+{
+    TextEditor::SnippetProvider::registerGroup(QLatin1String(Constants::ACN_SNIPPETS_GROUP_ID),
+                                               Tr::tr("ACN"),
+                                               &decorateEditor);
+}
