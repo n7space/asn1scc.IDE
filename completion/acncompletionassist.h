@@ -22,7 +22,6 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <coreplugin/id.h>
@@ -39,7 +38,7 @@ public:
     AcnCompletionAssistProcessor();
 
 private:
-    std::unique_ptr<BuiltinsProposalsProvider> getBuiltinsProposalsProvider() const override;
+    std::unique_ptr<ProposalsBuilder> createKeywordsProposalsBuilder() const override;
 };
 
 class AcnCompletionAssistProvider : public CompletionAssistProvider

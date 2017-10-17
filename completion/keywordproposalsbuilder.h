@@ -22,26 +22,38 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#pragma once
 
-#include "asnbuiltinsproposalsprovider.h"
+#include <QList>
 
-#include <QStringList>
+#include <texteditor/codeassist/assistproposalitem.h>
 
-using namespace Asn1Acn::Internal::Completion;
+#include "proposalsbuilder.h"
 
-static const QStringList KEYWORDS = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMATIC", "TAGS", "EXPLICIT", "IMPLICIT",
-                                      "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "DEFINITIONS", "APPLICATION", "PRIVATE",
-                                      "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM" };
+#include "completiontypedefs.h"
 
-static const QStringList TYPES = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SEQUENCE",
-                                   "OCTET STRING", "BIT STRING" };
+namespace Asn1Acn {
+namespace Internal {
+namespace Completion {
 
-static const QStringList BUILTIN = { "NULL", "FALSE", "TRUE" };
-
-static const QStringList ATTRIBUTES = { "SIZE", "OPTIONAL", "MIN", "MAX", "DEFAULT", "WITH COMPONENT", "WITH COMPONENTS",
-                                        "INCLUDES", "ABSENT", "PRESENT", "PATTERN" };
-
-AsnBuiltinsProposalsProvider::AsnBuiltinsProposalsProvider()
-    : BuiltinsProposalsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
+class KeywordProposalsBuilder : public ProposalsBuilder
 {
-}
+public:
+    KeywordProposalsBuilder(const QStringList &keywords,
+                            const QStringList &types,
+                            const QStringList &builtin,
+                            const QStringList &attributes);
+
+private:
+    void fillProposals() override;
+    void appendProposalsGroup(const QStringList &proposalsGroup);
+
+    const QStringList &m_keywords;
+    const QStringList &m_types;
+    const QStringList &m_builtin;
+    const QStringList &m_attributes;
+};
+
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

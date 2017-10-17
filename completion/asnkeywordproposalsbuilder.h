@@ -22,37 +22,18 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QList>
-
-#include <texteditor/codeassist/assistproposalitem.h>
-
-#include "proposalsprovider.h"
-
-#include "completiontypedefs.h"
+#include "keywordproposalsbuilder.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Completion {
 
-class BuiltinsProposalsProvider : public ProposalsProvider
+class AsnKeywordProposalsBuilder : public KeywordProposalsBuilder
 {
 public:
-    BuiltinsProposalsProvider(const QStringList &keywords,
-                              const QStringList &types,
-                              const QStringList &builtin,
-                              const QStringList &attributes);
-
-private:
-    Proposals createProposals() const override;
-    Proposals createProposalsGroup(const QStringList &proposalsGroup) const;
-
-    const QStringList &m_keywords;
-    const QStringList &m_types;
-    const QStringList &m_builtin;
-    const QStringList &m_attributes;
+    AsnKeywordProposalsBuilder();
 };
 
 } /* nameapsce Completion */

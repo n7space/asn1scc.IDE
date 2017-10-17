@@ -22,36 +22,28 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "proposalsbuilder.h"
 
-#pragma once
+using namespace Asn1Acn::Internal::Completion;
 
-#include <QIcon>
-#include <QList>
-#include <QString>
-
-#include <texteditor/codeassist/assistproposalitem.h>
-
-#include "completiontypedefs.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace Completion {
-
-class ProposalsProvider
+ProposalsBuilder::ProposalsBuilder(const QString &iconPath)
+    : m_memberIcon(iconPath)
 {
-public:
-    ProposalsProvider(const QString &iconPath);
-    Proposals takeProposals() const;
+}
 
-protected:
-    void addProposal(Proposals &proposals, const QString &text) const;
+Proposals ProposalsBuilder::buildProposals()
+{
+    m_proposals.clear();
+    fillProposals();
+    return m_proposals;
+}
 
-    QIcon m_memberIcon;
+void ProposalsBuilder::addProposal(const QString &text)
+{
+    auto proposalItem = new TextEditor::AssistProposalItem;
 
-private:
-    virtual Proposals createProposals() const = 0;
-};
+    proposalItem->setText(text);
+    proposalItem->setIcon(m_memberIcon);
 
-} /* nameapsce Completion */
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+    m_proposals.append(proposalItem);
+}

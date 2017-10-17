@@ -22,50 +22,31 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <memory>
 
-#include <texteditor/codeassist/assistinterface.h>
-#include <texteditor/codeassist/completionassistprovider.h>
-#include <texteditor/codeassist/iassistprocessor.h>
-#include <texteditor/snippets/snippetassistcollector.h>
+#include <texteditor/codeassist/assistproposalitem.h>
+
+#include <data/file.h>
 
 #include "proposalsbuilder.h"
-
-#include "completiontypedefs.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Completion {
 
-class CompletionAssistProcessor : public TextEditor::IAssistProcessor
+class UserTypesProposalsBuilder : public ProposalsBuilder
 {
 public:
-    CompletionAssistProcessor(const QString &snippetsGroup);
-
-    TextEditor::IAssistProposal *perform(const TextEditor::AssistInterface *interface) override;
+    UserTypesProposalsBuilder(const Data::File *data);
 
 private:
-    virtual std::unique_ptr<ProposalsBuilder> createKeywordsProposalsBuilder() const = 0;
+    void fillProposals() override;
+    void appendImportedTypes(const QList<QString> &importedProposals);
+    void appendInternalTypes(const Data::Definitions::Types &types);
 
-    void appendProposalsFromUserTypes(Proposals &proposals, const QString &fileName) const;
-    void appendProposalsFromSnippets(Proposals &proposals) const;
-    void appendProposalsFromKeywords(Proposals &proposals) const;
-
-    bool shouldAccept(const TextEditor::AssistInterface *interface) const;
-    int findStartOfName(const TextEditor::AssistInterface *interface) const;
-
-    TextEditor::SnippetAssistCollector m_snippetCollector;
-};
-
-class CompletionAssistProvider : public TextEditor::CompletionAssistProvider
-{
-    Q_OBJECT
-
-public:
-    bool isContinuationChar(const QChar &c) const override;
+    const Data::File *m_data;
 };
 
 } /* nameapsce Completion */

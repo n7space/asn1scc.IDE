@@ -22,27 +22,38 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "usertypesproposalsbuilder.h"
 
-#include "proposalsprovider.h"
+#include <data/definitions.h>
 
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Completion;
 
-ProposalsProvider::ProposalsProvider(const QString &iconPath)
-    : m_memberIcon(iconPath)
+UserTypesProposalsBuilder::UserTypesProposalsBuilder(const Data::File *data)
+    : ProposalsBuilder(":/codemodel/images/member.png")
+    , m_data(data)
 {
 }
 
-Proposals ProposalsProvider::takeProposals() const
+void UserTypesProposalsBuilder::fillProposals()
 {
-    return createProposals();
+    if (m_data == nullptr)
+        return;
+
+    for (const auto &definitions : m_data->definitionsList()) {
+        appendImportedTypes(definitions->importedTypes());
+        appendInternalTypes(definitions->types());
+    }
 }
 
-void ProposalsProvider::addProposal(Proposals &proposals, const QString &text) const
+void UserTypesProposalsBuilder::appendInternalTypes(const Data::Definitions::Types &types)
 {
-    auto proposalItem = new TextEditor::AssistProposalItem;
+    for (const auto &type : types)
+        addProposal(type->name());
+}
 
-    proposalItem->setText(text);
-    proposalItem->setIcon(m_memberIcon);
-
-    proposals.append(proposalItem);
+void UserTypesProposalsBuilder::appendImportedTypes(const QList<QString> &importedProposals)
+{
+    foreach(const QString &typeName, importedProposals)
+        addProposal(typeName);
 }

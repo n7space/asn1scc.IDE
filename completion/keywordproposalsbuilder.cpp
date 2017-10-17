@@ -22,41 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #include <QString>
 #include <QStringList>
 
-#include "builtinsproposalsprovider.h"
+#include "keywordproposalsbuilder.h"
 
 using namespace Asn1Acn::Internal::Completion;
 
-BuiltinsProposalsProvider::BuiltinsProposalsProvider(const QStringList &keywords,
-                                                     const QStringList &types,
-                                                     const QStringList &builtin,
-                                                     const QStringList &attributes)
-    : ProposalsProvider(":/codemodel/images/keyword.png"),
-      m_keywords(keywords), m_types(types), m_builtin(builtin), m_attributes(attributes)
+KeywordProposalsBuilder::KeywordProposalsBuilder(const QStringList &keywords,
+                                                 const QStringList &types,
+                                                 const QStringList &builtin,
+                                                 const QStringList &attributes)
+    : ProposalsBuilder(":/codemodel/images/keyword.png")
+    , m_keywords(keywords)
+    , m_types(types)
+    , m_builtin(builtin)
+    , m_attributes(attributes)
 {
 }
 
-Proposals BuiltinsProposalsProvider::createProposals() const
+void KeywordProposalsBuilder::fillProposals()
 {
-    Proposals proposals;
-
-    proposals.append(createProposalsGroup(m_keywords));
-    proposals.append(createProposalsGroup(m_types));
-    proposals.append(createProposalsGroup(m_builtin));
-    proposals.append(createProposalsGroup(m_attributes));
-
-    return proposals;
+    appendProposalsGroup(m_keywords);
+    appendProposalsGroup(m_types);
+    appendProposalsGroup(m_builtin);
+    appendProposalsGroup(m_attributes);
 }
 
-Proposals BuiltinsProposalsProvider::createProposalsGroup(const QStringList &group) const
+void KeywordProposalsBuilder::appendProposalsGroup(const QStringList &group)
 {
-    Proposals proposals;
-
     foreach(const QString &word, group)
-        addProposal(proposals, word);
-
-    return proposals;
+        addProposal(word);
 }

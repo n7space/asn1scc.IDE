@@ -36,7 +36,7 @@ public:
     AsnCompletionAssistProcessor();
 
 private:
-    std::unique_ptr<BuiltinsProposalsProvider> getBuiltinsProposalsProvider() const override;
+    std::unique_ptr<ProposalsBuilder> createKeywordsProposalsBuilder() const override;
 };
 
 class AsnCompletionAssistProvider : public CompletionAssistProvider

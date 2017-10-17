@@ -22,20 +22,18 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include "builtinsproposalsprovider.h"
+#include "keywordproposalsbuilder.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Completion {
 
-class AcnBuiltinsProposalProvider : public BuiltinsProposalsProvider
+class AcnKeywordProposalsBuilder : public KeywordProposalsBuilder
 {
-
 public:
-    AcnBuiltinsProposalProvider();
+    AcnKeywordProposalsBuilder();
 };
 
 } /* nameapsce Completion */

@@ -22,10 +22,9 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "acnkeywordproposalsbuilder.h"
 
 #include <QStringList>
-
-#include "acnbuiltinsproposalsprovider.h"
 
 using namespace Asn1Acn::Internal::Completion;
 
@@ -40,7 +39,7 @@ static const QStringList ATTRIBUTES = { "endianness", "encoding", "size", "null-
                                         "align-to-next", "encode-values", "true-value", "false-value", "pattern",
                                         "mapping-function", "present-when", "determinant" };
 
-AcnBuiltinsProposalProvider::AcnBuiltinsProposalProvider()
-    : BuiltinsProposalsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
+AcnKeywordProposalsBuilder::AcnKeywordProposalsBuilder()
+    : KeywordProposalsBuilder(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
 {
 }
