@@ -225,7 +225,7 @@ void AutoCompleterTests::test_insertEndForBegin()
     QTextCursor cursor(document);
     cursor.movePosition(QTextCursor::EndOfLine);
 
-    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor);
 
     QString expected = text + QString("\nEND");
 
@@ -245,7 +245,7 @@ void AutoCompleterTests::test_insertEndForBeginAlreadyPaired()
     QTextCursor cursor(document);
     cursor.movePosition(QTextCursor::EndOfLine);
 
-    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor);
 
     QString expected = text;
 
@@ -263,7 +263,7 @@ void AutoCompleterTests::test_insertEndForCommentedBegin()
     QTextCursor cursor(document);
     cursor.movePosition(QTextCursor::EndOfLine);
 
-    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor);
 
     QString expected = text;
 
@@ -281,7 +281,7 @@ void AutoCompleterTests::test_insertEndForBeginInString()
     QTextCursor cursor(document);
     cursor.movePosition(QTextCursor::EndOfLine);
 
-    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor);
 
     QString expected = text;
 
@@ -299,7 +299,7 @@ void AutoCompleterTests::test_insertEndForBeginNotInTheEndOfLine()
     QTextCursor cursor(document);
     cursor.movePosition(QTextCursor::EndOfLine);
 
-    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor);
 
     QString expected = text;
 
@@ -319,7 +319,7 @@ void AutoCompleterTests::test_insertEndForBeginWhenEndIsCommented()
     QTextCursor cursor(document);
     cursor.movePosition(QTextCursor::EndOfLine);
 
-    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor, TextEditor::TabSettings());
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor);
 
     QString expected("Autocomplete DEFINITIONS ::= BEGIN\n"
                      "END\n"

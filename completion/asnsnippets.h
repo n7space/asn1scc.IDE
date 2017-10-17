@@ -22,27 +22,16 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
-
-#include <texteditor/snippets/isnippetprovider.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Completion {
 
-class AsnSnippetProvider : public TextEditor::ISnippetProvider
-{
-    Q_OBJECT
+namespace AsnSnippets {
+void registerGroup();
+} /* namespace AsnSnippets */
 
-public:
-    ~AsnSnippetProvider() final = default;
-
-    QString groupId() const override final;
-    QString displayName() const override final;
-    void decorateEditor(TextEditor::SnippetEditorWidget *editor) const override final;
-};
-
-} /* nameapsce Completion */
+} /* namespace Completion */
 } /* namespace Internal */
 } /* namespace Asn1Acn */

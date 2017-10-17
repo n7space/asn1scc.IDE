@@ -134,8 +134,7 @@ bool AutoCompleter::contextAllowsAutoQuotes(const QTextCursor &cursor, const QSt
     return !isInComment(cursor);
 }
 
-int AutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor,
-                                                       const TextEditor::TabSettings &tabSettings)
+int AutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor)
 {
     if (tryInsertEndKeyword(cursor))
         return 1;
@@ -143,7 +142,7 @@ int AutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor,
     auto block = cursor.document()->lastBlock();
     TextEditor::TextDocumentLayout::setBraceDepth(block, 1); // TODO - workaround to reuse code from base class
 
-    return TextEditor::AutoCompleter::paragraphSeparatorAboutToBeInserted(cursor, tabSettings);
+    return TextEditor::AutoCompleter::paragraphSeparatorAboutToBeInserted(cursor);
 }
 
 bool AutoCompleter::tryInsertEndKeyword(QTextCursor &cursor) const

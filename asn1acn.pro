@@ -57,8 +57,8 @@ INCLUDEPATH += $$PWD
 SOURCES += \
     completion/autocompleter.cpp \
     completion/asncompletionassist.cpp \
-    completion/asnsnippetprovider.cpp \
-    completion/acnsnippetprovider.cpp \
+    completion/asnsnippets.cpp \
+    completion/acnsnippets.cpp \
     completion/proposalsprovider.cpp \
     completion/asnbuiltinsproposalsprovider.cpp \
     completion/usertypesproposalsprovider.cpp \
@@ -141,8 +141,8 @@ SOURCES += \
 HEADERS += \
     completion/autocompleter.h \
     completion/asncompletionassist.h \
-    completion/asnsnippetprovider.h \
-    completion/acnsnippetprovider.h \
+    completion/asnsnippets.h \
+    completion/acnsnippets.h \
     completion/proposalsprovider.h \
     completion/asnbuiltinsproposalsprovider.h \
     completion/usertypesproposalsprovider.h \

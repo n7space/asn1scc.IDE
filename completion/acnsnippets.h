@@ -22,33 +22,16 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "asnsnippetprovider.h"
+#pragma once
 
-#include <QLatin1String>
-#include <QCoreApplication>
+namespace Asn1Acn {
+namespace Internal {
+namespace Completion {
 
-#include <texteditor/snippets/snippeteditor.h>
-#include <texteditor/textdocument.h>
+namespace AcnSnippets {
+void registerGroup();
+} /* namespace AsnSnippets */
 
-#include <asn1acnconstants.h>
-
-#include "autocompleter.h"
-
-using namespace Asn1Acn::Internal::Completion;
-
-QString AsnSnippetProvider::groupId() const
-{
-    return QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID);
-}
-
-QString AsnSnippetProvider::displayName() const
-{
-    return QCoreApplication::translate("Asn1Acn::Internal::AsnSnippetProvider", "ASN.1");
-}
-
-void AsnSnippetProvider::decorateEditor(TextEditor::SnippetEditorWidget *editor) const
-{
-    editor->setAutoCompleter(new AutoCompleter);
-    editor->textDocument()->setMimeType(Constants::ASN1_MIMETYPE);
-    editor->configureGenericHighlighter();
-}
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

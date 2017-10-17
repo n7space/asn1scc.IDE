@@ -41,8 +41,9 @@ TypesLocator::TypesLocator()
     setIncludedByDefault(false);
 }
 
-void TypesLocator::accept(Entry selection) const
+void TypesLocator::accept(Entry selection, QString *newText, int *selectionStart, int *selectionLength) const
 {
+    Q_UNUSED(newText); Q_UNUSED(selectionStart); Q_UNUSED(selectionLength);
     Core::EditorManager::openEditorAt(selection.fileName, 1, 0);
 }
 
