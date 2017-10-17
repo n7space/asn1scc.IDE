@@ -26,6 +26,8 @@
 
 #include <data/definitions.h>
 
+#include <tree-views/decorationrolevisitor.h>
+
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Completion;
 
@@ -47,9 +49,8 @@ void UserTypesProposalsBuilder::fillProposals()
 
 void UserTypesProposalsBuilder::appendInternalTypes(const Data::Definitions::Types &types)
 {
-    const auto icon = QIcon(":/codemodel/images/member.png");
     for (const auto &type : types)
-        addProposal(type->name(), icon);
+        addProposal(type->name(), type->valueFor<TreeViews::DecorationRoleVisitor>());
 }
 
 void UserTypesProposalsBuilder::appendImportedTypes(const QList<QString> &importedProposals)
