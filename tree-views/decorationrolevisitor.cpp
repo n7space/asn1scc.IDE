@@ -32,6 +32,8 @@
 #include <data/typereference.h>
 #include <data/project.h>
 
+#include <utils/icon.h>
+
 #include <icons.h>
 
 using namespace Asn1Acn::Internal::TreeViews;
@@ -44,9 +46,11 @@ DecorationRoleVisitor::~DecorationRoleVisitor()
 
 QIcon DecorationRoleVisitor::valueFor(const Definitions &defs) const
 {
-    // TODO - same as namespace in C++?
     Q_UNUSED(defs);
-    return Icons::iconForType(Data::Type::UserDefined);
+    const static QIcon icon(Utils::Icon({{QLatin1String(":/utils/images/namespace.png"),
+                                          Utils::Theme::IconsCodeModelKeywordColor}
+                                 }, Utils::Icon::Tint).icon());
+    return icon;
 }
 
 QIcon DecorationRoleVisitor::valueFor(const File &file) const
