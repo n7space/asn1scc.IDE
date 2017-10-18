@@ -41,7 +41,7 @@ public:
     TypeReference(const Type dataType, const SourceLocation &location);
     TypeReference(const QString &name, const QString &module, const SourceLocation &location);
     // TODO kill
-    TypeReference() : TypeReference(Type::UserDefined, {}) {}
+    TypeReference() : TypeReference(Type::Kind::UserDefined, {}) {}
     ~TypeReference() override;
 
     void accept(Visitor &visitor) const override;
@@ -49,7 +49,7 @@ public:
     const QString &name() const { return m_name; }
     const QString &module() const { return m_module; }
     Type type() const { return m_type; }
-    bool isUserDefined() const { return m_type == Type::UserDefined; }
+    bool isUserDefined() const { return m_type.m_kind == Type::Kind::UserDefined; }
 
 private:
     Type m_type;

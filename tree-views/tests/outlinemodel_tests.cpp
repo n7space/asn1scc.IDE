@@ -56,13 +56,13 @@ void OutlineModelTests::test_modelWithDummyPopulation()
     const auto root = std::make_unique<Data::File>(Data::Source("file.asn1", "CONTENTS"));
 
     auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{"file1.asn1", 0, 0});
-    definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, Data::Type::UserDefined));
-    definitions1->add(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{"file1.asn1", 3, 3}, Data::Type::UserDefined));
+    definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, Data::Type::Kind::UserDefined));
+    definitions1->add(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{"file1.asn1", 3, 3}, Data::Type::Kind::UserDefined));
     root->add(std::move(definitions1));
 
     auto definitions2 = std::make_unique<Data::Definitions>("Module2", Data::SourceLocation{"file1.asn1", 5, 0});
-    definitions2->add(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{"file1.asn1", 6, 3}, Data::Type::UserDefined));
-    definitions2->add(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{"file1.asn1", 7, 3}, Data::Type::UserDefined));
+    definitions2->add(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{"file1.asn1", 6, 3}, Data::Type::Kind::UserDefined));
+    definitions2->add(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{"file1.asn1", 7, 3}, Data::Type::Kind::UserDefined));
     root->add(std::move(definitions2));
 
     auto model = new OutlineModel(this);

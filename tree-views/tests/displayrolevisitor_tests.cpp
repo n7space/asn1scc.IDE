@@ -41,7 +41,7 @@ DisplayRoleVisitorTests::DisplayRoleVisitorTests(QObject *parent)
 {
 }
 
-Q_DECLARE_METATYPE(Asn1Acn::Internal::Data::Type)
+Q_DECLARE_METATYPE(Asn1Acn::Internal::Data::Type::Kind)
 
 void DisplayRoleVisitorTests::test_definitions()
 {
@@ -59,38 +59,39 @@ void DisplayRoleVisitorTests::test_file()
 
 void DisplayRoleVisitorTests::test_typeAssignment()
 {
-    TypeAssignment type("TypeName", {}, Data::Type::Integer);
+    QFETCH(Type::Kind, kind);
+    QFETCH(QString, value);
 
-    QCOMPARE(type.valueFor<DisplayRoleVisitor>(), QStringLiteral("TypeName: INTEGER"));
+    TypeAssignment typeAssignment("TypeName", {}, Type(kind));
+
+
+    QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: " + value));
+}
+
+void DisplayRoleVisitorTests::test_typeAssignment_data()
+{
+    QTest::addColumn<Type::Kind>("kind");
+    QTest::addColumn<QString>("value");
+
+    QTest::newRow("Boolean")       << Type::Kind::Boolean       << "BOOLEAN";
+    QTest::newRow("Null")          << Type::Kind::Null          << "NULL";
+    QTest::newRow("Integer")       << Type::Kind::Integer       << "INTEGER";
+    QTest::newRow("Real")          << Type::Kind::Real          << "REAL";
+    QTest::newRow("BitString")     << Type::Kind::BitString     << "BIT STRING";
+    QTest::newRow("OctetString")   << Type::Kind::OctetString   << "OCTET STRING";
+    QTest::newRow("IA5String")     << Type::Kind::IA5String     << "IA5String";
+    QTest::newRow("NumericString") << Type::Kind::NumericString << "NumericString";
+    QTest::newRow("Enumerated")    << Type::Kind::Enumerated    << "ENUMERATED";
+    QTest::newRow("Choice")        << Type::Kind::Choice        << "CHOICE";
+    QTest::newRow("Sequence")      << Type::Kind::Sequence      << "SEQUENCE";
+    QTest::newRow("SequenceOf")    << Type::Kind::SequenceOf    << "SEQUENCE OF";
 }
 
 void DisplayRoleVisitorTests::test_typeReferenceBuiltIn()
 {
-    QFETCH(Data::Type, type);
-    QFETCH(QString, value);
-
-    TypeReference reference(type, {});
+    TypeReference reference(Type::Kind::SequenceOf, {});
 
     QCOMPARE(reference.valueFor<DisplayRoleVisitor>(), QString());
-}
-
-void DisplayRoleVisitorTests::test_typeReferenceBuiltIn_data()
-{
-    QTest::addColumn<Data::Type>("type");
-    QTest::addColumn<QString>("value");
-
-    QTest::newRow("Boolean")       << Data::Type::Boolean       << "BOOLEAN";
-    QTest::newRow("Null")          << Data::Type::Null          << "NULL";
-    QTest::newRow("Integer")       << Data::Type::Integer       << "INTEGER";
-    QTest::newRow("Real")          << Data::Type::Real          << "REAL";
-    QTest::newRow("BitString")     << Data::Type::BitString     << "BIT STRING";
-    QTest::newRow("OctetString")   << Data::Type::OctetString   << "OCTET STRING";
-    QTest::newRow("IA5String")     << Data::Type::IA5String     << "IA5String";
-    QTest::newRow("NumericString") << Data::Type::NumericString << "NumericString";
-    QTest::newRow("Enumerated")    << Data::Type::Enumerated    << "ENUMERATED";
-    QTest::newRow("Choice")        << Data::Type::Choice        << "CHOICE";
-    QTest::newRow("Sequence")      << Data::Type::Sequence      << "SEQUENCE";
-    QTest::newRow("SequenceOf")    << Data::Type::SequenceOf    << "SEQUENCE OF";
 }
 
 void DisplayRoleVisitorTests::test_typeReferenceUserDefined()

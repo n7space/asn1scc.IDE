@@ -34,20 +34,20 @@ namespace
 {
 QString baseIconFileForType(const Data::Type type)
 {
-    switch (type) {
-    case Data::Type::Boolean:       return QStringLiteral(":/asn1acn/images/outline/boolean.png");
-    case Data::Type::Null:          return QStringLiteral(":/asn1acn/images/outline/null.png");
-    case Data::Type::Integer:       return QStringLiteral(":/asn1acn/images/outline/integer.png");
-    case Data::Type::Real:          return QStringLiteral(":/asn1acn/images/outline/real.png");
-    case Data::Type::BitString:     return QStringLiteral(":/asn1acn/images/outline/bitstring.png");
-    case Data::Type::OctetString:   return QStringLiteral(":/asn1acn/images/outline/octetstring.png");
-    case Data::Type::IA5String:     return QStringLiteral(":/asn1acn/images/outline/ia5string.png");
-    case Data::Type::NumericString: return QStringLiteral(":/asn1acn/images/outline/numericstring.png");
-    case Data::Type::Enumerated:    return QStringLiteral(":/asn1acn/images/outline/enumerated.png");
-    case Data::Type::Choice:        return QStringLiteral(":/asn1acn/images/outline/choice.png");
-    case Data::Type::Sequence:      return QStringLiteral(":/asn1acn/images/outline/sequence.png");
-    case Data::Type::SequenceOf:    return QStringLiteral(":/asn1acn/images/outline/sequenceof.png");
-    case Data::Type::UserDefined:   return QStringLiteral(":/asn1acn/images/outline/userdefined.png");
+    switch (type.m_kind) {
+    case Data::Type::Kind::Boolean:       return QStringLiteral(":/asn1acn/images/outline/boolean.png");
+    case Data::Type::Kind::Null:          return QStringLiteral(":/asn1acn/images/outline/null.png");
+    case Data::Type::Kind::Integer:       return QStringLiteral(":/asn1acn/images/outline/integer.png");
+    case Data::Type::Kind::Real:          return QStringLiteral(":/asn1acn/images/outline/real.png");
+    case Data::Type::Kind::BitString:     return QStringLiteral(":/asn1acn/images/outline/bitstring.png");
+    case Data::Type::Kind::OctetString:   return QStringLiteral(":/asn1acn/images/outline/octetstring.png");
+    case Data::Type::Kind::IA5String:     return QStringLiteral(":/asn1acn/images/outline/ia5string.png");
+    case Data::Type::Kind::NumericString: return QStringLiteral(":/asn1acn/images/outline/numericstring.png");
+    case Data::Type::Kind::Enumerated:    return QStringLiteral(":/asn1acn/images/outline/enumerated.png");
+    case Data::Type::Kind::Choice:        return QStringLiteral(":/asn1acn/images/outline/choice.png");
+    case Data::Type::Kind::Sequence:      return QStringLiteral(":/asn1acn/images/outline/sequence.png");
+    case Data::Type::Kind::SequenceOf:    return QStringLiteral(":/asn1acn/images/outline/sequenceof.png");
+    case Data::Type::Kind::UserDefined:   return QStringLiteral(":/asn1acn/images/outline/userdefined.png");
     }
     return QString();
 }

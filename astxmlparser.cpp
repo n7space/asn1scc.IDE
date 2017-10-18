@@ -214,25 +214,25 @@ Data::SourceLocation AstXmlParser::readLocationFromAttributes()
 
 namespace
 {
-Data::Type mapNameToDataType(const QStringRef &name)
+Data::Type::Kind mapNameToDataType(const QStringRef &name)
 {
-    static const QMap<QString, Data::Type> mapping = {
-        { "BooleanType",       Data::Type::Boolean },
-        { "NullType",          Data::Type::Null },
-        { "IntegerType",       Data::Type::Integer },
-        { "RealType",          Data::Type::Real },
-        { "BitStringType",     Data::Type::BitString },
-        { "OctetStringType",   Data::Type::OctetString },
-        { "IA5StringType",     Data::Type::IA5String },
-        { "NumericStringType", Data::Type::NumericString },
-        { "EnumeratedType",    Data::Type::Enumerated },
-        { "ChoiceType",        Data::Type::Choice },
-        { "SequenceType",      Data::Type::Sequence },
-        { "SequenceOfType",    Data::Type::SequenceOf },
+    static const QMap<QString, Data::Type::Kind> mapping = {
+        { "BooleanType",       Data::Type::Kind::Boolean },
+        { "NullType",          Data::Type::Kind::Null },
+        { "IntegerType",       Data::Type::Kind::Integer },
+        { "RealType",          Data::Type::Kind::Real },
+        { "BitStringType",     Data::Type::Kind::BitString },
+        { "OctetStringType",   Data::Type::Kind::OctetString },
+        { "IA5StringType",     Data::Type::Kind::IA5String },
+        { "NumericStringType", Data::Type::Kind::NumericString },
+        { "EnumeratedType",    Data::Type::Kind::Enumerated },
+        { "ChoiceType",        Data::Type::Kind::Choice },
+        { "SequenceType",      Data::Type::Kind::Sequence },
+        { "SequenceOfType",    Data::Type::Kind::SequenceOf },
     };
     const auto it = mapping.find(name.toString());
     if (it == mapping.end())
-        return Data::Type::UserDefined;
+        return Data::Type::Kind::UserDefined;
     return it.value();
 }
 } // namespace
@@ -245,17 +245,18 @@ Data::Type AstXmlParser::readType()
     const auto location = readLocationFromAttributes();
 
     m_xmlReader.readNextStartElement();
-    Data::Type type = mapNameToDataType(m_xmlReader.name());
+    Data::Type::Kind kind = mapNameToDataType(m_xmlReader.name());
 
-    switch (type) {
-    case Data::Type::UserDefined:
-        readUserDefinedTypeReference(location);
+    Data::Type type(kind);
+    switch (kind) {
+    case Data::Type::Kind::UserDefined:
+        readUserDefinedTypeReference(location, type);
         m_xmlReader.skipCurrentElement();
         break;
-    case Data::Type::Sequence:
+    case Data::Type::Kind::Sequence:
         readSequence();
         break;
-    case Data::Type::SequenceOf:
+    case Data::Type::Kind::SequenceOf:
         readSequenceOf();
         break;
     default:
@@ -268,13 +269,17 @@ Data::Type AstXmlParser::readType()
     return type;
 }
 
-void AstXmlParser::readUserDefinedTypeReference(const Data::SourceLocation &location)
+void AstXmlParser::readUserDefinedTypeReference(const Data::SourceLocation &location, Data::Type &type)
 {
-    auto ref = std::make_unique<Data::TypeReference>(readReferencedTypeNameAttribute(),
-                                                     readReferencedModuleAttribute(),
-                                                     location);
+    const QString refName = readReferencedTypeNameAttribute();
+    const QString module = readReferencedModuleAttribute();
+
+    auto ref = std::make_unique<Data::TypeReference>(refName, module, location);
 
     m_data[m_currentFile]->addTypeReference(std::move(ref));
+
+    type.m_name = refName;
+    type.m_module = module;
 }
 
 void AstXmlParser::readSequence()

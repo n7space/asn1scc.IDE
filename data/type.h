@@ -30,21 +30,35 @@ namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-enum class Type {
-    Boolean,
-    Null,
-    Integer,
-    Real,
-    BitString,
-    OctetString,
-    IA5String,
-    NumericString,
-    Enumerated,
-    Choice,
-    Sequence,
-    SequenceOf,
+class Type
+{
+public:
 
-    UserDefined
+    enum class Kind {
+        Boolean,
+        Null,
+        Integer,
+        Real,
+        BitString,
+        OctetString,
+        IA5String,
+        NumericString,
+        Enumerated,
+        Choice,
+        Sequence,
+        SequenceOf,
+
+        UserDefined
+    };
+
+    Type() = default;
+
+    Type(Kind kind)
+        : m_kind(kind) {}
+
+    Kind m_kind;
+    QString m_name;
+    QString m_module;
 };
 
 } // namespace Data

@@ -49,33 +49,33 @@ QString DisplayRoleVisitor::valueFor(const File &file) const
 
 QString DisplayRoleVisitor::valueFor(const TypeAssignment &type) const
 {
-    switch (type.type()) {
-    case Type::Boolean:
+    switch (type.type().m_kind) {
+    case Type::Kind::Boolean:
         return type.name() + ": " + "BOOLEAN";
-    case Type::Null:
+    case Type::Kind::Null:
         return type.name() + ": " + "NULL";
-    case Type::Integer:
+    case Type::Kind::Integer:
         return type.name() + ": " + "INTEGER";
-    case Type::Real:
+    case Type::Kind::Real:
         return type.name() + ": " + "REAL";
-    case Type::BitString:
+    case Type::Kind::BitString:
         return type.name() + ": " + "BIT STRING";
-    case Type::OctetString:
+    case Type::Kind::OctetString:
         return type.name() + ": " + "OCTET STRING";
-    case Type::IA5String:
+    case Type::Kind::IA5String:
         return type.name() + ": " + "IA5String";
-    case Type::NumericString:
+    case Type::Kind::NumericString:
         return type.name() + ": " + "NumericString";
-    case Type::Enumerated:
+    case Type::Kind::Enumerated:
         return type.name() + ": " + "ENUMERATED";
-    case Type::Choice:
+    case Type::Kind::Choice:
         return type.name() + ": " + "CHOICE";
-    case Type::Sequence:
+    case Type::Kind::Sequence:
         return type.name() + ": " + "SEQUENCE";
-    case Type::SequenceOf:
+    case Type::Kind::SequenceOf:
         return type.name() + ": " + "SEQUENCE OF";
-    case Type::UserDefined:
-        return type.name();
+    case Type::Kind::UserDefined:
+        return type.name() + ": " + type.type().m_module + "." + type.type().m_name;
     }
 
     return {};
