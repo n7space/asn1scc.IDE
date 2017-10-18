@@ -40,8 +40,6 @@ public:
 private:
     Data::Node *valueFor(const Data::File &file) const override;
     Data::Node *valueFor(const Data::Project &project) const override;
-
-    int m_index;
 };
 
 } // namespace TypesTreeVisitors

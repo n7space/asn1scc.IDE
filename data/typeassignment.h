@@ -39,17 +39,17 @@ namespace Data {
 class TypeAssignment : public Node
 {
 public:
-    TypeAssignment(const QString &name, const SourceLocation &location, const TypeReference &reference);
+    TypeAssignment(const QString &name, const SourceLocation &location, const Type &type);
     ~TypeAssignment() override;
 
     void accept(Visitor &visitor) const override;
 
     const QString &name() const { return m_name; }
-    const TypeReference &reference() const { return m_reference; }
+    const Type &type() const { return m_type; }
 
 private:
     QString m_name;
-    TypeReference m_reference;
+    Type m_type;
 };
 
 } // namespace Data

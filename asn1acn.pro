@@ -135,7 +135,6 @@ SOURCES += \
     sourcemapper.cpp \
     typeslocator.cpp \
     editoroutline.cpp \
-    typereferencesholder.cpp \
     modelvalidityguard.cpp
 
 HEADERS += \
@@ -237,7 +236,6 @@ HEADERS += \
     editoroutline.h \
     sourcemapper.h \
     typeslocator.h \
-    typereferencesholder.h \
     modelvalidityguard.h
 
 FORMS += \

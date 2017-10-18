@@ -59,7 +59,7 @@ void DisplayRoleVisitorTests::test_file()
 
 void DisplayRoleVisitorTests::test_typeAssignment()
 {
-    TypeAssignment type("TypeName", {}, {Data::Type::Integer, {}});
+    TypeAssignment type("TypeName", {}, Data::Type::Integer);
 
     QCOMPARE(type.valueFor<DisplayRoleVisitor>(), QStringLiteral("TypeName: INTEGER"));
 }
@@ -71,7 +71,7 @@ void DisplayRoleVisitorTests::test_typeReferenceBuiltIn()
 
     TypeReference reference(type, {});
 
-    QCOMPARE(reference.valueFor<DisplayRoleVisitor>(), value);
+    QCOMPARE(reference.valueFor<DisplayRoleVisitor>(), QString());
 }
 
 void DisplayRoleVisitorTests::test_typeReferenceBuiltIn_data()
@@ -97,5 +97,5 @@ void DisplayRoleVisitorTests::test_typeReferenceUserDefined()
 {
     TypeReference reference("Name", "Module", {});
 
-    QCOMPARE(reference.valueFor<DisplayRoleVisitor>(), QStringLiteral("Module.Name"));
+    QCOMPARE(reference.valueFor<DisplayRoleVisitor>(), QString());
 }

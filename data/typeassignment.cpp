@@ -28,10 +28,10 @@
 
 using namespace Asn1Acn::Internal::Data;
 
-TypeAssignment::TypeAssignment(const QString &name, const SourceLocation &location, const TypeReference &reference)
+TypeAssignment::TypeAssignment(const QString &name, const SourceLocation &location, const Type &type)
     : Node(location)
     , m_name(name)
-    , m_reference(reference)
+    , m_type(type)
 {}
 
 TypeAssignment::~TypeAssignment()

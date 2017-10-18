@@ -31,6 +31,7 @@
 #include "source.h"
 #include "definitions.h"
 #include "node.h"
+#include "typereference.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -45,17 +46,24 @@ public:
     void accept(Visitor &visitor) const override;
 
     void add(std::unique_ptr<Definitions> defs);
+    void addTypeReference(std::unique_ptr<TypeReference> ref);
 
     const Source &source() const { return m_source; }
 
     using DefinitionsList = std::vector<std::unique_ptr<Definitions>>;
+    using ReferencesMap = std::multimap<int, std::unique_ptr<TypeReference>>;
+
     const DefinitionsList &definitionsList() const { return m_definitionsList; }
-    const Definitions* definitions(const QString &name) const;
+    const Definitions *definitions(const QString &name) const;
+    const ReferencesMap &references() const { return m_typeReferences; }
 
 private:
     Source m_source;
+
     DefinitionsList m_definitionsList;
-    std::map<QString, Definitions*> m_definitionsByNameMap;
+    ReferencesMap m_typeReferences;
+
+    std::map<QString, Definitions *> m_definitionsByNameMap;
 };
 
 } // namespace Data

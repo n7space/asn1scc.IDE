@@ -49,41 +49,41 @@ QString DisplayRoleVisitor::valueFor(const File &file) const
 
 QString DisplayRoleVisitor::valueFor(const TypeAssignment &type) const
 {
-    DisplayRoleVisitor typeVisitor;
-    type.reference().accept(typeVisitor);
-    return type.name() + ": " + typeVisitor.value();
+    switch (type.type()) {
+    case Type::Boolean:
+        return type.name() + ": " + "BOOLEAN";
+    case Type::Null:
+        return type.name() + ": " + "NULL";
+    case Type::Integer:
+        return type.name() + ": " + "INTEGER";
+    case Type::Real:
+        return type.name() + ": " + "REAL";
+    case Type::BitString:
+        return type.name() + ": " + "BIT STRING";
+    case Type::OctetString:
+        return type.name() + ": " + "OCTET STRING";
+    case Type::IA5String:
+        return type.name() + ": " + "IA5String";
+    case Type::NumericString:
+        return type.name() + ": " + "NumericString";
+    case Type::Enumerated:
+        return type.name() + ": " + "ENUMERATED";
+    case Type::Choice:
+        return type.name() + ": " + "CHOICE";
+    case Type::Sequence:
+        return type.name() + ": " + "SEQUENCE";
+    case Type::SequenceOf:
+        return type.name() + ": " + "SEQUENCE OF";
+    case Type::UserDefined:
+        return type.name();
+    }
+
+    return {};
 }
 
 QString DisplayRoleVisitor::valueFor(const TypeReference &ref) const
 {
-    switch (ref.type()) {
-    case Type::Boolean:
-        return "BOOLEAN";
-    case Type::Null:
-        return "NULL";
-    case Type::Integer:
-        return "INTEGER";
-    case Type::Real:
-        return "REAL";
-    case Type::BitString:
-        return "BIT STRING";
-    case Type::OctetString:
-        return "OCTET STRING";
-    case Type::IA5String:
-        return "IA5String";
-    case Type::NumericString:
-        return "NumericString";
-    case Type::Enumerated:
-        return "ENUMERATED";
-    case Type::Choice:
-        return "CHOICE";
-    case Type::Sequence:
-        return "SEQUENCE";
-    case Type::SequenceOf:
-        return "SEQUENCE OF";
-    case Type::UserDefined:
-        return ref.module() + "." + ref.name();
-    }
+    Q_UNUSED(ref);
     return {};
 }
 

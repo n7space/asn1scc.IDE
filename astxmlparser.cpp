@@ -118,11 +118,9 @@ void AstXmlParser::readTypeAssignment()
     Q_ASSERT(m_currentDefinitions != nullptr);
     const auto location = readLocationFromAttributes();
     const auto name = readNameAttribute();
-    const auto reference = readTypeReference();
+    auto type = readType();
 
-    m_currentDefinitions->add(std::make_unique<Data::TypeAssignment>(name, location, reference));
-
-    m_xmlReader.skipCurrentElement();
+    m_currentDefinitions->add(std::make_unique<Data::TypeAssignment>(name, location, type));
 }
 
 QString AstXmlParser::readReferencedTypeNameAttribute()
@@ -239,15 +237,7 @@ Data::Type mapNameToDataType(const QStringRef &name)
 }
 } // namespace
 
-Data::TypeReference AstXmlParser::readType(const Data::SourceLocation &location)
-{
-    const auto attributeName = m_xmlReader.name();
-    if (attributeName == QStringLiteral("ReferenceType"))
-        return { readReferencedTypeNameAttribute(), readReferencedModuleAttribute(), location };
-    return { mapNameToDataType(attributeName), location };
-}
-
-Data::TypeReference AstXmlParser::readTypeReference()
+Data::Type AstXmlParser::readType()
 {
     if (!nextRequiredElementIs("Type"))
         return {};
@@ -255,10 +245,45 @@ Data::TypeReference AstXmlParser::readTypeReference()
     const auto location = readLocationFromAttributes();
 
     m_xmlReader.readNextStartElement();
-    const auto type = readType(location);
-    m_xmlReader.skipCurrentElement();
+    Data::Type type = mapNameToDataType(m_xmlReader.name());
 
+    switch (type) {
+    case Data::Type::UserDefined:
+        readUserDefinedTypeReference(location);
+        m_xmlReader.skipCurrentElement();
+        break;
+    case Data::Type::Sequence:
+        readSequence();
+        break;
+    case Data::Type::SequenceOf:
+        readSequenceOf();
+        break;
+    default:
+        m_xmlReader.skipCurrentElement();
+    }
+
+    m_xmlReader.skipCurrentElement();
     m_xmlReader.skipCurrentElement();
 
     return type;
+}
+
+void AstXmlParser::readUserDefinedTypeReference(const Data::SourceLocation &location)
+{
+    auto ref = std::make_unique<Data::TypeReference>(readReferencedTypeNameAttribute(),
+                                                     readReferencedModuleAttribute(),
+                                                     location);
+
+    m_data[m_currentFile]->addTypeReference(std::move(ref));
+}
+
+void AstXmlParser::readSequence()
+{
+    while(nextRequiredElementIs(QStringLiteral("SequenceOrSetChild")))
+        readType();
+}
+
+void AstXmlParser::readSequenceOf()
+{
+    readType();
 }

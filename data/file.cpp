@@ -55,3 +55,8 @@ void File::add(std::unique_ptr<Definitions> defs)
     m_definitionsByNameMap[defs->name()] = defs.get();
     m_definitionsList.push_back(std::move(defs));
 }
+
+void File::addTypeReference(std::unique_ptr<TypeReference> ref)
+{
+    m_typeReferences.insert(std::make_pair(ref->location().line(), std::move(ref)));
+}

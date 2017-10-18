@@ -61,7 +61,7 @@ QIcon DecorationRoleVisitor::valueFor(const File &file) const
 
 QIcon DecorationRoleVisitor::valueFor(const TypeAssignment &type) const
 {
-    return type.reference().valueFor<DecorationRoleVisitor>();
+    return Icons::iconForType(type.type());
 }
 
 QIcon DecorationRoleVisitor::valueFor(const TypeReference &ref) const

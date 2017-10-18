@@ -53,6 +53,8 @@ private slots:
     void test_importedType();
     void test_multipleImportedType();
     void test_pathMapping();
+    void test_sequenceTypeAssingment();
+    void test_sequenceOfTypeAssingment();
 
 private:
     void setXmlData(const QString& str);

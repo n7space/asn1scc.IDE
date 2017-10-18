@@ -34,8 +34,6 @@
 #include "data/root.h"
 #include "data/file.h"
 
-#include "typereferencesholder.h"
-
 namespace Asn1Acn {
 namespace Internal {
 
@@ -61,7 +59,6 @@ public:
     const QStringList getProjectsForFile(const QString &filePath) const;
     const QStringList getFilesPathsFromProject(const QString &projectName) const;
 
-    Data::TypeReference getTypeReference(const QString &path, const int line, const int col) const;
     Data::SourceLocation getDefinitionLocation(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const;
 
 signals:
@@ -87,8 +84,6 @@ private:
                                                const QString &typeAssignmentName) const;
 
     std::unique_ptr<Data::Root> m_root;
-
-    TypeReferencesHolder m_typeReferences;
 
     mutable QMutex m_documentsMutex;
 };
