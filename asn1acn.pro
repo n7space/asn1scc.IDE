@@ -71,6 +71,9 @@ SOURCES += \
     data/root.cpp \
     data/file.cpp \
     data/project.cpp \
+    data/type.cpp \
+    data/userdefinedtype.cpp \
+    data/builtintype.cpp \
     data/typeassignment.cpp \
     data/typereference.cpp \
     data/definitions.cpp \
@@ -128,7 +131,6 @@ SOURCES += \
     projectcontenthandler.cpp \
     indenter.cpp \
     tools.cpp \
-    icons.cpp \
     linkcreator.cpp \
     filesourcereader.cpp \
     errormessageparser.cpp \
@@ -156,6 +158,8 @@ HEADERS += \
     data/definitions.h \
     data/typereference.h \
     data/type.h \
+    data/userdefinedtype.h \
+    data/builtintype.h \
     data/errormessage.h \
     data/node.h \
     data/root.h \
@@ -225,7 +229,6 @@ HEADERS += \
     tr.h \
     linkcreator.h \
     tools.h \
-    icons.h \
     parsingserviceprovider.h \
     parseddocumentbuilder.h \
     documentprocessor.h \

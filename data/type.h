@@ -25,6 +25,7 @@
 #pragma once
 
 #include <QString>
+#include <QIcon>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -33,32 +34,19 @@ namespace Data {
 class Type
 {
 public:
+    Type(const QString &name);
+    virtual ~Type() = default;
 
-    enum class Kind {
-        Boolean,
-        Null,
-        Integer,
-        Real,
-        BitString,
-        OctetString,
-        IA5String,
-        NumericString,
-        Enumerated,
-        Choice,
-        Sequence,
-        SequenceOf,
+    QIcon icon() const;
+    QString name() const;
 
-        UserDefined
-    };
+    virtual QString label() const = 0;
 
-    Type() = default;
-
-    Type(Kind kind)
-        : m_kind(kind) {}
-
-    Kind m_kind;
+protected:
     QString m_name;
-    QString m_module;
+
+private:
+    virtual QString baseIconFile() const = 0;
 };
 
 } // namespace Data

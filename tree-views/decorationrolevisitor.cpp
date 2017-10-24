@@ -34,8 +34,6 @@
 
 #include <utils/icon.h>
 
-#include <icons.h>
-
 using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal;
@@ -61,12 +59,13 @@ QIcon DecorationRoleVisitor::valueFor(const File &file) const
 
 QIcon DecorationRoleVisitor::valueFor(const TypeAssignment &type) const
 {
-    return Icons::iconForType(type.type());
+    return type.type()->icon();
 }
 
 QIcon DecorationRoleVisitor::valueFor(const TypeReference &ref) const
 {
-    return Icons::iconForType(ref.type());
+    Q_UNUSED(ref);
+    return QIcon();
 }
 
 QIcon DecorationRoleVisitor::valueFor(const Project &project) const

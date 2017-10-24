@@ -26,7 +26,8 @@
 
 #include <QtTest>
 
-#include <data/type.h>
+#include <data/builtintype.h>
+#include <data/userdefinedtype.h>
 #include <data/typereference.h>
 #include <data/definitions.h>
 #include <data/typeassignment.h>
@@ -40,8 +41,6 @@ DisplayRoleVisitorTests::DisplayRoleVisitorTests(QObject *parent)
     : QObject(parent)
 {
 }
-
-Q_DECLARE_METATYPE(Asn1Acn::Internal::Data::Type::Kind)
 
 void DisplayRoleVisitorTests::test_definitions()
 {
@@ -57,46 +56,49 @@ void DisplayRoleVisitorTests::test_file()
     QCOMPARE(file.valueFor<DisplayRoleVisitor>(), QStringLiteral("File"));
 }
 
-void DisplayRoleVisitorTests::test_typeAssignment()
+void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn()
 {
-    QFETCH(Type::Kind, kind);
-    QFETCH(QString, value);
+    QFETCH(QString, type);
 
-    TypeAssignment typeAssignment("TypeName", {}, Type(kind));
+    TypeAssignment typeAssignment("TypeName", {}, std::make_unique<Data::BuiltinType>(type));
 
-
-    QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: " + value));
+    QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: " + type));
 }
 
-void DisplayRoleVisitorTests::test_typeAssignment_data()
+void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn_data()
 {
-    QTest::addColumn<Type::Kind>("kind");
-    QTest::addColumn<QString>("value");
+    QTest::addColumn<QString>("type");
 
-    QTest::newRow("Boolean")       << Type::Kind::Boolean       << "BOOLEAN";
-    QTest::newRow("Null")          << Type::Kind::Null          << "NULL";
-    QTest::newRow("Integer")       << Type::Kind::Integer       << "INTEGER";
-    QTest::newRow("Real")          << Type::Kind::Real          << "REAL";
-    QTest::newRow("BitString")     << Type::Kind::BitString     << "BIT STRING";
-    QTest::newRow("OctetString")   << Type::Kind::OctetString   << "OCTET STRING";
-    QTest::newRow("IA5String")     << Type::Kind::IA5String     << "IA5String";
-    QTest::newRow("NumericString") << Type::Kind::NumericString << "NumericString";
-    QTest::newRow("Enumerated")    << Type::Kind::Enumerated    << "ENUMERATED";
-    QTest::newRow("Choice")        << Type::Kind::Choice        << "CHOICE";
-    QTest::newRow("Sequence")      << Type::Kind::Sequence      << "SEQUENCE";
-    QTest::newRow("SequenceOf")    << Type::Kind::SequenceOf    << "SEQUENCE OF";
+    QTest::newRow("Boolean")        << "BOOLEAN";
+    QTest::newRow("Null")           << "NULL";
+    QTest::newRow("Integer")        << "INTEGER";
+    QTest::newRow("Real")           << "REAL";
+    QTest::newRow("BitString")      << "BIT STRING";
+    QTest::newRow("OctetString")    << "OCTET STRING";
+    QTest::newRow("IA5String")      << "IA5String";
+    QTest::newRow("NumericString")  << "NumericString";
+    QTest::newRow("Enumerated")     << "ENUMERATED";
+    QTest::newRow("Choice")         << "CHOICE";
+    QTest::newRow("Sequence")       << "SEQUENCE";
+    QTest::newRow("SequenceOf")     << "SEQUENCE OF";
+}
+
+void DisplayRoleVisitorTests::test_typeAssignmentUserDefined()
+{
+    TypeAssignment typeAssignment("TypeName", {}, std::make_unique<Data::UserdefinedType>("type", "module"));
+    QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: type.module"));
 }
 
 void DisplayRoleVisitorTests::test_typeReferenceBuiltIn()
 {
-    TypeReference reference(Type::Kind::SequenceOf, {});
+    TypeReference reference;
 
     QCOMPARE(reference.valueFor<DisplayRoleVisitor>(), QString());
 }
 
 void DisplayRoleVisitorTests::test_typeReferenceUserDefined()
 {
-    TypeReference reference("Name", "Module", {});
+    TypeReference reference;
 
     QCOMPARE(reference.valueFor<DisplayRoleVisitor>(), QString());
 }

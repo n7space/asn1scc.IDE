@@ -26,6 +26,8 @@
 
 #include <QtTest>
 
+#include <data/builtintype.h>
+
 using namespace Asn1Acn::Internal::Tests;
 
 AstXmlParserTests::AstXmlParserTests(QObject *parent)
@@ -101,12 +103,10 @@ void AstXmlParserTests::test_singleTypeAssignment()
              m_parsedData["Test2File.asn"]->definitions("TestDefinitions"));
 }
 
-Q_DECLARE_METATYPE(Asn1Acn::Internal::Data::Type::Kind)
-
 void AstXmlParserTests::test_builtinTypeReference()
 {
     QFETCH(QString, typeName);
-    QFETCH(Data::Type::Kind, kind);
+    QFETCH(QString, type);
 
     parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
           R"(<ASN1AST>)"
@@ -123,26 +123,26 @@ void AstXmlParserTests::test_builtinTypeReference()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->type().m_kind, kind);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->type()->name(), type);
 }
 
 void AstXmlParserTests::test_builtinTypeReference_data()
 {
     QTest::addColumn<QString>("typeName");
-    QTest::addColumn<Data::Type::Kind>("kind");
+    QTest::addColumn<QString>("type");
 
-    QTest::newRow("Boolean")       << "BooleanType"       << Data::Type::Kind::Boolean;
-    QTest::newRow("Null")          << "NullType"          << Data::Type::Kind::Null;
-    QTest::newRow("Integer")       << "IntegerType"       << Data::Type::Kind::Integer;
-    QTest::newRow("Real")          << "RealType"          << Data::Type::Kind::Real;
-    QTest::newRow("BitString")     << "BitStringType"     << Data::Type::Kind::BitString;
-    QTest::newRow("OctetString")   << "OctetStringType"   << Data::Type::Kind::OctetString;
-    QTest::newRow("IA5String")     << "IA5StringType"     << Data::Type::Kind::IA5String;
-    QTest::newRow("NumericString") << "NumericStringType" << Data::Type::Kind::NumericString;
-    QTest::newRow("Enumerated")    << "EnumeratedType"    << Data::Type::Kind::Enumerated;
-    QTest::newRow("Choice")        << "ChoiceType"        << Data::Type::Kind::Choice;
-    QTest::newRow("Sequence")      << "SequenceType"      << Data::Type::Kind::Sequence;
-    QTest::newRow("SequenceOf")    << "SequenceOfType"    << Data::Type::Kind::SequenceOf;
+    QTest::newRow("Boolean")       << "BooleanType"       << "BOOLEAN";
+    QTest::newRow("Null")          << "NullType"          << "NULL";
+    QTest::newRow("Integer")       << "IntegerType"       << "INTEGER";
+    QTest::newRow("Real")          << "RealType"          << "REAL";
+    QTest::newRow("BitString")     << "BitStringType"     << "BIT STRING";
+    QTest::newRow("OctetString")   << "OctetStringType"   << "OCTET STRING";
+    QTest::newRow("IA5String")     << "IA5StringType"     << "IA5String";
+    QTest::newRow("NumericString") << "NumericStringType" << "NumericString";
+    QTest::newRow("Enumerated")    << "EnumeratedType"    << "ENUMERATED";
+    QTest::newRow("Choice")        << "ChoiceType"        << "CHOICE";
+    QTest::newRow("Sequence")      << "SequenceType"      << "SEQUENCE";
+    QTest::newRow("SequenceOf")    << "SequenceOfType"    << "SEQUENCE OF";
 }
 
 void AstXmlParserTests::test_userDefinedTypeReference()
@@ -162,7 +162,7 @@ void AstXmlParserTests::test_userDefinedTypeReference()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->type().m_kind, Data::Type::Kind::UserDefined);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->type()->name(), QStringLiteral("ThirdInt"));
 
     const auto ref = m_parsedData["Test2File.asn"]->references().find(3);
     QVERIFY(ref->second != nullptr);
@@ -191,7 +191,7 @@ void AstXmlParserTests::test_userDefinedTypeReferenceInOtherModule()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->type().m_kind, Data::Type::Kind::UserDefined);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->type()->name(), QStringLiteral("ThirdInt"));
 
     const auto ref = m_parsedData["Test2File.asn"]->references().find(3);
     QVERIFY(ref->second != nullptr);
@@ -231,9 +231,9 @@ void AstXmlParserTests::test_multipleTypeAssignments()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->type().m_kind, Data::Type::Kind::Integer);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeq")->type().m_kind, Data::Type::Kind::Sequence);
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyNull")->type().m_kind, Data::Type::Kind::Null);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->type()->name(), QStringLiteral("INTEGER"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeq")->type()->name(), QStringLiteral("SEQUENCE"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyNull")->type()->name(), QStringLiteral("NULL"));
 }
 
 void AstXmlParserTests::test_importedType()
@@ -331,7 +331,7 @@ void AstXmlParserTests::test_sequenceTypeAssingment()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeq")->type().m_kind, Data::Type::Kind::Sequence);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeq")->type()->name(), QStringLiteral("SEQUENCE"));
 
     QVERIFY(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeq")->location().isValid());
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeq")->location().line(), 19);
@@ -372,7 +372,7 @@ void AstXmlParserTests::test_sequenceOfTypeAssingment()
           R"(  </Asn1File>)"
           R"(</ASN1AST>)");
 
-    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeqOf")->type().m_kind, Data::Type::Kind::SequenceOf);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeqOf")->type()->name(), QStringLiteral("SEQUENCE OF"));
 
     QVERIFY(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeqOf")->location().isValid());
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeqOf")->location().line(), 17);

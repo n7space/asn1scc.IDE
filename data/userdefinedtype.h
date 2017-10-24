@@ -22,24 +22,30 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "typereference.h"
 
-#include "visitor.h"
+#pragma once
 
-using namespace Asn1Acn::Internal::Data;
+#include <QString>
 
-TypeReference::TypeReference(const SourceLocation &location)
-    : Node(location)
-{}
+#include "type.h"
 
-TypeReference::TypeReference(const QString &name, const QString &module, const SourceLocation &location)
-    : TypeReference(location)
+namespace Asn1Acn {
+namespace Internal {
+namespace Data {
+
+class UserdefinedType : public Type
 {
-    m_name = name;
-    m_module = module;
-}
+public:
+    UserdefinedType(const QString &name, const QString &module);
 
-void TypeReference::accept(Visitor &visitor) const
-{
-    visitor.visit(*this);
-}
+    QString label() const override;
+
+private:
+    QString baseIconFile() const override;
+
+    QString m_module;
+};
+
+} // namespace Data
+} // namespace Internal
+} // namespace Asn1Acn

@@ -22,24 +22,22 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "typereference.h"
 
-#include "visitor.h"
+#include "userdefinedtype.h"
 
 using namespace Asn1Acn::Internal::Data;
 
-TypeReference::TypeReference(const SourceLocation &location)
-    : Node(location)
+UserdefinedType::UserdefinedType(const QString &name, const QString &module)
+    : Type(name)
+    , m_module(module)
 {}
 
-TypeReference::TypeReference(const QString &name, const QString &module, const SourceLocation &location)
-    : TypeReference(location)
+QString UserdefinedType::label() const
 {
-    m_name = name;
-    m_module = module;
+    return ": " + name() + "." + m_module;
 }
 
-void TypeReference::accept(Visitor &visitor) const
+QString UserdefinedType::baseIconFile() const
 {
-    visitor.visit(*this);
+    return QStringLiteral(":/asn1acn/images/outline/userdefined.png");
 }

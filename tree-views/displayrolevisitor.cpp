@@ -49,36 +49,7 @@ QString DisplayRoleVisitor::valueFor(const File &file) const
 
 QString DisplayRoleVisitor::valueFor(const TypeAssignment &type) const
 {
-    switch (type.type().m_kind) {
-    case Type::Kind::Boolean:
-        return type.name() + ": " + "BOOLEAN";
-    case Type::Kind::Null:
-        return type.name() + ": " + "NULL";
-    case Type::Kind::Integer:
-        return type.name() + ": " + "INTEGER";
-    case Type::Kind::Real:
-        return type.name() + ": " + "REAL";
-    case Type::Kind::BitString:
-        return type.name() + ": " + "BIT STRING";
-    case Type::Kind::OctetString:
-        return type.name() + ": " + "OCTET STRING";
-    case Type::Kind::IA5String:
-        return type.name() + ": " + "IA5String";
-    case Type::Kind::NumericString:
-        return type.name() + ": " + "NumericString";
-    case Type::Kind::Enumerated:
-        return type.name() + ": " + "ENUMERATED";
-    case Type::Kind::Choice:
-        return type.name() + ": " + "CHOICE";
-    case Type::Kind::Sequence:
-        return type.name() + ": " + "SEQUENCE";
-    case Type::Kind::SequenceOf:
-        return type.name() + ": " + "SEQUENCE OF";
-    case Type::Kind::UserDefined:
-        return type.name() + ": " + type.type().m_module + "." + type.type().m_name;
-    }
-
-    return {};
+    return type.name() + type.type()->label();
 }
 
 QString DisplayRoleVisitor::valueFor(const TypeReference &ref) const

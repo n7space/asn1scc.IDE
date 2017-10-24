@@ -26,8 +26,6 @@
 
 #include <QString>
 
-#include "sourcelocation.h"
-#include "type.h"
 #include "node.h"
 
 namespace Asn1Acn {
@@ -38,21 +36,18 @@ namespace Data {
 class TypeReference : public Node
 {
 public:
-    TypeReference(const Type dataType, const SourceLocation &location);
+    TypeReference(const SourceLocation &location);
     TypeReference(const QString &name, const QString &module, const SourceLocation &location);
     // TODO kill
-    TypeReference() : TypeReference(Type::Kind::UserDefined, {}) {}
-    ~TypeReference() override;
+    TypeReference() : TypeReference(SourceLocation()) {}
+    ~TypeReference() override = default;
 
     void accept(Visitor &visitor) const override;
 
     const QString &name() const { return m_name; }
     const QString &module() const { return m_module; }
-    Type type() const { return m_type; }
-    bool isUserDefined() const { return m_type.m_kind == Type::Kind::UserDefined; }
 
 private:
-    Type m_type;
     QString m_name;
     QString m_module;
 };

@@ -22,24 +22,23 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "typereference.h"
 
-#include "visitor.h"
+#include "type.h"
+
+#include <utils/stylehelper.h>
 
 using namespace Asn1Acn::Internal::Data;
 
-TypeReference::TypeReference(const SourceLocation &location)
-    : Node(location)
+Type::Type(const QString &name)
+    : m_name(name)
 {}
 
-TypeReference::TypeReference(const QString &name, const QString &module, const SourceLocation &location)
-    : TypeReference(location)
+QIcon Type::icon() const
 {
-    m_name = name;
-    m_module = module;
+    return QIcon(Utils::StyleHelper::dpiSpecificImageFile(baseIconFile()));
 }
 
-void TypeReference::accept(Visitor &visitor) const
+QString Type::name() const
 {
-    visitor.visit(*this);
+    return m_name;
 }

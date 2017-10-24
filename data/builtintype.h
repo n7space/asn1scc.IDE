@@ -24,16 +24,27 @@
 ****************************************************************************/
 #pragma once
 
+#include <QString>
 #include <QIcon>
+#include <QMap>
 
-#include "data/type.h"
+#include "type.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Icons {
+namespace Data {
 
-QIcon iconForType(Data::Type type);
+class BuiltinType : public Type
+{
+public:
+    BuiltinType(const QString &name);
 
-} // namespace Icon
+    QString label() const override;
+
+private:
+    QString baseIconFile() const override;
+};
+
+} // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn
