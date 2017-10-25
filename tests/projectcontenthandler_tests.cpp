@@ -144,8 +144,7 @@ void ProjectContentHandlerTests::test_fileContentChangedNoProject()
 
     foreach (const QString type, m_fileTypes) {
         QString file("TestFileName_1" + type);
-        QString content("New Content" + type);
-        fileContentChanged(file, content);
+        fileContentChanged(file);
     }
 }
 
@@ -160,9 +159,7 @@ void ProjectContentHandlerTests::test_fileContentChanged()
         QString file("TestFileName_1" + type);
         fileListChanged(projectName, QStringList(file));
 
-        QString content("New Content" + type);
-        fileContentChanged(file, content);
-
+        fileContentChanged(file);
         fileListChanged(projectName, QStringList());
     }
 
@@ -185,8 +182,7 @@ void ProjectContentHandlerTests::test_fileInMultipleProjectContentChanged()
         fileListChanged(firstProjectName, QStringList(file));
         fileListChanged(secondProjectName, QStringList(file));
 
-        QString content("New Content" + type);
-        fileContentChanged(file, content);
+        fileContentChanged(file);
 
         fileListChanged(firstProjectName, QStringList());
         fileListChanged(secondProjectName, QStringList());
@@ -251,7 +247,7 @@ void ProjectContentHandlerTests::fileListChanged(const QString &projectName, con
     QCOMPARE(m_guard->isValid(), true);
 }
 
-void ProjectContentHandlerTests::fileContentChanged(const QString &path, const QString &content)
+void ProjectContentHandlerTests::fileContentChanged(const QString &path)
 {
     QSignalSpy spyAboutToUpdate(m_guard, &ModelValidityGuard::modelAboutToChange);
     QSignalSpy spyUpdated(m_guard, &ModelValidityGuard::modelChanged);
@@ -264,7 +260,7 @@ void ProjectContentHandlerTests::fileContentChanged(const QString &path, const Q
     QCOMPARE(spyAboutToUpdate.count(), 1);
     QCOMPARE(m_guard->isValid(), false);
 
-    pch->handleFileContentChanged(path, content);
+    pch->handleFileContentChanged(path);
 
     QCOMPARE(spyUpdated.count(), 1);
     QCOMPARE(m_guard->isValid(), true);

@@ -105,7 +105,7 @@ void Asn1SccDocumentProcessor::onBuilderErrored()
 
 void Asn1SccDocumentProcessor::createFallbackResults()
 {
-    for (const auto& source : m_documents)
+    for (const auto &source : m_documents)
         m_results.push_back(std::make_unique<Data::File>(source));
 }
 
