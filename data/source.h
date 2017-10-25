@@ -33,16 +33,13 @@ namespace Data {
 class Source
 {
 public:
-    Source(const QString &path, const QString &contents);
+    Source(const QString &path);
 
     const QString &filePath() const { return m_filePath; }
-    const QString &contents() const { return m_contents; }
-
     QString fileName() const;
 
 private:
     QString m_filePath;
-    QString m_contents;
 };
 
 } // namespace Data

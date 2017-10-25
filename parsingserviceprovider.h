@@ -44,7 +44,7 @@ public:
     ParsingServiceProvider(QObject *parent = 0) : QObject(parent) {}
     virtual ~ParsingServiceProvider() = default;
 
-    virtual QNetworkReply *requestAst(const QList<Data::Source> &documents) const = 0;
+    virtual QNetworkReply *requestAst(const QHash<QString, QString> &documents) const = 0;
 };
 
 } /* namespace Asn1Acn */

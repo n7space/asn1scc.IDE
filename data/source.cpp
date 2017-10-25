@@ -28,9 +28,8 @@
 
 using namespace Asn1Acn::Internal::Data;
 
-Source::Source(const QString &path, const QString &contents)
+Source::Source(const QString &path)
     : m_filePath(path)
-    , m_contents(contents)
 {
 }
 

@@ -34,9 +34,8 @@ using namespace Asn1Acn::Internal::Tests;
 
 DocumentProcessorTests::DocumentProcessorTests(QObject *parent)
     : QObject(parent)
-    , m_fileContent("Document content")
     , m_fileDir("/test/dir/")
-    , m_docBuilderCreator([](const QList<Data::Source> &documents)->ParsedDocumentBuilder *
+    , m_docBuilderCreator([](const QHash<QString, QString> &documents)->ParsedDocumentBuilder *
                           { return new ParsedDocumentBuilderStub(documents); })
 {
 }
@@ -56,12 +55,13 @@ void DocumentProcessorTests::test_unstarted()
 void DocumentProcessorTests::test_successful()
 {
     const QString fileName("SUCCESS");
+    const QString content("SUCCESS");
     const QString filePath = m_fileDir + fileName;
 
     DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
-    dp->addToRun(filePath, m_fileContent);
+    dp->addToRun(filePath, content);
     dp->run();
 
     examine(dp, spy, DocumentProcessor::State::Successful, fileName, filePath);
@@ -72,12 +72,13 @@ void DocumentProcessorTests::test_successful()
 void DocumentProcessorTests::test_error()
 {
     const QString fileName("ERROR");
+    const QString content("ERROR");
     const QString filePath = m_fileDir + fileName;
 
     DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
-    dp->addToRun(filePath, m_fileContent);
+    dp->addToRun(filePath, content);
     dp->run();
 
     examine(dp, spy, DocumentProcessor::State::Errored, fileName, filePath);
@@ -88,12 +89,13 @@ void DocumentProcessorTests::test_error()
 void DocumentProcessorTests::test_failed()
 {
     const QString fileName("FAILED");
+    const QString content("FAILED");
     const QString filePath = m_fileDir + fileName;
 
     DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator);
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
-    dp->addToRun(filePath, m_fileContent);
+    dp->addToRun(filePath, content);
     dp->run();
 
     examine(dp, spy, DocumentProcessor::State::Failed, fileName, filePath);
@@ -118,7 +120,6 @@ void DocumentProcessorTests::examine(DocumentProcessor *dp,
     QCOMPARE(results.size(), static_cast<size_t>(1));
 
     const Data::Source resultInfo = results.at(0)->source();
-    QCOMPARE(resultInfo.contents(), m_fileContent);
     QCOMPARE(resultInfo.fileName(), fileName);
     QCOMPARE(resultInfo.filePath(), filePath);
 }
