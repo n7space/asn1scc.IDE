@@ -119,7 +119,7 @@ void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique
     if (project == nullptr)
         return;
 
-    QString filePath = file->source().filePath();
+    QString filePath = file->location().path();
     project->add(std::move(file));
 
     const Data::File *rawFile = getFileForPathInternal(filePath);
@@ -186,7 +186,7 @@ const QStringList ParsedDataStorage::getFilesPathsFromProjectInternal(const QStr
 
     QStringList ret;
     for (const auto &file : project->files())
-        ret.append(file->source().filePath());
+        ret.append(file->location().path());
 
     return ret;
 }

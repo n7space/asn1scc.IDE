@@ -40,13 +40,13 @@ void SourceMapperTests::test_missingMapping()
 {
     SourceMapper mapper;
 
-    QCOMPARE(mapper.findByFileName("Abc").filePath(), QStringLiteral("Abc"));
+    QCOMPARE(mapper.findByFileName("Abc"), QStringLiteral("Abc"));
 }
 
 void SourceMapperTests::test_mapping()
 {
     SourceMapper mapper({ {"/a/bcd", ""}, {"/x/xyz", ""} });
 
-    QCOMPARE(mapper.findByFileName("xyz").filePath(), QStringLiteral("/x/xyz"));
-    QCOMPARE(mapper.findByFileName("bcd").filePath(), QStringLiteral("/a/bcd"));
+    QCOMPARE(mapper.findByFileName("xyz"), QStringLiteral("/x/xyz"));
+    QCOMPARE(mapper.findByFileName("bcd"), QStringLiteral("/a/bcd"));
 }

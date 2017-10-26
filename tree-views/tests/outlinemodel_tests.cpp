@@ -28,7 +28,6 @@
 
 #include <data/file.h>
 #include <data/definitions.h>
-#include <data/source.h>
 #include <data/typeassignment.h>
 
 #include "3rdparty/modeltest.h"
@@ -53,7 +52,7 @@ void OutlineModelTests::test_emptyModel()
 
 void OutlineModelTests::test_modelWithDummyPopulation()
 {
-    const auto root = std::make_unique<Data::File>(Data::Source("file.asn1", "CONTENTS"));
+    const auto root = std::make_unique<Data::File>("file.asn1");
 
     auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{"file1.asn1", 0, 0});
     definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, Data::TypeReference{}));

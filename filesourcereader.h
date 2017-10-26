@@ -37,6 +37,10 @@ class FileSourceReader
 {
 public:
     QString readContent(const QString &fileName) const override;
+
+private:
+    QString readFromFile(const QString &fileName) const;
+    QString readFromDocumentModel(const QString &fileName) const;
 };
 
 } /* namespace Internal */

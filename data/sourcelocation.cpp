@@ -22,19 +22,24 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "source.h"
+
+#include "sourcelocation.h"
 
 #include <QFileInfo>
 
 using namespace Asn1Acn::Internal::Data;
 
-Source::Source(const QString &path, const QString &contents)
-    : m_filePath(path)
-    , m_contents(contents)
+bool Asn1Acn::Internal::Data::operator==(const SourceLocation &a, const SourceLocation &b)
 {
+    return a.line() == b.line() && a.column() == b.column() && a.path() == b.path();
 }
 
-QString Source::fileName() const
+bool Asn1Acn::Internal::Data::operator!=(const SourceLocation &a, const SourceLocation &b)
 {
-    return QFileInfo(filePath()).fileName();
+    return !(a == b);
+}
+
+const QString SourceLocation::fileName() const
+{
+    return QFileInfo(path()).fileName();
 }

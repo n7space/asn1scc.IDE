@@ -64,7 +64,7 @@ Asn1SccServiceProvider::~Asn1SccServiceProvider()
         stop();
 }
 
-QNetworkReply *Asn1SccServiceProvider::requestAst(const QList<Data::Source> &documents) const
+QNetworkReply *Asn1SccServiceProvider::requestAst(const QHash<QString, QString> &documents) const
 {
     QNetworkRequest astRequest(QUrl(m_settings->baseUri + "ast"));
     astRequest.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
@@ -109,14 +109,14 @@ QStringList Asn1SccServiceProvider::additionalArguments() const
     return arguments;
 }
 
-QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QList<Data::Source> &documents) const
+QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QHash<QString, QString> &documents) const
 {
     QJsonArray documentArray;
 
-    for (const auto &doc : documents) {
+    for (auto it = documents.begin(); it != documents.end(); it++) {
         QJsonObject asnFileData;
-        asnFileData["Name"] = doc.fileName();
-        asnFileData["Contents"] = doc.contents();
+        asnFileData["Name"] = QFileInfo(it.key()).fileName();
+        asnFileData["Contents"] = it.value();
 
         documentArray.append(asnFileData);
     }

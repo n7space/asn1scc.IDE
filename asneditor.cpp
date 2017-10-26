@@ -27,8 +27,6 @@
 
 #include <QApplication>
 
-#include <coreplugin/editormanager/documentmodel.h>
-
 #include <texteditor/texteditoractionhandler.h>
 #include <texteditor/basehoverhandler.h>
 

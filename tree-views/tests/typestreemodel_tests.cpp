@@ -30,7 +30,6 @@
 #include <data/root.h>
 #include <data/file.h>
 #include <data/definitions.h>
-#include <data/source.h>
 #include <data/typeassignment.h>
 
 #include "3rdparty/modeltest.h"
@@ -55,7 +54,7 @@ void TypesTreeModelTests::test_emptyModel()
 
 void TypesTreeModelTests::test_modelWithDummyPopulation()
 {
-    auto file1 = std::make_unique<Data::File>(Data::Source("file1.asn1", "CONTENTS"));
+    auto file1 = std::make_unique<Data::File>("file1.asn1");
     {
         auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{"file1.asn1", 0, 0});
         definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, Data::TypeReference{}));
@@ -68,7 +67,7 @@ void TypesTreeModelTests::test_modelWithDummyPopulation()
         file1->add(std::move(definitions2));
     }
 
-    auto file2 = std::make_unique<Data::File>(Data::Source("file2.asn1", "CONTENTS"));
+    auto file2 = std::make_unique<Data::File>("file2.asn1");
     {
         auto definitions1 = std::make_unique<Data::Definitions>("Module10", Data::SourceLocation{"file2.asn1", 0, 0});
         definitions1->add(std::make_unique<Data::TypeAssignment>("Num10", Data::SourceLocation{"file2.asn1", 2, 3}, Data::TypeReference{}));
@@ -79,7 +78,7 @@ void TypesTreeModelTests::test_modelWithDummyPopulation()
     project1->add(std::move(file1));
     project1->add(std::move(file2));
 
-    auto file3 = std::make_unique<Data::File>(Data::Source("file3.asn1", "CONTENTS"));
+    auto file3 = std::make_unique<Data::File>("file3.asn1");
     {
         auto definitions1 = std::make_unique<Data::Definitions>("Module20", Data::SourceLocation{"file3.asn1", 0, 0});
         definitions1->add(std::make_unique<Data::TypeAssignment>("Num20", Data::SourceLocation{"file3.asn1", 2, 3}, Data::TypeReference{}));

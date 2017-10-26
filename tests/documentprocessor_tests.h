@@ -56,8 +56,6 @@ private:
                  const QString &filePath) const;
 
     const QString m_projectName;
-
-    const QString m_fileContent;
     const QString m_fileDir;
 
     Asn1SccDocumentProcessor::DocumentBuilderCreator m_docBuilderCreator;

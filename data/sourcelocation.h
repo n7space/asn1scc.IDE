@@ -42,6 +42,7 @@ public:
         : m_path(path), m_line(line), m_column(column)
     {}
 
+    const QString fileName() const;
     const QString &path() const { return m_path; }
     int line() const { return m_line; }
     int column() const { return m_column; }
@@ -54,15 +55,8 @@ private:
     int m_column;
 };
 
-inline bool operator==(const SourceLocation &a, const SourceLocation &b)
-{
-    return a.line() == b.line() && a.column() == b.column() && a.path() == b.path();
-}
-
-inline bool operator!=(const SourceLocation &a, const SourceLocation &b)
-{
-    return !(a == b);
-}
+bool operator==(const SourceLocation &a, const SourceLocation &b);
+bool operator!=(const SourceLocation &a, const SourceLocation &b);
 
 } // namespace Data
 } // namespace Internal
