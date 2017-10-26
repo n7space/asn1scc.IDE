@@ -29,8 +29,6 @@
 #include <QString>
 #include <QHash>
 
-#include <data/source.h>
-
 namespace Asn1Acn {
 namespace Internal {
 

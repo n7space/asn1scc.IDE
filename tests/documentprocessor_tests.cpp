@@ -119,7 +119,6 @@ void DocumentProcessorTests::examine(DocumentProcessor *dp,
     const std::vector<std::unique_ptr<Data::File>> results = dp->takeResults();
     QCOMPARE(results.size(), static_cast<size_t>(1));
 
-    const Data::Source resultInfo = results.at(0)->source();
-    QCOMPARE(resultInfo.fileName(), fileName);
-    QCOMPARE(resultInfo.filePath(), filePath);
+    QCOMPARE(fileName, results.at(0)->location().fileName());
+    QCOMPARE(filePath, results.at(0)->location().path());
 }

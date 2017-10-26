@@ -90,7 +90,7 @@ TextEditor::TextEditorWidget *OutlineIndexUpdaterTests::createEditorWidget()
 Data::Node *OutlineIndexUpdaterTests::createModelNodes(const QString &filePath)
 {
 
-    const auto root = new Data::File(Data::Source(filePath));
+    const auto root = new Data::File(filePath);
 
     auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{filePath, 0, 0});
     definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{filePath, 2, 3}, Data::TypeReference{}));

@@ -33,8 +33,6 @@
 #include <QFileInfo>
 #include <QTextDocument>
 
-#include "data/source.h"
-
 #include "parseddocumentbuilder.h"
 #include "documentprocessor.h"
 

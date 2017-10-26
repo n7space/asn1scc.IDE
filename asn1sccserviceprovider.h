@@ -36,8 +36,6 @@
 #include <QTimer>
 #include <QHash>
 
-#include <data/source.h>
-
 #include "settings/service.h"
 
 #include "parsingserviceprovider.h"

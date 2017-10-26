@@ -105,7 +105,7 @@ void Asn1SccDocumentProcessor::onBuilderErrored()
 void Asn1SccDocumentProcessor::createFallbackResults()
 {
     for (auto it = m_documents.begin(); it != m_documents.end(); it++)
-        m_results.push_back(std::make_unique<Data::File>(Data::Source(it.key())));
+        m_results.push_back(std::make_unique<Data::File>(it.key()));
 }
 
 const std::vector<Data::ErrorMessage> &Asn1SccDocumentProcessor::errorMessages() const

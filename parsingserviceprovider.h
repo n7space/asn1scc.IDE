@@ -30,8 +30,6 @@
 #include <QNetworkReply>
 #include <QList>
 
-#include <data/source.h>
-
 namespace Asn1Acn {
 namespace Internal {
 

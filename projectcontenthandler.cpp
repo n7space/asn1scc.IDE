@@ -176,7 +176,7 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
                                                            std::vector<std::unique_ptr<Data::File>> parsedDocuments)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++) {
-        auto filePath = parsedDocuments[i]->source().filePath();
+        auto filePath = parsedDocuments[i]->location().path();
         if (m_storage->getFileForPathFromProject(projectName, filePath) != nullptr)
             continue;
 
