@@ -50,12 +50,12 @@ public:
 
     using Files = std::vector<std::unique_ptr<File>>;
     const Files &files() const { return m_files; }
-    const File* file(const QString &path) const;
+    File *file(const QString &path) const;
 
 private:
     QString m_name;
     Files m_files;
-    std::map<QString, File*> m_filesByPathMap;
+    std::map<QString, File *> m_filesByPathMap;
 };
 
 } // namespace Data

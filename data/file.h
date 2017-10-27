@@ -55,7 +55,9 @@ public:
 
     const DefinitionsList &definitionsList() const { return m_definitionsList; }
     const Definitions *definitions(const QString &name) const;
+
     const ReferencesMap &references() const { return m_typeReferences; }
+    void clearReferences();
 
 private:
     Source m_source;
