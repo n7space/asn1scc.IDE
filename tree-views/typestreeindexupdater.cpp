@@ -44,6 +44,9 @@ TypesTreeIndexUpdater::TypesTreeIndexUpdater(const Model *model, QObject *parent
 {
     connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
             this, &TypesTreeIndexUpdater::onEditorChanged);
+
+    connect(Core::EditorManager::instance(), &Core::EditorManager::editorAboutToClose,
+            this, &TypesTreeIndexUpdater::onEditorAboutToClose);
 }
 
 QModelIndex TypesTreeIndexUpdater::currentRootIndex() const
@@ -61,7 +64,12 @@ QModelIndex TypesTreeIndexUpdater::currentRootIndex() const
 void TypesTreeIndexUpdater::onEditorChanged(Core::IEditor *editor)
 {
     Q_UNUSED(editor);
-
     TextEditor::TextEditorWidget *editorWidget = TextEditor::TextEditorWidget::currentTextEditorWidget();
     setEditor(editorWidget);
+}
+
+void TypesTreeIndexUpdater::onEditorAboutToClose(Core::IEditor *editor)
+{
+    Q_UNUSED(editor);
+    unsetEditor();
 }

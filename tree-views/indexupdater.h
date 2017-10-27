@@ -47,6 +47,8 @@ public:
     virtual ~IndexUpdater() = default;
 
     void setEditor(TextEditor::TextEditorWidget *editorWidget);
+    void unsetEditor();
+
     void updateCurrentIndex();
 
 signals:

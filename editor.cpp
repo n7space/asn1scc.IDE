@@ -76,12 +76,14 @@ void EditorWidget::finalizeInitialization()
     // TODO ? setLanguageSettingsId(Constants::SettingsId);
 
     auto document = qobject_cast<Document *>(textDocument());
-
     connect(document, &Document::extraSelectionsUpdated,
-            [this](const QList<QTextEdit::ExtraSelection> &selections){
-        setExtraSelections(TextEditorWidget::CodeWarningsSelection, selections);
-    });
+            this, &EditorWidget::onExtraSelectionsUpdated);
 
     insertExtraToolBarWidget(TextEditorWidget::Left,
                              new TreeViews::OutlineCombo(m_editorOutline->model(), m_editorOutline->indexUpdater()));
+}
+
+void EditorWidget::onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections)
+{
+    setExtraSelections(TextEditorWidget::CodeWarningsSelection, selections);
 }
