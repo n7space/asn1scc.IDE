@@ -26,7 +26,7 @@
 
 #include <QtTest>
 
-#include <data/builtintype.h>
+#include <data/builtintypes.h>
 #include <data/userdefinedtype.h>
 #include <data/typereference.h>
 #include <data/definitions.h>
@@ -58,29 +58,31 @@ void DisplayRoleVisitorTests::test_file()
 
 void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn()
 {
+    QFETCH(QString, typeName);
     QFETCH(QString, type);
 
-    TypeAssignment typeAssignment("TypeName", {}, std::make_unique<Data::BuiltinType>(type));
+    TypeAssignment typeAssignment("TypeName", {}, Data::BuiltinType::createBuiltinType(typeName));
 
     QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: " + type));
 }
 
 void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn_data()
 {
+    QTest::addColumn<QString>("typeName");
     QTest::addColumn<QString>("type");
 
-    QTest::newRow("Boolean")        << "BOOLEAN";
-    QTest::newRow("Null")           << "NULL";
-    QTest::newRow("Integer")        << "INTEGER";
-    QTest::newRow("Real")           << "REAL";
-    QTest::newRow("BitString")      << "BIT STRING";
-    QTest::newRow("OctetString")    << "OCTET STRING";
-    QTest::newRow("IA5String")      << "IA5String";
-    QTest::newRow("NumericString")  << "NumericString";
-    QTest::newRow("Enumerated")     << "ENUMERATED";
-    QTest::newRow("Choice")         << "CHOICE";
-    QTest::newRow("Sequence")       << "SEQUENCE";
-    QTest::newRow("SequenceOf")     << "SEQUENCE OF";
+    QTest::newRow("Boolean")       << "BooleanType"       << "BOOLEAN";
+    QTest::newRow("Null")          << "NullType"          << "NULL";
+    QTest::newRow("Integer")       << "IntegerType"       << "INTEGER";
+    QTest::newRow("Real")          << "RealType"          << "REAL";
+    QTest::newRow("BitString")     << "BitStringType"     << "BIT STRING";
+    QTest::newRow("OctetString")   << "OctetStringType"   << "OCTET STRING";
+    QTest::newRow("IA5String")     << "IA5StringType"     << "IA5String";
+    QTest::newRow("NumericString") << "NumericStringType" << "NumericString";
+    QTest::newRow("Enumerated")    << "EnumeratedType"    << "ENUMERATED";
+    QTest::newRow("Choice")        << "ChoiceType"        << "CHOICE";
+    QTest::newRow("Sequence")      << "SequenceType"      << "SEQUENCE";
+    QTest::newRow("SequenceOf")    << "SequenceOfType"    << "SEQUENCE OF";
 }
 
 void DisplayRoleVisitorTests::test_typeAssignmentUserDefined()

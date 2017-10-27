@@ -27,7 +27,7 @@
 #include <QMap>
 
 #include "data/userdefinedtype.h"
-#include "data/builtintype.h"
+#include "data/builtintypes.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -215,31 +215,6 @@ Data::SourceLocation AstXmlParser::readLocationFromAttributes()
     return { m_currentFile, readLineAttribute(), readCharPossitionInLineAttribute() };
 }
 
-namespace
-{
-QString mapInternalNameToTypeName(const QStringRef &name)
-{
-    static const QMap<QString, QString> mapping = {
-        { "BooleanType",       "BOOLEAN" },
-        { "NullType",          "NULL" },
-        { "IntegerType",       "INTEGER" },
-        { "RealType",          "REAL" },
-        { "BitStringType",     "BIT STRING" },
-        { "OctetStringType",   "OCTET STRING" },
-        { "IA5StringType",     "IA5String" },
-        { "NumericStringType", "NumericString" },
-        { "EnumeratedType",    "ENUMERATED" },
-        { "ChoiceType",        "CHOICE" },
-        { "SequenceType",      "SEQUENCE" },
-        { "SequenceOfType",    "SEQUENCE OF" },
-    };
-    const auto it = mapping.find(name.toString());
-    if (it == mapping.end())
-        return {};
-    return it.value();
-}
-} // namespace
-
 std::unique_ptr<Data::Type> AstXmlParser::readType()
 {
     if (!nextRequiredElementIs("Type"))
@@ -256,7 +231,7 @@ std::unique_ptr<Data::Type> AstXmlParser::readType()
         type = readUserDefinedTypeReference(location);
         m_xmlReader.skipCurrentElement();
     } else {
-        type = std::make_unique<Data::BuiltinType>(mapInternalNameToTypeName(name));
+        type = Data::BuiltinType::createBuiltinType(name.toString());
 
         if (name == QStringLiteral("SequenceType"))
             readSequence();

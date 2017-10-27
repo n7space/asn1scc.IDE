@@ -34,16 +34,12 @@ namespace Data {
 class Type
 {
 public:
-    Type(const QString &name);
     virtual ~Type() = default;
 
     QIcon icon() const;
-    QString name() const;
 
+    virtual QString name() const = 0;
     virtual QString label() const = 0;
-
-protected:
-    QString m_name;
 
 private:
     virtual QString baseIconFile() const = 0;

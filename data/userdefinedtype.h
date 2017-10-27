@@ -38,11 +38,13 @@ class UserdefinedType : public Type
 public:
     UserdefinedType(const QString &name, const QString &module);
 
+    QString name() const override;
     QString label() const override;
 
 private:
     QString baseIconFile() const override;
 
+    QString m_name;
     QString m_module;
 };
 

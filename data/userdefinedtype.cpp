@@ -28,9 +28,14 @@
 using namespace Asn1Acn::Internal::Data;
 
 UserdefinedType::UserdefinedType(const QString &name, const QString &module)
-    : Type(name)
+    : m_name(name)
     , m_module(module)
 {}
+
+QString UserdefinedType::name() const
+{
+    return m_name;
+}
 
 QString UserdefinedType::label() const
 {

@@ -73,7 +73,7 @@ SOURCES += \
     data/project.cpp \
     data/type.cpp \
     data/userdefinedtype.cpp \
-    data/builtintype.cpp \
+    data/builtintypes.cpp \
     data/typeassignment.cpp \
     data/typereference.cpp \
     data/definitions.cpp \
@@ -159,7 +159,7 @@ HEADERS += \
     data/typereference.h \
     data/type.h \
     data/userdefinedtype.h \
-    data/builtintype.h \
+    data/builtintypes.h \
     data/errormessage.h \
     data/node.h \
     data/root.h \

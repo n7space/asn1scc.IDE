@@ -29,16 +29,7 @@
 
 using namespace Asn1Acn::Internal::Data;
 
-Type::Type(const QString &name)
-    : m_name(name)
-{}
-
 QIcon Type::icon() const
 {
     return QIcon(Utils::StyleHelper::dpiSpecificImageFile(baseIconFile()));
-}
-
-QString Type::name() const
-{
-    return m_name;
 }
