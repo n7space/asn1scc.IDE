@@ -60,7 +60,7 @@ private:
     void removeProject(const QString &projectName);
 
     void fileListChanged(const QString &projectName, const QStringList &files);
-    void fileContentChanged(const QString &path, const QString &content);
+    void fileContentChanged(const QString &path);
 
     ParsedDataStorage *m_storage;
     ModelValidityGuard *m_guard;

@@ -28,7 +28,6 @@
 #include <map>
 #include <vector>
 
-#include "source.h"
 #include "definitions.h"
 #include "node.h"
 #include "typereference.h"
@@ -40,15 +39,13 @@ namespace Data {
 class File : public Node
 {
 public:
-    File(const Source &source);
+    File(const QString &path);
     ~File() override;
 
     void accept(Visitor &visitor) const override;
 
     void add(std::unique_ptr<Definitions> defs);
     void addTypeReference(std::unique_ptr<TypeReference> ref);
-
-    const Source &source() const { return m_source; }
 
     using DefinitionsList = std::vector<std::unique_ptr<Definitions>>;
     using ReferencesMap = std::multimap<int, std::unique_ptr<TypeReference>>;
@@ -60,8 +57,6 @@ public:
     void clearReferences();
 
 private:
-    Source m_source;
-
     DefinitionsList m_definitionsList;
     ReferencesMap m_typeReferences;
 

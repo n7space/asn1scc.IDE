@@ -27,18 +27,40 @@
 
 #include <QFile>
 
+#include <coreplugin/idocument.h>
+#include <coreplugin/editormanager/documentmodel.h>
+
 using namespace Asn1Acn::Internal;
 
 QString FileSourceReader::readContent(const QString &fileName) const
+{
+    QString content = readFromDocumentModel(fileName);
+
+    if (content.isEmpty())
+        content = readFromFile(fileName);
+
+    return content;
+}
+
+QString FileSourceReader::readFromFile(const QString &fileName) const
 {
     QFile file(fileName);
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return QString();
 
-    QString docContent = QString::fromLatin1(file.readAll().data());
+    QString content = QString::fromLatin1(file.readAll().data());
 
     file.close();
 
-    return docContent;
+    return content;
+}
+
+QString FileSourceReader::readFromDocumentModel(const QString &fileName) const
+{
+    const auto document = Core::DocumentModel::documentForFilePath(fileName);
+    if (document == nullptr)
+        return QString();
+
+    return QString::fromLatin1(document->contents());
 }

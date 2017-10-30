@@ -61,7 +61,7 @@ void Project::remove(const QString &path)
         m_filesByPathMap.erase(mapIt);
 
     for (auto vecIt = m_files.begin(); vecIt != m_files.end(); vecIt++) {
-        if ((*vecIt)->source().filePath() == path) {
+        if ((*vecIt)->location().path() == path) {
             m_files.erase(vecIt);
             break;
         }

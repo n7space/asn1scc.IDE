@@ -58,7 +58,7 @@ public:
     void handleProjectRemoved(const QString &projectName);
 
     void handleFileListChanged(const QString &projectName, const QStringList &fileList);
-    void handleFileContentChanged(const QString &path, const QString &content);
+    void handleFileContentChanged(const QString &path);
 
 signals:
     void codeErrorsChanged(const std::vector<Data::ErrorMessage> &errorMessages);
@@ -73,11 +73,7 @@ private:
 
     void processFiles(const QString &projectName, const QStringList &filePaths);
 
-    DocumentProcessor *createDocumentProcessorForFileChange(const QString &projectName,
-                                                            const QString &path,
-                                                            const QString &content) const;
-    DocumentProcessor *createDocumentProcessorForProjectChange(const QString &projectName,
-                                                               const QStringList &filePaths) const;
+    DocumentProcessor *createDocumentProcessor(const QString &projectName, const QStringList &filePaths) const;
     void startProcessing(DocumentProcessor *dp);
     void allProcessingFinished();
 
