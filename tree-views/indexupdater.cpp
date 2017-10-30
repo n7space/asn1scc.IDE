@@ -42,8 +42,7 @@ IndexUpdater::IndexUpdater(const Model *model, QObject *parent)
 
 void IndexUpdater::setEditor(TextEditor::TextEditorWidget *editorWidget)
 {
-    if (m_editorWidget != nullptr)
-        m_editorWidget->disconnect(m_updateIndexTimer);
+    unsetEditor();
 
     m_editorWidget = editorWidget;
 
@@ -54,6 +53,14 @@ void IndexUpdater::setEditor(TextEditor::TextEditorWidget *editorWidget)
     } else {
         emit currentIndexUpdated(QModelIndex());
     }
+}
+
+void IndexUpdater::unsetEditor()
+{
+    if (m_editorWidget != nullptr)
+        m_editorWidget->disconnect(m_updateIndexTimer);
+
+    m_editorWidget = nullptr;
 }
 
 void IndexUpdater::updateCurrentIndex()

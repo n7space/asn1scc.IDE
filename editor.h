@@ -47,6 +47,9 @@ protected:
 
     EditorOutline *m_editorOutline;
     Utils::CommentDefinition m_commentDefinition;
+
+private slots:
+    void onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections);
 };
 
 } // namespace Internal
