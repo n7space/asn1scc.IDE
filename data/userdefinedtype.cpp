@@ -22,55 +22,27 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "project.h"
 
-#include "visitor.h"
+#include "userdefinedtype.h"
 
 using namespace Asn1Acn::Internal::Data;
 
-Project::Project(const QString &projectName)
-    : Node({})
-    , m_name(projectName)
+UserdefinedType::UserdefinedType(const QString &name, const QString &module)
+    : m_name(name)
+    , m_module(module)
+{}
+
+QString UserdefinedType::name() const
 {
+    return m_name;
 }
 
-Project::~Project()
+QString UserdefinedType::label() const
 {
+    return ": " + name() + "." + m_module;
 }
 
-void Project::accept(Visitor &visitor) const
+QString UserdefinedType::baseIconFile() const
 {
-    visitor.visit(*this);
-}
-
-void Project::add(std::unique_ptr<File> file)
-{
-    const QString path = file->location().path();
-
-    remove(path);
-
-    file->setParent(this);
-    m_filesByPathMap[path] = file.get();
-    m_files.push_back(std::move(file));
-}
-
-void Project::remove(const QString &path)
-{
-    const auto mapIt = m_filesByPathMap.find(path);
-    if (mapIt != m_filesByPathMap.end())
-        m_filesByPathMap.erase(mapIt);
-
-    for (auto vecIt = m_files.begin(); vecIt != m_files.end(); vecIt++) {
-        if ((*vecIt)->location().path() == path) {
-            m_files.erase(vecIt);
-            break;
-        }
-    }
-}
-
-File *Project::file(const QString &path) const
-{
-    const auto it = m_filesByPathMap.find(path);
-
-    return it != m_filesByPathMap.end() ? it->second : nullptr;
+    return QStringLiteral(":/asn1acn/images/outline/userdefined.png");
 }

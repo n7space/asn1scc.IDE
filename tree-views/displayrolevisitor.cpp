@@ -49,41 +49,12 @@ QString DisplayRoleVisitor::valueFor(const File &file) const
 
 QString DisplayRoleVisitor::valueFor(const TypeAssignment &type) const
 {
-    DisplayRoleVisitor typeVisitor;
-    type.reference().accept(typeVisitor);
-    return type.name() + ": " + typeVisitor.value();
+    return type.name() + type.type()->label();
 }
 
 QString DisplayRoleVisitor::valueFor(const TypeReference &ref) const
 {
-    switch (ref.type()) {
-    case Type::Boolean:
-        return "BOOLEAN";
-    case Type::Null:
-        return "NULL";
-    case Type::Integer:
-        return "INTEGER";
-    case Type::Real:
-        return "REAL";
-    case Type::BitString:
-        return "BIT STRING";
-    case Type::OctetString:
-        return "OCTET STRING";
-    case Type::IA5String:
-        return "IA5String";
-    case Type::NumericString:
-        return "NumericString";
-    case Type::Enumerated:
-        return "ENUMERATED";
-    case Type::Choice:
-        return "CHOICE";
-    case Type::Sequence:
-        return "SEQUENCE";
-    case Type::SequenceOf:
-        return "SEQUENCE OF";
-    case Type::UserDefined:
-        return ref.module() + "." + ref.name();
-    }
+    Q_UNUSED(ref);
     return {};
 }
 

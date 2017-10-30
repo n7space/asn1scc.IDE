@@ -26,7 +26,8 @@
 
 #include <QtTest>
 
-#include <data/type.h>
+#include <data/builtintypes.h>
+#include <data/userdefinedtype.h>
 #include <data/typereference.h>
 #include <data/definitions.h>
 #include <data/typeassignment.h>
@@ -40,8 +41,6 @@ DisplayRoleVisitorTests::DisplayRoleVisitorTests(QObject *parent)
     : QObject(parent)
 {
 }
-
-Q_DECLARE_METATYPE(Asn1Acn::Internal::Data::Type)
 
 void DisplayRoleVisitorTests::test_definitions()
 {
@@ -57,45 +56,51 @@ void DisplayRoleVisitorTests::test_file()
     QCOMPARE(file.valueFor<DisplayRoleVisitor>(), QStringLiteral("File"));
 }
 
-void DisplayRoleVisitorTests::test_typeAssignment()
+void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn()
 {
-    TypeAssignment type("TypeName", {}, {Data::Type::Integer, {}});
+    QFETCH(QString, typeName);
+    QFETCH(QString, type);
 
-    QCOMPARE(type.valueFor<DisplayRoleVisitor>(), QStringLiteral("TypeName: INTEGER"));
+    TypeAssignment typeAssignment("TypeName", {}, Data::BuiltinType::createBuiltinType(typeName));
+
+    QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: " + type));
+}
+
+void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn_data()
+{
+    QTest::addColumn<QString>("typeName");
+    QTest::addColumn<QString>("type");
+
+    QTest::newRow("Boolean")       << "BooleanType"       << "BOOLEAN";
+    QTest::newRow("Null")          << "NullType"          << "NULL";
+    QTest::newRow("Integer")       << "IntegerType"       << "INTEGER";
+    QTest::newRow("Real")          << "RealType"          << "REAL";
+    QTest::newRow("BitString")     << "BitStringType"     << "BIT STRING";
+    QTest::newRow("OctetString")   << "OctetStringType"   << "OCTET STRING";
+    QTest::newRow("IA5String")     << "IA5StringType"     << "IA5String";
+    QTest::newRow("NumericString") << "NumericStringType" << "NumericString";
+    QTest::newRow("Enumerated")    << "EnumeratedType"    << "ENUMERATED";
+    QTest::newRow("Choice")        << "ChoiceType"        << "CHOICE";
+    QTest::newRow("Sequence")      << "SequenceType"      << "SEQUENCE";
+    QTest::newRow("SequenceOf")    << "SequenceOfType"    << "SEQUENCE OF";
+}
+
+void DisplayRoleVisitorTests::test_typeAssignmentUserDefined()
+{
+    TypeAssignment typeAssignment("TypeName", {}, std::make_unique<Data::UserdefinedType>("type", "module"));
+    QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: type.module"));
 }
 
 void DisplayRoleVisitorTests::test_typeReferenceBuiltIn()
 {
-    QFETCH(Data::Type, type);
-    QFETCH(QString, value);
+    TypeReference reference;
 
-    TypeReference reference(type, {});
-
-    QCOMPARE(reference.valueFor<DisplayRoleVisitor>(), value);
-}
-
-void DisplayRoleVisitorTests::test_typeReferenceBuiltIn_data()
-{
-    QTest::addColumn<Data::Type>("type");
-    QTest::addColumn<QString>("value");
-
-    QTest::newRow("Boolean")       << Data::Type::Boolean       << "BOOLEAN";
-    QTest::newRow("Null")          << Data::Type::Null          << "NULL";
-    QTest::newRow("Integer")       << Data::Type::Integer       << "INTEGER";
-    QTest::newRow("Real")          << Data::Type::Real          << "REAL";
-    QTest::newRow("BitString")     << Data::Type::BitString     << "BIT STRING";
-    QTest::newRow("OctetString")   << Data::Type::OctetString   << "OCTET STRING";
-    QTest::newRow("IA5String")     << Data::Type::IA5String     << "IA5String";
-    QTest::newRow("NumericString") << Data::Type::NumericString << "NumericString";
-    QTest::newRow("Enumerated")    << Data::Type::Enumerated    << "ENUMERATED";
-    QTest::newRow("Choice")        << Data::Type::Choice        << "CHOICE";
-    QTest::newRow("Sequence")      << Data::Type::Sequence      << "SEQUENCE";
-    QTest::newRow("SequenceOf")    << Data::Type::SequenceOf    << "SEQUENCE OF";
+    QCOMPARE(reference.valueFor<DisplayRoleVisitor>(), QString());
 }
 
 void DisplayRoleVisitorTests::test_typeReferenceUserDefined()
 {
-    TypeReference reference("Name", "Module", {});
+    TypeReference reference;
 
-    QCOMPARE(reference.valueFor<DisplayRoleVisitor>(), QStringLiteral("Module.Name"));
+    QCOMPARE(reference.valueFor<DisplayRoleVisitor>(), QString());
 }

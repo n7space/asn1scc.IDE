@@ -31,6 +31,7 @@
 #include "sourcelocation.h"
 #include "typereference.h"
 #include "node.h"
+#include "type.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -39,17 +40,17 @@ namespace Data {
 class TypeAssignment : public Node
 {
 public:
-    TypeAssignment(const QString &name, const SourceLocation &location, const TypeReference &reference);
+    TypeAssignment(const QString &name, const SourceLocation &location, std::unique_ptr<Type> type);
     ~TypeAssignment() override;
 
     void accept(Visitor &visitor) const override;
 
     const QString &name() const { return m_name; }
-    const TypeReference &reference() const { return m_reference; }
+    const Type *type() const { return m_type.get(); }
 
 private:
     QString m_name;
-    TypeReference m_reference;
+    std::unique_ptr<Type> m_type;
 };
 
 } // namespace Data

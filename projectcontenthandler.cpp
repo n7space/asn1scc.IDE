@@ -176,9 +176,11 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
                                                            std::vector<std::unique_ptr<Data::File>> parsedDocuments)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++) {
-        auto filePath = parsedDocuments[i]->location().path();
-        if (m_storage->getFileForPathFromProject(projectName, filePath) != nullptr)
+        auto file = m_storage->getFileForPathFromProject(projectName, parsedDocuments[i]->location().path());
+        if (file != nullptr) {
+            file->clearReferences();
             continue;
+        }
 
         ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
     }

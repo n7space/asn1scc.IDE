@@ -31,6 +31,7 @@
 #include <data/file.h>
 #include <data/definitions.h>
 #include <data/typeassignment.h>
+#include <data/builtintypes.h>
 
 #include "3rdparty/modeltest.h"
 
@@ -57,20 +58,20 @@ void TypesTreeModelTests::test_modelWithDummyPopulation()
     auto file1 = std::make_unique<Data::File>("file1.asn1");
     {
         auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{"file1.asn1", 0, 0});
-        definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, Data::TypeReference{}));
-        definitions1->add(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{"file1.asn1", 3, 3}, Data::TypeReference{}));
+        definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, Data::BuiltinType::createBuiltinType("IntegerType")));
+        definitions1->add(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{"file1.asn1", 3, 3}, Data::BuiltinType::createBuiltinType("IntegerType")));
         file1->add(std::move(definitions1));
 
         auto definitions2 = std::make_unique<Data::Definitions>("Module2", Data::SourceLocation{"file1.asn1", 5, 0});
-        definitions2->add(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{"file1.asn1", 6, 3}, Data::TypeReference{}));
-        definitions2->add(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{"file1.asn1", 7, 3}, Data::TypeReference{}));
+        definitions2->add(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{"file1.asn1", 6, 3}, Data::BuiltinType::createBuiltinType("IntegerType")));
+        definitions2->add(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{"file1.asn1", 7, 3}, Data::BuiltinType::createBuiltinType("IntegerType")));
         file1->add(std::move(definitions2));
     }
 
     auto file2 = std::make_unique<Data::File>("file2.asn1");
     {
         auto definitions1 = std::make_unique<Data::Definitions>("Module10", Data::SourceLocation{"file2.asn1", 0, 0});
-        definitions1->add(std::make_unique<Data::TypeAssignment>("Num10", Data::SourceLocation{"file2.asn1", 2, 3}, Data::TypeReference{}));
+        definitions1->add(std::make_unique<Data::TypeAssignment>("Num10", Data::SourceLocation{"file2.asn1", 2, 3}, Data::BuiltinType::createBuiltinType("IntegerType")));
         file2->add(std::move(definitions1));
     }
 
@@ -81,7 +82,7 @@ void TypesTreeModelTests::test_modelWithDummyPopulation()
     auto file3 = std::make_unique<Data::File>("file3.asn1");
     {
         auto definitions1 = std::make_unique<Data::Definitions>("Module20", Data::SourceLocation{"file3.asn1", 0, 0});
-        definitions1->add(std::make_unique<Data::TypeAssignment>("Num20", Data::SourceLocation{"file3.asn1", 2, 3}, Data::TypeReference{}));
+        definitions1->add(std::make_unique<Data::TypeAssignment>("Num20", Data::SourceLocation{"file3.asn1", 2, 3}, Data::BuiltinType::createBuiltinType("IntegerType")));
         file3->add(std::move(definitions1));
     }
 

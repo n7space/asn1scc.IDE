@@ -60,9 +60,21 @@ Data::TypeReference LinkCreator::getSymbolTypeReference(const QTextCursor &curso
     if (!m_textDocument.characterAt(cursor.position()).isLetterOrNumber())
         return Data::TypeReference();
 
-    return ParsedDataStorage::instance()->getTypeReference(m_documentPath,
-                                                           cursor.blockNumber() + 1,
-                                                           cursor.columnNumber());
+    const auto file = ParsedDataStorage::instance()->getAnyFileForPath(m_documentPath);
+
+    return getTypeReference(file, cursor.blockNumber() + 1, cursor.columnNumber());
+}
+
+Data::TypeReference LinkCreator::getTypeReference(const Data::File *file, int line, int col) const
+{
+    const auto range = file->references().equal_range(line);
+    for(auto it = range.first; it != range.second; it++) {
+        const int referedColumn = it->second->location().column();
+        if (col >=  referedColumn && col <= referedColumn + it->second->name().size())
+            return *(it->second);
+    }
+
+    return Data::TypeReference();
 }
 
 LinkCreator::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSource, const QTextCursor &cursor) const
@@ -128,12 +140,9 @@ Data::SourceLocation LinkCreator::getTargetLocationFromProject(const QString &pr
             continue;
 
         const auto location = storage->getDefinitionLocation(path, typeName, moduleName);
-
-        // TODO: does comment below holds true?
-        // can not simply return location, as it contains only file name and not file path
         if (location.isValid())
-            return Data::SourceLocation(path, location.line(), location.column());
+            return location;
     }
 
-    return Data::SourceLocation();
+    return {};
 }

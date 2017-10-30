@@ -42,9 +42,10 @@ public:
 private slots:
     void test_definitions();
     void test_file();
-    void test_typeAssignment();
+    void test_typeAssignmentBuiltIn();
+    void test_typeAssignmentBuiltIn_data();
+    void test_typeAssignmentUserDefined();
     void test_typeReferenceBuiltIn();
-    void test_typeReferenceBuiltIn_data();
     void test_typeReferenceUserDefined();
 };
 

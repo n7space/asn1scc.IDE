@@ -72,6 +72,9 @@ SOURCES += \
     data/root.cpp \
     data/file.cpp \
     data/project.cpp \
+    data/type.cpp \
+    data/userdefinedtype.cpp \
+    data/builtintypes.cpp \
     data/typeassignment.cpp \
     data/typereference.cpp \
     data/definitions.cpp \
@@ -128,14 +131,12 @@ SOURCES += \
     projectcontenthandler.cpp \
     indenter.cpp \
     tools.cpp \
-    icons.cpp \
     linkcreator.cpp \
     filesourcereader.cpp \
     errormessageparser.cpp \
     sourcemapper.cpp \
     typeslocator.cpp \
     editoroutline.cpp \
-    typereferencesholder.cpp \
     modelvalidityguard.cpp
 
 HEADERS += \
@@ -157,6 +158,8 @@ HEADERS += \
     data/definitions.h \
     data/typereference.h \
     data/type.h \
+    data/userdefinedtype.h \
+    data/builtintypes.h \
     data/errormessage.h \
     data/node.h \
     data/root.h \
@@ -225,7 +228,6 @@ HEADERS += \
     tr.h \
     linkcreator.h \
     tools.h \
-    icons.h \
     parsingserviceprovider.h \
     parseddocumentbuilder.h \
     documentprocessor.h \
@@ -236,7 +238,6 @@ HEADERS += \
     editoroutline.h \
     sourcemapper.h \
     typeslocator.h \
-    typereferencesholder.h \
     modelvalidityguard.h
 
 FORMS += \

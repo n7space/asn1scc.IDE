@@ -51,6 +51,8 @@ public:
     Link createTargetLink(const QTextCursor &cursor) const;
 
 private:
+    Data::TypeReference getTypeReference(const Data::File *file, int line, int col) const;
+
     Data::TypeReference getSymbolTypeReference(const QTextCursor &cursor) const;
     Link getSymbolLink(const Data::TypeReference &symbolSource, const QTextCursor &cursor) const;
 

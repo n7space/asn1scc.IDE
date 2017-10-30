@@ -34,6 +34,7 @@
 #include <data/file.h>
 #include <data/definitions.h>
 #include <data/typeassignment.h>
+#include <data/userdefinedtype.h>
 
 #include <tree-views/outlinemodel.h>
 
@@ -89,17 +90,16 @@ TextEditor::TextEditorWidget *OutlineIndexUpdaterTests::createEditorWidget()
 
 Data::Node *OutlineIndexUpdaterTests::createModelNodes(const QString &filePath)
 {
-
     const auto root = new Data::File(filePath);
 
     auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{filePath, 0, 0});
-    definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{filePath, 2, 3}, Data::TypeReference{}));
-    definitions1->add(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{filePath, 3, 3}, Data::TypeReference{}));
+    definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{filePath, 2, 3}, std::make_unique<Data::UserdefinedType>("UserTypeName", "Module1")));
+    definitions1->add(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{filePath, 3, 3}, std::make_unique<Data::UserdefinedType>("UserTypeName", "Module1")));
     root->add(std::move(definitions1));
 
     auto definitions2 = std::make_unique<Data::Definitions>("Module2", Data::SourceLocation{filePath, 5, 0});
-    definitions2->add(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{filePath, 6, 3}, Data::TypeReference{}));
-    definitions2->add(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{filePath, 7, 3}, Data::TypeReference{}));
+    definitions2->add(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{filePath, 6, 3}, std::make_unique<Data::UserdefinedType>("UserTypeName", "Module2")));
+    definitions2->add(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{filePath, 7, 3}, std::make_unique<Data::UserdefinedType>("UserTypeName", "Module2")));
     root->add(std::move(definitions2));
 
     m_data = root;

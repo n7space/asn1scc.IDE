@@ -73,8 +73,11 @@ private:
 
     Data::SourceLocation readLocationFromAttributes();
 
-    Data::TypeReference readTypeReference();
-    Data::TypeReference readType(const Data::SourceLocation &location);
+    std::unique_ptr<Data::Type> readType();
+    std::unique_ptr<Data::Type> readUserDefinedTypeReference(const Data::SourceLocation &location);
+    void readSequence();
+    void readSequenceOf();
+
     QString readReferencedTypeNameAttribute();
     QString readReferencedModuleAttribute();
 

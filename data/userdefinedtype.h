@@ -22,18 +22,32 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <QIcon>
+#include <QString>
 
-#include "data/type.h"
+#include "type.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Icons {
+namespace Data {
 
-QIcon iconForType(Data::Type type);
+class UserdefinedType : public Type
+{
+public:
+    UserdefinedType(const QString &name, const QString &module);
 
-} // namespace Icon
+    QString name() const override;
+    QString label() const override;
+
+private:
+    QString baseIconFile() const override;
+
+    QString m_name;
+    QString m_module;
+};
+
+} // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn

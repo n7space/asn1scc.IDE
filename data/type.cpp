@@ -23,33 +23,13 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "type.h"
 
-#include <QHash>
-#include <QString>
+#include <utils/stylehelper.h>
 
-#include "data/file.h"
-#include "data/definitions.h"
-#include "data/typereference.h"
+using namespace Asn1Acn::Internal::Data;
 
-namespace Asn1Acn {
-namespace Internal {
-
-class TypeReferencesHolder
+QIcon Type::icon() const
 {
-public:
-    void addReference(const QString &path, const Data::File &file);
-    void removeReference(const QString &path);
-
-    Data::TypeReference getTypeReference(const QString &path, const int line, const int col) const;
-
-private:
-    using ReferenceLookup = QMultiHash<int, Data::TypeReference>;
-
-    void createReferencesFromModule(const Data::Definitions &moduleDefinition, ReferenceLookup &lookup) const;
-
-    QHash<QString, ReferenceLookup> m_references;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+    return QIcon(Utils::StyleHelper::dpiSpecificImageFile(baseIconFile()));
+}

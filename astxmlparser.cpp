@@ -26,6 +26,9 @@
 
 #include <QMap>
 
+#include "data/userdefinedtype.h"
+#include "data/builtintypes.h"
+
 using namespace Asn1Acn::Internal;
 
 AstXmlParser::AstXmlParser(QXmlStreamReader &xmlReader, const SourceMapper &mapper)
@@ -117,11 +120,9 @@ void AstXmlParser::readTypeAssignment()
     Q_ASSERT(m_currentDefinitions != nullptr);
     const auto location = readLocationFromAttributes();
     const auto name = readNameAttribute();
-    const auto reference = readTypeReference();
+    auto type = readType();
 
-    m_currentDefinitions->add(std::make_unique<Data::TypeAssignment>(name, location, reference));
-
-    m_xmlReader.skipCurrentElement();
+    m_currentDefinitions->add(std::make_unique<Data::TypeAssignment>(name, location, std::move(type)));
 }
 
 QString AstXmlParser::readReferencedTypeNameAttribute()
@@ -213,40 +214,7 @@ Data::SourceLocation AstXmlParser::readLocationFromAttributes()
     return { m_currentFile, readLineAttribute(), readCharPossitionInLineAttribute() };
 }
 
-namespace
-{
-Data::Type mapNameToDataType(const QStringRef &name)
-{
-    static const QMap<QString, Data::Type> mapping = {
-        { "BooleanType",       Data::Type::Boolean },
-        { "NullType",          Data::Type::Null },
-        { "IntegerType",       Data::Type::Integer },
-        { "RealType",          Data::Type::Real },
-        { "BitStringType",     Data::Type::BitString },
-        { "OctetStringType",   Data::Type::OctetString },
-        { "IA5StringType",     Data::Type::IA5String },
-        { "NumericStringType", Data::Type::NumericString },
-        { "EnumeratedType",    Data::Type::Enumerated },
-        { "ChoiceType",        Data::Type::Choice },
-        { "SequenceType",      Data::Type::Sequence },
-        { "SequenceOfType",    Data::Type::SequenceOf },
-    };
-    const auto it = mapping.find(name.toString());
-    if (it == mapping.end())
-        return Data::Type::UserDefined;
-    return it.value();
-}
-} // namespace
-
-Data::TypeReference AstXmlParser::readType(const Data::SourceLocation &location)
-{
-    const auto attributeName = m_xmlReader.name();
-    if (attributeName == QStringLiteral("ReferenceType"))
-        return { readReferencedTypeNameAttribute(), readReferencedModuleAttribute(), location };
-    return { mapNameToDataType(attributeName), location };
-}
-
-Data::TypeReference AstXmlParser::readTypeReference()
+std::unique_ptr<Data::Type> AstXmlParser::readType()
 {
     if (!nextRequiredElementIs("Type"))
         return {};
@@ -254,10 +222,49 @@ Data::TypeReference AstXmlParser::readTypeReference()
     const auto location = readLocationFromAttributes();
 
     m_xmlReader.readNextStartElement();
-    const auto type = readType(location);
-    m_xmlReader.skipCurrentElement();
 
+    std::unique_ptr<Data::Type> type;
+
+    const auto name = m_xmlReader.name();
+    if (name == QStringLiteral("ReferenceType")) {
+        type = readUserDefinedTypeReference(location);
+        m_xmlReader.skipCurrentElement();
+    } else {
+        type = Data::BuiltinType::createBuiltinType(name.toString());
+
+        if (name == QStringLiteral("SequenceType"))
+            readSequence();
+        else if (name == QStringLiteral("SequenceOfType"))
+            readSequenceOf();
+        else
+            m_xmlReader.skipCurrentElement();
+    }
+
+    m_xmlReader.skipCurrentElement();
     m_xmlReader.skipCurrentElement();
 
     return type;
+}
+
+std::unique_ptr<Data::Type> AstXmlParser::readUserDefinedTypeReference(const Data::SourceLocation &location)
+{
+    const QString refName = readReferencedTypeNameAttribute();
+    const QString module = readReferencedModuleAttribute();
+
+    auto ref = std::make_unique<Data::TypeReference>(refName, module, location);
+
+    m_data[m_currentFile]->addTypeReference(std::move(ref));
+
+    return std::make_unique<Data::UserdefinedType>(refName, module);
+}
+
+void AstXmlParser::readSequence()
+{
+    while(nextRequiredElementIs(QStringLiteral("SequenceOrSetChild")))
+        readType();
+}
+
+void AstXmlParser::readSequenceOf()
+{
+    readType();
 }

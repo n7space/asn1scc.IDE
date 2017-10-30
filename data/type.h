@@ -25,26 +25,24 @@
 #pragma once
 
 #include <QString>
+#include <QIcon>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-enum class Type {
-    Boolean,
-    Null,
-    Integer,
-    Real,
-    BitString,
-    OctetString,
-    IA5String,
-    NumericString,
-    Enumerated,
-    Choice,
-    Sequence,
-    SequenceOf,
+class Type
+{
+public:
+    virtual ~Type() = default;
 
-    UserDefined
+    QIcon icon() const;
+
+    virtual QString name() const = 0;
+    virtual QString label() const = 0;
+
+private:
+    virtual QString baseIconFile() const = 0;
 };
 
 } // namespace Data

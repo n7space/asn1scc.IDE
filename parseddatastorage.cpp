@@ -50,7 +50,7 @@ const Data::File *ParsedDataStorage::getAnyFileForPath(const QString &filePath) 
     return getFileForPathInternal(filePath);
 }
 
-const Data::File *ParsedDataStorage::getFileForPathFromProject(const QString &projectName, const QString &filePath)
+Data::File *ParsedDataStorage::getFileForPathFromProject(const QString &projectName, const QString &filePath)
 {
     QMutexLocker locker(&m_documentsMutex);
 
@@ -89,13 +89,6 @@ const QStringList ParsedDataStorage::getFilesPathsFromProject(const QString &pro
     return getFilesPathsFromProjectInternal(projectName);
 }
 
-Data::TypeReference ParsedDataStorage::getTypeReference(const QString &path, const int line, const int col) const
-{
-    QMutexLocker locker(&m_documentsMutex);
-
-    return m_typeReferences.getTypeReference(path, line, col);
-}
-
 Data::SourceLocation ParsedDataStorage::getDefinitionLocation(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const
 {
     QMutexLocker locker(&m_documentsMutex);
@@ -123,8 +116,6 @@ void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique
     project->add(std::move(file));
 
     const Data::File *rawFile = getFileForPathInternal(filePath);
-
-    m_typeReferences.addReference(filePath, *rawFile);
 
     emit fileUpdated(filePath, rawFile);
 }
@@ -162,7 +153,6 @@ void ParsedDataStorage::removeFileFromProjectInternal(const QString &projectName
         return;
 
     prj->remove(filePath);
-    m_typeReferences.removeReference(filePath);
 }
 
 const QStringList ParsedDataStorage::getProjectsForFileInternal(const QString &filePath) const
