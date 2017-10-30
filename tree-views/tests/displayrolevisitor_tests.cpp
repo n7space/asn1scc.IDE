@@ -51,7 +51,7 @@ void DisplayRoleVisitorTests::test_definitions()
 
 void DisplayRoleVisitorTests::test_file()
 {
-    File file({"File", ""});
+    File file("File");
 
     QCOMPARE(file.valueFor<DisplayRoleVisitor>(), QStringLiteral("File"));
 }

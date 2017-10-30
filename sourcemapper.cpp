@@ -24,18 +24,20 @@
 ****************************************************************************/
 #include "sourcemapper.h"
 
+#include <QFileInfo>
+
 using namespace Asn1Acn::Internal;
 
-SourceMapper::SourceMapper(const QList<Data::Source> &documents)
+SourceMapper::SourceMapper(const QHash<QString, QString> &documents)
 {
-    for (const auto &doc : documents)
-        m_mapping.insert({doc.fileName(), doc});
+    for (auto it = documents.begin(); it != documents.end(); it++)
+        m_mapping.insert({ QFileInfo(it.key()).fileName(), it.key() });
 }
 
-Data::Source SourceMapper::findByFileName(const QString &fileName) const
+QString SourceMapper::findByFileName(const QString &fileName) const
 {
     const auto it = m_mapping.find(fileName);
     if (it == m_mapping.end())
-        return { fileName, QString() };
+        return fileName;
     return it->second;
 }

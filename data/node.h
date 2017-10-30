@@ -35,7 +35,7 @@ class Visitor;
 class Node
 {
 protected:
-    Node(const SourceLocation& location)
+    Node(const SourceLocation &location)
         : m_location(location)
         , m_parent(nullptr)
     {}
@@ -53,7 +53,7 @@ public:
         return visitor.value();
     }
 
-    const SourceLocation& location() const { return m_location; }
+    const SourceLocation &location() const { return m_location; }
 
     Node *parent() const { return m_parent; }
     void setParent(Node *parent) { m_parent = parent; }

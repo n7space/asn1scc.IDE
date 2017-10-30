@@ -29,7 +29,7 @@
 #include <vector>
 
 #include <QString>
-#include <QList>
+#include <QHash>
 
 #include <documentprocessor.h>
 
@@ -61,7 +61,7 @@ private:
     State m_state;
     QString m_projectName;
 
-    QList<Data::Source> m_documents;
+    QHash<QString, QString> m_documents;
     std::vector<std::unique_ptr<Data::File>> m_results;
     std::vector<Data::ErrorMessage> m_errorMessages;
 };

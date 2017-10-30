@@ -25,7 +25,6 @@
 
 #include "document.h"
 
-#include <QTextDocument>
 #include <QTextBlock>
 
 #include <coreplugin/idocument.h>
@@ -96,10 +95,7 @@ QList<QTextEdit::ExtraSelection> errorsToSelection(const std::vector<Data::Error
 
 void Document::processDocument()
 {
-    QTextDocument *currentDocument = document();
-
     const QString path = filePath().toString();
-    const QString content = currentDocument->toPlainText();
 
     ProjectContentHandler *handler = ProjectContentHandler::create();
     connect(handler, &ProjectContentHandler::codeErrorsChanged,
@@ -107,5 +103,5 @@ void Document::processDocument()
         const auto list = errorsToSelection(errorMessages, document(), filePath().toString());
         emit extraSelectionsUpdated(list);
     });
-    handler->handleFileContentChanged(path, content);
+    handler->handleFileContentChanged(path);
 }

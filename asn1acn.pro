@@ -67,6 +67,7 @@ SOURCES += \
     completion/acncompletionassist.cpp \
     completion/builtinsproposalsprovider.cpp \
     \
+    data/sourcelocation.cpp \
     data/node.cpp \
     data/root.cpp \
     data/file.cpp \
@@ -78,7 +79,6 @@ SOURCES += \
     data/typereference.cpp \
     data/definitions.cpp \
     data/visitor.cpp \
-    data/source.cpp \
     \
     tree-views/outline-visitors/childrencountingvisitor.cpp \
     tree-views/outline-visitors/childreturningvisitor.cpp \
@@ -167,7 +167,6 @@ HEADERS += \
     data/project.h \
     data/visitor.h \
     data/visitorwithvalue.h \
-    data/source.h \
     \
     tree-views/outline-visitors/childrencountingvisitor.h \
     tree-views/outline-visitors/childreturningvisitor.h \

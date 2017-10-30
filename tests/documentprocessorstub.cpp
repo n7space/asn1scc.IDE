@@ -41,17 +41,15 @@ DocumentProcessorStub::DocumentProcessorStub(const QString &project)
 
 void DocumentProcessorStub::addToRun(const QString &filePath, const QString &docContent)
 {
-    const Data::Source fileInfo(filePath, docContent);
-
-    m_documents.append(fileInfo);
+    m_documents.insert(filePath, docContent);
 }
 
 void DocumentProcessorStub::run()
 {
     m_state = createState();
 
-    for (const auto &doc : m_documents) {
-        auto modules = std::make_unique<Data::File>(doc);
+    for (auto it = m_documents.begin(); it != m_documents.end(); it++) {
+        auto modules = std::make_unique<Data::File>(it.key());
         m_results.push_back(std::move(modules));
     }
 
@@ -78,15 +76,15 @@ DocumentProcessorStub::State DocumentProcessorStub::createState()
     if (m_documents.empty())
         return State::Successful;
 
-    const QString content = m_documents[0].contents();
+    const auto content = m_documents.begin().value();
 
-    if (content.contains("SUCCESS"))
+    if (content == QStringLiteral("SUCCESS"))
         return State::Successful;
 
-    if (content.contains("FAILED"))
+    if (content == QStringLiteral("FAILED"))
         return State::Failed;
 
-    if (content.contains("ERROR"))
+    if (content == QStringLiteral("ERROR"))
         return State::Errored;
 
     return State::Errored;

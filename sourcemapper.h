@@ -27,9 +27,7 @@
 #include <map>
 
 #include <QString>
-#include <QList>
-
-#include <data/source.h>
+#include <QHash>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -37,12 +35,12 @@ namespace Internal {
 class SourceMapper
 {
 public:
-    explicit SourceMapper(const QList<Data::Source> &documents = {});
+    explicit SourceMapper(const QHash<QString, QString> &documents = {});
 
-    Data::Source findByFileName(const QString &fileName) const;
+    QString findByFileName(const QString &fileName) const;
 
 private:
-    std::map<QString, Data::Source> m_mapping;
+    std::map<QString, QString> m_mapping;
 };
 
 } // namespace Internal

@@ -78,7 +78,7 @@ void ProjectContentHandler::handleFileListChanged(const QString &projectName, co
     processFiles(projectName, fileList);
 }
 
-void ProjectContentHandler::handleFileContentChanged(const QString &path, const QString &content)
+void ProjectContentHandler::handleFileContentChanged(const QString &path)
 {
     QStringList projects = m_storage->getProjectsForFile(path);
 
@@ -89,8 +89,8 @@ void ProjectContentHandler::handleFileContentChanged(const QString &path, const 
     }
 
     for (const QString projectName : projects) {
-        DocumentProcessor *docProcessor = createDocumentProcessorForFileChange(projectName, path, content);
-        startProcessing(docProcessor);
+        const auto paths = m_storage->getFilesPathsFromProject(projectName);
+        processFiles(projectName, paths);
     }
 }
 
@@ -104,7 +104,7 @@ void ProjectContentHandler::removeStaleFiles(const QString &projectName, const Q
 
 void ProjectContentHandler::processFiles(const QString &projectName, const QStringList &filePaths)
 {
-    DocumentProcessor *dp = createDocumentProcessorForProjectChange(projectName, filePaths);
+    DocumentProcessor *dp = createDocumentProcessor(projectName, filePaths);
     startProcessing(dp);
 }
 
@@ -120,37 +120,12 @@ QStringList ProjectContentHandler::getStaleFilesPaths(const QString &projectName
     return ret;
 }
 
-DocumentProcessor *ProjectContentHandler::createDocumentProcessorForFileChange(const QString &projectName,
-                                                                               const QString &path,
-                                                                               const QString &content) const
+DocumentProcessor *ProjectContentHandler::createDocumentProcessor(const QString &projectName, const QStringList &filePaths) const
 {
     DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
-    const auto paths = m_storage->getFilesPathsFromProject(projectName);
-    foreach (const auto p, paths) {
-        if (p == path) {
-            docProcessor->addToRun(path, content);
-        } else {
-            const auto file = m_storage->getFileForPathFromProject(projectName, p);
-            docProcessor->addToRun(p, file->source().contents());
-        }
-    }
-
-    return docProcessor;
-}
-
-DocumentProcessor *ProjectContentHandler::createDocumentProcessorForProjectChange(const QString &projectName,
-                                                                                  const QStringList &filePaths) const
-{
-    DocumentProcessor *docProcessor = m_createProcessor(projectName);
-
-    foreach (const QString &path, filePaths) {
-        auto parsedDoc = m_storage->getFileForPathFromProject(projectName, path);
-        if (parsedDoc != nullptr)
-            docProcessor->addToRun(path, parsedDoc->source().contents());
-        else
-            docProcessor->addToRun(path, m_sourceReader->readContent(path));
-    }
+    for (const auto &path : filePaths)
+        docProcessor->addToRun(path, m_sourceReader->readContent(path));
 
     return docProcessor;
 }
@@ -201,7 +176,7 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
                                                            std::vector<std::unique_ptr<Data::File>> parsedDocuments)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++) {
-        auto filePath = parsedDocuments[i]->source().filePath();
+        auto filePath = parsedDocuments[i]->location().path();
         if (m_storage->getFileForPathFromProject(projectName, filePath) != nullptr)
             continue;
 

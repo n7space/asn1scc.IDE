@@ -32,7 +32,6 @@
 #include <QString>
 
 #include <data/errormessage.h>
-#include <data/source.h>
 #include <data/file.h>
 
 namespace Asn1Acn {
