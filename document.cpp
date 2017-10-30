@@ -28,6 +28,10 @@
 #include <QTextBlock>
 
 #include <coreplugin/idocument.h>
+
+#include <projectexplorer/session.h>
+#include <projectexplorer/project.h>
+
 #include <texteditor/texteditorsettings.h>
 #include <texteditor/fontsettings.h>
 
@@ -59,22 +63,30 @@ void Document::onFilePathChanged(const Utils::FileName &oldPath, const Utils::Fi
     if (newPath.isEmpty() || newPath == oldPath)
         return;
 
+    updateExtraSelections();
+
     connect(this, &Core::IDocument::contentsChanged,
             this, &Document::scheduleProcessDocument);
+
+    connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelChanged,
+            this, &Document::onModelChanged);
+}
+
+void Document::onModelChanged()
+{
+    updateExtraSelections();
 }
 
 namespace {
 QList<QTextEdit::ExtraSelection> errorsToSelection(const std::vector<Data::ErrorMessage> &errorMessages,
-                                                   QTextDocument *textDocument,
-                                                   const QString &path)
+                                                   QTextDocument *textDocument)
 {
     const auto errorFormat = TextEditor::TextEditorSettings::instance()->fontSettings().toTextCharFormat(TextEditor::C_ERROR);
 
     QList<QTextEdit::ExtraSelection> result;
 
     for (const auto &message : errorMessages) {
-        if (message.location().path() != path)
-            continue;
+
         const auto &location = message.location();
 
         QTextEdit::ExtraSelection selection;
@@ -98,10 +110,26 @@ void Document::processDocument()
     const QString path = filePath().toString();
 
     ProjectContentHandler *handler = ProjectContentHandler::create();
-    connect(handler, &ProjectContentHandler::codeErrorsChanged,
-            [this](const std::vector<Data::ErrorMessage> &errorMessages) {
-        const auto list = errorsToSelection(errorMessages, document(), filePath().toString());
-        emit extraSelectionsUpdated(list);
-    });
     handler->handleFileContentChanged(path);
+}
+
+void Document::updateExtraSelections() const
+{
+    const auto file = ParsedDataStorage::instance()->getFileForPathFromProject(activeProjectName(),
+                                                                               filePath().toString());
+    if (file == nullptr)
+        return;
+
+    const auto list = errorsToSelection(file->errors(), document());
+
+    emit extraSelectionsUpdated(list);
+}
+
+const QString Document::activeProjectName() const
+{
+    const auto project = ProjectExplorer::SessionManager::startupProject();
+    if (project == nullptr)
+        return QString();
+
+    return project->displayName();
 }

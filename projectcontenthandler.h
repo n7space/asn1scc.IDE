@@ -60,9 +60,6 @@ public:
     void handleFileListChanged(const QString &projectName, const QStringList &fileList);
     void handleFileContentChanged(const QString &path);
 
-signals:
-    void codeErrorsChanged(const std::vector<Data::ErrorMessage> &errorMessages);
-
 private slots:
     void onFilesProcessingFinished(const QString &projectName);
 
@@ -77,8 +74,14 @@ private:
     void startProcessing(DocumentProcessor *dp);
     void allProcessingFinished();
 
-    void handleFilesProcesedWithSuccess(const QString &projectName, std::vector<std::unique_ptr<Data::File>> parsedDocuments);
-    void handleFilesProcesedWithFailure(const QString &projectName, std::vector<std::unique_ptr<Data::File>> parsedDocuments);
+    void handleFilesProcesedWithSuccess(const QString &projectName,
+                                        std::vector<std::unique_ptr<Data::File>> parsedDocuments);
+
+    void handleFilesProcesedWithFailure(const QString &projectName,
+                                        std::vector<std::unique_ptr<Data::File>> parsedDocuments,
+                                        const std::vector<Data::ErrorMessage> &errorMessages);
+
+    void refreshErrorMessages(Data::File *file, const std::vector<Data::ErrorMessage> &errorMessages);
 
     ParsedDataStorage *m_storage;
     ModelValidityGuard *m_guard;

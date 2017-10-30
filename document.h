@@ -44,11 +44,17 @@ public:
     void scheduleProcessDocument();
 
 signals:
-    void extraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections);
+    void extraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections) const;
+
+private slots:
+    void onModelChanged();
 
 private:
     void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
     void processDocument();
+
+    void updateExtraSelections() const;
+    const QString activeProjectName() const;
 
     QTimer m_processorTimer;
 };

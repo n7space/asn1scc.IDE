@@ -60,7 +60,17 @@ void File::addTypeReference(std::unique_ptr<TypeReference> ref)
     m_typeReferences.insert(std::make_pair(ref->location().line(), std::move(ref)));
 }
 
+void File::addErrorMessage(const ErrorMessage &message)
+{
+    m_errorList.push_back(message);
+}
+
 void File::clearReferences()
 {
     m_typeReferences.clear();
+}
+
+void File::clearErrors()
+{
+    m_errorList.clear();
 }
