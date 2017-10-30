@@ -68,7 +68,7 @@ void Project::remove(const QString &path)
     }
 }
 
-const File *Project::file(const QString &path) const
+File *Project::file(const QString &path) const
 {
     const auto it = m_filesByPathMap.find(path);
 

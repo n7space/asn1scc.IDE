@@ -50,7 +50,7 @@ const Data::File *ParsedDataStorage::getAnyFileForPath(const QString &filePath) 
     return getFileForPathInternal(filePath);
 }
 
-const Data::File *ParsedDataStorage::getFileForPathFromProject(const QString &projectName, const QString &filePath)
+Data::File *ParsedDataStorage::getFileForPathFromProject(const QString &projectName, const QString &filePath)
 {
     QMutexLocker locker(&m_documentsMutex);
 

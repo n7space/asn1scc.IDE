@@ -59,3 +59,8 @@ void File::addTypeReference(std::unique_ptr<TypeReference> ref)
 {
     m_typeReferences.insert(std::make_pair(ref->location().line(), std::move(ref)));
 }
+
+void File::clearReferences()
+{
+    m_typeReferences.clear();
+}
