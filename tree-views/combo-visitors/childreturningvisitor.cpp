@@ -26,8 +26,8 @@
 
 #include <tree-views/combo-visitors/childrencountingvisitor.h>
 
-#include <data/type.h>
-#include <data/labeltype.h>
+#include <data/types/type.h>
+#include <data/types/labeltype.h>
 
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::TreeViews::ComboVisitors;
@@ -39,8 +39,8 @@ ChildReturningVisitor::ChildReturningVisitor(int index)
 Node *ChildReturningVisitor::valueFor(const File &file) const
 {
     // items are static to satisfy unit testing routines
-    static TypeAssignment selectSymbol("<Select Symbol>", {}, std::make_unique<LabelType>("<Select Symbol>"));
-    static TypeAssignment noSymbols("<No Symbols>", {}, std::make_unique<LabelType>("<No Symbols>"));
+    static TypeAssignment selectSymbol("<Select Symbol>", {}, std::make_unique<Types::LabelType>("<Select Symbol>"));
+    static TypeAssignment noSymbols("<No Symbols>", {}, std::make_unique<Types::LabelType>("<No Symbols>"));
 
     if (index() == 0) {
         if (file.valueFor<ChildrenCountingVisitor>() == 1)

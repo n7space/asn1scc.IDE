@@ -23,26 +23,32 @@
 **
 ****************************************************************************/
 
-#include "userdefinedtype.h"
+#pragma once
 
-using namespace Asn1Acn::Internal::Data;
+#include <QString>
 
-UserdefinedType::UserdefinedType(const QString &name, const QString &module)
-    : m_name(name)
-    , m_module(module)
-{}
+#include "type.h"
 
-QString UserdefinedType::name() const
+namespace Asn1Acn {
+namespace Internal {
+namespace Data {
+namespace Types {
+
+class LabelType : public Type
 {
-    return m_name;
-}
+public:
+    LabelType(const QString &label);
 
-QString UserdefinedType::label() const
-{
-    return ": " + name() + "." + m_module;
-}
+    QString name() const override;
+    QString label() const override;
 
-QString UserdefinedType::baseIconFile() const
-{
-    return QStringLiteral(":/asn1acn/images/outline/userdefined.png");
-}
+private:
+    QString baseIconFile() const override;
+
+    QString m_name;
+};
+
+} // namespace Types
+} // namespace Data
+} // namespace Internal
+} // namespace Asn1Acn

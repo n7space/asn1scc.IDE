@@ -29,7 +29,7 @@
 #include <data/file.h>
 #include <data/definitions.h>
 #include <data/typeassignment.h>
-#include <data/builtintypes.h>
+#include <data/types/builtintypes.h>
 
 #include "3rdparty/modeltest.h"
 
@@ -56,13 +56,13 @@ void OutlineModelTests::test_modelWithDummyPopulation()
     const auto root = std::make_unique<Data::File>("file.asn1");
 
     auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{"file1.asn1", 0, 0});
-    definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, Data::BuiltinType::createBuiltinType("IntegerType")));
-    definitions1->add(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{"file1.asn1", 3, 3}, Data::BuiltinType::createBuiltinType("IntegerType")));
+    definitions1->add(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, Data::Types::BuiltinType::createBuiltinType("IntegerType")));
+    definitions1->add(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{"file1.asn1", 3, 3}, Data::Types::BuiltinType::createBuiltinType("IntegerType")));
     root->add(std::move(definitions1));
 
     auto definitions2 = std::make_unique<Data::Definitions>("Module2", Data::SourceLocation{"file1.asn1", 5, 0});
-    definitions2->add(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{"file1.asn1", 6, 3}, Data::BuiltinType::createBuiltinType("IntegerType")));
-    definitions2->add(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{"file1.asn1", 7, 3}, Data::BuiltinType::createBuiltinType("IntegerType")));
+    definitions2->add(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{"file1.asn1", 6, 3}, Data::Types::BuiltinType::createBuiltinType("IntegerType")));
+    definitions2->add(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{"file1.asn1", 7, 3}, Data::Types::BuiltinType::createBuiltinType("IntegerType")));
     root->add(std::move(definitions2));
 
     auto model = new OutlineModel(this);

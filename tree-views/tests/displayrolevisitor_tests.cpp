@@ -26,8 +26,8 @@
 
 #include <QtTest>
 
-#include <data/builtintypes.h>
-#include <data/userdefinedtype.h>
+#include <data/types/builtintypes.h>
+#include <data/types/userdefinedtype.h>
 #include <data/typereference.h>
 #include <data/definitions.h>
 #include <data/typeassignment.h>
@@ -61,7 +61,7 @@ void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn()
     QFETCH(QString, typeName);
     QFETCH(QString, type);
 
-    TypeAssignment typeAssignment("TypeName", {}, Data::BuiltinType::createBuiltinType(typeName));
+    TypeAssignment typeAssignment("TypeName", {}, Data::Types::BuiltinType::createBuiltinType(typeName));
 
     QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: " + type));
 }
@@ -87,7 +87,7 @@ void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn_data()
 
 void DisplayRoleVisitorTests::test_typeAssignmentUserDefined()
 {
-    TypeAssignment typeAssignment("TypeName", {}, std::make_unique<Data::UserdefinedType>("type", "module"));
+    TypeAssignment typeAssignment("TypeName", {}, std::make_unique<Data::Types::UserdefinedType>("type", "module"));
     QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: type.module"));
 }
 

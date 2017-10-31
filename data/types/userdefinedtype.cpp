@@ -23,25 +23,26 @@
 **
 ****************************************************************************/
 
-#include "labeltype.h"
+#include "userdefinedtype.h"
 
-using namespace Asn1Acn::Internal::Data;
+using namespace Asn1Acn::Internal::Data::Types;
 
-LabelType::LabelType(const QString &name)
+UserdefinedType::UserdefinedType(const QString &name, const QString &module)
     : m_name(name)
+    , m_module(module)
 {}
 
-QString LabelType::name() const
+QString UserdefinedType::name() const
 {
     return m_name;
 }
 
-QString LabelType::label() const
+QString UserdefinedType::label() const
 {
-    return QString();
+    return ": " + name() + "." + m_module;
 }
 
-QString LabelType::baseIconFile() const
+QString UserdefinedType::baseIconFile() const
 {
-    return QString();
+    return QStringLiteral(":/asn1acn/images/outline/userdefined.png");
 }

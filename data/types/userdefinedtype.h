@@ -32,11 +32,12 @@
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
+namespace Types {
 
-class LabelType : public Type
+class UserdefinedType : public Type
 {
 public:
-    LabelType(const QString &label);
+    UserdefinedType(const QString &name, const QString &module);
 
     QString name() const override;
     QString label() const override;
@@ -45,8 +46,10 @@ private:
     QString baseIconFile() const override;
 
     QString m_name;
+    QString m_module;
 };
 
+} // namespace Types
 } // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn

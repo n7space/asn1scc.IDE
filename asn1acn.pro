@@ -72,14 +72,15 @@ SOURCES += \
     data/root.cpp \
     data/file.cpp \
     data/project.cpp \
-    data/type.cpp \
-    data/userdefinedtype.cpp \
-    data/labeltype.cpp \
-    data/builtintypes.cpp \
     data/typeassignment.cpp \
     data/typereference.cpp \
     data/definitions.cpp \
     data/visitor.cpp \
+    \
+    data/types/type.cpp \
+    data/types/userdefinedtype.cpp \
+    data/types/labeltype.cpp \
+    data/types/builtintypes.cpp \
     \
     tree-views/outline-visitors/childrencountingvisitor.cpp \
     tree-views/outline-visitors/childreturningvisitor.cpp \
@@ -164,10 +165,6 @@ HEADERS += \
     data/typeassignment.h \
     data/definitions.h \
     data/typereference.h \
-    data/type.h \
-    data/userdefinedtype.h \
-    data/labeltype.h \
-    data/builtintypes.h \
     data/errormessage.h \
     data/node.h \
     data/root.h \
@@ -175,6 +172,11 @@ HEADERS += \
     data/project.h \
     data/visitor.h \
     data/visitorwithvalue.h \
+    \
+    data/types/type.h \
+    data/types/userdefinedtype.h \
+    data/types/labeltype.h \
+    data/types/builtintypes.h \
     \
     tree-views/outline-visitors/childrencountingvisitor.h \
     tree-views/outline-visitors/childreturningvisitor.h \

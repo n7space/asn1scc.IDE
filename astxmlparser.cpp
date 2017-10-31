@@ -26,8 +26,8 @@
 
 #include <QMap>
 
-#include "data/userdefinedtype.h"
-#include "data/builtintypes.h"
+#include "data/types/userdefinedtype.h"
+#include "data/types/builtintypes.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -214,7 +214,7 @@ Data::SourceLocation AstXmlParser::readLocationFromAttributes()
     return { m_currentFile, readLineAttribute(), readCharPossitionInLineAttribute() };
 }
 
-std::unique_ptr<Data::Type> AstXmlParser::readType()
+std::unique_ptr<Data::Types::Type> AstXmlParser::readType()
 {
     if (!nextRequiredElementIs("Type"))
         return {};
@@ -223,14 +223,14 @@ std::unique_ptr<Data::Type> AstXmlParser::readType()
 
     m_xmlReader.readNextStartElement();
 
-    std::unique_ptr<Data::Type> type;
+    std::unique_ptr<Data::Types::Type> type;
 
     const auto name = m_xmlReader.name();
     if (name == QStringLiteral("ReferenceType")) {
         type = readUserDefinedTypeReference(location);
         m_xmlReader.skipCurrentElement();
     } else {
-        type = Data::BuiltinType::createBuiltinType(name.toString());
+        type = Data::Types::BuiltinType::createBuiltinType(name.toString());
 
         if (name == QStringLiteral("SequenceType"))
             readSequence();
@@ -246,7 +246,7 @@ std::unique_ptr<Data::Type> AstXmlParser::readType()
     return type;
 }
 
-std::unique_ptr<Data::Type> AstXmlParser::readUserDefinedTypeReference(const Data::SourceLocation &location)
+std::unique_ptr<Data::Types::Type> AstXmlParser::readUserDefinedTypeReference(const Data::SourceLocation &location)
 {
     const QString refName = readReferencedTypeNameAttribute();
     const QString module = readReferencedModuleAttribute();
@@ -255,7 +255,7 @@ std::unique_ptr<Data::Type> AstXmlParser::readUserDefinedTypeReference(const Dat
 
     m_data[m_currentFile]->addTypeReference(std::move(ref));
 
-    return std::make_unique<Data::UserdefinedType>(refName, module);
+    return std::make_unique<Data::Types::UserdefinedType>(refName, module);
 }
 
 void AstXmlParser::readSequence()

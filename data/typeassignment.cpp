@@ -28,7 +28,7 @@
 
 using namespace Asn1Acn::Internal::Data;
 
-TypeAssignment::TypeAssignment(const QString &name, const SourceLocation &location, std::unique_ptr<Type> type)
+TypeAssignment::TypeAssignment(const QString &name, const SourceLocation &location, std::unique_ptr<Types::Type> type)
     : Node(location)
     , m_name(name)
     , m_type(std::move(type))

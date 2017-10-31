@@ -23,31 +23,25 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "labeltype.h"
 
-#include <QString>
+using namespace Asn1Acn::Internal::Data::Types;
 
-#include "type.h"
+LabelType::LabelType(const QString &name)
+    : m_name(name)
+{}
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Data {
-
-class UserdefinedType : public Type
+QString LabelType::name() const
 {
-public:
-    UserdefinedType(const QString &name, const QString &module);
+    return m_name;
+}
 
-    QString name() const override;
-    QString label() const override;
+QString LabelType::label() const
+{
+    return QString();
+}
 
-private:
-    QString baseIconFile() const override;
-
-    QString m_name;
-    QString m_module;
-};
-
-} // namespace Data
-} // namespace Internal
-} // namespace Asn1Acn
+QString LabelType::baseIconFile() const
+{
+    return QString();
+}
