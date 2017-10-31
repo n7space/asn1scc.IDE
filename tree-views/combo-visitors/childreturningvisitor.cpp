@@ -22,34 +22,32 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "childreturningvisitor.h"
 
-#include <QModelIndex>
+#include <tree-views/combo-visitors/childrencountingvisitor.h>
 
-#include <utils/treeviewcombobox.h>
+#include <data/type.h>
+#include <data/labeltype.h>
 
-#include "editor.h"
+using namespace Asn1Acn::Internal::Data;
+using namespace Asn1Acn::Internal::TreeViews::ComboVisitors;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace TreeViews {
+ChildReturningVisitor::ChildReturningVisitor(int index)
+    : OutlineVisitors::ChildReturningVisitor(index)
+{}
 
-class Model;
-
-class OutlineCombo : public Utils::TreeViewComboBox
+Node *ChildReturningVisitor::valueFor(const File &file) const
 {
-    Q_OBJECT
-public:
-    OutlineCombo(EditorWidget *editorWidget);
+    // items are static to satisfy unit testing routines
+    static TypeAssignment selectSymbol("<Select Symbol>", {}, std::make_unique<LabelType>("<Select Symbol>"));
+    static TypeAssignment noSymbols("<No Symbols>", {}, std::make_unique<LabelType>("<No Symbols>"));
 
-private slots:
-    void modelRootChanged();
-    void updateSelection(const QModelIndex index);
+    if (index() == 0) {
+        if (file.valueFor<ChildrenCountingVisitor>() == 1)
+            return &noSymbols;
 
-private:
-    void setupComboBox(Model *model);
-};
+        return &selectSymbol;
+    }
 
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+    return file.valueFor<OutlineVisitors::ChildReturningVisitor>(index() - 1);
+}

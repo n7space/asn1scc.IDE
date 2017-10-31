@@ -22,34 +22,17 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "indexfindingvisitor.h"
 
-#include <QModelIndex>
+using namespace Asn1Acn::Internal::Data;
+using namespace Asn1Acn::Internal::TreeViews::ComboVisitors;
 
-#include <utils/treeviewcombobox.h>
-
-#include "editor.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace TreeViews {
-
-class Model;
-
-class OutlineCombo : public Utils::TreeViewComboBox
+IndexFindingVisitor::IndexFindingVisitor(const Node *child)
+    : OutlineVisitors::IndexFindingVisitor(child)
 {
-    Q_OBJECT
-public:
-    OutlineCombo(EditorWidget *editorWidget);
+}
 
-private slots:
-    void modelRootChanged();
-    void updateSelection(const QModelIndex index);
-
-private:
-    void setupComboBox(Model *model);
-};
-
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+int IndexFindingVisitor::valueFor(const File &file) const
+{
+    return file.valueFor<OutlineVisitors::IndexFindingVisitor>(child()) + 1;
+}

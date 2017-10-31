@@ -24,32 +24,27 @@
 ****************************************************************************/
 #pragma once
 
-#include <QModelIndex>
+#include <tree-views/outline-visitors/childreturningvisitor.h>
 
-#include <utils/treeviewcombobox.h>
-
-#include "editor.h"
+#include <data/file.h>
+#include <data/typeassignment.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
+namespace ComboVisitors {
 
-class Model;
-
-class OutlineCombo : public Utils::TreeViewComboBox
+class ChildReturningVisitor : public OutlineVisitors::ChildReturningVisitor
 {
-    Q_OBJECT
 public:
-    OutlineCombo(EditorWidget *editorWidget);
-
-private slots:
-    void modelRootChanged();
-    void updateSelection(const QModelIndex index);
+    ChildReturningVisitor(int index);
+    ~ChildReturningVisitor() override = default;
 
 private:
-    void setupComboBox(Model *model);
+    Data::Node *valueFor(const Data::File &file) const override;
 };
 
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace OutlineVisitors
+} // namespace TreeViews
+} // namespace Internal
+} // namespace Asn1Acn

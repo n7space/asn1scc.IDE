@@ -22,34 +22,41 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "combomodel.h"
 
-#include <QModelIndex>
+#include "combo-visitors/childrencountingvisitor.h"
+#include "combo-visitors/childreturningvisitor.h"
+#include "combo-visitors/indexfindingvisitor.h"
 
-#include <utils/treeviewcombobox.h>
+using namespace Asn1Acn::Internal::TreeViews::ComboVisitors;
+using namespace Asn1Acn::Internal::TreeViews;
+using namespace Asn1Acn::Internal::Data;
 
-#include "editor.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace TreeViews {
-
-class Model;
-
-class OutlineCombo : public Utils::TreeViewComboBox
+ComboModel::ComboModel(QObject *parent)
+    : Model(parent)
 {
-    Q_OBJECT
-public:
-    OutlineCombo(EditorWidget *editorWidget);
+}
 
-private slots:
-    void modelRootChanged();
-    void updateSelection(const QModelIndex index);
+ComboModel::~ComboModel()
+{
+}
 
-private:
-    void setupComboBox(Model *model);
-};
+Node *ComboModel::parentOf(const Node *node) const
+{
+    return node ? node->parent() : nullptr;
+}
 
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+int ComboModel::childrenCount(const Node *node) const
+{
+    return node ? node->valueFor<ChildrenCountingVisitor>() : 0;
+}
+
+int ComboModel::indexInParent(const Node *parent, const Node *node) const
+{
+    return parent ? parent->valueFor<IndexFindingVisitor>(node) : 0;
+}
+
+Node *ComboModel::nthChild(const Node *node, int n) const
+{
+    return node ? node->valueFor<ChildReturningVisitor>(n) : nullptr;
+}

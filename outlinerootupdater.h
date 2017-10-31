@@ -24,32 +24,41 @@
 ****************************************************************************/
 #pragma once
 
-#include <QModelIndex>
-
-#include <utils/treeviewcombobox.h>
-
-#include "editor.h"
+#include <QObject>
 
 namespace Asn1Acn {
 namespace Internal {
+
+class EditorWidget;
+
 namespace TreeViews {
-
 class Model;
+class IndexUpdater;
+}
 
-class OutlineCombo : public Utils::TreeViewComboBox
+class OutlineRootUpdater : public QObject
 {
     Q_OBJECT
 public:
-    OutlineCombo(EditorWidget *editorWidget);
+    OutlineRootUpdater(EditorWidget *editorWidget,
+                       TreeViews::Model *model,
+                       TreeViews::IndexUpdater *updater,
+                       QObject *parent = nullptr);
+
+signals:
+    void rootChanged();
 
 private slots:
-    void modelRootChanged();
-    void updateSelection(const QModelIndex index);
+    void onEditorChanged();
+    void onModelReset();
 
 private:
-    void setupComboBox(Model *model);
+    void refreshModelRoot();
+
+    EditorWidget *m_editorWidget;
+    TreeViews::Model *m_model;
+    TreeViews::IndexUpdater *m_indexUpdater;
 };
 
-} /* namespace TreeViews */
 } /* namespace Asn1Acn */
 } /* namespace Internal */

@@ -74,6 +74,7 @@ SOURCES += \
     data/project.cpp \
     data/type.cpp \
     data/userdefinedtype.cpp \
+    data/labeltype.cpp \
     data/builtintypes.cpp \
     data/typeassignment.cpp \
     data/typereference.cpp \
@@ -83,6 +84,10 @@ SOURCES += \
     tree-views/outline-visitors/childrencountingvisitor.cpp \
     tree-views/outline-visitors/childreturningvisitor.cpp \
     tree-views/outline-visitors/indexfindingvisitor.cpp \
+    \
+    tree-views/combo-visitors/childrencountingvisitor.cpp \
+    tree-views/combo-visitors/childreturningvisitor.cpp \
+    tree-views/combo-visitors/indexfindingvisitor.cpp \
     \
     tree-views/typestree-visitors/parentreturningvisitor.cpp \
     tree-views/typestree-visitors/childrencountingvisitor.cpp \
@@ -94,6 +99,7 @@ SOURCES += \
     tree-views/outlinemodel.cpp \
     tree-views/typestreemodel.cpp \
     tree-views/model.cpp \
+    tree-views/combomodel.cpp \
     tree-views/treeviewwidget.cpp \
     tree-views/activatehandler.cpp \
     tree-views/indexupdater.cpp \
@@ -137,7 +143,8 @@ SOURCES += \
     sourcemapper.cpp \
     typeslocator.cpp \
     editoroutline.cpp \
-    modelvalidityguard.cpp
+    modelvalidityguard.cpp \
+    outlinerootupdater.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -159,6 +166,7 @@ HEADERS += \
     data/typereference.h \
     data/type.h \
     data/userdefinedtype.h \
+    data/labeltype.h \
     data/builtintypes.h \
     data/errormessage.h \
     data/node.h \
@@ -172,6 +180,10 @@ HEADERS += \
     tree-views/outline-visitors/childreturningvisitor.h \
     tree-views/outline-visitors/indexfindingvisitor.h \
     \
+    tree-views/combo-visitors/childrencountingvisitor.h \
+    tree-views/combo-visitors/childreturningvisitor.h \
+    tree-views/combo-visitors/indexfindingvisitor.h \
+    \
     tree-views/typestree-visitors/parentreturningvisitor.h \
     tree-views/typestree-visitors/childrencountingvisitor.h \
     tree-views/typestree-visitors/childreturningvisitor.h \
@@ -183,6 +195,7 @@ HEADERS += \
     tree-views/typestreemodel.h \
     tree-views/typestreeindexupdater.h \
     tree-views/model.h \
+    tree-views/combomodel.h \
     tree-views/treeviewwidget.h \
     tree-views/activatehandler.h \
     tree-views/indexupdater.h \
@@ -238,7 +251,8 @@ HEADERS += \
     editoroutline.h \
     sourcemapper.h \
     typeslocator.h \
-    modelvalidityguard.h
+    modelvalidityguard.h \
+    outlinerootupdater.h
 
 FORMS += \
     options-pages/general.ui \
@@ -260,6 +274,7 @@ SOURCES += \
     \
     tree-views/tests/3rdparty/modeltest.cpp \
     tree-views/tests/outlinemodel_tests.cpp \
+    tree-views/tests/combomodel_tests.cpp \
     tree-views/tests/typestreemodel_tests.cpp \
     tree-views/tests/displayrolevisitor_tests.cpp \
     tree-views/tests/outlineindexupdater_tests.cpp \
@@ -285,6 +300,7 @@ HEADERS += \
     \
     tree-views/tests/3rdparty/modeltest.h \
     tree-views/tests/outlinemodel_tests.h \
+    tree-views/tests/combomodel_tests.h \
     tree-views/tests/typestreemodel_tests.h \
     tree-views/tests/displayrolevisitor_tests.h \
     tree-views/tests/outlineindexupdater_tests.h \

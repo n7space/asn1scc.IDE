@@ -24,32 +24,22 @@
 ****************************************************************************/
 #pragma once
 
-#include <QModelIndex>
-
-#include <utils/treeviewcombobox.h>
-
-#include "editor.h"
-
+#include <tree-views/outline-visitors/childrencountingvisitor.h>
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
+namespace ComboVisitors {
 
-class Model;
-
-class OutlineCombo : public Utils::TreeViewComboBox
+class ChildrenCountingVisitor : public OutlineVisitors::ChildrenCountingVisitor
 {
-    Q_OBJECT
 public:
-    OutlineCombo(EditorWidget *editorWidget);
-
-private slots:
-    void modelRootChanged();
-    void updateSelection(const QModelIndex index);
+    ~ChildrenCountingVisitor() override = default;
 
 private:
-    void setupComboBox(Model *model);
+    int valueFor(const Data::File &file) const override;
 };
 
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace OutlineVisitors
+} // namespace TreeViews
+} // namespace Internal
+} // namespace Asn1Acn

@@ -39,7 +39,7 @@ protected:
     explicit Model(QObject *parent = 0);
 
 public:
-    ~Model();
+    virtual ~Model();
 
     QVariant data(const QModelIndex &index, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;

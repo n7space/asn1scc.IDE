@@ -80,7 +80,7 @@ void EditorWidget::finalizeInitialization()
             this, &EditorWidget::onExtraSelectionsUpdated);
 
     insertExtraToolBarWidget(TextEditorWidget::Left,
-                             new TreeViews::OutlineCombo(m_editorOutline->model(), m_editorOutline->indexUpdater()));
+                             new TreeViews::OutlineCombo(this));
 }
 
 void EditorWidget::onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections)

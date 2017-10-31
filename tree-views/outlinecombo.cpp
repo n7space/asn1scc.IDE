@@ -24,18 +24,35 @@
 ****************************************************************************/
 #include "outlinecombo.h"
 
-#include <coreplugin/editormanager/editormanager.h>
-
-#include "indexupdater.h"
-#include "model.h"
 #include "activatehandler.h"
 
+#include "combomodel.h"
+#include "outlineindexupdater.h"
+#include "outlinerootupdater.h"
+
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
 static const int MINIMUM_COMBO_CONTENTS_LENGHT = 22;
 static const int MAXIMUM_COMBO_VISIBLE_ITEMS = 40;
 
-OutlineCombo::OutlineCombo(Model *model, IndexUpdater *indexUpdater)
+OutlineCombo::OutlineCombo(EditorWidget *editorWidget)
+{
+    auto model = new ComboModel(this);
+    auto indexUpdater = new OutlineIndexUpdater(model, this);
+
+    const auto rootUpdater = new OutlineRootUpdater(editorWidget, model, indexUpdater, this);
+
+    setupComboBox(model);
+
+    connect(indexUpdater, &IndexUpdater::currentIndexUpdated,
+            this, &OutlineCombo::updateSelection);
+
+    connect(rootUpdater, &OutlineRootUpdater::rootChanged,
+            this, &OutlineCombo::modelRootChanged, Qt::QueuedConnection);
+}
+
+void OutlineCombo::setupComboBox(Model *model)
 {
     setModel(model);
     setMinimumContentsLength(MINIMUM_COMBO_CONTENTS_LENGHT);
@@ -47,17 +64,13 @@ OutlineCombo::OutlineCombo(Model *model, IndexUpdater *indexUpdater)
     setMaxVisibleItems(MAXIMUM_COMBO_VISIBLE_ITEMS);
     setContextMenuPolicy(Qt::NoContextMenu);
 
-    connect(model, &QAbstractItemModel::modelReset,
-            view(), &Utils::TreeViewComboBoxView::expandAll);
-
-    connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
-            view(), &Utils::TreeViewComboBoxView::expandAll);
-
     connect(this, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
             [this]() { ActivateHandler::gotoSymbol(view()->currentIndex()); });
+}
 
-    connect(indexUpdater, &IndexUpdater::currentIndexUpdated,
-            this, &OutlineCombo::updateSelection);
+void OutlineCombo::modelRootChanged()
+{
+    view()->expandAll();
 }
 
 void OutlineCombo::updateSelection(const QModelIndex index)

@@ -24,32 +24,26 @@
 ****************************************************************************/
 #pragma once
 
-#include <QModelIndex>
-
-#include <utils/treeviewcombobox.h>
-
-#include "editor.h"
+#include "model.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
 
-class Model;
-
-class OutlineCombo : public Utils::TreeViewComboBox
+class ComboModel : public Model
 {
     Q_OBJECT
 public:
-    OutlineCombo(EditorWidget *editorWidget);
-
-private slots:
-    void modelRootChanged();
-    void updateSelection(const QModelIndex index);
+    explicit ComboModel(QObject *parent = 0);
+    ~ComboModel();
 
 private:
-    void setupComboBox(Model *model);
+    Data::Node *parentOf(const Data::Node *node) const override;
+    int childrenCount(const Data::Node *node) const override;
+    int indexInParent(const Data::Node *parent, const Data::Node *node) const override;
+    Data::Node *nthChild(const Data::Node *node, int n) const override;
 };
 
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace TreeViews
+} // namespace Internal
+} // namespace Asn1Acn
