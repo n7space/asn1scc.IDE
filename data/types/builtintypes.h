@@ -33,6 +33,7 @@
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
+namespace Types {
 
 class BuiltinType : public Type
 {
@@ -150,7 +151,7 @@ private:
     QString baseIconFile() const override { return QStringLiteral(":/asn1acn/images/outline/sequenceof.png"); }
 };
 
-
+} // namespace Types
 } // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn

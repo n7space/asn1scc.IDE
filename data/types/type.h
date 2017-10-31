@@ -22,14 +22,31 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#pragma once
 
-#include "type.h"
+#include <QString>
+#include <QIcon>
 
-#include <utils/stylehelper.h>
+namespace Asn1Acn {
+namespace Internal {
+namespace Data {
+namespace Types {
 
-using namespace Asn1Acn::Internal::Data;
-
-QIcon Type::icon() const
+class Type
 {
-    return QIcon(Utils::StyleHelper::dpiSpecificImageFile(baseIconFile()));
+public:
+    virtual ~Type() = default;
+
+    QIcon icon() const;
+
+    virtual QString name() const = 0;
+    virtual QString label() const = 0;
+
+private:
+    virtual QString baseIconFile() const = 0;
+};
+
 }
+} // namespace Data
+} // namespace Internal
+} // namespace Asn1Acn

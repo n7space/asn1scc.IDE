@@ -26,7 +26,7 @@
 
 #include <QtTest>
 
-#include <data/builtintypes.h>
+#include <data/types/builtintypes.h>
 
 using namespace Asn1Acn::Internal::Tests;
 

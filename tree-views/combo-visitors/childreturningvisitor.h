@@ -22,32 +22,29 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QString>
+#include <tree-views/outline-visitors/childreturningvisitor.h>
 
-#include "type.h"
+#include <data/file.h>
+#include <data/typeassignment.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace TreeViews {
+namespace ComboVisitors {
 
-class UserdefinedType : public Type
+class ChildReturningVisitor : public OutlineVisitors::ChildReturningVisitor
 {
 public:
-    UserdefinedType(const QString &name, const QString &module);
-
-    QString name() const override;
-    QString label() const override;
+    ChildReturningVisitor(int index);
+    ~ChildReturningVisitor() override = default;
 
 private:
-    QString baseIconFile() const override;
-
-    QString m_name;
-    QString m_module;
+    Data::Node *valueFor(const Data::File &file) const override;
 };
 
-} // namespace Data
+} // namespace OutlineVisitors
+} // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

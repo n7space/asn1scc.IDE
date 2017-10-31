@@ -22,34 +22,34 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <QModelIndex>
+#include <QString>
 
-#include <utils/treeviewcombobox.h>
-
-#include "editor.h"
+#include "type.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace TreeViews {
+namespace Data {
+namespace Types {
 
-class Model;
-
-class OutlineCombo : public Utils::TreeViewComboBox
+class UserdefinedType : public Type
 {
-    Q_OBJECT
 public:
-    OutlineCombo(EditorWidget *editorWidget);
+    UserdefinedType(const QString &name, const QString &module);
 
-private slots:
-    void modelRootChanged();
-    void updateSelection(const QModelIndex index);
+    QString name() const override;
+    QString label() const override;
 
 private:
-    void setupComboBox(Model *model);
+    QString baseIconFile() const override;
+
+    QString m_name;
+    QString m_module;
 };
 
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Types
+} // namespace Data
+} // namespace Internal
+} // namespace Asn1Acn

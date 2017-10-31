@@ -22,34 +22,19 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "childrencountingvisitor.h"
 
-#include <QModelIndex>
+#include <data/definitions.h>
+#include <data/file.h>
+#include <data/project.h>
+#include <data/root.h>
 
-#include <utils/treeviewcombobox.h>
+#include <QDebug>
 
-#include "editor.h"
+using namespace Asn1Acn::Internal::Data;
+using namespace Asn1Acn::Internal::TreeViews::ComboVisitors;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace TreeViews {
-
-class Model;
-
-class OutlineCombo : public Utils::TreeViewComboBox
+int ChildrenCountingVisitor::valueFor(const File &file) const
 {
-    Q_OBJECT
-public:
-    OutlineCombo(EditorWidget *editorWidget);
-
-private slots:
-    void modelRootChanged();
-    void updateSelection(const QModelIndex index);
-
-private:
-    void setupComboBox(Model *model);
-};
-
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+    return file.valueFor<OutlineVisitors::ChildrenCountingVisitor>() + 1;
+}

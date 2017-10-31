@@ -25,7 +25,7 @@
 
 #include "builtintypes.h"
 
-using namespace Asn1Acn::Internal::Data;
+using namespace Asn1Acn::Internal::Data::Types;
 
 std::unique_ptr<Type> BuiltinType::createBuiltinType(const QString &name)
 {

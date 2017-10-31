@@ -30,6 +30,7 @@ namespace Asn1Acn {
 namespace Internal {
 
 class EditorWidget;
+class OutlineRootUpdater;
 
 namespace TreeViews {
 class Model;
@@ -45,17 +46,11 @@ public:
     TreeViews::Model *model() const { return m_model; }
     TreeViews::IndexUpdater *indexUpdater() const { return m_indexUpdater; }
 
-private slots:
-    void onEditorChanged();
-    void onModelReset();
-
 private:
-    void refreshModelRoot();
-
-    EditorWidget *m_editorWidget;
-
     TreeViews::Model *m_model;
     TreeViews::IndexUpdater *m_indexUpdater;
+
+    OutlineRootUpdater *m_outlineRootUpdater;
 };
 
 } /* namespace Asn1Acn */

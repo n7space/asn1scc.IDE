@@ -24,27 +24,22 @@
 ****************************************************************************/
 #pragma once
 
-#include <QString>
-#include <QIcon>
-
+#include <tree-views/outline-visitors/childrencountingvisitor.h>
 namespace Asn1Acn {
 namespace Internal {
-namespace Data {
+namespace TreeViews {
+namespace ComboVisitors {
 
-class Type
+class ChildrenCountingVisitor : public OutlineVisitors::ChildrenCountingVisitor
 {
 public:
-    virtual ~Type() = default;
-
-    QIcon icon() const;
-
-    virtual QString name() const = 0;
-    virtual QString label() const = 0;
+    ~ChildrenCountingVisitor() override = default;
 
 private:
-    virtual QString baseIconFile() const = 0;
+    int valueFor(const Data::File &file) const override;
 };
 
-} // namespace Data
+} // namespace OutlineVisitors
+} // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

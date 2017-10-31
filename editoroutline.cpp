@@ -24,50 +24,20 @@
 ****************************************************************************/
 #include "editoroutline.h"
 
-#include <texteditor/textdocument.h>
-#include <utils/fileutils.h>
-#include <coreplugin/editormanager/editormanager.h>
+#include <editor.h>
 
 #include <tree-views/outlinemodel.h>
 #include <tree-views/outlineindexupdater.h>
 
-#include <editor.h>
-#include <parseddatastorage.h>
+#include <outlinerootupdater.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
 EditorOutline::EditorOutline(EditorWidget *editorWidget)
     : QObject(editorWidget)
-    , m_editorWidget(editorWidget)
     , m_model(new OutlineModel(this))
     , m_indexUpdater(new OutlineIndexUpdater(m_model, this))
+    , m_outlineRootUpdater(new OutlineRootUpdater(editorWidget, m_model, m_indexUpdater, this))
 {
-    m_indexUpdater->setEditor(m_editorWidget);
-
-    connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
-            this, &EditorOutline::onEditorChanged);
-
-    connect(m_model, &Model::modelReset,
-            this, &EditorOutline::onModelReset);
-}
-
-void EditorOutline::onEditorChanged()
-{
-    refreshModelRoot();
-}
-
-void EditorOutline::onModelReset()
-{
-    refreshModelRoot();
-    m_indexUpdater->updateCurrentIndex();
-}
-
-void EditorOutline::refreshModelRoot()
-{
-    const QString &path = m_editorWidget->textDocument()->filePath().toString();
-
-    const auto file = ParsedDataStorage::instance()->getAnyFileForPath(path);
-
-    m_model->setRoot(file);
 }

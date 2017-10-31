@@ -22,34 +22,26 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
 
-#include <QModelIndex>
+#include "labeltype.h"
 
-#include <utils/treeviewcombobox.h>
+using namespace Asn1Acn::Internal::Data::Types;
 
-#include "editor.h"
+LabelType::LabelType(const QString &name)
+    : m_name(name)
+{}
 
-namespace Asn1Acn {
-namespace Internal {
-namespace TreeViews {
-
-class Model;
-
-class OutlineCombo : public Utils::TreeViewComboBox
+QString LabelType::name() const
 {
-    Q_OBJECT
-public:
-    OutlineCombo(EditorWidget *editorWidget);
+    return m_name;
+}
 
-private slots:
-    void modelRootChanged();
-    void updateSelection(const QModelIndex index);
+QString LabelType::label() const
+{
+    return QString();
+}
 
-private:
-    void setupComboBox(Model *model);
-};
-
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+QString LabelType::baseIconFile() const
+{
+    return QString();
+}

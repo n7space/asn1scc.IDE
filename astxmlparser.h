@@ -73,8 +73,8 @@ private:
 
     Data::SourceLocation readLocationFromAttributes();
 
-    std::unique_ptr<Data::Type> readType();
-    std::unique_ptr<Data::Type> readUserDefinedTypeReference(const Data::SourceLocation &location);
+    std::unique_ptr<Data::Types::Type> readType();
+    std::unique_ptr<Data::Types::Type> readUserDefinedTypeReference(const Data::SourceLocation &location);
     void readSequence();
     void readSequenceOf();
 

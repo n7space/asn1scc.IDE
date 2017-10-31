@@ -24,32 +24,27 @@
 ****************************************************************************/
 #pragma once
 
-#include <QModelIndex>
+#include <tree-views/outline-visitors/indexfindingvisitor.h>
 
-#include <utils/treeviewcombobox.h>
-
-#include "editor.h"
+#include <data/node.h>
+#include <data/file.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
+namespace ComboVisitors {
 
-class Model;
-
-class OutlineCombo : public Utils::TreeViewComboBox
+class IndexFindingVisitor : public OutlineVisitors::IndexFindingVisitor
 {
-    Q_OBJECT
 public:
-    OutlineCombo(EditorWidget *editorWidget);
-
-private slots:
-    void modelRootChanged();
-    void updateSelection(const QModelIndex index);
+    IndexFindingVisitor(const Data::Node *child);
+    ~IndexFindingVisitor() override = default;
 
 private:
-    void setupComboBox(Model *model);
+    int valueFor(const Data::File &file) const override;
 };
 
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace OutlineVisitors
+} // namespace TreeViews
+} // namespace Internal
+} // namespace Asn1Acn

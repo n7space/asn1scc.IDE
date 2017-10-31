@@ -22,9 +22,9 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "outlinemodel_tests.h"
+#include "combomodel_tests.h"
 
-#include "../outlinemodel.h"
+#include "../combomodel.h"
 
 #include <data/file.h>
 #include <data/definitions.h>
@@ -37,21 +37,21 @@ using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::TreeViews::Tests;
 
-OutlineModelTests::OutlineModelTests(QObject *parent)
+ComboModelTests::ComboModelTests(QObject *parent)
     : QObject(parent)
 {
 }
 
-OutlineModelTests::~OutlineModelTests()
+ComboModelTests::~ComboModelTests()
 {
 }
 
-void OutlineModelTests::test_emptyModel()
+void ComboModelTests::test_emptyModel()
 {
-    ModelTest testEmptyModel(new OutlineModel(this), this);
+    ModelTest testEmptyModel(new ComboModel(this), this);
 }
 
-void OutlineModelTests::test_modelWithDummyPopulation()
+void ComboModelTests::test_modelWithDummyPopulation()
 {
     const auto root = std::make_unique<Data::File>("file.asn1");
 
@@ -65,7 +65,7 @@ void OutlineModelTests::test_modelWithDummyPopulation()
     definitions2->add(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{"file1.asn1", 7, 3}, Data::Types::BuiltinType::createBuiltinType("IntegerType")));
     root->add(std::move(definitions2));
 
-    auto model = new OutlineModel(this);
+    auto model = new ComboModel(this);
     model->setRoot(root.get());
 
     ModelTest testNonEmptyModel(model, this);

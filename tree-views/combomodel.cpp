@@ -22,27 +22,41 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "combomodel.h"
 
-#include "userdefinedtype.h"
+#include "combo-visitors/childrencountingvisitor.h"
+#include "combo-visitors/childreturningvisitor.h"
+#include "combo-visitors/indexfindingvisitor.h"
 
+using namespace Asn1Acn::Internal::TreeViews::ComboVisitors;
+using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
 
-UserdefinedType::UserdefinedType(const QString &name, const QString &module)
-    : m_name(name)
-    , m_module(module)
-{}
-
-QString UserdefinedType::name() const
+ComboModel::ComboModel(QObject *parent)
+    : Model(parent)
 {
-    return m_name;
 }
 
-QString UserdefinedType::label() const
+ComboModel::~ComboModel()
 {
-    return ": " + name() + "." + m_module;
 }
 
-QString UserdefinedType::baseIconFile() const
+Node *ComboModel::parentOf(const Node *node) const
 {
-    return QStringLiteral(":/asn1acn/images/outline/userdefined.png");
+    return node ? node->parent() : nullptr;
+}
+
+int ComboModel::childrenCount(const Node *node) const
+{
+    return node ? node->valueFor<ChildrenCountingVisitor>() : 0;
+}
+
+int ComboModel::indexInParent(const Node *parent, const Node *node) const
+{
+    return parent ? parent->valueFor<IndexFindingVisitor>(node) : 0;
+}
+
+Node *ComboModel::nthChild(const Node *node, int n) const
+{
+    return node ? node->valueFor<ChildReturningVisitor>(n) : nullptr;
 }
