@@ -50,7 +50,8 @@ include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
 CONFIG += object_parallel_to_source
 
 DEFINES += ASN1ACN_LIBRARY
-INCLUDEPATH += $$PWD
+INCLUDEPATH += $$PWD/src
+VPATH += $$PWD/src
 
 # asn1acn plugin files
 
