@@ -66,6 +66,7 @@ SOURCES += \
     completion/completionassist.cpp \
     completion/acncompletionassist.cpp \
     completion/keywordproposalsbuilder.cpp \
+    completion/importfindingvisitor.cpp \
     \
     data/sourcelocation.cpp \
     data/node.cpp \
@@ -160,6 +161,7 @@ HEADERS += \
     completion/acncompletionassist.h \
     completion/keywordproposalsbuilder.h \
     completion/completiontypedefs.h \
+    completion/importfindingvisitor.h \
     \
     data/sourcelocation.h \
     data/typeassignment.h \
