@@ -22,50 +22,46 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "usertypesproposalsprovider.h"
+#include "usertypesproposalsbuilder.h"
 
 #include <data/definitions.h>
+
+#include <tree-views/decorationrolevisitor.h>
+
+#include "importfindingvisitor.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Completion;
 
-UserTypesProposalsProvider::UserTypesProposalsProvider(const Data::File *data)
-    : ProposalsProvider(":/codemodel/images/member.png")
-    , m_data(data)
+UserTypesProposalsBuilder::UserTypesProposalsBuilder(const Data::File *data)
+    : m_data(data)
 {
 }
 
-Proposals UserTypesProposalsProvider::createProposals() const
+void UserTypesProposalsBuilder::fillProposals()
 {
-    Proposals proposals;
-
     if (m_data == nullptr)
-        return proposals;
+        return;
 
     for (const auto &definitions : m_data->definitionsList()) {
-        proposals.append(createImportedTypes(definitions->importedTypes()));
-        proposals.append(createInternalTypes(definitions->types()));
+        appendImportedTypes(definitions->importedTypes());
+        appendInternalTypes(definitions->types());
     }
-
-    return proposals;
 }
 
-Proposals UserTypesProposalsProvider::createInternalTypes(const Data::Definitions::Types &types) const
+void UserTypesProposalsBuilder::appendInternalTypes(const Data::Definitions::Types &types)
 {
-    Proposals proposals;
-
     for (const auto &type : types)
-        addProposal(proposals, type->name());
-
-    return proposals;
+        addProposal(type->name(), type->valueFor<TreeViews::DecorationRoleVisitor>());
 }
 
-Proposals UserTypesProposalsProvider::createImportedTypes(const QList<QString> &importedProposals) const
+void UserTypesProposalsBuilder::appendImportedTypes(const Data::Definitions::ImportedTypes &importedTypes)
 {
-    Proposals proposals;
-
-    foreach(const QString &typeName, importedProposals)
-        addProposal(proposals, typeName);
-
-    return proposals;
+    const auto searchRoot = m_data->parent() != nullptr ? m_data->parent() : m_data;
+    static const auto defaultIcon = QIcon(":/codemodel/images/member.png");
+    foreach(const auto &importedType, importedTypes) {
+        const auto typeNode = searchRoot->valueFor<ImportFindingVisitor>(importedType.module(), importedType.name());
+        const auto icon = typeNode == nullptr ? defaultIcon : typeNode->valueFor<TreeViews::DecorationRoleVisitor>();
+        addProposal(importedType.name(), icon);
+    }
 }

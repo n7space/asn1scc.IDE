@@ -60,6 +60,7 @@ public:
     const QStringList getFilesPathsFromProject(const QString &projectName) const;
 
     Data::SourceLocation getDefinitionLocation(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const;
+    const Data::TypeAssignment *getTypeAssignment(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const;
 
 signals:
     void fileUpdated(const QString &filePath, const Data::File *newFile);

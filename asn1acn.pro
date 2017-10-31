@@ -59,13 +59,14 @@ SOURCES += \
     completion/asncompletionassist.cpp \
     completion/asnsnippets.cpp \
     completion/acnsnippets.cpp \
-    completion/proposalsprovider.cpp \
-    completion/asnbuiltinsproposalsprovider.cpp \
-    completion/usertypesproposalsprovider.cpp \
-    completion/acnbuiltinsproposalsprovider.cpp \
+    completion/proposalsbuilder.cpp \
+    completion/asnkeywordproposalsbuilder.cpp \
+    completion/usertypesproposalsbuilder.cpp \
+    completion/acnkeywordproposalsbuilder.cpp \
     completion/completionassist.cpp \
     completion/acncompletionassist.cpp \
-    completion/builtinsproposalsprovider.cpp \
+    completion/keywordproposalsbuilder.cpp \
+    completion/importfindingvisitor.cpp \
     \
     data/sourcelocation.cpp \
     data/node.cpp \
@@ -152,14 +153,15 @@ HEADERS += \
     completion/asncompletionassist.h \
     completion/asnsnippets.h \
     completion/acnsnippets.h \
-    completion/proposalsprovider.h \
-    completion/asnbuiltinsproposalsprovider.h \
-    completion/usertypesproposalsprovider.h \
-    completion/acnbuiltinsproposalsprovider.h \
+    completion/proposalsbuilder.h \
+    completion/asnkeywordproposalsbuilder.h \
+    completion/usertypesproposalsbuilder.h \
+    completion/acnkeywordproposalsbuilder.h \
     completion/completionassist.h \
     completion/acncompletionassist.h \
-    completion/builtinsproposalsprovider.h \
+    completion/keywordproposalsbuilder.h \
     completion/completiontypedefs.h \
+    completion/importfindingvisitor.h \
     \
     data/sourcelocation.h \
     data/typeassignment.h \
@@ -172,6 +174,7 @@ HEADERS += \
     data/project.h \
     data/visitor.h \
     data/visitorwithvalue.h \
+    data/importedtype.h \
     \
     data/types/type.h \
     data/types/userdefinedtype.h \

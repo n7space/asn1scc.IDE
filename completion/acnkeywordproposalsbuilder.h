@@ -24,29 +24,16 @@
 ****************************************************************************/
 #pragma once
 
-#include <memory>
-
-#include <texteditor/codeassist/assistproposalitem.h>
-
-#include <data/file.h>
-
-#include "proposalsprovider.h"
+#include "keywordproposalsbuilder.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Completion {
 
-class UserTypesProposalsProvider : public ProposalsProvider
+class AcnKeywordProposalsBuilder : public KeywordProposalsBuilder
 {
 public:
-    UserTypesProposalsProvider(const Data::File *data);
-
-private:
-    Proposals createProposals() const override;
-    Proposals createImportedTypes(const QList<QString> &importedProposals) const;
-    Proposals createInternalTypes(const Data::Definitions::Types &types) const;
-
-    const Data::File *m_data;
+    AcnKeywordProposalsBuilder();
 };
 
 } /* nameapsce Completion */

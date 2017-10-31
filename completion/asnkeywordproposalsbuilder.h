@@ -22,34 +22,18 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QIcon>
-#include <QList>
-#include <QString>
-
-#include <texteditor/codeassist/assistproposalitem.h>
-
-#include "completiontypedefs.h"
+#include "keywordproposalsbuilder.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Completion {
 
-class ProposalsProvider
+class AsnKeywordProposalsBuilder : public KeywordProposalsBuilder
 {
 public:
-    ProposalsProvider(const QString &iconPath);
-    Proposals takeProposals() const;
-
-protected:
-    void addProposal(Proposals &proposals, const QString &text) const;
-
-    QIcon m_memberIcon;
-
-private:
-    virtual Proposals createProposals() const = 0;
+    AsnKeywordProposalsBuilder();
 };
 
 } /* nameapsce Completion */

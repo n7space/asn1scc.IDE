@@ -22,41 +22,25 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "asnkeywordproposalsbuilder.h"
 
-#include <QString>
 #include <QStringList>
-
-#include "builtinsproposalsprovider.h"
 
 using namespace Asn1Acn::Internal::Completion;
 
-BuiltinsProposalsProvider::BuiltinsProposalsProvider(const QStringList &keywords,
-                                                     const QStringList &types,
-                                                     const QStringList &builtin,
-                                                     const QStringList &attributes)
-    : ProposalsProvider(":/codemodel/images/keyword.png"),
-      m_keywords(keywords), m_types(types), m_builtin(builtin), m_attributes(attributes)
+static const QStringList KEYWORDS = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMATIC", "TAGS", "EXPLICIT", "IMPLICIT",
+                                      "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "DEFINITIONS", "APPLICATION", "PRIVATE",
+                                      "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM" };
+
+static const QStringList TYPES = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SEQUENCE",
+                                   "OCTET STRING", "BIT STRING" };
+
+static const QStringList BUILTIN = { "NULL", "FALSE", "TRUE" };
+
+static const QStringList ATTRIBUTES = { "SIZE", "OPTIONAL", "MIN", "MAX", "DEFAULT", "WITH COMPONENT", "WITH COMPONENTS",
+                                        "INCLUDES", "ABSENT", "PRESENT", "PATTERN" };
+
+AsnKeywordProposalsBuilder::AsnKeywordProposalsBuilder()
+    : KeywordProposalsBuilder(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
 {
-}
-
-Proposals BuiltinsProposalsProvider::createProposals() const
-{
-    Proposals proposals;
-
-    proposals.append(createProposalsGroup(m_keywords));
-    proposals.append(createProposalsGroup(m_types));
-    proposals.append(createProposalsGroup(m_builtin));
-    proposals.append(createProposalsGroup(m_attributes));
-
-    return proposals;
-}
-
-Proposals BuiltinsProposalsProvider::createProposalsGroup(const QStringList &group) const
-{
-    Proposals proposals;
-
-    foreach(const QString &word, group)
-        addProposal(proposals, word);
-
-    return proposals;
 }

@@ -32,6 +32,7 @@
 #include <QStringList>
 
 #include "typeassignment.h"
+#include "importedtype.h"
 #include "node.h"
 
 namespace Asn1Acn {
@@ -49,19 +50,20 @@ public:
     const QString &name() const { return m_name; }
 
     void add(std::unique_ptr<TypeAssignment> type);
-    void addImportedType(const QString &typeName);
+    void addImportedType(const ImportedType &type);
 
     using Types = std::vector<std::unique_ptr<TypeAssignment>>;
+    using ImportedTypes = std::vector<ImportedType>;
 
     const Types &types() const { return m_types; }
     const TypeAssignment *type(const QString &name) const;
-    const QStringList &importedTypes() const { return m_importedTypes; }
+    const ImportedTypes &importedTypes() const { return m_importedTypes; }
 
 private:
     QString m_name;
     Types m_types;
     std::map<QString, TypeAssignment*> m_typeByNameMap;
-    QStringList m_importedTypes;
+    ImportedTypes m_importedTypes;
 };
 
 } // namespace Data

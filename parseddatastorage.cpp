@@ -89,19 +89,29 @@ const QStringList ParsedDataStorage::getFilesPathsFromProject(const QString &pro
     return getFilesPathsFromProjectInternal(projectName);
 }
 
-Data::SourceLocation ParsedDataStorage::getDefinitionLocation(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const
+Data::SourceLocation ParsedDataStorage::getDefinitionLocation(const QString &path,
+                                                              const QString &typeAssignmentName,
+                                                              const QString &definitionsName) const
+{
+    const auto type = getTypeAssignment(path, typeAssignmentName, definitionsName);
+    return (type == nullptr) ? Data::SourceLocation() : type->location();
+}
+
+const Data::TypeAssignment *ParsedDataStorage::getTypeAssignment(const QString &path,
+                                                                 const QString &typeAssignmentName,
+                                                                 const QString &definitionsName) const
 {
     QMutexLocker locker(&m_documentsMutex);
 
     const auto file = getFileForPathInternal(path);
     if (file == nullptr)
-        return Data::SourceLocation();
+        return nullptr;
 
-    const auto &definitions = file->definitions(definitionsName);
-    if (!definitions)
-        return {};
+    const auto definitions = file->definitions(definitionsName);
+    if (definitions == nullptr)
+        return nullptr;
 
-    return getLocationFromModule(*definitions, typeAssignmentName);
+    return definitions->type(typeAssignmentName);
 }
 
 void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique_ptr<Data::File> file)

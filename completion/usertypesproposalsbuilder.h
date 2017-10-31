@@ -22,20 +22,31 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include "builtinsproposalsprovider.h"
+#include <memory>
+
+#include <texteditor/codeassist/assistproposalitem.h>
+
+#include <data/file.h>
+
+#include "proposalsbuilder.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Completion {
 
-class AcnBuiltinsProposalProvider : public BuiltinsProposalsProvider
+class UserTypesProposalsBuilder : public ProposalsBuilder
 {
-
 public:
-    AcnBuiltinsProposalProvider();
+    UserTypesProposalsBuilder(const Data::File *data);
+
+private:
+    void fillProposals() override;
+    void appendImportedTypes(const Data::Definitions::ImportedTypes &importedTypes);
+    void appendInternalTypes(const Data::Definitions::Types &types);
+
+    const Data::File *m_data;
 };
 
 } /* nameapsce Completion */

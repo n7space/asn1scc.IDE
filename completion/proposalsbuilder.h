@@ -25,11 +25,11 @@
 
 #pragma once
 
+#include <QIcon>
 #include <QList>
+#include <QString>
 
 #include <texteditor/codeassist/assistproposalitem.h>
-
-#include "proposalsprovider.h"
 
 #include "completiontypedefs.h"
 
@@ -37,22 +37,18 @@ namespace Asn1Acn {
 namespace Internal {
 namespace Completion {
 
-class BuiltinsProposalsProvider : public ProposalsProvider
+class ProposalsBuilder
 {
 public:
-    BuiltinsProposalsProvider(const QStringList &keywords,
-                              const QStringList &types,
-                              const QStringList &builtin,
-                              const QStringList &attributes);
+    Proposals buildProposals();
+    virtual ~ProposalsBuilder();
+
+protected:
+    void addProposal(const QString &text, const QIcon &icon);
 
 private:
-    Proposals createProposals() const override;
-    Proposals createProposalsGroup(const QStringList &proposalsGroup) const;
-
-    const QStringList &m_keywords;
-    const QStringList &m_types;
-    const QStringList &m_builtin;
-    const QStringList &m_attributes;
+    virtual void fillProposals() = 0;
+    Proposals m_proposals;
 };
 
 } /* nameapsce Completion */

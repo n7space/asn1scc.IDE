@@ -40,9 +40,7 @@
 #include "acneditor.h"
 #include "asneditor.h"
 
-#include "asnbuiltinsproposalsprovider.h"
-#include "acnbuiltinsproposalsprovider.h"
-#include "usertypesproposalsprovider.h"
+#include "usertypesproposalsbuilder.h"
 
 using namespace Asn1Acn::Internal::Completion;
 
@@ -79,8 +77,8 @@ void CompletionAssistProcessor::appendProposalsFromUserTypes(Proposals &proposal
     if (file == nullptr)
         return;
 
-    Completion::UserTypesProposalsProvider proposalsProvider(file);
-    proposals.append(proposalsProvider.takeProposals());
+    Completion::UserTypesProposalsBuilder builder(file);
+    proposals.append(builder.buildProposals());
 }
 
 void CompletionAssistProcessor::appendProposalsFromSnippets(Proposals &proposals) const
@@ -90,8 +88,8 @@ void CompletionAssistProcessor::appendProposalsFromSnippets(Proposals &proposals
 
 void CompletionAssistProcessor::appendProposalsFromKeywords(Proposals &proposals) const
 {
-    std::unique_ptr<BuiltinsProposalsProvider> provider = getBuiltinsProposalsProvider();
-    proposals.append(provider->takeProposals());
+    auto builder = createKeywordsProposalsBuilder();
+    proposals.append(builder->buildProposals());
 }
 
 bool CompletionAssistProcessor::shouldAccept(const TextEditor::AssistInterface *interface) const

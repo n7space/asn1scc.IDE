@@ -22,27 +22,27 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
-#include "proposalsprovider.h"
+#include "proposalsbuilder.h"
 
 using namespace Asn1Acn::Internal::Completion;
 
-ProposalsProvider::ProposalsProvider(const QString &iconPath)
-    : m_memberIcon(iconPath)
+ProposalsBuilder::~ProposalsBuilder()
 {
 }
 
-Proposals ProposalsProvider::takeProposals() const
+Proposals ProposalsBuilder::buildProposals()
 {
-    return createProposals();
+    m_proposals.clear();
+    fillProposals();
+    return m_proposals;
 }
 
-void ProposalsProvider::addProposal(Proposals &proposals, const QString &text) const
+void ProposalsBuilder::addProposal(const QString &text, const QIcon &icon)
 {
     auto proposalItem = new TextEditor::AssistProposalItem;
 
     proposalItem->setText(text);
-    proposalItem->setIcon(m_memberIcon);
+    proposalItem->setIcon(icon);
 
-    proposals.append(proposalItem);
+    m_proposals.append(proposalItem);
 }

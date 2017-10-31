@@ -22,21 +22,29 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include "builtinsproposalsprovider.h"
+#include <QString>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Completion {
+namespace Data {
 
-class AsnBuiltinsProposalsProvider : public BuiltinsProposalsProvider
+class ImportedType
 {
 public:
-    AsnBuiltinsProposalsProvider();
+    ImportedType(const QString &module, const QString &name)
+        : m_module(module), m_name(name)
+    {}
+
+    const QString &module() const { return m_module; }
+    const QString &name() const { return m_name; }
+
+private:
+    QString m_module;
+    QString m_name;
 };
 
-} /* nameapsce Completion */
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+} // namespace Data
+} // namespace Internal
+} // namespace Asn1Acn

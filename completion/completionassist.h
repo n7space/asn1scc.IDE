@@ -32,7 +32,7 @@
 #include <texteditor/codeassist/iassistprocessor.h>
 #include <texteditor/snippets/snippetassistcollector.h>
 
-#include "builtinsproposalsprovider.h"
+#include "proposalsbuilder.h"
 
 #include "completiontypedefs.h"
 
@@ -48,7 +48,7 @@ public:
     TextEditor::IAssistProposal *perform(const TextEditor::AssistInterface *interface) override;
 
 private:
-    virtual std::unique_ptr<BuiltinsProposalsProvider> getBuiltinsProposalsProvider() const = 0;
+    virtual std::unique_ptr<ProposalsBuilder> createKeywordsProposalsBuilder() const = 0;
 
     void appendProposalsFromUserTypes(Proposals &proposals, const QString &fileName) const;
     void appendProposalsFromSnippets(Proposals &proposals) const;

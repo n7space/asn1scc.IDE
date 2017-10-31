@@ -22,25 +22,33 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#pragma once
 
-#include <QStringList>
+#include <QString>
 
-#include "acnbuiltinsproposalsprovider.h"
+#include <data/visitorwithvalue.h>
 
-using namespace Asn1Acn::Internal::Completion;
+namespace Asn1Acn {
+namespace Internal {
+namespace Completion {
 
-static const QStringList KEYWORDS = { "BEGIN", "END", "DEFINITIONS", "CONSTANT" };
-
-static const QStringList TYPES = { "INTEGER", "BOOLEAN" };
-
-static const QStringList BUILTIN = { "NULL", "big", "little", "pos-int", "twos-complement", "BCD", "ASCII",
-                                     "IEEE754-1985-32", "IEEE754-1985-64", "byte", "word", "dword" };
-
-static const QStringList ATTRIBUTES = { "endianness", "encoding", "size", "null-terminated", "termination-pattern",
-                                        "align-to-next", "encode-values", "true-value", "false-value", "pattern",
-                                        "mapping-function", "present-when", "determinant" };
-
-AcnBuiltinsProposalProvider::AcnBuiltinsProposalProvider()
-    : BuiltinsProposalsProvider(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
+class ImportFindingVisitor : public Data::VisitorWithValue<Data::TypeAssignment *>
 {
-}
+public:
+    ImportFindingVisitor(const QString &module, const QString &type);
+
+private:
+    Data::TypeAssignment *valueFor(const Data::Root &root) const override;
+    Data::TypeAssignment *valueFor(const Data::Definitions &defs) const override;
+    Data::TypeAssignment *valueFor(const Data::File &file) const override;
+    Data::TypeAssignment *valueFor(const Data::TypeAssignment &type) const override;
+    Data::TypeAssignment *valueFor(const Data::TypeReference &ref) const override;
+    Data::TypeAssignment *valueFor(const Data::Project &project) const override;
+
+    QString m_module;
+    QString m_type;
+};
+
+} /* nameapsce Completion */
+} /* namespace Internal */
+} /* namespace Asn1Acn */

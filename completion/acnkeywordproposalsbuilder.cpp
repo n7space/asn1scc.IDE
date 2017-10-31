@@ -22,33 +22,24 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "acnkeywordproposalsbuilder.h"
 
-#include <coreplugin/id.h>
+#include <QStringList>
 
-#include "completionassist.h"
+using namespace Asn1Acn::Internal::Completion;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Completion {
+static const QStringList KEYWORDS = { "BEGIN", "END", "DEFINITIONS", "CONSTANT" };
 
-class AcnCompletionAssistProcessor : public CompletionAssistProcessor
+static const QStringList TYPES = { "INTEGER", "BOOLEAN" };
+
+static const QStringList BUILTIN = { "NULL", "big", "little", "pos-int", "twos-complement", "BCD", "ASCII",
+                                     "IEEE754-1985-32", "IEEE754-1985-64", "byte", "word", "dword" };
+
+static const QStringList ATTRIBUTES = { "endianness", "encoding", "size", "null-terminated", "termination-pattern",
+                                        "align-to-next", "encode-values", "true-value", "false-value", "pattern",
+                                        "mapping-function", "present-when", "determinant" };
+
+AcnKeywordProposalsBuilder::AcnKeywordProposalsBuilder()
+    : KeywordProposalsBuilder(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
 {
-public:
-    AcnCompletionAssistProcessor();
-
-private:
-    std::unique_ptr<ProposalsBuilder> createKeywordsProposalsBuilder() const override;
-};
-
-class AcnCompletionAssistProvider : public CompletionAssistProvider
-{
-    Q_OBJECT
-
-public:
-    TextEditor::IAssistProcessor *createProcessor() const override;
-};
-
-} /* nameapsce Completion */
-} /* namespace Internal */
-} /* namespace Asn1Acn */
+}
