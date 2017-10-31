@@ -150,14 +150,12 @@ void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName
         break;
     case DocumentProcessor::State::Errored:
     case DocumentProcessor::State::Failed:
-        handleFilesProcesedWithFailure(projectName, dp->takeResults());
+        handleFilesProcesedWithFailure(projectName, dp->takeResults(), dp->errorMessages());
         break;
     case DocumentProcessor::State::Unfinished:
         QTC_CHECK(false && "Wrong state in onFilesProcessingFinished");
         break;
     }
-
-    emit codeErrorsChanged(dp->errorMessages());
 
     dp->deleteLater();
 
@@ -173,17 +171,29 @@ void ProjectContentHandler::handleFilesProcesedWithSuccess(const QString &projec
 }
 
 void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projectName,
-                                                           std::vector<std::unique_ptr<Data::File>> parsedDocuments)
+                                                           std::vector<std::unique_ptr<Data::File>> parsedDocuments,
+                                                           const std::vector<Data::ErrorMessage> &errorMessages)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++) {
         auto file = m_storage->getFileForPathFromProject(projectName, parsedDocuments[i]->location().path());
-        if (file != nullptr) {
-            file->clearReferences();
-            continue;
+        if (file == nullptr) {
+            file = parsedDocuments[i].get();
+            ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
         }
 
-        ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
+        file->clearReferences();
+        refreshErrorMessages(file, errorMessages);
     }
+}
+
+void ProjectContentHandler::refreshErrorMessages(Data::File *file,
+                                                 const std::vector<Data::ErrorMessage> &errorMessages)
+{
+    file->clearErrors();
+
+    for (const auto &message : errorMessages)
+        if (message.location().path() == file->location().path())
+            file->addErrorMessage(message);
 }
 
 void ProjectContentHandler::allProcessingFinished()

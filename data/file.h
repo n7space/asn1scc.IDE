@@ -31,6 +31,7 @@
 #include "definitions.h"
 #include "node.h"
 #include "typereference.h"
+#include "errormessage.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -46,19 +47,25 @@ public:
 
     void add(std::unique_ptr<Definitions> defs);
     void addTypeReference(std::unique_ptr<TypeReference> ref);
+    void addErrorMessage(const ErrorMessage &message);
 
     using DefinitionsList = std::vector<std::unique_ptr<Definitions>>;
     using ReferencesMap = std::multimap<int, std::unique_ptr<TypeReference>>;
+    using ErrorList = std::vector<ErrorMessage>;
 
     const DefinitionsList &definitionsList() const { return m_definitionsList; }
     const Definitions *definitions(const QString &name) const;
 
     const ReferencesMap &references() const { return m_typeReferences; }
+    const ErrorList &errors() const { return m_errorList; }
+
     void clearReferences();
+    void clearErrors();
 
 private:
     DefinitionsList m_definitionsList;
     ReferencesMap m_typeReferences;
+    ErrorList m_errorList;
 
     std::map<QString, Definitions *> m_definitionsByNameMap;
 };
