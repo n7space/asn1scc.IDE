@@ -28,6 +28,8 @@
 
 #include <tree-views/decorationrolevisitor.h>
 
+#include "importfindingvisitor.h"
+
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Completion;
 
@@ -55,7 +57,11 @@ void UserTypesProposalsBuilder::appendInternalTypes(const Data::Definitions::Typ
 
 void UserTypesProposalsBuilder::appendImportedTypes(const Data::Definitions::ImportedTypes &importedTypes)
 {
-    const auto icon = QIcon(":/codemodel/images/member.png");
-    foreach(const auto &type, importedTypes)
-        addProposal(type.name(), icon); // TODO better icon!
+    const auto searchRoot = m_data->parent() != nullptr ? m_data->parent() : m_data;
+    static const auto defaultIcon = QIcon(":/codemodel/images/member.png");
+    foreach(const auto &importedType, importedTypes) {
+        const auto typeNode = searchRoot->valueFor<ImportFindingVisitor>(importedType.module(), importedType.name());
+        const auto icon = typeNode == nullptr ? defaultIcon : typeNode->valueFor<TreeViews::DecorationRoleVisitor>();
+        addProposal(importedType.name(), icon);
+    }
 }
