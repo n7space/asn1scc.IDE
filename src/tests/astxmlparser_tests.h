@@ -55,6 +55,7 @@ private slots:
     void test_pathMapping();
     void test_sequenceTypeAssingment();
     void test_sequenceOfTypeAssingment();
+    void test_variableAssignment();
 
 private:
     void setXmlData(const QString& str);
