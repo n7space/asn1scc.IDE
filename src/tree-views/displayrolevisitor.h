@@ -43,7 +43,6 @@ private:
     QString valueFor(const Data::File &file) const override;
     QString valueFor(const Data::TypeAssignment &type) const override;
     QString valueFor(const Data::VariableAssignment &variable) const override;
-    QString valueFor(const Data::TypeReference &ref) const override;
     QString valueFor(const Data::Project &project) const override;
 };
 

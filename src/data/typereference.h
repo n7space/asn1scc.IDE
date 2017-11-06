@@ -26,28 +26,24 @@
 
 #include <QString>
 
-#include "node.h"
+#include "sourcelocation.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-// TODO not a node?
-class TypeReference : public Node
+class TypeReference
 {
 public:
-    TypeReference(const SourceLocation &location);
+    explicit TypeReference(const SourceLocation &location = {});
     TypeReference(const QString &name, const QString &module, const SourceLocation &location);
-    // TODO kill
-    TypeReference() : TypeReference(SourceLocation()) {}
-    ~TypeReference() override = default;
 
-    void accept(Visitor &visitor) const override;
-
+    const SourceLocation &location() const { return m_location; }
     const QString &name() const { return m_name; }
     const QString &module() const { return m_module; }
 
 private:
+    SourceLocation m_location;
     QString m_name;
     QString m_module;
 };

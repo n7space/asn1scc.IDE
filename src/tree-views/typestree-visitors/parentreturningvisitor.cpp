@@ -64,11 +64,6 @@ Node *ParentReturningVisitor::valueFor(const VariableAssignment &variable) const
     return variable.parent();
 }
 
-Node *ParentReturningVisitor::valueFor(const TypeReference &ref) const
-{
-    return ref.parent();
-}
-
 Node *ParentReturningVisitor::valueFor(const Project &project) const
 {
     return project.parent();

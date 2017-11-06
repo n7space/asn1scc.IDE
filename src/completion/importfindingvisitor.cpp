@@ -76,12 +76,6 @@ TypeAssignment *ImportFindingVisitor::valueFor(const VariableAssignment &variabl
     return nullptr;
 }
 
-TypeAssignment *ImportFindingVisitor::valueFor(const TypeReference &ref) const
-{
-    Q_UNUSED(ref);
-    return nullptr;
-}
-
 TypeAssignment *ImportFindingVisitor::valueFor(const Project &project) const
 {
     for (const auto &file : project.files()) {

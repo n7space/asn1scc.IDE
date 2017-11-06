@@ -45,7 +45,6 @@ private:
     int valueFor(const Data::File &file) const override;
     int valueFor(const Data::TypeAssignment &type) const override;
     int valueFor(const Data::VariableAssignment &variable) const override;
-    int valueFor(const Data::TypeReference &ref) const override;
     int valueFor(const Data::Project &project) const override;
     int valueFor(const Data::Root &root) const override;
 

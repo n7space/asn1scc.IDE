@@ -68,12 +68,6 @@ QIcon DecorationRoleVisitor::valueFor(const VariableAssignment &variable) const
     return variable.type()->icon(); // TODO mark "variable icon"
 }
 
-QIcon DecorationRoleVisitor::valueFor(const TypeReference &ref) const
-{
-    Q_UNUSED(ref);
-    return QIcon();
-}
-
 QIcon DecorationRoleVisitor::valueFor(const Project &project) const
 {
     Q_UNUSED(project);

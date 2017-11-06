@@ -63,12 +63,6 @@ Node *ChildReturningVisitor::valueFor(const VariableAssignment &variable) const
     return nullptr;
 }
 
-Node *ChildReturningVisitor::valueFor(const TypeReference &ref) const
-{
-    Q_UNUSED(ref);
-    return nullptr;
-}
-
 Node *ChildReturningVisitor::valueFor(const Project &project) const
 {
     return project.files().at(m_index).get();

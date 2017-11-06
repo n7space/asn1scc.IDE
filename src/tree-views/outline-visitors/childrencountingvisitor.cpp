@@ -63,12 +63,6 @@ int ChildrenCountingVisitor::valueFor(const VariableAssignment &variable) const
     return 0;
 }
 
-int ChildrenCountingVisitor::valueFor(const TypeReference &ref) const
-{
-    Q_UNUSED(ref);
-    return 0;
-}
-
 int ChildrenCountingVisitor::valueFor(const Root &root) const
 {
     return static_cast<int>(root.projects().size());

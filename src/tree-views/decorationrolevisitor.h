@@ -43,7 +43,6 @@ private:
     QIcon valueFor(const Data::File &file) const override;
     QIcon valueFor(const Data::TypeAssignment &type) const override;
     QIcon valueFor(const Data::VariableAssignment &variable) const override;
-    QIcon valueFor(const Data::TypeReference &ref) const override;
     QIcon valueFor(const Data::Project &project) const override;
 };
 
