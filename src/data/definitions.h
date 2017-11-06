@@ -32,6 +32,7 @@
 #include <QStringList>
 
 #include "typeassignment.h"
+#include "variableassignment.h"
 #include "importedtype.h"
 #include "node.h"
 
@@ -49,20 +50,26 @@ public:
 
     const QString &name() const { return m_name; }
 
-    void add(std::unique_ptr<TypeAssignment> type);
+    void addType(std::unique_ptr<TypeAssignment> type);
+    void addVariable(std::unique_ptr<VariableAssignment> variable);
     void addImportedType(const ImportedType &type);
 
     using Types = std::vector<std::unique_ptr<TypeAssignment>>;
+    using Variables = std::vector<std::unique_ptr<VariableAssignment>>;
     using ImportedTypes = std::vector<ImportedType>;
 
     const Types &types() const { return m_types; }
     const TypeAssignment *type(const QString &name) const;
+    const Variables &variables() const { return m_variables; }
+    const VariableAssignment *variable(const QString &name) const;
     const ImportedTypes &importedTypes() const { return m_importedTypes; }
 
 private:
     QString m_name;
     Types m_types;
+    Variables m_variables;
     std::map<QString, TypeAssignment*> m_typeByNameMap;
+    std::map<QString, VariableAssignment*> m_variableByNameMap;
     ImportedTypes m_importedTypes;
 };
 

@@ -122,7 +122,7 @@ void AstXmlParser::readTypeAssignment()
     const auto name = readNameAttribute();
     auto type = readType();
 
-    m_currentDefinitions->add(std::make_unique<Data::TypeAssignment>(name, location, std::move(type)));
+    m_currentDefinitions->addType(std::make_unique<Data::TypeAssignment>(name, location, std::move(type)));
 }
 
 QString AstXmlParser::readReferencedTypeNameAttribute()
