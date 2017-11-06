@@ -75,6 +75,7 @@ SOURCES += \
     data/file.cpp \
     data/project.cpp \
     data/typeassignment.cpp \
+    data/variableassignment.cpp \
     data/typereference.cpp \
     data/definitions.cpp \
     data/visitor.cpp \
@@ -166,6 +167,7 @@ HEADERS += \
     \
     data/sourcelocation.h \
     data/typeassignment.h \
+    data/variableassignment.h \
     data/definitions.h \
     data/typereference.h \
     data/errormessage.h \

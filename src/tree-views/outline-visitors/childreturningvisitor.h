@@ -44,6 +44,7 @@ private:
     Data::Node *valueFor(const Data::Definitions &defs) const override;
     Data::Node *valueFor(const Data::File &file) const override;
     Data::Node *valueFor(const Data::TypeAssignment &type) const override;
+    Data::Node *valueFor(const Data::VariableAssignment &variable) const override;
     Data::Node *valueFor(const Data::TypeReference &ref) const override;
     Data::Node *valueFor(const Data::Project &project) const override;
     Data::Node *valueFor(const Data::Root &root) const override;

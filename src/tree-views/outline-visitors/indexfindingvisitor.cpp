@@ -78,6 +78,12 @@ int IndexFindingVisitor::valueFor(const TypeAssignment &type) const
     return -1;
 }
 
+int IndexFindingVisitor::valueFor(const VariableAssignment &variable) const
+{
+    Q_UNUSED(variable);
+    return -1;
+}
+
 int IndexFindingVisitor::valueFor(const TypeReference &ref) const
 {
     Q_UNUSED(ref);

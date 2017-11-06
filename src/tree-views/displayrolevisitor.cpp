@@ -27,6 +27,7 @@
 #include <data/definitions.h>
 #include <data/file.h>
 #include <data/typeassignment.h>
+#include <data/variableassignment.h>
 #include <data/typereference.h>
 #include <data/project.h>
 
@@ -50,6 +51,11 @@ QString DisplayRoleVisitor::valueFor(const File &file) const
 QString DisplayRoleVisitor::valueFor(const TypeAssignment &type) const
 {
     return type.name() + type.type()->label();
+}
+
+QString DisplayRoleVisitor::valueFor(const VariableAssignment &variable) const
+{
+    return variable.name() + variable.type()->label();
 }
 
 QString DisplayRoleVisitor::valueFor(const TypeReference &ref) const

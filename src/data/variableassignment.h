@@ -24,31 +24,34 @@
 ****************************************************************************/
 #pragma once
 
-#include <data/node.h>
-#include <data/visitorwithvalue.h>
+#include <memory>
+
+#include <QString>
+
+#include "sourcelocation.h"
+#include "node.h"
+#include "types/type.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace TreeViews {
-namespace TypesTreeVisitors {
+namespace Data {
 
-class ParentReturningVisitor : public Data::VisitorWithValue<Data::Node *>
+class VariableAssignment : public Node
 {
 public:
-    ParentReturningVisitor();
-    ~ParentReturningVisitor() override;
+    VariableAssignment(const QString &name, const SourceLocation &location, std::unique_ptr<Types::Type> type);
+    ~VariableAssignment() override;
+
+    void accept(Visitor &visitor) const override;
+
+    const QString &name() const { return m_name; }
+    const Types::Type *type() const { return m_type.get(); }
 
 private:
-    Data::Node *valueFor(const Data::Definitions &defs) const override;
-    Data::Node *valueFor(const Data::File &file) const override;
-    Data::Node *valueFor(const Data::TypeAssignment &type) const override;
-    Data::Node *valueFor(const Data::VariableAssignment &variable) const override;
-    Data::Node *valueFor(const Data::TypeReference &ref) const override;
-    Data::Node *valueFor(const Data::Project &project) const override;
-    Data::Node *valueFor(const Data::Root &root) const override;
+    QString m_name;
+    std::unique_ptr<Types::Type> m_type;
 };
 
-} // namespace TypesTreeVisitors
-} // namespace TreeViews
+} // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn

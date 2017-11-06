@@ -57,6 +57,12 @@ Node *ChildReturningVisitor::valueFor(const TypeAssignment &type) const
     return nullptr;
 }
 
+Node *ChildReturningVisitor::valueFor(const VariableAssignment &variable) const
+{
+    Q_UNUSED(variable);
+    return nullptr;
+}
+
 Node *ChildReturningVisitor::valueFor(const TypeReference &ref) const
 {
     Q_UNUSED(ref);

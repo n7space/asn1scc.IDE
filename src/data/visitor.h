@@ -32,6 +32,7 @@ class Definitions;
 class File;
 class Root;
 class TypeAssignment;
+class VariableAssignment;
 class TypeReference;
 class Project;
 
@@ -47,6 +48,7 @@ public:
     virtual void visit(const Definitions &defs) = 0;
     virtual void visit(const File &file) = 0;
     virtual void visit(const TypeAssignment &type) = 0;
+    virtual void visit(const VariableAssignment &variable) = 0;
     virtual void visit(const TypeReference &ref) = 0;
     virtual void visit(const Project &project) = 0;
 };

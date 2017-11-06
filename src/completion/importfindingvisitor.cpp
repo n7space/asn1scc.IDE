@@ -70,6 +70,12 @@ TypeAssignment *ImportFindingVisitor::valueFor(const TypeAssignment &type) const
     return nullptr;
 }
 
+TypeAssignment *ImportFindingVisitor::valueFor(const VariableAssignment &variable) const
+{
+    Q_UNUSED(variable);
+    return nullptr;
+}
+
 TypeAssignment *ImportFindingVisitor::valueFor(const TypeReference &ref) const
 {
     Q_UNUSED(ref);

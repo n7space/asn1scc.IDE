@@ -22,33 +22,23 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "variableassignment.h"
 
-#include <data/node.h>
-#include <data/visitorwithvalue.h>
+#include "visitor.h"
 
-namespace Asn1Acn {
-namespace Internal {
-namespace TreeViews {
-namespace TypesTreeVisitors {
+using namespace Asn1Acn::Internal::Data;
 
-class ParentReturningVisitor : public Data::VisitorWithValue<Data::Node *>
+VariableAssignment::VariableAssignment(const QString &name, const SourceLocation &location, std::unique_ptr<Types::Type> type)
+    : Node(location)
+    , m_name(name)
+    , m_type(std::move(type))
+{}
+
+VariableAssignment::~VariableAssignment()
 {
-public:
-    ParentReturningVisitor();
-    ~ParentReturningVisitor() override;
+}
 
-private:
-    Data::Node *valueFor(const Data::Definitions &defs) const override;
-    Data::Node *valueFor(const Data::File &file) const override;
-    Data::Node *valueFor(const Data::TypeAssignment &type) const override;
-    Data::Node *valueFor(const Data::VariableAssignment &variable) const override;
-    Data::Node *valueFor(const Data::TypeReference &ref) const override;
-    Data::Node *valueFor(const Data::Project &project) const override;
-    Data::Node *valueFor(const Data::Root &root) const override;
-};
-
-} // namespace TypesTreeVisitors
-} // namespace TreeViews
-} // namespace Internal
-} // namespace Asn1Acn
+void VariableAssignment::accept(Visitor &visitor) const
+{
+    visitor.visit(*this);
+}
