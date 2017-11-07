@@ -24,9 +24,18 @@
 ****************************************************************************/
 #include "librarieswidget.h"
 
+#include <QTextEdit>
 #include <QFileDialog>
+#include <QFormLayout>
+#include <QWidget>
+#include <QLabel>
+#include <QLineEdit>
+#include <QVBoxLayout>
+
+#include <utils/detailswidget.h>
 
 #include <libraries/metadata/general.h>
+#include <tr.h>
 
 using namespace Asn1Acn::Internal::OptionsPages;
 using namespace Asn1Acn::Internal;
@@ -39,16 +48,18 @@ enum class Columns {
     Path,
 };
 
+const int LibEntryItemType = QTreeWidgetItem::UserType + 1;
+
 class LibEntryItem : public QTreeWidgetItem
 {
   public:
     LibEntryItem(QTreeWidgetItem *parent, const QString &path)
-        : QTreeWidgetItem(parent, QTreeWidgetItem::UserType + 1)
+        : QTreeWidgetItem(parent, LibEntryItemType)
         , m_info(QFileInfo(path).baseName(), path)
     {
     }
 
-    QString libPath() const { return m_info.path(); }
+    const Libraries::Metadata::General &info() const { return m_info; }
 
     QVariant data(int column, int role) const override
     {
@@ -68,11 +79,62 @@ class LibEntryItem : public QTreeWidgetItem
     }
 
 private:
-    bool isValid() const { return QDir(libPath()).exists(); }
+    bool isValid() const { return QDir(info().path()).exists(); }
 
     Libraries::Metadata::General m_info;
 };
+
+LibEntryItem *asLibEntryItem(QTreeWidgetItem *item)
+{
+    if (item->type() == LibEntryItemType)
+        return static_cast<LibEntryItem *>(item);
+    return nullptr;
+}
 } // namespace
+
+class LibrariesWidget::DetailsWidget : public QWidget
+{
+public:
+    DetailsWidget(QWidget *parent)
+        : QWidget(parent)
+    {
+        m_path = new QLineEdit(this);
+        m_path->setReadOnly(true);
+        m_name = new QLineEdit(this);
+        m_name->setReadOnly(true);
+        m_version = new QLineEdit(this);
+        m_version->setReadOnly(true);
+        m_license = new QLineEdit(this);
+        m_license->setReadOnly(true);
+        m_description = new QTextEdit(this);
+        m_description->setReadOnly(true);
+
+        auto layout = new QFormLayout(this);
+        layout->addRow(new QLabel(Tr::tr("Name:")), m_name);
+        layout->addRow(new QLabel(Tr::tr("Version:")), m_version);
+        layout->addRow(new QLabel(Tr::tr("License:")), m_license);
+        layout->addRow(new QLabel(Tr::tr("Path:")), m_path);
+        layout->addRow(new QLabel(Tr::tr("Description:")), m_description);
+    }
+
+    void load(LibEntryItem *item)
+    {
+        if (item == nullptr)
+            return;
+        m_path->setText(item->info().path());
+        m_name->setText(item->info().name());
+        m_version->setText(item->info().version());
+        m_license->setText(item->info().license());
+        m_description->setText(item->info().description());
+    }
+
+private:
+    QLineEdit *m_name;
+    QLineEdit *m_path;
+    QLineEdit *m_version;
+    QLineEdit *m_license;
+    QTextEdit *m_description;
+};
 
 LibrariesWidget::LibrariesWidget(QWidget *parent)
     : QWidget(parent)
@@ -94,8 +156,16 @@ LibrariesWidget::LibrariesWidget(QWidget *parent)
     m_manualRootItem = new QTreeWidgetItem(m_ui.treeWidget);
     m_manualRootItem->setText(0, tr("Manual"));
 
+    m_detailsWidget = new DetailsWidget(this);
+    m_ui.detailsWidget->setWidget(m_detailsWidget);
+    m_ui.detailsWidget->setState(Utils::DetailsWidget::NoSummary);
+    m_ui.detailsWidget->setVisible(false);
+
     connect(m_ui.treeWidget, &QTreeWidget::itemClicked, [this](QTreeWidgetItem* item, int) {
         m_ui.removeButton->setEnabled(isManualItem(item));
+        const auto libItem = asLibEntryItem(item);
+        m_ui.detailsWidget->setVisible(libItem != nullptr);
+        m_detailsWidget->load(libItem);
     });
 
     connect(m_ui.removeButton, &QPushButton::clicked, [this](){
@@ -141,7 +211,7 @@ QStringList LibrariesWidget::manualLibPaths() const
 {
     QStringList res;
     for (int i = 0; i < m_manualRootItem->childCount(); ++i)
-        res << static_cast<LibEntryItem *>(m_manualRootItem->child(i))->libPath();
+        res << static_cast<LibEntryItem *>(m_manualRootItem->child(i))->info().path();
     return res;
 }
 

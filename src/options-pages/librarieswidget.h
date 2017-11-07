@@ -47,9 +47,12 @@ public:
     QStringList manualLibPaths() const;
 
 private:
+    class DetailsWidget;
     bool isManualItem(QTreeWidgetItem *item) const;
 
     Ui::LibrariesOptionsPage m_ui;
+
+    DetailsWidget *m_detailsWidget;
 
     QTreeWidgetItem *m_detectedRootItem;
     QTreeWidgetItem *m_manualRootItem;
