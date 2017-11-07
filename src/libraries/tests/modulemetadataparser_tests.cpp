@@ -22,39 +22,39 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "metadataparser_tests.h"
+#include "modulemetadataparser_tests.h"
 
 #include <QtTest>
 
 using namespace Asn1Acn::Internal::Libraries::Tests;
 
-MetadataParserTests::MetadataParserTests(QObject *parent)
+ModuleMetadataParserTests::ModuleMetadataParserTests(QObject *parent)
     : QObject(parent),
       m_parsedData("BadName", "BadDesc")
 {
 }
 
-void MetadataParserTests::test_emptyFile()
+void ModuleMetadataParserTests::test_emptyFile()
 {
     parsingFails("");
 }
 
-void MetadataParserTests::test_malformedJson()
+void ModuleMetadataParserTests::test_malformedJson()
 {
     parsingFails(R"( { "name": "xxxx", )");
 }
 
-void MetadataParserTests::test_wrongJsonType()
+void ModuleMetadataParserTests::test_wrongJsonType()
 {
     parsingFails("[]");
 }
 
-void MetadataParserTests::test_emptyObject()
+void ModuleMetadataParserTests::test_emptyObject()
 {
     parsingFails("{}");
 }
 
-void MetadataParserTests::test_emptyModule()
+void ModuleMetadataParserTests::test_emptyModule()
 {
     parse(R"({"name": "SomeName", "description": "SomeDesc"})");
 
@@ -63,7 +63,7 @@ void MetadataParserTests::test_emptyModule()
     QCOMPARE(m_parsedData.submodules().size(), 0);
 }
 
-void MetadataParserTests::test_emptySubmodule()
+void ModuleMetadataParserTests::test_emptySubmodule()
 {
     parse(R"({
           "name": "SomeName",
@@ -82,7 +82,7 @@ void MetadataParserTests::test_emptySubmodule()
     QCOMPARE(submodule.elements().size(), 0);
 }
 
-void MetadataParserTests::test_emptyElement()
+void ModuleMetadataParserTests::test_emptyElement()
 {
     parse(R"({
           "name": "SomeName",
@@ -110,7 +110,7 @@ void MetadataParserTests::test_emptyElement()
     QCOMPARE(element.requirements().size(), 0);
 }
 
-void MetadataParserTests::test_completeElement()
+void ModuleMetadataParserTests::test_completeElement()
 {
     parse(R"({
           "name": "SomeName",
@@ -147,20 +147,20 @@ void MetadataParserTests::test_completeElement()
     QCOMPARE(import.types().at(1), QLatin1Literal("Z"));
 }
 
-void MetadataParserTests::parsingFails(const QString &jsonData)
+void ModuleMetadataParserTests::parsingFails(const QString &jsonData)
 {
-    MetadataParser parser(jsonData.toUtf8());
+    ModuleMetadataParser parser(jsonData.toUtf8());
     try {
         parser.parse();
         QFAIL("Parsing should fail");
     }
-    catch (const MetadataParser::Error &err) {
+    catch (const ModuleMetadataParser::Error &err) {
         QVERIFY(QLatin1String(err.what()).size() > 0);
     }
 }
 
-void MetadataParserTests::parse(const QString &jsonData)
+void ModuleMetadataParserTests::parse(const QString &jsonData)
 {
-    MetadataParser parser(jsonData.toUtf8());
+    ModuleMetadataParser parser(jsonData.toUtf8());
     m_parsedData = parser.parse();
 }

@@ -22,42 +22,38 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QObject>
+#include <stdexcept>
+#include <string>
 
-#include "../metadataparser.h"
+#include <QJsonDocument>
+#include <QByteArray>
+
+#include "metadata/module.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
-namespace Tests {
 
-class MetadataParserTests : public QObject
+class ModuleMetadataParser
 {
-    Q_OBJECT
 public:
-    explicit MetadataParserTests(QObject *parent = 0);
+    struct Error : std::runtime_error
+    {
+        Error(const std::string &msg)
+            : std::runtime_error(msg)
+        {}
+    };
 
-private slots:
-    void test_emptyFile();
-    void test_malformedJson();
-    void test_wrongJsonType();
-    void test_emptyObject();
-    void test_emptyModule();
-    void test_emptySubmodule();
-    void test_emptyElement();
-    void test_completeElement();
+    ModuleMetadataParser(const QByteArray &data);
+
+    Metadata::Module parse();
 
 private:
-    void parsingFails(const QString &jsonData);
-    void parse(const QString &jsonData);
-
-    Metadata::Module m_parsedData;
+    QJsonDocument m_document;
 };
 
-} // namespace Tests
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

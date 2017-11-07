@@ -22,14 +22,14 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "metadataparser.h"
+#include "modulemetadataparser.h"
 
 #include <QJsonObject>
 #include <QJsonArray>
 
 using namespace Asn1Acn::Internal::Libraries;
 
-MetadataParser::MetadataParser(const QByteArray &data)
+ModuleMetadataParser::ModuleMetadataParser(const QByteArray &data)
     : m_document(QJsonDocument::fromJson(data))
 {
 }
@@ -47,7 +47,7 @@ QString readName(const QJsonObject &object)
 {
     const auto name = object["name"].toString();
     if (name.isEmpty())
-        throw MetadataParser::Error("'name' missing or empty");
+        throw ModuleMetadataParser::Error("'name' missing or empty");
     return name;
 }
 
@@ -70,7 +70,7 @@ Metadata::Import readImport(const QJsonObject &object)
     const auto import = Metadata::Import{object["from"].toString(),
                                          toStringList(object["types"])};
     if (import.from().isEmpty() || import.types().isEmpty())
-        throw MetadataParser::Error("'from' and 'types' must be present and not-empty");
+        throw ModuleMetadataParser::Error("'from' and 'types' must be present and not-empty");
     return import;
 }
 
@@ -118,7 +118,7 @@ Metadata::Module readModule(const QJsonObject &object)
 
 } // namespace
 
-Metadata::Module MetadataParser::parse()
+Metadata::Module ModuleMetadataParser::parse()
 {
     if (m_document.isNull())
         throw Error("JSON malformed");

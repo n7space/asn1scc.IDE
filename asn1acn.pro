@@ -125,7 +125,7 @@ SOURCES += \
     settings/service.cpp \
     settings/libraries.cpp \
     \
-    libraries/metadataparser.cpp \
+    libraries/modulemetadataparser.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -227,12 +227,13 @@ HEADERS += \
     settings/service.h \
     settings/libraries.h \
     \
-    libraries/metadataparser.h \
+    libraries/modulemetadataparser.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/import.h \
     libraries/metadata/submodule.h \
     libraries/metadata/module.h \
+    libraries/metadata/general.h \
     \
     asn1acn_global.h \
     asn1acnconstants.h \
@@ -285,7 +286,7 @@ DISTFILES += \
 equals(TEST, 1) {
 
 SOURCES += \
-    libraries/tests/metadataparser_tests.cpp \
+    libraries/tests/modulemetadataparser_tests.cpp \
     \
     tree-views/tests/3rdparty/modeltest.cpp \
     tree-views/tests/outlinemodel_tests.cpp \
@@ -311,7 +312,7 @@ SOURCES += \
     tests/sourcereadermock.cpp
 
 HEADERS += \
-    libraries/tests/metadataparser_tests.h \
+    libraries/tests/modulemetadataparser_tests.h \
     \
     tree-views/tests/3rdparty/modeltest.h \
     tree-views/tests/outlinemodel_tests.h \

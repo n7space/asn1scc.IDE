@@ -24,36 +24,42 @@
 ****************************************************************************/
 #pragma once
 
-#include <stdexcept>
-#include <string>
-
-#include <QJsonDocument>
-#include <QByteArray>
-
-#include "metadata/module.h"
+#include <QString>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Metadata {
 
-class MetadataParser
+class General
 {
 public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    General(const QString &name, const QString &path)
+        : m_name(name)
+        , m_path(path)
+    {}  
 
-    MetadataParser(const QByteArray &data);
+    const QString &name() const { return m_name; }
+    const QString &path() const { return m_path; }
 
-    Metadata::Module parse();
+    const QString &version() const { return m_version; }
+    void setVersion(const QString &version) { m_version = version; }
+
+    const QString &description() const { return m_description; }
+    void setDescription(const QString &desc) { m_description = desc; }
+
+    const QString &license() const { return m_license; }
+    void setLicense(const QString &lic) { m_license = lic; }
 
 private:
-    QJsonDocument m_document;
+    QString m_name;
+    QString m_path;
+    QString m_version;
+    QString m_description;
+    QString m_license;
 };
 
+} // namespace Metadata
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

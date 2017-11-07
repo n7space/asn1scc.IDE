@@ -26,7 +26,53 @@
 
 #include <QFileDialog>
 
+#include <libraries/metadata/general.h>
+
 using namespace Asn1Acn::Internal::OptionsPages;
+using namespace Asn1Acn::Internal;
+
+namespace {
+
+enum class Columns {
+    Name,
+    Version,
+    Path,
+};
+
+class LibEntryItem : public QTreeWidgetItem
+{
+  public:
+    LibEntryItem(QTreeWidgetItem *parent, const QString &path)
+        : QTreeWidgetItem(parent, QTreeWidgetItem::UserType + 1)
+        , m_info(QFileInfo(path).baseName(), path)
+    {
+    }
+
+    QString libPath() const { return m_info.path(); }
+
+    QVariant data(int column, int role) const override
+    {
+        if (role == Qt::ForegroundRole && !isValid())
+            return QColor(Qt::red);
+        if (role != Qt::DisplayRole)
+            return QTreeWidgetItem::data(column, role);
+        switch (static_cast<Columns>(column)) {
+        case Columns::Name:
+            return m_info.name();
+        case Columns::Version:
+            return m_info.version();
+        case Columns::Path:
+            return m_info.path();
+        }
+        return {};
+    }
+
+private:
+    bool isValid() const { return QDir(libPath()).exists(); }
+
+    Libraries::Metadata::General m_info;
+};
+} // namespace
 
 LibrariesWidget::LibrariesWidget(QWidget *parent)
     : QWidget(parent)
@@ -36,6 +82,12 @@ LibrariesWidget::LibrariesWidget(QWidget *parent)
     m_ui.treeWidget->setUniformRowHeights(true);
     m_ui.treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     m_ui.treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    QHeaderView *header = m_ui.treeWidget->header();
+    header->setStretchLastSection(false);
+    header->setSectionResizeMode(static_cast<int>(Columns::Name), QHeaderView::ResizeToContents);
+    header->setSectionResizeMode(static_cast<int>(Columns::Version), QHeaderView::ResizeToContents);
+    header->setSectionResizeMode(static_cast<int>(Columns::Path), QHeaderView::Stretch);
 
     m_detectedRootItem = new QTreeWidgetItem(m_ui.treeWidget);
     m_detectedRootItem->setText(0, tr("Auto-detected"));
@@ -55,8 +107,7 @@ LibrariesWidget::LibrariesWidget(QWidget *parent)
        const auto dir = QFileDialog::getExistingDirectory(this, tr("Select ASN.1/ACN components library directory"));
        if (dir.isEmpty())
            return;
-       const auto item = new QTreeWidgetItem(m_manualRootItem);
-       item->setText(0, dir);
+       new LibEntryItem(m_manualRootItem, dir);
     });
 
     m_ui.treeWidget->expandAll();
@@ -71,10 +122,8 @@ void replaceAllChildren(QTreeWidgetItem *item, const QStringList &texts)
 {
     while (item->childCount() > 0)
         delete item->child(0);
-    for (const auto &text : texts) {
-        auto child = new QTreeWidgetItem(item);
-        child->setText(0, text);
-    }
+    for (const auto &text : texts)
+        new LibEntryItem(item, text);
 }
 }
 
@@ -92,7 +141,7 @@ QStringList LibrariesWidget::manualLibPaths() const
 {
     QStringList res;
     for (int i = 0; i < m_manualRootItem->childCount(); ++i)
-        res << m_manualRootItem->child(i)->text(0);
+        res << static_cast<LibEntryItem *>(m_manualRootItem->child(i))->libPath();
     return res;
 }
 

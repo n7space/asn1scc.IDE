@@ -72,7 +72,7 @@
 #include "tests/autocompleter_tests.h"
 #include "tests/sourcemapper_tests.h"
 #include "tests/modelvalidityguard_tests.h"
-#include "libraries/tests/metadataparser_tests.h"
+#include "libraries/tests/modulemetadataparser_tests.h"
 #include "tree-views/tests/displayrolevisitor_tests.h"
 #include "tree-views/tests/outlineindexupdater_tests.h"
 #include "tree-views/tests/outlinemodel_tests.h"
@@ -195,7 +195,7 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
 QList<QObject *> Asn1AcnPlugin::createTestObjects() const
 {
     return QList<QObject *>()
-            << new Libraries::Tests::MetadataParserTests
+            << new Libraries::Tests::ModuleMetadataParserTests
             << new TreeViews::Tests::DisplayRoleVisitorTests
             << new TreeViews::Tests::OutlineIndexUpdaterTests
             << new TreeViews::Tests::OutlineModelTests
