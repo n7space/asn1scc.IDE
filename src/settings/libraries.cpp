@@ -50,7 +50,10 @@ QStringList listLibs(const QString &path)
     const auto dir = QDir(path);
     if (!dir.exists())
         return {};
-    return dir.entryList(QDir::AllDirs);
+    QStringList res;
+    for (const auto &subdir : dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name))
+        res << dir.absoluteFilePath(subdir);
+    return res;
 }
 
 } // namespace

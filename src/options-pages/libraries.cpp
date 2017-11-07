@@ -58,7 +58,8 @@ QWidget* Libraries::widget()
 {
     if (!m_widget) {
         m_widget = new LibrariesWidget;
-        // m_widget->setAsn1SccPath(m_settings->asn1sccPath);
+        m_widget->setDetectedLibPaths(m_settings->detectedLibPaths());
+        m_widget->setManualLibPaths(m_settings->manualLibPaths());
     }
     return m_widget;
 }
@@ -67,7 +68,7 @@ void Libraries::apply()
 {
     if (!m_widget)
         return;
-  //  m_settings->asn1sccPath = m_widget->asn1sccPath();
+    m_settings->setManualLibPaths(m_widget->manualLibPaths());
     m_settings->changed();
     Settings::save(m_settings);
 }

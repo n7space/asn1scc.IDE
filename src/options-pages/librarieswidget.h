@@ -25,6 +25,8 @@
 #pragma once
 
 #include <QWidget>
+#include <QTreeWidgetItem>
+#include <QStringList>
 
 #include "ui_libraries.h"
 
@@ -39,8 +41,18 @@ public:
     explicit LibrariesWidget(QWidget *parent = 0);
     ~LibrariesWidget();
 
+    void setDetectedLibPaths(const QStringList &paths);
+    void setManualLibPaths(const QStringList &paths);
+
+    QStringList manualLibPaths() const;
+
 private:
+    bool isManualItem(QTreeWidgetItem *item) const;
+
     Ui::LibrariesOptionsPage m_ui;
+
+    QTreeWidgetItem *m_detectedRootItem;
+    QTreeWidgetItem *m_manualRootItem;
 };
 
 } // namespace OptionsPages

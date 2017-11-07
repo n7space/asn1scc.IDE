@@ -24,6 +24,8 @@
 ****************************************************************************/
 #include "librarieswidget.h"
 
+#include <QFileDialog>
+
 using namespace Asn1Acn::Internal::OptionsPages;
 
 LibrariesWidget::LibrariesWidget(QWidget *parent)
@@ -31,13 +33,70 @@ LibrariesWidget::LibrariesWidget(QWidget *parent)
 {
     m_ui.setupUi(this);
 
-    // m_cmakeToolsView->setModel(&m_model);
-    m_ui.treeView->setUniformRowHeights(true);
-    m_ui.treeView->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_ui.treeView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    m_ui.treeView->expandAll();
+    m_ui.treeWidget->setUniformRowHeights(true);
+    m_ui.treeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_ui.treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    m_detectedRootItem = new QTreeWidgetItem(m_ui.treeWidget);
+    m_detectedRootItem->setText(0, tr("Auto-detected"));
+    m_manualRootItem = new QTreeWidgetItem(m_ui.treeWidget);
+    m_manualRootItem->setText(0, tr("Manual"));
+
+    connect(m_ui.treeWidget, &QTreeWidget::itemClicked, [this](QTreeWidgetItem* item, int) {
+        m_ui.removeButton->setEnabled(isManualItem(item));
+    });
+
+    connect(m_ui.removeButton, &QPushButton::clicked, [this](){
+       for (const auto &item : m_ui.treeWidget->selectedItems())
+           delete item;
+    });
+
+    connect(m_ui.addButton, &QPushButton::clicked, [this]() {
+       const auto dir = QFileDialog::getExistingDirectory(this, tr("Select ASN.1/ACN components library directory"));
+       if (dir.isEmpty())
+           return;
+       const auto item = new QTreeWidgetItem(m_manualRootItem);
+       item->setText(0, dir);
+    });
+
+    m_ui.treeWidget->expandAll();
 }
 
 LibrariesWidget::~LibrariesWidget()
 {
+}
+
+namespace {
+void replaceAllChildren(QTreeWidgetItem *item, const QStringList &texts)
+{
+    while (item->childCount() > 0)
+        delete item->child(0);
+    for (const auto &text : texts) {
+        auto child = new QTreeWidgetItem(item);
+        child->setText(0, text);
+    }
+}
+}
+
+void LibrariesWidget::setDetectedLibPaths(const QStringList &paths)
+{
+    replaceAllChildren(m_detectedRootItem, paths);
+}
+
+void LibrariesWidget::setManualLibPaths(const QStringList &paths)
+{
+    replaceAllChildren(m_manualRootItem, paths);
+}
+
+QStringList LibrariesWidget::manualLibPaths() const
+{
+    QStringList res;
+    for (int i = 0; i < m_manualRootItem->childCount(); ++i)
+        res << m_manualRootItem->child(i)->text(0);
+    return res;
+}
+
+bool LibrariesWidget::isManualItem(QTreeWidgetItem *item) const
+{
+    return item->parent() == m_manualRootItem;
 }
