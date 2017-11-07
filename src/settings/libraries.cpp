@@ -22,28 +22,25 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
-#include "general.h"
+#include "libraries.h"
 
 using namespace Asn1Acn::Internal::Settings;
 
-static const char ASN1SCC_PATH[] = "Asn1SccPath";
-
-General::~General()
+Libraries::~Libraries()
 {
 }
 
-QString General::name() const
+QString Libraries::name() const
 {
-    return QLatin1String("General");
+    return QLatin1String("Libraries");
 }
 
-void General::saveOptionsTo(QSettings *s)
+void Libraries::saveOptionsTo(QSettings *s)
 {
-    s->setValue(ASN1SCC_PATH, asn1sccPath);
+   // s->setValue(ASN1SCC_PATH, asn1sccPath);
 }
 
-void General::loadOptionsFrom(QSettings *s)
+void Libraries::loadOptionsFrom(QSettings *s)
 {
-    asn1sccPath = s->value(ASN1SCC_PATH, QLatin1Literal("asn1.exe")).toString(); // TODO default value?
+   // asn1sccPath = s->value(ASN1SCC_PATH, QLatin1Literal("asn1.exe")).toString(); // TODO default value?
 }

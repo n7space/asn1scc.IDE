@@ -43,9 +43,11 @@
 #include "settings/settings.h"
 #include "settings/general.h"
 #include "settings/service.h"
+#include "settings/libraries.h"
 
 #include "options-pages/general.h"
 #include "options-pages/service.h"
+#include "options-pages/libraries.h"
 
 #include "tree-views/outlinewidget.h"
 #include "tree-views/typestreewidget.h"
@@ -108,6 +110,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     const auto generalSettings = Settings::load<Settings::General>();
     const auto serviceSettings = Settings::load<Settings::Service>();
+    const auto librariesSettings = Settings::load<Settings::Libraries>();
 
     addAutoReleasedObject(new AsnEditorFactory);  
     addAutoReleasedObject(new AcnEditorFactory);
@@ -119,6 +122,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new OptionsPages::General(generalSettings));
     addAutoReleasedObject(new OptionsPages::Service(serviceSettings));
+    addAutoReleasedObject(new OptionsPages::Libraries(librariesSettings));
 
     addAutoReleasedObject(new TypesLocator);
 

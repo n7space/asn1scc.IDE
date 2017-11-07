@@ -22,28 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#pragma once
 
-#include "general.h"
+#include <memory>
 
-using namespace Asn1Acn::Internal::Settings;
+#include <QString>
 
-static const char ASN1SCC_PATH[] = "Asn1SccPath";
+#include "settings.h"
 
-General::~General()
+namespace Asn1Acn {
+namespace Internal {
+namespace Settings {
+
+class Libraries : public Settings
 {
-}
+    Q_OBJECT
+public:
+    Libraries() = default;
+    virtual ~Libraries();
 
-QString General::name() const
-{
-    return QLatin1String("General");
-}
+    QString name() const override;
 
-void General::saveOptionsTo(QSettings *s)
-{
-    s->setValue(ASN1SCC_PATH, asn1sccPath);
-}
+protected:
+    void saveOptionsTo(QSettings *s) override;
+    void loadOptionsFrom(QSettings *s) override;
+};
 
-void General::loadOptionsFrom(QSettings *s)
-{
-    asn1sccPath = s->value(ASN1SCC_PATH, QLatin1Literal("asn1.exe")).toString(); // TODO default value?
-}
+using LibrariesPtr = std::shared_ptr<Libraries>;
+using LibrariesConstPtr = std::shared_ptr<const Libraries>;
+
+} // namespace Settings
+} // namespace Internal
+} // namespace Asn1Acn

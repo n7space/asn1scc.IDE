@@ -22,28 +22,22 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "librarieswidget.h"
 
-#include "general.h"
+using namespace Asn1Acn::Internal::OptionsPages;
 
-using namespace Asn1Acn::Internal::Settings;
-
-static const char ASN1SCC_PATH[] = "Asn1SccPath";
-
-General::~General()
+LibrariesWidget::LibrariesWidget(QWidget *parent)
+    : QWidget(parent)
 {
+    m_ui.setupUi(this);
+
+    // m_cmakeToolsView->setModel(&m_model);
+    m_ui.treeView->setUniformRowHeights(true);
+    m_ui.treeView->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_ui.treeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_ui.treeView->expandAll();
 }
 
-QString General::name() const
+LibrariesWidget::~LibrariesWidget()
 {
-    return QLatin1String("General");
-}
-
-void General::saveOptionsTo(QSettings *s)
-{
-    s->setValue(ASN1SCC_PATH, asn1sccPath);
-}
-
-void General::loadOptionsFrom(QSettings *s)
-{
-    asn1sccPath = s->value(ASN1SCC_PATH, QLatin1Literal("asn1.exe")).toString(); // TODO default value?
 }

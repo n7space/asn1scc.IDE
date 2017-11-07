@@ -22,28 +22,28 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#pragma once
 
-#include "general.h"
+#include <QWidget>
 
-using namespace Asn1Acn::Internal::Settings;
+#include "ui_libraries.h"
 
-static const char ASN1SCC_PATH[] = "Asn1SccPath";
+namespace Asn1Acn {
+namespace Internal {
+namespace OptionsPages {
 
-General::~General()
+class LibrariesWidget : public QWidget
 {
-}
+    Q_OBJECT
+public:
+    explicit LibrariesWidget(QWidget *parent = 0);
+    ~LibrariesWidget();
 
-QString General::name() const
-{
-    return QLatin1String("General");
-}
+private:
+    Ui::LibrariesOptionsPage m_ui;
+};
 
-void General::saveOptionsTo(QSettings *s)
-{
-    s->setValue(ASN1SCC_PATH, asn1sccPath);
-}
+} // namespace OptionsPages
+} // namespace Internal
+} // namespace Asn1Acn
 
-void General::loadOptionsFrom(QSettings *s)
-{
-    asn1sccPath = s->value(ASN1SCC_PATH, QLatin1Literal("asn1.exe")).toString(); // TODO default value?
-}
