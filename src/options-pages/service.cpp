@@ -58,9 +58,9 @@ QWidget* Service::widget()
 {
     if (!m_widget) {
         m_widget = new ServiceWidget;
-        m_widget->setPath(m_settings->path);
-        m_widget->setBaseUri(m_settings->baseUri);
-        m_widget->setStayAlivePeriod(m_settings->stayAlivePeriod);
+        m_widget->setPath(m_settings->path());
+        m_widget->setBaseUri(m_settings->baseUri());
+        m_widget->setStayAlivePeriod(m_settings->stayAlivePeriod());
     }
     return m_widget;
 }
@@ -69,9 +69,9 @@ void Service::apply()
 {
     if (!m_widget)
         return;
-    m_settings->path = m_widget->path();
-    m_settings->baseUri = m_widget->baseUri();
-    m_settings->stayAlivePeriod = m_widget->stayAlivePeriod();
+    m_settings->setPath(m_widget->path());
+    m_settings->setBaseUri(m_widget->baseUri());
+    m_settings->setStayAlivePeriod(m_widget->stayAlivePeriod());
     m_settings->changed();
     Settings::save(m_settings);
 }

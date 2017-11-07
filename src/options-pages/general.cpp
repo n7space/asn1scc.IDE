@@ -58,7 +58,7 @@ QWidget* General::widget()
 {
     if (!m_widget) {
         m_widget = new GeneralWidget;
-        m_widget->setAsn1SccPath(m_settings->asn1sccPath);
+        m_widget->setAsn1SccPath(m_settings->asn1sccPath());
     }
     return m_widget;
 }
@@ -67,7 +67,7 @@ void General::apply()
 {
     if (!m_widget)
         return;
-    m_settings->asn1sccPath = m_widget->asn1sccPath();
+    m_settings->setAsn1sccPath(m_widget->asn1sccPath());
     m_settings->changed();
     Settings::save(m_settings);
 }

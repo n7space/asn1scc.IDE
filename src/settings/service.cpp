@@ -42,19 +42,19 @@ QString Service::name() const
     return QLatin1String("Service");
 }
 
-void Service::saveOptionsTo(QSettings *s)
+void Service::saveOptionsTo(QSettings *s) const
 {
-    s->setValue(PATH, path);
-    s->setValue(BASE_URI, baseUri);
-    s->setValue(STAY_ALIVE_PERIOD, stayAlivePeriod);
+    s->setValue(PATH, path());
+    s->setValue(BASE_URI, baseUri());
+    s->setValue(STAY_ALIVE_PERIOD, stayAlivePeriod());
 }
 
 void Service::loadOptionsFrom(QSettings *s)
 {
-    path = s->value(PATH, "/opt/asn1sccDaemon/asn1scc/Daemon/bin/Debug/Daemon.exe").toString(); // TODO good default, TODO windows support
-    baseUri = s->value(BASE_URI,
-                       Utils::HostOsInfo::isWindowsHost()
-                       ? "http://+:80/Temporary_Listen_Addresses/asn1scc.IDE/"
-                       : "http://localhost:9749/").toString();
-    stayAlivePeriod = s->value(STAY_ALIVE_PERIOD, 1000).toInt();
+    setPath(s->value(PATH, "/opt/asn1sccDaemon/asn1scc/Daemon/bin/Debug/Daemon.exe").toString()); // TODO good default, TODO windows support
+    setBaseUri(s->value(BASE_URI,
+                        Utils::HostOsInfo::isWindowsHost()
+                        ? "http://+:80/Temporary_Listen_Addresses/asn1scc.IDE/"
+                        : "http://localhost:9749/").toString());
+    setStayAlivePeriod(s->value(STAY_ALIVE_PERIOD, 1000).toInt());
 }

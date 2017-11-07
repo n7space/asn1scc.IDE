@@ -27,6 +27,7 @@
 #include <memory>
 
 #include <QString>
+#include <QStringList>
 
 #include "settings.h"
 
@@ -38,14 +39,24 @@ class Libraries : public Settings
 {
     Q_OBJECT
 public:
-    Libraries() = default;
+    Libraries();
     virtual ~Libraries();
 
     QString name() const override;
 
-protected:
-    void saveOptionsTo(QSettings *s) override;
+    QStringList libPaths() const { return detectedLibPaths() + manualLibPaths(); }
+
+    const QStringList &detectedLibPaths() const { return m_detectedLibPaths; }
+
+    const QStringList &manualLibPaths() const { return m_manualLibPaths; }
+    void setManualLibPaths(const QStringList &list) { m_manualLibPaths = list; }
+
+private:
+    void saveOptionsTo(QSettings *s) const override;
     void loadOptionsFrom(QSettings *s) override;
+
+    QStringList m_manualLibPaths;
+    QStringList m_detectedLibPaths;
 };
 
 using LibrariesPtr = std::shared_ptr<Libraries>;

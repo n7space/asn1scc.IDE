@@ -33,7 +33,7 @@ Settings::~Settings()
 {
 }
 
-void Settings::saveTo(QSettings *s)
+void Settings::saveTo(QSettings *s) const
 {
     s->beginGroup(Constants::SETTINGS_GROUP);
     s->beginGroup(name());

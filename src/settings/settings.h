@@ -46,14 +46,14 @@ public:
 
     virtual QString name() const = 0;
 
-    void saveTo(QSettings *s);
+    void saveTo(QSettings *s) const;
     void loadFrom(QSettings *s);
 
 signals:
     void changed();
 
 protected:
-    virtual void saveOptionsTo(QSettings *s) = 0;
+    virtual void saveOptionsTo(QSettings *s) const = 0;
     virtual void loadOptionsFrom(QSettings *s) = 0;
 };
 

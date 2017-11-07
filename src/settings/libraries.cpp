@@ -24,7 +24,42 @@
 ****************************************************************************/
 #include "libraries.h"
 
+#include <QDir>
+
+#include <coreplugin/icore.h>
+
 using namespace Asn1Acn::Internal::Settings;
+
+static const char LIBPATH_PATH[] = { "Paths" };
+static const char RELATIVE_ASN1LIB_PATH[] = "/asn1acn/libs";
+
+namespace {
+
+QString globalLibRootDir()
+{
+    return Core::ICore::resourcePath() + RELATIVE_ASN1LIB_PATH;
+}
+
+QString userLibRootDir()
+{
+    return Core::ICore::userResourcePath() + RELATIVE_ASN1LIB_PATH;
+}
+
+QStringList listLibs(const QString &path)
+{
+    const auto dir = QDir(path);
+    if (!dir.exists())
+        return {};
+    return dir.entryList(QDir::AllDirs);
+}
+
+} // namespace
+
+Libraries::Libraries()
+{
+    m_detectedLibPaths += listLibs(globalLibRootDir());
+    m_detectedLibPaths += listLibs(userLibRootDir());
+}
 
 Libraries::~Libraries()
 {
@@ -35,12 +70,12 @@ QString Libraries::name() const
     return QLatin1String("Libraries");
 }
 
-void Libraries::saveOptionsTo(QSettings *s)
+void Libraries::saveOptionsTo(QSettings *s) const
 {
-   // s->setValue(ASN1SCC_PATH, asn1sccPath);
+    s->setValue(LIBPATH_PATH, manualLibPaths());
 }
 
 void Libraries::loadOptionsFrom(QSettings *s)
 {
-   // asn1sccPath = s->value(ASN1SCC_PATH, QLatin1Literal("asn1.exe")).toString(); // TODO default value?
+    setManualLibPaths(s->value(LIBPATH_PATH).toStringList());
 }
