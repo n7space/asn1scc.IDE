@@ -41,7 +41,7 @@ public:
     void visit(const Definitions &defs) override final { m_value = valueFor(defs); }
     void visit(const File &file) override final { m_value = valueFor(file); }
     void visit(const TypeAssignment &type) override final { m_value = valueFor(type); }
-    void visit(const TypeReference &ref) override final { m_value = valueFor(ref); }
+    void visit(const VariableAssignment &variable) override final { m_value = valueFor(variable); }
     void visit(const Project &project) override final { m_value = valueFor(project); }
     void visit(const Root &root) override final { m_value = valueFor(root); }
 
@@ -50,7 +50,7 @@ protected:
     virtual Value valueFor(const Definitions &defs) const = 0;
     virtual Value valueFor(const File &file) const = 0;
     virtual Value valueFor(const TypeAssignment &type) const = 0;
-    virtual Value valueFor(const TypeReference &ref) const = 0;
+    virtual Value valueFor(const VariableAssignment &variable) const = 0;
     virtual Value valueFor(const Project &project) const = 0;
 
 private:

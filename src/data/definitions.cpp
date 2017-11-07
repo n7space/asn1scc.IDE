@@ -42,11 +42,18 @@ void Definitions::accept(Visitor &visitor) const
     visitor.visit(*this);
 }
 
-void Definitions::add(std::unique_ptr<TypeAssignment> type)
+void Definitions::addType(std::unique_ptr<TypeAssignment> type)
 {
     type->setParent(this);
     m_typeByNameMap[type->name()] = type.get();
     m_types.push_back(std::move(type));
+}
+
+void Definitions::addVariable(std::unique_ptr<VariableAssignment> variable)
+{
+    variable->setParent(this);
+    m_variableByNameMap[variable->name()] = variable.get();
+    m_variables.push_back(std::move(variable));
 }
 
 void Definitions::addImportedType(const ImportedType &type)
@@ -58,4 +65,10 @@ const TypeAssignment *Definitions::type(const QString &name) const
 {
     const auto it = m_typeByNameMap.find(name);
     return it != m_typeByNameMap.end() ? it->second : nullptr;
+}
+
+const VariableAssignment *Definitions::variable(const QString &name) const
+{
+    const auto it = m_variableByNameMap.find(name);
+    return it != m_variableByNameMap.end() ? it->second : nullptr;
 }

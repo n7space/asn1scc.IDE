@@ -394,6 +394,29 @@ void AstXmlParserTests::test_sequenceOfTypeAssingment()
     QCOMPARE(ref->second->module(), QStringLiteral("ApplicationProcess"));
 }
 
+void AstXmlParserTests::test_variableAssignment()
+{
+    parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
+          R"(<ASN1AST>)"
+          R"(  <Asn1File FileName="Test2File.asn">)"
+          R"(    <Asn1Module ID="TestDefinitions">)"
+          R"(      <VariablesAssignments>)"
+          R"(        <VariableAssignment Name="asnConstant" Line="2" CharPositionInLine="4">)"
+          R"(          <Type Line="2" CharPositionInLine="16">)"
+          R"(            <IntegerType Min="MIN" Max="MAX"/>)"
+          R"(          </Type>)"
+          R"(        </VariableAssignment>)"
+          R"(      </VariablesAssignments>)"
+          R"(    </Asn1Module>)"
+          R"(  </Asn1File>)"
+          R"(</ASN1AST>)");
+
+    QCOMPARE(static_cast<int>(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->variables().size()), 1);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->variable("asnConstant")->name(), QStringLiteral("asnConstant"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->variable("asnConstant")->location().line(), 2);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->variable("asnConstant")->type()->name(), QStringLiteral("INTEGER"));
+}
+
 void AstXmlParserTests::parsingFails(const QString& xmlData)
 {
     setXmlData(xmlData);

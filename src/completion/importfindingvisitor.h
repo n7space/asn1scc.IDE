@@ -42,7 +42,7 @@ private:
     Data::TypeAssignment *valueFor(const Data::Definitions &defs) const override;
     Data::TypeAssignment *valueFor(const Data::File &file) const override;
     Data::TypeAssignment *valueFor(const Data::TypeAssignment &type) const override;
-    Data::TypeAssignment *valueFor(const Data::TypeReference &ref) const override;
+    Data::TypeAssignment *valueFor(const Data::VariableAssignment &variable) const override;
     Data::TypeAssignment *valueFor(const Data::Project &project) const override;
 
     QString m_module;

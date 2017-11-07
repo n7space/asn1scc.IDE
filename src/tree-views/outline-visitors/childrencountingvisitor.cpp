@@ -57,9 +57,9 @@ int ChildrenCountingVisitor::valueFor(const TypeAssignment &type) const
     return 0;
 }
 
-int ChildrenCountingVisitor::valueFor(const TypeReference &ref) const
+int ChildrenCountingVisitor::valueFor(const VariableAssignment &variable) const
 {
-    Q_UNUSED(ref);
+    Q_UNUSED(variable);
     return 0;
 }
 

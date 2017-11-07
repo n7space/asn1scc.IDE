@@ -24,53 +24,32 @@
 ****************************************************************************/
 #pragma once
 
-#include <map>
-#include <vector>
 #include <memory>
 
 #include <QString>
-#include <QStringList>
 
-#include "typeassignment.h"
-#include "variableassignment.h"
-#include "importedtype.h"
+#include "sourcelocation.h"
 #include "node.h"
+#include "types/type.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-class Definitions : public Node
+class VariableAssignment : public Node
 {
 public:
-    Definitions(const QString &name, const SourceLocation &location);
-    ~Definitions() override;
+    VariableAssignment(const QString &name, const SourceLocation &location, std::unique_ptr<Types::Type> type);
+    ~VariableAssignment() override;
 
     void accept(Visitor &visitor) const override;
 
     const QString &name() const { return m_name; }
-
-    void addType(std::unique_ptr<TypeAssignment> type);
-    void addVariable(std::unique_ptr<VariableAssignment> variable);
-    void addImportedType(const ImportedType &type);
-
-    using Types = std::vector<std::unique_ptr<TypeAssignment>>;
-    using Variables = std::vector<std::unique_ptr<VariableAssignment>>;
-    using ImportedTypes = std::vector<ImportedType>;
-
-    const Types &types() const { return m_types; }
-    const TypeAssignment *type(const QString &name) const;
-    const Variables &variables() const { return m_variables; }
-    const VariableAssignment *variable(const QString &name) const;
-    const ImportedTypes &importedTypes() const { return m_importedTypes; }
+    const Types::Type *type() const { return m_type.get(); }
 
 private:
     QString m_name;
-    Types m_types;
-    Variables m_variables;
-    std::map<QString, TypeAssignment*> m_typeByNameMap;
-    std::map<QString, VariableAssignment*> m_variableByNameMap;
-    ImportedTypes m_importedTypes;
+    std::unique_ptr<Types::Type> m_type;
 };
 
 } // namespace Data

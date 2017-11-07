@@ -106,7 +106,8 @@ QString AstXmlParser::readIdAttribute()
 
 void AstXmlParser::readVariablesAssignments()
 {
-    m_xmlReader.skipCurrentElement();
+    while (nextRequiredElementIs(QStringLiteral("VariableAssignment")))
+        readVariableAssignment();
 }
 
 void AstXmlParser::readTypeAssignments()
@@ -122,7 +123,17 @@ void AstXmlParser::readTypeAssignment()
     const auto name = readNameAttribute();
     auto type = readType();
 
-    m_currentDefinitions->add(std::make_unique<Data::TypeAssignment>(name, location, std::move(type)));
+    m_currentDefinitions->addType(std::make_unique<Data::TypeAssignment>(name, location, std::move(type)));
+}
+
+void AstXmlParser::readVariableAssignment()
+{
+    Q_ASSERT(m_currentDefinitions != nullptr);
+    const auto location = readLocationFromAttributes();
+    const auto name = readNameAttribute();
+    auto type = readType();
+
+    m_currentDefinitions->addVariable(std::make_unique<Data::VariableAssignment>(name, location, std::move(type)));
 }
 
 QString AstXmlParser::readReferencedTypeNameAttribute()

@@ -29,7 +29,6 @@
 #include <QString>
 
 #include "sourcelocation.h"
-#include "typereference.h"
 #include "node.h"
 #include "types/type.h"
 

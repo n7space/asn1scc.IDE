@@ -22,39 +22,23 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "variableassignment.h"
 
-#include <data/visitorwithvalue.h>
-#include <data/node.h>
+#include "visitor.h"
 
-namespace Asn1Acn {
-namespace Internal {
-namespace TreeViews {
-namespace OutlineVisitors {
+using namespace Asn1Acn::Internal::Data;
 
-class IndexFindingVisitor : public Data::VisitorWithValue<int>
+VariableAssignment::VariableAssignment(const QString &name, const SourceLocation &location, std::unique_ptr<Types::Type> type)
+    : Node(location)
+    , m_name(name)
+    , m_type(std::move(type))
+{}
+
+VariableAssignment::~VariableAssignment()
 {
-public:
-    IndexFindingVisitor(const Data::Node *child);
-    ~IndexFindingVisitor() override;
+}
 
-    const Data::Node *child() const { return m_child; }
-
-private:
-    int valueFor(const Data::Definitions &defs) const override;
-    int valueFor(const Data::File &file) const override;
-    int valueFor(const Data::TypeAssignment &type) const override;
-    int valueFor(const Data::VariableAssignment &variable) const override;
-    int valueFor(const Data::Project &project) const override;
-    int valueFor(const Data::Root &root) const override;
-
-    const Data::Node *m_child;
-
-    template <typename Collection>
-    int findIndexIn(const Collection &items) const;
-};
-
-} // namespace OutlineVisitors
-} // namespace TreeViews
-} // namespace Internal
-} // namespace Asn1Acn
+void VariableAssignment::accept(Visitor &visitor) const
+{
+    visitor.visit(*this);
+}

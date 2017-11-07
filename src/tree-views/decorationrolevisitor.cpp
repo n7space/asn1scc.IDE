@@ -29,6 +29,7 @@
 #include <data/definitions.h>
 #include <data/file.h>
 #include <data/typeassignment.h>
+#include <data/variableassignment.h>
 #include <data/typereference.h>
 #include <data/project.h>
 
@@ -59,13 +60,12 @@ QIcon DecorationRoleVisitor::valueFor(const File &file) const
 
 QIcon DecorationRoleVisitor::valueFor(const TypeAssignment &type) const
 {
-    return type.type()->icon();
+    return type.type()->icon(); // TODO mark "type icon"
 }
 
-QIcon DecorationRoleVisitor::valueFor(const TypeReference &ref) const
+QIcon DecorationRoleVisitor::valueFor(const VariableAssignment &variable) const
 {
-    Q_UNUSED(ref);
-    return QIcon();
+    return variable.type()->icon(); // TODO mark "variable icon"
 }
 
 QIcon DecorationRoleVisitor::valueFor(const Project &project) const

@@ -58,6 +58,7 @@ private:
     void readVariablesAssignments();
     void readAsn1ModuleChildren();
     void readTypeAssignment();
+    void readVariableAssignment();
 
     void updateCurrentFile();
     void createNewAsn1Module();

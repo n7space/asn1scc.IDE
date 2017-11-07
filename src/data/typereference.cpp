@@ -29,7 +29,7 @@
 using namespace Asn1Acn::Internal::Data;
 
 TypeReference::TypeReference(const SourceLocation &location)
-    : Node(location)
+    : m_location(location)
 {}
 
 TypeReference::TypeReference(const QString &name, const QString &module, const SourceLocation &location)
@@ -39,7 +39,3 @@ TypeReference::TypeReference(const QString &name, const QString &module, const S
     m_module = module;
 }
 
-void TypeReference::accept(Visitor &visitor) const
-{
-    visitor.visit(*this);
-}

@@ -45,8 +45,6 @@ private slots:
     void test_typeAssignmentBuiltIn();
     void test_typeAssignmentBuiltIn_data();
     void test_typeAssignmentUserDefined();
-    void test_typeReferenceBuiltIn();
-    void test_typeReferenceUserDefined();
 };
 
 } // namespace Tests
