@@ -50,6 +50,8 @@ public:
     void remove(const QString &name);
 
     using Projects = std::vector<std::unique_ptr<Project>>;
+
+    Projects &projects() { return m_projects; }
     const Projects &projects() const { return m_projects; }
 
     Project *project(const QString &name) const;

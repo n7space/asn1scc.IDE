@@ -67,12 +67,14 @@ private slots:
 
 private:
     void createFallbackResults();
+    void setState(Asn1SccDocumentProcessor::State expected);
 
     QHash<QString, QString> m_documents;
     QString m_projectName;
 
     std::vector<std::unique_ptr<Data::File>> m_results;
     State m_state;
+    int m_index;
 
     std::unique_ptr<ParsedDocumentBuilder> m_docBuilder;
     DocumentBuilderCreator m_docBuilderCreator;

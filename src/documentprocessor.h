@@ -45,7 +45,8 @@ public:
         Unfinished,
         Successful,
         Failed,
-        Errored
+        Errored,
+        Outdated
     };
 
     virtual ~DocumentProcessor() = default;

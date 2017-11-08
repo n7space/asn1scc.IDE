@@ -152,6 +152,8 @@ void ProjectContentHandler::onFilesProcessingFinished(const QString &projectName
     case DocumentProcessor::State::Failed:
         handleFilesProcesedWithFailure(projectName, dp->takeResults(), dp->errorMessages());
         break;
+    case DocumentProcessor::State::Outdated:
+        break;
     case DocumentProcessor::State::Unfinished:
         QTC_CHECK(false && "Wrong state in onFilesProcessingFinished");
         break;

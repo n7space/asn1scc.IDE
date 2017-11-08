@@ -52,8 +52,13 @@ public:
     const Files &files() const { return m_files; }
     File *file(const QString &path) const;
 
+    int buildersCount() const { return m_buildersCount; }
+    void setBuildersCount(const int buildersCount) { m_buildersCount = buildersCount; }
+
 private:
     QString m_name;
+    int m_buildersCount;
+
     Files m_files;
     std::map<QString, File *> m_filesByPathMap;
 };

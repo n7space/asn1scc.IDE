@@ -25,6 +25,7 @@
 
 #include "asn1sccdocumentprocessor.h"
 
+#include "parseddatastorage.h"
 #include "asn1sccparseddocumentbuilder.h"
 
 using namespace Asn1Acn::Internal;
@@ -43,6 +44,10 @@ Asn1SccDocumentProcessor::Asn1SccDocumentProcessor(const QString &projectName,
       m_docBuilder(nullptr),
       m_docBuilderCreator(docBuilderCreator)
 {
+    auto dataStorage = ParsedDataStorage::instance();
+
+    m_index = dataStorage->getProjectBuildersCount(m_projectName) + 1;
+    dataStorage->setProjectBuildersCount(m_projectName, m_index);
 }
 
 Asn1SccDocumentProcessor::~Asn1SccDocumentProcessor()
@@ -81,7 +86,7 @@ std::vector<std::unique_ptr<Data::File>> Asn1SccDocumentProcessor::takeResults()
 void Asn1SccDocumentProcessor::onBuilderFinished()
 {
     m_results = m_docBuilder->takeDocuments();
-    m_state = State::Successful;
+    setState(State::Successful);
 
     emit processingFinished(m_projectName);
 }
@@ -89,7 +94,7 @@ void Asn1SccDocumentProcessor::onBuilderFinished()
 void Asn1SccDocumentProcessor::onBuilderFailed()
 {
     createFallbackResults();
-    m_state = State::Failed;
+    setState(State::Failed);
 
     emit processingFinished(m_projectName);
 }
@@ -97,9 +102,17 @@ void Asn1SccDocumentProcessor::onBuilderFailed()
 void Asn1SccDocumentProcessor::onBuilderErrored()
 {
     createFallbackResults();
-    m_state = State::Errored;
+    setState(State::Errored);
 
     emit processingFinished(m_projectName);
+}
+
+void Asn1SccDocumentProcessor::setState(Asn1SccDocumentProcessor::State expected)
+{
+    if (m_index < ParsedDataStorage::instance()->getProjectBuildersCount(m_projectName))
+        m_state = State::Outdated;
+    else
+        m_state = expected;
 }
 
 void Asn1SccDocumentProcessor::createFallbackResults()

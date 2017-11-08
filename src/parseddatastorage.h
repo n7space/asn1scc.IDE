@@ -62,8 +62,9 @@ public:
     Data::SourceLocation getDefinitionLocation(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const;
     const Data::TypeAssignment *getTypeAssignment(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const;
 
-signals:
-    void fileUpdated(const QString &filePath, const Data::File *newFile);
+    int getProjectBuildersCount(const QString &projectName) const;
+    void setProjectBuildersCount(const QString &projectName, const int version) const;
+    void resetProjectBuildersCount();
 
 private:
     void addProject(const QString &projectName);
