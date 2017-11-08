@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/asn1acn">
         <file>images/options_category.png</file>
-        <file>schemas/asn1-lib-schema.json</file>
         <file>images/outline/bitstring.png</file>
         <file>images/outline/choice.png</file>
         <file>images/outline/enumerated.png</file>
