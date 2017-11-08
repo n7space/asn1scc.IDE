@@ -100,6 +100,23 @@ LibEntryItem *asLibEntryItem(QTreeWidgetItem *item)
         return static_cast<LibEntryItem *>(item);
     return nullptr;
 }
+
+QLineEdit *makeReadOnlyLineEdit(QWidget *parent)
+{
+    auto edit = new QLineEdit(parent);
+    edit->setReadOnly(true);
+    return edit;
+}
+
+QTextEdit *makeDescriptionTextEdit(QWidget *parent)
+{
+    auto edit = new QTextEdit(parent);
+    edit->setReadOnly(true);
+    edit->setMaximumHeight(80);
+    edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    return edit;
+}
+
 } // namespace
 
 class LibrariesWidget::DetailsWidget : public QWidget
@@ -108,20 +125,17 @@ public:
     DetailsWidget(QWidget *parent)
         : QWidget(parent)
     {
-        m_path = new QLineEdit(this);
-        m_path->setReadOnly(true);
-        m_name = new QLineEdit(this);
-        m_name->setReadOnly(true);
-        m_version = new QLineEdit(this);
-        m_version->setReadOnly(true);
-        m_license = new QLineEdit(this);
-        m_license->setReadOnly(true);
-        m_description = new QTextEdit(this);
-        m_description->setReadOnly(true);
+        m_path = makeReadOnlyLineEdit(this);
+        m_name = makeReadOnlyLineEdit(this);
+        m_version = makeReadOnlyLineEdit(this);
+        m_license = makeReadOnlyLineEdit(this);
+        m_vendor = makeReadOnlyLineEdit(this);
+        m_description = makeDescriptionTextEdit(this);
 
         auto layout = new QFormLayout(this);
         layout->addRow(new QLabel(Tr::tr("Name:")), m_name);
         layout->addRow(new QLabel(Tr::tr("Version:")), m_version);
+        layout->addRow(new QLabel(Tr::tr("Vendor:")), m_vendor);
         layout->addRow(new QLabel(Tr::tr("License:")), m_license);
         layout->addRow(new QLabel(Tr::tr("Path:")), m_path);
         layout->addRow(new QLabel(Tr::tr("Description:")), m_description);
@@ -136,6 +150,7 @@ public:
         m_version->setText(item->info().version());
         m_license->setText(item->info().license());
         m_description->setText(item->info().description());
+        m_vendor->setText(item->info().vendor());
     }
 
 private:
@@ -143,6 +158,7 @@ private:
     QLineEdit *m_path;
     QLineEdit *m_version;
     QLineEdit *m_license;
+    QLineEdit *m_vendor;
     QTextEdit *m_description;
 };
 

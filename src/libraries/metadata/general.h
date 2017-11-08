@@ -51,12 +51,16 @@ public:
     const QString &license() const { return m_license; }
     void setLicense(const QString &lic) { m_license = lic; }
 
+    const QString &vendor() const { return m_vendor; }
+    void setVendor(const QString &vendor) { m_vendor = vendor; }
+
 private:
     QString m_name;
     QString m_path;
     QString m_version;
     QString m_description;
     QString m_license;
+    QString m_vendor;
 };
 
 } // namespace Metadata

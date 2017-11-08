@@ -50,6 +50,7 @@ void assignExtraProperties(Metadata::General &res, const QJsonObject &object)
     res.setDescription(object["description"].toString());
     res.setLicense(object["license"].toString());
     res.setVersion(object["version"].toString());
+    res.setVendor(object["vendor"].toString());
 }
 } // namespace
 

@@ -61,6 +61,7 @@ void GeneralMetadataParserTests::test_complete()
     parse(R"({)"
           R"("name": "InnerName",)"
           R"("version": "SomeVersion",)"
+          R"("vendor": "MyVendor",)"
           R"("description": "SomeDescription",)"
           R"("license": "GPL"})",
           "/some/path/with/LibName");
@@ -70,6 +71,7 @@ void GeneralMetadataParserTests::test_complete()
     QCOMPARE(m_parsedData.license(), QLatin1Literal("GPL"));
     QCOMPARE(m_parsedData.version(), QLatin1Literal("SomeVersion"));
     QCOMPARE(m_parsedData.description(), QLatin1Literal("SomeDescription"));
+    QCOMPARE(m_parsedData.vendor(), QLatin1Literal("MyVendor"));
 }
 
 void GeneralMetadataParserTests::parse(const QString &jsonData, const QString &path)
