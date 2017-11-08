@@ -48,13 +48,13 @@ Service::Service(Settings::ServicePtr settings)
 bool Service::matches(const QString &searchKeyWord) const
 {
     const QStringList keywords { "asn1scc", "daemon", "asn1.exe", "asn1", "asn.1", "acn" };
-    for (const auto& keyword : keywords)
+    for (const auto &keyword : keywords)
         if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;
     return Core::IOptionsPage::matches(searchKeyWord);
 }
 
-QWidget* Service::widget()
+QWidget *Service::widget()
 {
     if (!m_widget) {
         m_widget = new ServiceWidget;

@@ -48,13 +48,13 @@ Libraries::Libraries(Settings::LibrariesPtr settings)
 bool Libraries::matches(const QString &searchKeyWord) const
 {
     const QStringList keywords { "asn1", "asn.1", "acn", "libraries", "components" };
-    for (const auto& keyword : keywords)
+    for (const auto &keyword : keywords)
         if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;
     return Core::IOptionsPage::matches(searchKeyWord);
 }
 
-QWidget* Libraries::widget()
+QWidget *Libraries::widget()
 {
     if (!m_widget) {
         m_widget = new LibrariesWidget;
