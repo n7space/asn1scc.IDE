@@ -126,6 +126,7 @@ SOURCES += \
     settings/libraries.cpp \
     \
     libraries/modulemetadataparser.cpp \
+    libraries/generalmetadataparser.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -228,6 +229,7 @@ HEADERS += \
     settings/libraries.h \
     \
     libraries/modulemetadataparser.h \
+    libraries/generalmetadataparser.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/import.h \
@@ -287,6 +289,7 @@ equals(TEST, 1) {
 
 SOURCES += \
     libraries/tests/modulemetadataparser_tests.cpp \
+    libraries/tests/generalmetadataparser_tests.cpp \
     \
     tree-views/tests/3rdparty/modeltest.cpp \
     tree-views/tests/outlinemodel_tests.cpp \
@@ -313,6 +316,7 @@ SOURCES += \
 
 HEADERS += \
     libraries/tests/modulemetadataparser_tests.h \
+    libraries/tests/generalmetadataparser_tests.h \
     \
     tree-views/tests/3rdparty/modeltest.h \
     tree-views/tests/outlinemodel_tests.h \
