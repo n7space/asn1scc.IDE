@@ -1,7 +1,7 @@
 {
-  "id": "http://n7mobile.pl/Space/asn1-lib-schema.json",
+  "id": "http://n7mobile.pl/Space/asn1-lib-module-schema.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "description": "ASN.1 Types Library Metadata schema",
+  "description": "ASN.1 Types Library Module Metadata schema",
   "definitions": {
     "nonEmptyString": {
       "type": "string",

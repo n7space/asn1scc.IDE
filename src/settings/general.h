@@ -22,7 +22,6 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <memory>
@@ -44,11 +43,14 @@ public:
 
     QString name() const override;
 
-    QString asn1sccPath;
+    const QString &asn1sccPath() const { return m_asn1sccPath; }
+    void setAsn1sccPath(const QString &path) { m_asn1sccPath = path; }
 
-protected:
-    void saveOptionsTo(QSettings *s) override;
+private:
+    void saveOptionsTo(QSettings *s) const override;
     void loadOptionsFrom(QSettings *s) override;
+
+    QString m_asn1sccPath;
 };
 
 using GeneralPtr = std::shared_ptr<General>;

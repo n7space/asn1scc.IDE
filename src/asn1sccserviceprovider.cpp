@@ -66,7 +66,7 @@ Asn1SccServiceProvider::~Asn1SccServiceProvider()
 
 QNetworkReply *Asn1SccServiceProvider::requestAst(const QHash<QString, QString> &documents) const
 {
-    QNetworkRequest astRequest(QUrl(m_settings->baseUri + "ast"));
+    QNetworkRequest astRequest(QUrl(m_settings->baseUri() + "ast"));
     astRequest.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
 
     QByteArray jsonRequestData = buildAstRequestData(documents).toJson();
@@ -98,13 +98,13 @@ QStringList Asn1SccServiceProvider::additionalArguments() const
 {
     QStringList arguments;
 
-    if (!m_settings->baseUri.isEmpty()) {
+    if (!m_settings->baseUri().isEmpty()) {
         arguments.append(QString("--uri"));
-        arguments.append(m_settings->baseUri);
+        arguments.append(m_settings->baseUri());
     }
 
     arguments.append(QString("--watchdog"));
-    arguments.append(QString::number(m_settings->stayAlivePeriod));
+    arguments.append(QString::number(m_settings->stayAlivePeriod()));
 
     return arguments;
 }
@@ -141,7 +141,7 @@ void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatu
 
 void Asn1SccServiceProvider::stayAliveTimeout()
 {
-    auto reply = networkManagerInstance->get(QNetworkRequest(QUrl(m_settings->baseUri + "stayAlive")));
+    auto reply = networkManagerInstance->get(QNetworkRequest(QUrl(m_settings->baseUri() + "stayAlive")));
     connect(reply, &QNetworkReply::finished, [this, reply](){
         if (m_serviceStarted && reply->error() != QNetworkReply::NoError)
             restart();
@@ -151,10 +151,10 @@ void Asn1SccServiceProvider::stayAliveTimeout()
 
 void Asn1SccServiceProvider::updateConfigFromSettings()
 {
-    m_asn1sccService->setProgram(m_settings->path);
+    m_asn1sccService->setProgram(m_settings->path());
     m_asn1sccService->setArguments(additionalArguments());
 
-    m_stayAliveTimer.setInterval(m_settings->stayAlivePeriod / 2);
+    m_stayAliveTimer.setInterval(m_settings->stayAlivePeriod() / 2);
 }
 
 void Asn1SccServiceProvider::settingsChanged()

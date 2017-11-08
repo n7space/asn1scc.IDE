@@ -44,13 +44,22 @@ public:
 
     QString name() const override;
 
-    QString baseUri;
-    QString path;
-    int stayAlivePeriod;
+    const QString &baseUri() const { return m_baseUri; }
+    void setBaseUri(const QString &uri) { m_baseUri = uri; }
 
-protected:
-    void saveOptionsTo(QSettings *s) override;
+    const QString &path() const { return m_path; }
+    void setPath(const QString &p) { m_path = p; }
+
+    int stayAlivePeriod() const { return m_stayAlivePeriod; }
+    void setStayAlivePeriod(int p) { m_stayAlivePeriod = p; }
+
+private:
+    void saveOptionsTo(QSettings *s) const override;
     void loadOptionsFrom(QSettings *s) override;
+
+    QString m_baseUri;
+    QString m_path;
+    int m_stayAlivePeriod;
 };
 
 using ServicePtr = std::shared_ptr<Service>;

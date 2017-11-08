@@ -24,36 +24,41 @@
 ****************************************************************************/
 #pragma once
 
-#include <stdexcept>
-#include <string>
+#include <QWidget>
+#include <QTreeWidgetItem>
+#include <QStringList>
 
-#include <QJsonDocument>
-#include <QByteArray>
-
-#include "metadata/module.h"
+#include "ui_libraries.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Libraries {
+namespace OptionsPages {
 
-class MetadataParser
+class LibrariesWidget : public QWidget
 {
+    Q_OBJECT
 public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    explicit LibrariesWidget(QWidget *parent = 0);
+    ~LibrariesWidget();
 
-    MetadataParser(const QByteArray &data);
+    void setDetectedLibPaths(const QStringList &paths);
+    void setManualLibPaths(const QStringList &paths);
 
-    Metadata::Module parse();
+    QStringList manualLibPaths() const;
 
 private:
-    QJsonDocument m_document;
+    class DetailsWidget;
+    bool isManualItem(QTreeWidgetItem *item) const;
+
+    Ui::LibrariesOptionsPage m_ui;
+
+    DetailsWidget *m_detailsWidget;
+
+    QTreeWidgetItem *m_detectedRootItem;
+    QTreeWidgetItem *m_manualRootItem;
 };
 
-} // namespace Libraries
+} // namespace OptionsPages
 } // namespace Internal
 } // namespace Asn1Acn
+

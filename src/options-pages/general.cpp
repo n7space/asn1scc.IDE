@@ -48,17 +48,17 @@ General::General(Settings::GeneralPtr settings)
 bool General::matches(const QString &searchKeyWord) const
 {
     const QStringList keywords { "asn1scc", "asn1.exe", "asn1", "asn.1", "acn" };
-    for (const auto& keyword : keywords)
+    for (const auto &keyword : keywords)
         if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;
     return Core::IOptionsPage::matches(searchKeyWord);
 }
 
-QWidget* General::widget()
+QWidget *General::widget()
 {
     if (!m_widget) {
         m_widget = new GeneralWidget;
-        m_widget->setAsn1SccPath(m_settings->asn1sccPath);
+        m_widget->setAsn1SccPath(m_settings->asn1sccPath());
     }
     return m_widget;
 }
@@ -67,7 +67,7 @@ void General::apply()
 {
     if (!m_widget)
         return;
-    m_settings->asn1sccPath = m_widget->asn1sccPath();
+    m_settings->setAsn1sccPath(m_widget->asn1sccPath());
     m_settings->changed();
     Settings::save(m_settings);
 }

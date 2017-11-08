@@ -22,55 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <memory>
+#include <QPointer>
 
-#include <QSettings>
-#include <QString>
-#include <QObject>
+#include <coreplugin/dialogs/ioptionspage.h>
 
-#include <coreplugin/icore.h>
+#include <settings/libraries.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Settings {
+namespace OptionsPages {
 
-class Settings : public QObject
+class LibrariesWidget;
+
+class Libraries : public Core::IOptionsPage
 {
-    Q_OBJECT
 public:
-    Settings() = default;
-    virtual ~Settings();
+    Libraries(Settings::LibrariesPtr settings);
 
-    virtual QString name() const = 0;
+    bool matches(const QString &searchKeyWord) const override;
+    QWidget *widget() override;
+    void apply() override;
+    void finish() override;
 
-    void saveTo(QSettings *s) const;
-    void loadFrom(QSettings *s);
-
-signals:
-    void changed();
-
-protected:
-    virtual void saveOptionsTo(QSettings *s) const = 0;
-    virtual void loadOptionsFrom(QSettings *s) = 0;
+private:
+    Settings::LibrariesPtr m_settings;
+    QPointer<LibrariesWidget> m_widget;
 };
 
-template <typename Type>
-std::shared_ptr<Type> load()
-{
-    auto r = std::make_shared<Type>();
-    r->loadFrom(Core::ICore::settings());
-    return r;
-}
-
-template <typename Type>
-void save(std::shared_ptr<Type> settings)
-{
-    settings->saveTo(Core::ICore::settings());
-}
-
-} // namespace Settings
+} // namespace OptionsPages
 } // namespace Internal
 } // namespace Asn1Acn

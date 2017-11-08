@@ -22,55 +22,48 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <memory>
-
-#include <QSettings>
 #include <QString>
-#include <QObject>
-
-#include <coreplugin/icore.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Settings {
+namespace Libraries {
+namespace Metadata {
 
-class Settings : public QObject
+class General
 {
-    Q_OBJECT
 public:
-    Settings() = default;
-    virtual ~Settings();
+    General(const QString &name, const QString &path)
+        : m_name(name)
+        , m_path(path)
+    {}  
 
-    virtual QString name() const = 0;
+    const QString &name() const { return m_name; }
+    const QString &path() const { return m_path; }
 
-    void saveTo(QSettings *s) const;
-    void loadFrom(QSettings *s);
+    const QString &version() const { return m_version; }
+    void setVersion(const QString &version) { m_version = version; }
 
-signals:
-    void changed();
+    const QString &description() const { return m_description; }
+    void setDescription(const QString &desc) { m_description = desc; }
 
-protected:
-    virtual void saveOptionsTo(QSettings *s) const = 0;
-    virtual void loadOptionsFrom(QSettings *s) = 0;
+    const QString &license() const { return m_license; }
+    void setLicense(const QString &lic) { m_license = lic; }
+
+    const QString &vendor() const { return m_vendor; }
+    void setVendor(const QString &vendor) { m_vendor = vendor; }
+
+private:
+    QString m_name;
+    QString m_path;
+    QString m_version;
+    QString m_description;
+    QString m_license;
+    QString m_vendor;
 };
 
-template <typename Type>
-std::shared_ptr<Type> load()
-{
-    auto r = std::make_shared<Type>();
-    r->loadFrom(Core::ICore::settings());
-    return r;
-}
-
-template <typename Type>
-void save(std::shared_ptr<Type> settings)
-{
-    settings->saveTo(Core::ICore::settings());
-}
-
-} // namespace Settings
+} // namespace Metadata
+} // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

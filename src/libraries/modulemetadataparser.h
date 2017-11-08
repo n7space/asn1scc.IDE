@@ -22,55 +22,38 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <memory>
+#include <stdexcept>
+#include <string>
 
-#include <QSettings>
-#include <QString>
-#include <QObject>
+#include <QJsonDocument>
+#include <QByteArray>
 
-#include <coreplugin/icore.h>
+#include "metadata/module.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Settings {
+namespace Libraries {
 
-class Settings : public QObject
+class ModuleMetadataParser
 {
-    Q_OBJECT
 public:
-    Settings() = default;
-    virtual ~Settings();
+    struct Error : std::runtime_error
+    {
+        Error(const std::string &msg)
+            : std::runtime_error(msg)
+        {}
+    };
 
-    virtual QString name() const = 0;
+    ModuleMetadataParser(const QByteArray &data);
 
-    void saveTo(QSettings *s) const;
-    void loadFrom(QSettings *s);
+    Metadata::Module parse();
 
-signals:
-    void changed();
-
-protected:
-    virtual void saveOptionsTo(QSettings *s) const = 0;
-    virtual void loadOptionsFrom(QSettings *s) = 0;
+private:
+    QJsonDocument m_document;
 };
 
-template <typename Type>
-std::shared_ptr<Type> load()
-{
-    auto r = std::make_shared<Type>();
-    r->loadFrom(Core::ICore::settings());
-    return r;
-}
-
-template <typename Type>
-void save(std::shared_ptr<Type> settings)
-{
-    settings->saveTo(Core::ICore::settings());
-}
-
-} // namespace Settings
+} // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

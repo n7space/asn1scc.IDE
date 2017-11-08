@@ -25,52 +25,33 @@
 
 #pragma once
 
-#include <memory>
-
-#include <QSettings>
-#include <QString>
 #include <QObject>
 
-#include <coreplugin/icore.h>
+#include "../generalmetadataparser.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Settings {
+namespace Libraries {
+namespace Tests {
 
-class Settings : public QObject
+class GeneralMetadataParserTests : public QObject
 {
     Q_OBJECT
 public:
-    Settings() = default;
-    virtual ~Settings();
+    explicit GeneralMetadataParserTests(QObject *parent = 0);
 
-    virtual QString name() const = 0;
+private slots:
+    void test_empty();
+    void test_partiallyFilled();
+    void test_complete();
 
-    void saveTo(QSettings *s) const;
-    void loadFrom(QSettings *s);
+private:
+    void parse(const QString &jsonData, const QString &path);
 
-signals:
-    void changed();
-
-protected:
-    virtual void saveOptionsTo(QSettings *s) const = 0;
-    virtual void loadOptionsFrom(QSettings *s) = 0;
+    Metadata::General m_parsedData;
 };
 
-template <typename Type>
-std::shared_ptr<Type> load()
-{
-    auto r = std::make_shared<Type>();
-    r->loadFrom(Core::ICore::settings());
-    return r;
-}
-
-template <typename Type>
-void save(std::shared_ptr<Type> settings)
-{
-    settings->saveTo(Core::ICore::settings());
-}
-
-} // namespace Settings
+} // namespace Tests
+} // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

@@ -22,61 +22,58 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "service.h"
+#include "libraries.h"
 
 #include <QWidget>
 
 #include <asn1acnconstants.h>
 #include <tr.h>
 
-#include "servicewidget.h"
+#include "librarieswidget.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::OptionsPages;
 
-Service::Service(Settings::ServicePtr settings)
+Libraries::Libraries(Settings::LibrariesPtr settings)
     : m_settings(settings),
       m_widget(nullptr)
 {
-    setId(Constants::SERVICE_SETTINGS_ID);
-    setDisplayName(Tr::tr("Service"));
+    setId(Constants::LIBRARIES_SETTINGS_ID);
+    setDisplayName(Tr::tr("Libraries"));
     setCategory(Constants::SETTINGS_CATEGORY);
     setDisplayCategory(Tr::tr(Constants::SETTINGS_CATEGORY_DISPLAY));
     setCategoryIcon(Utils::Icon(Constants::OPTIONS_CATEGORY_ICON));
 }
 
-bool Service::matches(const QString &searchKeyWord) const
+bool Libraries::matches(const QString &searchKeyWord) const
 {
-    const QStringList keywords { "asn1scc", "daemon", "asn1.exe", "asn1", "asn.1", "acn" };
+    const QStringList keywords { "asn1", "asn.1", "acn", "libraries", "components" };
     for (const auto &keyword : keywords)
         if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;
     return Core::IOptionsPage::matches(searchKeyWord);
 }
 
-QWidget *Service::widget()
+QWidget *Libraries::widget()
 {
     if (!m_widget) {
-        m_widget = new ServiceWidget;
-        m_widget->setPath(m_settings->path());
-        m_widget->setBaseUri(m_settings->baseUri());
-        m_widget->setStayAlivePeriod(m_settings->stayAlivePeriod());
+        m_widget = new LibrariesWidget;
+        m_widget->setDetectedLibPaths(m_settings->detectedLibPaths());
+        m_widget->setManualLibPaths(m_settings->manualLibPaths());
     }
     return m_widget;
 }
 
-void Service::apply()
+void Libraries::apply()
 {
     if (!m_widget)
         return;
-    m_settings->setPath(m_widget->path());
-    m_settings->setBaseUri(m_widget->baseUri());
-    m_settings->setStayAlivePeriod(m_widget->stayAlivePeriod());
+    m_settings->setManualLibPaths(m_widget->manualLibPaths());
     m_settings->changed();
     Settings::save(m_settings);
 }
 
-void Service::finish()
+void Libraries::finish()
 {
     delete m_widget;
 }

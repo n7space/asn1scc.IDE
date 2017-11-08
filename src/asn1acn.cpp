@@ -43,9 +43,11 @@
 #include "settings/settings.h"
 #include "settings/general.h"
 #include "settings/service.h"
+#include "settings/libraries.h"
 
 #include "options-pages/general.h"
 #include "options-pages/service.h"
+#include "options-pages/libraries.h"
 
 #include "tree-views/outlinewidget.h"
 #include "tree-views/typestreewidget.h"
@@ -70,7 +72,8 @@
 #include "tests/autocompleter_tests.h"
 #include "tests/sourcemapper_tests.h"
 #include "tests/modelvalidityguard_tests.h"
-#include "libraries/tests/metadataparser_tests.h"
+#include "libraries/tests/modulemetadataparser_tests.h"
+#include "libraries/tests/generalmetadataparser_tests.h"
 #include "tree-views/tests/displayrolevisitor_tests.h"
 #include "tree-views/tests/outlineindexupdater_tests.h"
 #include "tree-views/tests/outlinemodel_tests.h"
@@ -108,6 +111,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     const auto generalSettings = Settings::load<Settings::General>();
     const auto serviceSettings = Settings::load<Settings::Service>();
+    const auto librariesSettings = Settings::load<Settings::Libraries>();
 
     addAutoReleasedObject(new AsnEditorFactory);  
     addAutoReleasedObject(new AcnEditorFactory);
@@ -119,6 +123,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new OptionsPages::General(generalSettings));
     addAutoReleasedObject(new OptionsPages::Service(serviceSettings));
+    addAutoReleasedObject(new OptionsPages::Libraries(librariesSettings));
 
     addAutoReleasedObject(new TypesLocator);
 
@@ -191,7 +196,8 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
 QList<QObject *> Asn1AcnPlugin::createTestObjects() const
 {
     return QList<QObject *>()
-            << new Libraries::Tests::MetadataParserTests
+            << new Libraries::Tests::ModuleMetadataParserTests
+            << new Libraries::Tests::GeneralMetadataParserTests
             << new TreeViews::Tests::DisplayRoleVisitorTests
             << new TreeViews::Tests::OutlineIndexUpdaterTests
             << new TreeViews::Tests::OutlineModelTests

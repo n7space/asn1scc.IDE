@@ -22,39 +22,43 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "generalmetadataparser.h"
 
-#include "service.h"
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QFileInfo>
 
-#include <utils/hostosinfo.h>
+using namespace Asn1Acn::Internal::Libraries;
 
-using namespace Asn1Acn::Internal::Settings;
-
-static const char PATH[] = "Path";
-static const char BASE_URI[] = "BaseUri";
-static const char STAY_ALIVE_PERIOD[] = "StayAlivePeriod";
-
-Service::~Service()
+GeneralMetadataParser::GeneralMetadataParser(const QByteArray &data, const QString &path)
+    : m_document(QJsonDocument::fromJson(data))
+    , m_path(path)
 {
 }
 
-QString Service::name() const
+QString GeneralMetadataParser::readName(const QJsonObject &object)
 {
-    return QLatin1String("Service");
+    const auto name = object["name"].toString();
+    if (name.isEmpty())
+        return QFileInfo(m_path).baseName();
+    return name;
 }
 
-void Service::saveOptionsTo(QSettings *s) const
+namespace {
+void assignExtraProperties(Metadata::General &res, const QJsonObject &object)
 {
-    s->setValue(PATH, path());
-    s->setValue(BASE_URI, baseUri());
-    s->setValue(STAY_ALIVE_PERIOD, stayAlivePeriod());
+    res.setDescription(object["description"].toString());
+    res.setLicense(object["license"].toString());
+    res.setVersion(object["version"].toString());
+    res.setVendor(object["vendor"].toString());
 }
+} // namespace
 
-void Service::loadOptionsFrom(QSettings *s)
+Metadata::General GeneralMetadataParser::parse()
 {
-    setPath(s->value(PATH, "/opt/asn1sccDaemon/asn1scc/Daemon/bin/Debug/Daemon.exe").toString()); // TODO good default, TODO windows support
-    setBaseUri(s->value(BASE_URI,
-                        Utils::HostOsInfo::isWindowsHost()
-                        ? "http://+:80/Temporary_Listen_Addresses/asn1scc.IDE/"
-                        : "http://localhost:9749/").toString());
-    setStayAlivePeriod(s->value(STAY_ALIVE_PERIOD, 1000).toInt());
+    const auto obj = m_document.object();
+    auto res = Metadata::General(readName(obj), m_path);
+    if (!m_document.isNull())
+        assignExtraProperties(res, obj);
+    return res;
 }

@@ -22,42 +22,46 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QObject>
+#include <memory>
 
-#include "../metadataparser.h"
+#include <QString>
+#include <QStringList>
+
+#include "settings.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Libraries {
-namespace Tests {
+namespace Settings {
 
-class MetadataParserTests : public QObject
+class Libraries : public Settings
 {
     Q_OBJECT
 public:
-    explicit MetadataParserTests(QObject *parent = 0);
+    Libraries();
+    virtual ~Libraries();
 
-private slots:
-    void test_emptyFile();
-    void test_malformedJson();
-    void test_wrongJsonType();
-    void test_emptyObject();
-    void test_emptyModule();
-    void test_emptySubmodule();
-    void test_emptyElement();
-    void test_completeElement();
+    QString name() const override;
+
+    QStringList libPaths() const { return detectedLibPaths() + manualLibPaths(); }
+
+    const QStringList &detectedLibPaths() const { return m_detectedLibPaths; }
+
+    const QStringList &manualLibPaths() const { return m_manualLibPaths; }
+    void setManualLibPaths(const QStringList &list) { m_manualLibPaths = list; }
 
 private:
-    void parsingFails(const QString &jsonData);
-    void parse(const QString &jsonData);
+    void saveOptionsTo(QSettings *s) const override;
+    void loadOptionsFrom(QSettings *s) override;
 
-    Metadata::Module m_parsedData;
+    QStringList m_manualLibPaths;
+    QStringList m_detectedLibPaths;
 };
 
-} // namespace Tests
-} // namespace Libraries
+using LibrariesPtr = std::shared_ptr<Libraries>;
+using LibrariesConstPtr = std::shared_ptr<const Libraries>;
+
+} // namespace Settings
 } // namespace Internal
 } // namespace Asn1Acn
