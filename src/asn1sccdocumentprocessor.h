@@ -35,6 +35,7 @@
 
 #include "parseddocumentbuilder.h"
 #include "documentprocessor.h"
+#include "parseddatastorage.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -50,8 +51,9 @@ public:
 
     static Asn1SccDocumentProcessor *create(const QString &projectName);
 
-    Asn1SccDocumentProcessor(const QString &projectName, DocumentBuilderCreator docBuilderCreator);
-    ~Asn1SccDocumentProcessor();
+    Asn1SccDocumentProcessor(const QString &projectName,
+                             DocumentBuilderCreator docBuilderCreator,
+                             ParsedDataStorage *storage);
 
     void addToRun(const QString &filePath, const QString &docContent) override;
     void run() override;
@@ -78,6 +80,8 @@ private:
 
     std::unique_ptr<ParsedDocumentBuilder> m_docBuilder;
     DocumentBuilderCreator m_docBuilderCreator;
+
+    ParsedDataStorage *m_storage;
 };
 
 } // namespace Internal

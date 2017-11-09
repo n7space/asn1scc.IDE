@@ -25,7 +25,6 @@
 
 #include "asn1sccdocumentprocessor.h"
 
-#include "parseddatastorage.h"
 #include "asn1sccparseddocumentbuilder.h"
 
 using namespace Asn1Acn::Internal;
@@ -34,24 +33,21 @@ Asn1SccDocumentProcessor *Asn1SccDocumentProcessor::create(const QString &projec
 {
     return new Asn1SccDocumentProcessor(projectName,
                                         [](const QHash<QString, QString> &documents)->ParsedDocumentBuilder *
-                                        { return Asn1SccParsedDocumentBuilder::create(documents); });
+                                        { return Asn1SccParsedDocumentBuilder::create(documents); },
+                                        ParsedDataStorage::instance());
 }
 
 Asn1SccDocumentProcessor::Asn1SccDocumentProcessor(const QString &projectName,
-                                                   DocumentBuilderCreator docBuilderCreator)
-    : m_projectName(projectName),
-      m_state(State::Unfinished),
-      m_docBuilder(nullptr),
-      m_docBuilderCreator(docBuilderCreator)
+                                                   DocumentBuilderCreator docBuilderCreator,
+                                                   ParsedDataStorage *storage)
+    : m_projectName(projectName)
+    , m_state(State::Unfinished)
+    , m_docBuilder(nullptr)
+    , m_docBuilderCreator(docBuilderCreator)
+    , m_storage(storage)
 {
-    auto dataStorage = ParsedDataStorage::instance();
-
-    m_index = dataStorage->getProjectBuildersCount(m_projectName) + 1;
-    dataStorage->setProjectBuildersCount(m_projectName, m_index);
-}
-
-Asn1SccDocumentProcessor::~Asn1SccDocumentProcessor()
-{
+    m_index = m_storage->getProjectBuildersCount(m_projectName) + 1;
+    m_storage->setProjectBuildersCount(m_projectName, m_index);
 }
 
 void Asn1SccDocumentProcessor::addToRun(const QString &filePath, const QString &docContent)
@@ -109,7 +105,7 @@ void Asn1SccDocumentProcessor::onBuilderErrored()
 
 void Asn1SccDocumentProcessor::setState(Asn1SccDocumentProcessor::State expected)
 {
-    if (m_index < ParsedDataStorage::instance()->getProjectBuildersCount(m_projectName))
+    if (m_index < m_storage->getProjectBuildersCount(m_projectName))
         m_state = State::Outdated;
     else
         m_state = expected;
