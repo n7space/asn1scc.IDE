@@ -24,8 +24,6 @@
 ****************************************************************************/
 #include "usertypesproposalsbuilder.h"
 
-#include <data/definitions.h>
-
 #include <tree-views/decorationrolevisitor.h>
 
 #include "importfindingvisitor.h"
@@ -46,6 +44,7 @@ void UserTypesProposalsBuilder::fillProposals()
     for (const auto &definitions : m_data->definitionsList()) {
         appendImportedTypes(definitions->importedTypes());
         appendInternalTypes(definitions->types());
+        appendInternalVariables(definitions->variables());
     }
 }
 
@@ -64,4 +63,10 @@ void UserTypesProposalsBuilder::appendImportedTypes(const Data::Definitions::Imp
         const auto icon = typeNode == nullptr ? defaultIcon : typeNode->valueFor<TreeViews::DecorationRoleVisitor>();
         addProposal(importedType.name(), icon);
     }
+}
+
+void UserTypesProposalsBuilder::appendInternalVariables(const Data::Definitions::Variables &variables)
+{
+    for (const auto &variable : variables)
+        addProposal(variable->name(), variable->valueFor<TreeViews::DecorationRoleVisitor>());
 }

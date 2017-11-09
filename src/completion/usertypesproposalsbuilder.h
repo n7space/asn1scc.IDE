@@ -29,6 +29,7 @@
 #include <texteditor/codeassist/assistproposalitem.h>
 
 #include <data/file.h>
+#include <data/definitions.h>
 
 #include "proposalsbuilder.h"
 
@@ -43,8 +44,11 @@ public:
 
 private:
     void fillProposals() override;
+
     void appendImportedTypes(const Data::Definitions::ImportedTypes &importedTypes);
     void appendInternalTypes(const Data::Definitions::Types &types);
+
+    void appendInternalVariables(const Data::Definitions::Variables &variables);
 
     const Data::File *m_data;
 };
