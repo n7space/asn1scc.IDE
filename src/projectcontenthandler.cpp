@@ -62,13 +62,13 @@ ProjectContentHandler::~ProjectContentHandler()
 
 void ProjectContentHandler::handleProjectAdded(const QString &projectName)
 {
-    ParsedDataStorageProxy::addProject(m_storage, projectName);
+    m_storage->addProject(projectName);
     allProcessingFinished();
 }
 
 void ProjectContentHandler::handleProjectRemoved(const QString &projectName)
 {
-    ParsedDataStorageProxy::removeProject(m_storage, projectName);
+    m_storage->removeProject(projectName);
     allProcessingFinished();
 }
 
@@ -99,7 +99,7 @@ void ProjectContentHandler::removeStaleFiles(const QString &projectName, const Q
     QStringList stalePaths = getStaleFilesPaths(projectName, filePaths);
 
     foreach (const QString &stalePath, stalePaths)
-        ParsedDataStorageProxy::removeFileFromProject(m_storage, projectName, stalePath);
+        m_storage->removeFileFromProject(projectName, stalePath);
 }
 
 void ProjectContentHandler::processFiles(const QString &projectName, const QStringList &filePaths)
@@ -169,7 +169,7 @@ void ProjectContentHandler::handleFilesProcesedWithSuccess(const QString &projec
                                                            std::vector<std::unique_ptr<Data::File>> parsedDocuments)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++)
-        ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
+        m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
 }
 
 void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projectName,
@@ -180,7 +180,7 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(const QString &projec
         auto file = m_storage->getFileForPathFromProject(projectName, parsedDocuments[i]->location().path());
         if (file == nullptr) {
             file = parsedDocuments[i].get();
-            ParsedDataStorageProxy::addFileToProject(m_storage, projectName, std::move(parsedDocuments[i]));
+            m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
         }
 
         file->clearReferences();

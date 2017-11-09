@@ -263,7 +263,6 @@ HEADERS += \
     documentprocessor.h \
     sourcereader.h \
     filesourcereader.h \
-    parseddatastorageproxy.h \
     errormessageparser.h \
     editoroutline.h \
     sourcemapper.h \

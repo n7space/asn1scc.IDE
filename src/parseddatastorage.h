@@ -37,21 +37,23 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedDataStorageProxy;
-
 class ParsedDataStorage : public QObject
 {
     Q_OBJECT
 
+public:
     ParsedDataStorage();
     ~ParsedDataStorage() = default;
 
-    friend class ParsedDataStorageProxy;
-
-public:
     static ParsedDataStorage *instance();
 
     const Data::Root *root() const { return m_root.get(); }
+
+    void addProject(const QString &projectName);
+    void removeProject(const QString &projectName);
+
+    void addFileToProject(const QString &projectName, std::unique_ptr<Data::File> file);
+    void removeFileFromProject(const QString &projectName, const QString &filePath);
 
     const Data::File *getAnyFileForPath(const QString &filePath) const;
     Data::File *getFileForPathFromProject(const QString &project, const QString &path);
@@ -66,16 +68,10 @@ public:
     void setProjectBuildersCount(const QString &projectName, const int version) const;
     void resetProjectBuildersCount();
 
-private:
-    void addProject(const QString &projectName);
-    void removeProject(const QString &projectName);
-
-    void addFileToProject(const QString &projectName, std::unique_ptr<Data::File> file);
-    void removeFileFromProject(const QString &projectName, const QString &filePath);
-
     int getProjectsCount();
     int getDocumentsCount();
 
+private:
     const QStringList getProjectsForFileInternal(const QString &filePath) const;
     const QStringList getFilesPathsFromProjectInternal(const QString &projectName) const;
     void removeFileFromProjectInternal(const QString &projectName, const QString &filePath);
@@ -86,7 +82,6 @@ private:
                                                const QString &typeAssignmentName) const;
 
     std::unique_ptr<Data::Root> m_root;
-
     mutable QMutex m_documentsMutex;
 };
 

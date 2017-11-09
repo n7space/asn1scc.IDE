@@ -30,7 +30,6 @@
 #include <QStringList>
 
 #include "parseddatastorage.h"
-#include "parseddatastorageproxy.h"
 #include "documentprocessor.h"
 #include "sourcereader.h"
 #include "modelvalidityguard.h"
@@ -40,7 +39,6 @@ namespace Internal {
 
 class ProjectContentHandler
         : public QObject
-        , public ParsedDataStorageProxy
 {
     Q_OBJECT
 
