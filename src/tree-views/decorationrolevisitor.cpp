@@ -60,12 +60,12 @@ QIcon DecorationRoleVisitor::valueFor(const File &file) const
 
 QIcon DecorationRoleVisitor::valueFor(const TypeAssignment &type) const
 {
-    return type.type()->icon(); // TODO mark "type icon"
+    return type.type()->typeIcon();
 }
 
 QIcon DecorationRoleVisitor::valueFor(const VariableAssignment &variable) const
 {
-    return variable.type()->icon(); // TODO mark "variable icon"
+    return variable.type()->variableIcon();
 }
 
 QIcon DecorationRoleVisitor::valueFor(const Project &project) const
