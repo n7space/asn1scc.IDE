@@ -68,7 +68,8 @@ private:
     int readCharPossitionInLineAttribute();
 
     void readImportedModule();
-    void readImportedVariables();
+    void readImportedVariables(const QString &moduleName);
+    void readImportedVariable(const QString &moduleName);
     void readImportedTypes(const QString &moduleName);
     void readImportedType(const QString &moduleName);
 

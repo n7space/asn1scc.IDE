@@ -61,6 +61,11 @@ void Definitions::addImportedType(const ImportedType &type)
     m_importedTypes.push_back(type);
 }
 
+void Definitions::addImportedVariable(const ImportedVariable &variable)
+{
+    m_importedVariables.push_back(variable);
+}
+
 const TypeAssignment *Definitions::type(const QString &name) const
 {
     const auto it = m_typeByNameMap.find(name);

@@ -417,6 +417,54 @@ void AstXmlParserTests::test_variableAssignment()
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->variable("asnConstant")->type()->name(), QStringLiteral("INTEGER"));
 }
 
+void AstXmlParserTests::test_importedVariable()
+{
+    parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
+          R"(<ASN1AST>)"
+          R"(  <Asn1File FileName="Test2File.asn">)"
+          R"(    <Asn1Module ID="TestDefinitions">)"
+          R"(      <ImportedModules>)"
+          R"(          <ImportedModule ID="OtherDefinitions">)"
+          R"(              <ImportedVariables>)"
+          R"(                  <ImportedVariable Name="Imported" />)"
+          R"(              </ImportedVariables>)"
+          R"(          </ImportedModule>)"
+          R"(      </ImportedModules>)"
+          R"(      <TypeAssignments/>)"
+          R"(    </Asn1Module>)"
+          R"(  </Asn1File>)"
+          R"(</ASN1AST>)");
+
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->importedVariables().size(), std::size_t(1));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->importedVariables().at(0).module(), QStringLiteral("OtherDefinitions"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->importedVariables().at(0).name(), QStringLiteral("Imported"));
+}
+
+void AstXmlParserTests::test_multipleImportedVariable()
+{
+    parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
+          R"(<ASN1AST>)"
+          R"(  <Asn1File FileName="Test2File.asn">)"
+          R"(    <Asn1Module ID="TestDefinitions">)"
+          R"(      <ImportedModules>)"
+          R"(          <ImportedModule ID="OtherDefinitions">)"
+          R"(              <ImportedVariables>)"
+          R"(                  <ImportedVariable Name="Imported" />)"
+          R"(                  <ImportedVariable Name="SecondImported" />)"
+          R"(              </ImportedVariables>)"
+          R"(          </ImportedModule>)"
+          R"(      </ImportedModules>)"
+          R"(      <TypeAssignments/>)"
+          R"(    </Asn1Module>)"
+          R"(  </Asn1File>)"
+          R"(</ASN1AST>)");
+
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->importedVariables().size(), std::size_t(2));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->importedVariables().at(0).module(), QStringLiteral("OtherDefinitions"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->importedVariables().at(0).name(), QStringLiteral("Imported"));
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->importedVariables().at(1).name(), QStringLiteral("SecondImported"));
+}
+
 void AstXmlParserTests::parsingFails(const QString& xmlData)
 {
     setXmlData(xmlData);

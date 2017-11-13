@@ -22,53 +22,29 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QObject>
-
-#include "../astxmlparser.h"
+#include <QString>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Tests {
+namespace Data {
 
-class AstXmlParserTests : public QObject
+class ImportedVariable
 {
-    Q_OBJECT
 public:
-    explicit AstXmlParserTests(QObject *parent = 0);
+    ImportedVariable(const QString &module, const QString &name)
+        : m_module(module), m_name(name)
+    {}
 
-private slots:
-    void test_emptyFile();
-    void test_badXmlRoot();
-    void test_missingAsn1Module();
-    void test_emptyDefinitions();
-    void test_singleTypeAssignment();
-    void test_builtinTypeReference();
-    void test_builtinTypeReference_data();
-    void test_userDefinedTypeReference();
-    void test_userDefinedTypeReferenceInOtherModule();
-    void test_multipleTypeAssignments();
-    void test_importedType();
-    void test_multipleImportedType();
-    void test_pathMapping();
-    void test_sequenceTypeAssingment();
-    void test_sequenceOfTypeAssingment();
-    void test_variableAssignment();
-    void test_importedVariable();
-    void test_multipleImportedVariable();
+    const QString &module() const { return m_module; }
+    const QString &name() const { return m_name; }
 
 private:
-    void setXmlData(const QString& str);
-    void parsingFails(const QString& xmlData);
-    void parse(const QString& xmlData);
-
-    QXmlStreamReader m_xmlReader;
-    SourceMapper m_pathMapper;
-    std::map<QString, std::unique_ptr<Data::File>> m_parsedData;
+    QString m_module;
+    QString m_name;
 };
 
-} // namespace Tests
+} // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn

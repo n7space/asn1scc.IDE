@@ -26,6 +26,8 @@
 
 #include <memory>
 
+#include <QString>
+
 #include <texteditor/codeassist/assistproposalitem.h>
 
 #include <data/file.h>
@@ -49,6 +51,9 @@ private:
     void appendInternalTypes(const Data::Definitions::Types &types);
 
     void appendInternalVariables(const Data::Definitions::Variables &variables);
+    void appendImportedVariables(const Data::Definitions::ImportedVariables &importedVariables);
+
+    void appendImportedElement(const QString &module, const QString &name);
 
     const Data::File *m_data;
 };

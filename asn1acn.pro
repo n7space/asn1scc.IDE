@@ -182,6 +182,7 @@ HEADERS += \
     data/visitor.h \
     data/visitorwithvalue.h \
     data/importedtype.h \
+    data/importedvariable.h \
     \
     data/types/type.h \
     data/types/userdefinedtype.h \
