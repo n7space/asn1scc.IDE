@@ -174,6 +174,13 @@ void Asn1AcnPlugin::initializeMenus()
     contextMenu->addAction(command);
     asnToolsMenu->addAction(command);
 
+
+    asnToolsMenu->addSeparator();
+    QAction *importFromAsnComponents = new QAction(tr("Import from ASN.1 components library..."), this);
+    command = Core::ActionManager::registerAction(importFromAsnComponents, Constants::IMPORT_FROM_COMPONENTS_LIBRARY);
+    connect(importFromAsnComponents, &QAction::triggered, this, &Asn1AcnPlugin::raiseImportComponentWindow);
+    asnToolsMenu->addAction(command);
+
     addToToolsMenu(asnToolsMenu);
 }
 
@@ -190,6 +197,11 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
     return SynchronousShutdown;
+}
+
+void Asn1AcnPlugin::raiseImportComponentWindow()
+{
+
 }
 
 #ifdef WITH_TESTS

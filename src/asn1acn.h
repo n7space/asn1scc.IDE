@@ -48,6 +48,9 @@ public:
 private:
     void initializeMenus();
 
+private slots:
+    void raiseImportComponentWindow();
+
 #ifdef WITH_TESTS   
     QList<QObject *> createTestObjects() const override;
 #endif
