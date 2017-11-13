@@ -61,7 +61,7 @@ void Definitions::addImportedType(const ImportedType &type)
     m_importedTypes.push_back(type);
 }
 
-void Definitions::addImportedVariables(const ImportedVariable &variable)
+void Definitions::addImportedVariable(const ImportedVariable &variable)
 {
     m_importedVariables.push_back(variable);
 }

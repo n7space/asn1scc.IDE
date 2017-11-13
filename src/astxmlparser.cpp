@@ -192,7 +192,7 @@ void AstXmlParser::readImportedVariables(const QString &moduleName)
 
 void AstXmlParser::readImportedVariable(const QString &moduleName)
 {
-    m_currentDefinitions->addImportedVariables({moduleName, readNameAttribute()});
+    m_currentDefinitions->addImportedVariable({moduleName, readNameAttribute()});
     m_xmlReader.skipCurrentElement();
 }
 

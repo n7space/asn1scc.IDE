@@ -54,7 +54,7 @@ public:
     void addType(std::unique_ptr<TypeAssignment> type);
     void addVariable(std::unique_ptr<VariableAssignment> variable);
     void addImportedType(const ImportedType &type);
-    void addImportedVariables(const ImportedVariable &variable);
+    void addImportedVariable(const ImportedVariable &variable);
 
     using Types = std::vector<std::unique_ptr<TypeAssignment>>;
     using Variables = std::vector<std::unique_ptr<VariableAssignment>>;
