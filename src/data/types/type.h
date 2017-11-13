@@ -27,6 +27,8 @@
 #include <QString>
 #include <QIcon>
 
+#include <utils/theme/theme.h>
+
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
@@ -37,12 +39,14 @@ class Type
 public:
     virtual ~Type() = default;
 
-    QIcon icon() const;
+    QIcon typeIcon() const;
+    QIcon variableIcon() const;
 
     virtual QString name() const = 0;
     virtual QString label() const = 0;
 
 private:
+    virtual QIcon createIcon(Utils::Theme::Color color) const;
     virtual QString baseIconFile() const = 0;
 };
 

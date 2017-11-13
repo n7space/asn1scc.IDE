@@ -25,11 +25,23 @@
 
 #include "type.h"
 
+#include <utils/icon.h>
 #include <utils/stylehelper.h>
 
 using namespace Asn1Acn::Internal::Data::Types;
 
-QIcon Type::icon() const
+
+QIcon Type::createIcon(Utils::Theme::Color color) const
 {
-    return QIcon(Utils::StyleHelper::dpiSpecificImageFile(baseIconFile()));
+    return QIcon(Utils::Icon({ { baseIconFile(), color} }, Utils::Icon::Tint).icon());
+}
+
+QIcon Type::typeIcon() const
+{
+    return createIcon(Utils::Theme::IconsErrorColor);
+}
+
+QIcon Type::variableIcon() const
+{
+    return createIcon(Utils::Theme::IconsCodeModelMacroColor);
 }

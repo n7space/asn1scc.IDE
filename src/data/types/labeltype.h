@@ -44,6 +44,7 @@ public:
 
 private:
     QString baseIconFile() const override;
+    QIcon createIcon(Utils::Theme::Color color) const override;
 
     QString m_name;
 };
