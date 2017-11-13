@@ -54,6 +54,9 @@ int IndexFindingVisitor::findIndexIn(const Collection &items) const
 
 int IndexFindingVisitor::valueFor(const Definitions &defs) const
 {
+    const auto variableIdx = findIndexIn(defs.variables());
+    if (variableIdx != -1)
+        return defs.types().size() + variableIdx;
     return findIndexIn(defs.types());
 }
 
