@@ -57,13 +57,8 @@ void UserTypesProposalsBuilder::appendInternalTypes(const Data::Definitions::Typ
 
 void UserTypesProposalsBuilder::appendImportedTypes(const Data::Definitions::ImportedTypes &importedTypes)
 {
-    const auto searchRoot = m_data->parent() != nullptr ? m_data->parent() : m_data;
-    static const auto defaultIcon = QIcon(":/codemodel/images/member.png");
-    foreach(const auto &importedType, importedTypes) {
-        const auto typeNode = searchRoot->valueFor<ImportFindingVisitor>(importedType.module(), importedType.name());
-        const auto icon = typeNode == nullptr ? defaultIcon : typeNode->valueFor<TreeViews::DecorationRoleVisitor>();
-        addProposal(importedType.name(), icon);
-    }
+    foreach (const auto &importedType, importedTypes)
+        appendImportedElement(importedType.module(), importedType.name());
 }
 
 void UserTypesProposalsBuilder::appendInternalVariables(const Data::Definitions::Variables &variables)
@@ -74,11 +69,15 @@ void UserTypesProposalsBuilder::appendInternalVariables(const Data::Definitions:
 
 void UserTypesProposalsBuilder::appendImportedVariables(const Data::Definitions::ImportedVariables &importedVariables)
 {
-    const auto searchRoot = m_data->parent() != nullptr ? m_data->parent() : m_data;
+    foreach (const auto &importedVariable, importedVariables)
+        appendImportedElement(importedVariable.module(), importedVariable.name());
+}
+
+void UserTypesProposalsBuilder::appendImportedElement(const QString &module, const QString &name)
+{
     static const auto defaultIcon = QIcon(":/codemodel/images/member.png");
-    foreach(const auto &importedVariable, importedVariables) {
-        const auto variableNode = searchRoot->valueFor<ImportFindingVisitor>(importedVariable.module(), importedVariable.name());
-        const auto icon = variableNode == nullptr ? defaultIcon : variableNode->valueFor<TreeViews::DecorationRoleVisitor>();
-        addProposal(importedVariable.name(), icon);
-    }
+    const auto searchRoot = m_data->parent() != nullptr ? m_data->parent() : m_data;
+    const auto node = searchRoot->valueFor<ImportFindingVisitor>(module, name);
+    const auto icon = node == nullptr ? defaultIcon : node->valueFor<TreeViews::DecorationRoleVisitor>();
+    addProposal(name, icon);
 }
