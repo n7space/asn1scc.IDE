@@ -25,10 +25,21 @@
 
 #include "typeslocator.h"
 
+#include <QStringMatcher>
+#include <QRegExp>
+
 #include <coreplugin/editormanager/editormanager.h>
 
-#include <projectexplorer/session.h> // TODO: remove along with stubbed implementation
-#include <projectexplorer/project.h> // TODO: remove along with stubbed implementation
+#include <data/root.h>
+#include <data/project.h>
+#include <data/file.h>
+#include <data/definitions.h>
+#include <data/typeassignment.h>
+#include <data/variableassignment.h>
+
+#include <tree-views/decorationrolevisitor.h>
+
+#include "parseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -44,7 +55,8 @@ TypesLocator::TypesLocator()
 void TypesLocator::accept(Entry selection, QString *newText, int *selectionStart, int *selectionLength) const
 {
     Q_UNUSED(newText); Q_UNUSED(selectionStart); Q_UNUSED(selectionLength);
-    Core::EditorManager::openEditorAt(selection.fileName, 1, 0);
+    const auto location = qvariant_cast<Data::SourceLocation>(selection.internalData);
+    Core::EditorManager::openEditorAt(location.path(), location.line(), location.column());
 }
 
 void TypesLocator::refresh(QFutureInterface<void> &future)
@@ -52,30 +64,127 @@ void TypesLocator::refresh(QFutureInterface<void> &future)
     Q_UNUSED(future);
 }
 
-QList<TypesLocator::Entry> TypesLocator::matchesFor(QFutureInterface<Entry> &future, const QString &entry)
-{    
-    const QStringList files = createProjectList().filter(".asn").filter(entry);
+namespace {
 
-    QList<Entry> ret;
+using HighlightInfo = Core::LocatorFilterEntry::HighlightInfo;
 
-    foreach (const auto &file, files) {
-        if (future.isCanceled())
-            break;
+class StringMatcher
+{
+public:
+    StringMatcher(const QString &entry)
+        : m_matcher(entry, Core::ILocatorFilter::caseSensitivity(entry))
+        , m_length(entry.length())
+    {}
 
-        Entry locatorEntry(this, file, QVariant());
-        locatorEntry.fileName = file;
-
-        ret.append(locatorEntry);
+    HighlightInfo match(const QString &text) const
+    {
+        const auto index = m_matcher.indexIn(text);
+        return { index, m_length };
     }
 
-    return ret;
-}
+private:
+    QStringMatcher m_matcher;
+    const int m_length;
+};
 
-QStringList TypesLocator::createProjectList()
+class WildcardMatcher
 {
-    QList<ProjectExplorer::Project *> projectList =  ProjectExplorer::SessionManager::projects();
-    if (projectList.empty())
-        return QStringList();
+public:
+    WildcardMatcher(const QString &entry)
+        : m_matcher(entry, Core::ILocatorFilter::caseSensitivity(entry), QRegExp::Wildcard)
+    {}
 
-    return projectList.at(0)->files(ProjectExplorer::Project::AllFiles);
+    HighlightInfo match(const QString &text) const
+    {
+        const auto index = m_matcher.indexIn(text);
+        return { index, m_matcher.matchedLength() };
+    }
+
+private:
+    QRegExp m_matcher;
+};
+
+class Matcher
+{
+public:
+    Matcher(const QString &entry)
+        : m_useWildcard(Core::ILocatorFilter::containsWildcard(entry))
+        , m_stringMatcher(entry)
+        , m_wildcardMatcher(entry)
+    {}
+
+    HighlightInfo match(const QString &text) const
+    {
+        return m_useWildcard ? m_wildcardMatcher.match(text) : m_stringMatcher.match(text);
+    }
+
+private:
+    bool m_useWildcard;
+    StringMatcher m_stringMatcher;
+    WildcardMatcher m_wildcardMatcher;
+};
+
+
+class EntriesCollector
+{
+public:
+    using Entry = TypesLocator::Entry;
+
+    EntriesCollector(Core::ILocatorFilter *parent)
+        : m_parent(parent)
+    {}
+
+    void append(const Data::Node *node, const HighlightInfo &current, const HighlightInfo &parent)
+    {
+        if (current.startIndex < 0 && parent.startIndex < 0)
+            return;
+        const auto icon = node->valueFor<TreeViews::DecorationRoleVisitor>();
+        Entry entry(m_parent, node->name(), qVariantFromValue(node->location()), icon);
+        entry.extraInfo = node->parent()->name();
+        if (current.startIndex >= 0) {
+            entry.highlightInfo = current;
+            if (current.startIndex == 0)
+                m_betterEntries.append(entry);
+            else
+                m_goodEntries.append(entry);
+        } else {
+            entry.highlightInfo = parent;
+            entry.highlightInfo.dataType = HighlightInfo::ExtraInfo;
+            m_goodEntries.append(entry);
+        }
+    }
+
+    QList<Entry> entries() const { return m_betterEntries + m_goodEntries; }
+
+private:
+    Core::ILocatorFilter *m_parent;
+
+    QList<Entry> m_goodEntries;
+    QList<Entry> m_betterEntries;
+};
+
+
+} // namespace
+
+QList<TypesLocator::Entry> TypesLocator::matchesFor(QFutureInterface<Entry> &future,
+                                                    const QString &entry)
+{
+    const Matcher matcher(entry);
+    EntriesCollector collector(this);
+
+    for (const auto &project : ParsedDataStorage::instance()->root()->projects())
+        for (const auto &file : project->files())
+            for (const auto &defs : file->definitionsList())
+            {
+                if (future.isCanceled())
+                    return {};
+                const auto defsMatch = matcher.match(defs->name());
+                defs->forAllNodes([&](const Data::Node *node) {
+                    if (future.isCanceled())
+                        return;
+                    collector.append(node, matcher.match(node->name()), defsMatch);
+                });
+            }
+    return collector.entries();
 }
+

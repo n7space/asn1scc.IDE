@@ -66,6 +66,15 @@ public:
     const ImportedTypes &importedTypes() const { return m_importedTypes; }
     const ImportedVariables &importedVariables() const { return m_importedVariables; }
 
+    template <typename Functor>
+    void forAllNodes(Functor fun) const
+    {
+        for (const auto &type : types())
+            fun(type.get());
+        for (const auto &var : variables())
+            fun(var.get());
+    }
+
 private:
     Types m_types;
     Variables m_variables;
