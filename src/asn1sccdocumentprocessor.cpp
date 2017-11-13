@@ -33,20 +33,21 @@ Asn1SccDocumentProcessor *Asn1SccDocumentProcessor::create(const QString &projec
 {
     return new Asn1SccDocumentProcessor(projectName,
                                         [](const QHash<QString, QString> &documents)->ParsedDocumentBuilder *
-                                        { return Asn1SccParsedDocumentBuilder::create(documents); });
+                                        { return Asn1SccParsedDocumentBuilder::create(documents); },
+                                        ParsedDataStorage::instance());
 }
 
 Asn1SccDocumentProcessor::Asn1SccDocumentProcessor(const QString &projectName,
-                                                   DocumentBuilderCreator docBuilderCreator)
-    : m_projectName(projectName),
-      m_state(State::Unfinished),
-      m_docBuilder(nullptr),
-      m_docBuilderCreator(docBuilderCreator)
+                                                   DocumentBuilderCreator docBuilderCreator,
+                                                   ParsedDataStorage *storage)
+    : m_projectName(projectName)
+    , m_state(State::Unfinished)
+    , m_docBuilder(nullptr)
+    , m_docBuilderCreator(docBuilderCreator)
+    , m_storage(storage)
 {
-}
-
-Asn1SccDocumentProcessor::~Asn1SccDocumentProcessor()
-{
+    m_index = m_storage->getProjectBuildersCount(m_projectName) + 1;
+    m_storage->setProjectBuildersCount(m_projectName, m_index);
 }
 
 void Asn1SccDocumentProcessor::addToRun(const QString &filePath, const QString &docContent)
@@ -81,7 +82,7 @@ std::vector<std::unique_ptr<Data::File>> Asn1SccDocumentProcessor::takeResults()
 void Asn1SccDocumentProcessor::onBuilderFinished()
 {
     m_results = m_docBuilder->takeDocuments();
-    m_state = State::Successful;
+    setState(State::Successful);
 
     emit processingFinished(m_projectName);
 }
@@ -89,7 +90,7 @@ void Asn1SccDocumentProcessor::onBuilderFinished()
 void Asn1SccDocumentProcessor::onBuilderFailed()
 {
     createFallbackResults();
-    m_state = State::Failed;
+    setState(State::Failed);
 
     emit processingFinished(m_projectName);
 }
@@ -97,9 +98,17 @@ void Asn1SccDocumentProcessor::onBuilderFailed()
 void Asn1SccDocumentProcessor::onBuilderErrored()
 {
     createFallbackResults();
-    m_state = State::Errored;
+    setState(State::Errored);
 
     emit processingFinished(m_projectName);
+}
+
+void Asn1SccDocumentProcessor::setState(Asn1SccDocumentProcessor::State expected)
+{
+    if (m_index < m_storage->getProjectBuildersCount(m_projectName))
+        m_state = State::Outdated;
+    else
+        m_state = expected;
 }
 
 void Asn1SccDocumentProcessor::createFallbackResults()

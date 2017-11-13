@@ -24,6 +24,8 @@
 ****************************************************************************/
 #pragma once
 
+#include <memory>
+
 #include <QObject>
 #include <QSignalSpy>
 
@@ -47,6 +49,7 @@ private slots:
     void test_successful();
     void test_error();
     void test_failed();
+    void test_multipleProcessors();
 
 private:
     void examine(DocumentProcessor *dp,
@@ -59,6 +62,7 @@ private:
     const QString m_fileDir;
 
     Asn1SccDocumentProcessor::DocumentBuilderCreator m_docBuilderCreator;
+    std::unique_ptr<ParsedDataStorage> m_storage;
 };
 
 } // namespace Tests

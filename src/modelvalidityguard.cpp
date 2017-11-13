@@ -25,6 +25,8 @@
 
 #include "modelvalidityguard.h"
 
+#include "parseddatastorage.h"
+
 using namespace Asn1Acn::Internal;
 
 ModelValidityGuard *ModelValidityGuard::instance()
@@ -64,5 +66,6 @@ void ModelValidityGuard::validate()
             return;
     }
 
+    ParsedDataStorage::instance()->resetProjectBuildersCount();
     emit modelChanged();
 }

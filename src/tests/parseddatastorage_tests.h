@@ -28,7 +28,6 @@
 #include <QObject>
 
 #include <parseddatastorage.h>
-#include <parseddatastorageproxy.h>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -36,7 +35,6 @@ namespace Tests {
 
 class ParsedDataStorageTests
         : public QObject
-        , public ParsedDataStorageProxy
 {
     Q_OBJECT
 

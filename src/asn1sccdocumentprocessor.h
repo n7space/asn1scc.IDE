@@ -35,6 +35,7 @@
 
 #include "parseddocumentbuilder.h"
 #include "documentprocessor.h"
+#include "parseddatastorage.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -50,8 +51,9 @@ public:
 
     static Asn1SccDocumentProcessor *create(const QString &projectName);
 
-    Asn1SccDocumentProcessor(const QString &projectName, DocumentBuilderCreator docBuilderCreator);
-    ~Asn1SccDocumentProcessor();
+    Asn1SccDocumentProcessor(const QString &projectName,
+                             DocumentBuilderCreator docBuilderCreator,
+                             ParsedDataStorage *storage);
 
     void addToRun(const QString &filePath, const QString &docContent) override;
     void run() override;
@@ -67,15 +69,19 @@ private slots:
 
 private:
     void createFallbackResults();
+    void setState(Asn1SccDocumentProcessor::State expected);
 
     QHash<QString, QString> m_documents;
     QString m_projectName;
 
     std::vector<std::unique_ptr<Data::File>> m_results;
     State m_state;
+    int m_index;
 
     std::unique_ptr<ParsedDocumentBuilder> m_docBuilder;
     DocumentBuilderCreator m_docBuilderCreator;
+
+    ParsedDataStorage *m_storage;
 };
 
 } // namespace Internal

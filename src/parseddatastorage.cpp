@@ -114,6 +114,37 @@ const Data::TypeAssignment *ParsedDataStorage::getTypeAssignment(const QString &
     return definitions->type(typeAssignmentName);
 }
 
+int ParsedDataStorage::getProjectBuildersCount(const QString &projectName) const
+{
+    QMutexLocker locker(&m_documentsMutex);
+
+    const auto project = m_root->project(projectName);
+    if (project == nullptr)
+        return -1;
+
+    return project->buildersCount();
+}
+
+void ParsedDataStorage::setProjectBuildersCount(const QString &projectName, const int version) const
+{
+    QMutexLocker locker(&m_documentsMutex);
+
+    auto project = m_root->project(projectName);
+    if (project == nullptr)
+        return;
+
+    return project->setBuildersCount(version);
+}
+
+void ParsedDataStorage::resetProjectBuildersCount()
+{
+    QMutexLocker locker(&m_documentsMutex);
+
+    const auto &projects = m_root->projects();
+    for (const auto &project : projects)
+        project->setBuildersCount(0);
+}
+
 void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique_ptr<Data::File> file)
 {
     QMutexLocker locker(&m_documentsMutex);
@@ -122,12 +153,7 @@ void ParsedDataStorage::addFileToProject(const QString &projectName, std::unique
     if (project == nullptr)
         return;
 
-    QString filePath = file->location().path();
     project->add(std::move(file));
-
-    const Data::File *rawFile = getFileForPathInternal(filePath);
-
-    emit fileUpdated(filePath, rawFile);
 }
 
 void ParsedDataStorage::removeFileFromProject(const QString &projectName, const QString &filePath)
