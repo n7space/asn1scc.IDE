@@ -30,23 +30,30 @@
 
 namespace Asn1Acn {
 namespace Internal {
+
+namespace Data { class Node; }
+
 namespace Completion {
 
-class ImportFindingVisitor : public Data::VisitorWithValue<Data::TypeAssignment *>
+class ImportFindingVisitor : public Data::VisitorWithValue<Data::Node *>
 {
 public:
-    ImportFindingVisitor(const QString &module, const QString &type);
+    ImportFindingVisitor(const QString &module, const QString &import);
 
 private:
-    Data::TypeAssignment *valueFor(const Data::Root &root) const override;
-    Data::TypeAssignment *valueFor(const Data::Definitions &defs) const override;
-    Data::TypeAssignment *valueFor(const Data::File &file) const override;
-    Data::TypeAssignment *valueFor(const Data::TypeAssignment &type) const override;
-    Data::TypeAssignment *valueFor(const Data::VariableAssignment &variable) const override;
-    Data::TypeAssignment *valueFor(const Data::Project &project) const override;
+    Data::Node *valueFor(const Data::Root &root) const override;
+    Data::Node *valueFor(const Data::Definitions &defs) const override;
+    Data::Node *valueFor(const Data::File &file) const override;
+    Data::Node *valueFor(const Data::TypeAssignment &type) const override;
+    Data::Node *valueFor(const Data::VariableAssignment &variable) const override;
+    Data::Node *valueFor(const Data::Project &project) const override;
+
+    bool isVariable() const;
+    template <typename Collection>
+    Data::Node *findImportByName(const Collection &col) const;
 
     QString m_module;
-    QString m_type;
+    QString m_import;
 };
 
 } /* nameapsce Completion */

@@ -49,6 +49,7 @@ private:
     void appendInternalTypes(const Data::Definitions::Types &types);
 
     void appendInternalVariables(const Data::Definitions::Variables &variables);
+    void appendImportedVariables(const Data::Definitions::ImportedVariables &importedVariables);
 
     const Data::File *m_data;
 };

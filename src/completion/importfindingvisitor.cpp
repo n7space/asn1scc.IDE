@@ -32,13 +32,13 @@
 using namespace Asn1Acn::Internal::Completion;
 using namespace Asn1Acn::Internal::Data;
 
-ImportFindingVisitor::ImportFindingVisitor(const QString &module, const QString &type)
+ImportFindingVisitor::ImportFindingVisitor(const QString &module, const QString &import)
     : m_module(module)
-    , m_type(type)
+    , m_import(import)
 {
 }
 
-TypeAssignment *ImportFindingVisitor::valueFor(const Root &root) const
+Node *ImportFindingVisitor::valueFor(const Root &root) const
 {
     for (const auto &project : root.projects()) {
         const auto res = valueFor(*project);
@@ -48,35 +48,48 @@ TypeAssignment *ImportFindingVisitor::valueFor(const Root &root) const
     return nullptr;
 }
 
-TypeAssignment *ImportFindingVisitor::valueFor(const Definitions &defs) const
+Node *ImportFindingVisitor::valueFor(const Definitions &defs) const
 {
     if (defs.name() != m_module)
         return nullptr;
-    for (const auto &type : defs.types())
-        if (type->name() == m_type)
-            return type.get();
+    return isVariable()
+            ? findImportByName(defs.variables())
+            : findImportByName(defs.types());
+}
+
+bool ImportFindingVisitor::isVariable() const
+{
+    return m_import.size() > 0 && m_import[0].isLower();
+}
+
+template <typename Collection>
+Node *ImportFindingVisitor::findImportByName(const Collection &col) const
+{
+    for (const auto &element : col)
+        if (element->name() == m_import)
+            return element.get();
     return nullptr;
 }
 
-TypeAssignment *ImportFindingVisitor::valueFor(const File &file) const
+Node *ImportFindingVisitor::valueFor(const File &file) const
 {
     const auto defs = file.definitions(m_module);
     return defs == nullptr ? nullptr : valueFor(*defs);
 }
 
-TypeAssignment *ImportFindingVisitor::valueFor(const TypeAssignment &type) const
+Node *ImportFindingVisitor::valueFor(const TypeAssignment &type) const
 {
     Q_UNUSED(type);
     return nullptr;
 }
 
-TypeAssignment *ImportFindingVisitor::valueFor(const VariableAssignment &variable) const
+Node *ImportFindingVisitor::valueFor(const VariableAssignment &variable) const
 {
     Q_UNUSED(variable);
     return nullptr;
 }
 
-TypeAssignment *ImportFindingVisitor::valueFor(const Project &project) const
+Node *ImportFindingVisitor::valueFor(const Project &project) const
 {
     for (const auto &file : project.files()) {
         const auto res = valueFor(*file);

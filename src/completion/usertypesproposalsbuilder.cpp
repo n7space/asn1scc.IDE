@@ -44,6 +44,7 @@ void UserTypesProposalsBuilder::fillProposals()
     for (const auto &definitions : m_data->definitionsList()) {
         appendImportedTypes(definitions->importedTypes());
         appendInternalTypes(definitions->types());
+        appendImportedVariables(definitions->importedVariables());
         appendInternalVariables(definitions->variables());
     }
 }
@@ -69,4 +70,15 @@ void UserTypesProposalsBuilder::appendInternalVariables(const Data::Definitions:
 {
     for (const auto &variable : variables)
         addProposal(variable->name(), variable->valueFor<TreeViews::DecorationRoleVisitor>());
+}
+
+void UserTypesProposalsBuilder::appendImportedVariables(const Data::Definitions::ImportedVariables &importedVariables)
+{
+    const auto searchRoot = m_data->parent() != nullptr ? m_data->parent() : m_data;
+    static const auto defaultIcon = QIcon(":/codemodel/images/member.png");
+    foreach(const auto &importedVariable, importedVariables) {
+        const auto variableNode = searchRoot->valueFor<ImportFindingVisitor>(importedVariable.module(), importedVariable.name());
+        const auto icon = variableNode == nullptr ? defaultIcon : variableNode->valueFor<TreeViews::DecorationRoleVisitor>();
+        addProposal(importedVariable.name(), icon);
+    }
 }
