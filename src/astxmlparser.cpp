@@ -178,20 +178,27 @@ void AstXmlParser::readImportedModule()
         if (m_xmlReader.name() == QStringLiteral("ImportedTypes"))
             readImportedTypes(moduleName);
         else if (m_xmlReader.name() == QStringLiteral("ImportedVariables"))
-            readImportedVariables();
+            readImportedVariables(moduleName);
         else
             m_xmlReader.skipCurrentElement();
     }
 }
 
-void AstXmlParser::readImportedVariables()
+void AstXmlParser::readImportedVariables(const QString &moduleName)
 {
+    while (nextRequiredElementIs(QStringLiteral("ImportedVariable")))
+        readImportedVariable(moduleName);
+}
+
+void AstXmlParser::readImportedVariable(const QString &moduleName)
+{
+    m_currentDefinitions->addImportedVariables({moduleName, readNameAttribute()});
     m_xmlReader.skipCurrentElement();
 }
 
 void AstXmlParser::readImportedTypes(const QString &moduleName)
 {
-    while (nextRequiredElementIs("ImportedType"))
+    while (nextRequiredElementIs(QStringLiteral("ImportedType")))
         readImportedType(moduleName);
 }
 
