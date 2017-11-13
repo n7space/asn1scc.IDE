@@ -233,7 +233,7 @@
                 {
                     "source": "template.acn",
                     "target": "%{AcnTargetDirectory}/%{AcnFile}",
-                    "openInEditor": false,
+                    "openInEditor": true,
                     "condition": "%{AddAcnFile}"
                 },
                 {
