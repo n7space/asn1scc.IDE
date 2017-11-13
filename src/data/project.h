@@ -43,8 +43,6 @@ public:
 
     void accept(Visitor &visitor) const override;
 
-    const QString &name() const { return m_name; }
-
     void add(std::unique_ptr<File> file);
     void remove(const QString &path);
 
@@ -56,7 +54,6 @@ public:
     void setBuildersCount(const int buildersCount) { m_buildersCount = buildersCount; }
 
 private:
-    QString m_name;
     int m_buildersCount;
 
     Files m_files;

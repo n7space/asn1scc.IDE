@@ -49,8 +49,6 @@ public:
 
     void accept(Visitor &visitor) const override;
 
-    const QString &name() const { return m_name; }
-
     void addType(std::unique_ptr<TypeAssignment> type);
     void addVariable(std::unique_ptr<VariableAssignment> variable);
     void addImportedType(const ImportedType &type);
@@ -69,7 +67,6 @@ public:
     const ImportedVariables &importedVariables() const { return m_importedVariables; }
 
 private:
-    QString m_name;
     Types m_types;
     Variables m_variables;
     std::map<QString, TypeAssignment*> m_typeByNameMap;

@@ -32,7 +32,7 @@
 using namespace Asn1Acn::Internal::Data;
 
 Root::Root()
-    : Node({})
+    : Node("ROOT", {})
 {
 }
 

@@ -28,9 +28,10 @@
 
 using namespace Asn1Acn::Internal::Data;
 
-VariableAssignment::VariableAssignment(const QString &name, const SourceLocation &location, std::unique_ptr<Types::Type> type)
-    : Node(location)
-    , m_name(name)
+VariableAssignment::VariableAssignment(const QString &name,
+                                       const SourceLocation &location,
+                                       std::unique_ptr<Types::Type> type)
+    : Node(name, location)
     , m_type(std::move(type))
 {}
 

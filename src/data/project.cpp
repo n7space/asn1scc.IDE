@@ -29,8 +29,7 @@
 using namespace Asn1Acn::Internal::Data;
 
 Project::Project(const QString &projectName)
-    : Node({})
-    , m_name(projectName)
+    : Node(projectName, {})
     , m_buildersCount(0)
 {
 }

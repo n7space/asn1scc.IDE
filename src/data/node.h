@@ -24,6 +24,8 @@
 ****************************************************************************/
 #pragma once
 
+#include <QString>
+
 #include "sourcelocation.h"
 
 namespace Asn1Acn {
@@ -35,8 +37,10 @@ class Visitor;
 class Node
 {
 protected:
-    Node(const SourceLocation &location)
-        : m_location(location)
+    Node(const QString &name,
+         const SourceLocation &location)
+        : m_name(name)
+        , m_location(location)
         , m_parent(nullptr)
     {}
 
@@ -53,12 +57,14 @@ public:
         return visitor.value();
     }
 
+    const QString &name() const { return m_name; }
     const SourceLocation &location() const { return m_location; }
 
     Node *parent() const { return m_parent; }
     void setParent(Node *parent) { m_parent = parent; }
 
 private:
+    QString m_name;
     SourceLocation m_location;
     Node *m_parent;
 };
