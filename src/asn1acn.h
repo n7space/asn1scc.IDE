@@ -32,7 +32,7 @@
 #include <coreplugin/icontext.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 
-#include "component-importer/importcomponentdialog.h"
+#include "libraries/component-importer/importcomponentdialog.h"
 
 namespace Asn1Acn {
 namespace Internal {
