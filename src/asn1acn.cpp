@@ -26,11 +26,9 @@
 #include <QMenu>
 
 #include <coreplugin/icore.h>
-#include <coreplugin/icontext.h>
 #include <coreplugin/jsexpander.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/command.h>
-#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/coreconstants.h>
 
 #include <extensionsystem/pluginmanager.h>
@@ -144,50 +142,69 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     return true;
 }
 
-static void addToToolsMenu(Core::ActionContainer* container)
+void Asn1AcnPlugin::initializeMenus()
+{
+    auto toolsMenu = Core::ActionManager::createMenu(Constants::M_TOOLS_ASN);
+    auto contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
+
+    Context context(Constants::BASE_CONTEXT);
+
+    initializeSwitchActionMenu(toolsMenu, contextMenu, context);
+    initializeOpenInNextSplitActionMenu(toolsMenu, context);
+    initializeFollowSymbolActionMenu(toolsMenu, contextMenu);
+    initializeImportFromAsnComponents(toolsMenu);
+
+    addToToolsMenu(toolsMenu);
+}
+
+void Asn1AcnPlugin::initializeSwitchActionMenu(ActionContainer *toolsMenu,
+                                               ActionContainer *contextMenu,
+                                               const Context &context)
+{
+    QAction *switchAction = new QAction(tr("Switch Data/Encoding"), this);
+    Core::Command *command = Core::ActionManager::registerAction(switchAction, Constants::SWITCH_DATA_ENCODING, context, true);
+    command->setDefaultKeySequence(QKeySequence(Qt::Key_F4));
+    connect(switchAction, &QAction::triggered, []() { Tools::switchBetweenDataAndEncoding(); });
+    toolsMenu->addAction(command);
+    contextMenu->addAction(command);
+}
+
+void Asn1AcnPlugin::initializeFollowSymbolActionMenu(ActionContainer *toolsMenu, ActionContainer *contextMenu)
+{
+    Core::Command *command = Core::ActionManager::ActionManager::command(TextEditor::Constants::FOLLOW_SYMBOL_UNDER_CURSOR);
+    contextMenu->addAction(command);
+    toolsMenu->addAction(command);
+}
+
+void Asn1AcnPlugin::initializeOpenInNextSplitActionMenu(ActionContainer *toolsMenu, const Context &context)
+{
+    QAction *openInNextSplitAction = new QAction(tr("Open Corresponding Data/Encoding in Next Split"), this);
+    Core::Command *command = Core::ActionManager::registerAction(openInNextSplitAction, Constants::OPEN_DATA_ENCODING_IN_NEXT_SPLIT, context, true);
+    command->setDefaultKeySequence(QKeySequence(Utils::HostOsInfo::isMacHost() ? tr("Meta+E, F4") : tr("Ctrl+E, F4")));
+    connect(openInNextSplitAction, &QAction::triggered, []() { Tools::switchBetweenDataAndEncodingInNextSplit(); });
+    toolsMenu->addAction(command);
+}
+
+void Asn1AcnPlugin::initializeImportFromAsnComponents(ActionContainer *toolsMenu)
+{
+    toolsMenu->addSeparator();
+
+    QAction *importFromAsnComponents = new QAction(tr("Import from ASN.1 components library..."), this);
+    Core::Command *command = Core::ActionManager::registerAction(importFromAsnComponents, Constants::IMPORT_FROM_COMPONENTS_LIBRARY);
+    connect(importFromAsnComponents, &QAction::triggered, this, &Asn1AcnPlugin::raiseImportComponentWindow);
+    toolsMenu->addAction(command);
+    importFromAsnComponents->setEnabled(ProjectExplorer::SessionManager::hasProjects());
+    connect(ProjectExplorer::ProjectExplorerPlugin::instance(), &ProjectExplorer::ProjectExplorerPlugin::fileListChanged,
+            [importFromAsnComponents]() { importFromAsnComponents->setEnabled(ProjectExplorer::SessionManager::hasProjects()); });
+}
+
+void Asn1AcnPlugin::addToToolsMenu(ActionContainer *container)
 {
     auto toolsMenu = Core::ActionManager::actionContainer(Core::Constants::M_TOOLS);
     QMenu *menu = container->menu();
     menu->setTitle(Tr::tr("&ASN.1/ACN"));
     menu->setEnabled(true);
     toolsMenu->addMenu(container);
-}
-
-void Asn1AcnPlugin::initializeMenus()
-{
-    auto asnToolsMenu = Core::ActionManager::createMenu(Constants::M_TOOLS_ASN);
-    auto contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
-
-    Core::Context context(Constants::BASE_CONTEXT);
-
-    QAction *switchAction = new QAction(tr("Switch Data/Encoding"), this);
-    Core::Command *command = Core::ActionManager::registerAction(switchAction, Constants::SWITCH_DATA_ENCODING, context, true);
-    command->setDefaultKeySequence(QKeySequence(Qt::Key_F4));
-    connect(switchAction, &QAction::triggered, []() { Tools::switchBetweenDataAndEncoding(); });
-    asnToolsMenu->addAction(command);
-    contextMenu->addAction(command);
-
-    QAction *openInNextSplitAction = new QAction(tr("Open Corresponding Data/Encoding in Next Split"), this);
-    command = Core::ActionManager::registerAction(openInNextSplitAction, Constants::OPEN_DATA_ENCODING_IN_NEXT_SPLIT, context, true);
-    command->setDefaultKeySequence(QKeySequence(Utils::HostOsInfo::isMacHost() ? tr("Meta+E, F4") : tr("Ctrl+E, F4")));
-    connect(openInNextSplitAction, &QAction::triggered, []() { Tools::switchBetweenDataAndEncodingInNextSplit(); });
-    asnToolsMenu->addAction(command);
-
-    command = Core::ActionManager::ActionManager::command(TextEditor::Constants::FOLLOW_SYMBOL_UNDER_CURSOR);
-    contextMenu->addAction(command);
-    asnToolsMenu->addAction(command);
-
-
-    asnToolsMenu->addSeparator();
-    QAction *importFromAsnComponents = new QAction(tr("Import from ASN.1 components library..."), this);
-    command = Core::ActionManager::registerAction(importFromAsnComponents, Constants::IMPORT_FROM_COMPONENTS_LIBRARY);
-    connect(importFromAsnComponents, &QAction::triggered, this, &Asn1AcnPlugin::raiseImportComponentWindow);
-    asnToolsMenu->addAction(command);
-    importFromAsnComponents->setEnabled(ProjectExplorer::SessionManager::hasProjects());
-    connect(ProjectExplorer::ProjectExplorerPlugin::instance(), &ProjectExplorer::ProjectExplorerPlugin::fileListChanged,
-            [importFromAsnComponents]() { importFromAsnComponents->setEnabled(ProjectExplorer::SessionManager::hasProjects()); });
-
-    addToToolsMenu(asnToolsMenu);
 }
 
 void Asn1AcnPlugin::extensionsInitialized()
