@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Asn1Acn::Internal::ComponentImporter::ImportComponentDialog</class>
- <widget class="QDialog" name="Asn1Acn::Internal::ComponentImporter::ImportComponentDialog">
+ <class>Asn1Acn::Internal::Libraries::ImportComponentDialog</class>
+ <widget class="QDialog" name="Asn1Acn::Internal::Libraries::ImportComponentDialog">
   <property name="geometry">
    <rect>
     <x>0</x>

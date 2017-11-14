@@ -37,7 +37,7 @@
 
 namespace Asn1Acn {
 namespace Internal {
-namespace ComponentImporter {
+namespace Libraries {
 
 class ImportComponentDialog : public QDialog
 {
@@ -56,9 +56,9 @@ private:
     Ui::ImportComponentDialog m_ui;
     Settings::LibrariesConstPtr m_libraries;
 
-    static Importer m_importer;
+    static ComponentImporter m_importer;
 };
 
-} // namespace ComponentImporter
+} // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

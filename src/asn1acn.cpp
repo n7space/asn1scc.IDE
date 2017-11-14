@@ -227,7 +227,7 @@ void Asn1AcnPlugin::raiseImportComponentWindow()
     if (m_importComponentDialog) {
         Core::ICore::raiseWindow(m_importComponentDialog);
     } else {
-        m_importComponentDialog = new ComponentImporter::ImportComponentDialog(Core::ICore::mainWindow());
+        m_importComponentDialog = new Libraries::ImportComponentDialog(Core::ICore::mainWindow());
         m_importComponentDialog->show();
     }
 }

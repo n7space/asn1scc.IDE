@@ -29,9 +29,9 @@
 
 #include <coreplugin/icore.h>
 
-using namespace Asn1Acn::Internal::ComponentImporter;
+using namespace Asn1Acn::Internal::Libraries;
 
-Importer ImportComponentDialog::m_importer;
+ComponentImporter ImportComponentDialog::m_importer;
 
 ImportComponentDialog::ImportComponentDialog(QWidget *parent)
     : QDialog(parent)

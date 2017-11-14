@@ -30,9 +30,9 @@
 
 namespace Asn1Acn {
 namespace Internal {
-namespace ComponentImporter {
+namespace Libraries {
 
-class Importer
+class ComponentImporter
 {
 public:
     void importFromPath(const QString &directoryPath);
@@ -42,6 +42,6 @@ private:
     void addPathsToProject(const QStringList &paths);
 };
 
-} // namespace ComponentImporter
+} // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

@@ -33,15 +33,15 @@
 
 #include <utils/qtcassert.h>
 
-using namespace Asn1Acn::Internal::ComponentImporter;
+using namespace Asn1Acn::Internal::Libraries;
 
-void Importer::importFromPath(const QString &directoryPath)
+void ComponentImporter::importFromPath(const QString &directoryPath)
 {
     const auto paths = pathsInDirectory(directoryPath);
     addPathsToProject(paths);
 }
 
-QStringList Importer::pathsInDirectory(const QString &directoryPath)
+QStringList ComponentImporter::pathsInDirectory(const QString &directoryPath)
 {
     QDir dir(directoryPath);
     QTC_ASSERT(dir.exists() == true, return {});
@@ -59,7 +59,7 @@ QStringList Importer::pathsInDirectory(const QString &directoryPath)
     return paths;
 }
 
-void Importer::addPathsToProject(const QStringList &paths)
+void ComponentImporter::addPathsToProject(const QStringList &paths)
 {
     const auto project = ProjectExplorer::SessionManager::startupProject();
     if (project == nullptr)

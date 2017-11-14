@@ -32,7 +32,7 @@
 #include <coreplugin/icontext.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 
-#include "libraries/component-importer/importcomponentdialog.h"
+#include "libraries/importcomponentdialog.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -66,7 +66,7 @@ private:
 
     void addToToolsMenu(ActionContainer *container);
 
-    QPointer<ComponentImporter::ImportComponentDialog> m_importComponentDialog;
+    QPointer<Libraries::ImportComponentDialog> m_importComponentDialog;
 
 #ifdef WITH_TESTS   
     QList<QObject *> createTestObjects() const override;
