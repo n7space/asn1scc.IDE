@@ -23,42 +23,47 @@
 **
 ****************************************************************************/
 
-#pragma once
-
-#include <QDialog>
-
-#include <memory.h>
-
-#include "ui_import_component.h"
-
-#include <settings/libraries.h>
-
 #include "componentimporter.h"
 
-namespace Asn1Acn {
-namespace Internal {
-namespace ComponentImporter {
+#include <QDir>
 
-class ImportComponentDialog : public QDialog
+#include <projectexplorer/session.h>
+#include <projectexplorer/project.h>
+#include <projectexplorer/projectnodes.h>
+
+#include <utils/qtcassert.h>
+
+using namespace Asn1Acn::Internal::ComponentImporter;
+
+void Importer::importFromPath(const QString &directoryPath)
 {
-    Q_OBJECT
+    const auto paths = pathsInDirectory(directoryPath);
+    addPathsToProject(paths);
+}
 
-public:
-    explicit ImportComponentDialog(QWidget *parent = 0);
+QStringList Importer::pathsInDirectory(const QString &directoryPath)
+{
+    QDir dir(directoryPath);
+    QTC_ASSERT(dir.exists() == true, return {});
 
-private slots:
-    void accept() override;
+    QStringList filters;
+    filters << "*.asn" << "*.asn1" << "*.acn";
+    dir.setNameFilters(filters);
 
-    void refreshPaths();
-    void builtInRadioToggled(bool checked);
+    const auto names = dir.entryList();
 
-private:
-    Ui::ImportComponentDialog m_ui;
-    Settings::LibrariesConstPtr m_libraries;
+    QStringList paths;
+    for (const auto &name : names)
+        paths << dir.filePath(name);
 
-    static Importer m_importer;
-};
+    return paths;
+}
 
-} // namespace ComponentImporter
-} // namespace Internal
-} // namespace Asn1Acn
+void Importer::addPathsToProject(const QStringList &paths)
+{
+    const auto project = ProjectExplorer::SessionManager::startupProject();
+    if (project == nullptr)
+        return;
+
+    project->rootProjectNode()->addFiles(paths);
+}

@@ -26,17 +26,12 @@
 #include "importcomponentdialog.h"
 
 #include <QWidget>
-#include <QDir>
 
 #include <coreplugin/icore.h>
 
-#include <utils/qtcassert.h>
-
-#include <projectexplorer/session.h>
-#include <projectexplorer/project.h>
-#include <projectexplorer/projectnodes.h>
-
 using namespace Asn1Acn::Internal::ComponentImporter;
+
+Importer ImportComponentDialog::m_importer;
 
 ImportComponentDialog::ImportComponentDialog(QWidget *parent)
     : QDialog(parent)
@@ -81,43 +76,9 @@ void ImportComponentDialog::builtInRadioToggled(bool checked)
 void ImportComponentDialog::accept()
 {
     if (m_ui.builtInRadio->isChecked())
-        addFilesFromDirectory(m_ui.builtInCombo->currentText());
+        m_importer.importFromPath(m_ui.builtInCombo->currentText());
     else if (m_ui.customRadio->isChecked())
-        addFilesFromDirectory(m_ui.asn1sccPathChooser->path());
+        m_importer.importFromPath(m_ui.asn1sccPathChooser->path());
 
     QDialog::accept();
 }
-
-void ImportComponentDialog::addFilesFromDirectory(const QString &directoryPath)
-{
-    const auto paths = pathsInDirectory(directoryPath);
-    addPathsToProject(paths);
-}
-
-QStringList ImportComponentDialog::pathsInDirectory(const QString &directoryPath)
-{
-    QDir dir(directoryPath);
-    QTC_ASSERT(dir.exists() == true, return {});
-
-    QStringList filters;
-    filters << "*.asn" << "*.asn1" << "*.acn";
-    dir.setNameFilters(filters);
-
-    const auto names = dir.entryList();
-
-    QStringList paths;
-    for (const auto &name : names)
-        paths << dir.filePath(name);
-
-    return paths;
-}
-
-void ImportComponentDialog::addPathsToProject(const QStringList &paths)
-{
-    const auto project = ProjectExplorer::SessionManager::startupProject();
-    if (project == nullptr)
-        return;
-
-    project->rootProjectNode()->addFiles(paths);
-}
-

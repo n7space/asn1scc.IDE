@@ -25,38 +25,21 @@
 
 #pragma once
 
-#include <QDialog>
-
-#include <memory.h>
-
-#include "ui_import_component.h"
-
-#include <settings/libraries.h>
-
-#include "componentimporter.h"
+#include <QString>
+#include <QStringList>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace ComponentImporter {
 
-class ImportComponentDialog : public QDialog
+class Importer
 {
-    Q_OBJECT
-
 public:
-    explicit ImportComponentDialog(QWidget *parent = 0);
-
-private slots:
-    void accept() override;
-
-    void refreshPaths();
-    void builtInRadioToggled(bool checked);
+    void importFromPath(const QString &directoryPath);
 
 private:
-    Ui::ImportComponentDialog m_ui;
-    Settings::LibrariesConstPtr m_libraries;
-
-    static Importer m_importer;
+    QStringList pathsInDirectory(const QString &directoryPath);
+    void addPathsToProject(const QStringList &paths);
 };
 
 } // namespace ComponentImporter
