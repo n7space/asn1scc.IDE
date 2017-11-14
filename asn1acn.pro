@@ -128,6 +128,8 @@ SOURCES += \
     libraries/modulemetadataparser.cpp \
     libraries/generalmetadataparser.cpp \
     \
+    component-importer\importcomponentdialog.cpp \
+    \
     asn1acn.cpp \
     asneditor.cpp \
     asndocument.cpp \
@@ -238,6 +240,8 @@ HEADERS += \
     libraries/metadata/module.h \
     libraries/metadata/general.h \
     \
+    component-importer/importcomponentdialog.h \
+    \
     asn1acn_global.h \
     asn1acnconstants.h \
     asn1acn.h \
@@ -271,10 +275,13 @@ HEADERS += \
     modelvalidityguard.h \
     outlinerootupdater.h
 
+
 FORMS += \
     options-pages/general.ui \
     options-pages/service.ui \
-    options-pages/libraries.ui
+    options-pages/libraries.ui \
+    \
+    component-importer/import_component.ui
 
 RESOURCES += \
     asn1acn.qrc

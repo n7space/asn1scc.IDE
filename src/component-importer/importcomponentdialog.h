@@ -25,40 +25,40 @@
 
 #pragma once
 
-#include "asn1acn_global.h"
+#include <QDialog>
 
-#include <extensionsystem/iplugin.h>
+#include <memory.h>
 
-#include "component-importer/importcomponentdialog.h"
+#include "ui_import_component.h"
+
+#include <settings/libraries.h>
 
 namespace Asn1Acn {
 namespace Internal {
+namespace ComponentImporter {
 
-class Asn1AcnPlugin : public ExtensionSystem::IPlugin
+class ImportComponentDialog : public QDialog
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QtCreatorPlugin" FILE "Asn1Acn.json")
 
 public:
-    Asn1AcnPlugin();
-    ~Asn1AcnPlugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString) override;
-    void extensionsInitialized() override;
-    ShutdownFlag aboutToShutdown() override;
+    explicit ImportComponentDialog(QWidget *parent = 0);
 
 private slots:
-    void raiseImportComponentWindow();
+    void accept() override;
+
+    void refreshPaths();
+    void builtInRadioToggled(bool checked);
 
 private:
-    void initializeMenus();
+    void addFilesFromDirectory(const QString &directoryPath);
+    QStringList pathsInDirectory(const QString &directoryPath);
+    void addPathsToProject(const QStringList &paths);
 
-    QPointer<ComponentImporter::ImportComponentDialog> m_importComponentDialog;
-
-#ifdef WITH_TESTS   
-    QList<QObject *> createTestObjects() const override;
-#endif
+    Ui::ImportComponentDialog m_ui;
+    Settings::LibrariesConstPtr m_libraries;
 };
 
+} // namespace ComponentImporter
 } // namespace Internal
 } // namespace Asn1Acn

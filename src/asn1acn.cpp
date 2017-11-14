@@ -35,6 +35,9 @@
 
 #include <extensionsystem/pluginmanager.h>
 
+#include <projectexplorer/projectexplorer.h>
+#include <projectexplorer/session.h>
+
 #include <texteditor/texteditorconstants.h>
 
 #include "completion/asnsnippets.h"
@@ -180,6 +183,9 @@ void Asn1AcnPlugin::initializeMenus()
     command = Core::ActionManager::registerAction(importFromAsnComponents, Constants::IMPORT_FROM_COMPONENTS_LIBRARY);
     connect(importFromAsnComponents, &QAction::triggered, this, &Asn1AcnPlugin::raiseImportComponentWindow);
     asnToolsMenu->addAction(command);
+    importFromAsnComponents->setEnabled(ProjectExplorer::SessionManager::hasProjects());
+    connect(ProjectExplorer::ProjectExplorerPlugin::instance(), &ProjectExplorer::ProjectExplorerPlugin::fileListChanged,
+            [importFromAsnComponents]() { importFromAsnComponents->setEnabled(ProjectExplorer::SessionManager::hasProjects()); });
 
     addToToolsMenu(asnToolsMenu);
 }
@@ -201,7 +207,12 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
 
 void Asn1AcnPlugin::raiseImportComponentWindow()
 {
-
+    if (m_importComponentDialog) {
+        Core::ICore::raiseWindow(m_importComponentDialog);
+    } else {
+        m_importComponentDialog = new ComponentImporter::ImportComponentDialog(Core::ICore::mainWindow());
+        m_importComponentDialog->show();
+    }
 }
 
 #ifdef WITH_TESTS
