@@ -42,6 +42,7 @@ ImportComponentDialog::ImportComponentDialog(QWidget *parent)
     setAttribute(Qt::WA_DeleteOnClose);
     connect(Core::ICore::instance(), &Core::ICore::coreAboutToClose, this, &QWidget::close);
 
+    // TODO: signal Settings::Libraries::changed is never emitted.
     connect(m_libraries.get(), &Settings::Libraries::changed, this, &ImportComponentDialog::refreshPaths);
     connect(m_ui.builtInRadio, &QRadioButton::toggled, this, &ImportComponentDialog::builtInRadioToggled);
 
