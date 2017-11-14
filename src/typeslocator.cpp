@@ -68,7 +68,15 @@ namespace {
 
 using HighlightInfo = Core::LocatorFilterEntry::HighlightInfo;
 
-class StringMatcher
+class Matcher
+{
+public:
+    virtual ~Matcher() {}
+    virtual HighlightInfo match(const QString &text) const = 0;
+};
+
+
+class StringMatcher : public Matcher
 {
 public:
     StringMatcher(const QString &entry)
@@ -76,7 +84,7 @@ public:
         , m_length(entry.length())
     {}
 
-    HighlightInfo match(const QString &text) const
+    HighlightInfo match(const QString &text) const override
     {
         const auto index = m_matcher.indexIn(text);
         return { index, m_length };
@@ -87,14 +95,14 @@ private:
     const int m_length;
 };
 
-class WildcardMatcher
+class WildcardMatcher : public Matcher
 {
 public:
     WildcardMatcher(const QString &entry)
         : m_matcher(entry, Core::ILocatorFilter::caseSensitivity(entry), QRegExp::Wildcard)
     {}
 
-    HighlightInfo match(const QString &text) const
+    HighlightInfo match(const QString &text) const override
     {
         const auto index = m_matcher.indexIn(text);
         return { index, m_matcher.matchedLength() };
@@ -104,26 +112,12 @@ private:
     QRegExp m_matcher;
 };
 
-class Matcher
+std::unique_ptr<Matcher> makeMatcher(const QString &entry)
 {
-public:
-    Matcher(const QString &entry)
-        : m_useWildcard(Core::ILocatorFilter::containsWildcard(entry))
-        , m_stringMatcher(entry)
-        , m_wildcardMatcher(entry)
-    {}
-
-    HighlightInfo match(const QString &text) const
-    {
-        return m_useWildcard ? m_wildcardMatcher.match(text) : m_stringMatcher.match(text);
-    }
-
-private:
-    bool m_useWildcard;
-    StringMatcher m_stringMatcher;
-    WildcardMatcher m_wildcardMatcher;
-};
-
+    if (Core::ILocatorFilter::containsWildcard(entry))
+        return std::make_unique<WildcardMatcher>(entry);
+    return std::make_unique<StringMatcher>(entry);
+}
 
 class EntriesCollector
 {
@@ -138,25 +132,34 @@ public:
     {
         if (current.startIndex < 0 && parent.startIndex < 0)
             return;
-        const auto icon = node->valueFor<TreeViews::DecorationRoleVisitor>();
-        Entry entry(m_parent, node->name(), qVariantFromValue(node->location()), icon);
-        entry.extraInfo = node->parent()->name();
-        if (current.startIndex >= 0) {
-            entry.highlightInfo = current;
-            if (current.startIndex == 0)
-                m_betterEntries.append(entry);
-            else
-                m_goodEntries.append(entry);
-        } else {
-            entry.highlightInfo = parent;
-            entry.highlightInfo.dataType = HighlightInfo::ExtraInfo;
-            m_goodEntries.append(entry);
-        }
+        auto entry = buildEntry(node);
+        entry.highlightInfo = selectHighlight(current, parent);
+        selectEntries(current).append(entry);
     }
 
     QList<Entry> entries() const { return m_betterEntries + m_goodEntries; }
 
 private:
+    Entry buildEntry(const Data::Node *node)
+    {
+        const auto icon = node->valueFor<TreeViews::DecorationRoleVisitor>();
+        Entry entry(m_parent, node->name(), qVariantFromValue(node->location()), icon);
+        entry.extraInfo = node->parent()->name();
+        return entry;
+    }
+
+    QList<Entry> &selectEntries(const HighlightInfo &current)
+    {
+        return (current.startIndex == 0) ? m_betterEntries : m_goodEntries;
+    }
+
+    HighlightInfo selectHighlight(const HighlightInfo &current, const HighlightInfo &parent)
+    {
+        return (current.startIndex >= 0)
+                ? current
+                : HighlightInfo{ parent.startIndex, parent.length, HighlightInfo::ExtraInfo };
+    }
+
     Core::ILocatorFilter *m_parent;
 
     QList<Entry> m_goodEntries;
@@ -169,7 +172,7 @@ private:
 QList<TypesLocator::Entry> TypesLocator::matchesFor(QFutureInterface<Entry> &future,
                                                     const QString &entry)
 {
-    const Matcher matcher(entry);
+    const auto matcher = makeMatcher(entry);
     EntriesCollector collector(this);
 
     for (const auto &project : ParsedDataStorage::instance()->root()->projects())
@@ -177,12 +180,12 @@ QList<TypesLocator::Entry> TypesLocator::matchesFor(QFutureInterface<Entry> &fut
             for (const auto &defs : file->definitionsList())
             {
                 if (future.isCanceled())
-                    return {};
-                const auto defsMatch = matcher.match(defs->name());
+                    return collector.entries();
+                const auto defsMatch = matcher->match(defs->name());
                 defs->forAllNodes([&](const Data::Node *node) {
                     if (future.isCanceled())
                         return;
-                    collector.append(node, matcher.match(node->name()), defsMatch);
+                    collector.append(node, matcher->match(node->name()), defsMatch);
                 });
             }
     return collector.entries();
