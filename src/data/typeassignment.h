@@ -39,16 +39,16 @@ namespace Data {
 class TypeAssignment : public Node
 {
 public:
-    TypeAssignment(const QString &name, const SourceLocation &location, std::unique_ptr<Types::Type> type);
+    TypeAssignment(const QString &name,
+                   const SourceLocation &location,
+                   std::unique_ptr<Types::Type> type);
     ~TypeAssignment() override;
 
     void accept(Visitor &visitor) const override;
 
-    const QString &name() const { return m_name; }
     const Types::Type *type() const { return m_type.get(); }
 
 private:
-    QString m_name;
     std::unique_ptr<Types::Type> m_type;
 };
 

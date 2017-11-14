@@ -29,7 +29,7 @@
 using namespace Asn1Acn::Internal::Data;
 
 File::File(const QString &path)
-    : Node({path, 0, 0})
+    : Node(path, {path, 0, 0})
 {
 }
 

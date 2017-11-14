@@ -29,8 +29,7 @@
 using namespace Asn1Acn::Internal::Data;
 
 Definitions::Definitions(const QString &name, const SourceLocation &location)
-    : Node(location)
-    , m_name(name)
+    : Node(name, location)
 {}
 
 Definitions::~Definitions()

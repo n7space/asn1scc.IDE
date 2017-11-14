@@ -26,6 +26,7 @@
 #pragma once
 
 #include <QString>
+#include <QMetaType>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -61,3 +62,5 @@ bool operator!=(const SourceLocation &a, const SourceLocation &b);
 } // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn
+
+Q_DECLARE_METATYPE(Asn1Acn::Internal::Data::SourceLocation)

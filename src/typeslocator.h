@@ -46,9 +46,6 @@ public:
     void refresh(QFutureInterface<void> &future) override;
 
     QList<Entry> matchesFor(QFutureInterface<Entry> &future, const QString &entry) override;
-
-private:
-    QStringList createProjectList();
 };
 
 } /* namespace Asn1Acn */
