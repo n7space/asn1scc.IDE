@@ -54,6 +54,7 @@
 #include "tree-views/typestreewidget.h"
 
 #include "libraries/componentdirectorywatcher.h"
+#include "libraries/componentlibrarydispatcher.h"
 
 #include "asneditor.h"
 #include "acneditor.h"
@@ -130,7 +131,9 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new TypesLocator);
 
-    addAutoReleasedObject(new Libraries::ComponentDirectoryWatcher(librariesSettings));
+    const auto directoryWatcher = new Libraries::ComponentDirectoryWatcher(librariesSettings,
+                                                                           std::make_unique<Libraries::CompontentLibraryDispatcher>());
+    addAutoReleasedObject(directoryWatcher);
 
     Completion::AsnSnippets::registerGroup();
     Completion::AcnSnippets::registerGroup();

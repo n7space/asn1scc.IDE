@@ -22,51 +22,34 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <memory.h>
-
 #include <QObject>
-#include <QTimer>
-#include <QFileSystemWatcher>
+#include <QString>
 
-#include <settings/libraries.h>
-
-#include "componentlibrarydispatcher.h"
+#include <filesourcereader.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 
-class ComponentDirectoryWatcher : public QObject
+class ComponentLibraryProcessor : public QObject
 {
     Q_OBJECT
 
 public:
-    ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries,
-                              std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
+    ComponentLibraryProcessor(const QString &path,
+                              const QStringList &files,
+                              const FileSourceReader &reader,
                               QObject *parent = nullptr);
-
-private slots:
-    void configChanged();
-    void filesChanged(const QString &path);
-
-    void resetWatch();
+    void process();
 
 private:
-    void addAllLibraries();
-    void addMainDirectory(const QString &path);
-    void addSubDirectory(const QString &path);
-    void removeAll();
+    const FileSourceReader m_reader;
 
-    std::unique_ptr<QFileSystemWatcher> m_fsWatcher;
-    std::unique_ptr<CompontentLibraryDispatcher> m_dispatcher;
-    Settings::LibrariesConstPtr m_libraries;
-
-    QTimer m_resetWatch;
+    const QString m_path;
+    const QStringList m_files;
 };
-
 
 } // namespace Libraries
 } // namespace Internal

@@ -31,18 +31,21 @@ using namespace Asn1Acn::Internal::Libraries;
 
 static const int WAIT_TIMEOUT_MS = 2000;
 
-ComponentDirectoryWatcher::ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries, QObject *parent)
+ComponentDirectoryWatcher::ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries,
+                                                     std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
+                                                     QObject *parent)
     : QObject(parent)
     , m_fsWatcher(std::make_unique<QFileSystemWatcher>())
+    , m_dispatcher(std::move(dispatcher))
     , m_libraries(libraries)
 {
-    addAllLibraries();
+    resetWatch();
 
     m_resetWatch.setInterval(WAIT_TIMEOUT_MS);
     m_resetWatch.setSingleShot(true);
 
     connect(&m_resetWatch, &QTimer::timeout,
-            this, &ComponentDirectoryWatcher::onResetWatchTimeout, Qt::UniqueConnection);
+            this, &ComponentDirectoryWatcher::resetWatch, Qt::UniqueConnection);
 
     connect(m_fsWatcher.get(), &QFileSystemWatcher::fileChanged,
             this, &ComponentDirectoryWatcher::filesChanged, Qt::UniqueConnection);
@@ -63,10 +66,12 @@ void ComponentDirectoryWatcher::filesChanged(const QString &path)
     m_resetWatch.start();
 }
 
-void ComponentDirectoryWatcher::onResetWatchTimeout()
+void ComponentDirectoryWatcher::resetWatch()
 {
     removeAll();
     addAllLibraries();
+
+    m_dispatcher->dispatch(m_libraries->detectedLibPaths() + m_libraries->manualLibPaths(), m_fsWatcher->files());
 }
 
 void ComponentDirectoryWatcher::addAllLibraries()
@@ -104,6 +109,11 @@ void ComponentDirectoryWatcher::addSubDirectory(const QString &path)
 
 void ComponentDirectoryWatcher::removeAll()
 {
-    m_fsWatcher->removePaths(m_fsWatcher->directories());
-    m_fsWatcher->removePaths( m_fsWatcher->files());
+    const auto directories = m_fsWatcher->directories();
+    if (!directories.empty())
+        m_fsWatcher->removePaths(directories);
+
+    const auto files = m_fsWatcher->files();
+    if (!files.empty())
+        m_fsWatcher->removePaths(files);
 }

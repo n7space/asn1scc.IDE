@@ -130,6 +130,8 @@ SOURCES += \
     libraries/importcomponentdialog.cpp \
     libraries/componentimporter.cpp \
     libraries/componentdirectorywatcher.cpp \
+    libraries/componentlibraryprocessor.cpp \
+    libraries/componentlibrarydispatcher.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -237,6 +239,8 @@ HEADERS += \
     libraries/importcomponentdialog.h \
     libraries/componentimporter.h \
     libraries/componentdirectorywatcher.h \
+    libraries/componentlibraryprocessor.h \
+    libraries/componentlibrarydispatcher.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/import.h \

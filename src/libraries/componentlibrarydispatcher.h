@@ -25,48 +25,20 @@
 
 #pragma once
 
-#include <memory.h>
-
 #include <QObject>
-#include <QTimer>
-#include <QFileSystemWatcher>
-
-#include <settings/libraries.h>
-
-#include "componentlibrarydispatcher.h"
+#include <QStringList>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 
-class ComponentDirectoryWatcher : public QObject
+class CompontentLibraryDispatcher : public QObject
 {
     Q_OBJECT
 
-public:
-    ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries,
-                              std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
-                              QObject *parent = nullptr);
-
-private slots:
-    void configChanged();
-    void filesChanged(const QString &path);
-
-    void resetWatch();
-
-private:
-    void addAllLibraries();
-    void addMainDirectory(const QString &path);
-    void addSubDirectory(const QString &path);
-    void removeAll();
-
-    std::unique_ptr<QFileSystemWatcher> m_fsWatcher;
-    std::unique_ptr<CompontentLibraryDispatcher> m_dispatcher;
-    Settings::LibrariesConstPtr m_libraries;
-
-    QTimer m_resetWatch;
+public slots:
+    void dispatch(const QStringList &librariesDirectory, const QStringList &metadataFiles) const;
 };
-
 
 } // namespace Libraries
 } // namespace Internal

@@ -23,51 +23,21 @@
 **
 ****************************************************************************/
 
-#pragma once
-
-#include <memory.h>
-
-#include <QObject>
-#include <QTimer>
-#include <QFileSystemWatcher>
-
-#include <settings/libraries.h>
-
 #include "componentlibrarydispatcher.h"
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Libraries {
+#include "componentlibraryprocessor.h"
 
-class ComponentDirectoryWatcher : public QObject
+#include "filesourcereader.h"
+
+using namespace Asn1Acn::Internal::Libraries;
+
+void CompontentLibraryDispatcher::dispatch(const QStringList &directories, const QStringList &files) const
 {
-    Q_OBJECT
+    static const FileSourceReader reader;
 
-public:
-    ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries,
-                              std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
-                              QObject *parent = nullptr);
-
-private slots:
-    void configChanged();
-    void filesChanged(const QString &path);
-
-    void resetWatch();
-
-private:
-    void addAllLibraries();
-    void addMainDirectory(const QString &path);
-    void addSubDirectory(const QString &path);
-    void removeAll();
-
-    std::unique_ptr<QFileSystemWatcher> m_fsWatcher;
-    std::unique_ptr<CompontentLibraryDispatcher> m_dispatcher;
-    Settings::LibrariesConstPtr m_libraries;
-
-    QTimer m_resetWatch;
-};
-
-
-} // namespace Libraries
-} // namespace Internal
-} // namespace Asn1Acn
+    for (const auto &directory : directories) {
+        const auto filesInDirectory = files.filter(directory);
+        const auto processor = new ComponentLibraryProcessor(directory, filesInDirectory, reader);
+        processor->process();
+    }
+}
