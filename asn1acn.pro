@@ -129,6 +129,7 @@ SOURCES += \
     libraries/generalmetadataparser.cpp \
     libraries/importcomponentdialog.cpp \
     libraries/componentimporter.cpp \
+    libraries/componentdirectorywatcher.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -233,15 +234,15 @@ HEADERS += \
     \
     libraries/modulemetadataparser.h \
     libraries/generalmetadataparser.h \
+    libraries/importcomponentdialog.h \
+    libraries/componentimporter.h \
+    libraries/componentdirectorywatcher.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/import.h \
     libraries/metadata/submodule.h \
     libraries/metadata/module.h \
     libraries/metadata/general.h \
-    \
-    libraries/importcomponentdialog.h \
-    libraries/componentimporter.h \
     \
     asn1acn_global.h \
     asn1acnconstants.h \

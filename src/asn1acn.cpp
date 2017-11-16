@@ -53,6 +53,8 @@
 #include "tree-views/outlinewidget.h"
 #include "tree-views/typestreewidget.h"
 
+#include "libraries/componentdirectorywatcher.h"
+
 #include "asneditor.h"
 #include "acneditor.h"
 #include "projectwatcher.h"
@@ -127,6 +129,8 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(new OptionsPages::Libraries(librariesSettings));
 
     addAutoReleasedObject(new TypesLocator);
+
+    addAutoReleasedObject(new Libraries::ComponentDirectoryWatcher(librariesSettings));
 
     Completion::AsnSnippets::registerGroup();
     Completion::AcnSnippets::registerGroup();
