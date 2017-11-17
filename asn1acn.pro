@@ -132,6 +132,7 @@ SOURCES += \
     libraries/componentdirectorywatcher.cpp \
     libraries/componentlibraryprocessor.cpp \
     libraries/componentlibrarydispatcher.cpp \
+    libraries/librarystorage.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -241,11 +242,13 @@ HEADERS += \
     libraries/componentdirectorywatcher.h \
     libraries/componentlibraryprocessor.h \
     libraries/componentlibrarydispatcher.h \
+    libraries/librarystorage.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/import.h \
     libraries/metadata/submodule.h \
     libraries/metadata/module.h \
+    libraries/metadata/library.h \
     libraries/metadata/general.h \
     \
     asn1acn_global.h \

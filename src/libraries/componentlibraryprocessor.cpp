@@ -25,6 +25,11 @@
 
 #include "componentlibraryprocessor.h"
 
+#include <memory>
+
+#include "metadata/library.h"
+
+#include "librarystorage.h"
 #include "modulemetadataparser.h"
 
 using namespace Asn1Acn::Internal::Libraries;
@@ -42,25 +47,23 @@ ComponentLibraryProcessor::ComponentLibraryProcessor(const QString &path,
 
 void ComponentLibraryProcessor::process()
 {
-    QList<Metadata::Module> res;
+    auto library = std::make_unique<Metadata::Library>(m_path);
 
     for (const auto &file : m_files) {
-
         const auto content = m_reader.readContent(file);
         ModuleMetadataParser parser(content.toLatin1());
 
         try {
             const auto module = parser.parse();
-            res.append(module);
+            library->addModule(module);
         }
         catch (const ModuleMetadataParser::Error &err) {
             Q_UNUSED(err);
-            // TODO: notify that m_path failed, so it could be removed from storage.
-            break;
+            return;
         }
     }
 
-    // TODO: add res to storage.
+    LibraryStorage::instance()->addLibrary(std::move(library));
 
     this->deleteLater();
 }

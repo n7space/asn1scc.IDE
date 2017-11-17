@@ -23,51 +23,44 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "librarystorage.h"
 
-#include <memory>
+using namespace Asn1Acn::Internal::Libraries;
 
-#include <QObject>
-#include <QTimer>
-#include <QFileSystemWatcher>
-
-#include <settings/libraries.h>
-
-#include "componentlibrarydispatcher.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace Libraries {
-
-class ComponentDirectoryWatcher : public QObject
+LibraryStorage *LibraryStorage::instance()
 {
-    Q_OBJECT
+    static LibraryStorage instance_;
+    return &instance_;
+}
 
-public:
-    ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries,
-                              std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
-                              QObject *parent = nullptr);
+void LibraryStorage::addLibrary(LibraryPtr library)
+{
+    emit aboutToChange();
 
-private slots:
-    void configChanged();
-    void filesChanged(const QString &path);
+    m_libraries.push_back(std::move(library));
 
-    void resetWatch();
+    emit changed();
+}
 
-private:
-    void addAllLibraries();
-    void addMainDirectory(const QString &path);
-    void addSubDirectory(const QString &path);
-    void removeAll();
+void LibraryStorage::removeLibraries()
+{
+    emit aboutToChange();
 
-    std::unique_ptr<QFileSystemWatcher> m_fsWatcher;
-    std::unique_ptr<CompontentLibraryDispatcher> m_dispatcher;
-    Settings::LibrariesConstPtr m_libraries;
+    m_libraries.clear();
 
-    QTimer m_resetWatch;
-};
+    emit changed();
+}
 
+const std::vector<LibraryStorage::LibraryPtr> &LibraryStorage::libraries() const
+{
+    return m_libraries;
+}
 
-} // namespace Libraries
-} // namespace Internal
-} // namespace Asn1Acn
+const Metadata::Library *LibraryStorage::library(const QString &path) const
+{
+    for (const auto &library : m_libraries)
+        if (library->name() == path)
+            return library.get();
+
+    return nullptr;
+}

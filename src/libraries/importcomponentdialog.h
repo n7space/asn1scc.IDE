@@ -27,7 +27,7 @@
 
 #include <QDialog>
 
-#include <memory.h>
+#include <memory>
 
 #include "ui_import_component.h"
 

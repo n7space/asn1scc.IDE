@@ -27,6 +27,8 @@
 
 #include <QDir>
 
+#include "librarystorage.h"
+
 using namespace Asn1Acn::Internal::Libraries;
 
 static const int WAIT_TIMEOUT_MS = 2000;
@@ -71,6 +73,8 @@ void ComponentDirectoryWatcher::resetWatch()
     removeAll();
     addAllLibraries();
 
+    LibraryStorage::instance()->removeLibraries();
+
     m_dispatcher->dispatch(m_libraries->detectedLibPaths() + m_libraries->manualLibPaths(), m_fsWatcher->files());
 }
 
@@ -103,8 +107,8 @@ void ComponentDirectoryWatcher::addSubDirectory(const QString &path)
 
     m_fsWatcher->addPath(path);
 
-    if (dir.exists(QStringLiteral("metadata.json")))
-        m_fsWatcher->addPath(path + QStringLiteral("/metadata.json"));
+    if (dir.exists(QStringLiteral("meta.json")))
+        m_fsWatcher->addPath(path + QStringLiteral("/meta.json"));
 }
 
 void ComponentDirectoryWatcher::removeAll()
