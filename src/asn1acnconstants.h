@@ -64,6 +64,7 @@ const char ACN_SNIPPETS_GROUP_ID[] = "ACN";
 const char M_TOOLS_ASN[]                      = "Asn1Acn.Tools.Menu";
 const char SWITCH_DATA_ENCODING[]             = "Asn1Acn.SwitchDataEncoding";
 const char OPEN_DATA_ENCODING_IN_NEXT_SPLIT[] = "Asn1Acn.SwitchDataEncodingInNextSplit";
+const char IMPORT_FROM_COMPONENTS_LIBRARY[]   = "Asn1Acn.ImportFromComponentsLibrary";
 
 // Icons
 

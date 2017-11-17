@@ -29,6 +29,11 @@
 
 #include <extensionsystem/iplugin.h>
 
+#include <coreplugin/icontext.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
+
+#include "libraries/importcomponentdialog.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -45,8 +50,23 @@ public:
     void extensionsInitialized() override;
     ShutdownFlag aboutToShutdown() override;
 
+private slots:
+    void raiseImportComponentWindow();
+
 private:
+    using ActionContainer = Core::ActionContainer;
+    using Context = Core::Context;
+
     void initializeMenus();
+
+    void initializeSwitchActionMenu(ActionContainer *toolsMenu, ActionContainer *contextMenu, const Context &context);
+    void initializeFollowSymbolActionMenu(ActionContainer *toolsMenu, ActionContainer *contextMenu);
+    void initializeOpenInNextSplitActionMenu(ActionContainer *toolsMenu, const Context &context);
+    void initializeImportFromAsnComponents(ActionContainer *toolsMenu);
+
+    void addToToolsMenu(ActionContainer *container);
+
+    QPointer<Libraries::ImportComponentDialog> m_importComponentDialog;
 
 #ifdef WITH_TESTS   
     QList<QObject *> createTestObjects() const override;
