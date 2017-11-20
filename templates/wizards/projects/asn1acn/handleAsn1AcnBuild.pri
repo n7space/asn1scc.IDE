@@ -22,8 +22,11 @@
 #######################################################################
 
 isEmpty(ASN1SCC): ASN1SCC = asn1.exe
-isEmpty(ASN1SCC_PRODUCTS_DIR): ASN1SCC_PRODUCTS_DIR = $${OUT_PWD}/asn1acnSources
-isEmpty(ASN1SCC_ENCODING_OPTIONS): ASN1SCC_ENCODING_OPTIONS = ACN
+isEmpty(ASN1SCC_PRODUCTS_DIR): ASN1SCC_PRODUCTS_DIR = $${OUT_PWD}/asn1acnGenerated/src
+isEmpty(ASN1SCC_GENERATING_OPTIONS): ASN1SCC_GENERATING_OPTIONS = -c -ACN
+isEmpty(ASN1SCC_ICD_DIR): ASN1SCC_ICD_DIR = $${OUT_PWD}/asn1acnGenerated/icd
+isEmpty(ASN1SCC_ICD_FILE): ASN1SCC_ICD_FILE = ICD.html
+isEmpty(ASN1SCC_ICD_OPTIONS): ASN1SCC_ICD_OPTIONS = -icdAcn
 
-include(createSourcesList.pri)
-include(createSources.pri)
+include(updateSourcesList.pri)
+include(generateFromAsn1.pri)
