@@ -189,14 +189,14 @@
                     "condition": "%{JS: '%{BuildSystem}' === 'qmake'}"
                 },
                 {
-                    "source": "createSourcesList.pri",
-                    "target": "createSourcesList.pri",
+                    "source": "updateSourcesList.pri",
+                    "target": "updateSourcesList.pri",
                     "openAsProject": false,
                     "condition": "%{JS: '%{BuildSystem}' === 'qmake'}"
                 },
                 {
-                    "source": "createSources.pri",
-                    "target": "createSources.pri",
+                    "source": "generateFromAsn1.pri",
+                    "target": "generateFromAsn1.pri",
                     "openAsProject": false,
                     "condition": "%{JS: '%{BuildSystem}' === 'qmake'}"
                 },
