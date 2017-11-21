@@ -231,11 +231,11 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
 
 void Asn1AcnPlugin::raiseImportComponentWindow()
 {
-    if (m_importComponentDialog) {
-        Core::ICore::raiseWindow(m_importComponentDialog);
+    if (!m_importComponentWizard.isNull()) {
+        Core::ICore::raiseWindow(m_importComponentWizard);
     } else {
-        m_importComponentDialog = new Libraries::ImportComponentDialog(Core::ICore::mainWindow());
-        m_importComponentDialog->show();
+        m_importComponentWizard = new Libraries::Wizard::ImportComponentWizard(Core::ICore::mainWindow());
+        m_importComponentWizard->show();
     }
 }
 

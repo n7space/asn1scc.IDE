@@ -25,48 +25,35 @@
 
 #pragma once
 
-#include <memory>
+#include <QLabel>
+#include <QWizardPage>
 
-#include <QObject>
-#include <QTimer>
-#include <QFileSystemWatcher>
-
-#include <settings/libraries.h>
-
-#include "componentlibrarydispatcher.h"
+#include <libraries/componentimporter.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Wizard {
 
-class ComponentDirectoryWatcher : public QObject
+class SummaryPage : public QWizardPage
 {
     Q_OBJECT
 
 public:
-    ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries,
-                              std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
-                              QObject *parent = nullptr);
-
-private slots:
-    void configChanged();
-    void filesChanged(const QString &path);
-
-    void resetWatch();
+    explicit SummaryPage(ComponentImporter &importer, QWidget *parent = nullptr);
+    void initializePage() override;
 
 private:
-    void addAllLibraries();
-    void addMainDirectory(const QString &path);
-    void addSubDirectory(const QString &path);
-    void removeAll();
+    QLabel *m_directoryCaption;
+    QLabel *m_directory;
 
-    std::unique_ptr<QFileSystemWatcher> m_fsWatcher;
-    std::unique_ptr<CompontentLibraryDispatcher> m_dispatcher;
-    Settings::LibrariesConstPtr m_libraries;
+    QLabel *m_filesListCaption;
+    QLabel *m_filesList;
 
-    QTimer m_resetWatch;
+    ComponentImporter &m_importer;
 };
 
+} // namespace Wizard
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

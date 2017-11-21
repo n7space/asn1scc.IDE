@@ -23,33 +23,35 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "importcomponentwizard.h"
 
-#include <QString>
-#include <QStringList>
+#include <coreplugin/icore.h>
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Libraries {
+#include "selectsourcepage.h"
+#include "selectcomponentspage.h"
+#include "summarypage.h"
 
-class ComponentImporter
+using namespace Asn1Acn::Internal::Libraries;
+using namespace Asn1Acn::Internal::Libraries::Wizard;
+
+ImportComponentWizard::ImportComponentWizard(QWidget *parent)
+    : QWizard(parent)
 {
-public:
-    void setPath(const QString &path);
+    setAttribute(Qt::WA_DeleteOnClose);
+    connect(Core::ICore::instance(), &Core::ICore::coreAboutToClose, this, &QWidget::close);
 
-    const QString &path() const;
-    const QStringList &files() const;
+    setPage(static_cast<int>(Page::Page_SelectSource), new SelectSourcePage(m_importer));
+    setPage(static_cast<int>(Page::Page_SelectItems), new SelectComponentsPage(m_importer));
+    setPage(static_cast<int>(Page::Page_Summary), new SummaryPage(m_importer));
 
-    void import() const;
+    setStartId(static_cast<int>(Page::Page_SelectSource));
 
-private:
-    QStringList pathsInDirectory(const QString &directoryPath);
-    void addPathsToProject(const QStringList &paths) const;
+    setOption(NoBackButtonOnStartPage);
+}
 
-    QString m_path;
-    QStringList m_filesInDir;
-};
+void ImportComponentWizard::accept()
+{
+    m_importer.import();
 
-} // namespace Libraries
-} // namespace Internal
-} // namespace Asn1Acn
+    QDialog::accept();
+}

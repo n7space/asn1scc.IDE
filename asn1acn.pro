@@ -127,12 +127,16 @@ SOURCES += \
     \
     libraries/modulemetadataparser.cpp \
     libraries/generalmetadataparser.cpp \
-    libraries/importcomponentdialog.cpp \
     libraries/componentimporter.cpp \
     libraries/componentdirectorywatcher.cpp \
     libraries/componentlibraryprocessor.cpp \
     libraries/componentlibrarydispatcher.cpp \
     libraries/librarystorage.cpp \
+    \
+    libraries/wizard/importcomponentwizard.cpp \
+    libraries/wizard/selectsourcepage.cpp \
+    libraries/wizard/selectcomponentspage.cpp \
+    libraries/wizard/summarypage.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -237,12 +241,16 @@ HEADERS += \
     \
     libraries/modulemetadataparser.h \
     libraries/generalmetadataparser.h \
-    libraries/importcomponentdialog.h \
     libraries/componentimporter.h \
     libraries/componentdirectorywatcher.h \
     libraries/componentlibraryprocessor.h \
     libraries/componentlibrarydispatcher.h \
     libraries/librarystorage.h \
+    \
+    libraries/wizard/importcomponentwizard.h \
+    libraries/wizard/selectsourcepage.h \
+    libraries/wizard/selectcomponentspage.h \
+    libraries/wizard/summarypage.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/import.h \

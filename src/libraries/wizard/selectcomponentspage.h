@@ -25,40 +25,34 @@
 
 #pragma once
 
-#include <QDialog>
+#include <QTreeView>
+#include <QWizardPage>
+#include <QFileSystemModel>
 
-#include <memory>
-
-#include "ui_import_component.h"
-
-#include <settings/libraries.h>
-
-#include "componentimporter.h"
+#include <libraries/componentimporter.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Wizard {
 
-class ImportComponentDialog : public QDialog
+class SelectComponentsPage : public QWizardPage
 {
     Q_OBJECT
 
 public:
-    explicit ImportComponentDialog(QWidget *parent = 0);
+    explicit SelectComponentsPage(ComponentImporter &importer, QWidget *parent = nullptr);
+    ~SelectComponentsPage();
 
-private slots:
-    void accept() override;
-
-    void refreshPaths();
-    void builtInRadioToggled(bool checked);
+    void initializePage() override;
 
 private:
-    Ui::ImportComponentDialog m_ui;
-    Settings::LibrariesConstPtr m_libraries;
-
-    static ComponentImporter m_importer;
+    QFileSystemModel *m_model;
+    QTreeView *m_modulesView;
+    ComponentImporter &m_importer;
 };
 
+} // namespace Wizard
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

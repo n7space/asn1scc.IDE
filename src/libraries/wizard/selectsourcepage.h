@@ -27,46 +27,42 @@
 
 #include <memory>
 
-#include <QObject>
-#include <QTimer>
-#include <QFileSystemWatcher>
+#include <QWizardPage>
+
+#include "ui_import_component.h"
 
 #include <settings/libraries.h>
 
-#include "componentlibrarydispatcher.h"
+#include <libraries/componentimporter.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Wizard {
 
-class ComponentDirectoryWatcher : public QObject
+class SelectSourcePage : public QWizardPage
 {
     Q_OBJECT
 
 public:
-    ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries,
-                              std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
-                              QObject *parent = nullptr);
+    explicit SelectSourcePage(ComponentImporter &importer, QWidget *parent = nullptr);
+
+    int nextId() const override;
+    bool validatePage() override;
+    bool isComplete() const override;
 
 private slots:
-    void configChanged();
-    void filesChanged(const QString &path);
-
-    void resetWatch();
+    void refreshPaths();
+    void builtInRadioToggled(bool checked);
 
 private:
-    void addAllLibraries();
-    void addMainDirectory(const QString &path);
-    void addSubDirectory(const QString &path);
-    void removeAll();
-
-    std::unique_ptr<QFileSystemWatcher> m_fsWatcher;
-    std::unique_ptr<CompontentLibraryDispatcher> m_dispatcher;
+    Ui::SelectSourcePage m_ui;
     Settings::LibrariesConstPtr m_libraries;
 
-    QTimer m_resetWatch;
+    ComponentImporter &m_importer;
 };
 
+} // namespace Wizard
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

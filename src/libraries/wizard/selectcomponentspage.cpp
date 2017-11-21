@@ -23,33 +23,38 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "selectcomponentspage.h"
 
-#include <QString>
-#include <QStringList>
+#include <QBoxLayout>
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Libraries {
+#include <QDebug>
 
-class ComponentImporter
+using namespace Asn1Acn::Internal::Libraries;
+using namespace Asn1Acn::Internal::Libraries::Wizard;
+
+SelectComponentsPage::SelectComponentsPage(ComponentImporter &importer, QWidget *parent)
+    : QWizardPage(parent)
+    , m_model(new QFileSystemModel)
+    , m_modulesView(new QTreeView(this))
+    , m_importer(importer)
+
 {
-public:
-    void setPath(const QString &path);
+    setTitle(QLatin1String("Select components you wish to import"));
 
-    const QString &path() const;
-    const QStringList &files() const;
+    m_modulesView->setModel(m_model);
 
-    void import() const;
+    auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
+    layout->addWidget(m_modulesView);
+    setLayout(layout);
+}
 
-private:
-    QStringList pathsInDirectory(const QString &directoryPath);
-    void addPathsToProject(const QStringList &paths) const;
+SelectComponentsPage::~SelectComponentsPage()
+{
+    delete m_model;
+}
 
-    QString m_path;
-    QStringList m_filesInDir;
-};
-
-} // namespace Libraries
-} // namespace Internal
-} // namespace Asn1Acn
+void SelectComponentsPage::initializePage()
+{
+    m_model->setRootPath(m_importer.path());
+    m_modulesView->setRootIndex(m_model->index(m_importer.path()));
+}

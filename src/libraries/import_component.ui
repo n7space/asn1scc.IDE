@@ -1,114 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Asn1Acn::Internal::Libraries::ImportComponentDialog</class>
- <widget class="QDialog" name="Asn1Acn::Internal::Libraries::ImportComponentDialog">
+ <class>Asn1Acn::Internal::Libraries::SelectSourcePage</class>
+ <widget class="QWidget" name="Asn1Acn::Internal::Libraries::SelectSourcePage">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>628</width>
-    <height>301</height>
+    <width>833</width>
+    <height>144</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Import ASN.1 components</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>260</y>
-     <width>341</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-   <property name="centerButtons">
-    <bool>false</bool>
-   </property>
-  </widget>
-  <widget class="QRadioButton" name="builtInRadio">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>30</y>
-     <width>141</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Built-in library</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="builtInCombo">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>60</y>
-     <width>561</width>
-     <height>28</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QRadioButton" name="customRadio">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>130</y>
-     <width>181</width>
-     <height>26</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Custom library</string>
-   </property>
-  </widget>
-  <widget class="Line" name="line">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>240</y>
-     <width>611</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="Utils::PathChooser" name="asn1sccPathChooser" native="true">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>170</y>
-     <width>551</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-     <horstretch>1</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QRadioButton" name="builtInRadio">
+     <property name="text">
+      <string>Built-in library</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="builtInCombo">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="customRadio">
+     <property name="text">
+      <string>Custom library</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Utils::PathChooser" name="asn1sccPathChooser">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <customwidgets>
   <customwidget>
    <class>Utils::PathChooser</class>
-   <extends>QWidget</extends>
-   <header location="global">utils/pathchooser.h</header>
+   <extends>QLineEdit</extends>
+   <header>utils/pathchooser.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
