@@ -22,16 +22,24 @@
 #######################################################################
 
 add_custom_target(
-    Asn1AcnSources
+    codeFromAsn1
     COMMAND ${CMAKE_COMMAND} -E make_directory ${ASN1SCC_PRODUCTS_DIR}
-    COMMAND ${ASN1SCC} -c -${ASN1SCC_ENCODING_OPTIONS} ${ASN1ACNSOURCES} -o ${ASN1SCC_PRODUCTS_DIR}
+    COMMAND ${ASN1SCC} ${ASN1SCC_GENERATION_OPTIONS} ${ASN1ACNSOURCES} -o ${ASN1SCC_PRODUCTS_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Running Asn1Scc"
+    COMMENT "Generating code using Asn1Scc"
     VERBATIM)
 
 if (TARGET ${TARGET_NAME})
-    add_dependencies(${TARGET_NAME} Asn1AcnSources)
+    add_dependencies(${TARGET_NAME} codeFromAsn1)
 endif()
 
 set_property(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${ASN1SCC_PRODUCTS_DIR})
 include_directories(${ASN1SCC_PRODUCTS_DIR})
+
+add_custom_target(
+  icdFromAsn1
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${ASN1SCC_ICD_DIR}
+  COMMAND ${ASN1SCC} ${ASN1SCC_ICD_OPTIONS} ${ASN1SCC_ICD_DIR}/${ASN1SCC_ICD_FILE} ${ASN1ACNSOURCES}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  COMMENT "Generating ICD using Asn1Scc"
+  VERBATIM)
