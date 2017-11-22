@@ -24,42 +24,30 @@
 ****************************************************************************/
 #pragma once
 
-#include <QString>
 #include <QTextCursor>
+#include <QChar>
 
 #include <texteditor/texteditor.h>
 
 #include "data/file.h"
 #include "data/typereference.h"
-#include "data/sourcelocation.h"
-
-#include "parseddatastorage.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class LinkCreator
+class ParsedDataStorage;
+
+class ReferenceFinder
 {
 public:
+    ReferenceFinder(const TextEditor::TextDocument &document,
+                    const ParsedDataStorage *storage);
 
-    using Link = TextEditor::TextEditorWidget::Link;
-
-    LinkCreator(const TextEditor::TextDocument &document, const ParsedDataStorage *storage);
-
-    Link createHighlightLink(const QTextCursor &cursor) const;
-    Link createTargetLink(const QTextCursor &cursor) const;
+    Data::TypeReference findAt(const QTextCursor &cursor) const;
 
 private:
-    Link getSymbolLink(const Data::TypeReference &symbolSource, const QTextCursor &cursor) const;
-
-    Link getTargetSymbolLink(const Data::TypeReference &symbolSource, const Link &symbol) const;
-
-    Data::SourceLocation getTargetLocation(const QString &typeName, const QString &moduleName) const;
-    Data::SourceLocation getTargetLocationFromProject(const QString &projectName,
-                                                      const QString &typeName,
-                                                      const QString &moduleName) const;
-
-    const QString m_documentPath;
+    bool isProperAsn1IdentifierChar(QChar ch) const;
+    Data::TypeReference findAt(const Data::File *file, int line, int col) const;
     const TextEditor::TextDocument &m_textDocument;
     const ParsedDataStorage *m_storage;
 };

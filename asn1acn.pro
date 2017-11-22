@@ -158,6 +158,7 @@ SOURCES += \
     indenter.cpp \
     tools.cpp \
     linkcreator.cpp \
+    referencefinder.cpp \
     filesourcereader.cpp \
     errormessageparser.cpp \
     sourcemapper.cpp \
@@ -284,6 +285,7 @@ HEADERS += \
     indenter.h \
     tr.h \
     linkcreator.h \
+    referencefinder.h \
     tools.h \
     parsingserviceprovider.h \
     parseddocumentbuilder.h \

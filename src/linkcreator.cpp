@@ -30,6 +30,8 @@
 
 #include <utils/fileutils.h>
 
+#include "referencefinder.h"
+
 using namespace Asn1Acn::Internal;
 
 LinkCreator::LinkCreator(const TextEditor::TextDocument &document, const ParsedDataStorage *storage)
@@ -41,43 +43,17 @@ LinkCreator::LinkCreator(const TextEditor::TextDocument &document, const ParsedD
 
 LinkCreator::Link LinkCreator::createHighlightLink(const QTextCursor &cursor) const
 {
-    Data::TypeReference typeRef = getSymbolTypeReference(cursor);
-
+    const auto typeRef = ReferenceFinder(m_textDocument, m_storage).findAt(cursor);
     return getSymbolLink(typeRef, cursor);
 }
 
 LinkCreator::Link LinkCreator::createTargetLink(const QTextCursor &cursor) const
 {
-    Data::TypeReference typeRef = getSymbolTypeReference(cursor);
+    const auto typeRef = ReferenceFinder(m_textDocument, m_storage).findAt(cursor);
 
     Link sourceSymbol = getSymbolLink(typeRef, cursor);
 
     return getTargetSymbolLink(typeRef, sourceSymbol);
-}
-
-Data::TypeReference LinkCreator::getSymbolTypeReference(const QTextCursor &cursor) const
-{
-    if (!m_textDocument.characterAt(cursor.position()).isLetterOrNumber())
-        return Data::TypeReference();
-
-    const auto file = m_storage->getAnyFileForPath(m_documentPath);
-
-    return getTypeReference(file, cursor.blockNumber() + 1, cursor.columnNumber());
-}
-
-Data::TypeReference LinkCreator::getTypeReference(const Data::File *file, int line, int col) const
-{
-    if (file == nullptr)
-        return Data::TypeReference();
-
-    const auto range = file->references().equal_range(line);
-    for(auto it = range.first; it != range.second; it++) {
-        const int referedColumn = it->second->location().column();
-        if (col >= referedColumn && col <= referedColumn + it->second->name().size())
-            return *(it->second);
-    }
-
-    return Data::TypeReference();
 }
 
 LinkCreator::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSource, const QTextCursor &cursor) const
@@ -116,14 +92,10 @@ LinkCreator::Link LinkCreator::getTargetSymbolLink(const Data::TypeReference &sy
 
 Data::SourceLocation LinkCreator::getTargetLocation(const QString &typeName, const QString &moduleName) const
 {
-    QStringList projects = m_storage->getProjectsForFile(m_documentPath);
+    const auto projects = m_storage->getProjectsForFile(m_documentPath);
 
-    if (projects.empty())
-        return Data::SourceLocation();
-
-    Data::SourceLocation location;
     for (const QString &projectName : projects) {
-        location = getTargetLocationFromProject(projectName, typeName, moduleName);
+        const auto location = getTargetLocationFromProject(projectName, typeName, moduleName);
         if (location.isValid())
             return location;
     }
