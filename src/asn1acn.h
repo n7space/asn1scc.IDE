@@ -22,7 +22,6 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include "asn1acn_global.h"
@@ -52,6 +51,7 @@ public:
 
 private slots:
     void raiseImportComponentWindow();
+    void findUsages();
 
 private:
     using ActionContainer = Core::ActionContainer;
@@ -59,10 +59,11 @@ private:
 
     void initializeMenus();
 
-    void initializeSwitchActionMenu(ActionContainer *toolsMenu, ActionContainer *contextMenu, const Context &context);
-    void initializeFollowSymbolActionMenu(ActionContainer *toolsMenu, ActionContainer *contextMenu);
-    void initializeOpenInNextSplitActionMenu(ActionContainer *toolsMenu, const Context &context);
+    void initializeSwitchAction(ActionContainer *toolsMenu, ActionContainer *contextMenu, const Context &context);
+    void initializeFollowSymbolAction(ActionContainer *toolsMenu, ActionContainer *contextMenu);
+    void initializeOpenInNextSplitAction(ActionContainer *toolsMenu, const Context &context);
     void initializeImportFromAsnComponents(ActionContainer *toolsMenu);
+    void initializeFindUsagesAction(ActionContainer *toolsMenu, ActionContainer *contextMenu, const Context &context);
 
     void addToToolsMenu(ActionContainer *container);
 

@@ -50,13 +50,15 @@ public:
     void addErrorMessage(const ErrorMessage &message);
 
     using DefinitionsList = std::vector<std::unique_ptr<Definitions>>;
-    using ReferencesMap = std::multimap<int, std::unique_ptr<TypeReference>>;
+    using References = std::vector<std::unique_ptr<TypeReference>>;
+    using ReferencesMap = std::multimap<int, TypeReference*>;
     using ErrorList = std::vector<ErrorMessage>;
 
     const DefinitionsList &definitionsList() const { return m_definitionsList; }
     const Definitions *definitions(const QString &name) const;
 
-    const ReferencesMap &references() const { return m_typeReferences; }
+    const ReferencesMap &referencesMap() const { return m_referencesMap; }
+    const References &references() const { return m_references; }
     const ErrorList &errors() const { return m_errorList; }
 
     void clearReferences();
@@ -64,7 +66,8 @@ public:
 
 private:
     DefinitionsList m_definitionsList;
-    ReferencesMap m_typeReferences;
+    ReferencesMap m_referencesMap;
+    References m_references;
     ErrorList m_errorList;
 
     std::map<QString, Definitions *> m_definitionsByNameMap;

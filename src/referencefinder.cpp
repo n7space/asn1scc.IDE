@@ -53,7 +53,7 @@ Data::TypeReference ReferenceFinder::findAt(const Data::File *file, int line, in
     if (file == nullptr)
         return Data::TypeReference();
 
-    const auto range = file->references().equal_range(line);
+    const auto range = file->referencesMap().equal_range(line);
     for(auto it = range.first; it != range.second; it++) {
         const auto referedColumn = it->second->location().column();
         const auto size = it->second->name().size();

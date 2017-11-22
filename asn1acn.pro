@@ -165,7 +165,8 @@ SOURCES += \
     typeslocator.cpp \
     editoroutline.cpp \
     modelvalidityguard.cpp \
-    outlinerootupdater.cpp
+    outlinerootupdater.cpp \
+    usagesfinder.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -297,7 +298,8 @@ HEADERS += \
     sourcemapper.h \
     typeslocator.h \
     modelvalidityguard.h \
-    outlinerootupdater.h
+    outlinerootupdater.h \
+    usagesfinder.h
 
 
 FORMS += \

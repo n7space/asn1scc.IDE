@@ -65,10 +65,14 @@ const char M_TOOLS_ASN[]                      = "Asn1Acn.Tools.Menu";
 const char SWITCH_DATA_ENCODING[]             = "Asn1Acn.SwitchDataEncoding";
 const char OPEN_DATA_ENCODING_IN_NEXT_SPLIT[] = "Asn1Acn.SwitchDataEncodingInNextSplit";
 const char IMPORT_FROM_COMPONENTS_LIBRARY[]   = "Asn1Acn.ImportFromComponentsLibrary";
+const char FIND_USAGES[]                      = "Asn1Acn.FindUsages";
 
 // Icons
 
 const char OPTIONS_CATEGORY_ICON[] = ":/asn1acn/images/options_category.png";
+
+// Tasks
+const char TASK_SEARCH[]              = "Asn1Acn.Task.Search";
 
 } // namespace Asn1Acn
 } // namespace Constants

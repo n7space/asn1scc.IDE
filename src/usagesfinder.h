@@ -22,51 +22,47 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QTextCursor>
+#include <QObject>
+#include <QString>
+#include <QFuture>
 
-#include <texteditor/texteditor.h>
-
-#include "editor.h"
+namespace Core {
+class SearchResult;
+class SearchResultItem;
+}
 
 namespace Asn1Acn {
 namespace Internal {
 
-class UsagesFinder;
+namespace Data {
+class TypeReference;
+}
 
-class AsnEditor : public TextEditor::BaseTextEditor
+struct UsagesFinderParameters
 {
-    Q_OBJECT
-
-public:
-    explicit AsnEditor();
+    QString module;
+    QString type;
 };
 
-class AsnEditorFactory : public TextEditor::TextEditorFactory
-{
-public:
-    explicit AsnEditorFactory();
-};
-
-class AsnEditorWidget : public EditorWidget
+class UsagesFinder : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit AsnEditorWidget();
+    explicit UsagesFinder(QObject *parent = nullptr);
 
-    void findUsages() override;
-
-protected:
-    Link findLinkAt(const QTextCursor &,
-                    bool resolveTarget = true,
-                    bool inNextSplit = false) override;
+    void findUsages(const QString &module, const QString &type);
 
 private:
-    UsagesFinder *m_usagesFinder;
+    void searchAgain();
+    void openEditor(const Core::SearchResultItem &item);
+    void findAll(Core::SearchResult *search, const UsagesFinderParameters &params);
+    void createWatcher(const QFuture<Data::TypeReference> &future,
+                       Core::SearchResult *search);
 };
 
 } // namespace Internal
 } // namespace Asn1Acn
+
+Q_DECLARE_METATYPE(Asn1Acn::Internal::UsagesFinderParameters)

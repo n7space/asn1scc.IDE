@@ -164,7 +164,7 @@ void AstXmlParserTests::test_userDefinedTypeReference()
 
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->type()->name(), QStringLiteral("ThirdInt"));
 
-    const auto ref = m_parsedData["Test2File.asn"]->references().find(3);
+    const auto ref = m_parsedData["Test2File.asn"]->referencesMap().find(3);
     QVERIFY(ref->second != nullptr);
 
     QCOMPARE(ref->second->location().column(), 19);
@@ -193,7 +193,7 @@ void AstXmlParserTests::test_userDefinedTypeReferenceInOtherModule()
 
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MyInt")->type()->name(), QStringLiteral("ThirdInt"));
 
-    const auto ref = m_parsedData["Test2File.asn"]->references().find(3);
+    const auto ref = m_parsedData["Test2File.asn"]->referencesMap().find(3);
     QVERIFY(ref->second != nullptr);
 
     QCOMPARE(ref->second->location().column(), 19);
@@ -341,9 +341,9 @@ void AstXmlParserTests::test_sequenceTypeAssingment()
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeq")->location().path(),
             QLatin1String("Test2File.asn"));
 
-    QCOMPARE(static_cast<int>(m_parsedData["Test2File.asn"]->references().size()), 1);
+    QCOMPARE(static_cast<int>(m_parsedData["Test2File.asn"]->referencesMap().size()), 1);
 
-    const auto ref = m_parsedData["Test2File.asn"]->references().find(13);
+    const auto ref = m_parsedData["Test2File.asn"]->referencesMap().find(13);
     QVERIFY(ref->second != nullptr);
 
     QCOMPARE(ref->second->location().line(), 13);
@@ -431,9 +431,9 @@ void AstXmlParserTests::test_sequenceOfTypeAssingment()
     QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("MySeqOf")->location().path(),
             QLatin1String("Test2File.asn"));
 
-    QCOMPARE(static_cast<int>(m_parsedData["Test2File.asn"]->references().size()), 1);
+    QCOMPARE(static_cast<int>(m_parsedData["Test2File.asn"]->referencesMap().size()), 1);
 
-    const auto ref = m_parsedData["Test2File.asn"]->references().find(17);
+    const auto ref = m_parsedData["Test2File.asn"]->referencesMap().find(17);
     QVERIFY(ref->second != nullptr);
 
     QCOMPARE(ref->second->location().line(), 17);
