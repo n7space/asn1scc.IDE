@@ -34,7 +34,7 @@ endfunction()
 function(appendPersistentList)
     set(persistentFiles ${ASN1SCC_PRODUCTS_DIR}/asn1crt.c ${ASN1SCC_PRODUCTS_DIR}/real.c)
 
-    if (${ASN1SCC_ENCODING_OPTIONS} STREQUAL "ACN")
+    if (${ASN1SCC_GENERATION_OPTIONS} MATCHES "-ACN")
         set(persistentFiles ${persistentFiles} ${ASN1SCC_PRODUCTS_DIR}/acn.c)
     endif()
 
