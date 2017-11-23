@@ -27,34 +27,53 @@
 
 #include <QBoxLayout>
 
-#include <QDebug>
+#include <libraries/metadata/library.h>
+#include <libraries/librarystorage.h>
 
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
 SelectComponentsPage::SelectComponentsPage(ComponentImporter &importer, QWidget *parent)
     : QWizardPage(parent)
-    , m_model(new QFileSystemModel)
     , m_modulesView(new QTreeView(this))
     , m_importer(importer)
 
 {
     setTitle(QLatin1String("Select components you wish to import"));
 
-    m_modulesView->setModel(m_model);
-
     auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
     layout->addWidget(m_modulesView);
     setLayout(layout);
-}
 
-SelectComponentsPage::~SelectComponentsPage()
-{
-    delete m_model;
+    m_modulesView->setHeaderHidden(true);
+    m_modulesView->setExpandsOnDoubleClick(false);
+
+    connect(m_modulesView, &QTreeView::clicked,
+            this, &SelectComponentsPage::onItemClicked);
 }
 
 void SelectComponentsPage::initializePage()
 {
-    m_model->setRootPath(m_importer.path());
-    m_modulesView->setRootIndex(m_model->index(m_importer.path()));
+    auto storage = LibraryStorage::instance();
+    const auto lib = storage->library(m_importer.path());
+
+    if (lib == nullptr)
+        return;
+
+    m_model.reset(new LibraryModel(lib, this));
+    m_modulesView->setModel(m_model.get());
+}
+
+void SelectComponentsPage::onItemClicked(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+
+    auto node = static_cast<Metadata::LibraryNode *>(index.internalPointer());
+    if (!node)
+        return;
+
+    node->setChecked(!node->checked());
+
+    m_modulesView->update(index);
 }

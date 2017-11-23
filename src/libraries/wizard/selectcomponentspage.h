@@ -25,11 +25,13 @@
 
 #pragma once
 
+#include <memory>
+
 #include <QTreeView>
 #include <QWizardPage>
-#include <QFileSystemModel>
 
 #include <libraries/componentimporter.h>
+#include <libraries/librarymodel.h>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -42,12 +44,14 @@ class SelectComponentsPage : public QWizardPage
 
 public:
     explicit SelectComponentsPage(ComponentImporter &importer, QWidget *parent = nullptr);
-    ~SelectComponentsPage();
 
     void initializePage() override;
 
+private slots:
+    void onItemClicked(const QModelIndex &index);
+
 private:
-    QFileSystemModel *m_model;
+    std::unique_ptr<LibraryModel> m_model;
     QTreeView *m_modulesView;
     ComponentImporter &m_importer;
 };

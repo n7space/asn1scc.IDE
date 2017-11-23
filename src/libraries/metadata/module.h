@@ -24,7 +24,8 @@
 ****************************************************************************/
 #pragma once
 
-#include <QList>
+#include <memory>
+#include <vector>
 
 #include "submodule.h"
 
@@ -33,24 +34,40 @@ namespace Internal {
 namespace Libraries {
 namespace Metadata {
 
-class Module
+class Module : public LibraryNode
 {
 public:
     Module(const QString &name, const QString &description)
-        : m_name(name)
-        , m_description(description)
+        : LibraryNode(name, description)
     {}
 
-    const QString &name() const { return m_name; }
-    const QString &description() const { return m_description; }
-    const QList<Submodule> &submodules() const { return m_submodules; }
+    using Submodules = std::vector<std::unique_ptr<Submodule>>;
 
-    void addSubmodule(const Submodule &submodule) { m_submodules.append(submodule); }
+    const Submodules &submodules() const { return m_submodules; }
+
+    void addSubmodule(std::unique_ptr<Submodule> submodule)
+    {
+        submodule->setParent(this);
+        m_submodules.push_back(std::move(submodule));
+    }
+
+    LibraryNode *child(int num) const override
+    {
+        return num < childrenCount() ? m_submodules[num].get() : nullptr;
+    }
+
+    int childrenCount() const override
+    {
+        return static_cast<int>(m_submodules.size());
+    }
+
+    int childIndex(const LibraryNode *child) const override
+    {
+        return findChildIndex<Submodules>(submodules(), child);
+    }
 
 private:
-    QString m_name;
-    QString m_description;
-    QList<Submodule> m_submodules;
+    Submodules m_submodules;
 };
 
 } // namespace Metadata

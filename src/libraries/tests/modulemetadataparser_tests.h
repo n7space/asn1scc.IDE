@@ -54,7 +54,7 @@ private:
     void parsingFails(const QString &jsonData);
     void parse(const QString &jsonData);
 
-    Metadata::Module m_parsedData;
+    std::unique_ptr<Metadata::Module> m_parsedData;
 };
 
 } // namespace Tests

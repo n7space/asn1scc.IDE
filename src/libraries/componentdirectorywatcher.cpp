@@ -29,6 +29,7 @@
 
 #include "librarystorage.h"
 
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Libraries;
 
 static const int WAIT_TIMEOUT_MS = 2000;

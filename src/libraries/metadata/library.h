@@ -24,7 +24,8 @@
 ****************************************************************************/
 #pragma once
 
-#include <QList>
+#include <memory>
+#include <vector>
 
 #include "module.h"
 
@@ -33,21 +34,40 @@ namespace Internal {
 namespace Libraries {
 namespace Metadata {
 
-class Library
+class Library : public LibraryNode
 {
 public:
     Library(const QString &name)
-        : m_name(name)
+        : LibraryNode(name, QString())
     {}
 
-    const QString &name() const { return m_name; }
-    const QList<Module> &modules() const { return m_modules; }
+    using Modules = std::vector<std::unique_ptr<Module>>;
 
-    void addModule(const Module &module) { m_modules.append(module); }
+    const Modules &modules() const { return m_modules; }
+
+    void addModule(std::unique_ptr<Module> module)
+    {
+        module->setParent(this);
+        m_modules.push_back(std::move(module));
+    }
+
+    LibraryNode *child(int num) const override
+    {
+        return num < childrenCount() ? m_modules[num].get() : nullptr;
+    }
+
+    int childrenCount() const override
+    {
+        return static_cast<int>(m_modules.size());
+    }
+
+    int childIndex(const LibraryNode *child) const override
+    {
+        return findChildIndex<Modules>(modules(), child);
+    }
 
 private:
-    QString m_name;
-    QList<Module> m_modules;
+    Modules m_modules;
 };
 
 } // namespace Metadata

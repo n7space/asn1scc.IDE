@@ -24,7 +24,8 @@
 ****************************************************************************/
 #pragma once
 
-#include <QList>
+#include <memory>
+#include <vector>
 
 #include "element.h"
 
@@ -33,24 +34,40 @@ namespace Internal {
 namespace Libraries {
 namespace Metadata {
 
-class Submodule
+class Submodule : public LibraryNode
 {
 public:
     Submodule(const QString &name, const QString &description)
-        : m_name(name)
-        , m_description(description)
+        : LibraryNode(name, description)
     {}
 
-    const QString &name() const { return m_name; }
-    const QString &description() const { return m_description; }
-    const QList<Element> &elements() const { return m_elements; }
+    using Elements = std::vector<std::unique_ptr<Element>>;
 
-    void addElement(const Element &element) { m_elements.append(element); }
+    const Elements &elements() const { return m_elements; }
+
+    void addElement(std::unique_ptr<Element> element)
+    {
+        element->setParent(this);
+        m_elements.push_back(std::move(element));
+    }
+
+    LibraryNode *child(int num) const override
+    {
+        return num < childrenCount() ? m_elements[num].get() : nullptr;
+    }
+
+    int childrenCount() const override
+    {
+        return static_cast<int>(m_elements.size());
+    }
+
+    int childIndex(const LibraryNode *child) const override
+    {
+        return LibraryNode::findChildIndex<Elements>(elements(), child);
+    }
 
 private:
-    QString m_name;
-    QString m_description;
-    QList<Element> m_elements;
+    Elements m_elements;
 };
 
 } // namespace Metadata

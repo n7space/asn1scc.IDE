@@ -32,6 +32,7 @@
 #include "librarystorage.h"
 #include "modulemetadataparser.h"
 
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Libraries;
 
 ComponentLibraryProcessor::ComponentLibraryProcessor(const QString &path,
@@ -54,12 +55,13 @@ void ComponentLibraryProcessor::process()
         ModuleMetadataParser parser(content.toLatin1());
 
         try {
-            const auto module = parser.parse();
-            library->addModule(module);
+            auto module = parser.parse();
+            library->addModule(std::move(module));
         }
         catch (const ModuleMetadataParser::Error &err) {
             Q_UNUSED(err);
-            return;
+            // TODO: continue helps develop; in final implementation it should be return instead
+            continue;
         }
     }
 
