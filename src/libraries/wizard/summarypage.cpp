@@ -25,6 +25,7 @@
 
 #include "summarypage.h"
 
+#include <QVariant>
 #include <QBoxLayout>
 
 using namespace Asn1Acn::Internal::Libraries;
@@ -36,16 +37,10 @@ SummaryPage::SummaryPage(ComponentImporter &importer, QWidget *parent)
 {
     setTitle(QLatin1String("Summary"));
 
-    m_directoryCaption = new QLabel(QLatin1String("Path: "), this);
-    m_directory = new QLabel(this);
-
     m_filesListCaption = new QLabel(QLatin1String("Files to import: "), this);
     m_filesList = new QLabel(this);
 
     auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
-
-    layout->addWidget(m_directoryCaption);
-    layout->addWidget(m_directory);
 
     layout->addWidget(m_filesListCaption);
     layout->addWidget(m_filesList);
@@ -55,8 +50,6 @@ SummaryPage::SummaryPage(ComponentImporter &importer, QWidget *parent)
 
 void SummaryPage::initializePage()
 {
-    m_directory->setText(m_importer.path());
-
     QString filesText;
     for (auto it = m_importer.files().begin(); it != m_importer.files().end(); it++) {
         filesText += *it;

@@ -35,19 +35,19 @@ namespace Libraries {
 class ComponentImporter
 {
 public:
-    void setPath(const QString &path);
+    void setDirectories(const QStringList &paths);
+    void setFiles(const QStringList &files);
 
-    const QString &path() const;
     const QStringList &files() const;
 
     void import() const;
 
 private:
-    QStringList pathsInDirectory(const QString &directoryPath);
+    QStringList pathsInDirectory(const QStringList &directories);
     void addPathsToProject(const QStringList &paths) const;
 
-    QString m_path;
-    QStringList m_filesInDir;
+    QStringList m_directories;
+    QStringList m_files;
 };
 
 } // namespace Libraries

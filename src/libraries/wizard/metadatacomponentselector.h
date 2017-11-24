@@ -25,29 +25,22 @@
 
 #pragma once
 
-#include <QLabel>
-#include <QWizardPage>
-
-#include <libraries/componentimporter.h>
+#include <libraries/librarymodel.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 namespace Wizard {
 
-class SummaryPage : public QWizardPage
+class MetadaComponentSelector
 {
-    Q_OBJECT
-
 public:
-    explicit SummaryPage(ComponentImporter &importer, QWidget *parent = nullptr);
-    void initializePage() override;
+    MetadaComponentSelector(const QString &path);
+    QStringList paths();
 
 private:
-    QLabel *m_filesListCaption;
-    QLabel *m_filesList;
-
-    ComponentImporter &m_importer;
+    QStringList pathsFromNames(const QStringList &names);
+    QString m_path;
 };
 
 } // namespace Wizard

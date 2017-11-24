@@ -46,6 +46,7 @@ public:
     explicit SelectComponentsPage(ComponentImporter &importer, QWidget *parent = nullptr);
 
     void initializePage() override;
+    bool validatePage() override;
 
 private slots:
     void onItemClicked(const QModelIndex &index);

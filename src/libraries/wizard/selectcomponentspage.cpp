@@ -30,6 +30,8 @@
 #include <libraries/metadata/library.h>
 #include <libraries/librarystorage.h>
 
+#include "metadatacomponentselector.h"
+
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
@@ -55,13 +57,22 @@ SelectComponentsPage::SelectComponentsPage(ComponentImporter &importer, QWidget 
 void SelectComponentsPage::initializePage()
 {
     auto storage = LibraryStorage::instance();
-    const auto lib = storage->library(m_importer.path());
+    const auto lib = storage->library(field("builtInCombo").toString());
 
     if (lib == nullptr)
         return;
 
     m_model.reset(new LibraryModel(lib, this));
     m_modulesView->setModel(m_model.get());
+}
+
+bool SelectComponentsPage::validatePage()
+{
+    MetadaComponentSelector componentSelector(field("builtInCombo").toString());
+
+    m_importer.setFiles(componentSelector.paths());
+
+    return QWizardPage::validatePage();
 }
 
 void SelectComponentsPage::onItemClicked(const QModelIndex &index)
