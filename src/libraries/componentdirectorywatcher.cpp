@@ -73,10 +73,6 @@ void ComponentDirectoryWatcher::resetWatch()
 {
     removeAll();
     addAllLibraries();
-
-    LibraryStorage::instance()->removeLibraries();
-
-    m_dispatcher->dispatch(m_libraries->detectedLibPaths() + m_libraries->manualLibPaths(), m_fsWatcher->files());
 }
 
 void ComponentDirectoryWatcher::addAllLibraries()
@@ -84,6 +80,8 @@ void ComponentDirectoryWatcher::addAllLibraries()
     const auto libPaths = m_libraries->detectedLibPaths() + m_libraries->manualLibPaths();
     for (const auto &libPath : libPaths)
         addMainDirectory(libPath);
+
+    m_dispatcher->dispatch(m_libraries->detectedLibPaths() + m_libraries->manualLibPaths(), m_fsWatcher->files());
 }
 
 void ComponentDirectoryWatcher::addMainDirectory(const QString &path)
@@ -121,4 +119,6 @@ void ComponentDirectoryWatcher::removeAll()
     const auto files = m_fsWatcher->files();
     if (!files.empty())
         m_fsWatcher->removePaths(files);
+
+    LibraryStorage::instance()->removeLibraries();
 }

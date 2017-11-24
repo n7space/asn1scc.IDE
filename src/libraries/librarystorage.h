@@ -26,6 +26,10 @@
 #pragma once
 
 #include <memory>
+#include <map>
+
+#include <QMutex>
+#include <QString>
 
 #include "metadata/library.h"
 
@@ -48,7 +52,6 @@ public:
     void addLibrary(LibraryPtr library);
     void removeLibraries();
 
-    const std::vector<LibraryPtr> &libraries() const;
     const Metadata::Library *library(const QString &path) const;
 
 signals:
@@ -56,7 +59,9 @@ signals:
     void changed();
 
 private:
-    std::vector<LibraryPtr> m_libraries;
+    std::map<QString, LibraryPtr> m_libraries;
+
+    mutable QMutex m_libraryMutex;
 };
 
 

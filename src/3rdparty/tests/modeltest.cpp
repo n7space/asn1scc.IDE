@@ -31,8 +31,6 @@
 #include <QtCore/QtCore>
 #include <QtTest/QtTest>
 
-#include <QTreeView>
-
 /*!
     Connect to all of the models signals.  Whenever anything happens recheck everything.
 */
@@ -369,14 +367,13 @@ void ModelTest::checkChildren ( const QModelIndex &parent, int currentDepth )
             // If the next test fails here is some somewhat useful debug you play with.
 
             if (model->parent(index) != parent) {
-                qDebug() << "A" << r << c << currentDepth << model->data(index).toString() << model->data(parent).toString();
-
-                qDebug() << "B" << index << parent << model->parent(index);
-
+                qDebug() << r << c << currentDepth << model->data(index).toString()
+                         << model->data(parent).toString();
+                qDebug() << index << parent << model->parent(index);
 //                 And a view that you can even use to show the model.
-                 // QTreeView view;
-                 // view.setModel(model);
-                 // view.show();
+//                 QTreeView view;
+//                 view.setModel(model);
+//                 view.show();
             }
 
             // Check that we can get back our real parent.

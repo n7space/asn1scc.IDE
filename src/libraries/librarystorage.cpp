@@ -25,6 +25,8 @@
 
 #include "librarystorage.h"
 
+#include <QMutexLocker>
+
 using namespace Asn1Acn::Internal::Libraries;
 
 LibraryStorage *LibraryStorage::instance()
@@ -35,15 +37,19 @@ LibraryStorage *LibraryStorage::instance()
 
 void LibraryStorage::addLibrary(LibraryPtr library)
 {
+    QMutexLocker lock(&m_libraryMutex);
+
     emit aboutToChange();
 
-    m_libraries.push_back(std::move(library));
+    m_libraries[library->name()] = std::move(library);
 
     emit changed();
 }
 
 void LibraryStorage::removeLibraries()
 {
+    QMutexLocker lock(&m_libraryMutex);
+
     emit aboutToChange();
 
     m_libraries.clear();
@@ -51,16 +57,13 @@ void LibraryStorage::removeLibraries()
     emit changed();
 }
 
-const std::vector<LibraryStorage::LibraryPtr> &LibraryStorage::libraries() const
-{
-    return m_libraries;
-}
-
 const Metadata::Library *LibraryStorage::library(const QString &path) const
 {
-    for (const auto &library : m_libraries)
-        if (library->name() == path)
-            return library.get();
+    QMutexLocker lock(&m_libraryMutex);
+
+    for (const auto &item : m_libraries)
+        if (item.first == path)
+            return item.second.get();
 
     return nullptr;
 }

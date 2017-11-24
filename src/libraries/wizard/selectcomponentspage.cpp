@@ -39,7 +39,6 @@ SelectComponentsPage::SelectComponentsPage(ComponentImporter &importer, QWidget 
     : QWizardPage(parent)
     , m_modulesView(new QTreeView(this))
     , m_importer(importer)
-
 {
     setTitle(QLatin1String("Select components you wish to import"));
 

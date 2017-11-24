@@ -39,6 +39,9 @@ MetadaComponentSelector::MetadaComponentSelector(const QString &path)
 
 QStringList MetadaComponentSelector::pathsFromNames(const QStringList &names)
 {
+    if (names.empty())
+        return {};
+
     QDirIterator it(m_path, names, QDir::NoFilter, QDirIterator::Subdirectories);
 
     QStringList paths;
