@@ -62,7 +62,9 @@ Data::TypeReference LinkCreator::getSymbolTypeReference(const QTextCursor &curso
 
     const auto file = ParsedDataStorage::instance()->getAnyFileForPath(m_documentPath);
 
-    return getTypeReference(file, cursor.blockNumber() + 1, cursor.columnNumber());
+    return file != nullptr
+            ? getTypeReference(file, cursor.blockNumber() + 1, cursor.columnNumber())
+            : Data::TypeReference();
 }
 
 Data::TypeReference LinkCreator::getTypeReference(const Data::File *file, int line, int col) const
