@@ -62,11 +62,11 @@ LinkCreator::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSo
 
     QTextCursor selection = TextEditor::Convenience::selectAt(cursor,
                                                               symbolSource.location().line(),
-                                                              symbolSource.location().column(),
+                                                              symbolSource.location().column() + 1,
                                                               symbolSource.name().length());
 
-    symbol.linkTextStart = selection.selectionStart() + 1;
-    symbol.linkTextEnd = selection.selectionEnd() + 1;
+    symbol.linkTextStart = selection.selectionStart();
+    symbol.linkTextEnd = selection.selectionEnd();
 
     return symbol;
 }
