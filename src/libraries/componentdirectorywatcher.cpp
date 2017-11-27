@@ -42,13 +42,13 @@ ComponentDirectoryWatcher::ComponentDirectoryWatcher(Settings::LibrariesConstPtr
     , m_dispatcher(std::move(dispatcher))
     , m_libraries(libraries)
 {
-    resetWatch();
+    resetWatched();
 
     m_resetWatch.setInterval(WAIT_TIMEOUT_MS);
     m_resetWatch.setSingleShot(true);
 
     connect(&m_resetWatch, &QTimer::timeout,
-            this, &ComponentDirectoryWatcher::resetWatch, Qt::UniqueConnection);
+            this, &ComponentDirectoryWatcher::resetWatched, Qt::UniqueConnection);
 
     connect(m_fsWatcher.get(), &QFileSystemWatcher::fileChanged,
             this, &ComponentDirectoryWatcher::filesChanged, Qt::UniqueConnection);
@@ -69,7 +69,7 @@ void ComponentDirectoryWatcher::filesChanged(const QString &path)
     m_resetWatch.start();
 }
 
-void ComponentDirectoryWatcher::resetWatch()
+void ComponentDirectoryWatcher::resetWatched()
 {
     removeAll();
     addAllLibraries();
@@ -77,11 +77,11 @@ void ComponentDirectoryWatcher::resetWatch()
 
 void ComponentDirectoryWatcher::addAllLibraries()
 {
-    const auto libPaths = m_libraries->detectedLibPaths() + m_libraries->manualLibPaths();
+    const auto libPaths = m_libraries->libPaths();
     for (const auto &libPath : libPaths)
         addMainDirectory(libPath);
 
-    m_dispatcher->dispatch(m_libraries->detectedLibPaths() + m_libraries->manualLibPaths(), m_fsWatcher->files());
+    m_dispatcher->dispatch(libPaths, m_fsWatcher->files());
 }
 
 void ComponentDirectoryWatcher::addMainDirectory(const QString &path)

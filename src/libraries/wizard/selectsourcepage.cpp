@@ -45,7 +45,6 @@ SelectSourcePage::SelectSourcePage(ComponentImporter &importer, QWidget *parent)
 
     setTitle(QLatin1String("Select library source"));
 
-    // TODO: signal Settings::Libraries::changed is never emitted.
     connect(m_libraries.get(), &Settings::Libraries::changed, this, &SelectSourcePage::refreshPaths);
     connect(m_ui.builtInRadio, &QRadioButton::toggled, this, &SelectSourcePage::builtInRadioToggled);
 

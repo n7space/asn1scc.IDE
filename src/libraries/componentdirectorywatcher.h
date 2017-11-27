@@ -52,7 +52,7 @@ private slots:
     void configChanged();
     void filesChanged(const QString &path);
 
-    void resetWatch();
+    void resetWatched();
 
 private:
     void addAllLibraries();
