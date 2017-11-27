@@ -22,38 +22,28 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <stdexcept>
-#include <string>
-
-#include <QJsonDocument>
-#include <QByteArray>
-
-#include "metadata/module.h"
+#include <libraries/librarymodel.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Wizard {
 
-class ModuleMetadataParser
+class MetadaComponentSelector
 {
 public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
-
-    ModuleMetadataParser(const QByteArray &data);
-
-    std::unique_ptr<Metadata::Module> parse();
+    MetadaComponentSelector(const QString &path);
+    QStringList paths();
 
 private:
-    QJsonDocument m_document;
+    QStringList pathsFromNames(const QStringList &names);
+    QString m_path;
 };
 
+} // namespace Wizard
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

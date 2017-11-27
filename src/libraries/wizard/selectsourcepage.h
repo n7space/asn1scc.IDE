@@ -22,38 +22,47 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <stdexcept>
-#include <string>
+#include <memory>
 
-#include <QJsonDocument>
-#include <QByteArray>
+#include <QWizardPage>
 
-#include "metadata/module.h"
+#include "ui_import_component.h"
+
+#include <settings/libraries.h>
+
+#include <libraries/componentimporter.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Wizard {
 
-class ModuleMetadataParser
+class SelectSourcePage : public QWizardPage
 {
+    Q_OBJECT
+
 public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    explicit SelectSourcePage(ComponentImporter &importer, QWidget *parent = nullptr);
 
-    ModuleMetadataParser(const QByteArray &data);
+    int nextId() const override;
+    bool validatePage() override;
+    bool isComplete() const override;
 
-    std::unique_ptr<Metadata::Module> parse();
+private slots:
+    void refreshPaths();
+    void builtInRadioToggled(bool checked);
 
 private:
-    QJsonDocument m_document;
+    Ui::SelectSourcePage m_ui;
+    Settings::LibrariesConstPtr m_libraries;
+
+    ComponentImporter &m_importer;
 };
 
+} // namespace Wizard
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

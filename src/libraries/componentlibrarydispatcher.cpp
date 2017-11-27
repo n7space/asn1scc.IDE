@@ -22,38 +22,22 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
 
-#include <stdexcept>
-#include <string>
+#include "componentlibrarydispatcher.h"
 
-#include <QJsonDocument>
-#include <QByteArray>
+#include "componentlibraryprocessor.h"
 
-#include "metadata/module.h"
+#include "filesourcereader.h"
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Libraries {
+using namespace Asn1Acn::Internal::Libraries;
 
-class ModuleMetadataParser
+void CompontentLibraryDispatcher::dispatch(const QStringList &directories, const QStringList &files) const
 {
-public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    static const FileSourceReader reader;
 
-    ModuleMetadataParser(const QByteArray &data);
-
-    std::unique_ptr<Metadata::Module> parse();
-
-private:
-    QJsonDocument m_document;
-};
-
-} // namespace Libraries
-} // namespace Internal
-} // namespace Asn1Acn
+    for (const auto &directory : directories) {
+        const auto filesInDirectory = files.filter(directory);
+        const auto processor = new ComponentLibraryProcessor(directory, filesInDirectory, reader);
+        processor->process();
+    }
+}

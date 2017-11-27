@@ -35,31 +35,46 @@
 
 using namespace Asn1Acn::Internal::Libraries;
 
-void ComponentImporter::importFromPath(const QString &directoryPath)
+void ComponentImporter::setFiles(const QStringList &files)
 {
-    const auto paths = pathsInDirectory(directoryPath);
-    addPathsToProject(paths);
+    m_files = files;
 }
 
-QStringList ComponentImporter::pathsInDirectory(const QString &directoryPath)
+void ComponentImporter::setDirectories(const QStringList &paths)
 {
-    QDir dir(directoryPath);
-    QTC_ASSERT(dir.exists() == true, return {});
+    m_files = pathsInDirectory(paths);
+}
 
+const QStringList &ComponentImporter::files() const
+{
+    return m_files;
+}
+
+void ComponentImporter::import() const
+{
+    addPathsToProject(m_files);
+}
+
+QStringList ComponentImporter::pathsInDirectory(const QStringList &directories)
+{
+    QStringList files;
     QStringList filters;
     filters << "*.asn" << "*.asn1" << "*.acn";
-    dir.setNameFilters(filters);
 
-    const auto names = dir.entryList();
+    for(const auto &directory : directories) {
+        QDir dir(directory);
+        if (!dir.exists())
+            continue;
 
-    QStringList paths;
-    for (const auto &name : names)
-        paths << dir.filePath(name);
+        dir.setNameFilters(filters);
+        for (const auto &path : dir.entryList())
+            files << dir.filePath(path);
+    }
 
-    return paths;
+    return files;
 }
 
-void ComponentImporter::addPathsToProject(const QStringList &paths)
+void ComponentImporter::addPathsToProject(const QStringList &paths) const
 {
     const auto project = ProjectExplorer::SessionManager::startupProject();
     if (project == nullptr)

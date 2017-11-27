@@ -22,36 +22,49 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <stdexcept>
-#include <string>
+#include <memory>
 
-#include <QJsonDocument>
-#include <QByteArray>
+#include <QObject>
+#include <QTimer>
+#include <QFileSystemWatcher>
 
-#include "metadata/module.h"
+#include <settings/libraries.h>
+
+#include "componentlibrarydispatcher.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 
-class ModuleMetadataParser
+class ComponentDirectoryWatcher : public QObject
 {
+    Q_OBJECT
+
 public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries,
+                              std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
+                              QObject *parent = nullptr);
 
-    ModuleMetadataParser(const QByteArray &data);
+private slots:
+    void configChanged();
+    void filesChanged(const QString &path);
 
-    std::unique_ptr<Metadata::Module> parse();
+    void resetWatched();
 
 private:
-    QJsonDocument m_document;
+    void addAllLibraries();
+    void addMainDirectory(const QString &path);
+    void addSubDirectory(const QString &path);
+    void removeAll();
+
+    std::unique_ptr<QFileSystemWatcher> m_fsWatcher;
+    std::unique_ptr<CompontentLibraryDispatcher> m_dispatcher;
+    Settings::LibrariesConstPtr m_libraries;
+
+    QTimer m_resetWatch;
 };
 
 } // namespace Libraries

@@ -31,7 +31,7 @@
 #include <data/typeassignment.h>
 #include <data/types/builtintypes.h>
 
-#include "3rdparty/modeltest.h"
+#include <3rdparty/tests/modeltest.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;

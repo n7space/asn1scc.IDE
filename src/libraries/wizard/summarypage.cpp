@@ -22,38 +22,40 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
 
-#include <stdexcept>
-#include <string>
+#include "summarypage.h"
 
-#include <QJsonDocument>
-#include <QByteArray>
+#include <QVariant>
+#include <QBoxLayout>
 
-#include "metadata/module.h"
+using namespace Asn1Acn::Internal::Libraries;
+using namespace Asn1Acn::Internal::Libraries::Wizard;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Libraries {
-
-class ModuleMetadataParser
+SummaryPage::SummaryPage(ComponentImporter &importer, QWidget *parent)
+    : QWizardPage(parent)
+    , m_importer(importer)
 {
-public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    setTitle(QLatin1String("Summary"));
 
-    ModuleMetadataParser(const QByteArray &data);
+    m_filesListCaption = new QLabel(QLatin1String("Files to import: "), this);
+    m_filesList = new QLabel(this);
 
-    std::unique_ptr<Metadata::Module> parse();
+    auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
 
-private:
-    QJsonDocument m_document;
-};
+    layout->addWidget(m_filesListCaption);
+    layout->addWidget(m_filesList);
 
-} // namespace Libraries
-} // namespace Internal
-} // namespace Asn1Acn
+    setLayout(layout);
+}
+
+void SummaryPage::initializePage()
+{
+    QString filesText;
+    for (auto it = m_importer.files().begin(); it != m_importer.files().end(); it++) {
+        filesText += *it;
+        if (it + 1 != m_importer.files().end())
+            filesText += QLatin1String(",\n");
+    }
+
+    m_filesList->setText(filesText);
+}

@@ -53,6 +53,9 @@
 #include "tree-views/outlinewidget.h"
 #include "tree-views/typestreewidget.h"
 
+#include "libraries/componentdirectorywatcher.h"
+#include "libraries/componentlibrarydispatcher.h"
+
 #include "asneditor.h"
 #include "acneditor.h"
 #include "projectwatcher.h"
@@ -73,6 +76,7 @@
 #include "tests/autocompleter_tests.h"
 #include "tests/sourcemapper_tests.h"
 #include "tests/modelvalidityguard_tests.h"
+#include "libraries/tests/librarymodel_tests.h"
 #include "libraries/tests/modulemetadataparser_tests.h"
 #include "libraries/tests/generalmetadataparser_tests.h"
 #include "tree-views/tests/displayrolevisitor_tests.h"
@@ -127,6 +131,10 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(new OptionsPages::Libraries(librariesSettings));
 
     addAutoReleasedObject(new TypesLocator);
+
+    const auto directoryWatcher = new Libraries::ComponentDirectoryWatcher(librariesSettings,
+                                                                           std::make_unique<Libraries::CompontentLibraryDispatcher>());
+    addAutoReleasedObject(directoryWatcher);
 
     Completion::AsnSnippets::registerGroup();
     Completion::AcnSnippets::registerGroup();
@@ -224,11 +232,11 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
 
 void Asn1AcnPlugin::raiseImportComponentWindow()
 {
-    if (m_importComponentDialog) {
-        Core::ICore::raiseWindow(m_importComponentDialog);
+    if (!m_importComponentWizard.isNull()) {
+        Core::ICore::raiseWindow(m_importComponentWizard);
     } else {
-        m_importComponentDialog = new Libraries::ImportComponentDialog(Core::ICore::mainWindow());
-        m_importComponentDialog->show();
+        m_importComponentWizard = new Libraries::Wizard::ImportComponentWizard(Core::ICore::mainWindow());
+        m_importComponentWizard->show();
     }
 }
 
@@ -238,6 +246,7 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
     return QList<QObject *>()
             << new Libraries::Tests::ModuleMetadataParserTests
             << new Libraries::Tests::GeneralMetadataParserTests
+            << new Libraries::Tests::LibraryModelTests
             << new TreeViews::Tests::DisplayRoleVisitorTests
             << new TreeViews::Tests::OutlineIndexUpdaterTests
             << new TreeViews::Tests::OutlineModelTests

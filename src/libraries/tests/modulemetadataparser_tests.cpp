@@ -30,7 +30,7 @@ using namespace Asn1Acn::Internal::Libraries::Tests;
 
 ModuleMetadataParserTests::ModuleMetadataParserTests(QObject *parent)
     : QObject(parent),
-      m_parsedData("BadName", "BadDesc")
+      m_parsedData(std::make_unique<Metadata::Module>("BadName", "BadDesc"))
 {
 }
 
@@ -58,9 +58,9 @@ void ModuleMetadataParserTests::test_emptyModule()
 {
     parse(R"({"name": "SomeName", "description": "SomeDesc"})");
 
-    QCOMPARE(m_parsedData.name(), QLatin1Literal("SomeName"));
-    QCOMPARE(m_parsedData.description(), QLatin1Literal("SomeDesc"));
-    QCOMPARE(m_parsedData.submodules().size(), 0);
+    QCOMPARE(m_parsedData->name(), QLatin1Literal("SomeName"));
+    QCOMPARE(m_parsedData->description(), QLatin1Literal("SomeDesc"));
+    QCOMPARE(static_cast<int>(m_parsedData->submodules().size()), 0);
 }
 
 void ModuleMetadataParserTests::test_emptySubmodule()
@@ -75,11 +75,11 @@ void ModuleMetadataParserTests::test_emptySubmodule()
             ]
           })");
 
-    QCOMPARE(m_parsedData.submodules().size(), 1);
-    const auto submodule = m_parsedData.submodules().at(0);
-    QCOMPARE(submodule.name(), QLatin1Literal("SubmoduleName"));
-    QCOMPARE(submodule.description(), QLatin1Literal("SubmoduleDesc"));
-    QCOMPARE(submodule.elements().size(), 0);
+    QCOMPARE(static_cast<int>(m_parsedData->submodules().size()), 1);
+    const auto submodule = m_parsedData->submodules().at(0).get();
+    QCOMPARE(submodule->name(), QLatin1Literal("SubmoduleName"));
+    QCOMPARE(submodule->description(), QLatin1Literal("SubmoduleDesc"));
+    QCOMPARE(static_cast<int>(submodule->elements().size()), 0);
 }
 
 void ModuleMetadataParserTests::test_emptyElement()
@@ -99,15 +99,15 @@ void ModuleMetadataParserTests::test_emptyElement()
             ]
           })");
 
-    QCOMPARE(m_parsedData.submodules().size(), 1);
-    const auto submodule = m_parsedData.submodules().at(0);
-    QCOMPARE(submodule.elements().size(), 1);
-    const auto element = submodule.elements().at(0);
-    QCOMPARE(element.name(), QLatin1Literal("ElementName"));
-    QCOMPARE(element.description(), QLatin1Literal("ElementDesc"));
-    QCOMPARE(element.asn1Files().size(), 0);
-    QCOMPARE(element.conflicts().size(), 0);
-    QCOMPARE(element.requirements().size(), 0);
+    QCOMPARE(static_cast<int>(m_parsedData->submodules().size()), 1);
+    const auto submodule = m_parsedData->submodules().at(0).get();
+    QCOMPARE(static_cast<int>(submodule->elements().size()), 1);
+    const auto element = submodule->elements().at(0).get();
+    QCOMPARE(element->name(), QLatin1Literal("ElementName"));
+    QCOMPARE(element->description(), QLatin1Literal("ElementDesc"));
+    QCOMPARE(element->asn1Files().size(), 0);
+    QCOMPARE(element->conflicts().size(), 0);
+    QCOMPARE(element->requirements().size(), 0);
 }
 
 void ModuleMetadataParserTests::test_completeElement()
@@ -132,15 +132,15 @@ void ModuleMetadataParserTests::test_completeElement()
             ]
           })");
 
-    QCOMPARE(m_parsedData.submodules().size(), 1);
-    const auto submodule = m_parsedData.submodules().at(0);
-    QCOMPARE(submodule.elements().size(), 1);
-    const auto element = submodule.elements().at(0);
-    QCOMPARE(element.asn1Files(), (QStringList{"f1", "f2"}));
-    QCOMPARE(element.conflicts(), (QStringList{"c1", "c2", "c3"}));
-    QCOMPARE(element.requirements(), (QStringList{"r1"}));
-    QCOMPARE(element.imports().size(), 1);
-    const auto import = element.imports().at(0);
+    QCOMPARE(static_cast<int>(m_parsedData->submodules().size()), 1);
+    const auto submodule = m_parsedData->submodules().at(0).get();
+    QCOMPARE(static_cast<int>(submodule->elements().size()), 1);
+    const auto element = submodule->elements().at(0).get();
+    QCOMPARE(element->asn1Files(), (QStringList{"f1", "f2"}));
+    QCOMPARE(element->conflicts(), (QStringList{"c1", "c2", "c3"}));
+    QCOMPARE(element->requirements(), (QStringList{"r1"}));
+    QCOMPARE(element->imports().size(), 1);
+    const auto import = element->imports().at(0);
     QCOMPARE(import.from(), QLatin1Literal("X"));
     QCOMPARE(import.types().size(), 2);
     QCOMPARE(import.types().at(0), QLatin1Literal("Y"));

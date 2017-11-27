@@ -22,38 +22,36 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
 
-#include <stdexcept>
-#include <string>
+#include "importcomponentwizard.h"
 
-#include <QJsonDocument>
-#include <QByteArray>
+#include <coreplugin/icore.h>
 
-#include "metadata/module.h"
+#include "selectsourcepage.h"
+#include "selectcomponentspage.h"
+#include "summarypage.h"
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Libraries {
+using namespace Asn1Acn::Internal::Libraries;
+using namespace Asn1Acn::Internal::Libraries::Wizard;
 
-class ModuleMetadataParser
+ImportComponentWizard::ImportComponentWizard(QWidget *parent)
+    : QWizard(parent)
 {
-public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    setAttribute(Qt::WA_DeleteOnClose);
+    connect(Core::ICore::instance(), &Core::ICore::coreAboutToClose, this, &QWidget::close);
 
-    ModuleMetadataParser(const QByteArray &data);
+    setPage(static_cast<int>(Page::Page_SelectSource), new SelectSourcePage(m_importer));
+    setPage(static_cast<int>(Page::Page_SelectItems), new SelectComponentsPage(m_importer));
+    setPage(static_cast<int>(Page::Page_Summary), new SummaryPage(m_importer));
 
-    std::unique_ptr<Metadata::Module> parse();
+    setStartId(static_cast<int>(Page::Page_SelectSource));
 
-private:
-    QJsonDocument m_document;
-};
+    setOption(NoBackButtonOnStartPage);
+}
 
-} // namespace Libraries
-} // namespace Internal
-} // namespace Asn1Acn
+void ImportComponentWizard::accept()
+{
+    m_importer.import();
+
+    QDialog::accept();
+}

@@ -22,37 +22,48 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <stdexcept>
-#include <string>
+#include <memory>
+#include <map>
 
-#include <QJsonDocument>
-#include <QByteArray>
+#include <QMutex>
+#include <QString>
 
-#include "metadata/module.h"
+#include "metadata/library.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 
-class ModuleMetadataParser
+class LibraryStorage : public QObject
 {
+    Q_OBJECT
+
+    LibraryStorage() = default;
+    ~LibraryStorage() = default;
+
 public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    using LibraryPtr = std::unique_ptr<Metadata::Library>;
 
-    ModuleMetadataParser(const QByteArray &data);
+    static LibraryStorage *instance();
 
-    std::unique_ptr<Metadata::Module> parse();
+    void addLibrary(LibraryPtr library);
+    void removeLibraries();
+
+    const Metadata::Library *library(const QString &path) const;
+
+signals:
+    void aboutToChange();
+    void changed();
 
 private:
-    QJsonDocument m_document;
+    std::map<QString, LibraryPtr> m_libraries;
+
+    mutable QMutex m_libraryMutex;
 };
+
 
 } // namespace Libraries
 } // namespace Internal

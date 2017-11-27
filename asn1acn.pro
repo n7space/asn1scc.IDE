@@ -127,8 +127,18 @@ SOURCES += \
     \
     libraries/modulemetadataparser.cpp \
     libraries/generalmetadataparser.cpp \
-    libraries/importcomponentdialog.cpp \
     libraries/componentimporter.cpp \
+    libraries/componentdirectorywatcher.cpp \
+    libraries/componentlibraryprocessor.cpp \
+    libraries/componentlibrarydispatcher.cpp \
+    libraries/librarystorage.cpp \
+    libraries/librarymodel.cpp \
+    \
+    libraries/wizard/importcomponentwizard.cpp \
+    libraries/wizard/selectsourcepage.cpp \
+    libraries/wizard/selectcomponentspage.cpp \
+    libraries/wizard/summarypage.cpp \
+    libraries/wizard/metadatacomponentselector.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -233,15 +243,26 @@ HEADERS += \
     \
     libraries/modulemetadataparser.h \
     libraries/generalmetadataparser.h \
+    libraries/componentimporter.h \
+    libraries/componentdirectorywatcher.h \
+    libraries/componentlibraryprocessor.h \
+    libraries/componentlibrarydispatcher.h \
+    libraries/librarystorage.h \
+    libraries/librarymodel.h \
+    \
+    libraries/wizard/importcomponentwizard.h \
+    libraries/wizard/selectsourcepage.h \
+    libraries/wizard/selectcomponentspage.h \
+    libraries/wizard/summarypage.h \
+    libraries/wizard/metadatacomponentselector.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/import.h \
     libraries/metadata/submodule.h \
     libraries/metadata/module.h \
+    libraries/metadata/library.h \
     libraries/metadata/general.h \
-    \
-    libraries/importcomponentdialog.h \
-    libraries/componentimporter.h \
+    libraries/metadata/librarynode.h \
     \
     asn1acn_global.h \
     asn1acnconstants.h \
@@ -298,8 +319,10 @@ equals(TEST, 1) {
 SOURCES += \
     libraries/tests/modulemetadataparser_tests.cpp \
     libraries/tests/generalmetadataparser_tests.cpp \
+    libraries/tests/librarymodel_tests.cpp \
     \
-    tree-views/tests/3rdparty/modeltest.cpp \
+    3rdparty/tests/modeltest.cpp \
+    \
     tree-views/tests/outlinemodel_tests.cpp \
     tree-views/tests/combomodel_tests.cpp \
     tree-views/tests/typestreemodel_tests.cpp \
@@ -325,13 +348,15 @@ SOURCES += \
 HEADERS += \
     libraries/tests/modulemetadataparser_tests.h \
     libraries/tests/generalmetadataparser_tests.h \
+    libraries/tests/librarymodel_tests.h \
     \
-    tree-views/tests/3rdparty/modeltest.h \
     tree-views/tests/outlinemodel_tests.h \
     tree-views/tests/combomodel_tests.h \
     tree-views/tests/typestreemodel_tests.h \
     tree-views/tests/displayrolevisitor_tests.h \
     tree-views/tests/outlineindexupdater_tests.h \
+    \
+    3rdparty/tests/modeltest.h \
     \
     tests/astxmlparser_tests.h \
     tests/errormessageparser_tests.h \

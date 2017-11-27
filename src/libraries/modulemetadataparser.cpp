@@ -75,52 +75,54 @@ Metadata::Import readImport(const QJsonObject &object)
 }
 
 template <typename T>
-T readNamedType(const QJsonObject &object)
+std::unique_ptr<T> readNamedType(const QJsonObject &object)
 {
-    return T{readName(object), readDescription(object)};
+    return std::make_unique<T>(readName(object), readDescription(object));
 }
 
-Metadata::Element readElement(const QJsonObject &object)
+std::unique_ptr<Metadata::Element> readElement(const QJsonObject &object)
 {
     auto element = readNamedType<Metadata::Element>(object);
     foreachItem(object["asn1Files"], [&element](const QJsonValue &value) {
-        element.addAsn1File(value.toString());
+        element->addAsn1File(value.toString());
     });
     foreachItem(object["conflicts"], [&element](const QJsonValue &value) {
-        element.addConflict(value.toString());
+        element->addConflict(value.toString());
     });
     foreachItem(object["requires"], [&element](const QJsonValue &value) {
-        element.addRequirement(value.toString());
+        element->addRequirement(value.toString());
     });
     foreachItem(object["imports"], [&element](const QJsonValue &value) {
-        element.addImport(readImport(value.toObject()));
+        element->addImport(readImport(value.toObject()));
     });
     return element;
 }
 
-Metadata::Submodule readSubmodule(const QJsonObject &object)
+std::unique_ptr<Metadata::Submodule> readSubmodule(const QJsonObject &object)
 {
     auto submodule = readNamedType<Metadata::Submodule>(object);
     foreachItem(object["elements"], [&submodule](const QJsonValue &value) {
-        submodule.addElement(readElement(value.toObject()));
+        auto element = readElement(value.toObject());
+        submodule->addElement(std::move(element));
     });
-    return submodule;
+    return std::move(submodule);
 }
 
-Metadata::Module readModule(const QJsonObject &object)
+std::unique_ptr<Metadata::Module> readModule(const QJsonObject &object)
 {
     auto module = readNamedType<Metadata::Module>(object);
     foreachItem(object["submodules"], [&module](const QJsonValue &value) {
-        module.addSubmodule(readSubmodule(value.toObject()));
+        auto element = readSubmodule(value.toObject());
+        module->addSubmodule(std::move(element));
     });
-    return module;
+    return std::move(module);
 }
 
 } // namespace
 
-Metadata::Module ModuleMetadataParser::parse()
+std::unique_ptr<Metadata::Module> ModuleMetadataParser::parse()
 {
     if (m_document.isNull())
         throw Error("JSON malformed");
-    return readModule(m_document.object());
+    return std::move(readModule(m_document.object()));
 }

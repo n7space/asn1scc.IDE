@@ -24,36 +24,25 @@
 ****************************************************************************/
 #pragma once
 
-#include <stdexcept>
-#include <string>
-
-#include <QJsonDocument>
-#include <QByteArray>
-
-#include "metadata/module.h"
+#include <QObject>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Tests {
 
-class ModuleMetadataParser
+class LibraryModelTests : public QObject
 {
+    Q_OBJECT
 public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    explicit LibraryModelTests(QObject *parent = 0);
 
-    ModuleMetadataParser(const QByteArray &data);
-
-    std::unique_ptr<Metadata::Module> parse();
-
-private:
-    QJsonDocument m_document;
+private slots:
+    void test_emptyModel();
+    void test_modelWithDummyPopulation();
 };
 
+} // namespace Tests
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

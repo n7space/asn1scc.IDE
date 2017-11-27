@@ -30,21 +30,20 @@
 
 #include "import.h"
 
+#include "librarynode.h"
+
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 namespace Metadata {
 
-class Element
+class Element : public LibraryNode
 {
 public:
     Element(const QString &name, const QString &description)
-        : m_name(name)
-        , m_description(description)
+        : LibraryNode(name, description)
     {}
 
-    const QString &name() const { return m_name; }
-    const QString &description() const { return m_description; }
     const QStringList &asn1Files() const { return m_asn1Files; }
     const QStringList &conflicts() const { return m_conflicts; }
     const QStringList &requirements() const { return m_requirements; }
@@ -55,9 +54,11 @@ public:
     void addRequirement(const QString &requirement) { m_requirements.append(requirement); }
     void addImport(const Import &import) { m_imports.append(import); }
 
+    LibraryNode *child(int num) const override { Q_UNUSED(num); return nullptr; }
+    int childrenCount() const override { return 0; }
+    int childIndex(const LibraryNode *child) const override { Q_UNUSED(child); return -1; }
+
 private:
-    QString m_name;
-    QString m_description;
     QStringList m_asn1Files;
     QStringList m_conflicts;
     QStringList m_requirements;

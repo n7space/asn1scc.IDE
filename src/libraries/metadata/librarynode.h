@@ -22,52 +22,61 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <memory>
-#include <vector>
-
-#include "submodule.h"
+#include <QString>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 namespace Metadata {
 
-class Module : public LibraryNode
+class LibraryNode
 {
-public:
-    Module(const QString &name, const QString &description)
-        : LibraryNode(name, description)
+protected:
+    LibraryNode(const QString &name, const QString &description)
+        : m_name(name)
+        , m_description(description)
+        , m_parent(nullptr)
+        , m_checked(false)
     {}
 
-    using Submodules = std::vector<std::unique_ptr<Submodule>>;
+public:
+    virtual ~LibraryNode() = default;
 
-    const Submodules &submodules() const { return m_submodules; }
+    const QString &name() const { return m_name; }
+    const QString &description() const { return m_description; }
 
-    void addSubmodule(std::unique_ptr<Submodule> submodule)
+    virtual int childrenCount() const = 0;
+    virtual LibraryNode *child(int num) const = 0;
+    virtual int childIndex(const LibraryNode *child) const = 0;
+
+    LibraryNode *parent() const { return m_parent; }
+    void setParent(LibraryNode *parent) { m_parent = parent; }
+
+    bool checked() const { return m_checked; }
+    void setChecked(bool checked) { m_checked = checked; }
+
+protected:
+    template <typename Collection>
+    int findChildIndex(const Collection &col, const LibraryNode *child) const
     {
-        submodule->setParent(this);
-        m_submodules.push_back(std::move(submodule));
-    }
-
-    LibraryNode *child(int num) const override
-    {
-        return num < childrenCount() ? m_submodules[num].get() : nullptr;
-    }
-
-    int childrenCount() const override
-    {
-        return static_cast<int>(m_submodules.size());
-    }
-
-    int childIndex(const LibraryNode *child) const override
-    {
-        return findChildIndex<Submodules>(submodules(), child);
+        int idx = 0;
+        for (const auto &item : col) {
+            if (item->name() == child->name())
+                return idx;
+            ++idx;
+        }
+        return -1;
     }
 
 private:
-    Submodules m_submodules;
+    const QString m_name;
+    const QString m_description;
+
+    LibraryNode *m_parent;
+    bool m_checked;
 };
 
 } // namespace Metadata

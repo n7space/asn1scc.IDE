@@ -22,36 +22,22 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <stdexcept>
-#include <string>
-
-#include <QJsonDocument>
-#include <QByteArray>
-
-#include "metadata/module.h"
+#include <QObject>
+#include <QStringList>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 
-class ModuleMetadataParser
+class CompontentLibraryDispatcher : public QObject
 {
-public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    Q_OBJECT
 
-    ModuleMetadataParser(const QByteArray &data);
-
-    std::unique_ptr<Metadata::Module> parse();
-
-private:
-    QJsonDocument m_document;
+public slots:
+    void dispatch(const QStringList &librariesDirectory, const QStringList &metadataFiles) const;
 };
 
 } // namespace Libraries

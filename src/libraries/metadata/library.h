@@ -24,36 +24,53 @@
 ****************************************************************************/
 #pragma once
 
-#include <stdexcept>
-#include <string>
+#include <memory>
+#include <vector>
 
-#include <QJsonDocument>
-#include <QByteArray>
-
-#include "metadata/module.h"
+#include "module.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Metadata {
 
-class ModuleMetadataParser
+class Library : public LibraryNode
 {
 public:
-    struct Error : std::runtime_error
+    Library(const QString &name)
+        : LibraryNode(name, QString())
+    {}
+
+    using Modules = std::vector<std::unique_ptr<Module>>;
+
+    const Modules &modules() const { return m_modules; }
+
+    void addModule(std::unique_ptr<Module> module)
     {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+        module->setParent(this);
+        m_modules.push_back(std::move(module));
+    }
 
-    ModuleMetadataParser(const QByteArray &data);
+    LibraryNode *child(int num) const override
+    {
+        return num < childrenCount() ? m_modules[num].get() : nullptr;
+    }
 
-    std::unique_ptr<Metadata::Module> parse();
+    int childrenCount() const override
+    {
+        return static_cast<int>(m_modules.size());
+    }
+
+    int childIndex(const LibraryNode *child) const override
+    {
+        return findChildIndex<Modules>(modules(), child);
+    }
 
 private:
-    QJsonDocument m_document;
+    Modules m_modules;
 };
 
+} // namespace Metadata
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

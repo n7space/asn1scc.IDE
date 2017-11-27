@@ -29,8 +29,6 @@
 #include <data/project.h>
 #include <data/root.h>
 
-#include <QDebug>
-
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::TreeViews::ComboVisitors;
 

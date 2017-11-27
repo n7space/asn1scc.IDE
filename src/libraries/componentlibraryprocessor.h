@@ -24,34 +24,31 @@
 ****************************************************************************/
 #pragma once
 
-#include <stdexcept>
-#include <string>
+#include <QObject>
+#include <QString>
 
-#include <QJsonDocument>
-#include <QByteArray>
-
-#include "metadata/module.h"
+#include <filesourcereader.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 
-class ModuleMetadataParser
+class ComponentLibraryProcessor : public QObject
 {
+    Q_OBJECT
+
 public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
-
-    ModuleMetadataParser(const QByteArray &data);
-
-    std::unique_ptr<Metadata::Module> parse();
+    ComponentLibraryProcessor(const QString &path,
+                              const QStringList &files,
+                              const FileSourceReader &reader,
+                              QObject *parent = nullptr);
+    void process();
 
 private:
-    QJsonDocument m_document;
+    const FileSourceReader m_reader;
+
+    const QString m_path;
+    const QStringList m_files;
 };
 
 } // namespace Libraries

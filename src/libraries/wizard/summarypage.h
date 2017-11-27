@@ -22,38 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <stdexcept>
-#include <string>
+#include <QLabel>
+#include <QWizardPage>
 
-#include <QJsonDocument>
-#include <QByteArray>
-
-#include "metadata/module.h"
+#include <libraries/componentimporter.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Wizard {
 
-class ModuleMetadataParser
+class SummaryPage : public QWizardPage
 {
+    Q_OBJECT
+
 public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
-
-    ModuleMetadataParser(const QByteArray &data);
-
-    std::unique_ptr<Metadata::Module> parse();
+    explicit SummaryPage(ComponentImporter &importer, QWidget *parent = nullptr);
+    void initializePage() override;
 
 private:
-    QJsonDocument m_document;
+    QLabel *m_filesListCaption;
+    QLabel *m_filesList;
+
+    ComponentImporter &m_importer;
 };
 
+} // namespace Wizard
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

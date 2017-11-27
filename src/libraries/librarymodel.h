@@ -22,36 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <stdexcept>
-#include <string>
+#include <QModelIndex>
+#include <QAbstractItemModel>
 
-#include <QJsonDocument>
-#include <QByteArray>
-
-#include "metadata/module.h"
+#include <libraries/metadata/librarynode.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 
-class ModuleMetadataParser
+class LibraryModel : public QAbstractItemModel
 {
+    Q_OBJECT
 public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    explicit LibraryModel(const Metadata::LibraryNode *root, QObject *parent = 0);
 
-    ModuleMetadataParser(const QByteArray &data);
-
-    std::unique_ptr<Metadata::Module> parse();
+    QVariant data(const QModelIndex &index, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
 
 private:
-    QJsonDocument m_document;
+    const Metadata::LibraryNode *dataNode(const QModelIndex &index) const;
+
+    const Metadata::LibraryNode *m_root;
 };
 
 } // namespace Libraries

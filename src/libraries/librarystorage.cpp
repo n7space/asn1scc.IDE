@@ -22,38 +22,48 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
 
-#include <stdexcept>
-#include <string>
+#include "librarystorage.h"
 
-#include <QJsonDocument>
-#include <QByteArray>
+#include <QMutexLocker>
 
-#include "metadata/module.h"
+using namespace Asn1Acn::Internal::Libraries;
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Libraries {
-
-class ModuleMetadataParser
+LibraryStorage *LibraryStorage::instance()
 {
-public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    static LibraryStorage instance_;
+    return &instance_;
+}
 
-    ModuleMetadataParser(const QByteArray &data);
+void LibraryStorage::addLibrary(LibraryPtr library)
+{
+    QMutexLocker lock(&m_libraryMutex);
 
-    std::unique_ptr<Metadata::Module> parse();
+    emit aboutToChange();
 
-private:
-    QJsonDocument m_document;
-};
+    m_libraries[library->name()] = std::move(library);
 
-} // namespace Libraries
-} // namespace Internal
-} // namespace Asn1Acn
+    emit changed();
+}
+
+void LibraryStorage::removeLibraries()
+{
+    QMutexLocker lock(&m_libraryMutex);
+
+    emit aboutToChange();
+
+    m_libraries.clear();
+
+    emit changed();
+}
+
+const Metadata::Library *LibraryStorage::library(const QString &path) const
+{
+    QMutexLocker lock(&m_libraryMutex);
+
+    for (const auto &item : m_libraries)
+        if (item.first == path)
+            return item.second.get();
+
+    return nullptr;
+}
