@@ -255,6 +255,8 @@ std::unique_ptr<Data::Types::Type> AstXmlParser::readType()
             readSequence();
         else if (name == QStringLiteral("SequenceOfType"))
             readSequenceOf();
+        else if (name == QStringLiteral("ChoiceType"))
+            readChoice();
         else
             m_xmlReader.skipCurrentElement();
     }
@@ -286,4 +288,10 @@ void AstXmlParser::readSequence()
 void AstXmlParser::readSequenceOf()
 {
     readType();
+}
+
+void AstXmlParser::readChoice()
+{
+    while(nextRequiredElementIs(QStringLiteral("ChoiceChild")))
+        readType();
 }
