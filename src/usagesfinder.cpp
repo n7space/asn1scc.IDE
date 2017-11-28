@@ -47,8 +47,9 @@ using namespace Asn1Acn::Internal;
 using namespace Core;
 using Data::TypeReference;
 
-UsagesFinder::UsagesFinder(QObject *parent)
+UsagesFinder::UsagesFinder(ParsedDataStorage *storage, QObject *parent)
     : QObject(parent)
+    , m_storage(storage)
 {
 }
 
@@ -78,9 +79,9 @@ void UsagesFinder::searchAgain()
     findAll(search, params);
 }
 
-static int countFiles()
+static int countFiles(ParsedDataStorage *storage)
 {
-    const auto &projects = ParsedDataStorage::instance()->root()->projects();
+    const auto &projects = storage->root()->projects();
     auto fileCount = std::accumulate(std::begin(projects),
                                      std::end(projects),
                                      0,
@@ -91,11 +92,12 @@ static int countFiles()
 }
 
 static void performSearch(QFutureInterface<TypeReference> &future,
+                          ParsedDataStorage *storage,
                           const UsagesFinderParameters &params)
 {
-    future.setProgressRange(0, countFiles());
+    future.setProgressRange(0, countFiles(storage));
 
-    for (const auto &project : ParsedDataStorage::instance()->root()->projects())
+    for (const auto &project : storage->root()->projects())
         for (const auto &file : project->files())
         {
             for (const auto &ref : file->references())
@@ -154,7 +156,7 @@ void UsagesFinder::findAll(SearchResult *search, const UsagesFinderParameters &p
             this, &UsagesFinder::openEditor);
 
     SearchResultWindow::instance()->popup(IOutputPane::ModeSwitch | IOutputPane::WithFocus);
-    auto result = Utils::runAsync(performSearch, params);
+    auto result = Utils::runAsync(performSearch, m_storage, params);
     createWatcher(result, search);
 
     auto progress = ProgressManager::addTask(result, tr("Searching for Usages"),
@@ -173,30 +175,3 @@ void UsagesFinder::openEditor(const SearchResultItem &item)
         EditorManager::openEditor(QDir::fromNativeSeparators(item.text));
     }
 }
-
-/*
- *
- * TODO
- * void CppEditorPlugin::onTaskStarted(Id type)
-{
-    if (type == CppTools::Constants::TASK_INDEX) {
-        m_renameSymbolUnderCursorAction->setEnabled(false);
-        m_findUsagesAction->setEnabled(false);
-        m_reparseExternallyChangedFiles->setEnabled(false);
-        m_openTypeHierarchyAction->setEnabled(false);
-        m_openIncludeHierarchyAction->setEnabled(false);
-    }
-}
-
-void CppEditorPlugin::onAllTasksFinished(Id type)
-{
-    if (type == CppTools::Constants::TASK_INDEX) {
-        m_renameSymbolUnderCursorAction->setEnabled(true);
-        m_findUsagesAction->setEnabled(true);
-        m_reparseExternallyChangedFiles->setEnabled(true);
-        m_openTypeHierarchyAction->setEnabled(true);
-        m_openIncludeHierarchyAction->setEnabled(true);
-    }
-}
-
- * */

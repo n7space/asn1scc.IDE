@@ -52,6 +52,8 @@ public:
 private slots:
     void raiseImportComponentWindow();
     void findUsages();
+    void onTaskStarted(Core::Id id);
+    void onTaskFinished(Core::Id id);
 
 private:
     using ActionContainer = Core::ActionContainer;
@@ -68,6 +70,7 @@ private:
     void addToToolsMenu(ActionContainer *container);
 
     QPointer<Libraries::Wizard::ImportComponentWizard> m_importComponentWizard;
+    QAction *m_findUsagesAction;
 
 #ifdef WITH_TESTS   
     QList<QObject *> createTestObjects() const override;

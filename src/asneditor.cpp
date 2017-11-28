@@ -35,6 +35,7 @@
 #include "asn1acnconstants.h"
 #include "linkcreator.h"
 #include "referencefinder.h"
+#include "parseddatastorage.h"
 #include "usagesfinder.h"
 #include "asndocument.h"
 #include "indenter.h"
@@ -79,7 +80,7 @@ AsnEditorFactory::AsnEditorFactory()
 }
 
 AsnEditorWidget::AsnEditorWidget()
-    : m_usagesFinder(new UsagesFinder(this))
+    : m_usagesFinder(new UsagesFinder(ParsedDataStorage::instance(), this))
 {
 }
 

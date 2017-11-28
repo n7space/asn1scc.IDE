@@ -27,6 +27,7 @@
 #include <QObject>
 #include <QString>
 #include <QFuture>
+#include <QPointer>
 
 namespace Core {
 class SearchResult;
@@ -40,6 +41,8 @@ namespace Data {
 class TypeReference;
 }
 
+class ParsedDataStorage;
+
 struct UsagesFinderParameters
 {
     QString module;
@@ -50,7 +53,8 @@ class UsagesFinder : public QObject
 {
     Q_OBJECT
 public:
-    explicit UsagesFinder(QObject *parent = nullptr);
+    explicit UsagesFinder(ParsedDataStorage *storage,
+                          QObject *parent = nullptr);
 
     void findUsages(const QString &module, const QString &type);
 
@@ -60,6 +64,8 @@ private:
     void findAll(Core::SearchResult *search, const UsagesFinderParameters &params);
     void createWatcher(const QFuture<Data::TypeReference> &future,
                        Core::SearchResult *search);
+
+    QPointer<ParsedDataStorage> m_storage;
 };
 
 } // namespace Internal

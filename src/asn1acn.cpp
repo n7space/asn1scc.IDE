@@ -31,6 +31,7 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/coreconstants.h>
+#include <coreplugin/progressmanager/progressmanager.h>
 #include <coreplugin/editormanager/editormanager.h>
 
 #include <extensionsystem/pluginmanager.h>
@@ -148,6 +149,11 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     Core::JsExpander::registerQObjectForJs(QLatin1String("Asn1Acn"), new Asn1AcnJsExtension);
 
+    connect(Core::ProgressManager::instance(), &Core::ProgressManager::taskStarted,
+            this, &Asn1AcnPlugin::onTaskStarted);
+    connect(Core::ProgressManager::instance(), &Core::ProgressManager::allTasksFinished,
+            this, &Asn1AcnPlugin::onTaskFinished);
+
     return true;
 }
 
@@ -177,6 +183,7 @@ void Asn1AcnPlugin::initializeFindUsagesAction(ActionContainer *toolsMenu,
     connect(action, &QAction::triggered, this, &Asn1AcnPlugin::findUsages);
     contextMenu->addAction(command);
     toolsMenu->addAction(command);
+    m_findUsagesAction = action;
 }
 
 static EditorWidget *currentEditorWidget()
@@ -265,6 +272,20 @@ void Asn1AcnPlugin::raiseImportComponentWindow()
     } else {
         m_importComponentWizard = new Libraries::Wizard::ImportComponentWizard(Core::ICore::mainWindow());
         m_importComponentWizard->show();
+    }
+}
+
+void Asn1AcnPlugin::onTaskStarted(Core::Id id)
+{
+    if (id == Constants::TASK_SEARCH) {
+        m_findUsagesAction->setEnabled(false);
+    }
+}
+
+void Asn1AcnPlugin::onTaskFinished(Core::Id id)
+{
+    if (id == Constants::TASK_SEARCH) {
+        m_findUsagesAction->setEnabled(true);
     }
 }
 
