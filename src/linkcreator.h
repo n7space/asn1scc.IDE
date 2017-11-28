@@ -36,6 +36,8 @@
 #include "data/typereference.h"
 #include "data/sourcelocation.h"
 
+#include "parseddatastorage.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -45,7 +47,7 @@ public:
 
     using Link = TextEditor::TextEditorWidget::Link;
 
-    LinkCreator(const TextEditor::TextDocument &document);
+    LinkCreator(const TextEditor::TextDocument &document, const ParsedDataStorage *storage);
 
     Link createHighlightLink(const QTextCursor &cursor) const;
     Link createTargetLink(const QTextCursor &cursor) const;
@@ -65,6 +67,7 @@ private:
 
     const QString m_documentPath;
     const TextEditor::TextDocument &m_textDocument;
+    const ParsedDataStorage *m_storage;
 };
 
 } /* namespace Internal */
