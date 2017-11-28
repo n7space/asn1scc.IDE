@@ -82,7 +82,7 @@ AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
 {
     Q_UNUSED(inNextSplit);
 
-    LinkCreator linkCreator(*textDocument());
+    LinkCreator linkCreator(*textDocument(), ParsedDataStorage::instance());
     if (resolveTarget)
         return linkCreator.createTargetLink(cursor);
     else

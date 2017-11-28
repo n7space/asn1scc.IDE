@@ -30,12 +30,12 @@
 
 #include <utils/fileutils.h>
 
-#include "parseddatastorage.h"
-
 using namespace Asn1Acn::Internal;
 
-LinkCreator::LinkCreator(const TextEditor::TextDocument &document)
-    : m_documentPath(document.filePath().toString()), m_textDocument(document)
+LinkCreator::LinkCreator(const TextEditor::TextDocument &document, const ParsedDataStorage *storage)
+    : m_documentPath(document.filePath().toString())
+    , m_textDocument(document)
+    , m_storage(storage)
 {
 }
 
@@ -60,7 +60,7 @@ Data::TypeReference LinkCreator::getSymbolTypeReference(const QTextCursor &curso
     if (!m_textDocument.characterAt(cursor.position()).isLetterOrNumber())
         return Data::TypeReference();
 
-    const auto file = ParsedDataStorage::instance()->getAnyFileForPath(m_documentPath);
+    const auto file = m_storage->getAnyFileForPath(m_documentPath);
 
     return file != nullptr
             ? getTypeReference(file, cursor.blockNumber() + 1, cursor.columnNumber())
@@ -72,7 +72,7 @@ Data::TypeReference LinkCreator::getTypeReference(const Data::File *file, int li
     const auto range = file->references().equal_range(line);
     for(auto it = range.first; it != range.second; it++) {
         const int referedColumn = it->second->location().column();
-        if (col >=  referedColumn && col <= referedColumn + it->second->name().size())
+        if (col >= referedColumn && col <= referedColumn + it->second->name().size())
             return *(it->second);
     }
 
@@ -98,9 +98,9 @@ LinkCreator::Link LinkCreator::getTargetSymbolLink(const Data::TypeReference &sy
 {
     Link target = symbol;
 
-    Data::SourceLocation targetLocation = ParsedDataStorage::instance()->getDefinitionLocation(m_documentPath,
-                                                                                               symbolSource.name(),
-                                                                                               symbolSource.module());
+    Data::SourceLocation targetLocation = m_storage->getDefinitionLocation(m_documentPath,
+                                                                           symbolSource.name(),
+                                                                           symbolSource.module());
 
     if (!targetLocation.isValid()) {
         targetLocation = getTargetLocation(symbolSource.name(), symbolSource.module());
@@ -115,7 +115,7 @@ LinkCreator::Link LinkCreator::getTargetSymbolLink(const Data::TypeReference &sy
 
 Data::SourceLocation LinkCreator::getTargetLocation(const QString &typeName, const QString &moduleName) const
 {
-    QStringList projects = ParsedDataStorage::instance()->getProjectsForFile(m_documentPath);
+    QStringList projects = m_storage->getProjectsForFile(m_documentPath);
 
     if (projects.empty())
         return Data::SourceLocation();
@@ -134,14 +134,12 @@ Data::SourceLocation LinkCreator::getTargetLocationFromProject(const QString &pr
                                                                const QString &typeName,
                                                                const QString &moduleName) const
 {
-    const auto storage = ParsedDataStorage::instance();
-
-    const auto paths = storage->getFilesPathsFromProject(projectName);
+    const auto paths = m_storage->getFilesPathsFromProject(projectName);
     for (const auto &path : paths) {
         if (path == m_documentPath)
             continue;
 
-        const auto location = storage->getDefinitionLocation(path, typeName, moduleName);
+        const auto location = m_storage->getDefinitionLocation(path, typeName, moduleName);
         if (location.isValid())
             return location;
     }

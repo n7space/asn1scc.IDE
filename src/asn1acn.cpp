@@ -77,6 +77,7 @@
 #include "tests/sourcemapper_tests.h"
 #include "tests/modelvalidityguard_tests.h"
 #include "libraries/tests/librarymodel_tests.h"
+#include "tests/linkcreator_tests.h"
 #include "libraries/tests/modulemetadataparser_tests.h"
 #include "libraries/tests/generalmetadataparser_tests.h"
 #include "tree-views/tests/displayrolevisitor_tests.h"
@@ -261,6 +262,7 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
             << new Tests::AutoCompleterTests
             << new Tests::SourceMapperTests
             << new Tests::ModelValidityGuardTests
+            << new Tests::LinkCreatorTests
                ;
 }
 #endif
