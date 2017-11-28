@@ -69,6 +69,7 @@ void File::addErrorMessage(const ErrorMessage &message)
 void File::clearReferences()
 {
     m_referencesMap.clear();
+    m_references.clear();
 }
 
 void File::clearErrors()
