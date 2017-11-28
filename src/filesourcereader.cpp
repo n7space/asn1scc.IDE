@@ -32,6 +32,10 @@
 
 using namespace Asn1Acn::Internal;
 
+FileSourceReader::FileSourceReader()
+{
+}
+
 QString FileSourceReader::readContent(const QString &fileName) const
 {
     const QString content = readFromDocumentModel(fileName);

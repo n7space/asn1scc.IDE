@@ -36,6 +36,8 @@ class FileSourceReader
         : public SourceReader
 {
 public:
+    FileSourceReader();
+
     QString readContent(const QString &fileName) const override;
 
 private:
