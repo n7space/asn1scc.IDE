@@ -24,6 +24,8 @@
 ****************************************************************************/
 #pragma once
 
+#include <memory>
+
 #include <QObject>
 #include <QString>
 #include <QFuture>
@@ -39,9 +41,11 @@ namespace Internal {
 
 namespace Data {
 class TypeReference;
+class SourceLocation;
 }
 
 class ParsedDataStorage;
+class SourceReader;
 
 struct UsagesFinderParameters
 {
@@ -54,7 +58,9 @@ class UsagesFinder : public QObject
     Q_OBJECT
 public:
     explicit UsagesFinder(ParsedDataStorage *storage,
+                          std::unique_ptr<SourceReader> reader,
                           QObject *parent = nullptr);
+    ~UsagesFinder() override;
 
     void findUsages(const QString &module, const QString &type);
 
@@ -64,8 +70,13 @@ private:
     void findAll(Core::SearchResult *search, const UsagesFinderParameters &params);
     void createWatcher(const QFuture<Data::TypeReference> &future,
                        Core::SearchResult *search);
+    QString readLine(const Data::SourceLocation &loc);
+    void displayResults(Core::SearchResult *search,
+                        QFutureWatcher<Data::TypeReference> *watcher,
+                        int first, int last);
 
     QPointer<ParsedDataStorage> m_storage;
+    std::unique_ptr<SourceReader> m_reader;
 };
 
 } // namespace Internal

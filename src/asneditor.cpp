@@ -32,6 +32,7 @@
 
 #include "completion/autocompleter.h"
 #include "completion/asncompletionassist.h"
+#include "filesourcereader.h"
 #include "asn1acnconstants.h"
 #include "linkcreator.h"
 #include "referencefinder.h"
@@ -80,7 +81,9 @@ AsnEditorFactory::AsnEditorFactory()
 }
 
 AsnEditorWidget::AsnEditorWidget()
-    : m_usagesFinder(new UsagesFinder(ParsedDataStorage::instance(), this))
+    : m_usagesFinder(new UsagesFinder(ParsedDataStorage::instance(),
+                                      std::make_unique<FileSourceReader>(),
+                                      this))
 {
 }
 

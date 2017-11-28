@@ -24,8 +24,6 @@
 ****************************************************************************/
 #include "usagesfinder.h"
 
-#include <algorithm>
-
 #include <QDir>
 #include <QFutureInterface>
 
@@ -42,14 +40,22 @@
 
 #include "asn1acnconstants.h"
 #include "parseddatastorage.h"
+#include "sourcereader.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Core;
 using Data::TypeReference;
 
-UsagesFinder::UsagesFinder(ParsedDataStorage *storage, QObject *parent)
+UsagesFinder::UsagesFinder(ParsedDataStorage *storage,
+                           std::unique_ptr<SourceReader> reader,
+                           QObject *parent)
     : QObject(parent)
     , m_storage(storage)
+    , m_reader(std::move(reader))
+{
+}
+
+UsagesFinder::~UsagesFinder()
 {
 }
 
@@ -79,23 +85,11 @@ void UsagesFinder::searchAgain()
     findAll(search, params);
 }
 
-static int countFiles(ParsedDataStorage *storage)
-{
-    const auto &projects = storage->root()->projects();
-    auto fileCount = std::accumulate(std::begin(projects),
-                                     std::end(projects),
-                                     0,
-                                     [](int s, const std::unique_ptr<Data::Project> &p) {
-        return s + p->files().size();
-    });
-    return static_cast<int>(fileCount);
-}
-
 static void performSearch(QFutureInterface<TypeReference> &future,
                           ParsedDataStorage *storage,
                           const UsagesFinderParameters &params)
 {
-    future.setProgressRange(0, countFiles(storage));
+    future.setProgressRange(0, storage->getDocumentsCount());
 
     for (const auto &project : storage->root()->projects())
         for (const auto &file : project->files())
@@ -107,18 +101,18 @@ static void performSearch(QFutureInterface<TypeReference> &future,
             future.setProgressValue(future.progressValue() + 1);
         }
 
-    // TODO search only "current" project
+    future.setProgressValue(future.progressMaximum());
 }
 
-static void displayResults(SearchResult *search,
-                           QFutureWatcher<TypeReference> *watcher,
-                           int first, int last)
+void UsagesFinder::displayResults(SearchResult *search,
+                                  QFutureWatcher<TypeReference> *watcher,
+                                  int first, int last)
 {
     for (int index = first; index != last; ++index) {
         auto result = watcher->future().resultAt(index);
         search->addResult(result.location().path(),
                           result.location().line(),
-                          "TODO: result.lineText",
+                          readLine(result.location()),
                           result.location().column(),
                           result.name().length());
     }
@@ -134,9 +128,9 @@ void UsagesFinder::createWatcher(const QFuture<TypeReference> &future,
         watcher->deleteLater();
     });
 
-    connect(watcher, &QFutureWatcherBase::resultsReadyAt, search,
-            [search, watcher](int first, int last) {
-                displayResults(search, watcher, first, last);
+    connect(watcher, &QFutureWatcherBase::resultsReadyAt, this,
+            [this, search, watcher](int first, int last) {
+                this->displayResults(search, watcher, first, last);
             });
     connect(watcher, &QFutureWatcherBase::finished, search, [search, watcher]() {
         search->finishSearch(watcher->isCanceled());
@@ -174,4 +168,10 @@ void UsagesFinder::openEditor(const SearchResultItem &item)
     } else {
         EditorManager::openEditor(QDir::fromNativeSeparators(item.text));
     }
+}
+
+QString UsagesFinder::readLine(const Data::SourceLocation &loc)
+{
+    const auto lines = m_reader->readContent(loc.path()).split('\n');
+    return (loc.line() > 0 && lines.size() > loc.line()) ? lines[loc.line() - 1] : QString();
 }

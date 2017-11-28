@@ -34,10 +34,10 @@ using namespace Asn1Acn::Internal;
 
 QString FileSourceReader::readContent(const QString &fileName) const
 {
-    QString content = readFromDocumentModel(fileName);
+    const QString content = readFromDocumentModel(fileName);
 
     if (content.isEmpty())
-        content = readFromFile(fileName);
+        return readFromFile(fileName);
 
     return content;
 }
@@ -49,11 +49,7 @@ QString FileSourceReader::readFromFile(const QString &fileName) const
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return QString();
 
-    QString content = QString::fromLatin1(file.readAll().data());
-
-    file.close();
-
-    return content;
+    return QString::fromLatin1(file.readAll());
 }
 
 QString FileSourceReader::readFromDocumentModel(const QString &fileName) const
