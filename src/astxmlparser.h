@@ -79,6 +79,7 @@ private:
     std::unique_ptr<Data::Types::Type> readUserDefinedTypeReference(const Data::SourceLocation &location);
     void readSequence();
     void readSequenceOf();
+    void readChoice();
 
     QString readReferencedTypeNameAttribute();
     QString readReferencedModuleAttribute();

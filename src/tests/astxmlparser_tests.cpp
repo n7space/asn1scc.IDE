@@ -353,6 +353,55 @@ void AstXmlParserTests::test_sequenceTypeAssingment()
     QCOMPARE(ref->second->module(), QStringLiteral("ApplicationProcess"));
 }
 
+void AstXmlParserTests::test_choiceTypeAssignment()
+{
+    parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
+          R"(<ASN1AST>)"
+          R"(  <Asn1File FileName="Test2File.asn">)"
+          R"(    <Asn1Module ID="TestDefinitions">)"
+          R"(      <TypeAssignments>)"
+          R"(        <TypeAssignment Name="FirstChoice" Line="4" CharPositionInLine="0">)"
+          R"(          <Type Line="4" CharPositionInLine="16">)"
+          R"(            <ChoiceType>)"
+          R"(              <ChoiceChild VarName="child-1" Line="6" CharPositionInLine="4" EnumID ="child_1_PRESENT">)"
+          R"(                <Type Line="6" CharPositionInLine="12">)"
+          R"(                  <ReferenceType ReferencedTypeName="MyInt" Min="MIN" Max="MAX" ReferencedModName="Exporter"/>)"
+          R"(                </Type>)"
+          R"(              </ChoiceChild>)"
+          R"(              <ChoiceChild VarName="child-2" Line="7" CharPositionInLine="4" EnumID ="child_2_PRESENT">)"
+          R"(                <Type Line="7" CharPositionInLine="12">)"
+          R"(                  <IntegerType Min="MIN" Max="MAX"/>)"
+          R"(                </Type>)"
+          R"(              </ChoiceChild>)"
+          R"(            </ChoiceType>)"
+          R"(          </Type>)"
+          R"(        </TypeAssignment>)"
+          R"(      </TypeAssignments>)"
+          R"(    </Asn1Module>)"
+          R"(  </Asn1File>)"
+          R"(</ASN1AST>)");
+
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("FirstChoice")->type()->name(), QStringLiteral("CHOICE"));
+
+    QVERIFY(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("FirstChoice")->location().isValid());
+
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("FirstChoice")->location().line(), 4);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("FirstChoice")->location().column(), 0);
+    QCOMPARE(m_parsedData["Test2File.asn"]->definitions("TestDefinitions")->type("FirstChoice")->location().path(),
+            QLatin1String("Test2File.asn"));
+
+    QCOMPARE(static_cast<int>(m_parsedData["Test2File.asn"]->references().size()), 1);
+
+    const auto ref = m_parsedData["Test2File.asn"]->references().find(6);
+    QVERIFY(ref->second != nullptr);
+
+    QCOMPARE(ref->second->location().line(), 6);
+    QCOMPARE(ref->second->location().column(), 12);
+
+    QCOMPARE(ref->second->name(), QStringLiteral("MyInt"));
+    QCOMPARE(ref->second->module(), QStringLiteral("Exporter"));
+}
+
 void AstXmlParserTests::test_sequenceOfTypeAssingment()
 {
     parse(R"(<?xml version="1.0" encoding="utf-8"?>)"
