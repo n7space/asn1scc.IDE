@@ -158,13 +158,15 @@ SOURCES += \
     indenter.cpp \
     tools.cpp \
     linkcreator.cpp \
+    referencefinder.cpp \
     filesourcereader.cpp \
     errormessageparser.cpp \
     sourcemapper.cpp \
     typeslocator.cpp \
     editoroutline.cpp \
     modelvalidityguard.cpp \
-    outlinerootupdater.cpp
+    outlinerootupdater.cpp \
+    usagesfinder.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -284,6 +286,7 @@ HEADERS += \
     indenter.h \
     tr.h \
     linkcreator.h \
+    referencefinder.h \
     tools.h \
     parsingserviceprovider.h \
     parseddocumentbuilder.h \
@@ -295,7 +298,8 @@ HEADERS += \
     sourcemapper.h \
     typeslocator.h \
     modelvalidityguard.h \
-    outlinerootupdater.h
+    outlinerootupdater.h \
+    usagesfinder.h
 
 
 FORMS += \

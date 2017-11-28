@@ -57,7 +57,8 @@ void File::add(std::unique_ptr<Definitions> defs)
 
 void File::addTypeReference(std::unique_ptr<TypeReference> ref)
 {
-    m_typeReferences.insert(std::make_pair(ref->location().line(), std::move(ref)));
+    m_referencesMap.insert(std::make_pair(ref->location().line(), ref.get()));
+    m_references.push_back(std::move(ref));
 }
 
 void File::addErrorMessage(const ErrorMessage &message)
@@ -67,7 +68,8 @@ void File::addErrorMessage(const ErrorMessage &message)
 
 void File::clearReferences()
 {
-    m_typeReferences.clear();
+    m_referencesMap.clear();
+    m_references.clear();
 }
 
 void File::clearErrors()

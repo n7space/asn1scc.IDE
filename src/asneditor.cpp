@@ -32,8 +32,12 @@
 
 #include "completion/autocompleter.h"
 #include "completion/asncompletionassist.h"
+#include "filesourcereader.h"
 #include "asn1acnconstants.h"
 #include "linkcreator.h"
+#include "referencefinder.h"
+#include "parseddatastorage.h"
+#include "usagesfinder.h"
 #include "asndocument.h"
 #include "indenter.h"
 #include "tr.h"
@@ -76,6 +80,13 @@ AsnEditorFactory::AsnEditorFactory()
                           | TextEditorActionHandler::FollowSymbolUnderCursor);
 }
 
+AsnEditorWidget::AsnEditorWidget()
+    : m_usagesFinder(new UsagesFinder(ParsedDataStorage::instance(),
+                                      std::make_unique<FileSourceReader>(),
+                                      this))
+{
+}
+
 AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
                                                   bool resolveTarget,
                                                   bool inNextSplit)
@@ -87,4 +98,12 @@ AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
         return linkCreator.createTargetLink(cursor);
     else
         return linkCreator.createHighlightLink(cursor);
+}
+
+void AsnEditorWidget::findUsages()
+{
+    ReferenceFinder refFinder(*textDocument(), ParsedDataStorage::instance());
+    const auto ref = refFinder.findAt(textCursor());
+    if (ref.location().isValid())
+        m_usagesFinder->findUsages(ref.module(), ref.name());
 }

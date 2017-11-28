@@ -22,6 +22,7 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "asn1acn.h"
 
 #include <QMenu>
 
@@ -30,6 +31,8 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/coreconstants.h>
+#include <coreplugin/progressmanager/progressmanager.h>
+#include <coreplugin/editormanager/editormanager.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -86,8 +89,6 @@
 #include "tree-views/tests/combomodel_tests.h"
 #include "tree-views/tests/typestreemodel_tests.h"
 #endif
-
-#include "asn1acn.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -148,6 +149,11 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     Core::JsExpander::registerQObjectForJs(QLatin1String("Asn1Acn"), new Asn1AcnJsExtension);
 
+    connect(Core::ProgressManager::instance(), &Core::ProgressManager::taskStarted,
+            this, &Asn1AcnPlugin::onTaskStarted);
+    connect(Core::ProgressManager::instance(), &Core::ProgressManager::allTasksFinished,
+            this, &Asn1AcnPlugin::onTaskFinished);
+
     return true;
 }
 
@@ -158,17 +164,44 @@ void Asn1AcnPlugin::initializeMenus()
 
     Context context(Constants::BASE_CONTEXT);
 
-    initializeSwitchActionMenu(toolsMenu, contextMenu, context);
-    initializeOpenInNextSplitActionMenu(toolsMenu, context);
-    initializeFollowSymbolActionMenu(toolsMenu, contextMenu);
+    initializeSwitchAction(toolsMenu, contextMenu, context);
+    initializeOpenInNextSplitAction(toolsMenu, context);
+    initializeFollowSymbolAction(toolsMenu, contextMenu);
+    initializeFindUsagesAction(toolsMenu, contextMenu, context);
     initializeImportFromAsnComponents(toolsMenu);
 
     addToToolsMenu(toolsMenu);
 }
 
-void Asn1AcnPlugin::initializeSwitchActionMenu(ActionContainer *toolsMenu,
+void Asn1AcnPlugin::initializeFindUsagesAction(ActionContainer *toolsMenu,
                                                ActionContainer *contextMenu,
                                                const Context &context)
+{
+    auto action = new QAction(tr("Find Usages"), this);
+    auto command = Core::ActionManager::registerAction(action, Constants::FIND_USAGES, context);
+    command->setDefaultKeySequence(QKeySequence(tr("Ctrl+Shift+U")));
+    connect(action, &QAction::triggered, this, &Asn1AcnPlugin::findUsages);
+    contextMenu->addAction(command);
+    toolsMenu->addAction(command);
+    m_findUsagesAction = action;
+}
+
+static EditorWidget *currentEditorWidget()
+{
+    if (auto currentEditor = Core::EditorManager::currentEditor())
+        return qobject_cast<EditorWidget*>(currentEditor->widget());
+    return nullptr;
+}
+
+void Asn1AcnPlugin::findUsages()
+{
+    if (auto editorWidget = currentEditorWidget())
+        editorWidget->findUsages();
+}
+
+void Asn1AcnPlugin::initializeSwitchAction(ActionContainer *toolsMenu,
+                                           ActionContainer *contextMenu,
+                                           const Context &context)
 {
     QAction *switchAction = new QAction(tr("Switch Data/Encoding"), this);
     Core::Command *command = Core::ActionManager::registerAction(switchAction, Constants::SWITCH_DATA_ENCODING, context, true);
@@ -178,14 +211,15 @@ void Asn1AcnPlugin::initializeSwitchActionMenu(ActionContainer *toolsMenu,
     contextMenu->addAction(command);
 }
 
-void Asn1AcnPlugin::initializeFollowSymbolActionMenu(ActionContainer *toolsMenu, ActionContainer *contextMenu)
+void Asn1AcnPlugin::initializeFollowSymbolAction(ActionContainer *toolsMenu,
+                                                 ActionContainer *contextMenu)
 {
     Core::Command *command = Core::ActionManager::ActionManager::command(TextEditor::Constants::FOLLOW_SYMBOL_UNDER_CURSOR);
     contextMenu->addAction(command);
     toolsMenu->addAction(command);
 }
 
-void Asn1AcnPlugin::initializeOpenInNextSplitActionMenu(ActionContainer *toolsMenu, const Context &context)
+void Asn1AcnPlugin::initializeOpenInNextSplitAction(ActionContainer *toolsMenu, const Context &context)
 {
     QAction *openInNextSplitAction = new QAction(tr("Open Corresponding Data/Encoding in Next Split"), this);
     Core::Command *command = Core::ActionManager::registerAction(openInNextSplitAction, Constants::OPEN_DATA_ENCODING_IN_NEXT_SPLIT, context, true);
@@ -238,6 +272,20 @@ void Asn1AcnPlugin::raiseImportComponentWindow()
     } else {
         m_importComponentWizard = new Libraries::Wizard::ImportComponentWizard(Core::ICore::mainWindow());
         m_importComponentWizard->show();
+    }
+}
+
+void Asn1AcnPlugin::onTaskStarted(Core::Id id)
+{
+    if (id == Constants::TASK_SEARCH) {
+        m_findUsagesAction->setEnabled(false);
+    }
+}
+
+void Asn1AcnPlugin::onTaskFinished(Core::Id id)
+{
+    if (id == Constants::TASK_SEARCH) {
+        m_findUsagesAction->setEnabled(true);
     }
 }
 

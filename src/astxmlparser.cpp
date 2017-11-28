@@ -124,6 +124,7 @@ void AstXmlParser::readTypeAssignment()
     auto type = readType();
 
     m_currentDefinitions->addType(std::make_unique<Data::TypeAssignment>(name, location, std::move(type)));
+    m_data[m_currentFile]->addTypeReference(std::make_unique<Data::TypeReference>(name, m_currentDefinitions->name(), location));
 }
 
 void AstXmlParser::readVariableAssignment()

@@ -22,10 +22,7 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
-
-#include "memory"
 
 #include <QString>
 #include <QTextCursor>
@@ -53,9 +50,6 @@ public:
     Link createTargetLink(const QTextCursor &cursor) const;
 
 private:
-    Data::TypeReference getTypeReference(const Data::File *file, int line, int col) const;
-
-    Data::TypeReference getSymbolTypeReference(const QTextCursor &cursor) const;
     Link getSymbolLink(const Data::TypeReference &symbolSource, const QTextCursor &cursor) const;
 
     Link getTargetSymbolLink(const Data::TypeReference &symbolSource, const Link &symbol) const;

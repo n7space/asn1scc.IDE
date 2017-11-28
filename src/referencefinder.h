@@ -22,51 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <QTextCursor>
+#include <QChar>
 
 #include <texteditor/texteditor.h>
 
-#include "editor.h"
+#include "data/file.h"
+#include "data/typereference.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class UsagesFinder;
+class ParsedDataStorage;
 
-class AsnEditor : public TextEditor::BaseTextEditor
-{
-    Q_OBJECT
-
-public:
-    explicit AsnEditor();
-};
-
-class AsnEditorFactory : public TextEditor::TextEditorFactory
+class ReferenceFinder
 {
 public:
-    explicit AsnEditorFactory();
-};
+    ReferenceFinder(const TextEditor::TextDocument &document,
+                    const ParsedDataStorage *storage);
 
-class AsnEditorWidget : public EditorWidget
-{
-    Q_OBJECT
-
-public:
-    explicit AsnEditorWidget();
-
-    void findUsages() override;
-
-protected:
-    Link findLinkAt(const QTextCursor &,
-                    bool resolveTarget = true,
-                    bool inNextSplit = false) override;
+    Data::TypeReference findAt(const QTextCursor &cursor) const;
 
 private:
-    UsagesFinder *m_usagesFinder;
+    bool isProperAsn1IdentifierChar(QChar ch) const;
+    Data::TypeReference findAt(const Data::File *file, int line, int col) const;
+    const TextEditor::TextDocument &m_textDocument;
+    const ParsedDataStorage *m_storage;
 };
 
-} // namespace Internal
-} // namespace Asn1Acn
+} /* namespace Internal */
+} /* namespace Asn1Acn */

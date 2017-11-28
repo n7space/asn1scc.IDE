@@ -54,6 +54,8 @@ class AcnEditorWidget : public EditorWidget
 
 public:
     explicit AcnEditorWidget() = default;
+
+    void findUsages() override;
 };
 
 } // namespace Internal

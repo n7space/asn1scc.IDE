@@ -74,3 +74,8 @@ AcnEditorFactory::AcnEditorFactory()
                             | TextEditorActionHandler::UnCollapseAll
                             | TextEditorActionHandler::FollowSymbolUnderCursor);
 }
+
+void AcnEditorWidget::findUsages()
+{
+    // TODO acn
+}
