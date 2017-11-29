@@ -30,11 +30,11 @@ if(NOT ASN1SCC_GENERATION_OPTIONS)
 endif()
 
 if(NOT ASN1SCC_PRODUCTS_DIR)
-    set(ASN1SCC_PRODUCTS_DIR ${PROJECT_BINARY_DIR}/asn1acnGenerated/src)
+    set(ASN1SCC_PRODUCTS_DIR ${PROJECT_BINARY_DIR}/asn1sccGenerated/src)
 endif()
 
 if(NOT ASN1SCC_ICD_DIR)
-    set(ASN1SCC_ICD_DIR ${PROJECT_BINARY_DIR}/asn1acnGenerated/icd)
+    set(ASN1SCC_ICD_DIR ${PROJECT_BINARY_DIR}/asn1sccGenerated/icd)
 endif()
 
 if(NOT ASN1SCC_ICD_FILE)
