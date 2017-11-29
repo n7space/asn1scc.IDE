@@ -307,7 +307,8 @@ FORMS += \
     options-pages/service.ui \
     options-pages/libraries.ui \
     \
-    libraries/import_component.ui
+    libraries/import_component.ui \
+    libraries/wizard/select_component.ui
 
 RESOURCES += \
     asn1acn.qrc

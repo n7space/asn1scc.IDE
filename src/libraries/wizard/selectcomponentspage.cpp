@@ -25,8 +25,6 @@
 
 #include "selectcomponentspage.h"
 
-#include <QBoxLayout>
-
 #include <libraries/metadata/library.h>
 #include <libraries/librarystorage.h>
 
@@ -35,46 +33,43 @@
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
+static const QString METADATA_COMBO_KEY("Metadata");
+static const QString FILESYSTEM_COMBO_KEY("File System");
+
 SelectComponentsPage::SelectComponentsPage(ComponentImporter &importer, QWidget *parent)
     : QWizardPage(parent)
-    , m_modulesView(new QTreeView(this))
     , m_importer(importer)
 {
+    m_ui.setupUi(this);
+
     setTitle(QLatin1String("Select components you wish to import"));
 
-    auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
-    layout->addWidget(m_modulesView);
-    setLayout(layout);
+    connect(m_ui.modulesView, &QTreeView::clicked,
+            this, &SelectComponentsPage::onTreeItemClicked);
 
-    m_modulesView->setHeaderHidden(true);
-    m_modulesView->setExpandsOnDoubleClick(false);
-
-    connect(m_modulesView, &QTreeView::clicked,
-            this, &SelectComponentsPage::onItemClicked);
+    connect(m_ui.modeCombo, &QComboBox::currentTextChanged,
+            this, &SelectComponentsPage::onComboTextChanged);
 }
 
 void SelectComponentsPage::initializePage()
 {
-    auto storage = LibraryStorage::instance();
-    const auto lib = storage->library(field("builtInCombo").toString());
+    m_ui.modeCombo->setCurrentIndex(0);
 
-    if (lib == nullptr)
-        return;
+    setLibPath();
+    m_ui.modeCombo->setEnabled(LibraryStorage::instance()->library(m_libPath) != nullptr);
 
-    m_model.reset(new LibraryModel(lib, this));
-    m_modulesView->setModel(m_model.get());
+    setupFileSystemModel();
 }
 
 bool SelectComponentsPage::validatePage()
 {
-    MetadaComponentSelector componentSelector(field("builtInCombo").toString());
-
-    m_importer.setFiles(componentSelector.paths());
+    if (m_selector != nullptr)
+        m_importer.setFiles(m_selector->paths());
 
     return QWizardPage::validatePage();
 }
 
-void SelectComponentsPage::onItemClicked(const QModelIndex &index)
+void SelectComponentsPage::onTreeItemClicked(const QModelIndex &index)
 {
     if (!index.isValid())
         return;
@@ -85,5 +80,40 @@ void SelectComponentsPage::onItemClicked(const QModelIndex &index)
 
     node->setChecked(!node->checked());
 
-    m_modulesView->update(index);
+    m_ui.modulesView->update(index);
+}
+
+void SelectComponentsPage::onComboTextChanged(const QString &text)
+{
+    if (text == METADATA_COMBO_KEY)
+        setupMetadaModel();
+    else if (text == FILESYSTEM_COMBO_KEY)
+        setupFileSystemModel();
+}
+
+void SelectComponentsPage::setLibPath()
+{
+    m_libPath = field("builtInRadio").toBool() ?
+                field("builtInCombo").toString() :
+                field("pathChoser").toString();
+}
+
+void SelectComponentsPage::setupMetadaModel()
+{
+    auto model = new LibraryModel(LibraryStorage::instance()->library(m_libPath), this);
+
+    m_ui.modulesView->setModel(model);
+
+    m_model.reset(model);
+    m_selector.reset(new MetadaComponentSelector(m_libPath));
+}
+
+void SelectComponentsPage::setupFileSystemModel()
+{
+    // TODO: create filesystem model, setup it here
+    // TODO: create filesystem selector, setup it here
+    m_model.reset(nullptr);
+    m_selector.reset(nullptr);
+
+    m_ui.modulesView->setModel(m_model.get());
 }

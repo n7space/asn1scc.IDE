@@ -40,11 +40,9 @@ ImportComponentWizard::ImportComponentWizard(QWidget *parent)
     setAttribute(Qt::WA_DeleteOnClose);
     connect(Core::ICore::instance(), &Core::ICore::coreAboutToClose, this, &QWidget::close);
 
-    setPage(static_cast<int>(Page::Page_SelectSource), new SelectSourcePage(m_importer));
-    setPage(static_cast<int>(Page::Page_SelectItems), new SelectComponentsPage(m_importer));
-    setPage(static_cast<int>(Page::Page_Summary), new SummaryPage(m_importer));
-
-    setStartId(static_cast<int>(Page::Page_SelectSource));
+    addPage(new SelectSourcePage(m_importer));
+    addPage(new SelectComponentsPage(m_importer));
+    addPage(new SummaryPage(m_importer));
 
     setOption(NoBackButtonOnStartPage);
 }

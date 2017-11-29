@@ -40,8 +40,6 @@ class ImportComponentWizard : public QWizard
     Q_OBJECT
 
 public:
-    enum class Page { Page_SelectSource, Page_SelectItems, Page_Summary };
-
     ImportComponentWizard(QWidget *parent = nullptr);
 
     void accept() override;

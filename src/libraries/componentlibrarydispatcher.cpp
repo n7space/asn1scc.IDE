@@ -37,6 +37,9 @@ void CompontentLibraryDispatcher::dispatch(const QStringList &directories, const
 
     for (const auto &directory : directories) {
         const auto filesInDirectory = files.filter(directory);
+        if (filesInDirectory.empty())
+            continue;
+
         const auto processor = new ComponentLibraryProcessor(directory, filesInDirectory, reader);
         processor->process();
     }

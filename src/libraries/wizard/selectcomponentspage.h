@@ -33,6 +33,9 @@
 #include <libraries/componentimporter.h>
 #include <libraries/librarymodel.h>
 
+#include "metadatacomponentselector.h"
+#include "ui_select_component.h"
+
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
@@ -49,12 +52,22 @@ public:
     bool validatePage() override;
 
 private slots:
-    void onItemClicked(const QModelIndex &index);
+    void onTreeItemClicked(const QModelIndex &index);
+    void onComboTextChanged(const QString &text);
 
 private:
-    std::unique_ptr<LibraryModel> m_model;
-    QTreeView *m_modulesView;
+    void setLibPath();
+
+    void setupMetadaModel();
+    void setupFileSystemModel();
+
+    Ui::SelectComponent m_ui;
+    QString m_libPath;
+
+    std::unique_ptr<QAbstractItemModel> m_model;
+
     ComponentImporter &m_importer;
+    std::unique_ptr<MetadaComponentSelector> m_selector;
 };
 
 } // namespace Wizard

@@ -47,7 +47,6 @@ class SelectSourcePage : public QWizardPage
 public:
     explicit SelectSourcePage(ComponentImporter &importer, QWidget *parent = nullptr);
 
-    int nextId() const override;
     bool validatePage() override;
     bool isComplete() const override;
 
