@@ -105,7 +105,7 @@ std::unique_ptr<Metadata::Submodule> readSubmodule(const QJsonObject &object)
         auto element = readElement(value.toObject());
         submodule->addElement(std::move(element));
     });
-    return std::move(submodule);
+    return submodule;
 }
 
 std::unique_ptr<Metadata::Module> readModule(const QJsonObject &object)
@@ -115,7 +115,7 @@ std::unique_ptr<Metadata::Module> readModule(const QJsonObject &object)
         auto element = readSubmodule(value.toObject());
         module->addSubmodule(std::move(element));
     });
-    return std::move(module);
+    return module;
 }
 
 } // namespace
@@ -124,5 +124,5 @@ std::unique_ptr<Metadata::Module> ModuleMetadataParser::parse()
 {
     if (m_document.isNull())
         throw Error("JSON malformed");
-    return std::move(readModule(m_document.object()));
+    return readModule(m_document.object());
 }
