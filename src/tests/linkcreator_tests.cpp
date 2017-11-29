@@ -58,7 +58,7 @@ std::unique_ptr<TextEditor::TextDocument> createDocument(const QString &path, co
     doc->setFilePath(Utils::FileName::fromString(path));
     doc->setContents(content);
 
-    return std::move(doc);
+    return doc;
 }
 } // namespace anonymous
 
