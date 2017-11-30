@@ -31,7 +31,7 @@
 #include <QWizardPage>
 
 #include <libraries/componentimporter.h>
-#include <libraries/librarymodel.h>
+#include <libraries/metadatamodel.h>
 
 #include "metadatacomponentselector.h"
 #include "ui_select_component.h"
@@ -52,7 +52,6 @@ public:
     bool validatePage() override;
 
 private slots:
-    void onTreeItemClicked(const QModelIndex &index);
     void onComboTextChanged(const QString &text);
 
 private:

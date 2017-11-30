@@ -23,27 +23,36 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "filemodel_tests.h"
 
-#include <libraries/metadatamodel.h>
+#include <memory>
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Libraries {
-namespace Wizard {
+#include <QDir>
+#include <QFileSystemModel>
 
-class MetadaComponentSelector
+#include <libraries/filemodel.h>
+
+#include <3rdparty/tests/modeltest.h>
+
+using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Libraries;
+using namespace Asn1Acn::Internal::Libraries::Tests;
+
+FileModelTests::FileModelTests(QObject *parent)
+    : QObject(parent)
 {
-public:
-    MetadaComponentSelector(const QString &path);
-    QStringList paths();
+}
 
-private:
-    QStringList pathsFromNames(const QStringList &names);
-    QString m_path;
-};
+void FileModelTests::test_emptyModel()
+{
+    const auto model = std::make_unique<FileModel>(this);
+    ModelTest testEmptyModel(model.get(), this);
+}
 
-} // namespace Wizard
-} // namespace Libraries
-} // namespace Internal
-} // namespace Asn1Acn
+void FileModelTests::test_modelWithDummyPopulation()
+{
+    const auto model = std::make_unique<FileModel>(this);
+    model->setRootPath(QDir::currentPath());
+
+    ModelTest testNonEmptyModel(model.get(), this);
+}

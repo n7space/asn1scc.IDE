@@ -25,25 +25,29 @@
 
 #pragma once
 
-#include <libraries/metadatamodel.h>
+#include <QSet>
+#include <QFileSystemModel>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
-namespace Wizard {
 
-class MetadaComponentSelector
+class FileModel : public QFileSystemModel
 {
+    Q_OBJECT
+
 public:
-    MetadaComponentSelector(const QString &path);
-    QStringList paths();
+    FileModel(QObject *parent = nullptr);
+
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
 private:
-    QStringList pathsFromNames(const QStringList &names);
-    QString m_path;
+    QSet<QPersistentModelIndex> m_checked;
 };
 
-} // namespace Wizard
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

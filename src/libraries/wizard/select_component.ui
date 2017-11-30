@@ -16,6 +16,9 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
     <widget class="QTreeView" name="modulesView">
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
      <property name="tabKeyNavigation">
       <bool>false</bool>
      </property>
@@ -35,7 +38,7 @@
       <enum>QAbstractItemView::MultiSelection</enum>
      </property>
      <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectItems</enum>
+      <enum>QAbstractItemView::SelectRows</enum>
      </property>
      <property name="rootIsDecorated">
       <bool>true</bool>
@@ -43,14 +46,26 @@
      <property name="itemsExpandable">
       <bool>true</bool>
      </property>
+     <property name="allColumnsShowFocus">
+      <bool>true</bool>
+     </property>
+     <property name="headerHidden">
+      <bool>true</bool>
+     </property>
      <property name="expandsOnDoubleClick">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <attribute name="headerVisible">
       <bool>false</bool>
      </attribute>
      <attribute name="headerDefaultSectionSize">
       <number>0</number>
+     </attribute>
+     <attribute name="headerMinimumSectionSize">
+      <number>0</number>
+     </attribute>
+     <attribute name="headerStretchLastSection">
+      <bool>true</bool>
      </attribute>
     </widget>
    </item>

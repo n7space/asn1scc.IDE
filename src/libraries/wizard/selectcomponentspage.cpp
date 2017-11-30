@@ -30,6 +30,8 @@
 
 #include "metadatacomponentselector.h"
 
+#include <libraries/filemodel.h>
+
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
@@ -44,18 +46,15 @@ SelectComponentsPage::SelectComponentsPage(ComponentImporter &importer, QWidget 
 
     setTitle(QLatin1String("Select components you wish to import"));
 
-    connect(m_ui.modulesView, &QTreeView::clicked,
-            this, &SelectComponentsPage::onTreeItemClicked);
-
     connect(m_ui.modeCombo, &QComboBox::currentTextChanged,
             this, &SelectComponentsPage::onComboTextChanged);
 }
 
 void SelectComponentsPage::initializePage()
 {
-    m_ui.modeCombo->setCurrentIndex(0);
-
     setLibPath();
+
+    m_ui.modeCombo->setCurrentIndex(0);
     m_ui.modeCombo->setEnabled(LibraryStorage::instance()->library(m_libPath) != nullptr);
 
     setupFileSystemModel();
@@ -63,24 +62,11 @@ void SelectComponentsPage::initializePage()
 
 bool SelectComponentsPage::validatePage()
 {
+    // TODO: just call method after selector for filesystem will be created
     if (m_selector != nullptr)
         m_importer.setFiles(m_selector->paths());
 
     return QWizardPage::validatePage();
-}
-
-void SelectComponentsPage::onTreeItemClicked(const QModelIndex &index)
-{
-    if (!index.isValid())
-        return;
-
-    auto node = static_cast<Metadata::LibraryNode *>(index.internalPointer());
-    if (!node)
-        return;
-
-    node->setChecked(!node->checked());
-
-    m_ui.modulesView->update(index);
 }
 
 void SelectComponentsPage::onComboTextChanged(const QString &text)
@@ -100,7 +86,7 @@ void SelectComponentsPage::setLibPath()
 
 void SelectComponentsPage::setupMetadaModel()
 {
-    auto model = new LibraryModel(LibraryStorage::instance()->library(m_libPath), this);
+    auto model = new MetadataModel(LibraryStorage::instance()->library(m_libPath), this);
 
     m_ui.modulesView->setModel(model);
 
@@ -110,10 +96,15 @@ void SelectComponentsPage::setupMetadaModel()
 
 void SelectComponentsPage::setupFileSystemModel()
 {
-    // TODO: create filesystem model, setup it here
-    // TODO: create filesystem selector, setup it here
-    m_model.reset(nullptr);
-    m_selector.reset(nullptr);
+    auto model = new FileModel;
 
-    m_ui.modulesView->setModel(m_model.get());
+    // TODO filtering entries to show only ASN.1/ACN files?
+    model->setRootPath(m_libPath);
+
+    m_ui.modulesView->setModel(model);
+    m_ui.modulesView->setRootIndex(model->index(m_libPath));
+
+    m_model.reset(model);
+    // TODO: create filesystem selector, setup it here
+    m_selector.reset(nullptr);
 }

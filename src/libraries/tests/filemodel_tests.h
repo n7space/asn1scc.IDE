@@ -31,11 +31,11 @@ namespace Internal {
 namespace Libraries {
 namespace Tests {
 
-class LibraryModelTests : public QObject
+class FileModelTests : public QObject
 {
     Q_OBJECT
 public:
-    explicit LibraryModelTests(QObject *parent = 0);
+    explicit FileModelTests(QObject *parent = 0);
 
 private slots:
     void test_emptyModel();

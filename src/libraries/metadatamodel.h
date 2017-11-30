@@ -25,25 +25,35 @@
 
 #pragma once
 
-#include <libraries/metadatamodel.h>
+#include <QModelIndex>
+#include <QAbstractItemModel>
+
+#include <libraries/metadata/librarynode.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
-namespace Wizard {
 
-class MetadaComponentSelector
+class MetadataModel : public QAbstractItemModel
 {
+    Q_OBJECT
 public:
-    MetadaComponentSelector(const QString &path);
-    QStringList paths();
+    explicit MetadataModel(const Metadata::LibraryNode *root, QObject *parent = 0);
+
+    QVariant data(const QModelIndex &index, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
 private:
-    QStringList pathsFromNames(const QStringList &names);
-    QString m_path;
+    const Metadata::LibraryNode *dataNode(const QModelIndex &index) const;
+
+    const Metadata::LibraryNode *m_root;
 };
 
-} // namespace Wizard
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn
