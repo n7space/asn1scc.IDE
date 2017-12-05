@@ -23,11 +23,11 @@
 **
 ****************************************************************************/
 
-#include "librarymodel_tests.h"
+#include "metadatamodel_tests.h"
 
 #include <memory>
 
-#include <libraries/librarymodel.h>
+#include <libraries/metadatamodel.h>
 
 #include <libraries/metadata/library.h>
 #include <libraries/metadata/module.h>
@@ -40,20 +40,20 @@ using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Tests;
 
-LibraryModelTests::LibraryModelTests(QObject *parent)
+MetadataModelTests::MetadataModelTests(QObject *parent)
     : QObject(parent)
 {
 }
 
-void LibraryModelTests::test_emptyModel()
+void MetadataModelTests::test_emptyModel()
 {
     Metadata::Library library(QLatin1String("Library"));
 
-    const auto model = std::make_unique<LibraryModel>(&library, this);
+    const auto model = std::make_unique<MetadataModel>(&library, this);
     ModelTest testEmptyModel(model.get(), this);
 }
 
-void LibraryModelTests::test_modelWithDummyPopulation()
+void MetadataModelTests::test_modelWithDummyPopulation()
 {
     auto element1 = std::make_unique<Metadata::Element>(QLatin1String("Element_1_Name"), QLatin1String("Element_1_Description"));
     auto element2 = std::make_unique<Metadata::Element>(QLatin1String("Element_2_Name"), QLatin1String("Element_2_Description"));
@@ -76,6 +76,6 @@ void LibraryModelTests::test_modelWithDummyPopulation()
     library->addModule(std::move(module1));
     library->addModule(std::move(module2));
 
-    const auto model = std::make_unique<LibraryModel>(library.get(), this);
+    const auto model = std::make_unique<MetadataModel>(library.get(), this);
     ModelTest testNonEmptyModel(model.get(), this);
 }

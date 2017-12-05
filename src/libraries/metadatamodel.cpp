@@ -23,17 +23,17 @@
 **
 ****************************************************************************/
 
-#include "librarymodel.h"
+#include "metadatamodel.h"
 
 using namespace Asn1Acn::Internal::Libraries;
 
-LibraryModel::LibraryModel(const Metadata::LibraryNode *root, QObject *parent)
+MetadataModel::MetadataModel(const Metadata::LibraryNode *root, QObject *parent)
     : QAbstractItemModel(parent)
     , m_root(root)
 {
 }
 
-QVariant LibraryModel::data(const QModelIndex &index, int role) const
+QVariant MetadataModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -52,28 +52,29 @@ QVariant LibraryModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-Qt::ItemFlags LibraryModel::flags(const QModelIndex &index) const
+Qt::ItemFlags MetadataModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
+
     return Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
 }
 
-QModelIndex LibraryModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex MetadataModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    auto parentNode = dataNode(parent);
-
+    const auto parentNode = dataNode(parent);
     const auto node = parentNode->child(row);
+
     if (node == nullptr)
         return QModelIndex();
 
     return createIndex(row, column, node);
 }
 
-QModelIndex LibraryModel::parent(const QModelIndex &index) const
+QModelIndex MetadataModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid())
         return QModelIndex();
@@ -87,18 +88,34 @@ QModelIndex LibraryModel::parent(const QModelIndex &index) const
     return createIndex(parent->parent()->childIndex(parent), index.column(), parent);
 }
 
-int LibraryModel::rowCount(const QModelIndex &parent) const
+int MetadataModel::rowCount(const QModelIndex &parent) const
 {
     return dataNode(parent)->childrenCount();
 }
 
-int LibraryModel::columnCount(const QModelIndex &parent) const
+int MetadataModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return 1;
 }
 
-const Metadata::LibraryNode *LibraryModel::dataNode(const QModelIndex &index) const
+bool MetadataModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    if (role != Qt::CheckStateRole)
+        return QAbstractItemModel::setData(index, value, role);
+
+    if (!index.isValid())
+        return false;
+
+    auto node = static_cast<Metadata::LibraryNode *>(index.internalPointer());
+    node->setChecked(value == Qt::Checked);
+
+    emit dataChanged(index, index);
+
+    return true;
+}
+
+const Metadata::LibraryNode *MetadataModel::dataNode(const QModelIndex &index) const
 {
     return index.isValid() ? static_cast<Metadata::LibraryNode *>(index.internalPointer()) : m_root;
 }

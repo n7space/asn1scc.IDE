@@ -22,34 +22,27 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#pragma once
 
-#include "importcomponentwizard.h"
+#include <QObject>
 
-#include <coreplugin/icore.h>
+namespace Asn1Acn {
+namespace Internal {
+namespace Libraries {
+namespace Tests {
 
-#include "selectsourcepage.h"
-#include "selectcomponentspage.h"
-#include "summarypage.h"
-
-using namespace Asn1Acn::Internal::Libraries;
-using namespace Asn1Acn::Internal::Libraries::Wizard;
-
-ImportComponentWizard::ImportComponentWizard(QWidget *parent)
-    : QWizard(parent)
+class MetadataModelTests : public QObject
 {
-    setAttribute(Qt::WA_DeleteOnClose);
-    connect(Core::ICore::instance(), &Core::ICore::coreAboutToClose, this, &QWidget::close);
+    Q_OBJECT
+public:
+    explicit MetadataModelTests(QObject *parent = 0);
 
-    addPage(new SelectSourcePage(m_importer));
-    addPage(new SelectComponentsPage(m_importer));
-    addPage(new SummaryPage(m_importer));
+private slots:
+    void test_emptyModel();
+    void test_modelWithDummyPopulation();
+};
 
-    setOption(NoBackButtonOnStartPage);
-}
-
-void ImportComponentWizard::accept()
-{
-    m_importer.import();
-
-    QDialog::accept();
-}
+} // namespace Tests
+} // namespace Libraries
+} // namespace Internal
+} // namespace Asn1Acn

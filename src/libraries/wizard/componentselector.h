@@ -22,27 +22,37 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include <QObject>
+#include <QTreeView>
+#include <QStringList>
+#include <QModelIndex>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
-namespace Tests {
+namespace Wizard {
 
-class LibraryModelTests : public QObject
+class ComponentSelector : public QObject
 {
     Q_OBJECT
-public:
-    explicit LibraryModelTests(QObject *parent = 0);
 
-private slots:
-    void test_emptyModel();
-    void test_modelWithDummyPopulation();
+protected:
+    ComponentSelector(QTreeView *treeView, QObject *parent = nullptr)
+        : QObject(parent)
+        , m_treeView(treeView)
+    {}
+
+public:
+    virtual QStringList pathsToImport() = 0;
+    virtual void updateSelections(const QModelIndex &index) = 0;
+
+protected:
+     QTreeView *m_treeView;
 };
 
-} // namespace Tests
+} // namespace Wizard
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

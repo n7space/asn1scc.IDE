@@ -23,33 +23,36 @@
 **
 ****************************************************************************/
 
-#include "importcomponentwizard.h"
+#include "filemodel_tests.h"
 
-#include <coreplugin/icore.h>
+#include <memory>
 
-#include "selectsourcepage.h"
-#include "selectcomponentspage.h"
-#include "summarypage.h"
+#include <QDir>
+#include <QFileSystemModel>
 
+#include <libraries/filemodel.h>
+
+#include <3rdparty/tests/modeltest.h>
+
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Libraries;
-using namespace Asn1Acn::Internal::Libraries::Wizard;
+using namespace Asn1Acn::Internal::Libraries::Tests;
 
-ImportComponentWizard::ImportComponentWizard(QWidget *parent)
-    : QWizard(parent)
+FileModelTests::FileModelTests(QObject *parent)
+    : QObject(parent)
 {
-    setAttribute(Qt::WA_DeleteOnClose);
-    connect(Core::ICore::instance(), &Core::ICore::coreAboutToClose, this, &QWidget::close);
-
-    addPage(new SelectSourcePage(m_importer));
-    addPage(new SelectComponentsPage(m_importer));
-    addPage(new SummaryPage(m_importer));
-
-    setOption(NoBackButtonOnStartPage);
 }
 
-void ImportComponentWizard::accept()
+void FileModelTests::test_emptyModel()
 {
-    m_importer.import();
+    const auto model = std::make_unique<FileModel>(this);
+    ModelTest testEmptyModel(model.get(), this);
+}
 
-    QDialog::accept();
+void FileModelTests::test_modelWithDummyPopulation()
+{
+    const auto model = std::make_unique<FileModel>(this);
+    model->setRootPath(QDir::currentPath());
+
+    ModelTest testNonEmptyModel(model.get(), this);
 }

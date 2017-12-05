@@ -23,33 +23,33 @@
 **
 ****************************************************************************/
 
-#include "importcomponentwizard.h"
+#pragma once
 
-#include <coreplugin/icore.h>
+#include <QHash>
+#include <QFileSystemModel>
 
-#include "selectsourcepage.h"
-#include "selectcomponentspage.h"
-#include "summarypage.h"
+namespace Asn1Acn {
+namespace Internal {
+namespace Libraries {
 
-using namespace Asn1Acn::Internal::Libraries;
-using namespace Asn1Acn::Internal::Libraries::Wizard;
-
-ImportComponentWizard::ImportComponentWizard(QWidget *parent)
-    : QWizard(parent)
+class FileModel : public QFileSystemModel
 {
-    setAttribute(Qt::WA_DeleteOnClose);
-    connect(Core::ICore::instance(), &Core::ICore::coreAboutToClose, this, &QWidget::close);
+    Q_OBJECT
 
-    addPage(new SelectSourcePage(m_importer));
-    addPage(new SelectComponentsPage(m_importer));
-    addPage(new SummaryPage(m_importer));
+public:
+    FileModel(QObject *parent = nullptr);
 
-    setOption(NoBackButtonOnStartPage);
-}
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
-void ImportComponentWizard::accept()
-{
-    m_importer.import();
+    void changeCheckState(const QModelIndex &index, const QVariant &value);
 
-    QDialog::accept();
-}
+private:
+    QHash<QPersistentModelIndex, Qt::CheckState> m_checkStates;
+};
+
+} // namespace Libraries
+} // namespace Internal
+} // namespace Asn1Acn

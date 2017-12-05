@@ -25,27 +25,41 @@
 
 #pragma once
 
-#include <QWizard>
-#include <QWidget>
+#include "componentselector.h"
 
-#include <libraries/componentimporter.h>
+#include <QTreeView>
+
+#include <libraries/filemodel.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 namespace Wizard {
 
-class ImportComponentWizard : public QWizard
+class FileComponentSelector : public ComponentSelector
 {
-    Q_OBJECT
-
 public:
-    ImportComponentWizard(QWidget *parent = nullptr);
+    FileComponentSelector(QTreeView *treeView, FileModel *model, const QStringList nameFilter);
 
-    void accept() override;
+    QStringList pathsToImport() override;
+    void updateSelections(const QModelIndex &index) override;
+
+private slots:
+    void onDirectoryLoaded(const QString &path);
 
 private:
-    ComponentImporter m_importer;
+    void updateChildrenSelections(const QModelIndex &index, const QVariant checkState);
+    void updateParentsSelection(const QModelIndex &index, const QVariant checkState);
+
+    QVariant parentState(const QModelIndex &index) const;
+
+    QStringList selectedPathsFromModelItem(const QString &parentPath) const;
+    QStringList pathsFromChildIndex(const QModelIndex &child) const;
+
+    QStringList selectedPathsFromFilesystemItem(const QString &path) const;
+
+    FileModel *m_model;
+    const QStringList m_nameFilter;
 };
 
 } // namespace Wizard

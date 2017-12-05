@@ -25,65 +25,101 @@
 
 #include "selectcomponentspage.h"
 
-#include <QBoxLayout>
+#include <utils/qtcassert.h>
 
 #include <libraries/metadata/library.h>
 #include <libraries/librarystorage.h>
+#include <libraries/filemodel.h>
 
 #include "metadatacomponentselector.h"
+#include "filecomponentselector.h"
 
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
+static const QString METADATA_COMBO_KEY("Metadata");
+static const QString FILESYSTEM_COMBO_KEY("File System");
+
 SelectComponentsPage::SelectComponentsPage(ComponentImporter &importer, QWidget *parent)
     : QWizardPage(parent)
-    , m_modulesView(new QTreeView(this))
     , m_importer(importer)
 {
+    m_ui.setupUi(this);
+
     setTitle(QLatin1String("Select components you wish to import"));
 
-    auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
-    layout->addWidget(m_modulesView);
-    setLayout(layout);
-
-    m_modulesView->setHeaderHidden(true);
-    m_modulesView->setExpandsOnDoubleClick(false);
-
-    connect(m_modulesView, &QTreeView::clicked,
-            this, &SelectComponentsPage::onItemClicked);
+    connect(m_ui.modeCombo, &QComboBox::currentTextChanged,
+            this, &SelectComponentsPage::onComboTextChanged);
 }
 
 void SelectComponentsPage::initializePage()
 {
-    auto storage = LibraryStorage::instance();
-    const auto lib = storage->library(field("builtInCombo").toString());
+    setLibPath();
 
-    if (lib == nullptr)
-        return;
+    // TODO: Tools->Options should allow to configure if default should be metadata or filesystem?
+    m_ui.modeCombo->setCurrentIndex(0);
+    m_ui.modeCombo->setEnabled(LibraryStorage::instance()->library(m_libPath) != nullptr);
 
-    m_model.reset(new LibraryModel(lib, this));
-    m_modulesView->setModel(m_model.get());
+    setupModel(FILESYSTEM_COMBO_KEY);
 }
 
 bool SelectComponentsPage::validatePage()
 {
-    MetadaComponentSelector componentSelector(field("builtInCombo").toString());
-
-    m_importer.setFiles(componentSelector.paths());
+    m_importer.setFiles(m_selector->pathsToImport());
 
     return QWizardPage::validatePage();
 }
 
-void SelectComponentsPage::onItemClicked(const QModelIndex &index)
+void SelectComponentsPage::onComboTextChanged(const QString &text)
 {
-    if (!index.isValid())
-        return;
+    setupModel(text);
+}
 
-    auto node = static_cast<Metadata::LibraryNode *>(index.internalPointer());
-    if (!node)
-        return;
+void SelectComponentsPage::setLibPath()
+{
+    m_libPath = field("builtInRadio").toBool() ?
+                field("builtInCombo").toString() :
+                field("pathChoser").toString();
+}
 
-    node->setChecked(!node->checked());
+void SelectComponentsPage::setupModel(const QString &key)
+{
+    QTC_ASSERT(key == METADATA_COMBO_KEY || key == FILESYSTEM_COMBO_KEY, return);
 
-    m_modulesView->update(index);
+    if (key == METADATA_COMBO_KEY)
+        setupMetadaModel();
+    else if (key == FILESYSTEM_COMBO_KEY)
+        setupFileSystemModel();
+
+    connect(m_model.get(), &QAbstractItemModel::dataChanged,
+            m_selector.get(), &ComponentSelector::updateSelections);
+}
+
+void SelectComponentsPage::setupMetadaModel()
+{
+    auto model = new MetadataModel(LibraryStorage::instance()->library(m_libPath), this);
+
+    m_ui.modulesView->setModel(model);
+
+    m_selector.reset(new MetadaComponentSelector(m_ui.modulesView, model, m_libPath));
+
+    m_model.reset(model);
+}
+
+void SelectComponentsPage::setupFileSystemModel()
+{
+    auto model = new FileModel(this);
+
+    static QStringList nameFilter = (QStringList() << "*.asn1" << "*.asn" << "*.acn");
+    model->setNameFilters(nameFilter);
+    model->setNameFilterDisables(false);
+
+    model->setRootPath(m_libPath);
+
+    m_ui.modulesView->setModel(model);
+    m_ui.modulesView->setRootIndex(model->index(m_libPath));
+
+    m_selector.reset(new FileComponentSelector(m_ui.modulesView, model, nameFilter));
+
+    m_model.reset(model);
 }

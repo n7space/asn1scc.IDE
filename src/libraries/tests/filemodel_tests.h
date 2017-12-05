@@ -22,37 +22,27 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QModelIndex>
-#include <QAbstractItemModel>
-
-#include <libraries/metadata/librarynode.h>
+#include <QObject>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Tests {
 
-class LibraryModel : public QAbstractItemModel
+class FileModelTests : public QObject
 {
     Q_OBJECT
 public:
-    explicit LibraryModel(const Metadata::LibraryNode *root, QObject *parent = 0);
+    explicit FileModelTests(QObject *parent = 0);
 
-    QVariant data(const QModelIndex &index, int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-    int rowCount(const QModelIndex &parent) const override;
-    int columnCount(const QModelIndex &parent) const override;
-
-private:
-    const Metadata::LibraryNode *dataNode(const QModelIndex &index) const;
-
-    const Metadata::LibraryNode *m_root;
+private slots:
+    void test_emptyModel();
+    void test_modelWithDummyPopulation();
 };
 
+} // namespace Tests
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

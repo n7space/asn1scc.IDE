@@ -23,33 +23,37 @@
 **
 ****************************************************************************/
 
-#include "importcomponentwizard.h"
+#pragma once
 
-#include <coreplugin/icore.h>
+#include <QModelIndex>
+#include <QAbstractItemModel>
 
-#include "selectsourcepage.h"
-#include "selectcomponentspage.h"
-#include "summarypage.h"
+#include <libraries/metadata/librarynode.h>
 
-using namespace Asn1Acn::Internal::Libraries;
-using namespace Asn1Acn::Internal::Libraries::Wizard;
+namespace Asn1Acn {
+namespace Internal {
+namespace Libraries {
 
-ImportComponentWizard::ImportComponentWizard(QWidget *parent)
-    : QWizard(parent)
+class MetadataModel : public QAbstractItemModel
 {
-    setAttribute(Qt::WA_DeleteOnClose);
-    connect(Core::ICore::instance(), &Core::ICore::coreAboutToClose, this, &QWidget::close);
+    Q_OBJECT
+public:
+    explicit MetadataModel(const Metadata::LibraryNode *root, QObject *parent = 0);
 
-    addPage(new SelectSourcePage(m_importer));
-    addPage(new SelectComponentsPage(m_importer));
-    addPage(new SummaryPage(m_importer));
+    QVariant data(const QModelIndex &index, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
-    setOption(NoBackButtonOnStartPage);
-}
+private:
+    const Metadata::LibraryNode *dataNode(const QModelIndex &index) const;
 
-void ImportComponentWizard::accept()
-{
-    m_importer.import();
+    const Metadata::LibraryNode *m_root;
+};
 
-    QDialog::accept();
-}
+} // namespace Libraries
+} // namespace Internal
+} // namespace Asn1Acn

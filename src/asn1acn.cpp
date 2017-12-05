@@ -79,7 +79,8 @@
 #include "tests/autocompleter_tests.h"
 #include "tests/sourcemapper_tests.h"
 #include "tests/modelvalidityguard_tests.h"
-#include "libraries/tests/librarymodel_tests.h"
+#include "libraries/tests/metadatamodel_tests.h"
+#include "libraries/tests/filemodel_tests.h"
 #include "tests/linkcreator_tests.h"
 #include "libraries/tests/modulemetadataparser_tests.h"
 #include "libraries/tests/generalmetadataparser_tests.h"
@@ -295,7 +296,8 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
     return QList<QObject *>()
             << new Libraries::Tests::ModuleMetadataParserTests
             << new Libraries::Tests::GeneralMetadataParserTests
-            << new Libraries::Tests::LibraryModelTests
+            << new Libraries::Tests::MetadataModelTests
+            << new Libraries::Tests::FileModelTests
             << new TreeViews::Tests::DisplayRoleVisitorTests
             << new TreeViews::Tests::OutlineIndexUpdaterTests
             << new TreeViews::Tests::OutlineModelTests

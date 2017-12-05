@@ -32,8 +32,10 @@
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
-MetadaComponentSelector::MetadaComponentSelector(const QString &path)
-    : m_path(path)
+MetadaComponentSelector::MetadaComponentSelector(QTreeView *treeView, MetadataModel *model, const QString &path, QObject *parent)
+    : ComponentSelector(treeView, parent)
+    , m_model(model)
+    , m_path(path)
 {
 }
 
@@ -81,7 +83,7 @@ QStringList readModule(const Metadata::Module *module)
 
 } // namespace Anonymous
 
-QStringList MetadaComponentSelector::paths()
+QStringList MetadaComponentSelector::pathsToImport()
 {
     const auto lib = LibraryStorage::instance()->library(m_path);
 
@@ -95,4 +97,10 @@ QStringList MetadaComponentSelector::paths()
     files.removeDuplicates();
 
     return pathsFromNames(files);
+}
+
+void MetadaComponentSelector::updateSelections(const QModelIndex &index)
+{
+    Q_UNUSED(index);
+    Q_UNUSED(m_model);
 }

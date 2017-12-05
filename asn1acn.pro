@@ -132,13 +132,15 @@ SOURCES += \
     libraries/componentlibraryprocessor.cpp \
     libraries/componentlibrarydispatcher.cpp \
     libraries/librarystorage.cpp \
-    libraries/librarymodel.cpp \
+    libraries/metadatamodel.cpp \
+    libraries/filemodel.cpp \
     \
     libraries/wizard/importcomponentwizard.cpp \
     libraries/wizard/selectsourcepage.cpp \
     libraries/wizard/selectcomponentspage.cpp \
     libraries/wizard/summarypage.cpp \
     libraries/wizard/metadatacomponentselector.cpp \
+    libraries/wizard/filecomponentselector.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -250,13 +252,16 @@ HEADERS += \
     libraries/componentlibraryprocessor.h \
     libraries/componentlibrarydispatcher.h \
     libraries/librarystorage.h \
-    libraries/librarymodel.h \
+    libraries/metadatamodel.h \
+    libraries/filemodel.h \
     \
     libraries/wizard/importcomponentwizard.h \
     libraries/wizard/selectsourcepage.h \
     libraries/wizard/selectcomponentspage.h \
     libraries/wizard/summarypage.h \
     libraries/wizard/metadatacomponentselector.h \
+    libraries/wizard/componentselector.h \
+    libraries/wizard/filecomponentselector.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/import.h \
@@ -307,7 +312,8 @@ FORMS += \
     options-pages/service.ui \
     options-pages/libraries.ui \
     \
-    libraries/import_component.ui
+    libraries/wizard/import_component.ui \
+    libraries/wizard/select_component.ui
 
 RESOURCES += \
     asn1acn.qrc
@@ -325,7 +331,8 @@ equals(TEST, 1) {
 SOURCES += \
     libraries/tests/modulemetadataparser_tests.cpp \
     libraries/tests/generalmetadataparser_tests.cpp \
-    libraries/tests/librarymodel_tests.cpp \
+    libraries/tests/metadatamodel_tests.cpp \
+    libraries/tests/filemodel_tests.cpp \
     \
     3rdparty/tests/modeltest.cpp \
     \
@@ -355,7 +362,8 @@ SOURCES += \
 HEADERS += \
     libraries/tests/modulemetadataparser_tests.h \
     libraries/tests/generalmetadataparser_tests.h \
-    libraries/tests/librarymodel_tests.h \
+    libraries/tests/metadatamodel_tests.h \
+    libraries/tests/filemodel_tests.h \
     \
     tree-views/tests/outlinemodel_tests.h \
     tree-views/tests/combomodel_tests.h \

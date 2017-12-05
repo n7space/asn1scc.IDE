@@ -70,14 +70,6 @@ bool SelectSourcePage::validatePage()
     return QWizardPage::validatePage();
 }
 
-int SelectSourcePage::nextId() const
-{
-    if (m_ui.builtInRadio->isChecked())
-        return static_cast<int>(ImportComponentWizard::Page::Page_SelectItems);
-
-    return static_cast<int>(ImportComponentWizard::Page::Page_Summary);
-}
-
 bool SelectSourcePage::isComplete() const
 {
     return !(m_ui.customRadio->isChecked() && m_ui.asn1sccPathChooser->path().isEmpty());
