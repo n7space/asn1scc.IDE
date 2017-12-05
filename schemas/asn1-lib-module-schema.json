@@ -24,7 +24,7 @@
       "properties": {
         "from": { "$ref": "#/definitions/asn1TypeName" },
         "types": {
-          "types": "array",
+          "type": "array",
           "items": { "$ref": "#/definitions/asn1TypeName" }
         }
       },

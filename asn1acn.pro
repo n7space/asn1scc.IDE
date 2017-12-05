@@ -314,7 +314,9 @@ RESOURCES += \
 
 DISTFILES += \
     LICENSE \
-    README.md
+    README.md \
+    schemas/asn1-lib-general-schema.json \
+    schemas/asn1-lib-module-schema.json
 
 # test files
 
