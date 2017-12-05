@@ -25,6 +25,8 @@
 
 #include "filecomponentselector.h"
 
+#include <QDirIterator>
+
 #include <utils/qtcassert.h>
 
 using namespace Asn1Acn::Internal::Libraries;
@@ -81,12 +83,9 @@ void FileComponentSelector::updateChildrenSelections(const QModelIndex &index, c
 
 void FileComponentSelector::updateParentsSelection(const QModelIndex &index, const QVariant checkState)
 {
-    QModelIndex parent = index.parent();
-    while (parent.isValid()) {
+    for (auto parent = index.parent(); parent.isValid(); parent = parent.parent()) {
         m_model->changeCheckState(parent, checkState);
         m_treeView->dataChanged(parent, parent);
-
-        parent = parent.parent();
     }
 }
 
