@@ -140,6 +140,7 @@ SOURCES += \
     libraries/wizard/selectcomponentspage.cpp \
     libraries/wizard/summarypage.cpp \
     libraries/wizard/metadatacomponentselector.cpp \
+    libraries/wizard/filecomponentselector.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -259,6 +260,8 @@ HEADERS += \
     libraries/wizard/selectcomponentspage.h \
     libraries/wizard/summarypage.h \
     libraries/wizard/metadatacomponentselector.h \
+    libraries/wizard/componentselector.h \
+    libraries/wizard/filecomponentselector.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/import.h \

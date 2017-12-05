@@ -33,7 +33,7 @@
 #include <libraries/componentimporter.h>
 #include <libraries/metadatamodel.h>
 
-#include "metadatacomponentselector.h"
+#include "componentselector.h"
 #include "ui_select_component.h"
 
 namespace Asn1Acn {
@@ -57,6 +57,7 @@ private slots:
 private:
     void setLibPath();
 
+    void setupModel(const QString &key);
     void setupMetadaModel();
     void setupFileSystemModel();
 
@@ -66,7 +67,7 @@ private:
     std::unique_ptr<QAbstractItemModel> m_model;
 
     ComponentImporter &m_importer;
-    std::unique_ptr<MetadaComponentSelector> m_selector;
+    std::unique_ptr<ComponentSelector> m_selector;
 };
 
 } // namespace Wizard

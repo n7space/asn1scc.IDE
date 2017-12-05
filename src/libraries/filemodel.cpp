@@ -52,7 +52,7 @@ QVariant FileModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     if (role == Qt::CheckStateRole)
-        return m_checked.contains(index) ? Qt::Checked : Qt::Unchecked;
+        return m_checkStates.contains(index) ? m_checkStates.value(index) : Qt::Unchecked;
 
     return QFileSystemModel::data(index, role);
 }
@@ -63,10 +63,7 @@ bool FileModel::setData(const QModelIndex &index, const QVariant &value, int rol
         return false;
 
     if (role == Qt::CheckStateRole) {
-        if (value == Qt::Unchecked)
-            m_checked.remove(index);
-        else if (value == Qt::Checked)
-            m_checked.insert(index);
+        changeCheckState(index, value);
 
         emit dataChanged(index, index);
 
@@ -74,4 +71,9 @@ bool FileModel::setData(const QModelIndex &index, const QVariant &value, int rol
     }
 
     return QFileSystemModel::setData(index, value, role);
+}
+
+void FileModel::changeCheckState(const QModelIndex &index, const QVariant &value)
+{
+    m_checkStates.insert(index, static_cast<Qt::CheckState>(value.toInt()));
 }

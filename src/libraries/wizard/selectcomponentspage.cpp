@@ -25,12 +25,14 @@
 
 #include "selectcomponentspage.h"
 
+#include <utils/qtcassert.h>
+
 #include <libraries/metadata/library.h>
 #include <libraries/librarystorage.h>
+#include <libraries/filemodel.h>
 
 #include "metadatacomponentselector.h"
-
-#include <libraries/filemodel.h>
+#include "filecomponentselector.h"
 
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
@@ -54,27 +56,23 @@ void SelectComponentsPage::initializePage()
 {
     setLibPath();
 
+    // TODO: Tools->Options should allow to configure if default should be metadata or filesystem?
     m_ui.modeCombo->setCurrentIndex(0);
     m_ui.modeCombo->setEnabled(LibraryStorage::instance()->library(m_libPath) != nullptr);
 
-    setupFileSystemModel();
+    setupModel(FILESYSTEM_COMBO_KEY);
 }
 
 bool SelectComponentsPage::validatePage()
 {
-    // TODO: just call method after selector for filesystem will be created
-    if (m_selector != nullptr)
-        m_importer.setFiles(m_selector->paths());
+    m_importer.setFiles(m_selector->pathsToImport());
 
     return QWizardPage::validatePage();
 }
 
 void SelectComponentsPage::onComboTextChanged(const QString &text)
 {
-    if (text == METADATA_COMBO_KEY)
-        setupMetadaModel();
-    else if (text == FILESYSTEM_COMBO_KEY)
-        setupFileSystemModel();
+    setupModel(text);
 }
 
 void SelectComponentsPage::setLibPath()
@@ -84,27 +82,44 @@ void SelectComponentsPage::setLibPath()
                 field("pathChoser").toString();
 }
 
+void SelectComponentsPage::setupModel(const QString &key)
+{
+    QTC_ASSERT(key == METADATA_COMBO_KEY || key == FILESYSTEM_COMBO_KEY, return);
+
+    if (key == METADATA_COMBO_KEY)
+        setupMetadaModel();
+    else if (key == FILESYSTEM_COMBO_KEY)
+        setupFileSystemModel();
+
+    connect(m_model.get(), &QAbstractItemModel::dataChanged,
+            m_selector.get(), &ComponentSelector::updateSelections);
+}
+
 void SelectComponentsPage::setupMetadaModel()
 {
     auto model = new MetadataModel(LibraryStorage::instance()->library(m_libPath), this);
 
     m_ui.modulesView->setModel(model);
 
+    m_selector.reset(new MetadaComponentSelector(m_ui.modulesView, model, m_libPath));
+
     m_model.reset(model);
-    m_selector.reset(new MetadaComponentSelector(m_libPath));
 }
 
 void SelectComponentsPage::setupFileSystemModel()
 {
-    auto model = new FileModel;
+    auto model = new FileModel(this);
 
-    // TODO filtering entries to show only ASN.1/ACN files?
+    static QStringList nameFilter = (QStringList() << "*.asn1" << "*.asn" << "*.acn");
+    model->setNameFilters(nameFilter);
+    model->setNameFilterDisables(false);
+
     model->setRootPath(m_libPath);
 
     m_ui.modulesView->setModel(model);
     m_ui.modulesView->setRootIndex(model->index(m_libPath));
 
+    m_selector.reset(new FileComponentSelector(m_ui.modulesView, model, nameFilter));
+
     m_model.reset(model);
-    // TODO: create filesystem selector, setup it here
-    m_selector.reset(nullptr);
 }

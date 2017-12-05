@@ -25,28 +25,31 @@
 
 #pragma once
 
-#include <libraries/metadatamodel.h>
-
-#include "componentselector.h"
+#include <QTreeView>
+#include <QStringList>
+#include <QModelIndex>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 namespace Wizard {
 
-class MetadaComponentSelector : public ComponentSelector
+class ComponentSelector : public QObject
 {
+    Q_OBJECT
+
+protected:
+    ComponentSelector(QTreeView *treeView, QObject *parent = nullptr)
+        : QObject(parent)
+        , m_treeView(treeView)
+    {}
+
 public:
-    MetadaComponentSelector(QTreeView *treeView, MetadataModel *model, const QString &path, QObject *parent = nullptr);
+    virtual QStringList pathsToImport() = 0;
+    virtual void updateSelections(const QModelIndex &index) = 0;
 
-    QStringList pathsToImport() override;
-    void updateSelections(const QModelIndex &index) override;
-
-private:
-    MetadataModel *m_model;
-
-    QStringList pathsFromNames(const QStringList &names);
-    QString m_path;
+protected:
+     QTreeView *m_treeView;
 };
 
 } // namespace Wizard

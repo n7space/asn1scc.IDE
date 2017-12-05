@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include <QSet>
+#include <QHash>
 #include <QFileSystemModel>
 
 namespace Asn1Acn {
@@ -44,8 +44,10 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
+    void changeCheckState(const QModelIndex &index, const QVariant &value);
+
 private:
-    QSet<QPersistentModelIndex> m_checked;
+    QHash<QPersistentModelIndex, Qt::CheckState> m_checkStates;
 };
 
 } // namespace Libraries

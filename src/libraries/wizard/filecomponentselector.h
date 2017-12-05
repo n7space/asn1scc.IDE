@@ -25,28 +25,41 @@
 
 #pragma once
 
-#include <libraries/metadatamodel.h>
-
 #include "componentselector.h"
+
+#include <QTreeView>
+
+#include <libraries/filemodel.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 namespace Wizard {
 
-class MetadaComponentSelector : public ComponentSelector
+class FileComponentSelector : public ComponentSelector
 {
 public:
-    MetadaComponentSelector(QTreeView *treeView, MetadataModel *model, const QString &path, QObject *parent = nullptr);
+    FileComponentSelector(QTreeView *treeView, FileModel *model, const QStringList nameFilter);
 
     QStringList pathsToImport() override;
     void updateSelections(const QModelIndex &index) override;
 
-private:
-    MetadataModel *m_model;
+private slots:
+    void onDirectoryLoaded(const QString &path);
 
-    QStringList pathsFromNames(const QStringList &names);
-    QString m_path;
+private:
+    void updateChildrenSelections(const QModelIndex &index, const QVariant checkState);
+    void updateParentsSelection(const QModelIndex &index, const QVariant checkState);
+
+    QVariant parentState(const QModelIndex &index) const;
+
+    QStringList selectedPathsFromModelItem(const QString &parentPath) const;
+    QStringList pathsFromChildIndex(const QModelIndex &child) const;
+
+    QStringList selectedPathsFromFilesystemItem(const QString &path) const;
+
+    FileModel *m_model;
+    const QStringList m_nameFilter;
 };
 
 } // namespace Wizard
