@@ -53,6 +53,9 @@ public:
     QModelIndex rootIndex() const;
     const Metadata::LibraryNode *dataNode(const QModelIndex &index) const;
 
+signals:
+    void conflictOccurred(const QString &first, const QString &second) const;
+
 private:
     const Metadata::LibraryNode *m_root;
 

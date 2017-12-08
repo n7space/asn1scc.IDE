@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <QMessageBox>
+
 #include <libraries/metadatamodel.h>
 
 #include "componentselector.h"
@@ -40,6 +42,9 @@ public:
     MetadaComponentSelector(MetadataModel *model, const QString &path, QObject *parent = nullptr);
 
     QStringList pathsToImport() override;
+
+private slots:
+    void onConflictOccured(const QString &first, const QString &second) const;
 
 private:
     QStringList pathsFromNames(const QStringList &names);

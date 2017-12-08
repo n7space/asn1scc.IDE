@@ -26,6 +26,7 @@
 #include "metadatacomponentselector.h"
 
 #include <QDirIterator>
+#include <QMessageBox>
 
 #include <libraries/librarystorage.h>
 
@@ -37,6 +38,16 @@ MetadaComponentSelector::MetadaComponentSelector(MetadataModel *model, const QSt
     , m_model(model)
     , m_path(path)
 {
+    connect(m_model, &MetadataModel::conflictOccurred,
+            this, &MetadaComponentSelector::onConflictOccured);
+}
+
+void MetadaComponentSelector::onConflictOccured(const QString &first, const QString &second) const
+{
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Conflict detected");
+    msgBox.setText("\"" + first + "\"" + " and " + "\"" + second + "\"" + " conflicts");
+    msgBox.exec();
 }
 
 QStringList MetadaComponentSelector::pathsFromNames(const QStringList &names)

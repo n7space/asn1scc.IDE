@@ -147,5 +147,5 @@ void MetadataModel::itemConflicted(MetadataCheckStateHandler::Conflict &conflict
     QTC_ASSERT(!conflict.first.isEmpty(), return);
     QTC_ASSERT(!conflict.second.isEmpty(), return);
 
-    // TODO: emit signal about items being conflicted
+    emit conflictOccurred(conflict.first, conflict.second);
 }
