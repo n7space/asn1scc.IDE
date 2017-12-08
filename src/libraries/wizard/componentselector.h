@@ -39,17 +39,12 @@ class ComponentSelector : public QObject
     Q_OBJECT
 
 protected:
-    ComponentSelector(QTreeView *treeView, QObject *parent = nullptr)
+    ComponentSelector(QObject *parent = nullptr)
         : QObject(parent)
-        , m_treeView(treeView)
     {}
 
 public:
     virtual QStringList pathsToImport() = 0;
-    virtual void updateSelections(const QModelIndex &index) = 0;
-
-protected:
-     QTreeView *m_treeView;
 };
 
 } // namespace Wizard

@@ -47,6 +47,13 @@ public:
     void changeCheckState(const QModelIndex &index, const QVariant &value);
 
 private:
+    void onDirectoryLoaded(const QString &path);
+
+    void setItemCheck(const QModelIndex &index, const QVariant &value);
+    void setChildrenCheck(const QModelIndex &index, const QVariant &value);
+    void setParentCheck(const QModelIndex &index);
+    QVariant parentState(const QModelIndex &index) const;
+
     QHash<QPersistentModelIndex, Qt::CheckState> m_checkStates;
 };
 

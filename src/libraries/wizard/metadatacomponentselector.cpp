@@ -32,8 +32,8 @@
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
-MetadaComponentSelector::MetadaComponentSelector(QTreeView *treeView, MetadataModel *model, const QString &path, QObject *parent)
-    : ComponentSelector(treeView, parent)
+MetadaComponentSelector::MetadaComponentSelector(MetadataModel *model, const QString &path, QObject *parent)
+    : ComponentSelector(parent)
     , m_model(model)
     , m_path(path)
 {
@@ -97,10 +97,4 @@ QStringList MetadaComponentSelector::pathsToImport()
     files.removeDuplicates();
 
     return pathsFromNames(files);
-}
-
-void MetadaComponentSelector::updateSelections(const QModelIndex &index)
-{
-    Q_UNUSED(index);
-    Q_UNUSED(m_model);
 }

@@ -37,10 +37,9 @@ namespace Wizard {
 class MetadaComponentSelector : public ComponentSelector
 {
 public:
-    MetadaComponentSelector(QTreeView *treeView, MetadataModel *model, const QString &path, QObject *parent = nullptr);
+    MetadaComponentSelector(MetadataModel *model, const QString &path, QObject *parent = nullptr);
 
     QStringList pathsToImport() override;
-    void updateSelections(const QModelIndex &index) override;
 
 private:
     QStringList pathsFromNames(const QStringList &names);

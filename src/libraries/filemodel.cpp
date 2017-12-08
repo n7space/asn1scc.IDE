@@ -30,6 +30,8 @@ using namespace Asn1Acn::Internal::Libraries;
 FileModel::FileModel(QObject *parent)
     : QFileSystemModel(parent)
 {
+    connect(this, &QFileSystemModel::directoryLoaded,
+            this, &FileModel::onDirectoryLoaded);
 }
 
 Qt::ItemFlags FileModel::flags(const QModelIndex &index) const
@@ -59,13 +61,14 @@ QVariant FileModel::data(const QModelIndex &index, int role) const
 
 bool FileModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (!index.isValid())
-        return false;
-
     if (role == Qt::CheckStateRole) {
-        changeCheckState(index, value);
 
-        emit dataChanged(index, index);
+        if (!index.isValid())
+            return false;
+
+        setItemCheck(index, value);
+        setChildrenCheck(index, value);
+        setParentCheck(index);
 
         return true;
     }
@@ -73,7 +76,66 @@ bool FileModel::setData(const QModelIndex &index, const QVariant &value, int rol
     return QFileSystemModel::setData(index, value, role);
 }
 
+void FileModel::setItemCheck(const QModelIndex &index, const QVariant &value)
+{
+    changeCheckState(index, value);
+    emit dataChanged(index, index);
+}
+
+void FileModel::setChildrenCheck(const QModelIndex &index, const QVariant &value)
+{
+    if (!index.isValid())
+        return;
+
+    for (int i = 0; i < rowCount(index); ++i) {
+        for (int j = 0; j < columnCount(index); ++j) {
+            auto child = index.child(i, j);
+            changeCheckState(child, value);
+            setChildrenCheck(child, value);
+        }
+    }
+
+    emit dataChanged(index.child(0, 0), index.child(rowCount(index), rowCount(index)));
+}
+
+void FileModel::setParentCheck(const QModelIndex &index)
+{
+    auto checkState = parentState(index);
+
+    for (auto parent = index.parent(); parent.isValid(); parent = parent.parent()) {
+
+        changeCheckState(parent, checkState);
+        checkState = parentState(parent);
+
+        emit dataChanged(parent, parent);
+    }
+}
+
 void FileModel::changeCheckState(const QModelIndex &index, const QVariant &value)
 {
     m_checkStates.insert(index, static_cast<Qt::CheckState>(value.toInt()));
+}
+
+QVariant FileModel::parentState(const QModelIndex &index) const
+{
+    const auto checkState = index.data(Qt::CheckStateRole);
+    const auto parent = index.parent();
+
+    for (int i = 0; i < rowCount(parent); ++i)
+        for (int j = 0; j < columnCount(parent); ++j)
+            if (parent.child(i, j).data(Qt::CheckStateRole) != checkState)
+                return Qt::PartiallyChecked;
+
+    return checkState;
+}
+
+void FileModel::onDirectoryLoaded(const QString &path)
+{
+    const auto idx = index(path);
+    auto checkState = idx.data(Qt::CheckStateRole);
+
+    if (checkState == Qt::Unchecked)
+        return;
+
+    setChildrenCheck(idx, checkState);
 }

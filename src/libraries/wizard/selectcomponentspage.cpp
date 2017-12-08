@@ -90,9 +90,6 @@ void SelectComponentsPage::setupModel(const QString &key)
         setupMetadaModel();
     else if (key == FILESYSTEM_COMBO_KEY)
         setupFileSystemModel();
-
-    connect(m_model.get(), &QAbstractItemModel::dataChanged,
-            m_selector.get(), &ComponentSelector::updateSelections);
 }
 
 void SelectComponentsPage::setupMetadaModel()
@@ -101,7 +98,7 @@ void SelectComponentsPage::setupMetadaModel()
 
     m_ui.modulesView->setModel(model);
 
-    m_selector.reset(new MetadaComponentSelector(m_ui.modulesView, model, m_libPath));
+    m_selector.reset(new MetadaComponentSelector(model, m_libPath));
 
     m_model.reset(model);
 }
@@ -119,7 +116,7 @@ void SelectComponentsPage::setupFileSystemModel()
     m_ui.modulesView->setModel(model);
     m_ui.modulesView->setRootIndex(model->index(m_libPath));
 
-    m_selector.reset(new FileComponentSelector(m_ui.modulesView, model, nameFilter));
+    m_selector.reset(new FileComponentSelector(model, nameFilter));
 
     m_model.reset(model);
 }
