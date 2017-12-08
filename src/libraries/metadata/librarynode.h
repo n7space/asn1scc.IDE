@@ -39,7 +39,7 @@ protected:
         : m_name(name)
         , m_description(description)
         , m_parent(nullptr)
-        , m_checked(false)
+        , m_state(Qt::Unchecked)
     {}
 
 public:
@@ -52,11 +52,14 @@ public:
     virtual LibraryNode *child(int num) const = 0;
     virtual int childIndex(const LibraryNode *child) const = 0;
 
+    virtual const QStringList conflicts() const { return {}; }
+    virtual const QStringList requirements() const { return {}; }
+
     LibraryNode *parent() const { return m_parent; }
     void setParent(LibraryNode *parent) { m_parent = parent; }
 
-    bool checked() const { return m_checked; }
-    void setChecked(bool checked) { m_checked = checked; }
+    Qt::CheckState checked() const { return m_state; }
+    void setChecked(Qt::CheckState state) { m_state = state; }
 
 protected:
     template <typename Collection>
@@ -76,7 +79,7 @@ private:
     const QString m_description;
 
     LibraryNode *m_parent;
-    bool m_checked;
+    Qt::CheckState m_state;
 };
 
 } // namespace Metadata

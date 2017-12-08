@@ -43,9 +43,9 @@ public:
     void updateSelections(const QModelIndex &index) override;
 
 private:
-    MetadataModel *m_model;
-
     QStringList pathsFromNames(const QStringList &names);
+
+    MetadataModel *m_model;
     QString m_path;
 };
 

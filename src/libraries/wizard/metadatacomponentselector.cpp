@@ -57,7 +57,7 @@ namespace {
 
 QStringList readElement(const Metadata::Element *element)
 {
-    if (!element->checked())
+    if (element->checked() != Qt::Checked)
         return {};
 
     return element->asn1Files();

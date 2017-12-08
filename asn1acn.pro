@@ -134,6 +134,7 @@ SOURCES += \
     libraries/librarystorage.cpp \
     libraries/metadatamodel.cpp \
     libraries/filemodel.cpp \
+    libraries/metadatacheckstatehandler.cpp \
     \
     libraries/wizard/importcomponentwizard.cpp \
     libraries/wizard/selectsourcepage.cpp \
@@ -254,6 +255,7 @@ HEADERS += \
     libraries/librarystorage.h \
     libraries/metadatamodel.h \
     libraries/filemodel.h \
+    libraries/metadatacheckstatehandler.h \
     \
     libraries/wizard/importcomponentwizard.h \
     libraries/wizard/selectsourcepage.h \

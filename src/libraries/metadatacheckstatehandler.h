@@ -25,39 +25,47 @@
 
 #pragma once
 
+#include <QHash>
 #include <QModelIndex>
-#include <QAbstractItemModel>
-
-#include <libraries/metadata/librarynode.h>
-
-#include "metadatacheckstatehandler.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 
-class MetadataModel : public QAbstractItemModel
+class MetadataModel;
+
+class MetadataCheckStateHandler
 {
-    Q_OBJECT
 public:
-    explicit MetadataModel(const Metadata::LibraryNode *root, QObject *parent = 0);
+    using States = QHash<QModelIndex, Qt::CheckState>;
+    using Conflict = QPair<QString, QString>;
 
-    QVariant data(const QModelIndex &index, int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-    int rowCount(const QModelIndex &parent) const override;
-    int columnCount(const QModelIndex &parent) const override;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+    MetadataCheckStateHandler(const MetadataModel *model);
 
-    QModelIndex rootIndex() const;
-    const Metadata::LibraryNode *dataNode(const QModelIndex &index) const;
+    bool changeCheckStates(const QModelIndex &index, const Qt::CheckState state);
+
+    States &changedIndexes();
+    Conflict &conflict();
 
 private:
-    const Metadata::LibraryNode *m_root;
+    bool uncheck(const QModelIndex &index);
+    bool check(const QModelIndex &index, const Qt::CheckState state);
 
-    void selectItems(MetadataCheckStateHandler::States &items);
-    void itemConflicted(MetadataCheckStateHandler::Conflict &conflict) const;
+    bool updateChildren(const QModelIndex &index, const Qt::CheckState state);
+    bool updateParent(const QModelIndex &index, const Qt::CheckState childState);
+
+    bool handleRelatives(const QModelIndex &index, const Qt::CheckState state);
+
+    bool noConflicts(const QModelIndex &index);
+    bool checkRequired(const QModelIndex &index, const Qt::CheckState state);
+
+    QModelIndex findIndexByName(const QModelIndex &parent, const QString &name) const;
+    Qt::CheckState parentState(const QModelIndex &index, const Qt::CheckState state) const;
+
+    States m_changedIndexes;
+    Conflict m_conflict;
+
+    const MetadataModel *m_model;
 };
 
 } // namespace Libraries

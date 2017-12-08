@@ -25,6 +25,12 @@
 
 #include "metadatamodel.h"
 
+#include <utils/qtcassert.h>
+
+#include "metadatacheckstatehandler.h"
+
+#include <QDebug>
+
 using namespace Asn1Acn::Internal::Libraries;
 
 MetadataModel::MetadataModel(const Metadata::LibraryNode *root, QObject *parent)
@@ -46,7 +52,7 @@ QVariant MetadataModel::data(const QModelIndex &index, int role) const
     case Qt::ToolTipRole:
         return node->description();
     case Qt::CheckStateRole:
-        return node->checked() ? Qt::Checked : Qt::Unchecked;
+        return node->checked();
     }
 
     return QVariant();
@@ -101,21 +107,45 @@ int MetadataModel::columnCount(const QModelIndex &parent) const
 
 bool MetadataModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (role != Qt::CheckStateRole)
-        return QAbstractItemModel::setData(index, value, role);
+    if (role == Qt::CheckStateRole) {
+        if (!index.isValid())
+            return false;
 
-    if (!index.isValid())
-        return false;
+        MetadataCheckStateHandler checkHandler(this);
 
-    auto node = static_cast<Metadata::LibraryNode *>(index.internalPointer());
-    node->setChecked(value == Qt::Checked);
+        if (checkHandler.changeCheckStates(index, static_cast<Qt::CheckState>(value.toInt())))
+            selectItems(checkHandler.changedIndexes());
+        else
+            itemConflicted(checkHandler.conflict());
 
-    emit dataChanged(index, index);
+        return true;
+    }
 
-    return true;
+    return QAbstractItemModel::setData(index, value, role);
 }
 
 const Metadata::LibraryNode *MetadataModel::dataNode(const QModelIndex &index) const
 {
     return index.isValid() ? static_cast<Metadata::LibraryNode *>(index.internalPointer()) : m_root;
+}
+
+QModelIndex MetadataModel::rootIndex() const
+{
+    return createIndex(0, 0, const_cast<Metadata::LibraryNode *>(m_root));
+}
+
+void MetadataModel::selectItems(MetadataCheckStateHandler::States &items)
+{
+    for (auto it = items.begin(); it != items.end(); ++it) {
+        static_cast<Metadata::LibraryNode *>(it.key().internalPointer())->setChecked(it.value());
+        emit dataChanged(it.key(), it.key());
+    }
+}
+
+void MetadataModel::itemConflicted(MetadataCheckStateHandler::Conflict &conflict) const
+{
+    QTC_ASSERT(!conflict.first.isEmpty(), return);
+    QTC_ASSERT(!conflict.second.isEmpty(), return);
+
+    // TODO: emit signal about items being conflicted
 }
