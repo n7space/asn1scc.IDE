@@ -25,52 +25,32 @@
 
 #pragma once
 
-#include <memory>
+#include <QModelIndex>
+#include <QLabel>
 
-#include <QTreeView>
-#include <QWizardPage>
-
-#include <libraries/componentimporter.h>
 #include <libraries/metadatamodel.h>
-
-#include "relationslabelscontroller.h"
-#include "componentselector.h"
-
-#include "ui_select_component.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 namespace Wizard {
 
-class SelectComponentsPage : public QWizardPage
+class RelationsLabelsController : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit SelectComponentsPage(ComponentImporter &importer, QWidget *parent = nullptr);
+    RelationsLabelsController(MetadataModel *model, QLabel *requires, QLabel *conflicts, QObject *parent = nullptr);
 
-    void initializePage() override;
-    bool validatePage() override;
-
-private slots:
-    void onComboTextChanged(const QString &text);
+public slots:
+    void onFocusedItemChanged(const QModelIndex &current, const QModelIndex &previous) const;
 
 private:
-    void setLibPath();
+    void fillRelations(const QModelIndex &index, QStringList &provides, QStringList &requires, QStringList &conflicts) const;
 
-    void setupModel(const QString &key);
-    void setupMetadaModel();
-    void setupFileSystemModel();
-
-    Ui::SelectComponent m_ui;
-    QString m_libPath;
-
-    std::unique_ptr<QAbstractItemModel> m_model;
-
-    ComponentImporter &m_importer;
-    std::unique_ptr<ComponentSelector> m_selector;
-    std::unique_ptr<RelationsLabelsController> m_labelsController;
+    MetadataModel *m_model;
+    QLabel *m_requires;
+    QLabel *m_conflicts;
 };
 
 } // namespace Wizard

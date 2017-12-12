@@ -142,6 +142,7 @@ SOURCES += \
     libraries/wizard/summarypage.cpp \
     libraries/wizard/metadatacomponentselector.cpp \
     libraries/wizard/filecomponentselector.cpp \
+    libraries/wizard/relationslabelscontroller.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -264,6 +265,7 @@ HEADERS += \
     libraries/wizard/metadatacomponentselector.h \
     libraries/wizard/componentselector.h \
     libraries/wizard/filecomponentselector.h \
+    libraries/wizard/relationslabelscontroller.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/import.h \

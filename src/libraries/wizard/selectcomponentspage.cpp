@@ -86,10 +86,13 @@ void SelectComponentsPage::setupModel(const QString &key)
 {
     QTC_ASSERT(key == METADATA_COMBO_KEY || key == FILESYSTEM_COMBO_KEY, return);
 
-    if (key == METADATA_COMBO_KEY)
+    if (key == METADATA_COMBO_KEY) {
         setupMetadaModel();
-    else if (key == FILESYSTEM_COMBO_KEY)
+        m_ui.verticalWidget->show();
+    } else if (key == FILESYSTEM_COMBO_KEY) {
         setupFileSystemModel();
+        m_ui.verticalWidget->hide();
+    }
 }
 
 void SelectComponentsPage::setupMetadaModel()
@@ -99,6 +102,10 @@ void SelectComponentsPage::setupMetadaModel()
     m_ui.modulesView->setModel(model);
 
     m_selector.reset(new MetadaComponentSelector(model, m_libPath));
+    m_labelsController.reset(new RelationsLabelsController(model, m_ui.requiredItems, m_ui.conflictItems));
+
+    connect(m_ui.modulesView->selectionModel(), &QItemSelectionModel::currentChanged,
+            m_labelsController.get(), &RelationsLabelsController::onFocusedItemChanged, Qt::UniqueConnection);
 
     m_model.reset(model);
 }
@@ -117,6 +124,7 @@ void SelectComponentsPage::setupFileSystemModel()
     m_ui.modulesView->setRootIndex(model->index(m_libPath));
 
     m_selector.reset(new FileComponentSelector(model, nameFilter));
+    m_labelsController.reset();
 
     m_model.reset(model);
 }
