@@ -50,7 +50,7 @@ QVariant MetadataModel::data(const QModelIndex &index, int role) const
     case Qt::ToolTipRole:
         return node->description();
     case Qt::CheckStateRole:
-        return node->checked();
+        return node->checkState();
     }
 
     return QVariant();
@@ -135,7 +135,7 @@ QModelIndex MetadataModel::rootIndex() const
 void MetadataModel::selectItems(const MetadataCheckStateHandler::States &items)
 {
     for (auto it = items.begin(); it != items.end(); ++it) {
-        static_cast<Metadata::LibraryNode *>(it.key().internalPointer())->setChecked(it.value());
+        static_cast<Metadata::LibraryNode *>(it.key().internalPointer())->setCheckState(it.value());
         emit dataChanged(it.key(), it.key());
     }
 }

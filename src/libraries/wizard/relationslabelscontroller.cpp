@@ -27,6 +27,7 @@
 
 #include <QStringList>
 
+using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
 RelationsLabelsController::RelationsLabelsController(MetadataModel *model, QLabel *requires, QLabel *conflicts, QObject *parent)
@@ -56,7 +57,6 @@ void RelationsLabelsController::onFocusedItemChanged(const QModelIndex &current,
         return;
 
     QStringList provided;
-
     QStringList required;
     QStringList conflicted;
 

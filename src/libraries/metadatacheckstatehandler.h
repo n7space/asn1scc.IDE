@@ -56,7 +56,7 @@ private:
 
     bool handleRelatives(const QModelIndex &index);
 
-    bool noConflicts(const QModelIndex &index);
+    bool hasNoConflicts(const QModelIndex &index);
     void enqueueRequired(const QModelIndex &index);
 
     QModelIndex findIndexByName(const QModelIndex &parent, const QString &name) const;

@@ -120,7 +120,7 @@ bool MetadataCheckStateHandler::updateParent(const QModelIndex &index, const Qt:
 bool MetadataCheckStateHandler::handleRelatives(const QModelIndex &index)
 {
     enqueueRequired(index);
-    return noConflicts(index);
+    return hasNoConflicts(index);
 }
 
 void MetadataCheckStateHandler::enqueueRequired(const QModelIndex &index)
@@ -129,7 +129,7 @@ void MetadataCheckStateHandler::enqueueRequired(const QModelIndex &index)
         m_relatives.append(findIndexByName(m_model->rootIndex(), item));
 }
 
-bool MetadataCheckStateHandler::noConflicts(const QModelIndex &index)
+bool MetadataCheckStateHandler::hasNoConflicts(const QModelIndex &index)
 {
     const auto currentNode = m_model->dataNode(index);
 

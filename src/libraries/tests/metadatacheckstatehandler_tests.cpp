@@ -71,7 +71,7 @@ std::unique_ptr<Metadata::Library> createLibrary(const int modulesCnt, const int
 
     for (int i = 0; i < modulesCnt; i++) {
         const QString moduleName = name + QString("_module") + QString::number(i);
-        library->addModule(std::move(createModule(submodulesCnt, elementsCnt, moduleName)));
+        library->addModule(createModule(submodulesCnt, elementsCnt, moduleName));
     }
 
     return library;

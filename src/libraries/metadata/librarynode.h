@@ -58,8 +58,8 @@ public:
     LibraryNode *parent() const { return m_parent; }
     void setParent(LibraryNode *parent) { m_parent = parent; }
 
-    Qt::CheckState checked() const { return m_state; }
-    void setChecked(Qt::CheckState state) { m_state = state; }
+    Qt::CheckState checkState() const { return m_state; }
+    void setCheckState(Qt::CheckState state) { m_state = state; }
 
 protected:
     template <typename Collection>
