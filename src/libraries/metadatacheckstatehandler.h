@@ -44,8 +44,8 @@ public:
 
     bool changeCheckStates(const QModelIndex &index, const Qt::CheckState state);
 
-    States &changedIndexes();
-    Conflict &conflict();
+    const States &changedIndexes() const;
+    const Conflict &conflict() const;
 
 private:
     bool uncheck(const QModelIndex &index);
@@ -54,16 +54,18 @@ private:
     bool updateChildren(const QModelIndex &index, const Qt::CheckState state);
     bool updateParent(const QModelIndex &index, const Qt::CheckState childState);
 
-    bool handleRelatives(const QModelIndex &index, const Qt::CheckState state);
+    bool handleRelatives(const QModelIndex &index);
 
     bool noConflicts(const QModelIndex &index);
-    bool checkRequired(const QModelIndex &index, const Qt::CheckState state);
+    void enqueueRequired(const QModelIndex &index);
 
     QModelIndex findIndexByName(const QModelIndex &parent, const QString &name) const;
     Qt::CheckState parentState(const QModelIndex &index, const Qt::CheckState state) const;
 
     States m_changedIndexes;
     Conflict m_conflict;
+
+    QList<QModelIndex> m_relatives;
 
     const MetadataModel *m_model;
 };

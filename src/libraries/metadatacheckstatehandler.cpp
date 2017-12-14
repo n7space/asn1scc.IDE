@@ -34,6 +34,16 @@ MetadataCheckStateHandler::MetadataCheckStateHandler(const MetadataModel *model)
 {
 }
 
+const MetadataCheckStateHandler::States &MetadataCheckStateHandler::changedIndexes() const
+{
+    return m_changedIndexes;
+}
+
+const MetadataCheckStateHandler::Conflict &MetadataCheckStateHandler::conflict() const
+{
+    return m_conflict;
+}
+
 bool MetadataCheckStateHandler::changeCheckStates(const QModelIndex &index, const Qt::CheckState state)
 {
     if (state == Qt::Unchecked)
@@ -43,16 +53,6 @@ bool MetadataCheckStateHandler::changeCheckStates(const QModelIndex &index, cons
         return check(index, state);
 
     return true;
-}
-
-MetadataCheckStateHandler::States &MetadataCheckStateHandler::changedIndexes()
-{
-    return m_changedIndexes;
-}
-
-MetadataCheckStateHandler::Conflict &MetadataCheckStateHandler::conflict()
-{
-    return m_conflict;
 }
 
 bool MetadataCheckStateHandler::uncheck(const QModelIndex &index)
@@ -69,9 +69,18 @@ bool MetadataCheckStateHandler::uncheck(const QModelIndex &index)
 
 bool MetadataCheckStateHandler::check(const QModelIndex &index, const Qt::CheckState state)
 {
+    if (m_changedIndexes.contains(index) && m_changedIndexes.value(index) == state)
+        return true;
+
     m_changedIndexes.insert(index, state);
 
-    return handleRelatives(index, state) && updateChildren(index, state) && updateParent(index, state);
+    if (!updateParent(index, state) || !updateChildren(index, state) || !handleRelatives(index))
+        return false;
+
+    if (!m_relatives.isEmpty())
+        return check(m_relatives.takeFirst(), state);
+
+    return true;
 }
 
 bool MetadataCheckStateHandler::updateChildren(const QModelIndex &index, const Qt::CheckState state)
@@ -82,7 +91,7 @@ bool MetadataCheckStateHandler::updateChildren(const QModelIndex &index, const Q
 
             m_changedIndexes.insert(child, state);
 
-            if (state != Qt::Unchecked && !handleRelatives(child, state))
+            if (state != Qt::Unchecked && !handleRelatives(child))
                 return false;
 
             if (!updateChildren(child, state))
@@ -99,8 +108,7 @@ bool MetadataCheckStateHandler::updateParent(const QModelIndex &index, const Qt:
 
     for (auto parent = index.parent(); parent.isValid(); parent = parent.parent()) {
         m_changedIndexes.insert(parent, state);
-
-        if (childState != Qt::Unchecked && !handleRelatives(parent, state))
+        if (state != Qt::Unchecked && !handleRelatives(parent))
             return false;
 
         state = parentState(parent, state);
@@ -109,9 +117,16 @@ bool MetadataCheckStateHandler::updateParent(const QModelIndex &index, const Qt:
     return true;
 }
 
-bool MetadataCheckStateHandler::handleRelatives(const QModelIndex &index, const Qt::CheckState state)
+bool MetadataCheckStateHandler::handleRelatives(const QModelIndex &index)
 {
-    return noConflicts(index) && checkRequired(index, state);
+    enqueueRequired(index);
+    return noConflicts(index);
+}
+
+void MetadataCheckStateHandler::enqueueRequired(const QModelIndex &index)
+{
+    for (const auto &item : m_model->dataNode(index)->requirements())
+        m_relatives.append(findIndexByName(m_model->rootIndex(), item));
 }
 
 bool MetadataCheckStateHandler::noConflicts(const QModelIndex &index)
@@ -119,10 +134,9 @@ bool MetadataCheckStateHandler::noConflicts(const QModelIndex &index)
     const auto currentNode = m_model->dataNode(index);
 
     for (const auto &item : currentNode->conflicts()) {
-        const auto testedNode = m_model->dataNode(findIndexByName(m_model->rootIndex(), item));
-
-        if (testedNode->checked() == Qt::Checked) {
-            m_conflict = qMakePair(currentNode->name(), testedNode->name());
+        const auto testedIndex = findIndexByName(m_model->rootIndex(), item);
+        if (m_model->data(testedIndex, Qt::CheckStateRole) == Qt::Checked) {
+            m_conflict = qMakePair(currentNode->name(), m_model->dataNode(testedIndex)->name());
             return false;
         }
 
@@ -131,17 +145,6 @@ bool MetadataCheckStateHandler::noConflicts(const QModelIndex &index)
                 m_conflict = qMakePair(currentNode->name(), m_model->dataNode(it.key())->name());
                 return false;
             }
-    }
-
-    return true;
-}
-
-bool MetadataCheckStateHandler::checkRequired(const QModelIndex &index, const Qt::CheckState state)
-{
-    for (const auto &item : m_model->dataNode(index)->requirements()) {
-        auto index = findIndexByName(m_model->rootIndex(), item);
-        if (!check(index, state))
-            return false;
     }
 
     return true;

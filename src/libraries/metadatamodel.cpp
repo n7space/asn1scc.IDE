@@ -29,8 +29,6 @@
 
 #include "metadatacheckstatehandler.h"
 
-#include <QDebug>
-
 using namespace Asn1Acn::Internal::Libraries;
 
 MetadataModel::MetadataModel(const Metadata::LibraryNode *root, QObject *parent)
@@ -134,7 +132,7 @@ QModelIndex MetadataModel::rootIndex() const
     return createIndex(0, 0, const_cast<Metadata::LibraryNode *>(m_root));
 }
 
-void MetadataModel::selectItems(MetadataCheckStateHandler::States &items)
+void MetadataModel::selectItems(const MetadataCheckStateHandler::States &items)
 {
     for (auto it = items.begin(); it != items.end(); ++it) {
         static_cast<Metadata::LibraryNode *>(it.key().internalPointer())->setChecked(it.value());
@@ -142,7 +140,7 @@ void MetadataModel::selectItems(MetadataCheckStateHandler::States &items)
     }
 }
 
-void MetadataModel::itemConflicted(MetadataCheckStateHandler::Conflict &conflict) const
+void MetadataModel::itemConflicted(const MetadataCheckStateHandler::Conflict &conflict) const
 {
     QTC_ASSERT(!conflict.first.isEmpty(), return);
     QTC_ASSERT(!conflict.second.isEmpty(), return);

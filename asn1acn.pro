@@ -337,6 +337,7 @@ SOURCES += \
     libraries/tests/generalmetadataparser_tests.cpp \
     libraries/tests/metadatamodel_tests.cpp \
     libraries/tests/filemodel_tests.cpp \
+    libraries/tests/metadatacheckstatehandler_tests.cpp \
     \
     3rdparty/tests/modeltest.cpp \
     \
@@ -368,6 +369,7 @@ HEADERS += \
     libraries/tests/generalmetadataparser_tests.h \
     libraries/tests/metadatamodel_tests.h \
     libraries/tests/filemodel_tests.h \
+    libraries/tests/metadatacheckstatehandler_tests.h \
     \
     tree-views/tests/outlinemodel_tests.h \
     tree-views/tests/combomodel_tests.h \

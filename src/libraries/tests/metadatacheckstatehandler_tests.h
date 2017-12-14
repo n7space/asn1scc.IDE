@@ -22,47 +22,38 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QModelIndex>
-#include <QAbstractItemModel>
-
-#include <libraries/metadata/librarynode.h>
-
-#include "metadatacheckstatehandler.h"
+#include <QObject>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Tests {
 
-class MetadataModel : public QAbstractItemModel
+class MetadataCheckStateHandlerTests : public QObject
 {
     Q_OBJECT
 public:
-    explicit MetadataModel(const Metadata::LibraryNode *root, QObject *parent = 0);
+    explicit MetadataCheckStateHandlerTests(QObject *parent = 0);
 
-    QVariant data(const QModelIndex &index, int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-    int rowCount(const QModelIndex &parent) const override;
-    int columnCount(const QModelIndex &parent) const override;
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+private slots:
+    void test_singleElementChecked();
+    void test_allParentChildrenChecked();
 
-    QModelIndex rootIndex() const;
-    const Metadata::LibraryNode *dataNode(const QModelIndex &index) const;
+    void test_elementWithSingleRequirementChecked();
+    void test_parentWithDependendtChildrenChecked();
 
-signals:
-    void conflictOccurred(const QString &first, const QString &second) const;
+    void test_elementWithRequirementInOtherModule();
+    void test_elementRequiresOtherModule();
 
-private:
-    const Metadata::LibraryNode *m_root;
+    void test_conflictingElementChecked();
+    void test_parentWithConflictingChildrenChecked();
 
-    void selectItems(const MetadataCheckStateHandler::States &items);
-    void itemConflicted(const MetadataCheckStateHandler::Conflict &conflict) const;
+    void test_cyclicDependedncy();
 };
 
+} // namespace Tests
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn
