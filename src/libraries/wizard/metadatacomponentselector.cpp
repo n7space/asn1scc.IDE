@@ -26,17 +26,28 @@
 #include "metadatacomponentselector.h"
 
 #include <QDirIterator>
+#include <QMessageBox>
 
 #include <libraries/librarystorage.h>
 
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
-MetadaComponentSelector::MetadaComponentSelector(QTreeView *treeView, MetadataModel *model, const QString &path, QObject *parent)
-    : ComponentSelector(treeView, parent)
+MetadaComponentSelector::MetadaComponentSelector(MetadataModel *model, const QString &path, QObject *parent)
+    : ComponentSelector(parent)
     , m_model(model)
     , m_path(path)
 {
+    connect(m_model, &MetadataModel::conflictOccurred,
+            this, &MetadaComponentSelector::onConflictOccured);
+}
+
+void MetadaComponentSelector::onConflictOccured(const QString &first, const QString &second) const
+{
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Conflict detected");
+    msgBox.setText("\"" + first + "\"" + " and " + "\"" + second + "\"" + " conflicts");
+    msgBox.exec();
 }
 
 QStringList MetadaComponentSelector::pathsFromNames(const QStringList &names)
@@ -57,7 +68,7 @@ namespace {
 
 QStringList readElement(const Metadata::Element *element)
 {
-    if (!element->checked())
+    if (element->checkState() != Qt::Checked)
         return {};
 
     return element->asn1Files();
@@ -97,10 +108,4 @@ QStringList MetadaComponentSelector::pathsToImport()
     files.removeDuplicates();
 
     return pathsFromNames(files);
-}
-
-void MetadaComponentSelector::updateSelections(const QModelIndex &index)
-{
-    Q_UNUSED(index);
-    Q_UNUSED(m_model);
 }

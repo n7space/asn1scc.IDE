@@ -25,26 +25,32 @@
 
 #pragma once
 
-#include <QTreeView>
-#include <QStringList>
 #include <QModelIndex>
+#include <QLabel>
+
+#include <libraries/metadatamodel.h>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 namespace Wizard {
 
-class ComponentSelector : public QObject
+class RelationsLabelsController : public QObject
 {
     Q_OBJECT
 
-protected:
-    ComponentSelector(QObject *parent = nullptr)
-        : QObject(parent)
-    {}
-
 public:
-    virtual QStringList pathsToImport() = 0;
+    RelationsLabelsController(MetadataModel *model, QLabel *requires, QLabel *conflicts, QObject *parent = nullptr);
+
+public slots:
+    void onFocusedItemChanged(const QModelIndex &current, const QModelIndex &previous) const;
+
+private:
+    void fillRelations(const QModelIndex &index, QStringList &provides, QStringList &requires, QStringList &conflicts) const;
+
+    MetadataModel *m_model;
+    QLabel *m_requires;
+    QLabel *m_conflicts;
 };
 
 } // namespace Wizard

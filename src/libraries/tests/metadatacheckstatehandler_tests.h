@@ -22,32 +22,38 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QTreeView>
-#include <QStringList>
-#include <QModelIndex>
+#include <QObject>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
-namespace Wizard {
+namespace Tests {
 
-class ComponentSelector : public QObject
+class MetadataCheckStateHandlerTests : public QObject
 {
     Q_OBJECT
-
-protected:
-    ComponentSelector(QObject *parent = nullptr)
-        : QObject(parent)
-    {}
-
 public:
-    virtual QStringList pathsToImport() = 0;
+    explicit MetadataCheckStateHandlerTests(QObject *parent = 0);
+
+private slots:
+    void test_singleElementChecked();
+    void test_allParentChildrenChecked();
+
+    void test_elementWithSingleRequirementChecked();
+    void test_parentWithDependendtChildrenChecked();
+
+    void test_elementWithRequirementInOtherModule();
+    void test_elementRequiresOtherModule();
+
+    void test_conflictingElementChecked();
+    void test_parentWithConflictingChildrenChecked();
+
+    void test_cyclicDependedncy();
 };
 
-} // namespace Wizard
+} // namespace Tests
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

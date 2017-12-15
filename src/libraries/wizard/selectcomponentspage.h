@@ -33,7 +33,9 @@
 #include <libraries/componentimporter.h>
 #include <libraries/metadatamodel.h>
 
+#include "relationslabelscontroller.h"
 #include "componentselector.h"
+
 #include "ui_select_component.h"
 
 namespace Asn1Acn {
@@ -68,6 +70,7 @@ private:
 
     ComponentImporter &m_importer;
     std::unique_ptr<ComponentSelector> m_selector;
+    std::unique_ptr<RelationsLabelsController> m_labelsController;
 };
 
 } // namespace Wizard

@@ -30,6 +30,8 @@
 
 #include <libraries/metadata/librarynode.h>
 
+#include "metadatacheckstatehandler.h"
+
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
@@ -48,10 +50,17 @@ public:
     int columnCount(const QModelIndex &parent) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
-private:
+    QModelIndex rootIndex() const;
     const Metadata::LibraryNode *dataNode(const QModelIndex &index) const;
 
+signals:
+    void conflictOccurred(const QString &first, const QString &second) const;
+
+private:
     const Metadata::LibraryNode *m_root;
+
+    void selectItems(const MetadataCheckStateHandler::States &items);
+    void itemConflicted(const MetadataCheckStateHandler::Conflict &conflict) const;
 };
 
 } // namespace Libraries

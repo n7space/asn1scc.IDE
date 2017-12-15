@@ -25,29 +25,51 @@
 
 #pragma once
 
-#include <QTreeView>
-#include <QStringList>
+#include <QHash>
 #include <QModelIndex>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
-namespace Wizard {
 
-class ComponentSelector : public QObject
+class MetadataModel;
+
+class MetadataCheckStateHandler
 {
-    Q_OBJECT
-
-protected:
-    ComponentSelector(QObject *parent = nullptr)
-        : QObject(parent)
-    {}
-
 public:
-    virtual QStringList pathsToImport() = 0;
+    using States = QHash<QModelIndex, Qt::CheckState>;
+    using Conflict = QPair<QString, QString>;
+
+    MetadataCheckStateHandler(const MetadataModel *model);
+
+    bool changeCheckStates(const QModelIndex &index, const Qt::CheckState state);
+
+    const States &changedIndexes() const;
+    const Conflict &conflict() const;
+
+private:
+    bool uncheck(const QModelIndex &index);
+    bool check(const QModelIndex &index, const Qt::CheckState state);
+
+    bool updateChildren(const QModelIndex &index, const Qt::CheckState state);
+    bool updateParent(const QModelIndex &index, const Qt::CheckState childState);
+
+    bool handleRelatives(const QModelIndex &index);
+
+    bool hasNoConflicts(const QModelIndex &index);
+    void enqueueRequired(const QModelIndex &index);
+
+    QModelIndex findIndexByName(const QModelIndex &parent, const QString &name) const;
+    Qt::CheckState parentState(const QModelIndex &index, const Qt::CheckState state) const;
+
+    States m_changedIndexes;
+    Conflict m_conflict;
+
+    QList<QModelIndex> m_relatives;
+
+    const MetadataModel *m_model;
 };
 
-} // namespace Wizard
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

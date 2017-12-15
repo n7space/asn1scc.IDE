@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <QMessageBox>
+
 #include <libraries/metadatamodel.h>
 
 #include "componentselector.h"
@@ -37,15 +39,17 @@ namespace Wizard {
 class MetadaComponentSelector : public ComponentSelector
 {
 public:
-    MetadaComponentSelector(QTreeView *treeView, MetadataModel *model, const QString &path, QObject *parent = nullptr);
+    MetadaComponentSelector(MetadataModel *model, const QString &path, QObject *parent = nullptr);
 
     QStringList pathsToImport() override;
-    void updateSelections(const QModelIndex &index) override;
+
+private slots:
+    void onConflictOccured(const QString &first, const QString &second) const;
 
 private:
-    MetadataModel *m_model;
-
     QStringList pathsFromNames(const QStringList &names);
+
+    MetadataModel *m_model;
     QString m_path;
 };
 

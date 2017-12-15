@@ -134,6 +134,7 @@ SOURCES += \
     libraries/librarystorage.cpp \
     libraries/metadatamodel.cpp \
     libraries/filemodel.cpp \
+    libraries/metadatacheckstatehandler.cpp \
     \
     libraries/wizard/importcomponentwizard.cpp \
     libraries/wizard/selectsourcepage.cpp \
@@ -141,6 +142,7 @@ SOURCES += \
     libraries/wizard/summarypage.cpp \
     libraries/wizard/metadatacomponentselector.cpp \
     libraries/wizard/filecomponentselector.cpp \
+    libraries/wizard/relationslabelscontroller.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -254,6 +256,7 @@ HEADERS += \
     libraries/librarystorage.h \
     libraries/metadatamodel.h \
     libraries/filemodel.h \
+    libraries/metadatacheckstatehandler.h \
     \
     libraries/wizard/importcomponentwizard.h \
     libraries/wizard/selectsourcepage.h \
@@ -262,6 +265,7 @@ HEADERS += \
     libraries/wizard/metadatacomponentselector.h \
     libraries/wizard/componentselector.h \
     libraries/wizard/filecomponentselector.h \
+    libraries/wizard/relationslabelscontroller.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/import.h \
@@ -333,6 +337,7 @@ SOURCES += \
     libraries/tests/generalmetadataparser_tests.cpp \
     libraries/tests/metadatamodel_tests.cpp \
     libraries/tests/filemodel_tests.cpp \
+    libraries/tests/metadatacheckstatehandler_tests.cpp \
     \
     3rdparty/tests/modeltest.cpp \
     \
@@ -364,6 +369,7 @@ HEADERS += \
     libraries/tests/generalmetadataparser_tests.h \
     libraries/tests/metadatamodel_tests.h \
     libraries/tests/filemodel_tests.h \
+    libraries/tests/metadatacheckstatehandler_tests.h \
     \
     tree-views/tests/outlinemodel_tests.h \
     tree-views/tests/combomodel_tests.h \

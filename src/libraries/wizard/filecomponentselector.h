@@ -39,20 +39,11 @@ namespace Wizard {
 class FileComponentSelector : public ComponentSelector
 {
 public:
-    FileComponentSelector(QTreeView *treeView, FileModel *model, const QStringList nameFilter);
+    FileComponentSelector(FileModel *model, const QStringList nameFilter, QObject *parent = nullptr);
 
     QStringList pathsToImport() override;
-    void updateSelections(const QModelIndex &index) override;
-
-private slots:
-    void onDirectoryLoaded(const QString &path);
 
 private:
-    void updateChildrenSelections(const QModelIndex &index, const QVariant checkState);
-    void updateParentsSelection(const QModelIndex &index, const QVariant checkState);
-
-    QVariant parentState(const QModelIndex &index) const;
-
     QStringList selectedPathsFromModelItem(const QString &parentPath) const;
     QStringList pathsFromChildIndex(const QModelIndex &child) const;
 

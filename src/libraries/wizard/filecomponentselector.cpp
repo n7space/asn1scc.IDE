@@ -32,72 +32,16 @@
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
-FileComponentSelector::FileComponentSelector(QTreeView *treeView, FileModel *model, const QStringList nameFilter)
-    : ComponentSelector(treeView)
+FileComponentSelector::FileComponentSelector(FileModel *model, const QStringList nameFilter, QObject *parent)
+    : ComponentSelector(parent)
     , m_model(model)
     , m_nameFilter(nameFilter)
 {
-    connect(m_model, &QFileSystemModel::directoryLoaded,
-            this, &FileComponentSelector::onDirectoryLoaded);
 }
 
 QStringList FileComponentSelector::pathsToImport()
 {
     return selectedPathsFromModelItem(m_model->rootPath());
-}
-
-void FileComponentSelector::updateSelections(const QModelIndex &index)
-{
-    updateChildrenSelections(index, index.data(Qt::CheckStateRole));
-    updateParentsSelection(index, parentState(index));
-}
-
-QVariant FileComponentSelector::parentState(const QModelIndex &index) const
-{
-    const auto checkState = index.data(Qt::CheckStateRole);
-    const auto parent = index.parent();
-
-    for (int i = 0; i < m_model->rowCount(parent); ++i)
-        for (int j = 0; j < m_model->columnCount(parent); ++j)
-            if (parent.child(i, j).data(Qt::CheckStateRole) != checkState)
-                return Qt::PartiallyChecked;
-
-    return checkState;
-}
-
-void FileComponentSelector::updateChildrenSelections(const QModelIndex &index, const QVariant checkState)
-{
-    if (!index.isValid())
-        return;
-
-    for (int i = 0; i < m_model->rowCount(index); ++i) {
-        for (int j = 0; j < m_model->columnCount(index); ++j) {
-            auto child = index.child(i, j);
-
-            m_model->changeCheckState(child, checkState);
-            m_treeView->dataChanged(child, child);
-            updateChildrenSelections(child, checkState);
-        }
-    }
-}
-
-void FileComponentSelector::updateParentsSelection(const QModelIndex &index, const QVariant checkState)
-{
-    for (auto parent = index.parent(); parent.isValid(); parent = parent.parent()) {
-        m_model->changeCheckState(parent, checkState);
-        m_treeView->dataChanged(parent, parent);
-    }
-}
-
-void FileComponentSelector::onDirectoryLoaded(const QString &path)
-{
-    auto index = m_model->index(path);
-    auto checkState = index.data(Qt::CheckStateRole);
-
-    if (checkState == Qt::Unchecked)
-        return;
-
-    updateChildrenSelections(index, checkState);
 }
 
 QStringList FileComponentSelector::selectedPathsFromModelItem(const QString &parentPath) const
@@ -123,8 +67,8 @@ QStringList FileComponentSelector::pathsFromChildIndex(const QModelIndex &child)
 
     if (m_model->isDir(child))
         return m_model->rowCount(child) > 0
-                ? selectedPathsFromModelItem(m_model->filePath(child))
-                : selectedPathsFromFilesystemItem(m_model->filePath(child));
+               ? selectedPathsFromModelItem(m_model->filePath(child))
+               : selectedPathsFromFilesystemItem(m_model->filePath(child));
 
     QTC_ASSERT(state == Qt::Checked, return {});
 
