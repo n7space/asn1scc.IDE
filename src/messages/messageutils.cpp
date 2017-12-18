@@ -31,7 +31,7 @@
 #include "messagemanager.h"
 
 using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::Message;
+using namespace Asn1Acn::Internal::Messages;
 
 namespace {
 
@@ -187,23 +187,23 @@ QString processBaseMessage(const QProcess *process)
 
 } // namespace Anonymous
 
-void Asn1Acn::Internal::Message::messageNetworkReply(const QNetworkReply *reply)
+void Asn1Acn::Internal::Messages::messageNetworkReply(const QNetworkReply *reply)
 {
     MessageManager::write(networkReplyBaseMessage(reply), MessageManager::Type::Communication);
 }
 
-void Asn1Acn::Internal::Message::messageNetworkReplyError(const QNetworkReply *reply)
+void Asn1Acn::Internal::Messages::messageNetworkReplyError(const QNetworkReply *reply)
 {
     QString message = networkReplyBaseMessage(reply) + " " + networkReplyError(reply);
     MessageManager::write(message, MessageManager::Type::Communication);
 }
 
-void Asn1Acn::Internal::Message::messageProcess(const QProcess *process)
+void Asn1Acn::Internal::Messages::messageProcess(const QProcess *process)
 {
     MessageManager::write(processBaseMessage(process), MessageManager::Type::Process);
 }
 
-void Asn1Acn::Internal::Message::messageProcessError(const QProcess *process)
+void Asn1Acn::Internal::Messages::messageProcessError(const QProcess *process)
 {
     QString message = processBaseMessage(process) + " " + processError(process);
     MessageManager::write(message, MessageManager::Type::Process);

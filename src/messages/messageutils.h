@@ -23,44 +23,21 @@
 **
 ****************************************************************************/
 
-#include "messagemanager.h"
+#pragma once
 
-#include <QDateTime>
+class QNetworkReply;
+class QProcess;
 
-#include <coreplugin/messagemanager.h>
+namespace Asn1Acn {
+namespace Internal {
+namespace Messages {
 
-using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::Message;
+void messageNetworkReply(const QNetworkReply *reply);
+void messageNetworkReplyError(const QNetworkReply *reply);
 
-namespace {
-QString currentTime()
-{
-    return QDateTime::currentDateTime().toString("hh:mm:ss.zzz ");
-}
+void messageProcess(const QProcess *process);
+void messageProcessError(const QProcess *process);
 
-QString prefix(MessageManager::Type type)
-{
-    QString typeName;
-    switch (type) {
-    case MessageManager::Type::Process:
-        typeName = "Process:";
-        break;
-    case MessageManager::Type::Communication:
-        typeName = "Communication:";
-    default:
-        break;
-    }
-
-    return QString("ASN1ACN: " + typeName + "    ");
-}
-
-QString decorateMessage(const QString &message, MessageManager::Type type)
-{
-    return currentTime() + prefix(type) + message;
-}
-} // namespace Anonymous
-
-void MessageManager::write(const QString &message, MessageManager::Type type)
-{
-    Core::MessageManager::write(decorateMessage(message, type),  Core::MessageManager::PrintToOutputPaneFlag::Silent);
-}
+} // namespace Messages
+} // namespace Internal
+} // namespace Asn1Acn

@@ -23,29 +23,44 @@
 **
 ****************************************************************************/
 
-#pragma once
+#include "messagemanager.h"
 
-#include <QString>
+#include <QDateTime>
 
-namespace Asn1Acn {
-namespace Internal {
-namespace Message {
+#include <coreplugin/messagemanager.h>
 
-class MessageManager
+using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Messages;
+
+namespace {
+QString currentTime()
 {
-    MessageManager() = default;
+    return QDateTime::currentDateTime().toString("hh:mm:ss.zzz ");
+}
 
-public:
-    enum class Type {
-        Process,
-        Communication
-    };
+QString prefix(MessageManager::Type type)
+{
+    QString typeName;
+    switch (type) {
+    case MessageManager::Type::Process:
+        typeName = "Process:";
+        break;
+    case MessageManager::Type::Communication:
+        typeName = "Communication:";
+    default:
+        break;
+    }
 
-    static void write(const QString &message, Type type);
-};
+    return QString("ASN1ACN: " + typeName + "    ");
+}
 
-} // namespace Message
-} // namespace Internal
-} // namespace Asn1Acn
+QString decorateMessage(const QString &message, MessageManager::Type type)
+{
+    return currentTime() + prefix(type) + message;
+}
+} // namespace Anonymous
 
-
+void MessageManager::write(const QString &message, MessageManager::Type type)
+{
+    Core::MessageManager::write(decorateMessage(message, type),  Core::MessageManager::PrintToOutputPaneFlag::Silent);
+}

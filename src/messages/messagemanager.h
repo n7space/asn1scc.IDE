@@ -25,19 +25,27 @@
 
 #pragma once
 
-class QNetworkReply;
-class QProcess;
+#include <QString>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Message {
+namespace Messages {
 
-void messageNetworkReply(const QNetworkReply *reply);
-void messageNetworkReplyError(const QNetworkReply *reply);
+class MessageManager
+{
+    MessageManager() = default;
 
-void messageProcess(const QProcess *process);
-void messageProcessError(const QProcess *process);
+public:
+    enum class Type {
+        Process,
+        Communication
+    };
 
-} // namespace Message
+    static void write(const QString &message, Type type);
+};
+
+} // namespace Messages
 } // namespace Internal
 } // namespace Asn1Acn
+
+

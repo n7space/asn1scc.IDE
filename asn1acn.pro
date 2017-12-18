@@ -144,8 +144,8 @@ SOURCES += \
     libraries/wizard/filecomponentselector.cpp \
     libraries/wizard/relationslabelscontroller.cpp \
     \
-    message/messageutils.cpp \
-    message/messagemanager.cpp \
+    messages/messageutils.cpp \
+    messages/messagemanager.cpp \
     \
     asn1acn.cpp \
     asneditor.cpp \
@@ -278,8 +278,8 @@ HEADERS += \
     libraries/metadata/general.h \
     libraries/metadata/librarynode.h \
     \
-    message/messageutils.h \
-    message/messagemanager.h \
+    messages/messageutils.h \
+    messages/messagemanager.h \
     \
     asn1acn_global.h \
     asn1acnconstants.h \
