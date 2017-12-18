@@ -144,6 +144,9 @@ SOURCES += \
     libraries/wizard/filecomponentselector.cpp \
     libraries/wizard/relationslabelscontroller.cpp \
     \
+    messages/messageutils.cpp \
+    messages/messagemanager.cpp \
+    \
     asn1acn.cpp \
     asneditor.cpp \
     asndocument.cpp \
@@ -275,6 +278,9 @@ HEADERS += \
     libraries/metadata/general.h \
     libraries/metadata/librarynode.h \
     \
+    messages/messageutils.h \
+    messages/messagemanager.h \
+    \
     asn1acn_global.h \
     asn1acnconstants.h \
     asn1acn.h \
@@ -309,7 +315,6 @@ HEADERS += \
     modelvalidityguard.h \
     outlinerootupdater.h \
     usagesfinder.h
-
 
 FORMS += \
     options-pages/general.ui \

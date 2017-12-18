@@ -33,6 +33,8 @@
 
 #include <extensionsystem/pluginmanager.h>
 
+#include <messages/messageutils.h>
+
 #include "data/file.h"
 #include "data/definitions.h"
 
@@ -65,10 +67,14 @@ void Asn1SccParsedDocumentBuilder::requestFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
 
-    if (reply->error() == QNetworkReply::NoError)
+
+    if (reply->error() == QNetworkReply::NoError) {
+        Messages::messageNetworkReply(reply);
         parseResponse(reply->readAll());
-    else
+    } else {
+        Messages::messageNetworkReplyError(reply);
         emit failed();
+    }
 
     reply->deleteLater();
 }

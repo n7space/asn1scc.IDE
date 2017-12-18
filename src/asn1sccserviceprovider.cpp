@@ -34,6 +34,8 @@
 #include <coreplugin/icore.h>
 
 #include <utils/qtcassert.h>
+#include <messages/messageutils.h>
+#include <messages/messagemanager.h>
 
 #include "asn1acnconstants.h"
 
@@ -47,6 +49,11 @@ Asn1SccServiceProvider::Asn1SccServiceProvider(Settings::ServiceConstPtr setting
       m_settings(settings)
 {
     updateConfigFromSettings();
+
+    connect(m_asn1sccService, &QProcess::stateChanged,
+            [this](QProcess::ProcessState newState) {
+        Q_UNUSED(newState); Messages::messageProcess(m_asn1sccService);
+    } );
 
     connect(m_settings.get(), &Settings::Service::changed, this, &Asn1SccServiceProvider::settingsChanged);
 
@@ -77,21 +84,28 @@ QNetworkReply *Asn1SccServiceProvider::requestAst(const QHash<QString, QString> 
 void Asn1SccServiceProvider::start()
 {
     QTC_ASSERT(m_serviceStarted == false, return);
-
+    Messages::MessageManager::write("Starting Asn1Scc service...",
+                                    Messages::MessageManager::Type::Process);
     m_serviceStarted = true;
 
     m_stayAliveTimer.start();
     m_asn1sccService->start();
-    m_asn1sccService->waitForStarted(); // TODO check for error
+
+    if (!m_asn1sccService->waitForStarted()) // TODO handle error?
+        Messages::messageProcessError(m_asn1sccService);
 }
 
 void Asn1SccServiceProvider::stop()
 {
+    Messages::MessageManager::write("Stopping Asn1Scc service...",
+                                    Messages::MessageManager::Type::Process);
     m_serviceStarted = false;
 
     m_stayAliveTimer.stop();
     m_asn1sccService->terminate();
-    m_asn1sccService->waitForFinished();
+
+    if (!m_asn1sccService->waitForFinished()) // TODO handle error?
+        Messages::messageProcessError(m_asn1sccService);
 }
 
 QStringList Asn1SccServiceProvider::additionalArguments() const
@@ -133,6 +147,9 @@ void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatu
     Q_UNUSED(exitCode);
     Q_UNUSED(exitStatus);
 
+    Messages::MessageManager::write("Process finished...",
+                                    Messages::MessageManager::Type::Process);
+
     if (m_serviceStarted) {
         m_asn1sccService->start();
         m_asn1sccService->waitForStarted();
@@ -142,11 +159,21 @@ void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatu
 void Asn1SccServiceProvider::stayAliveTimeout()
 {
     auto reply = networkManagerInstance->get(QNetworkRequest(QUrl(m_settings->baseUri() + "stayAlive")));
-    connect(reply, &QNetworkReply::finished, [this, reply](){
-        if (m_serviceStarted && reply->error() != QNetworkReply::NoError)
-            restart();
-        reply->deleteLater();
-    });
+    connect(reply, &QNetworkReply::finished,
+            this , &Asn1SccServiceProvider::onStayAliveRequestFinished);
+}
+
+void Asn1SccServiceProvider::onStayAliveRequestFinished()
+{
+    const auto reply = qobject_cast<QNetworkReply *>(sender());
+    QTC_ASSERT(reply != nullptr, return);
+
+    if (m_serviceStarted && reply->error() != QNetworkReply::NoError) {
+        Messages::messageNetworkReplyError(reply);
+        restart();
+    }
+
+    reply->deleteLater();
 }
 
 void Asn1SccServiceProvider::updateConfigFromSettings()
