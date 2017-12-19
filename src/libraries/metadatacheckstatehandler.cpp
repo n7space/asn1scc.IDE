@@ -126,7 +126,7 @@ bool MetadataCheckStateHandler::handleRelatives(const QModelIndex &index)
 void MetadataCheckStateHandler::enqueueRequired(const QModelIndex &index)
 {
     for (const auto &item : m_model->dataNode(index)->requirements())
-        m_relatives.append(findIndexByName(m_model->rootIndex(), item));
+        m_relatives.append(findIndexByName(m_model->rootIndex(), item.element())); // TODO
 }
 
 bool MetadataCheckStateHandler::hasNoConflicts(const QModelIndex &index)
@@ -134,14 +134,14 @@ bool MetadataCheckStateHandler::hasNoConflicts(const QModelIndex &index)
     const auto currentNode = m_model->dataNode(index);
 
     for (const auto &item : currentNode->conflicts()) {
-        const auto testedIndex = findIndexByName(m_model->rootIndex(), item);
+        const auto testedIndex = findIndexByName(m_model->rootIndex(), item.element()); // TODO
         if (m_model->data(testedIndex, Qt::CheckStateRole) == Qt::Checked) {
             m_conflict = qMakePair(currentNode->name(), m_model->dataNode(testedIndex)->name());
             return false;
         }
 
         for (auto it = m_changedIndexes.begin(); it != m_changedIndexes.end(); ++it)
-            if (m_model->dataNode(it.key())->name() == item) {
+            if (m_model->dataNode(it.key())->name() == item.element()) { // TODO
                 m_conflict = qMakePair(currentNode->name(), m_model->dataNode(it.key())->name());
                 return false;
             }

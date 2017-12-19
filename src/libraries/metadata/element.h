@@ -25,10 +25,10 @@
 #pragma once
 
 #include <QString>
-#include <QStringList>
 #include <QList>
 
 #include "librarynode.h"
+#include "reference.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -45,20 +45,20 @@ public:
     const QStringList &asn1Files() const { return m_asn1Files; }
 
     void addAsn1File(const QString &file) { m_asn1Files.append(file); }
-    void addConflict(const QString &conflict) { m_conflicts.append(conflict); }
-    void addRequirement(const QString &requirement) { m_requirements.append(requirement); }
+    void addConflict(const Reference &conflict) { m_conflicts.append(conflict); }
+    void addRequirement(const Reference &requirement) { m_requirements.append(requirement); }
 
     LibraryNode *child(int num) const override { Q_UNUSED(num); return nullptr; }
     int childrenCount() const override { return 0; }
     int childIndex(const LibraryNode *child) const override { Q_UNUSED(child); return -1; }
 
-    const QStringList conflicts() const override { return m_conflicts; }
-    const QStringList requirements() const override { return m_requirements; }
+    QList<Reference> conflicts() const override { return m_conflicts; }
+    QList<Reference> requirements() const override { return m_requirements; }
 
 private:
     QStringList m_asn1Files;
-    QStringList m_conflicts;
-    QStringList m_requirements;
+    QList<Reference> m_conflicts;
+    QList<Reference> m_requirements;
 };
 
 } // namespace Metadata

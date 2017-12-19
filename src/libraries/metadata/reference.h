@@ -24,51 +24,35 @@
 ****************************************************************************/
 #pragma once
 
-#include <stdexcept>
-#include <string>
-#include <memory>
-
-#include <QJsonDocument>
-#include <QByteArray>
-
-#include "metadata/reference.h"
+#include <QString>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
-
 namespace Metadata {
-class Module;
-class Submodule;
-class Element;
-}
 
-class ModuleMetadataParser
+class Reference
 {
 public:
-    struct Error : std::runtime_error
-    {
-        Error(const std::string &msg)
-            : std::runtime_error(msg)
-        {}
-    };
+    Reference(const QString &module,
+              const QString &submodule,
+              const QString &element)
+        : m_module(module)
+        , m_submodule(submodule)
+        , m_element(element)
+    {}
 
-    ModuleMetadataParser(const QByteArray &data);
-
-    std::unique_ptr<Metadata::Module> parse();
+    const QString &module() const { return m_module; }
+    const QString &submodule() const { return m_submodule; }
+    const QString &element() const { return m_element; }
 
 private:
-    std::unique_ptr<Metadata::Module> readModule(const QJsonObject &object);
-    std::unique_ptr<Metadata::Submodule> readSubmodule(const QJsonObject &object);
-    std::unique_ptr<Metadata::Element> readElement(const QJsonObject &object);
-    Metadata::Reference readReference(const QJsonValue &value) const;
-
-    QJsonDocument m_document;
-
-    QString m_currentModuleName;
-    QString m_currentSubmoduleName;
+    QString m_module;
+    QString m_submodule;
+    QString m_element;
 };
 
+} // namespace Metadata
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

@@ -22,12 +22,13 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <QObject>
 
 #include "../modulemetadataparser.h"
+
+#include <libraries/metadata/module.h>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -49,6 +50,7 @@ private slots:
     void test_emptySubmodule();
     void test_emptyElement();
     void test_completeElement();
+    void test_complexReferences();
 
 private:
     void parsingFails(const QString &jsonData);

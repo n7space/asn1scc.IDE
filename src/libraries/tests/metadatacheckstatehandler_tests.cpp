@@ -104,10 +104,10 @@ void setDependecies(const MetadataModel *model, const QString &owner, const QStr
     QVERIFY(element != nullptr);
 
     for (const auto &r : requires)
-        element->addRequirement(r);
+        element->addRequirement(Metadata::Reference("TODO", "TODO", r));
 
     for (const auto &c : conflicts)
-        element->addConflict(c);
+        element->addConflict(Metadata::Reference("TODO", "TODO", c));
 }
 
 } // namespace Anonymous

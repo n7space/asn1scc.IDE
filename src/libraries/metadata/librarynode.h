@@ -22,10 +22,11 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <QString>
+
+#include "reference.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -52,8 +53,8 @@ public:
     virtual LibraryNode *child(int num) const = 0;
     virtual int childIndex(const LibraryNode *child) const = 0;
 
-    virtual const QStringList conflicts() const { return {}; }
-    virtual const QStringList requirements() const { return {}; }
+    virtual QList<Reference> conflicts() const { return {}; }
+    virtual QList<Reference> requirements() const { return {}; }
 
     LibraryNode *parent() const { return m_parent; }
     void setParent(LibraryNode *parent) { m_parent = parent; }
