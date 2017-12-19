@@ -48,6 +48,9 @@ public:
     int stayAlivePeriod() const;
     void setStayAlivePeriod(int i);
 
+    bool watchdogDisabled() const;
+    void setWatchdogDisabled(bool checked);
+
 private:
     Ui::ServiceOptionsPage m_ui;
 };

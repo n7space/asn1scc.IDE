@@ -82,3 +82,13 @@ void ServiceWidget::setStayAlivePeriod(int i)
         m_ui.stayAliveSpinBox->setValue(m_ui.stayAliveSpinBox->minimum());
     }
 }
+
+bool ServiceWidget::watchdogDisabled() const
+{
+    return m_ui.stayAliveCheckbox->isChecked();
+}
+
+void ServiceWidget::setWatchdogDisabled(bool checked)
+{
+    m_ui.stayAliveCheckbox->setChecked(checked);
+}

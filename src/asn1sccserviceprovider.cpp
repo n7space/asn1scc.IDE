@@ -60,9 +60,6 @@ Asn1SccServiceProvider::Asn1SccServiceProvider(Settings::ServiceConstPtr setting
     // QProcess::finished is overloaded, hence the cast
     connect(m_asn1sccService, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             this, &Asn1SccServiceProvider::onProcessFinished);
-
-    connect(&m_stayAliveTimer, &QTimer::timeout,
-            this, &Asn1SccServiceProvider::stayAliveTimeout, Qt::UniqueConnection);
 }
 
 Asn1SccServiceProvider::~Asn1SccServiceProvider()
@@ -182,6 +179,14 @@ void Asn1SccServiceProvider::updateConfigFromSettings()
     m_asn1sccService->setArguments(additionalArguments());
 
     m_stayAliveTimer.setInterval(m_settings->stayAlivePeriod() / 2);
+
+    if (m_settings->watchdogDisabled()) {
+        disconnect(&m_stayAliveTimer, &QTimer::timeout,
+                   this, &Asn1SccServiceProvider::stayAliveTimeout);
+    } else {
+        connect(&m_stayAliveTimer, &QTimer::timeout,
+                this, &Asn1SccServiceProvider::stayAliveTimeout, Qt::UniqueConnection);
+    }
 }
 
 void Asn1SccServiceProvider::settingsChanged()
