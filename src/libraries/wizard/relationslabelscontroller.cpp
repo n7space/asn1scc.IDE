@@ -72,13 +72,24 @@ void RelationsLabelsController::onFocusedItemChanged(const QModelIndex &current,
     m_conflicts->setText(conflicted.join("\n"));
 }
 
-void RelationsLabelsController::fillRelations(const QModelIndex &index, QStringList &provides, QStringList &requires, QStringList &conflicts) const
+static QStringList toStringList(const QList<Metadata::Reference> &refs) // TODO
+{
+    QStringList res;
+    for (const auto &item : refs)
+        res << item.element(); // TODO
+    return res;
+}
+
+void RelationsLabelsController::fillRelations(const QModelIndex &index,
+                                              QStringList &provides,
+                                              QStringList &requires,
+                                              QStringList &conflicts) const
 {
     const auto node = m_model->dataNode(index);
 
     provides << node->name();
-    requires << node->requirements();
-    conflicts << node->conflicts();
+    requires << toStringList(node->requirements());
+    conflicts << toStringList(node->conflicts());
 
     for (auto i = 0; i < m_model->rowCount(index); ++i)
         for (auto j = 0; j < m_model->columnCount(index); ++j)

@@ -120,12 +120,9 @@ void ModuleMetadataParserTests::test_completeElement()
                 "elements": [
                   {
                     "name": "ElementName",
-                    "asn1Files": ["f1", "f2"],
-                    "conflicts": ["c1", "c2", "c3"],
-                    "requires": ["r1"],
-                    "imports": [
-                      { "from": "X", "types": ["Y", "Z"] }
-                    ]
+                    "asn1Files": ["f1", "f2", "f3"],
+                    "conflicts": ["c1", "c2"],
+                    "requires": ["r1"]
                   }
                 ]
               }
@@ -136,15 +133,60 @@ void ModuleMetadataParserTests::test_completeElement()
     const auto submodule = m_parsedData->submodules().at(0).get();
     QCOMPARE(static_cast<int>(submodule->elements().size()), 1);
     const auto element = submodule->elements().at(0).get();
-    QCOMPARE(element->asn1Files(), (QStringList{"f1", "f2"}));
-    QCOMPARE(element->conflicts(), (QStringList{"c1", "c2", "c3"}));
-    QCOMPARE(element->requirements(), (QStringList{"r1"}));
-    QCOMPARE(element->imports().size(), 1);
-    const auto import = element->imports().at(0);
-    QCOMPARE(import.from(), QLatin1Literal("X"));
-    QCOMPARE(import.types().size(), 2);
-    QCOMPARE(import.types().at(0), QLatin1Literal("Y"));
-    QCOMPARE(import.types().at(1), QLatin1Literal("Z"));
+    QCOMPARE(element->asn1Files(), (QStringList{"f1", "f2", "f3"}));
+
+    QCOMPARE(element->conflicts().size(), 2);
+    QCOMPARE(element->conflicts().at(0).element(), QStringLiteral("c1"));
+    QCOMPARE(element->conflicts().at(0).submodule(), QStringLiteral("SubmoduleName"));
+    QCOMPARE(element->conflicts().at(0).module(), QStringLiteral("SomeName"));
+    QCOMPARE(element->conflicts().at(1).element(), QStringLiteral("c2"));
+    QCOMPARE(element->conflicts().at(1).submodule(), QStringLiteral("SubmoduleName"));
+    QCOMPARE(element->conflicts().at(1).module(), QStringLiteral("SomeName"));
+
+    QCOMPARE(element->requirements().size(), 1);
+    QCOMPARE(element->requirements().at(0).element(), QStringLiteral("r1"));
+    QCOMPARE(element->requirements().at(0).submodule(), QStringLiteral("SubmoduleName"));
+    QCOMPARE(element->requirements().at(0).module(), QStringLiteral("SomeName"));
+}
+
+void ModuleMetadataParserTests::test_complexReferences()
+{
+    parse(R"({
+          "name": "SomeName",
+          "submodules": [
+              {
+                "name": "SubmoduleName",
+                "elements": [
+                  {
+                    "name": "ElementName",
+                    "asn1Files": ["f1"],
+                    "conflicts": [{
+                                    "module": "OtherModule",
+                                    "submodule": "OtherSubmodule",
+                                    "element": "ConflictingElement"
+                                 }],
+                    "requires": [{
+                                    "submodule": "LocalSubmodule",
+                                    "element": "RequiredElement"
+                                }]
+                  }
+                ]
+              }
+            ]
+          })");
+
+    const auto submodule = m_parsedData->submodules().at(0).get();
+    const auto element = submodule->elements().at(0).get();
+
+    QCOMPARE(element->conflicts().size(), 1);
+    QCOMPARE(element->conflicts().at(0).element(), QStringLiteral("ConflictingElement"));
+    QCOMPARE(element->conflicts().at(0).submodule(), QStringLiteral("OtherSubmodule"));
+    QCOMPARE(element->conflicts().at(0).module(), QStringLiteral("OtherModule"));
+
+    QCOMPARE(element->requirements().size(), 1);
+    QCOMPARE(element->requirements().at(0).element(), QStringLiteral("RequiredElement"));
+    QCOMPARE(element->requirements().at(0).submodule(), QStringLiteral("LocalSubmodule"));
+    QCOMPARE(element->requirements().at(0).module(), QStringLiteral("SomeName"));
 }
 
 void ModuleMetadataParserTests::parsingFails(const QString &jsonData)

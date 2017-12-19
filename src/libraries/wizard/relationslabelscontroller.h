@@ -46,7 +46,10 @@ public slots:
     void onFocusedItemChanged(const QModelIndex &current, const QModelIndex &previous) const;
 
 private:
-    void fillRelations(const QModelIndex &index, QStringList &provides, QStringList &requires, QStringList &conflicts) const;
+    void fillRelations(const QModelIndex &index,
+                       QStringList &provides,
+                       QStringList &requires,
+                       QStringList &conflicts) const;
 
     MetadataModel *m_model;
     QLabel *m_requires;

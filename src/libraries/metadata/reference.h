@@ -25,27 +25,31 @@
 #pragma once
 
 #include <QString>
-#include <QStringList>
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
 namespace Metadata {
 
-class Import
+class Reference
 {
 public:
-    Import(const QString &from, const QStringList &types)
-        : m_from(from)
-        , m_types(types)
+    Reference(const QString &module,
+              const QString &submodule,
+              const QString &element)
+        : m_module(module)
+        , m_submodule(submodule)
+        , m_element(element)
     {}
 
-    const QString &from() const { return m_from; }
-    const QStringList &types() const { return m_types; }
+    const QString &module() const { return m_module; }
+    const QString &submodule() const { return m_submodule; }
+    const QString &element() const { return m_element; }
 
 private:
-    QString m_from;
-    QStringList m_types;
+    QString m_module;
+    QString m_submodule;
+    QString m_element;
 };
 
 } // namespace Metadata

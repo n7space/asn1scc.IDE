@@ -26,15 +26,22 @@
 
 #include <stdexcept>
 #include <string>
+#include <memory>
 
 #include <QJsonDocument>
 #include <QByteArray>
 
-#include "metadata/module.h"
+#include "metadata/reference.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+
+namespace Metadata {
+class Module;
+class Submodule;
+class Element;
+}
 
 class ModuleMetadataParser
 {
@@ -51,7 +58,15 @@ public:
     std::unique_ptr<Metadata::Module> parse();
 
 private:
+    std::unique_ptr<Metadata::Module> readModule(const QJsonObject &object);
+    std::unique_ptr<Metadata::Submodule> readSubmodule(const QJsonObject &object);
+    std::unique_ptr<Metadata::Element> readElement(const QJsonObject &object);
+    Metadata::Reference readReference(const QJsonValue &value) const;
+
     QJsonDocument m_document;
+
+    QString m_currentModuleName;
+    QString m_currentSubmoduleName;
 };
 
 } // namespace Libraries
