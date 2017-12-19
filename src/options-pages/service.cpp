@@ -61,6 +61,7 @@ QWidget *Service::widget()
         m_widget->setPath(m_settings->path());
         m_widget->setBaseUri(m_settings->baseUri());
         m_widget->setStayAlivePeriod(m_settings->stayAlivePeriod());
+        m_widget->setWatchdogDisabled(m_settings->watchdogDisabled());
     }
     return m_widget;
 }

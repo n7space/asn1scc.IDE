@@ -53,6 +53,8 @@ public:
     int stayAlivePeriod() const { return m_stayAlivePeriod; }
     void setStayAlivePeriod(int p) { m_stayAlivePeriod = p; }
 
+    bool watchdogDisabled() const { return stayAlivePeriod() <= 0; }
+
 private:
     void saveOptionsTo(QSettings *s) const override;
     void loadOptionsFrom(QSettings *s) override;
