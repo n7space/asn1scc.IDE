@@ -73,7 +73,6 @@ void Service::apply()
     m_settings->setPath(m_widget->path());
     m_settings->setBaseUri(m_widget->baseUri());
     m_settings->setStayAlivePeriod(m_widget->stayAlivePeriod());
-    m_settings->setWatchdogDisabled(m_widget->watchdogDisabled());
     m_settings->changed();
     Settings::save(m_settings);
 }

@@ -32,7 +32,6 @@ using namespace Asn1Acn::Internal::Settings;
 static const char PATH[] = "Path";
 static const char BASE_URI[] = "BaseUri";
 static const char STAY_ALIVE_PERIOD[] = "StayAlivePeriod";
-static const char WATCHDOG_DISABLED[] = "WatchdogDisabled";
 
 Service::~Service()
 {
@@ -48,7 +47,6 @@ void Service::saveOptionsTo(QSettings *s) const
     s->setValue(PATH, path());
     s->setValue(BASE_URI, baseUri());
     s->setValue(STAY_ALIVE_PERIOD, stayAlivePeriod());
-    s->setValue(WATCHDOG_DISABLED, watchdogDisabled());
 }
 
 void Service::loadOptionsFrom(QSettings *s)
@@ -59,5 +57,4 @@ void Service::loadOptionsFrom(QSettings *s)
                         ? "http://+:80/Temporary_Listen_Addresses/asn1scc.IDE/"
                         : "http://localhost:9749/").toString());
     setStayAlivePeriod(s->value(STAY_ALIVE_PERIOD, 1000).toInt());
-    setWatchdogDisabled(s->value(WATCHDOG_DISABLED, false).toBool());
 }
