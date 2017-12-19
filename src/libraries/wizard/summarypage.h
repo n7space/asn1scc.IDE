@@ -22,10 +22,10 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <QLabel>
+#include <QPlainTextEdit>
 #include <QWizardPage>
 
 #include <libraries/componentimporter.h>
@@ -45,7 +45,7 @@ public:
 
 private:
     QLabel *m_filesListCaption;
-    QLabel *m_filesList;
+    QPlainTextEdit *m_filesList;
 
     ComponentImporter &m_importer;
 };

@@ -38,7 +38,8 @@ SummaryPage::SummaryPage(ComponentImporter &importer, QWidget *parent)
     setTitle(QLatin1String("Summary"));
 
     m_filesListCaption = new QLabel(QLatin1String("Files to import: "), this);
-    m_filesList = new QLabel(this);
+    m_filesList = new QPlainTextEdit(this);
+    m_filesList->setReadOnly(true);
 
     auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
 
@@ -57,5 +58,5 @@ void SummaryPage::initializePage()
             filesText += QLatin1String(",\n");
     }
 
-    m_filesList->setText(filesText);
+    m_filesList->setPlainText(filesText);
 }
