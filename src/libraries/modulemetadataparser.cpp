@@ -56,24 +56,6 @@ QString readDescription(const QJsonObject &object)
     return object["description"].toString();
 }
 
-QStringList toStringList(const QJsonValue &value)
-{
-  QStringList result;
-  foreachItem(value, [&result](const QJsonValue &item) {
-      result.append(item.toString());
-    });
-  return result;
-}
-
-Metadata::Import readImport(const QJsonObject &object)
-{
-    const auto import = Metadata::Import{object["from"].toString(),
-                                         toStringList(object["types"])};
-    if (import.from().isEmpty() || import.types().isEmpty())
-        throw ModuleMetadataParser::Error("'from' and 'types' must be present and not-empty");
-    return import;
-}
-
 template <typename T>
 std::unique_ptr<T> readNamedType(const QJsonObject &object)
 {
@@ -91,9 +73,6 @@ std::unique_ptr<Metadata::Element> readElement(const QJsonObject &object)
     });
     foreachItem(object["requires"], [&element](const QJsonValue &value) {
         element->addRequirement(value.toString());
-    });
-    foreachItem(object["imports"], [&element](const QJsonValue &value) {
-        element->addImport(readImport(value.toObject()));
     });
     return element;
 }

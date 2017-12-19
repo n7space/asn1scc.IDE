@@ -123,9 +123,6 @@ void ModuleMetadataParserTests::test_completeElement()
                     "asn1Files": ["f1", "f2"],
                     "conflicts": ["c1", "c2", "c3"],
                     "requires": ["r1"],
-                    "imports": [
-                      { "from": "X", "types": ["Y", "Z"] }
-                    ]
                   }
                 ]
               }
@@ -139,12 +136,6 @@ void ModuleMetadataParserTests::test_completeElement()
     QCOMPARE(element->asn1Files(), (QStringList{"f1", "f2"}));
     QCOMPARE(element->conflicts(), (QStringList{"c1", "c2", "c3"}));
     QCOMPARE(element->requirements(), (QStringList{"r1"}));
-    QCOMPARE(element->imports().size(), 1);
-    const auto import = element->imports().at(0);
-    QCOMPARE(import.from(), QLatin1Literal("X"));
-    QCOMPARE(import.types().size(), 2);
-    QCOMPARE(import.types().at(0), QLatin1Literal("Y"));
-    QCOMPARE(import.types().at(1), QLatin1Literal("Z"));
 }
 
 void ModuleMetadataParserTests::parsingFails(const QString &jsonData)

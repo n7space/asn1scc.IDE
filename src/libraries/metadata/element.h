@@ -28,8 +28,6 @@
 #include <QStringList>
 #include <QList>
 
-#include "import.h"
-
 #include "librarynode.h"
 
 namespace Asn1Acn {
@@ -45,12 +43,10 @@ public:
     {}
 
     const QStringList &asn1Files() const { return m_asn1Files; }
-    const QList<Import> &imports() const { return m_imports; }
 
     void addAsn1File(const QString &file) { m_asn1Files.append(file); }
     void addConflict(const QString &conflict) { m_conflicts.append(conflict); }
     void addRequirement(const QString &requirement) { m_requirements.append(requirement); }
-    void addImport(const Import &import) { m_imports.append(import); }
 
     LibraryNode *child(int num) const override { Q_UNUSED(num); return nullptr; }
     int childrenCount() const override { return 0; }
@@ -63,7 +59,6 @@ private:
     QStringList m_asn1Files;
     QStringList m_conflicts;
     QStringList m_requirements;
-    QList<Import> m_imports;
 };
 
 } // namespace Metadata

@@ -271,7 +271,6 @@ HEADERS += \
     libraries/wizard/relationslabelscontroller.h \
     \
     libraries/metadata/element.h \
-    libraries/metadata/import.h \
     libraries/metadata/submodule.h \
     libraries/metadata/module.h \
     libraries/metadata/library.h \
