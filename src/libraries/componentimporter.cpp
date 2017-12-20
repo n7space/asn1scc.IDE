@@ -25,60 +25,78 @@
 
 #include "componentimporter.h"
 
-#include <QDir>
+#include <QFile>
 
 #include <projectexplorer/session.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectnodes.h>
 
-#include <utils/qtcassert.h>
-
 using namespace Asn1Acn::Internal::Libraries;
 
 void ComponentImporter::setFiles(const QStringList &files)
 {
-    m_files = files;
-}
-
-void ComponentImporter::setDirectories(const QStringList &paths)
-{
-    m_files = pathsInDirectory(paths);
+    m_sourceFiles = files;
 }
 
 const QStringList &ComponentImporter::files() const
 {
-    return m_files;
+    return m_sourceFiles;
 }
 
-void ComponentImporter::import() const
+void ComponentImporter::setDirectory(const QString &path)
 {
-    addPathsToProject(m_files);
+    m_sourceDir = QDir(path);
 }
 
-QStringList ComponentImporter::pathsInDirectory(const QStringList &directories)
-{
-    QStringList files;
-    QStringList filters;
-    filters << "*.asn" << "*.asn1" << "*.acn";
-
-    for(const auto &directory : directories) {
-        QDir dir(directory);
-        if (!dir.exists())
-            continue;
-
-        dir.setNameFilters(filters);
-        for (const auto &path : dir.entryList())
-            files << dir.filePath(path);
-    }
-
-    return files;
-}
-
-void ComponentImporter::addPathsToProject(const QStringList &paths) const
+void ComponentImporter::import()
 {
     const auto project = ProjectExplorer::SessionManager::startupProject();
-    if (project == nullptr)
-        return;
 
-    project->rootProjectNode()->addFiles(paths);
+    m_projectDir = QDir(project->projectDirectory().toString());
+    m_targetDir = QDir(m_projectDir.filePath(m_sourceDir.dirName()));
+
+    m_projectDir.mkpath(m_sourceDir.dirName());
+
+    const auto copied = copyFilesToProject();
+    addFilesToProject(project, copied);
+}
+
+QStringList ComponentImporter::copyFilesToProject()
+{
+    QStringList copiedFiles;
+
+    for (const auto &file : m_sourceFiles) {
+        QString target = targetFileName(file);
+
+        m_targetDir.mkpath(QFileInfo(target).absolutePath());
+
+        QFile::copy(file, m_targetDir.filePath(target));
+        copiedFiles.append(m_projectDir.relativeFilePath(target));
+    }
+
+    return copiedFiles;
+}
+
+QString ComponentImporter::targetFileName(const QString &file)
+{
+    QString relativeSrcPath = m_sourceDir.relativeFilePath(file);
+    return m_targetDir.filePath(relativeSrcPath);
+}
+
+void ComponentImporter::addFilesToProject(const ProjectExplorer::Project *project, const QStringList &files)
+{
+    const auto uniqueFiles = createUniqueFilesList(project, files);
+    project->rootProjectNode()->addFiles(uniqueFiles);
+}
+
+QStringList ComponentImporter::createUniqueFilesList(const ProjectExplorer::Project *project, const QStringList &newFiles)
+{
+    QStringList uniqueFiles;
+    const auto projectFiles = project->files(ProjectExplorer::Project::SourceFiles);
+
+    for (const auto &file : newFiles)
+        if (!projectFiles.contains(m_projectDir.filePath(file)))
+            uniqueFiles.append(file);
+
+    return uniqueFiles;
 }

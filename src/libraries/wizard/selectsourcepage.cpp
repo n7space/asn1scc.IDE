@@ -63,9 +63,9 @@ SelectSourcePage::SelectSourcePage(ComponentImporter &importer, QWidget *parent)
 bool SelectSourcePage::validatePage()
 {
     if (m_ui.builtInRadio->isChecked())
-        m_importer.setDirectories(QStringList(m_ui.builtInCombo->currentText()));
+        m_importer.setDirectory(m_ui.builtInCombo->currentText());
     else if (m_ui.customRadio->isChecked())
-        m_importer.setDirectories(QStringList(m_ui.asn1sccPathChooser->path()));
+        m_importer.setDirectory(m_ui.asn1sccPathChooser->path());
 
     return QWizardPage::validatePage();
 }

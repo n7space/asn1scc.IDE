@@ -27,6 +27,11 @@
 
 #include <QString>
 #include <QStringList>
+#include <QDir>
+
+namespace ProjectExplorer {
+class Project;
+}
 
 namespace Asn1Acn {
 namespace Internal {
@@ -35,19 +40,24 @@ namespace Libraries {
 class ComponentImporter
 {
 public:
-    void setDirectories(const QStringList &paths);
+    void setDirectory(const QString &path);
     void setFiles(const QStringList &files);
 
     const QStringList &files() const;
 
-    void import() const;
+    void import();
 
 private:
-    QStringList pathsInDirectory(const QStringList &directories);
-    void addPathsToProject(const QStringList &paths) const;
+    QStringList copyFilesToProject();
+    QString targetFileName(const QString &file);
+    void addFilesToProject(const ProjectExplorer::Project *project, const QStringList &files);
+    QStringList createUniqueFilesList(const ProjectExplorer::Project *project, const QStringList &newFiles);
 
-    QStringList m_directories;
-    QStringList m_files;
+    QStringList m_sourceFiles;
+
+    QDir m_sourceDir;
+    QDir m_targetDir;
+    QDir m_projectDir;
 };
 
 } // namespace Libraries
