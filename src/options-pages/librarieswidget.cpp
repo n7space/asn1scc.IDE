@@ -39,6 +39,10 @@
 #include <libraries/generalmetadataparser.h>
 #include <tr.h>
 
+#include <libraries/librarystorage.h>
+
+#include <QDebug>
+
 using namespace Asn1Acn::Internal::OptionsPages;
 using namespace Asn1Acn::Internal;
 
@@ -52,20 +56,12 @@ enum class Columns {
 
 const int LibEntryItemType = QTreeWidgetItem::UserType + 1;
 
-Libraries::Metadata::General readInfo(const QString &path)
-{
-    QFile file{path + "/info.json"};
-    Libraries::GeneralMetadataParser parser(file.open(QIODevice::ReadOnly) ? file.readAll() : QByteArray(),
-                                            path); // TODO use some singleton storage in future
-    return parser.parse();
-}
-
 class LibEntryItem : public QTreeWidgetItem
 {
   public:
     LibEntryItem(QTreeWidgetItem *parent, const QString &path)
         : QTreeWidgetItem(parent, LibEntryItemType)
-        , m_info(readInfo(path))
+        , m_info(Libraries::LibraryStorage::instance()->metadata(path))
     {
     }
 

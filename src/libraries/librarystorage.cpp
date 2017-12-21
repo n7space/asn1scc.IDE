@@ -46,6 +46,18 @@ void LibraryStorage::addLibrary(LibraryPtr library)
     emit changed();
 }
 
+void LibraryStorage::addMetadata(Metadata::General metadata)
+{
+    QMutexLocker lock(&m_libraryMutex);
+    m_generalMetadata[metadata.path()] = metadata;
+}
+
+Metadata::General LibraryStorage::metadata(const QString &path)
+{
+    QMutexLocker lock(&m_libraryMutex);
+    return m_generalMetadata[path];
+}
+
 void LibraryStorage::removeLibraries()
 {
     QMutexLocker lock(&m_libraryMutex);
@@ -55,6 +67,12 @@ void LibraryStorage::removeLibraries()
     m_libraries.clear();
 
     emit changed();
+}
+
+void LibraryStorage::removeMetadata()
+{
+    QMutexLocker lock(&m_libraryMutex);
+    m_generalMetadata.clear();
 }
 
 const Metadata::Library *LibraryStorage::library(const QString &path) const

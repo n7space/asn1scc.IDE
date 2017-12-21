@@ -23,31 +23,29 @@
 **
 ****************************************************************************/
 
-#include "componentlibrarydispatcher.h"
-
-#include "componentlibraryprocessor.h"
 #include "generalmetadataprocessor.h"
 
-#include "filesourcereader.h"
+#include "librarystorage.h"
+#include "generalmetadataparser.h"
 
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Libraries;
 
-void CompontentLibraryDispatcher::dispatch(const QStringList &directories, const QStringList &files) const
+GeneralMetadataProcessor::GeneralMetadataProcessor(const QString &path,
+                                                   const QString &file,
+                                                   const FileSourceReader &reader,
+                                                   QObject *parent)
+    : QObject(parent)
+    , m_reader(reader)
+    , m_path(path)
+    , m_file(file)
 {
-    static const FileSourceReader reader;
+}
 
-    for (const auto &directory : directories) {
-        const auto filesInDirectory = files.filter(directory);
+void GeneralMetadataProcessor::process()
+{
+    GeneralMetadataParser parser(m_reader.readContent(m_file).toLatin1(), m_path);
+    LibraryStorage::instance()->addMetadata(parser.parse());
 
-        const auto infoFile = filesInDirectory.filter("info.json").join(" ");
-        const auto generalProcessor = new GeneralMetadataProcessor(directory, infoFile, reader);
-        generalProcessor->process();
-
-        const auto metaFiles = filesInDirectory.filter("meta.json");
-        if (metaFiles.empty())
-            continue;
-
-        const auto componentProcessor = new ComponentLibraryProcessor(directory, filesInDirectory.filter("meta.json"), reader);
-        componentProcessor->process();
-    }
+    this->deleteLater();
 }

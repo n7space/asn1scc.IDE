@@ -92,9 +92,12 @@ void ComponentDirectoryWatcher::addMainDirectory(const QString &path)
 
     m_fsWatcher->addPath(path);
 
+    if (dir.exists(QStringLiteral("info.json")))
+        m_fsWatcher->addPath(dir.filePath(QStringLiteral("info.json")));
+
     const auto subDirectories = dir.entryList(QDir::Filter::Dirs | QDir::Filter::NoDotAndDotDot);
     for (const auto &subPath : subDirectories)
-        addSubDirectory(path + QString("/") + subPath);
+        addSubDirectory(dir.filePath(subPath));
 }
 
 
@@ -107,7 +110,7 @@ void ComponentDirectoryWatcher::addSubDirectory(const QString &path)
     m_fsWatcher->addPath(path);
 
     if (dir.exists(QStringLiteral("meta.json")))
-        m_fsWatcher->addPath(path + QStringLiteral("/meta.json"));
+        m_fsWatcher->addPath(dir.filePath(QStringLiteral("meta.json")));
 }
 
 void ComponentDirectoryWatcher::removeAll()
@@ -120,5 +123,8 @@ void ComponentDirectoryWatcher::removeAll()
     if (!files.empty())
         m_fsWatcher->removePaths(files);
 
-    LibraryStorage::instance()->removeLibraries();
+    auto instance = LibraryStorage::instance();
+
+    instance->removeLibraries();
+    instance->removeMetadata();
 }

@@ -48,6 +48,9 @@ QString FileSourceReader::readContent(const QString &fileName) const
 
 QString FileSourceReader::readFromFile(const QString &fileName) const
 {
+    if (fileName.isEmpty())
+        return QString();
+
     QFile file(fileName);
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
