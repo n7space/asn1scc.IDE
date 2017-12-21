@@ -45,7 +45,7 @@ GeneralMetadataProcessor::GeneralMetadataProcessor(const QString &path,
 void GeneralMetadataProcessor::process()
 {
     GeneralMetadataParser parser(m_reader.readContent(m_file).toLatin1(), m_path);
-    LibraryStorage::instance()->addMetadata(parser.parse());
+    LibraryStorage::instance()->addGeneralMetadata(parser.parse());
 
     this->deleteLater();
 }

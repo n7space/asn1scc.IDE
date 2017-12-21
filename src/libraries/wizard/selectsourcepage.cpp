@@ -86,7 +86,7 @@ void SelectSourcePage::refreshPaths()
     m_ui.builtInCombo->clear();
 
     for (const auto &path : m_libraries->libPaths()) {
-        const auto metadata = LibraryStorage::instance()->metadata(path);
+        const auto metadata = LibraryStorage::instance()->generalMetadata(path);
         m_ui.builtInCombo->addItem(metadata.name(), metadata.path());
     }
 }

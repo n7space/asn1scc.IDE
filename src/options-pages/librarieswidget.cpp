@@ -36,12 +36,9 @@
 #include <utils/detailswidget.h>
 
 #include <libraries/metadata/general.h>
+#include <libraries/librarystorage.h>
 #include <libraries/generalmetadataparser.h>
 #include <tr.h>
-
-#include <libraries/librarystorage.h>
-
-#include <QDebug>
 
 using namespace Asn1Acn::Internal::OptionsPages;
 using namespace Asn1Acn::Internal;
@@ -61,7 +58,7 @@ class LibEntryItem : public QTreeWidgetItem
   public:
     LibEntryItem(QTreeWidgetItem *parent, const QString &path)
         : QTreeWidgetItem(parent, LibEntryItemType)
-        , m_info(Libraries::LibraryStorage::instance()->metadata(path))
+        , m_info(Libraries::LibraryStorage::instance()->generalMetadata(path))
     {
     }
 

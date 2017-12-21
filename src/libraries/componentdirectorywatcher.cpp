@@ -123,8 +123,8 @@ void ComponentDirectoryWatcher::removeAll()
     if (!files.empty())
         m_fsWatcher->removePaths(files);
 
-    auto instance = LibraryStorage::instance();
+    auto storage = LibraryStorage::instance();
 
-    instance->removeLibraries();
-    instance->removeMetadata();
+    storage->removeLibraries();
+    storage->removeAllMetadata();
 }

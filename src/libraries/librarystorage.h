@@ -53,10 +53,10 @@ public:
     void addLibrary(LibraryPtr library);
     void removeLibraries();
 
-    void addMetadata(Metadata::General metadata);
-    void removeMetadata();
+    void addGeneralMetadata(Metadata::General metadata);
+    void removeAllMetadata();
 
-    Metadata::General metadata(const QString &path);
+    Metadata::General generalMetadata(const QString &path);
     const Metadata::Library *library(const QString &path) const;
 
 signals:
