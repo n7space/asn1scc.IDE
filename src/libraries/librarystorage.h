@@ -32,6 +32,7 @@
 #include <QString>
 
 #include "metadata/library.h"
+#include "metadata/general.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -52,6 +53,10 @@ public:
     void addLibrary(LibraryPtr library);
     void removeLibraries();
 
+    void addGeneralMetadata(Metadata::General metadata);
+    void removeAllMetadata();
+
+    Metadata::General generalMetadata(const QString &path);
     const Metadata::Library *library(const QString &path) const;
 
 signals:
@@ -60,6 +65,7 @@ signals:
 
 private:
     std::map<QString, LibraryPtr> m_libraries;
+    std::map<QString, Metadata::General> m_generalMetadata;
 
     mutable QMutex m_libraryMutex;
 };

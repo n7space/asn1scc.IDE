@@ -22,32 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#pragma once
 
-#include "componentlibrarydispatcher.h"
+#include <QObject>
+#include <QString>
 
-#include "componentlibraryprocessor.h"
-#include "generalmetadataprocessor.h"
+#include <filesourcereader.h>
 
-#include "filesourcereader.h"
+namespace Asn1Acn {
+namespace Internal {
+namespace Libraries {
 
-using namespace Asn1Acn::Internal::Libraries;
-
-void CompontentLibraryDispatcher::dispatch(const QStringList &directories, const QStringList &files) const
+class GeneralMetadataProcessor : public QObject
 {
-    static const FileSourceReader reader;
+    Q_OBJECT
 
-    for (const auto &directory : directories) {
-        const auto filesInDirectory = files.filter(directory);
+public:
+    GeneralMetadataProcessor(const QString &path,
+                             const QString &file,
+                             const FileSourceReader &reader,
+                             QObject *parent = nullptr);
+    void process();
 
-        const auto infoFile = filesInDirectory.filter("info.json").join(" ");
-        const auto generalProcessor = new GeneralMetadataProcessor(directory, infoFile, reader);
-        generalProcessor->process();
+private:
+    const FileSourceReader m_reader;
 
-        const auto metaFiles = filesInDirectory.filter("meta.json");
-        if (metaFiles.empty())
-            continue;
+    const QString m_path;
+    const QString m_file;
+};
 
-        const auto componentProcessor = new ComponentLibraryProcessor(directory, filesInDirectory.filter("meta.json"), reader);
-        componentProcessor->process();
-    }
-}
+} // namespace Libraries
+} // namespace Internal
+} // namespace Asn1Acn
