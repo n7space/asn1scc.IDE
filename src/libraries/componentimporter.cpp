@@ -70,11 +70,20 @@ QStringList ComponentImporter::copyFilesToProject()
 
         m_targetDir.mkpath(QFileInfo(target).absolutePath());
 
-        QFile::copy(file, m_targetDir.filePath(target));
+        copyFile(file, m_targetDir.filePath(target));
+
         copiedFiles.append(m_projectDir.relativeFilePath(target));
     }
 
     return copiedFiles;
+}
+
+void ComponentImporter::copyFile(const QString &source, const QString &target)
+{
+    if (QFile::exists(target))
+        QFile::remove(target);
+
+    QFile::copy(source, target);
 }
 
 QString ComponentImporter::targetFileName(const QString &file)

@@ -51,6 +51,7 @@ private:
     QStringList copyFilesToProject();
     QString targetFileName(const QString &file);
     void addFilesToProject(const ProjectExplorer::Project *project, const QStringList &files);
+    void copyFile(const QString &source, const QString &target);
     QStringList createUniqueFilesList(const ProjectExplorer::Project *project, const QStringList &newFiles);
 
     QStringList m_sourceFiles;
