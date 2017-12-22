@@ -30,6 +30,9 @@
 
 #include <coreplugin/icore.h>
 
+#include <libraries/librarystorage.h>
+#include <libraries/metadata/general.h>
+
 #include "importcomponentwizard.h"
 
 using namespace Asn1Acn::Internal;
@@ -56,14 +59,14 @@ SelectSourcePage::SelectSourcePage(ComponentImporter &importer, QWidget *parent)
     registerField("builtInRadio", m_ui.builtInRadio);
     registerField("customRadio", m_ui.customRadio);
 
-    registerField("builtInCombo", m_ui.builtInCombo, "currentText");
+    registerField("builtInCombo", m_ui.builtInCombo, "currentData");
     registerField("pathChoser", m_ui.asn1sccPathChooser, "path", "pathChanged");
 }
 
 bool SelectSourcePage::validatePage()
 {
     if (m_ui.builtInRadio->isChecked())
-        m_importer.setDirectory(m_ui.builtInCombo->currentText());
+        m_importer.setDirectory(m_ui.builtInCombo->currentData().toString());
     else if (m_ui.customRadio->isChecked())
         m_importer.setDirectory(m_ui.asn1sccPathChooser->path());
 
@@ -82,11 +85,10 @@ void SelectSourcePage::refreshPaths()
 
     m_ui.builtInCombo->clear();
 
-    const auto detectedPaths = m_libraries->detectedLibPaths();
-    const auto manualPaths = m_libraries->manualLibPaths();
-
-    m_ui.builtInCombo->addItems(detectedPaths);
-    m_ui.builtInCombo->addItems(manualPaths);
+    for (const auto &path : m_libraries->libPaths()) {
+        const auto metadata = LibraryStorage::instance()->generalMetadata(path);
+        m_ui.builtInCombo->addItem(metadata.name(), metadata.path());
+    }
 }
 
 void SelectSourcePage::builtInRadioToggled(bool checked)

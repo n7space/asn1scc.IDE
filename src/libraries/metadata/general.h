@@ -34,6 +34,7 @@ namespace Metadata {
 class General
 {
 public:
+    General() = default;
     General(const QString &name, const QString &path)
         : m_name(name)
         , m_path(path)

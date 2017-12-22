@@ -36,6 +36,7 @@
 #include <utils/detailswidget.h>
 
 #include <libraries/metadata/general.h>
+#include <libraries/librarystorage.h>
 #include <libraries/generalmetadataparser.h>
 #include <tr.h>
 
@@ -52,20 +53,12 @@ enum class Columns {
 
 const int LibEntryItemType = QTreeWidgetItem::UserType + 1;
 
-Libraries::Metadata::General readInfo(const QString &path)
-{
-    QFile file{path + "/info.json"};
-    Libraries::GeneralMetadataParser parser(file.open(QIODevice::ReadOnly) ? file.readAll() : QByteArray(),
-                                            path); // TODO use some singleton storage in future
-    return parser.parse();
-}
-
 class LibEntryItem : public QTreeWidgetItem
 {
   public:
     LibEntryItem(QTreeWidgetItem *parent, const QString &path)
         : QTreeWidgetItem(parent, LibEntryItemType)
-        , m_info(readInfo(path))
+        , m_info(Libraries::LibraryStorage::instance()->generalMetadata(path))
     {
     }
 

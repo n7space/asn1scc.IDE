@@ -130,6 +130,7 @@ SOURCES += \
     libraries/componentimporter.cpp \
     libraries/componentdirectorywatcher.cpp \
     libraries/componentlibraryprocessor.cpp \
+    libraries/generalmetadataprocessor.cpp \
     libraries/componentlibrarydispatcher.cpp \
     libraries/librarystorage.cpp \
     libraries/metadatamodel.cpp \
@@ -255,6 +256,7 @@ HEADERS += \
     libraries/componentimporter.h \
     libraries/componentdirectorywatcher.h \
     libraries/componentlibraryprocessor.h \
+    libraries/generalmetadataprocessor.h \
     libraries/componentlibrarydispatcher.h \
     libraries/librarystorage.h \
     libraries/metadatamodel.h \
