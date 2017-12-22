@@ -25,7 +25,10 @@
 
 #include "componentimporter.h"
 
+#include <stdexcept>
+
 #include <QFile>
+#include <QMessageBox>
 
 #include <projectexplorer/session.h>
 #include <projectexplorer/project.h>
@@ -55,10 +58,13 @@ void ComponentImporter::import()
     m_projectDir = QDir(project->projectDirectory().toString());
     m_targetDir = QDir(m_projectDir.filePath(m_sourceDir.dirName()));
 
-    m_projectDir.mkpath(m_sourceDir.dirName());
-
-    const auto copied = copyFilesToProject();
-    addFilesToProject(project, copied);
+    try {
+        const auto copied = copyFilesToProject();
+        addFilesToProject(project, copied);
+    }
+    catch (const std::runtime_error &err) {
+        raiseErrorWindow(QString::fromLatin1(err.what()));
+    }
 }
 
 QStringList ComponentImporter::copyFilesToProject()
@@ -68,22 +74,27 @@ QStringList ComponentImporter::copyFilesToProject()
     for (const auto &file : m_sourceFiles) {
         QString target = targetFileName(file);
 
-        m_targetDir.mkpath(QFileInfo(target).absolutePath());
-
+        createTargetDir(m_targetDir, QFileInfo(target).absolutePath());
         copyFile(file, m_targetDir.filePath(target));
-
         copiedFiles.append(m_projectDir.relativeFilePath(target));
     }
 
     return copiedFiles;
 }
 
+void ComponentImporter::createTargetDir(QDir &parent, const QString &path)
+{
+    if (!parent.mkpath(path))
+        throw std::runtime_error("Could not create directory \'" + parent.filePath(path).toStdString() + "\'");
+}
+
 void ComponentImporter::copyFile(const QString &source, const QString &target)
 {
-    if (QFile::exists(target))
-        QFile::remove(target);
+    if (QFile::exists(target) && !QFile::remove(target))
+        throw std::runtime_error("Could not replace exisitng file \'" + target.toStdString() + "\'");
 
-    QFile::copy(source, target);
+    if (!QFile::copy(source, target))
+        throw std::runtime_error("Could not copy \'" + source.toStdString() + "\' to \'" + target.toStdString() + "\'");
 }
 
 QString ComponentImporter::targetFileName(const QString &file)
@@ -108,4 +119,12 @@ QStringList ComponentImporter::createUniqueFilesList(const ProjectExplorer::Proj
             uniqueFiles.append(file);
 
     return uniqueFiles;
+}
+
+void ComponentImporter::raiseErrorWindow(const QString &message)
+{
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(QLatin1Literal("Operation failed"));
+    msgBox.setText(message);
+    msgBox.exec();
 }

@@ -49,10 +49,12 @@ public:
 
 private:
     QStringList copyFilesToProject();
+    void createTargetDir(QDir &parent, const QString &path);
     QString targetFileName(const QString &file);
     void addFilesToProject(const ProjectExplorer::Project *project, const QStringList &files);
     void copyFile(const QString &source, const QString &target);
     QStringList createUniqueFilesList(const ProjectExplorer::Project *project, const QStringList &newFiles);
+    void raiseErrorWindow(const QString &message);
 
     QStringList m_sourceFiles;
 
