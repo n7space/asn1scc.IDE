@@ -28,28 +28,34 @@
 #include <QVariant>
 #include <QBoxLayout>
 
+#include <coreplugin/iversioncontrol.h>
+#include <coreplugin/vcsmanager.h>
+
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
+
+static const QString NO_VCS_DISPLAY_NAME("<None>");
 
 SummaryPage::SummaryPage(ComponentImporter &importer, QWidget *parent)
     : QWizardPage(parent)
     , m_importer(importer)
 {
     setTitle(QLatin1String("Summary"));
-
-    m_filesListCaption = new QLabel(QLatin1String("Files to import: "), this);
-    m_filesList = new QPlainTextEdit(this);
-    m_filesList->setReadOnly(true);
-
-    auto layout = new QBoxLayout(QBoxLayout::TopToBottom);
-
-    layout->addWidget(m_filesListCaption);
-    layout->addWidget(m_filesList);
-
-    setLayout(layout);
+    m_ui.setupUi(this);    
 }
 
 void SummaryPage::initializePage()
+{
+    fillFilesList();
+    setupVcsSelection();
+}
+
+void SummaryPage::onVcsCheckboxStateChanged(int state)
+{
+    setVcsComboState(state == Qt::Checked);
+}
+
+void SummaryPage::fillFilesList()
 {
     QString filesText;
     for (auto it = m_importer.files().begin(); it != m_importer.files().end(); it++) {
@@ -58,5 +64,42 @@ void SummaryPage::initializePage()
             filesText += QLatin1String(",\n");
     }
 
-    m_filesList->setPlainText(filesText);
+    m_ui.filesList->setPlainText(filesText);
+}
+
+void SummaryPage::setupVcsSelection()
+{
+    const auto &versionControls = Core::VcsManager::versionControls();
+    setVcsCheckboxState(!versionControls.isEmpty());
+}
+
+void SummaryPage::setVcsCheckboxState(bool enabled)
+{
+    m_ui.vcsCheckBox->setEnabled(enabled);
+
+    if (enabled) {
+        connect(m_ui.vcsCheckBox, &QCheckBox::stateChanged,
+                this, &SummaryPage::onVcsCheckboxStateChanged);
+    } else {
+        disconnect(m_ui.vcsCheckBox, &QCheckBox::stateChanged,
+                   this, &SummaryPage::onVcsCheckboxStateChanged);
+
+        m_ui.vcsCheckBox->setChecked(false);
+    }
+}
+
+void SummaryPage::setVcsComboState(bool enabled)
+{
+    m_ui.vcsComboBox->clear();
+    m_ui.vcsComboBox->setEnabled(enabled);
+
+    if (enabled)
+        fillVcsComboItems();
+}
+
+void SummaryPage::fillVcsComboItems()
+{
+    m_ui.vcsComboBox->addItem(NO_VCS_DISPLAY_NAME);
+    for (const auto &control : Core::VcsManager::versionControls())
+        m_ui.vcsComboBox->addItem(control->displayName());
 }

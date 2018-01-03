@@ -28,7 +28,11 @@
 #include <QPlainTextEdit>
 #include <QWizardPage>
 
+#include "ui_summary.h"
+
 #include <libraries/componentimporter.h>
+
+namespace Core { class IVersionControl; }
 
 namespace Asn1Acn {
 namespace Internal {
@@ -43,10 +47,19 @@ public:
     explicit SummaryPage(ComponentImporter &importer, QWidget *parent = nullptr);
     void initializePage() override;
 
-private:
-    QLabel *m_filesListCaption;
-    QPlainTextEdit *m_filesList;
+private slots:
+    void onVcsCheckboxStateChanged(int state);
 
+private:
+    void fillFilesList();
+    void setupVcsSelection();
+
+    void setVcsCheckboxState(bool enabled);
+    void setVcsComboState(bool enabled);
+
+    void fillVcsComboItems();
+
+    Ui::Summary m_ui;
     ComponentImporter &m_importer;
 };
 
