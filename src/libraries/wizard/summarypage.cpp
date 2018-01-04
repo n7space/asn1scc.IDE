@@ -25,23 +25,23 @@
 
 #include "summarypage.h"
 
-#include <QVariant>
-#include <QBoxLayout>
-
 #include <coreplugin/iversioncontrol.h>
-#include <coreplugin/vcsmanager.h>
 
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
 static const QString NO_VCS_DISPLAY_NAME("<None>");
 
-SummaryPage::SummaryPage(ComponentImporter &importer, QWidget *parent)
+SummaryPage::SummaryPage(ComponentImporter &importer, VcsHandler &handler, QWidget *parent)
     : QWizardPage(parent)
     , m_importer(importer)
+    , m_vcsHandler(handler)
 {
     setTitle(QLatin1String("Summary"));
-    m_ui.setupUi(this);    
+    m_ui.setupUi(this);
+
+    connect(&m_vcsHandler, &VcsHandler::vcsListChanged,
+            this, &SummaryPage::onVcsListChanged);
 }
 
 void SummaryPage::initializePage()
@@ -55,12 +55,22 @@ void SummaryPage::onVcsCheckboxStateChanged(int state)
     setVcsComboState(state == Qt::Checked);
 }
 
+void SummaryPage::onVcsComboIndexChanged(int index)
+{
+    m_vcsHandler.setCurrentIndex(index - 1);
+}
+
+void SummaryPage::onVcsListChanged()
+{
+    setupVcsSelection();
+}
+
 void SummaryPage::fillFilesList()
 {
     QString filesText;
-    for (auto it = m_importer.files().begin(); it != m_importer.files().end(); it++) {
+    for (auto it = m_importer.sourceFiles().begin(); it != m_importer.sourceFiles().end(); it++) {
         filesText += *it;
-        if (it + 1 != m_importer.files().end())
+        if (it + 1 != m_importer.sourceFiles().end())
             filesText += QLatin1String(",\n");
     }
 
@@ -69,23 +79,18 @@ void SummaryPage::fillFilesList()
 
 void SummaryPage::setupVcsSelection()
 {
-    const auto &versionControls = Core::VcsManager::versionControls();
-    setVcsCheckboxState(!versionControls.isEmpty());
+    setVcsCheckboxState(!m_vcsHandler.vcsList().isEmpty());
 }
 
 void SummaryPage::setVcsCheckboxState(bool enabled)
 {
     m_ui.vcsCheckBox->setEnabled(enabled);
+    setVcsComboState(enabled && m_ui.vcsCheckBox->checkState() == Qt::Checked);
 
-    if (enabled) {
-        connect(m_ui.vcsCheckBox, &QCheckBox::stateChanged,
-                this, &SummaryPage::onVcsCheckboxStateChanged);
-    } else {
-        disconnect(m_ui.vcsCheckBox, &QCheckBox::stateChanged,
-                   this, &SummaryPage::onVcsCheckboxStateChanged);
-
-        m_ui.vcsCheckBox->setChecked(false);
-    }
+    if (enabled)
+        connect(m_ui.vcsCheckBox, &QCheckBox::stateChanged, this, &SummaryPage::onVcsCheckboxStateChanged);
+    else
+        disconnect(m_ui.vcsCheckBox, &QCheckBox::stateChanged, this, &SummaryPage::onVcsCheckboxStateChanged);
 }
 
 void SummaryPage::setVcsComboState(bool enabled)
@@ -93,13 +98,19 @@ void SummaryPage::setVcsComboState(bool enabled)
     m_ui.vcsComboBox->clear();
     m_ui.vcsComboBox->setEnabled(enabled);
 
-    if (enabled)
+    if (enabled) {
         fillVcsComboItems();
+        connect(m_ui.vcsComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+                this, &SummaryPage::onVcsComboIndexChanged);
+    } else {
+        disconnect(m_ui.vcsComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+                   this, &SummaryPage::onVcsComboIndexChanged);
+    }
 }
 
 void SummaryPage::fillVcsComboItems()
 {
     m_ui.vcsComboBox->addItem(NO_VCS_DISPLAY_NAME);
-    for (const auto &control : Core::VcsManager::versionControls())
-        m_ui.vcsComboBox->addItem(control->displayName());
+    for (const auto &item : m_vcsHandler.vcsList())
+        m_ui.vcsComboBox->addItem(item->displayName());
 }
