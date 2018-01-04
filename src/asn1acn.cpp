@@ -295,11 +295,11 @@ void Asn1AcnPlugin::onTaskFinished(Core::Id id)
 QList<QObject *> Asn1AcnPlugin::createTestObjects() const
 {
     return QList<QObject *>()
-            << new Libraries::Tests::ModuleMetadataParserTests
+            /* << new Libraries::Tests::ModuleMetadataParserTests
             << new Libraries::Tests::GeneralMetadataParserTests
-            << new Libraries::Tests::MetadataModelTests
+            << new Libraries::Tests::MetadataModelTests */
             << new Libraries::Tests::MetadataCheckStateHandlerTests
-            << new Libraries::Tests::FileModelTests
+            /* << new Libraries::Tests::FileModelTests
             << new TreeViews::Tests::DisplayRoleVisitorTests
             << new TreeViews::Tests::OutlineIndexUpdaterTests
             << new TreeViews::Tests::OutlineModelTests
@@ -314,7 +314,7 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
             << new Tests::AutoCompleterTests
             << new Tests::SourceMapperTests
             << new Tests::ModelValidityGuardTests
-            << new Tests::LinkCreatorTests
+            << new Tests::LinkCreatorTests */
                ;
 }
 #endif
