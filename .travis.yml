@@ -23,8 +23,8 @@ sudo: required
 
 env:
   global:
-    - ENV_QTC_VERSION="4.4.1"
-    - ENV_QTC_VERSION_SHORT="4.4"
+    - ENV_QTC_VERSION="4.5.0"
+    - ENV_QTC_VERSION_SHORT="4.5"
   matrix:
     - ENV_WITH_TESTS=1
     - ENV_WITH_TESTS=0
@@ -32,7 +32,7 @@ env:
 addons:
   apt:
     sources:
-    - sourceline: "ppa:beineri/opt-qt591-trusty"
+    - sourceline: "ppa:beineri/opt-qt593-trusty"
     - ubuntu-toolchain-r-test
     packages:
     - g++-6
