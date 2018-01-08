@@ -102,7 +102,7 @@ void SelectComponentsPage::setupMetadaModel()
     m_ui.modulesView->setModel(model);
 
     m_selector.reset(new MetadaComponentSelector(model, m_libPath));
-    m_labelsController.reset(new RelationsLabelsController(model, m_ui.requiredItems, m_ui.conflictItems));
+    m_labelsController.reset(new RelationsLabelsController(model, m_ui.requiresTree, m_ui.conflictsTree));
 
     connect(m_ui.modulesView->selectionModel(), &QItemSelectionModel::currentChanged,
             m_labelsController.get(), &RelationsLabelsController::onFocusedItemChanged, Qt::UniqueConnection);

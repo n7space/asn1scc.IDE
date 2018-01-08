@@ -25,27 +25,80 @@
 
 #include "relationslabelscontroller.h"
 
+#include <QHash>
 #include <QStringList>
+
+#include <utils/qtcassert.h>
 
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
-RelationsLabelsController::RelationsLabelsController(MetadataModel *model, QLabel *requires, QLabel *conflicts, QObject *parent)
+RelationsLabelsController::RelationsLabelsController(MetadataModel *model,
+                                                     QTreeWidget *requiresTree,
+                                                     QTreeWidget *conflictsTree,
+                                                     QObject *parent)
     : QObject(parent)
     , m_model(model)
-    , m_requires(requires)
-    , m_conflicts(conflicts)
+    , m_requiresTree(requiresTree)
+    , m_conflictsTree(conflictsTree)
 {
 }
 
 namespace {
-QStringList removeSelfContained(const QStringList &internalItems, const QStringList &allItems)
+void appendElementItems(const QList<Metadata::Reference> &references, QHash<QString, QTreeWidgetItem *> &parents)
 {
-    auto ret = internalItems;
-    for (const auto &item : allItems)
-        ret.removeOne(item);
+    QHash<QString, QTreeWidgetItem *> elements;
+    for (const auto &ref : references) {
+        const auto name = ref.element();
 
-    return ret;
+        QTC_ASSERT(parents.contains(ref.submodule()), continue);
+
+        QTreeWidgetItem *parent = nullptr;
+        for (const auto &parentCandidate : parents.values(ref.submodule())) {
+            if (parentCandidate->parent()->data(0, Qt::DisplayRole) == ref.module()) {
+                parent = parentCandidate;
+                break;
+            }
+        }
+        QTC_ASSERT(parent != nullptr, continue);
+
+        if (elements.contains(name) && elements.value(name)->parent() == parent)
+            continue;
+
+        elements.insert(name, new QTreeWidgetItem(parent, QStringList(name)));
+    }
+}
+
+void appendSubmoduleItems(const QList<Metadata::Reference> &references, QHash<QString, QTreeWidgetItem *> &parents)
+{
+    QHash<QString, QTreeWidgetItem *> submoduleItems;
+    for (const auto &ref : references) {
+        const auto name = ref.submodule();
+
+        QTC_ASSERT(parents.contains(ref.module()), continue);
+        const auto parent = parents.value(ref.module());
+
+        if (submoduleItems.contains(name) && submoduleItems.value(name)->parent() == parent)
+            continue;
+
+        submoduleItems.insert(name, new QTreeWidgetItem(parent, QStringList(name)));
+    }
+
+    appendElementItems(references, submoduleItems);
+}
+
+void appendModuleItems(const QList<Metadata::Reference> &references, QTreeWidget *tree)
+{
+    QHash<QString, QTreeWidgetItem *> moduleItems;
+    for (const auto &ref : references) {
+        const auto name = ref.module();
+        if (moduleItems.contains(name))
+            continue;
+
+        moduleItems.insert(name, new QTreeWidgetItem(tree, QStringList(name)));
+    }
+
+    appendSubmoduleItems(references, moduleItems);
 }
 } // namespace Anonymous
 
@@ -56,42 +109,39 @@ void RelationsLabelsController::onFocusedItemChanged(const QModelIndex &current,
     if (!current.isValid())
         return;
 
-    QStringList provided;
-    QStringList required;
-    QStringList conflicted;
+    m_requiresTree->clear();
+    m_conflictsTree->clear();
 
-    fillRelations(current, provided, required, conflicted);
+    QList<Metadata::Reference> requirements;
+    QList<Metadata::Reference> conflicts;
 
-    required.removeDuplicates();
-    conflicted.removeDuplicates();
+    fillRelations(current, requirements, conflicts);
 
-    required = removeSelfContained(required, provided);
-    conflicted = removeSelfContained(conflicted, provided);
+    appendModuleItems(requirements, m_requiresTree);
+    m_requiresTree->expandAll();
 
-    m_requires->setText(required.join("\n"));
-    m_conflicts->setText(conflicted.join("\n"));
+    appendModuleItems(conflicts, m_conflictsTree);
+    m_conflictsTree->expandAll();
 }
 
-static QStringList toStringList(const QList<Metadata::Reference> &refs) // TODO
+static void appendReferences(const QList<Metadata::Reference> &source, QList<Metadata::Reference> &target)
 {
-    QStringList res;
-    for (const auto &item : refs)
-        res << item.element(); // TODO
-    return res;
+    for (const auto &item : source)
+        if (!target.contains(item))
+            target.append(item);
 }
 
 void RelationsLabelsController::fillRelations(const QModelIndex &index,
-                                              QStringList &provides,
-                                              QStringList &requires,
-                                              QStringList &conflicts) const
+                                              QList<Metadata::Reference> &requirements,
+                                              QList<Metadata::Reference> &conflicts) const
 {
     const auto node = m_model->dataNode(index);
 
-    provides << node->name();
-    requires << toStringList(node->requirements());
-    conflicts << toStringList(node->conflicts());
+    appendReferences(node->requirements(), requirements);
+    appendReferences(node->conflicts(), conflicts);
 
     for (auto i = 0; i < m_model->rowCount(index); ++i)
         for (auto j = 0; j < m_model->columnCount(index); ++j)
-            fillRelations(index.child(i, j), provides, requires, conflicts);
+            fillRelations(index.child(i, j), requirements, conflicts);
 }
+
