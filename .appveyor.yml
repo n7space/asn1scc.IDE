@@ -9,10 +9,10 @@ clone_folder: c:\projects\asn1scc.IDE\src
 
 environment:
   QTDIR: C:\Qt\5.9\msvc2015
-  ENV_QTC_VERSION: 4.4.1
-  ENV_QTC_VERSION_SHORT: 4.4
   ENV_QTC_PLATFORM: vs2015_32
   ENV_MSVC_PLATFORM: x86
+  ENV_QTC_VERSION: 4.5.0
+  ENV_QTC_VERSION_SHORT: 4.5
   BUILD_DIR: c:\projects\asn1scc.IDE\build
   DOWNLOAD_DIR: c:\projects\asn1scc.IDE\downloads
   VSVER: 14.0
