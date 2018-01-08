@@ -46,6 +46,12 @@ public:
     const QString &submodule() const { return m_submodule; }
     const QString &element() const { return m_element; }
 
+    bool operator==(const Reference &other) const {
+        return m_module == other.m_module
+               && m_submodule == other.m_submodule
+               && m_element == other.m_element;
+    }
+
 private:
     QString m_module;
     QString m_submodule;

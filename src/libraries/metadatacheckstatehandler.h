@@ -28,6 +28,8 @@
 #include <QHash>
 #include <QModelIndex>
 
+#include <libraries/metadata/reference.h>
+
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
@@ -59,7 +61,9 @@ private:
     bool hasNoConflicts(const QModelIndex &index);
     void enqueueRequired(const QModelIndex &index);
 
-    QModelIndex findIndexByName(const QModelIndex &parent, const QString &name) const;
+    QModelIndex findRelative(const Metadata::Reference &reference) const;
+    QModelIndex findChildByName(const QModelIndex &parent, const QString &name) const;
+
     Qt::CheckState parentState(const QModelIndex &index, const Qt::CheckState state) const;
 
     States m_changedIndexes;

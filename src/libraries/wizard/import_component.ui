@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>809</width>
-    <height>300</height>
+    <width>974</width>
+    <height>573</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
-    <width>800</width>
-    <height>300</height>
+    <width>974</width>
+    <height>573</height>
    </size>
   </property>
   <property name="windowTitle">

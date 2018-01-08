@@ -25,8 +25,10 @@
 
 #pragma once
 
+#include <QObject>
+
 #include <QModelIndex>
-#include <QLabel>
+#include <QTreeWidget>
 
 #include <libraries/metadatamodel.h>
 
@@ -40,20 +42,21 @@ class RelationsLabelsController : public QObject
     Q_OBJECT
 
 public:
-    RelationsLabelsController(MetadataModel *model, QLabel *requires, QLabel *conflicts, QObject *parent = nullptr);
+    RelationsLabelsController(MetadataModel *model,
+                              QTreeWidget *requiresTree,
+                              QTreeWidget *conflictsTree,
+                              QObject *parent = nullptr);
 
 public slots:
     void onFocusedItemChanged(const QModelIndex &current, const QModelIndex &previous) const;
 
 private:
-    void fillRelations(const QModelIndex &index,
-                       QStringList &provides,
-                       QStringList &requires,
-                       QStringList &conflicts) const;
+    void fillRelations(const QModelIndex &index, QList<Metadata::Reference> &requirements, QList<Metadata::Reference> &conflicts) const;
 
     MetadataModel *m_model;
-    QLabel *m_requires;
-    QLabel *m_conflicts;
+
+    QTreeWidget *m_requiresTree;
+    QTreeWidget *m_conflictsTree;
 };
 
 } // namespace Wizard

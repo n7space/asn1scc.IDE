@@ -125,8 +125,11 @@ bool MetadataCheckStateHandler::handleRelatives(const QModelIndex &index)
 
 void MetadataCheckStateHandler::enqueueRequired(const QModelIndex &index)
 {
-    for (const auto &item : m_model->dataNode(index)->requirements())
-        m_relatives.append(findIndexByName(m_model->rootIndex(), item.element())); // TODO
+    for (const auto &item : m_model->dataNode(index)->requirements()) {
+        const auto relative = findRelative(item);
+        if (relative.isValid())
+            m_relatives.append(relative);
+    }
 }
 
 bool MetadataCheckStateHandler::hasNoConflicts(const QModelIndex &index)
@@ -134,23 +137,27 @@ bool MetadataCheckStateHandler::hasNoConflicts(const QModelIndex &index)
     const auto currentNode = m_model->dataNode(index);
 
     for (const auto &item : currentNode->conflicts()) {
-        const auto testedIndex = findIndexByName(m_model->rootIndex(), item.element()); // TODO
-        if (m_model->data(testedIndex, Qt::CheckStateRole) == Qt::Checked) {
+        const auto testedIndex = findRelative(item);
+        if (!testedIndex.isValid())
+            continue;
+
+        if (m_model->data(testedIndex, Qt::CheckStateRole) == Qt::Checked || m_changedIndexes.contains(testedIndex)) {
             m_conflict = qMakePair(currentNode->name(), m_model->dataNode(testedIndex)->name());
             return false;
         }
-
-        for (auto it = m_changedIndexes.begin(); it != m_changedIndexes.end(); ++it)
-            if (m_model->dataNode(it.key())->name() == item.element()) { // TODO
-                m_conflict = qMakePair(currentNode->name(), m_model->dataNode(it.key())->name());
-                return false;
-            }
     }
 
     return true;
 }
 
-QModelIndex MetadataCheckStateHandler::findIndexByName(const QModelIndex &parent, const QString &name) const
+QModelIndex MetadataCheckStateHandler::findRelative(const Metadata::Reference &reference) const
+{
+    const auto module = findChildByName(m_model->rootIndex(), reference.module());
+    const auto submodule = findChildByName(module, reference.submodule());
+    return findChildByName(submodule, reference.element());
+}
+
+QModelIndex MetadataCheckStateHandler::findChildByName(const QModelIndex &parent, const QString &name) const
 {
     if (!parent.isValid())
         return {};
@@ -160,10 +167,6 @@ QModelIndex MetadataCheckStateHandler::findIndexByName(const QModelIndex &parent
             auto child = parent.child(i, j);
             if (m_model->dataNode(child)->name() == name)
                 return child;
-
-            auto foundInChild = findIndexByName(child, name);
-            if (foundInChild.isValid())
-                return foundInChild;
         }
     }
 

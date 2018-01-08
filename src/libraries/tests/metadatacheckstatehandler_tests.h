@@ -45,7 +45,6 @@ private slots:
     void test_parentWithDependendtChildrenChecked();
 
     void test_elementWithRequirementInOtherModule();
-    void test_elementRequiresOtherModule();
 
     void test_conflictingElementChecked();
     void test_parentWithConflictingChildrenChecked();

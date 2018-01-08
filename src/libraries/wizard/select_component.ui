@@ -79,6 +79,9 @@
      <property name="layoutDirection">
       <enum>Qt::LeftToRight</enum>
      </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
      <property name="tabKeyNavigation">
       <bool>false</bool>
      </property>
@@ -155,48 +158,31 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="requiredItems">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>300</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>300</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="wordWrap">
+       <widget class="QTreeWidget" name="requiresTree">
+        <property name="showDropIndicator" stdset="0">
          <bool>true</bool>
         </property>
+        <property name="rootIsDecorated">
+         <bool>true</bool>
+        </property>
+        <property name="itemsExpandable">
+         <bool>true</bool>
+        </property>
+        <property name="expandsOnDoubleClick">
+         <bool>false</bool>
+        </property>
+        <attribute name="headerVisible">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="headerStretchLastSection">
+         <bool>true</bool>
+        </attribute>
+        <column>
+         <property name="text">
+          <string notr="true">1</string>
+         </property>
+        </column>
        </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Preferred</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
       <item>
        <widget class="QLabel" name="conflictLabel">
@@ -212,51 +198,25 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="conflictItems">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QTreeWidget" name="conflictsTree">
+        <property name="horizontalScrollMode">
+         <enum>QAbstractItemView::ScrollPerPixel</enum>
         </property>
-        <property name="minimumSize">
-         <size>
-          <width>300</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>300</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="wordWrap">
+        <property name="rootIsDecorated">
          <bool>true</bool>
         </property>
+        <property name="itemsExpandable">
+         <bool>true</bool>
+        </property>
+        <attribute name="headerVisible">
+         <bool>false</bool>
+        </attribute>
+        <column>
+         <property name="text">
+          <string notr="true">1</string>
+         </property>
+        </column>
        </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </widget>
