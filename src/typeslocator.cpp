@@ -25,8 +25,7 @@
 
 #include "typeslocator.h"
 
-#include <QStringMatcher>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include <coreplugin/editormanager/editormanager.h>
 
@@ -68,57 +67,6 @@ namespace {
 
 using HighlightInfo = Core::LocatorFilterEntry::HighlightInfo;
 
-class Matcher
-{
-public:
-    virtual ~Matcher() {}
-    virtual HighlightInfo match(const QString &text) const = 0;
-};
-
-
-class StringMatcher : public Matcher
-{
-public:
-    StringMatcher(const QString &entry)
-        : m_matcher(entry, Core::ILocatorFilter::caseSensitivity(entry))
-        , m_length(entry.length())
-    {}
-
-    HighlightInfo match(const QString &text) const override
-    {
-        const auto index = m_matcher.indexIn(text);
-        return { index, m_length };
-    }
-
-private:
-    QStringMatcher m_matcher;
-    const int m_length;
-};
-
-class WildcardMatcher : public Matcher
-{
-public:
-    WildcardMatcher(const QString &entry)
-        : m_matcher(entry, Core::ILocatorFilter::caseSensitivity(entry), QRegExp::Wildcard)
-    {}
-
-    HighlightInfo match(const QString &text) const override
-    {
-        const auto index = m_matcher.indexIn(text);
-        return { index, m_matcher.matchedLength() };
-    }
-
-private:
-    QRegExp m_matcher;
-};
-
-std::unique_ptr<Matcher> makeMatcher(const QString &entry)
-{
-    if (Core::ILocatorFilter::containsWildcard(entry))
-        return std::make_unique<WildcardMatcher>(entry);
-    return std::make_unique<StringMatcher>(entry);
-}
-
 class EntriesCollector
 {
 public:
@@ -128,9 +76,11 @@ public:
         : m_parent(parent)
     {}
 
-    void append(const Data::Node *node, const HighlightInfo &current, const HighlightInfo &parent)
+    void append(const Data::Node *node,
+                const QRegularExpressionMatch &current,
+                const QRegularExpressionMatch &parent)
     {
-        if (current.startIndex < 0 && parent.startIndex < 0)
+        if (!current.hasMatch() && !parent.hasMatch())
             return;
         auto entry = buildEntry(node);
         entry.highlightInfo = selectHighlight(current, parent);
@@ -148,16 +98,17 @@ private:
         return entry;
     }
 
-    QList<Entry> &selectEntries(const HighlightInfo &current)
+    QList<Entry> &selectEntries(const QRegularExpressionMatch &current)
     {
-        return (current.startIndex == 0) ? m_betterEntries : m_goodEntries;
+        return current.hasMatch() ? m_betterEntries : m_goodEntries;
     }
 
-    HighlightInfo selectHighlight(const HighlightInfo &current, const HighlightInfo &parent)
+    HighlightInfo selectHighlight(const QRegularExpressionMatch &current,
+                                  const QRegularExpressionMatch &parent)
     {
-        return (current.startIndex >= 0)
-                ? current
-                : HighlightInfo{ parent.startIndex, parent.length, HighlightInfo::ExtraInfo };
+        return current.hasMatch()
+                ? m_parent->highlightInfo(current)
+                : m_parent->highlightInfo(parent, HighlightInfo::ExtraInfo);
     }
 
     Core::ILocatorFilter *m_parent;
@@ -172,7 +123,7 @@ private:
 QList<TypesLocator::Entry> TypesLocator::matchesFor(QFutureInterface<Entry> &future,
                                                     const QString &entry)
 {
-    const auto matcher = makeMatcher(entry);
+    const auto regExp = createRegExp(entry);
     EntriesCollector collector(this);
 
     for (const auto &project : ParsedDataStorage::instance()->root()->projects())
@@ -181,11 +132,11 @@ QList<TypesLocator::Entry> TypesLocator::matchesFor(QFutureInterface<Entry> &fut
             {
                 if (future.isCanceled())
                     return collector.entries();
-                const auto defsMatch = matcher->match(defs->name());
+                const auto defsMatch = regExp.match(defs->name());
                 defs->forAllNodes([&](const Data::Node *node) {
                     if (future.isCanceled())
                         return;
-                    collector.append(node, matcher->match(node->name()), defsMatch);
+                    collector.append(node, regExp.match(node->name()), defsMatch);
                 });
             }
     return collector.entries();

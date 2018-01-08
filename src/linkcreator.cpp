@@ -26,9 +26,9 @@
 #include "linkcreator.h"
 
 #include <texteditor/textdocument.h>
-#include <texteditor/convenience.h>
 
 #include <utils/fileutils.h>
+#include <utils/textutils.h>
 
 #include "referencefinder.h"
 
@@ -60,10 +60,10 @@ LinkCreator::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSo
 {
     Link symbol(m_documentPath);
 
-    QTextCursor selection = TextEditor::Convenience::selectAt(cursor,
-                                                              symbolSource.location().line(),
-                                                              symbolSource.location().column() + 1,
-                                                              symbolSource.name().length());
+    QTextCursor selection = Utils::Text::selectAt(cursor,
+                                                  symbolSource.location().line(),
+                                                  symbolSource.location().column() + 1,
+                                                  symbolSource.name().length());
 
     symbol.linkTextStart = selection.selectionStart();
     symbol.linkTextEnd = selection.selectionEnd();
