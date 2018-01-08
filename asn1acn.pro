@@ -144,6 +144,7 @@ SOURCES += \
     libraries/wizard/metadatacomponentselector.cpp \
     libraries/wizard/filecomponentselector.cpp \
     libraries/wizard/relationslabelscontroller.cpp \
+    libraries/wizard/vcshandler.cpp \
     \
     messages/messageutils.cpp \
     messages/messagemanager.cpp \
@@ -271,6 +272,7 @@ HEADERS += \
     libraries/wizard/componentselector.h \
     libraries/wizard/filecomponentselector.h \
     libraries/wizard/relationslabelscontroller.h \
+    libraries/wizard/vcshandler.h \
     \
     libraries/metadata/element.h \
     libraries/metadata/reference.h \
@@ -324,7 +326,8 @@ FORMS += \
     options-pages/libraries.ui \
     \
     libraries/wizard/import_component.ui \
-    libraries/wizard/select_component.ui
+    libraries/wizard/select_component.ui \
+    libraries/wizard/summary.ui
 
 RESOURCES += \
     asn1acn.qrc

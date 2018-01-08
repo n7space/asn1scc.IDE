@@ -29,6 +29,7 @@
 #include <QWidget>
 
 #include <libraries/componentimporter.h>
+#include <libraries/wizard/vcshandler.h>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -45,7 +46,10 @@ public:
     void accept() override;
 
 private:
+    void raiseErrorWindow(const QString &message);
+
     ComponentImporter m_importer;
+    VcsHandler m_handler;
 };
 
 } // namespace Wizard

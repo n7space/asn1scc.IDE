@@ -24,11 +24,14 @@
 ****************************************************************************/
 #pragma once
 
-#include <QLabel>
-#include <QPlainTextEdit>
 #include <QWizardPage>
 
+#include "ui_summary.h"
+
 #include <libraries/componentimporter.h>
+#include <libraries/wizard/vcshandler.h>
+
+namespace Core { class IVersionControl; }
 
 namespace Asn1Acn {
 namespace Internal {
@@ -40,14 +43,26 @@ class SummaryPage : public QWizardPage
     Q_OBJECT
 
 public:
-    explicit SummaryPage(ComponentImporter &importer, QWidget *parent = nullptr);
+    explicit SummaryPage(ComponentImporter &importer, VcsHandler &handler, QWidget *parent = nullptr);
     void initializePage() override;
 
+private slots:
+    void onVcsCheckboxStateChanged(int state);
+    void onVcsComboIndexChanged(int index);
+    void onVcsListChanged();
+
 private:
-    QLabel *m_filesListCaption;
-    QPlainTextEdit *m_filesList;
+    void fillFilesList();
+    void setupVcsSelection();
+
+    void setVcsCheckboxState(bool enabled);
+    void setVcsComboState(bool enabled);
+
+    void fillVcsComboItems();
 
     ComponentImporter &m_importer;
+    VcsHandler &m_vcsHandler;
+    Ui::Summary m_ui;
 };
 
 } // namespace Wizard

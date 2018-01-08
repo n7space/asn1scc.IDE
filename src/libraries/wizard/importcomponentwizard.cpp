@@ -25,6 +25,8 @@
 
 #include "importcomponentwizard.h"
 
+#include <QMessageBox>
+
 #include <coreplugin/icore.h>
 
 #include "selectsourcepage.h"
@@ -42,14 +44,28 @@ ImportComponentWizard::ImportComponentWizard(QWidget *parent)
 
     addPage(new SelectSourcePage(m_importer));
     addPage(new SelectComponentsPage(m_importer));
-    addPage(new SummaryPage(m_importer));
+    addPage(new SummaryPage(m_importer, m_handler));
 
     setOption(NoBackButtonOnStartPage);
 }
 
 void ImportComponentWizard::accept()
 {
-    m_importer.import();
+    try {
+        m_importer.import();
+        m_handler.addToVcs(m_importer.importedFiles());
+    }
+    catch (const std::runtime_error &err) {
+        raiseErrorWindow(QString::fromLatin1(err.what()));
+    }
 
     QDialog::accept();
+}
+
+void ImportComponentWizard::raiseErrorWindow(const QString &message)
+{
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(QLatin1Literal("Operation failed"));
+    msgBox.setText(message);
+    msgBox.exec();
 }

@@ -22,47 +22,47 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QString>
-#include <QStringList>
-#include <QDir>
+#include <QObject>
+#include <QList>
 
-namespace ProjectExplorer {
-class Project;
-}
+namespace Core { class IVersionControl; }
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+namespace Wizard {
 
-class ComponentImporter
+class VcsHandler : public QObject
 {
+    Q_OBJECT
+
 public:
-    void setDirectory(const QString &path);
-    void setFiles(const QStringList &files);
+    VcsHandler(QObject *parent = nullptr);
 
-    const QStringList &sourceFiles() const;
-    const QStringList &importedFiles() const;
+    const QList<Core::IVersionControl *> vcsList() const;
 
-    void import();
+    void setCurrentIndex(int index);
+
+    void addToVcs(const QStringList &files);
+
+private slots:
+    void onConfigChanged();
+
+signals:
+    void vcsListChanged();
 
 private:
-    QStringList copyFilesToProject();
-    void createTargetDir(QDir &parent, const QString &path);
-    QString targetFileName(const QString &file);
-    void addFilesToProject(const ProjectExplorer::Project *project, const QStringList &files);
-    void copyFile(const QString &source, const QString &target);
-    QStringList createUniqueFilesList(const ProjectExplorer::Project *project, const QStringList &newFiles);
+    void updateVcsList();
 
-    QStringList m_sourceFiles;
-    QStringList m_importedFiles;
+    QList<Core::IVersionControl *> m_vcs;
+    int m_index;
 
-    QDir m_sourceDir;
-    QDir m_targetDir;
+    bool m_createRepo;
 };
 
+} // namespace Wizard
 } // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

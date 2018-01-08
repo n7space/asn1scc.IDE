@@ -28,7 +28,6 @@
 #include <stdexcept>
 
 #include <QFile>
-#include <QMessageBox>
 
 #include <projectexplorer/session.h>
 #include <projectexplorer/project.h>
@@ -41,9 +40,14 @@ void ComponentImporter::setFiles(const QStringList &files)
     m_sourceFiles = files;
 }
 
-const QStringList &ComponentImporter::files() const
+const QStringList &ComponentImporter::sourceFiles() const
 {
     return m_sourceFiles;
+}
+
+const QStringList &ComponentImporter::importedFiles() const
+{
+    return m_importedFiles;
 }
 
 void ComponentImporter::setDirectory(const QString &path)
@@ -55,16 +59,11 @@ void ComponentImporter::import()
 {
     const auto project = ProjectExplorer::SessionManager::startupProject();
 
-    m_projectDir = QDir(project->projectDirectory().toString());
-    m_targetDir = QDir(m_projectDir.filePath(m_sourceDir.dirName()));
+    const auto projectDir = QDir(project->projectDirectory().toString());
+    m_targetDir = QDir(projectDir.filePath(m_sourceDir.dirName()));
 
-    try {
-        const auto copied = copyFilesToProject();
-        addFilesToProject(project, copied);
-    }
-    catch (const std::runtime_error &err) {
-        raiseErrorWindow(QString::fromLatin1(err.what()));
-    }
+    const auto copied = copyFilesToProject();
+    addFilesToProject(project, copied);
 }
 
 QStringList ComponentImporter::copyFilesToProject()
@@ -75,8 +74,8 @@ QStringList ComponentImporter::copyFilesToProject()
         QString target = targetFileName(file);
 
         createTargetDir(m_targetDir, QFileInfo(target).absolutePath());
-        copyFile(file, m_targetDir.filePath(target));
-        copiedFiles.append(m_projectDir.relativeFilePath(target));
+        copyFile(file, target);
+        copiedFiles.append(target);
     }
 
     return copiedFiles;
@@ -105,8 +104,8 @@ QString ComponentImporter::targetFileName(const QString &file)
 
 void ComponentImporter::addFilesToProject(const ProjectExplorer::Project *project, const QStringList &files)
 {
-    const auto uniqueFiles = createUniqueFilesList(project, files);
-    project->rootProjectNode()->addFiles(uniqueFiles);
+    m_importedFiles = createUniqueFilesList(project, files);
+    project->rootProjectNode()->addFiles(m_importedFiles);
 }
 
 QStringList ComponentImporter::createUniqueFilesList(const ProjectExplorer::Project *project, const QStringList &newFiles)
@@ -115,16 +114,8 @@ QStringList ComponentImporter::createUniqueFilesList(const ProjectExplorer::Proj
     const auto projectFiles = project->files(ProjectExplorer::Project::SourceFiles);
 
     for (const auto &file : newFiles)
-        if (!projectFiles.contains(m_projectDir.filePath(file)))
+        if (!projectFiles.contains(file))
             uniqueFiles.append(file);
 
     return uniqueFiles;
-}
-
-void ComponentImporter::raiseErrorWindow(const QString &message)
-{
-    QMessageBox msgBox;
-    msgBox.setWindowTitle(QLatin1Literal("Operation failed"));
-    msgBox.setText(message);
-    msgBox.exec();
 }
