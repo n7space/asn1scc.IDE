@@ -38,10 +38,10 @@ QIcon Type::createIcon(Utils::Theme::Color color) const
 
 QIcon Type::typeIcon() const
 {
-    return createIcon(Utils::Theme::IconsErrorColor);
+    return createIcon(Utils::Theme::IconsCodeModelStructColor);
 }
 
 QIcon Type::variableIcon() const
 {
-    return createIcon(Utils::Theme::IconsCodeModelMacroColor);
+    return createIcon(Utils::Theme::IconsCodeModelVariableColor);
 }
