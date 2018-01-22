@@ -1,5 +1,5 @@
 {
-  "id": "http://n7mobile.pl/Space/asn1-lib-general-schema.json",
+  "id": "http://n7space.com/asn1-lib-general-schema.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "description": "ASN.1 Types Library General Information schema",
   "definitions": {
