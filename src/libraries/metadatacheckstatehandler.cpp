@@ -46,13 +46,17 @@ const MetadataCheckStateHandler::Conflict &MetadataCheckStateHandler::conflict()
 
 bool MetadataCheckStateHandler::changeCheckStates(const QModelIndex &index, const Qt::CheckState state)
 {
-    if (state == Qt::Unchecked)
-        return uncheck(index);
+    bool checkSuccessful = true;
 
-    if (state == Qt::Checked)
-        return check(index, state);
+    if (state == Qt::Unchecked) {
+        checkSuccessful = uncheck(index);
+    } else if (state == Qt::Checked) {
+        m_indexesToCheck.append(index);
+        while (!m_indexesToCheck.isEmpty() && checkSuccessful)
+            checkSuccessful = check(m_indexesToCheck.takeFirst(), state);
+    }
 
-    return true;
+    return checkSuccessful;
 }
 
 bool MetadataCheckStateHandler::uncheck(const QModelIndex &index)
@@ -76,9 +80,6 @@ bool MetadataCheckStateHandler::check(const QModelIndex &index, const Qt::CheckS
 
     if (!updateParent(index, state) || !updateChildren(index, state) || !handleRelatives(index))
         return false;
-
-    if (!m_relatives.isEmpty())
-        return check(m_relatives.takeFirst(), state);
 
     return true;
 }
@@ -128,7 +129,7 @@ void MetadataCheckStateHandler::enqueueRequired(const QModelIndex &index)
     for (const auto &item : m_model->dataNode(index)->requirements()) {
         const auto relative = findRelative(item);
         if (relative.isValid())
-            m_relatives.append(relative);
+            m_indexesToCheck.append(relative);
     }
 }
 
