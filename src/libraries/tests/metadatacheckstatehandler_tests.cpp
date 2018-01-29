@@ -351,3 +351,31 @@ void MetadataCheckStateHandlerTests::test_cyclicDependedncy()
         QCOMPARE(changed.value(parent), Qt::PartiallyChecked);
     }
 }
+
+void MetadataCheckStateHandlerTests::test_parentNodeWithChildDependencyInOtherModuleChecked()
+{
+    auto library = createLibrary(3, 3, 3);
+    const auto model = std::make_unique<MetadataModel>(library.get());
+    MetadataCheckStateHandler handler(model.get());
+
+    References requirements;
+    requirements << Metadata::Reference("library_module1", "library_module1_submodule0", "library_module1_submodule0_element0");
+    requirements << Metadata::Reference("library_module1", "library_module1_submodule0", "library_module1_submodule0_element1");
+    setDependecies(model.get(), "library_module0_submodule0_element0", requirements, {});
+
+    requirements.clear();
+    requirements << Metadata::Reference("library_module1", "library_module1_submodule0", "library_module1_submodule0_element0");
+    requirements << Metadata::Reference("library_module1", "library_module1_submodule0", "library_module1_submodule0_element2");
+    setDependecies(model.get(), "library_module1_submodule0_element1", requirements, {});
+
+
+    auto index = getIndexByName(model.get(), model->rootIndex(), "library_module0");
+    bool ret = handler.changeCheckStates(index, Qt::Checked);
+    QVERIFY(ret);
+
+    const auto &changed = handler.changedIndexes();
+    QVERIFY(changed.contains(getIndexByName(model.get(), model->rootIndex(), "library_module0")));
+    QVERIFY(changed.contains(getIndexByName(model.get(), model->rootIndex(), "library_module1_submodule0_element0")));
+    QVERIFY(changed.contains(getIndexByName(model.get(), model->rootIndex(), "library_module1_submodule0_element1")));
+    QVERIFY(changed.contains(getIndexByName(model.get(), model->rootIndex(), "library_module1_submodule0_element2")));
+}

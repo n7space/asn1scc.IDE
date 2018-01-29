@@ -50,6 +50,8 @@ private slots:
     void test_parentWithConflictingChildrenChecked();
 
     void test_cyclicDependedncy();
+
+    void test_parentNodeWithChildDependencyInOtherModuleChecked();
 };
 
 } // namespace Tests
