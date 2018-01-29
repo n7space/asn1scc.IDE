@@ -33,7 +33,7 @@ static const QStringList KEYWORDS = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMA
                                       "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM" };
 
 static const QStringList TYPES = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SEQUENCE",
-                                   "OCTET STRING", "BIT STRING" };
+                                   "OCTET STRING", "BIT STRING", "IA5String" };
 
 static const QStringList BUILTIN = { "NULL", "FALSE", "TRUE" };
 
