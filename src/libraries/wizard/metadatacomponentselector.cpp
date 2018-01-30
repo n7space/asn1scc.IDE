@@ -25,6 +25,7 @@
 
 #include "metadatacomponentselector.h"
 
+#include <QFileInfo>
 #include <QDirIterator>
 #include <QMessageBox>
 
@@ -56,7 +57,9 @@ QStringList MetadaComponentSelector::pathsToImport()
 
     files.removeDuplicates();
 
-    return pathsFromNames(files);
+    files = pathsFromNames(files);
+
+    return insertAcnFiles(files);
 }
 
 QStringList MetadaComponentSelector::fileNamesFromSelectedItems() const
@@ -72,6 +75,26 @@ QStringList MetadaComponentSelector::fileNamesFromSelectedItems() const
     }
 
     return fileNames;
+}
+
+QStringList MetadaComponentSelector::insertAcnFiles(const QStringList &asnFiles) const
+{
+    QStringList allFiles = asnFiles;
+
+    static const QRegularExpression re("\\.asn1?$");
+
+    for (auto file : asnFiles) {
+        const auto match = re.match(file);
+        if (!match.hasMatch())
+            continue;
+
+        file.replace(match.capturedStart(), match.capturedLength(), ".acn");
+
+        if (QFileInfo::exists(file))
+            allFiles << file;
+    }
+
+    return allFiles;
 }
 
 QStringList MetadaComponentSelector::pathsFromNames(const QStringList &names) const
