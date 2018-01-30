@@ -69,7 +69,7 @@ private:
     States m_changedIndexes;
     Conflict m_conflict;
 
-    QList<QModelIndex> m_relatives;
+    QList<QModelIndex> m_indexesToCheck;
 
     const MetadataModel *m_model;
 };
