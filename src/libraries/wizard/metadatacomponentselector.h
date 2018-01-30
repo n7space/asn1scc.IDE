@@ -49,6 +49,7 @@ private slots:
 private:
     QStringList fileNamesFromSelectedItems() const;
     QStringList pathsFromNames(const QStringList &names) const;
+    QStringList insertAcnFiles(const QStringList &asnFiles) const;
 
     MetadataModel *m_model;
     QString m_path;
