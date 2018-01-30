@@ -47,7 +47,8 @@ private slots:
     void onConflictOccured(const QString &first, const QString &second) const;
 
 private:
-    QStringList pathsFromNames(const QStringList &names);
+    QStringList fileNamesFromSelectedItems() const;
+    QStringList pathsFromNames(const QStringList &names) const;
 
     MetadataModel *m_model;
     QString m_path;

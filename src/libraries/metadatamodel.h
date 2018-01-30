@@ -52,15 +52,17 @@ public:
 
     QModelIndex rootIndex() const;
     const Metadata::LibraryNode *dataNode(const QModelIndex &index) const;
+    const QHash<QPersistentModelIndex, Qt::CheckState> &selectedItems() const;
 
 signals:
     void conflictOccurred(const QString &first, const QString &second) const;
 
 private:
-    const Metadata::LibraryNode *m_root;
-
     void selectItems(const MetadataCheckStateHandler::States &items);
     void itemConflicted(const MetadataCheckStateHandler::Conflict &conflict) const;
+
+    const Metadata::LibraryNode *m_root;
+    QHash<QPersistentModelIndex, Qt::CheckState> m_selectedItems;
 };
 
 } // namespace Libraries

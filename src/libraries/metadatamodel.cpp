@@ -50,7 +50,7 @@ QVariant MetadataModel::data(const QModelIndex &index, int role) const
     case Qt::ToolTipRole:
         return node->description();
     case Qt::CheckStateRole:
-        return node->checkState();
+        return m_selectedItems.contains(index) ? m_selectedItems.value(index) : Qt::Unchecked;
     }
 
     return QVariant();
@@ -110,7 +110,6 @@ bool MetadataModel::setData(const QModelIndex &index, const QVariant &value, int
             return false;
 
         MetadataCheckStateHandler checkHandler(this);
-
         if (checkHandler.changeCheckStates(index, static_cast<Qt::CheckState>(value.toInt())))
             selectItems(checkHandler.changedIndexes());
         else
@@ -127,6 +126,11 @@ const Metadata::LibraryNode *MetadataModel::dataNode(const QModelIndex &index) c
     return index.isValid() ? static_cast<Metadata::LibraryNode *>(index.internalPointer()) : m_root;
 }
 
+const QHash<QPersistentModelIndex, Qt::CheckState> &MetadataModel::selectedItems() const
+{
+    return m_selectedItems;
+}
+
 QModelIndex MetadataModel::rootIndex() const
 {
     return createIndex(0, 0, const_cast<Metadata::LibraryNode *>(m_root));
@@ -135,7 +139,7 @@ QModelIndex MetadataModel::rootIndex() const
 void MetadataModel::selectItems(const MetadataCheckStateHandler::States &items)
 {
     for (auto it = items.begin(); it != items.end(); ++it) {
-        static_cast<Metadata::LibraryNode *>(it.key().internalPointer())->setCheckState(it.value());
+        m_selectedItems.insert(it.key(), it.value());
         emit dataChanged(it.key(), it.key());
     }
 }
