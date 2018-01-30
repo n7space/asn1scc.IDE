@@ -50,7 +50,31 @@ void MetadaComponentSelector::onConflictOccured(const QString &first, const QStr
     msgBox.exec();
 }
 
-QStringList MetadaComponentSelector::pathsFromNames(const QStringList &names)
+QStringList MetadaComponentSelector::pathsToImport()
+{
+    auto files = fileNamesFromSelectedItems();
+
+    files.removeDuplicates();
+
+    return pathsFromNames(files);
+}
+
+QStringList MetadaComponentSelector::fileNamesFromSelectedItems() const
+{
+    QStringList fileNames;
+    const auto &selectedItems = m_model->selectedItems();
+    for (auto it = selectedItems.begin(); it != selectedItems.end(); ++it) {
+        if (it.value() != Qt::Checked)
+            continue;
+
+        const auto libraryNode = m_model->dataNode(it.key());
+        fileNames.append(libraryNode->asn1Files());
+    }
+
+    return fileNames;
+}
+
+QStringList MetadaComponentSelector::pathsFromNames(const QStringList &names) const
 {
     if (names.empty())
         return {};
@@ -62,50 +86,4 @@ QStringList MetadaComponentSelector::pathsFromNames(const QStringList &names)
         paths.append(it.next());
 
     return paths;
-}
-
-namespace {
-
-QStringList readElement(const Metadata::Element *element)
-{
-    if (element->checkState() != Qt::Checked)
-        return {};
-
-    return element->asn1Files();
-}
-
-QStringList readSubmodule(const Metadata::Submodule *submodule)
-{
-    QStringList files;
-    for (const auto &element : submodule->elements())
-        files.append(readElement(element.get()));
-
-    return files;
-}
-
-QStringList readModule(const Metadata::Module *module)
-{
-    QStringList files;
-    for (const auto &submodule : module->submodules())
-        files.append(readSubmodule(submodule.get()));
-
-    return files;
-}
-
-} // namespace Anonymous
-
-QStringList MetadaComponentSelector::pathsToImport()
-{
-    const auto lib = LibraryStorage::instance()->library(m_path);
-
-    if (lib == nullptr)
-        return {};
-
-    QStringList files;
-    for (const auto &module : lib->modules())
-        files.append(readModule(module.get()));
-
-    files.removeDuplicates();
-
-    return pathsFromNames(files);
 }

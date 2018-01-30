@@ -42,8 +42,6 @@ public:
         : LibraryNode(name, description)
     {}
 
-    const QStringList &asn1Files() const { return m_asn1Files; }
-
     void addAsn1File(const QString &file) { m_asn1Files.append(file); }
     void addConflict(const Reference &conflict) { m_conflicts.append(conflict); }
     void addRequirement(const Reference &requirement) { m_requirements.append(requirement); }
@@ -54,6 +52,8 @@ public:
 
     QList<Reference> conflicts() const override { return m_conflicts; }
     QList<Reference> requirements() const override { return m_requirements; }
+
+    const QStringList asn1Files() const override { return m_asn1Files; }
 
 private:
     QStringList m_asn1Files;

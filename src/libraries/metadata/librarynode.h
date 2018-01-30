@@ -40,7 +40,6 @@ protected:
         : m_name(name)
         , m_description(description)
         , m_parent(nullptr)
-        , m_state(Qt::Unchecked)
     {}
 
 public:
@@ -56,11 +55,10 @@ public:
     virtual QList<Reference> conflicts() const { return {}; }
     virtual QList<Reference> requirements() const { return {}; }
 
+    virtual const QStringList asn1Files() const { return {}; }
+
     LibraryNode *parent() const { return m_parent; }
     void setParent(LibraryNode *parent) { m_parent = parent; }
-
-    Qt::CheckState checkState() const { return m_state; }
-    void setCheckState(Qt::CheckState state) { m_state = state; }
 
 protected:
     template <typename Collection>
@@ -80,7 +78,6 @@ private:
     const QString m_description;
 
     LibraryNode *m_parent;
-    Qt::CheckState m_state;
 };
 
 } // namespace Metadata
