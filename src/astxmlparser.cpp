@@ -86,7 +86,7 @@ void AstXmlParser::readAsn1ModuleChildren()
 
 void AstXmlParser::createNewAsn1Module()
 {
-    const auto location = Data::SourceLocation(m_currentFile, 0, 0); // TODO location of DEFINITIONS begin (fix in asn1scc required)
+    const auto location = Data::SourceLocation(m_currentFile, 1, 0); // TODO location of DEFINITIONS begin (fix in asn1scc required)
     m_currentModule = readIdAttribute();
     auto module = std::make_unique<Data::Definitions>(m_currentModule, location);
     m_currentDefinitions = module.get();

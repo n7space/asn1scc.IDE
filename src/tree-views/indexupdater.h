@@ -64,8 +64,7 @@ private:
     void createUpdateTimer();
 
     int getCurrentLine() const;
-    QModelIndex getTargetIndexFromRootIndex(const QModelIndex &rootIndex) const;
-    QModelIndex getTargetIndexFromModuleIndex(const QModelIndex &moduleIndex, int line) const;
+    QModelIndex getIndexFromParent(const QModelIndex &parentIndex, const int line, const QString &fileName) const;
 
     TextEditor::TextEditorWidget *m_editorWidget;
     QTimer *m_updateIndexTimer;
