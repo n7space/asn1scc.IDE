@@ -41,7 +41,7 @@ QIcon Type::typeIcon() const
     return createIcon(Utils::Theme::IconsCodeModelStructColor);
 }
 
-QIcon Type::variableIcon() const
+QIcon Type::valueIcon() const
 {
     return createIcon(Utils::Theme::IconsCodeModelVariableColor);
 }

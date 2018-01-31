@@ -32,9 +32,9 @@
 #include <QStringList>
 
 #include "typeassignment.h"
-#include "variableassignment.h"
+#include "valueassignment.h"
 #include "importedtype.h"
-#include "importedvariable.h"
+#include "importedvalue.h"
 #include "node.h"
 
 namespace Asn1Acn {
@@ -50,38 +50,38 @@ public:
     void accept(Visitor &visitor) const override;
 
     void addType(std::unique_ptr<TypeAssignment> type);
-    void addVariable(std::unique_ptr<VariableAssignment> variable);
+    void addValue(std::unique_ptr<ValueAssignment> value);
     void addImportedType(const ImportedType &type);
-    void addImportedVariable(const ImportedVariable &variable);
+    void addImportedValue(const ImportedValue &value);
 
     using Types = std::vector<std::unique_ptr<TypeAssignment>>;
-    using Variables = std::vector<std::unique_ptr<VariableAssignment>>;
+    using Values = std::vector<std::unique_ptr<ValueAssignment>>;
     using ImportedTypes = std::vector<ImportedType>;
-    using ImportedVariables = std::vector<ImportedVariable>;
+    using ImportedValues = std::vector<ImportedValue>;
 
     const Types &types() const { return m_types; }
     const TypeAssignment *type(const QString &name) const;
-    const Variables &variables() const { return m_variables; }
-    const VariableAssignment *variable(const QString &name) const;
+    const Values &values() const { return m_values; }
+    const ValueAssignment *value(const QString &name) const;
     const ImportedTypes &importedTypes() const { return m_importedTypes; }
-    const ImportedVariables &importedVariables() const { return m_importedVariables; }
+    const ImportedValues &importedValues() const { return m_importedValues; }
 
     template <typename Functor>
     void forAllNodes(Functor fun) const
     {
         for (const auto &type : types())
             fun(type.get());
-        for (const auto &var : variables())
+        for (const auto &var : values())
             fun(var.get());
     }
 
 private:
     Types m_types;
-    Variables m_variables;
+    Values m_values;
     std::map<QString, TypeAssignment*> m_typeByNameMap;
-    std::map<QString, VariableAssignment*> m_variableByNameMap;
+    std::map<QString, ValueAssignment*> m_valueByNameMap;
     ImportedTypes m_importedTypes;
-    ImportedVariables m_importedVariables;
+    ImportedValues m_importedValues;
 };
 
 } // namespace Data

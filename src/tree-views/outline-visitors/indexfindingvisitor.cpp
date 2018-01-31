@@ -54,9 +54,9 @@ int IndexFindingVisitor::findIndexIn(const Collection &items) const
 
 int IndexFindingVisitor::valueFor(const Definitions &defs) const
 {
-    const auto variableIdx = findIndexIn(defs.variables());
-    if (variableIdx != -1)
-        return defs.types().size() + variableIdx;
+    const auto valueIdx = findIndexIn(defs.values());
+    if (valueIdx != -1)
+        return defs.types().size() + valueIdx;
     return findIndexIn(defs.types());
 }
 
@@ -81,8 +81,8 @@ int IndexFindingVisitor::valueFor(const TypeAssignment &type) const
     return -1;
 }
 
-int IndexFindingVisitor::valueFor(const VariableAssignment &variable) const
+int IndexFindingVisitor::valueFor(const ValueAssignment &value) const
 {
-    Q_UNUSED(variable);
+    Q_UNUSED(value);
     return -1;
 }

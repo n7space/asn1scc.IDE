@@ -135,7 +135,7 @@ void LinkCreatorTests::test_createTarget()
 
     auto typeAssignment = std::make_unique<Data::TypeAssignment>("TypeName",
                                                                  Data::SourceLocation(m_path, 1, 15),
-                                                                 Data::Types::BuiltinType::createBuiltinType("IntegerType"));
+                                                                 std::make_unique<Data::Types::Integer>());
     auto defs = std::make_unique<Data::Definitions>("ModuleName", Data::SourceLocation(m_path, 0, 0));
 
     defs->addType(std::move(typeAssignment));

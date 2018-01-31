@@ -38,7 +38,7 @@ ChildrenCountingVisitor::~ChildrenCountingVisitor()
 
 int ChildrenCountingVisitor::valueFor(const Definitions &defs) const
 {
-    return static_cast<int>(defs.types().size()) + static_cast<int>(defs.variables().size());
+    return static_cast<int>(defs.types().size()) + static_cast<int>(defs.values().size());
 }
 
 int ChildrenCountingVisitor::valueFor(const File &file) const
@@ -57,9 +57,9 @@ int ChildrenCountingVisitor::valueFor(const TypeAssignment &type) const
     return 0;
 }
 
-int ChildrenCountingVisitor::valueFor(const VariableAssignment &variable) const
+int ChildrenCountingVisitor::valueFor(const ValueAssignment &value) const
 {
-    Q_UNUSED(variable);
+    Q_UNUSED(value);
     return 0;
 }
 

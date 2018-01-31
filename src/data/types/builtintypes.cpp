@@ -29,40 +29,40 @@ using namespace Asn1Acn::Internal::Data::Types;
 
 std::unique_ptr<Type> BuiltinType::createBuiltinType(const QString &name)
 {
-    if (name == QStringLiteral("BooleanType"))
+    if (name == QStringLiteral("BOOLEAN"))
         return std::make_unique<Boolean>();
 
-    if (name == QStringLiteral("NullType"))
+    if (name == QStringLiteral("NULL"))
         return std::make_unique<Null>();
 
-    if (name == QStringLiteral("IntegerType"))
+    if (name == QStringLiteral("INTEGER"))
         return std::make_unique<Integer>();
 
-    if (name == QStringLiteral("RealType"))
+    if (name == QStringLiteral("REAL"))
         return std::make_unique<Real>();
 
-    if (name == QStringLiteral("BitStringType"))
+    if (name == QStringLiteral("BIT_STRING"))
         return std::make_unique<BitString>();
 
-    if (name == QStringLiteral("OctetStringType"))
+    if (name == QStringLiteral("OCTET_STRING"))
         return std::make_unique<OctetString>();
 
-    if (name == QStringLiteral("IA5StringType"))
+    if (name == QStringLiteral("IA5String"))
         return std::make_unique<IA5String>();
 
-    if (name == QStringLiteral("NumericStringType"))
+    if (name == QStringLiteral("NumericString"))
         return std::make_unique<NumericString>();
 
-    if (name == QStringLiteral("EnumeratedType"))
+    if (name == QStringLiteral("Enumerated"))
         return std::make_unique<Enumarated>();
 
-    if (name == QStringLiteral("ChoiceType"))
+    if (name == QStringLiteral("CHOICE"))
         return std::make_unique<Choice>();
 
-    if (name == QStringLiteral("SequenceType"))
+    if (name == QStringLiteral("SEQUENCE"))
         return std::make_unique<Sequence>();
 
-    if (name == QStringLiteral("SequenceOfType"))
+    if (name == QStringLiteral("SEQUENCE_OF"))
         return std::make_unique<SequenceOf>();
 
     return nullptr;

@@ -58,13 +58,13 @@ void ComboModelTests::test_modelWithDummyPopulation()
     const auto root = std::make_unique<Data::File>(filePath);
 
     auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{"file1.asn1", 0, 0});
-    definitions1->addType(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, Data::Types::BuiltinType::createBuiltinType("IntegerType")));
-    definitions1->addType(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{"file1.asn1", 3, 3}, Data::Types::BuiltinType::createBuiltinType("IntegerType")));
+    definitions1->addType(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, std::make_unique<Data::Types::Integer>()));
+    definitions1->addType(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{"file1.asn1", 3, 3}, std::make_unique<Data::Types::Integer>()));
     root->add(std::move(definitions1));
 
     auto definitions2 = std::make_unique<Data::Definitions>("Module2", Data::SourceLocation{"file1.asn1", 5, 0});
-    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{"file1.asn1", 6, 3}, Data::Types::BuiltinType::createBuiltinType("IntegerType")));
-    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{"file1.asn1", 7, 3}, Data::Types::BuiltinType::createBuiltinType("IntegerType")));
+    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{"file1.asn1", 6, 3}, std::make_unique<Data::Types::Integer>()));
+    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{"file1.asn1", 7, 3}, std::make_unique<Data::Types::Integer>()));
     root->add(std::move(definitions2));
 
     auto model = new ComboModel(filePath, this);

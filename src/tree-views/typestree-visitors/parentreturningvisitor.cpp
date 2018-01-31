@@ -29,7 +29,7 @@
 #include <data/definitions.h>
 #include <data/project.h>
 #include <data/root.h>
-#include <data/variableassignment.h>
+#include <data/valueassignment.h>
 
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::TreeViews::TypesTreeVisitors;
@@ -59,9 +59,9 @@ Node *ParentReturningVisitor::valueFor(const TypeAssignment &type) const
     return type.parent();
 }
 
-Node *ParentReturningVisitor::valueFor(const VariableAssignment &variable) const
+Node *ParentReturningVisitor::valueFor(const ValueAssignment &value) const
 {
-    return variable.parent();
+    return value.parent();
 }
 
 Node *ParentReturningVisitor::valueFor(const Project &project) const

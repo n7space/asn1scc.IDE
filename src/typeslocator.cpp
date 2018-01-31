@@ -33,8 +33,6 @@
 #include <data/project.h>
 #include <data/file.h>
 #include <data/definitions.h>
-#include <data/typeassignment.h>
-#include <data/variableassignment.h>
 
 #include <tree-views/decorationrolevisitor.h>
 

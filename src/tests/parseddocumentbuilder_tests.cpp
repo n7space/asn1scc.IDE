@@ -98,19 +98,19 @@ void ParsedDocumentBuilderTests::test_error()
 
 void ParsedDocumentBuilderTests::test_success()
 {
+    const QString docXml
+            = R"(<AstRoot>)"
+              R"(  <Asn1File FileName=\"TestFile.asn\">)"
+              R"(    <Modules>)"
+              R"(      <Module Name=\"TestDefinitions\" Line=\"13\" CharPositionInLine=\"42\">)"
+              R"(      </Module>)"
+              R"(    </Modules>)"
+              R"(  </Asn1File>)"
+              R"(</AstRoot>)";
     const QHash<QString, QString> document = { {"SUCCESS",
-                          "{\"ErrorCode\":0,\"Files\":[{\"Contents\":\"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?>\\u000a<ASN1AST>\\u000a    "
-                          "<Asn1File FileName=\\\"emptyAsn2.asn\\\">\\u000a        <Asn1Module ID=\\\"EmptyAsn2\\\">\\u000a        "
-                          "<ExportedTypes>\\u000a            <ExportedType Name=\\\"AData\\\" \\/>\\u000a            "
-                          "<ExportedType Name=\\\"BData\\\" \\/> \\u000a        <\\/ExportedTypes>\\u000a        <ExportedVariables>\\u000a         "
-                          "\\u000a        <\\/ExportedVariables>\\u000a        <ImportedModules>\\u000a        <\\/ImportedModules>\\u000a        "
-                          "<TypeAssignments>\\u000a            <TypeAssignment Name=\\\"AData\\\" Line=\\\"2\\\" CharPositionInLine=\\\"4\\\">\\u000a                "
-                          "<Type Line=\\\"2\\\" CharPositionInLine=\\\"14\\\">\\u000a                    "
-                          "<IntegerType Min=\\\"-100\\\" Max=\\\"1000\\\"\\/>\\u000a                <\\/Type>\\u000a            "
-                          "<\\/TypeAssignment>\\u000a            <TypeAssignment Name=\\\"BData\\\" Line=\\\"3\\\" CharPositionInLine=\\\"4\\\">\\u000a                "
-                          "<Type Line=\\\"3\\\" CharPositionInLine=\\\"14\\\">\\u000a                    <IntegerType Min=\\\"0\\\" Max=\\\"1000\\\"\\/>\\u000a                "
-                          "<\\/Type>\\u000a            <\\/TypeAssignment>\\u000a        <\\/TypeAssignments>\\u000a        <VariablesAssignments>\\u000a        "
-                          "<\\/VariablesAssignments>\\u000a        <\\/Asn1Module>\\u000a    <\\/Asn1File>\\u000a<\\/ASN1AST>\",\"Name\":\"AST.xml\"}],\"Messages\":null}"} };
+                          QStringLiteral("{\"ErrorCode\":0,\"Files\":[{\"Contents\":")
+                          + '"' + docXml + '"' +
+                          ",\"Name\":\"AST.xml\"}],\"Messages\":null}"} };
 
     Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider, document);
     QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);

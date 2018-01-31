@@ -44,8 +44,8 @@ void UserTypesProposalsBuilder::fillProposals()
     for (const auto &definitions : m_data->definitionsList()) {
         appendImportedTypes(definitions->importedTypes());
         appendInternalTypes(definitions->types());
-        appendImportedVariables(definitions->importedVariables());
-        appendInternalVariables(definitions->variables());
+        appendImportedValues(definitions->importedValues());
+        appendInternalValues(definitions->values());
     }
 }
 
@@ -61,16 +61,16 @@ void UserTypesProposalsBuilder::appendImportedTypes(const Data::Definitions::Imp
         appendImportedElement(importedType.module(), importedType.name());
 }
 
-void UserTypesProposalsBuilder::appendInternalVariables(const Data::Definitions::Variables &variables)
+void UserTypesProposalsBuilder::appendInternalValues(const Data::Definitions::Values &values)
 {
-    for (const auto &variable : variables)
-        addProposal(variable->name(), variable->valueFor<TreeViews::DecorationRoleVisitor>());
+    for (const auto &value : values)
+        addProposal(value->name(), value->valueFor<TreeViews::DecorationRoleVisitor>());
 }
 
-void UserTypesProposalsBuilder::appendImportedVariables(const Data::Definitions::ImportedVariables &importedVariables)
+void UserTypesProposalsBuilder::appendImportedValues(const Data::Definitions::ImportedValues &importedValues)
 {
-    foreach (const auto &importedVariable, importedVariables)
-        appendImportedElement(importedVariable.module(), importedVariable.name());
+    foreach (const auto &importedValue, importedValues)
+        appendImportedElement(importedValue.module(), importedValue.name());
 }
 
 void UserTypesProposalsBuilder::appendImportedElement(const QString &module, const QString &name)

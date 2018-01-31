@@ -52,12 +52,12 @@ Node *ImportFindingVisitor::valueFor(const Definitions &defs) const
 {
     if (defs.name() != m_module)
         return nullptr;
-    return isVariable()
-            ? findImportByName(defs.variables())
+    return isValue()
+            ? findImportByName(defs.values())
             : findImportByName(defs.types());
 }
 
-bool ImportFindingVisitor::isVariable() const
+bool ImportFindingVisitor::isValue() const
 {
     return m_import.size() > 0 && m_import[0].isLower();
 }
@@ -83,9 +83,9 @@ Node *ImportFindingVisitor::valueFor(const TypeAssignment &type) const
     return nullptr;
 }
 
-Node *ImportFindingVisitor::valueFor(const VariableAssignment &variable) const
+Node *ImportFindingVisitor::valueFor(const ValueAssignment &value) const
 {
-    Q_UNUSED(variable);
+    Q_UNUSED(value);
     return nullptr;
 }
 
