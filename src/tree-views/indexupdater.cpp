@@ -85,7 +85,7 @@ void IndexUpdater::updateNow()
 
     QModelIndex index;
     if (m_editorWidget != nullptr)
-        index = getTargetIndexFromRootIndex(currentRootIndex());
+        index = getIndexFromParent(currentRootIndex(), getCurrentLine(), currentFileName().toString());
 
     emit currentIndexUpdated(index);
 }
@@ -98,33 +98,23 @@ int IndexUpdater::getCurrentLine() const
     return line;
 }
 
-QModelIndex IndexUpdater::getTargetIndexFromRootIndex(const QModelIndex &rootIndex) const
+QModelIndex IndexUpdater::getIndexFromParent(const QModelIndex &parentIndex,
+                                             const int line,
+                                             const QString &fileName) const
 {
-    const int line = getCurrentLine();
+    for (int row = 0; row < m_model->rowCount(parentIndex); ++row) {
+        const auto index = m_model->index(row, 0, parentIndex);
+        const auto location = m_model->dataNode(index)->location();
 
-    for (int row = 0; row < m_model->rowCount(rootIndex); ++row) {
-        const QModelIndex moduleIndex = m_model->index(row, 0, rootIndex);
-        const auto moduleNode = m_model->dataNode(moduleIndex);
-        const Data::SourceLocation location = moduleNode->location();
-        if (location.path() != currentFileName().toString())
+        if (location.path() != fileName)
             continue;
 
-        const QModelIndex index = getTargetIndexFromModuleIndex(moduleIndex, line);
-        if (index.isValid())
-            return index;
-    }
-
-    return QModelIndex();
-}
-
-QModelIndex IndexUpdater::getTargetIndexFromModuleIndex(const QModelIndex &moduleIndex, int line) const
-{
-    for (int row = 0; row < m_model->rowCount(moduleIndex); ++row) {
-        const QModelIndex index = m_model->index(row, 0, moduleIndex);
-        const auto node = m_model->dataNode(index);
-        const Data::SourceLocation location = node->location();
         if (location.line() == line)
             return index;
+
+        const auto childIndex = getIndexFromParent(index, line, fileName);
+        if (childIndex.isValid())
+            return childIndex;
     }
 
     return QModelIndex();
