@@ -56,15 +56,14 @@ void TreeView::contextMenuEvent(QContextMenuEvent *event)
     event->accept();
 }
 
-TreeViewWidget::TreeViewWidget(Model *model, IndexUpdater *indexUpdater)
-    : m_indexUpdater(indexUpdater)
+TreeViewWidget::TreeViewWidget(Model *model, std::unique_ptr<IndexUpdaterFactory> indexUpdaterFactory)
+    : m_indexUpdater(indexUpdaterFactory->createIndexUpdater(model, this))
+    , m_indexUpdaterFactory(std::move(indexUpdaterFactory))
     , m_treeView(new TreeView(this))
 {
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    layout->addWidget(Core::ItemViewFind::createSearchableWrapper(m_treeView));
-    setLayout(layout);
+    model->setParent(this);
+
+    setLayout(createLayout());
 
     m_treeView->setModel(model);
     m_treeView->setExpandsOnDoubleClick(false);
@@ -90,6 +89,16 @@ void TreeViewWidget::setCursorSynchronization(bool syncWithCursor)
                 this, &TreeViewWidget::updateSelection, Qt::QueuedConnection);
     else
         m_indexUpdater->disconnect(this);
+}
+
+QLayout *TreeViewWidget::createLayout()
+{
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    layout->addWidget(Core::ItemViewFind::createSearchableWrapper(m_treeView));
+
+    return layout;
 }
 
 void TreeViewWidget::updateSelection(const QModelIndex index)

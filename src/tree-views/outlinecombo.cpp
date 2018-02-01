@@ -36,12 +36,12 @@ using namespace Asn1Acn::Internal::TreeViews;
 static const int MINIMUM_COMBO_CONTENTS_LENGHT = 22;
 static const int MAXIMUM_COMBO_VISIBLE_ITEMS = 40;
 
-OutlineCombo::OutlineCombo(EditorWidget *editorWidget)
+OutlineCombo::OutlineCombo()
 {
     auto model = new ComboModel(this);
     auto indexUpdater = new OutlineIndexUpdater(model, this);
 
-    const auto rootUpdater = new OutlineRootUpdater(editorWidget, model, indexUpdater, this);
+    const auto rootUpdater = new OutlineRootUpdater(model, indexUpdater, this);
 
     setupComboBox(model);
 

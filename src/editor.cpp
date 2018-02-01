@@ -36,20 +36,8 @@
 #include "asn1acnconstants.h"
 #include "document.h"
 
-#include "editoroutline.h"
-
 using namespace Asn1Acn::Internal;
 using namespace Core;
-
-EditorWidget::EditorWidget()
-    : m_editorOutline(new EditorOutline(this))
-{
-}
-
-EditorOutline *EditorWidget::outline() const
-{
-    return m_editorOutline;
-}
 
 void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
 {
@@ -80,7 +68,7 @@ void EditorWidget::finalizeInitialization()
             this, &EditorWidget::onExtraSelectionsUpdated);
 
     insertExtraToolBarWidget(TextEditorWidget::Left,
-                             new TreeViews::OutlineCombo(this));
+                             new TreeViews::OutlineCombo());
 }
 
 void EditorWidget::onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections)

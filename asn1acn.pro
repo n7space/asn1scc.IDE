@@ -173,7 +173,6 @@ SOURCES += \
     errormessageparser.cpp \
     sourcemapper.cpp \
     typeslocator.cpp \
-    editoroutline.cpp \
     modelvalidityguard.cpp \
     outlinerootupdater.cpp \
     usagesfinder.cpp
@@ -241,6 +240,9 @@ HEADERS += \
     tree-views/outlinewidget.h \
     tree-views/typestreewidget.h \
     tree-views/staterestorer.h \
+    tree-views/indexupdaterfactory.h \
+    tree-views/typestreeindexupdaterfactory.h \
+    tree-views/outlineindexupdaterfactory.h \
     \
     options-pages/general.h \
     options-pages/service.h \
@@ -315,7 +317,6 @@ HEADERS += \
     sourcereader.h \
     filesourcereader.h \
     errormessageparser.h \
-    editoroutline.h \
     sourcemapper.h \
     typeslocator.h \
     modelvalidityguard.h \

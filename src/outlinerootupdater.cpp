@@ -40,27 +40,37 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
-OutlineRootUpdater::OutlineRootUpdater(EditorWidget *editorWidget,
-                                       Model *model,
+static EditorWidget *currentEditor()
+{
+    if (auto current = Core::EditorManager::currentEditor())
+        return qobject_cast<EditorWidget *>(current->widget());
+
+    return nullptr;
+}
+
+OutlineRootUpdater::OutlineRootUpdater(Model *model,
                                        IndexUpdater *updater,
                                        QObject *parent)
     : QObject(parent)
-    , m_editorWidget(editorWidget)
     , m_model(model)
     , m_indexUpdater(updater)
 {
-    m_indexUpdater->setEditor(m_editorWidget);
+    editorChanged();
 
     connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
-            this, &OutlineRootUpdater::onEditorChanged);
+            this, &OutlineRootUpdater::editorChanged);
 
     connect(m_model, &Model::modelReset,
             this, &OutlineRootUpdater::onModelReset);
 }
 
-void OutlineRootUpdater::onEditorChanged()
+void OutlineRootUpdater::editorChanged()
 {
+    m_editorWidget = currentEditor();
+    m_indexUpdater->setEditor(m_editorWidget);
+
     refreshModelRoot();
+
     emit rootChanged();
 }
 
@@ -73,6 +83,9 @@ void OutlineRootUpdater::onModelReset()
 
 void OutlineRootUpdater::refreshModelRoot()
 {
+    if (m_editorWidget == nullptr)
+        return;
+
     const QString &path = m_editorWidget->textDocument()->filePath().toString();
 
     const auto file = ParsedDataStorage::instance()->getAnyFileForPath(path);

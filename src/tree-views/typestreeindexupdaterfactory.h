@@ -22,36 +22,29 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "outlinewidget.h"
+#pragma once
 
-#include <memory>
+#include <QObject>
 
-#include <utils/qtcassert.h>
+#include "indexupdaterfactory.h"
+#include "typestreeindexupdater.h"
 
-#include <asneditor.h>
-#include <acneditor.h>
-#include <editor.h>
+namespace Asn1Acn {
+namespace Internal {
+namespace TreeViews {
 
-#include <tree-views/outlinemodel.h>
-#include <tree-views/outlineindexupdaterfactory.h>
+class Model;
+class IndexUpdater;
 
-using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::TreeViews;
-
-OutlineWidget::OutlineWidget(Model *model, std::unique_ptr<OutlineIndexUpdaterFactory> factory)
-    : TreeViewWidget(model, std::move(factory))
+class TypesTreeIndexUpdaterFactory : public IndexUpdaterFactory
 {
-}
+public:
+    IndexUpdater *createIndexUpdater(Model *model, QObject *parent = nullptr) override
+    {
+        return new TypesTreeIndexUpdater(model, parent);
+    }
+};
 
-bool OutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const
-{
-    return qobject_cast<AcnEditor *>(editor) != nullptr
-            || qobject_cast<AsnEditor *>(editor) != nullptr;
-}
-
-// TODO for the end: editor might be passed to factory, and used in rootUpdater?
-TextEditor::IOutlineWidget *OutlineWidgetFactory::createWidget(Core::IEditor *editor)
-{
-    Q_UNUSED(editor)
-    return new OutlineWidget(new OutlineModel, std::make_unique<OutlineIndexUpdaterFactory>());
-}
+} /* namespace TreeViews */
+} /* namespace Asn1Acn */
+} /* namespace Internal */

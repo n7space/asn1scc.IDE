@@ -32,6 +32,7 @@
 
 #include "model.h"
 #include "indexupdater.h"
+#include "indexupdaterfactory.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -50,7 +51,7 @@ class TreeViewWidget : public TextEditor::IOutlineWidget
 {
     Q_OBJECT
 public:
-    TreeViewWidget(Model *model, IndexUpdater *indexUpdater);
+    TreeViewWidget(Model *model, std::unique_ptr<IndexUpdaterFactory> indexUpdaterFactory);
 
     QList<QAction *> filterMenuActions() const override;
     void setCursorSynchronization(bool syncWithCursor) override;
@@ -62,6 +63,9 @@ protected:
     QPointer<IndexUpdater> m_indexUpdater;
 
 private:
+    QLayout *createLayout();
+
+    std::unique_ptr<IndexUpdaterFactory> m_indexUpdaterFactory;
     TreeView *m_treeView;
 };
 

@@ -22,22 +22,33 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "editoroutline.h"
+#pragma once
 
-#include <editor.h>
+#include <QObject>
 
-#include <tree-views/outlinemodel.h>
-#include <tree-views/outlineindexupdater.h>
+#include "indexupdaterfactory.h"
+#include "outlineindexupdater.h"
+#include "outlinerootupdater.h"
 
-#include <outlinerootupdater.h>
+namespace Asn1Acn {
+namespace Internal {
+namespace TreeViews {
 
-using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::TreeViews;
+class Model;
+class IndexUpdater;
 
-EditorOutline::EditorOutline(EditorWidget *editorWidget)
-    : QObject(editorWidget)
-    , m_model(new OutlineModel(this))
-    , m_indexUpdater(new OutlineIndexUpdater(m_model, this))
-    , m_outlineRootUpdater(new OutlineRootUpdater(editorWidget, m_model, m_indexUpdater, this))
+class OutlineIndexUpdaterFactory : public IndexUpdaterFactory
 {
-}
+public:
+    IndexUpdater *createIndexUpdater(Model *model, QObject *parent = nullptr) override
+    {
+        auto indexUpdater = new OutlineIndexUpdater(model, parent);
+        new OutlineRootUpdater(model, indexUpdater, parent); // TODO: move to index updater?
+
+        return indexUpdater;
+    }
+};
+
+} /* namespace TreeViews */
+} /* namespace Asn1Acn */
+} /* namespace Internal */

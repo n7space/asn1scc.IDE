@@ -28,30 +28,17 @@
 
 namespace Asn1Acn {
 namespace Internal {
-
-class EditorWidget;
-class OutlineRootUpdater;
-
 namespace TreeViews {
+
 class Model;
 class IndexUpdater;
-}
 
-class EditorOutline : public QObject
+class IndexUpdaterFactory
 {
-    Q_OBJECT
 public:
-    EditorOutline(EditorWidget *editorWidget);
-
-    TreeViews::Model *model() const { return m_model; }
-    TreeViews::IndexUpdater *indexUpdater() const { return m_indexUpdater; }
-
-private:
-    TreeViews::Model *m_model;
-    TreeViews::IndexUpdater *m_indexUpdater;
-
-    OutlineRootUpdater *m_outlineRootUpdater;
+    virtual IndexUpdater *createIndexUpdater(Model *model, QObject *parent = nullptr) = 0;
 };
 
+} /* namespace TreeViews */
 } /* namespace Asn1Acn */
 } /* namespace Internal */

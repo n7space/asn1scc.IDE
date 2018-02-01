@@ -40,8 +40,7 @@ class OutlineRootUpdater : public QObject
 {
     Q_OBJECT
 public:
-    OutlineRootUpdater(EditorWidget *editorWidget,
-                       TreeViews::Model *model,
+    OutlineRootUpdater(TreeViews::Model *model,
                        TreeViews::IndexUpdater *updater,
                        QObject *parent = nullptr);
 
@@ -49,7 +48,7 @@ signals:
     void rootChanged();
 
 private slots:
-    void onEditorChanged();
+    void editorChanged();
     void onModelReset();
 
 private:
