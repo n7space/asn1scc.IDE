@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 N7 Space sp. z o. o.
+** Copyright (C) 2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -24,21 +24,34 @@
 ****************************************************************************/
 #pragma once
 
-#include "indexupdater.h"
+#include <QObject>
+
+class QTreeView;
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
 
-class OutlineIndexUpdater : public IndexUpdater
+class Model;
+
+class StateRestorer : public QObject
 {
     Q_OBJECT
 public:
-    explicit OutlineIndexUpdater(const Model *model, QObject *parent = nullptr);
+    StateRestorer(QTreeView *view, const Model *model, QObject *parent = nullptr);
 
-protected:
-    QModelIndex currentRootIndex() const override;
+private slots:
+    void onModelAboutToBeReset();
+    void onModelResetFinished();
 
+private:
+    void tryAddIndex(const QModelIndex &index);
+    void addChildrenIndexes(const QModelIndex &parent);
+
+    QStringList m_expandedItems;
+
+    QTreeView *m_view;
+    const Model *const m_model;
 };
 
 } /* namespace TreeViews */

@@ -112,6 +112,7 @@ SOURCES += \
     tree-views/outlinecombo.cpp \
     tree-views/outlinewidget.cpp \
     tree-views/typestreewidget.cpp \
+    tree-views/staterestorer.cpp \
     \
     options-pages/general.cpp \
     options-pages/service.cpp \
@@ -239,6 +240,7 @@ HEADERS += \
     tree-views/outlinecombo.h \
     tree-views/outlinewidget.h \
     tree-views/typestreewidget.h \
+    tree-views/staterestorer.h \
     \
     options-pages/general.h \
     options-pages/service.h \

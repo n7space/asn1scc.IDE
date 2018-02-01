@@ -29,6 +29,7 @@
 
 #include <coreplugin/find/itemviewfind.h>
 
+#include "staterestorer.h"
 #include "activatehandler.h"
 
 using namespace Asn1Acn::Internal::TreeViews;
@@ -70,6 +71,8 @@ TreeViewWidget::TreeViewWidget(Model *model, IndexUpdater *indexUpdater)
 
     connect(m_treeView, &QAbstractItemView::activated,
             [this](const QModelIndex &index){ ActivateHandler::gotoSymbol(index); });
+
+    new StateRestorer(m_treeView, model, this);
 }
 
 QList<QAction *> TreeViewWidget::filterMenuActions() const

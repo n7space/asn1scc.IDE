@@ -47,6 +47,9 @@ TypesTreeIndexUpdater::TypesTreeIndexUpdater(const Model *model, QObject *parent
 
     connect(Core::EditorManager::instance(), &Core::EditorManager::editorAboutToClose,
             this, &TypesTreeIndexUpdater::onEditorAboutToClose);
+
+    connect(m_model, &Model::modelReset,
+            [this]() { updateCurrentIndex(); } );
 }
 
 QModelIndex TypesTreeIndexUpdater::currentRootIndex() const

@@ -43,9 +43,6 @@ TypesTreeWidget::TypesTreeWidget(Model *model, IndexUpdater *updater)
     model->setRoot(ParsedDataStorage::instance()->root());
 
     m_toggleSync = createToggleSyncButton();
-
-    connect(m_indexUpdater, &IndexUpdater::currentIndexUpdated,
-            this, &TreeViewWidget::updateSelection, Qt::QueuedConnection);
 }
 
 TypesTreeWidget::~TypesTreeWidget()
