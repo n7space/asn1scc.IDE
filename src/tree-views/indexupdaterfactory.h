@@ -26,6 +26,10 @@
 
 #include <QObject>
 
+#include "unsynchronizedindexupdater.h"
+
+class QTreeView;
+
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
@@ -36,7 +40,12 @@ class IndexUpdater;
 class IndexUpdaterFactory
 {
 public:
-    virtual IndexUpdater *createIndexUpdater(Model *model, QObject *parent = nullptr) = 0;
+    virtual IndexUpdater *createSynchronizedIndexUpdater(Model *model, QObject *parent = nullptr) const = 0;
+
+    IndexUpdater *createUnsynchronozedIndexUpdater(QTreeView *treeView, Model *model, QObject *parent = nullptr) const
+    {
+        return new UnsynchronizedIndexUpdater(treeView, model, parent);
+    }
 };
 
 } /* namespace TreeViews */

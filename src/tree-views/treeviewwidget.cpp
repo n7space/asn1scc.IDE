@@ -59,13 +59,11 @@ void TreeView::contextMenuEvent(QContextMenuEvent *event)
 }
 
 TreeViewWidget::TreeViewWidget(Model *model, std::unique_ptr<IndexUpdaterFactory> indexUpdaterFactory)
-    : m_indexUpdater(indexUpdaterFactory->createIndexUpdater(model))
-    , m_indexUpdaterFactory(std::move(indexUpdaterFactory))
+    : m_indexUpdaterFactory(std::move(indexUpdaterFactory))
     , m_model(model)
     , m_treeView(new TreeView(this))
 {   
     model->setParent(this);
-    m_indexUpdater->setParent(this);
 
     setLayout(createLayout());
 
@@ -85,14 +83,13 @@ QList<QAction *> TreeViewWidget::filterMenuActions() const
 
 void TreeViewWidget::setCursorSynchronization(bool syncWithCursor)
 {
-    if (syncWithCursor) {
-        m_indexUpdater.reset(m_indexUpdaterFactory->createIndexUpdater(m_model, this));
-        connect(m_indexUpdater.get(), &IndexUpdater::currentIndexUpdated,
-                this, &TreeViewWidget::updateSelection, Qt::QueuedConnection);
-    } else {
-        // TODO: create 'non-synchronized index updater here'
-        m_indexUpdater.reset();
-    }
+    if (syncWithCursor)
+        m_indexUpdater.reset(m_indexUpdaterFactory->createSynchronizedIndexUpdater(m_model, this));
+    else
+        m_indexUpdater.reset(m_indexUpdaterFactory->createUnsynchronozedIndexUpdater(m_treeView, m_model, this));
+
+    connect(m_indexUpdater.get(), &IndexUpdater::currentIndexUpdated,
+            this, &TreeViewWidget::updateSelection);
 }
 
 QLayout *TreeViewWidget::createLayout()

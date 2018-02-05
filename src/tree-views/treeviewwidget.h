@@ -24,8 +24,9 @@
 ****************************************************************************/
 #pragma once
 
+#include <memory>
+
 #include <QModelIndex>
-#include <QPointer>
 
 #include <texteditor/ioutlinewidget.h>
 #include <utils/navigationtreeview.h>

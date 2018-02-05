@@ -108,7 +108,7 @@ Data::Node *OutlineIndexUpdaterTests::createModelNodes(const QString &filePath)
 
 void OutlineIndexUpdaterTests::test_setEmptyEditor()
 {
-    QSignalSpy spy(m_indexUpdater, &OutlineIndexUpdater::currentIndexUpdated);
+    QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
 
     m_indexUpdater->setEditor(nullptr);
 
@@ -123,7 +123,7 @@ void OutlineIndexUpdaterTests::test_setEmptyEditor()
 
 void OutlineIndexUpdaterTests::test_setNonEmpytEditorInitialCursorPosition()
 {
-    QSignalSpy spy(m_indexUpdater, &OutlineIndexUpdater::currentIndexUpdated);
+    QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
 
     m_editorWidget->gotoLine(0);
     m_indexUpdater->setEditor(m_editorWidget);
@@ -141,7 +141,7 @@ void OutlineIndexUpdaterTests::test_setNonEmpytEditorInitialCursorPosition()
 
 void OutlineIndexUpdaterTests::test_setNonEmpytEditorChangedPosition()
 {
-    QSignalSpy spy(m_indexUpdater, &OutlineIndexUpdater::currentIndexUpdated);
+    QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
     const int lineNumber = 2;
 
     m_editorWidget->gotoLine(lineNumber);
@@ -164,7 +164,7 @@ void OutlineIndexUpdaterTests::test_setNonEmpytEditorChangedPosition()
 
 void OutlineIndexUpdaterTests::test_cursorMovedToModule()
 {
-    QSignalSpy spy(m_indexUpdater, &OutlineIndexUpdater::currentIndexUpdated);
+    QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
 
     m_editorWidget->gotoLine(1);
     m_indexUpdater->setEditor(m_editorWidget);
@@ -182,7 +182,7 @@ void OutlineIndexUpdaterTests::test_cursorMovedToModule()
 
 void OutlineIndexUpdaterTests::test_cursorMovedToTypeDefinition()
 {
-    QSignalSpy spy(m_indexUpdater, &OutlineIndexUpdater::currentIndexUpdated);
+    QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
     const int lineNumber = 3;
 
     m_editorWidget->gotoLine(lineNumber);
@@ -205,7 +205,7 @@ void OutlineIndexUpdaterTests::test_cursorMovedToTypeDefinition()
 
 void OutlineIndexUpdaterTests::test_cursorMovedToEmptyLine()
 {
-    QSignalSpy spy(m_indexUpdater, &OutlineIndexUpdater::currentIndexUpdated);
+    QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
 
     m_editorWidget->gotoLine(8);
     m_indexUpdater->setEditor(m_editorWidget);
@@ -223,7 +223,7 @@ void OutlineIndexUpdaterTests::test_cursorMovedToEmptyLine()
 
 void OutlineIndexUpdaterTests::test_forceUpdate()
 {
-    QSignalSpy spy(m_indexUpdater, &OutlineIndexUpdater::currentIndexUpdated);
+    QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
     const int lineNumber = 6;
 
     m_editorWidget->gotoLine(lineNumber);
@@ -245,7 +245,7 @@ void OutlineIndexUpdaterTests::test_forceUpdate()
 
 void OutlineIndexUpdaterTests::test_forceUpdateAfterCursorMoved()
 {
-    QSignalSpy spy(m_indexUpdater, &OutlineIndexUpdater::currentIndexUpdated);
+    QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
     const int lineNumber = 7;
 
     m_indexUpdater->setEditor(m_editorWidget);
@@ -267,7 +267,7 @@ void OutlineIndexUpdaterTests::test_forceUpdateAfterCursorMoved()
 
 void OutlineIndexUpdaterTests::test_removeEditorAfterLineUpdate()
 {
-    QSignalSpy spy(m_indexUpdater, &OutlineIndexUpdater::currentIndexUpdated);
+    QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
     const int lineNumber = 7;
 
     m_indexUpdater->setEditor(m_editorWidget);

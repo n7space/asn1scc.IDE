@@ -41,7 +41,7 @@ class IndexUpdater;
 class OutlineIndexUpdaterFactory : public IndexUpdaterFactory
 {
 public:
-    IndexUpdater *createIndexUpdater(Model *model, QObject *parent = nullptr) override
+    IndexUpdater *createSynchronizedIndexUpdater(Model *model, QObject *parent = nullptr) const override
     {
         auto indexUpdater = new OutlineIndexUpdater(model, parent);
         indexUpdater->setEditor(TextEditor::TextEditorWidget::currentTextEditorWidget());

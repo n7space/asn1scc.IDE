@@ -25,29 +25,44 @@
 #pragma once
 
 #include <QObject>
+#include <QTimer>
 #include <QModelIndex>
+
+#include <texteditor/texteditor.h>
+#include <utils/fileutils.h>
+
+#include "indexupdater.h"
+
+class QTreeView;
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
 
-class Model;
-
-class IndexUpdater : public QObject
+class SynchronizedIndexUpdater : public IndexUpdater
 {
     Q_OBJECT
-protected:
-    explicit IndexUpdater(const Model *model, QObject *parent);
-
 public:
-    virtual ~IndexUpdater() = default;
-    virtual void updateCurrentIndex() = 0;
+    explicit SynchronizedIndexUpdater(const Model *model, QObject *parent);
 
-signals:
-    void currentIndexUpdated(const QModelIndex modelIndex);
+    void updateCurrentIndex() override;
+
+    void setEditor(TextEditor::TextEditorWidget *editorWidget);
+    void unsetEditor();
 
 protected:
-    const Model *const m_model;
+    virtual QModelIndex currentRootIndex() const = 0;
+    Utils::FileName currentFileName() const;
+
+private:
+    void updateNow();
+    void createUpdateTimer();
+
+    int getCurrentLine() const;
+    QModelIndex getIndexFromParent(const QModelIndex &parentIndex, const int line, const QString &fileName) const;
+
+    TextEditor::TextEditorWidget *m_editorWidget;
+    QTimer *m_updateIndexTimer;
 };
 
 } /* namespace TreeViews */

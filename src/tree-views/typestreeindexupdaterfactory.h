@@ -39,9 +39,11 @@ class IndexUpdater;
 class TypesTreeIndexUpdaterFactory : public IndexUpdaterFactory
 {
 public:
-    IndexUpdater *createIndexUpdater(Model *model, QObject *parent = nullptr) override
+    IndexUpdater *createSynchronizedIndexUpdater(Model *model, QObject *parent = nullptr) const override
     {
-        return new TypesTreeIndexUpdater(model, parent);
+        auto indexUpdater = new TypesTreeIndexUpdater(model, parent);
+        indexUpdater->setEditor(TextEditor::TextEditorWidget::currentTextEditorWidget());
+        return indexUpdater;
     }
 };
 

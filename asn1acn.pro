@@ -110,6 +110,8 @@ SOURCES += \
     tree-views/indexupdater.cpp \
     tree-views/outlineindexupdater.cpp \
     tree-views/typestreeindexupdater.cpp \
+    tree-views/synchronizedindexupdater.cpp \
+    tree-views/unsynchronizedindexupdater.cpp \
     tree-views/outlinecombo.cpp \
     tree-views/outlinewidget.cpp \
     tree-views/typestreewidget.cpp \
@@ -237,6 +239,8 @@ HEADERS += \
     tree-views/activatehandler.h \
     tree-views/indexupdater.h \
     tree-views/outlineindexupdater.h \
+    tree-views/unsynchronizedindexupdater.h \
+    tree-views/synchronizedindexupdater.h \
     tree-views/outlinecombo.h \
     tree-views/outlinewidget.h \
     tree-views/typestreewidget.h \
