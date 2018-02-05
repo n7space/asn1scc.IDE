@@ -38,6 +38,8 @@ IndexUpdater::IndexUpdater(const Model *model, QObject *parent)
     , m_editorWidget(nullptr)
 {
     createUpdateTimer();
+    connect(model, &Model::modelReset,
+            this, &IndexUpdater::updateCurrentIndex);
 }
 
 void IndexUpdater::setEditor(TextEditor::TextEditorWidget *editorWidget)
@@ -76,7 +78,7 @@ void IndexUpdater::createUpdateTimer()
     m_updateIndexTimer->setInterval(UPDATE_INTERVAL_MS);
 
     connect(m_updateIndexTimer, &QTimer::timeout,
-            [this]() { updateNow(); });
+            this, &IndexUpdater::updateNow);
 }
 
 void IndexUpdater::updateNow()

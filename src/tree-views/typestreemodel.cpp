@@ -29,6 +29,8 @@
 #include "typestree-visitors/indexfindingvisitor.h"
 #include "typestree-visitors/parentreturningvisitor.h"
 
+#include "modelvalidityguard.h"
+
 using namespace Asn1Acn::Internal::TreeViews::TypesTreeVisitors;
 using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
@@ -36,10 +38,17 @@ using namespace Asn1Acn::Internal::Data;
 TypesTreeModel::TypesTreeModel(QObject *parent)
     : Model(parent)
 {
+    connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelChanged,
+            this, &TypesTreeModel::endResetModel);
 }
 
 TypesTreeModel::~TypesTreeModel()
 {
+}
+
+void TypesTreeModel::onEndResetModel()
+{
+    endResetModel();
 }
 
 Node *TypesTreeModel::parentOf(const Node *node) const

@@ -32,8 +32,8 @@ using namespace Asn1Acn::Internal::TreeViews::OutlineVisitors;
 using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
 
-OutlineModel::OutlineModel(QObject *parent)
-    : Model(parent)
+OutlineModel::OutlineModel(const QString &filePath, QObject *parent)
+    : MutableRootModel(filePath, parent)
 {
 }
 

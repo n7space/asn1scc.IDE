@@ -32,6 +32,8 @@
 #include <acneditor.h>
 #include <editor.h>
 
+#include <texteditor/textdocument.h>
+
 #include <tree-views/outlinemodel.h>
 #include <tree-views/outlineindexupdaterfactory.h>
 
@@ -49,9 +51,14 @@ bool OutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const
             || qobject_cast<AsnEditor *>(editor) != nullptr;
 }
 
-// TODO for the end: editor might be passed to factory, and used in rootUpdater?
 TextEditor::IOutlineWidget *OutlineWidgetFactory::createWidget(Core::IEditor *editor)
 {
-    Q_UNUSED(editor)
-    return new OutlineWidget(new OutlineModel, std::make_unique<OutlineIndexUpdaterFactory>());
+    TextEditor::BaseTextEditor *baseEditor = qobject_cast<TextEditor::BaseTextEditor *>(editor);
+    QTC_ASSERT(baseEditor, return 0);
+
+    EditorWidget *editorWidget = qobject_cast<EditorWidget *>(baseEditor->widget());
+    QTC_ASSERT(editorWidget, return 0);
+
+    return new OutlineWidget(new OutlineModel(editorWidget->textDocument()->filePath().toString()),
+                             std::make_unique<OutlineIndexUpdaterFactory>());
 }

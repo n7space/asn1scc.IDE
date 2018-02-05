@@ -100,6 +100,7 @@ SOURCES += \
     \
     tree-views/displayrolevisitor.cpp \
     tree-views/decorationrolevisitor.cpp \
+    tree-views/mutablerootmodel.cpp \
     tree-views/outlinemodel.cpp \
     tree-views/typestreemodel.cpp \
     tree-views/model.cpp \
@@ -174,7 +175,6 @@ SOURCES += \
     sourcemapper.cpp \
     typeslocator.cpp \
     modelvalidityguard.cpp \
-    outlinerootupdater.cpp \
     usagesfinder.cpp
 
 HEADERS += \
@@ -226,7 +226,8 @@ HEADERS += \
     tree-views/typestree-visitors/indexfindingvisitor.h \
     \
     tree-views/displayrolevisitor.h \
-    tree-views/decorationrolevisitor.h \   
+    tree-views/decorationrolevisitor.h \
+    tree-views/mutablerootmodel.h \
     tree-views/outlinemodel.h \
     tree-views/typestreemodel.h \
     tree-views/typestreeindexupdater.h \
@@ -320,7 +321,6 @@ HEADERS += \
     sourcemapper.h \
     typeslocator.h \
     modelvalidityguard.h \
-    outlinerootupdater.h \
     usagesfinder.h
 
 FORMS += \

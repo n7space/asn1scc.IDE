@@ -22,35 +22,24 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "mutablerootmodel.h"
 
-#include <texteditor/texteditor.h>
+#include "modelvalidityguard.h"
+#include "parseddatastorage.h"
 
-#include <utils/uncommentselection.h>
+using namespace Asn1Acn::Internal::TreeViews;
 
-namespace Asn1Acn {
-namespace Internal {
-
-class EditorOutline;
-
-class EditorWidget : public TextEditor::TextEditorWidget
+MutableRootModel::MutableRootModel(const QString &filePath, QObject *parent)
+    : Model(parent)
+    , m_filePath(filePath)
 {
-    Q_OBJECT
+    setRoot(ParsedDataStorage::instance()->getAnyFileForPath(m_filePath));
+    connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelChanged,
+            this, &MutableRootModel::onEndResetModel);
+}
 
-public:
-    virtual void findUsages() = 0;
-
-protected:
-    void openFinishedSuccessfully() override;
-
-    void finalizeInitialization() override;
-    void contextMenuEvent(QContextMenuEvent *) override;
-
-    Utils::CommentDefinition m_commentDefinition;
-
-private slots:
-    void onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections);
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+void MutableRootModel::onEndResetModel()
+{
+    setRoot(ParsedDataStorage::instance()->getAnyFileForPath(m_filePath));
+    endResetModel();
+}

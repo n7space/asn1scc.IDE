@@ -60,12 +60,13 @@ public slots:
     void updateSelection(const QModelIndex index);
 
 protected:
-    QPointer<IndexUpdater> m_indexUpdater;
+    std::unique_ptr<IndexUpdater> m_indexUpdater;
 
 private:
     QLayout *createLayout();
 
     std::unique_ptr<IndexUpdaterFactory> m_indexUpdaterFactory;
+    Model *m_model;
     TreeView *m_treeView;
 };
 

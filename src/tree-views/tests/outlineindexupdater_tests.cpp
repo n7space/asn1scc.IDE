@@ -49,7 +49,7 @@ OutlineIndexUpdaterTests::OutlineIndexUpdaterTests(QObject *parent)
 {
     m_editorWidget = createEditorWidget();
 
-    m_model = new OutlineModel;
+    m_model = new OutlineModel(QString());
     m_model->setRoot(createModelNodes(m_editorWidget->textDocument()->filePath().toString()));
 
     m_indexUpdater = new OutlineIndexUpdater(m_model, nullptr);

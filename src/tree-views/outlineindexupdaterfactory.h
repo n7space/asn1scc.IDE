@@ -26,9 +26,10 @@
 
 #include <QObject>
 
+#include "coreplugin/editormanager/editormanager.h"
+
 #include "indexupdaterfactory.h"
 #include "outlineindexupdater.h"
-#include "outlinerootupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -43,8 +44,7 @@ public:
     IndexUpdater *createIndexUpdater(Model *model, QObject *parent = nullptr) override
     {
         auto indexUpdater = new OutlineIndexUpdater(model, parent);
-        new OutlineRootUpdater(model, indexUpdater, parent); // TODO: move to index updater?
-
+        indexUpdater->setEditor(TextEditor::TextEditorWidget::currentTextEditorWidget());
         return indexUpdater;
     }
 };

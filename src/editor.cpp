@@ -39,6 +39,12 @@
 using namespace Asn1Acn::Internal;
 using namespace Core;
 
+void EditorWidget::openFinishedSuccessfully()
+{
+    insertExtraToolBarWidget(TextEditorWidget::Left,
+                             new TreeViews::OutlineCombo(textDocument()->filePath().toString(), this));
+}
+
 void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
 {
     QPointer<QMenu> menu(new QMenu(this));
@@ -66,9 +72,6 @@ void EditorWidget::finalizeInitialization()
     auto document = qobject_cast<Document *>(textDocument());
     connect(document, &Document::extraSelectionsUpdated,
             this, &EditorWidget::onExtraSelectionsUpdated);
-
-    insertExtraToolBarWidget(TextEditorWidget::Left,
-                             new TreeViews::OutlineCombo());
 }
 
 void EditorWidget::onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections)

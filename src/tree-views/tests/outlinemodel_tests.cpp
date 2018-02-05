@@ -48,12 +48,13 @@ OutlineModelTests::~OutlineModelTests()
 
 void OutlineModelTests::test_emptyModel()
 {
-    ModelTest testEmptyModel(new OutlineModel(this), this);
+    ModelTest testEmptyModel(new OutlineModel(QString(), this), this);
 }
 
 void OutlineModelTests::test_modelWithDummyPopulation()
 {
-    const auto root = std::make_unique<Data::File>("file.asn1");
+    const QString filePath("file.asn1");
+    const auto root = std::make_unique<Data::File>(filePath);
 
     auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{"file1.asn1", 0, 0});
     definitions1->addType(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{"file1.asn1", 2, 3}, Data::Types::BuiltinType::createBuiltinType("IntegerType")));
@@ -65,7 +66,7 @@ void OutlineModelTests::test_modelWithDummyPopulation()
     definitions2->addType(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{"file1.asn1", 7, 3}, Data::Types::BuiltinType::createBuiltinType("IntegerType")));
     root->add(std::move(definitions2));
 
-    auto model = new OutlineModel(this);
+    auto model = new OutlineModel(filePath, this);
     model->setRoot(root.get());
 
     ModelTest testNonEmptyModel(model, this);

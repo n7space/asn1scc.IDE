@@ -38,9 +38,6 @@ Model::Model(QObject *parent)
 {
     connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelAboutToChange,
             this, &Model::beginResetModel);
-
-    connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelChanged,
-            this, &Model::endResetModel);
 }
 
 Model::~Model()
