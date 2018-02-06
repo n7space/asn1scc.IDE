@@ -115,7 +115,7 @@ SOURCES += \
     tree-views/outlinecombo.cpp \
     tree-views/outlinewidget.cpp \
     tree-views/typestreewidget.cpp \
-    tree-views/staterestorer.cpp \
+    tree-views/expansionstaterestorer.cpp \
     \
     options-pages/general.cpp \
     options-pages/service.cpp \
@@ -244,7 +244,7 @@ HEADERS += \
     tree-views/outlinecombo.h \
     tree-views/outlinewidget.h \
     tree-views/typestreewidget.h \
-    tree-views/staterestorer.h \
+    tree-views/expansionstaterestorer.h \
     tree-views/indexupdaterfactory.h \
     tree-views/typestreeindexupdaterfactory.h \
     tree-views/outlineindexupdaterfactory.h \

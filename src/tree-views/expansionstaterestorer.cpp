@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "staterestorer.h"
+#include "expansionstaterestorer.h"
 
 #include <QAbstractItemModel>
 #include <QTreeView>
@@ -33,19 +33,19 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
-StateRestorer::StateRestorer(QTreeView *view, const Model *model, QObject *parent)
+ExpansionStateRestorer::ExpansionStateRestorer(QTreeView *view, const Model *model, QObject *parent)
     : QObject(parent)
     , m_view(view)
     , m_model(model)
 {
     connect(m_model, &QAbstractItemModel::modelAboutToBeReset,
-            this, &StateRestorer::onModelAboutToBeReset);
+            this, &ExpansionStateRestorer::onModelAboutToBeReset);
 
     connect(m_model, &QAbstractItemModel::modelReset,
-            this, &StateRestorer::onModelResetFinished);
+            this, &ExpansionStateRestorer::onModelResetFinished);
 }
 
-void StateRestorer::tryAddIndex(const QModelIndex &index)
+void ExpansionStateRestorer::tryAddIndex(const QModelIndex &index)
 {
     if (!m_view->isExpanded(index))
         return;
@@ -54,20 +54,20 @@ void StateRestorer::tryAddIndex(const QModelIndex &index)
     addChildrenIndexes(index);
 }
 
-void StateRestorer::addChildrenIndexes(const QModelIndex &parent)
+void ExpansionStateRestorer::addChildrenIndexes(const QModelIndex &parent)
 {
     for (int i = 0; i < m_model->rowCount(parent); ++i)
         for (int j = 0; j < m_model->columnCount(parent); ++j)
             tryAddIndex(parent.child(i, j));
 }
 
-void StateRestorer::onModelAboutToBeReset()
+void ExpansionStateRestorer::onModelAboutToBeReset()
 {
     m_expandedItems.clear();
     tryAddIndex(m_model->index(0, 0, QModelIndex()));
 }
 
-void StateRestorer::onModelResetFinished()
+void ExpansionStateRestorer::onModelResetFinished()
 {
     for (const auto &item : m_expandedItems) {
         const auto matches = m_model->match(m_model->index(0, 0, QModelIndex()),

@@ -24,14 +24,12 @@
 ****************************************************************************/
 #include "treeviewwidget.h"
 
-#include <memory>
-
 #include <QMenu>
 #include <QVBoxLayout>
 
 #include <coreplugin/find/itemviewfind.h>
 
-#include "staterestorer.h"
+#include "expansionstaterestorer.h"
 #include "activatehandler.h"
 
 using namespace Asn1Acn::Internal::TreeViews;
@@ -73,7 +71,7 @@ TreeViewWidget::TreeViewWidget(Model *model, std::unique_ptr<IndexUpdaterFactory
     connect(m_treeView, &QAbstractItemView::activated,
             [this](const QModelIndex &index){ ActivateHandler::gotoSymbol(index); });
 
-    new StateRestorer(m_treeView, model, this);
+    new ExpansionStateRestorer(m_treeView, model, this);
 }
 
 QList<QAction *> TreeViewWidget::filterMenuActions() const

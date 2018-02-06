@@ -34,11 +34,11 @@ namespace TreeViews {
 
 class Model;
 
-class StateRestorer : public QObject
+class ExpansionStateRestorer : public QObject
 {
     Q_OBJECT
 public:
-    StateRestorer(QTreeView *view, const Model *model, QObject *parent = nullptr);
+    ExpansionStateRestorer(QTreeView *view, const Model *model, QObject *parent = nullptr);
 
 private slots:
     void onModelAboutToBeReset();
