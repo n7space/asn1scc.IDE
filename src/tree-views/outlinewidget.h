@@ -27,6 +27,7 @@
 #include <texteditor/ioutlinewidget.h>
 
 #include "treeviewwidget.h"
+#include "outlineindexupdaterfactory.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -39,10 +40,7 @@ class OutlineWidget : public TreeViewWidget
 {
     Q_OBJECT
 public:
-    OutlineWidget(EditorWidget *editor);
-
-private:
-    EditorWidget *m_editor;
+    OutlineWidget(Model *model, std::unique_ptr<OutlineIndexUpdaterFactory> factory);
 };
 
 class OutlineWidgetFactory : public TextEditor::IOutlineWidgetFactory

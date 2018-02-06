@@ -38,7 +38,7 @@ class TypesTreeWidget : public TreeViewWidget
 {
     Q_OBJECT
 public:
-    TypesTreeWidget(Model *model, IndexUpdater *updater);
+    TypesTreeWidget(Model *model, std::unique_ptr<IndexUpdaterFactory> factory);
     ~TypesTreeWidget() override;
 
     QToolButton *toggleSyncButton();
@@ -60,10 +60,6 @@ public:
     TypesTreeWidgetFactory();
 
     Core::NavigationView createWidget() override;
-
-private:
-    Model *m_model;
-    IndexUpdater *m_updater;
 };
 
 } // namespace TreeViews

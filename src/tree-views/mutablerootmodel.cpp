@@ -22,34 +22,24 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "mutablerootmodel.h"
 
-#include <QObject>
-#include <QModelIndex>
+#include "modelvalidityguard.h"
+#include "parseddatastorage.h"
 
-namespace Asn1Acn {
-namespace Internal {
-namespace TreeViews {
+using namespace Asn1Acn::Internal::TreeViews;
 
-class Model;
-
-class IndexUpdater : public QObject
+MutableRootModel::MutableRootModel(const QString &filePath, QObject *parent)
+    : Model(parent)
+    , m_filePath(filePath)
 {
-    Q_OBJECT
-protected:
-    explicit IndexUpdater(const Model *model, QObject *parent);
+    setRoot(ParsedDataStorage::instance()->getAnyFileForPath(m_filePath));
+    connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelChanged,
+            this, &MutableRootModel::onEndResetModel);
+}
 
-public:
-    virtual ~IndexUpdater() = default;
-    virtual void updateCurrentIndex() = 0;
-
-signals:
-    void currentIndexUpdated(const QModelIndex modelIndex);
-
-protected:
-    const Model *const m_model;
-};
-
-} /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+void MutableRootModel::onEndResetModel()
+{
+    setRoot(ParsedDataStorage::instance()->getAnyFileForPath(m_filePath));
+    endResetModel();
+}

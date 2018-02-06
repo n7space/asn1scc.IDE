@@ -37,6 +37,9 @@ public:
     explicit TypesTreeModel(QObject *parent = 0);
     ~TypesTreeModel();
 
+protected:
+    void onEndResetModel() override;
+
 private:
     Data::Node *parentOf(const Data::Node *node) const override;
     int childrenCount(const Data::Node *node) const override;

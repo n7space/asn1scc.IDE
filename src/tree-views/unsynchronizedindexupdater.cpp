@@ -22,16 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "indexupdater.h"
+
+#include <QTreeView>
+
+#include "unsynchronizedindexupdater.h"
 
 #include "model.h"
 
 using namespace Asn1Acn::Internal::TreeViews;
 
-IndexUpdater::IndexUpdater(const Model *model, QObject *parent)
-    : QObject(parent)
-    , m_model(model)
+UnsynchronizedIndexUpdater::UnsynchronizedIndexUpdater(const QTreeView *view, const Model *model, QObject *parent)
+    : IndexUpdater(model, parent)
+    , m_view(view)
 {
-    connect(model, &Model::modelReset,
-            this, &IndexUpdater::updateCurrentIndex);
+    connect(model, &Model::modelAboutToBeReset,
+            this, &UnsynchronizedIndexUpdater::onModelAboutToBeReset);
+}
+
+void UnsynchronizedIndexUpdater::onModelAboutToBeReset()
+{
+    const auto currentIndex = m_view->currentIndex();
+    m_lastFocusedItem = currentIndex.isValid() ? currentIndex.data(Qt::DisplayRole).toString() : QString();
+}
+
+void UnsynchronizedIndexUpdater::updateCurrentIndex()
+{
+    const auto matches = m_model->match(m_model->index(0, 0, QModelIndex()),
+                                        Qt::DisplayRole,
+                                        m_lastFocusedItem,
+                                        -1,
+                                        Qt::MatchRecursive);
+    emit currentIndexUpdated(matches.value(0));
 }

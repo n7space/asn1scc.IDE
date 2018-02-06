@@ -24,13 +24,13 @@
 ****************************************************************************/
 #pragma once
 
-#include "indexupdater.h"
+#include "synchronizedindexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
 
-class TypesTreeIndexUpdater : public IndexUpdater
+class TypesTreeIndexUpdater : public SynchronizedIndexUpdater
 {
     Q_OBJECT
 public:

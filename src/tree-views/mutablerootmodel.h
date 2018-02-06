@@ -24,34 +24,25 @@
 ****************************************************************************/
 #pragma once
 
-#include <QObject>
+#include "model.h"
 
 namespace Asn1Acn {
 namespace Internal {
-
-class EditorWidget;
-class OutlineRootUpdater;
-
 namespace TreeViews {
-class Model;
-class IndexUpdater;
-}
 
-class EditorOutline : public QObject
+class MutableRootModel : public Model
 {
     Q_OBJECT
-public:
-    EditorOutline(EditorWidget *editorWidget);
-
-    TreeViews::Model *model() const { return m_model; }
-    TreeViews::IndexUpdater *indexUpdater() const { return m_indexUpdater; }
+protected:
+    explicit MutableRootModel(const QString &filePath, QObject *parent = 0);
 
 private:
-    TreeViews::Model *m_model;
-    TreeViews::IndexUpdater *m_indexUpdater;
+    void onEndResetModel() override;
 
-    OutlineRootUpdater *m_outlineRootUpdater;
+private:
+    QString m_filePath;
 };
 
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace TreeViews
+} // namespace Internal
+} // namespace Asn1Acn

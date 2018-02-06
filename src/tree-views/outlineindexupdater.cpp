@@ -29,7 +29,7 @@
 using namespace Asn1Acn::Internal::TreeViews;
 
 OutlineIndexUpdater::OutlineIndexUpdater(const Model *model, QObject *parent)
-    : IndexUpdater(model, parent)
+    : SynchronizedIndexUpdater(model, parent)
 {
 }
 

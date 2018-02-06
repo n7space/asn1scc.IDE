@@ -29,6 +29,7 @@
 
 #include <coreplugin/find/itemviewfind.h>
 
+#include "expansionstaterestorer.h"
 #include "activatehandler.h"
 
 using namespace Asn1Acn::Internal::TreeViews;
@@ -55,21 +56,22 @@ void TreeView::contextMenuEvent(QContextMenuEvent *event)
     event->accept();
 }
 
-TreeViewWidget::TreeViewWidget(Model *model, IndexUpdater *indexUpdater)
-    : m_indexUpdater(indexUpdater)
+TreeViewWidget::TreeViewWidget(Model *model, std::unique_ptr<IndexUpdaterFactory> indexUpdaterFactory)
+    : m_indexUpdaterFactory(std::move(indexUpdaterFactory))
+    , m_model(model)
     , m_treeView(new TreeView(this))
-{
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    layout->addWidget(Core::ItemViewFind::createSearchableWrapper(m_treeView));
-    setLayout(layout);
+{   
+    model->setParent(this);
+
+    setLayout(createLayout());
 
     m_treeView->setModel(model);
     m_treeView->setExpandsOnDoubleClick(false);
 
     connect(m_treeView, &QAbstractItemView::activated,
             [this](const QModelIndex &index){ ActivateHandler::gotoSymbol(index); });
+
+    new ExpansionStateRestorer(m_treeView, model, this);
 }
 
 QList<QAction *> TreeViewWidget::filterMenuActions() const
@@ -79,14 +81,23 @@ QList<QAction *> TreeViewWidget::filterMenuActions() const
 
 void TreeViewWidget::setCursorSynchronization(bool syncWithCursor)
 {
-    if (!m_indexUpdater)
-        return;
-
     if (syncWithCursor)
-        connect(m_indexUpdater, &IndexUpdater::currentIndexUpdated,
-                this, &TreeViewWidget::updateSelection, Qt::QueuedConnection);
+        m_indexUpdater.reset(m_indexUpdaterFactory->createSynchronizedIndexUpdater(m_model, this));
     else
-        m_indexUpdater->disconnect(this);
+        m_indexUpdater.reset(m_indexUpdaterFactory->createUnsynchronozedIndexUpdater(m_treeView, m_model, this));
+
+    connect(m_indexUpdater.get(), &IndexUpdater::currentIndexUpdated,
+            this, &TreeViewWidget::updateSelection);
+}
+
+QLayout *TreeViewWidget::createLayout()
+{
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    layout->addWidget(Core::ItemViewFind::createSearchableWrapper(m_treeView));
+
+    return layout;
 }
 
 void TreeViewWidget::updateSelection(const QModelIndex index)

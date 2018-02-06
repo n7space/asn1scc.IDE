@@ -31,21 +31,19 @@
 #include <asn1acnconstants.h>
 #include <parseddatastorage.h>
 
+#include "indexupdaterfactory.h"
 #include "typestreemodel.h"
-#include "typestreeindexupdater.h"
+#include "typestreeindexupdaterfactory.h"
 
 using namespace Asn1Acn::Internal::TreeViews;
 
-TypesTreeWidget::TypesTreeWidget(Model *model, IndexUpdater *updater)
-    : TreeViewWidget(model, updater)
+TypesTreeWidget::TypesTreeWidget(Model *model, std::unique_ptr<IndexUpdaterFactory> factory)
+    : TreeViewWidget(model, std::move(factory))
     , m_syncWithEditor(true)
 {
     model->setRoot(ParsedDataStorage::instance()->root());
 
     m_toggleSync = createToggleSyncButton();
-
-    connect(m_indexUpdater, &IndexUpdater::currentIndexUpdated,
-            this, &TreeViewWidget::updateSelection, Qt::QueuedConnection);
 }
 
 TypesTreeWidget::~TypesTreeWidget()
@@ -81,8 +79,6 @@ QToolButton *TypesTreeWidget::createToggleSyncButton()
 }
 
 TypesTreeWidgetFactory::TypesTreeWidgetFactory()
-    : m_model(new TypesTreeModel(this))
-    , m_updater(new TypesTreeIndexUpdater(m_model, this))
 {
     setDisplayName(tr("ASN.1 Types View"));
     setPriority(500);
@@ -92,7 +88,7 @@ TypesTreeWidgetFactory::TypesTreeWidgetFactory()
 Core::NavigationView TypesTreeWidgetFactory::createWidget()
 {
     Core::NavigationView n;
-    TypesTreeWidget *w = new TypesTreeWidget(m_model, m_updater);
+    TypesTreeWidget *w = new TypesTreeWidget(new TypesTreeModel, std::make_unique<TypesTreeIndexUpdaterFactory>());
 
     n.widget = w;
     n.dockToolBarWidgets.append(w->toggleSyncButton());

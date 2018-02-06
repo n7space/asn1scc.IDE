@@ -25,29 +25,26 @@
 #pragma once
 
 #include <QObject>
-#include <QModelIndex>
+
+#include "indexupdaterfactory.h"
+#include "typestreeindexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
 
 class Model;
+class IndexUpdater;
 
-class IndexUpdater : public QObject
+class TypesTreeIndexUpdaterFactory : public IndexUpdaterFactory
 {
-    Q_OBJECT
-protected:
-    explicit IndexUpdater(const Model *model, QObject *parent);
-
 public:
-    virtual ~IndexUpdater() = default;
-    virtual void updateCurrentIndex() = 0;
-
-signals:
-    void currentIndexUpdated(const QModelIndex modelIndex);
-
-protected:
-    const Model *const m_model;
+    IndexUpdater *createSynchronizedIndexUpdater(Model *model, QObject *parent = nullptr) const override
+    {
+        auto indexUpdater = new TypesTreeIndexUpdater(model, parent);
+        indexUpdater->setEditor(TextEditor::TextEditorWidget::currentTextEditorWidget());
+        return indexUpdater;
+    }
 };
 
 } /* namespace TreeViews */

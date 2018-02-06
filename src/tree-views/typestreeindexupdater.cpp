@@ -40,13 +40,16 @@
 using namespace Asn1Acn::Internal::TreeViews;
 
 TypesTreeIndexUpdater::TypesTreeIndexUpdater(const Model *model, QObject *parent)
-    : IndexUpdater(model, parent)
+    : SynchronizedIndexUpdater(model, parent)
 {
     connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
             this, &TypesTreeIndexUpdater::onEditorChanged);
 
     connect(Core::EditorManager::instance(), &Core::EditorManager::editorAboutToClose,
             this, &TypesTreeIndexUpdater::onEditorAboutToClose);
+
+    connect(m_model, &Model::modelReset,
+            this, &IndexUpdater::updateCurrentIndex);
 }
 
 QModelIndex TypesTreeIndexUpdater::currentRootIndex() const

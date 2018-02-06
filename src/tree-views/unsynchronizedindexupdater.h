@@ -24,32 +24,30 @@
 ****************************************************************************/
 #pragma once
 
-#include <QObject>
-#include <QModelIndex>
+#include "indexupdater.h"
+
+class QTreeView;
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
 
-class Model;
-
-class IndexUpdater : public QObject
+class UnsynchronizedIndexUpdater : public IndexUpdater
 {
     Q_OBJECT
-protected:
-    explicit IndexUpdater(const Model *model, QObject *parent);
-
 public:
-    virtual ~IndexUpdater() = default;
-    virtual void updateCurrentIndex() = 0;
+    explicit UnsynchronizedIndexUpdater(const QTreeView *view, const Model *model, QObject *parent);
+    void updateCurrentIndex() override;
 
-signals:
-    void currentIndexUpdated(const QModelIndex modelIndex);
+protected slots:
+    void onModelAboutToBeReset();
 
-protected:
-    const Model *const m_model;
+private:
+    QString m_lastFocusedItem;
+    const QTreeView *const m_view;
 };
 
 } /* namespace TreeViews */
 } /* namespace Asn1Acn */
 } /* namespace Internal */
+

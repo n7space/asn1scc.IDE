@@ -24,19 +24,24 @@
 ****************************************************************************/
 #include "outlinewidget.h"
 
+#include <memory>
+
 #include <utils/qtcassert.h>
 
 #include <asneditor.h>
 #include <acneditor.h>
 #include <editor.h>
-#include <editoroutline.h>
+
+#include <texteditor/textdocument.h>
+
+#include <tree-views/outlinemodel.h>
+#include <tree-views/outlineindexupdaterfactory.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
-OutlineWidget::OutlineWidget(EditorWidget *editor)
-    : TreeViewWidget(editor->outline()->model(), editor->outline()->indexUpdater())
-    , m_editor(editor)
+OutlineWidget::OutlineWidget(Model *model, std::unique_ptr<OutlineIndexUpdaterFactory> factory)
+    : TreeViewWidget(model, std::move(factory))
 {
 }
 
@@ -54,5 +59,6 @@ TextEditor::IOutlineWidget *OutlineWidgetFactory::createWidget(Core::IEditor *ed
     EditorWidget *editorWidget = qobject_cast<EditorWidget *>(baseEditor->widget());
     QTC_ASSERT(editorWidget, return 0);
 
-    return new OutlineWidget(editorWidget);
+    return new OutlineWidget(new OutlineModel(editorWidget->textDocument()->filePath().toString()),
+                             std::make_unique<OutlineIndexUpdaterFactory>());
 }

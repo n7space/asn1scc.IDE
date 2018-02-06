@@ -100,6 +100,7 @@ SOURCES += \
     \
     tree-views/displayrolevisitor.cpp \
     tree-views/decorationrolevisitor.cpp \
+    tree-views/mutablerootmodel.cpp \
     tree-views/outlinemodel.cpp \
     tree-views/typestreemodel.cpp \
     tree-views/model.cpp \
@@ -109,9 +110,12 @@ SOURCES += \
     tree-views/indexupdater.cpp \
     tree-views/outlineindexupdater.cpp \
     tree-views/typestreeindexupdater.cpp \
+    tree-views/synchronizedindexupdater.cpp \
+    tree-views/unsynchronizedindexupdater.cpp \
     tree-views/outlinecombo.cpp \
     tree-views/outlinewidget.cpp \
     tree-views/typestreewidget.cpp \
+    tree-views/expansionstaterestorer.cpp \
     \
     options-pages/general.cpp \
     options-pages/service.cpp \
@@ -172,9 +176,7 @@ SOURCES += \
     errormessageparser.cpp \
     sourcemapper.cpp \
     typeslocator.cpp \
-    editoroutline.cpp \
     modelvalidityguard.cpp \
-    outlinerootupdater.cpp \
     usagesfinder.cpp
 
 HEADERS += \
@@ -226,7 +228,8 @@ HEADERS += \
     tree-views/typestree-visitors/indexfindingvisitor.h \
     \
     tree-views/displayrolevisitor.h \
-    tree-views/decorationrolevisitor.h \   
+    tree-views/decorationrolevisitor.h \
+    tree-views/mutablerootmodel.h \
     tree-views/outlinemodel.h \
     tree-views/typestreemodel.h \
     tree-views/typestreeindexupdater.h \
@@ -236,9 +239,15 @@ HEADERS += \
     tree-views/activatehandler.h \
     tree-views/indexupdater.h \
     tree-views/outlineindexupdater.h \
+    tree-views/unsynchronizedindexupdater.h \
+    tree-views/synchronizedindexupdater.h \
     tree-views/outlinecombo.h \
     tree-views/outlinewidget.h \
     tree-views/typestreewidget.h \
+    tree-views/expansionstaterestorer.h \
+    tree-views/indexupdaterfactory.h \
+    tree-views/typestreeindexupdaterfactory.h \
+    tree-views/outlineindexupdaterfactory.h \
     \
     options-pages/general.h \
     options-pages/service.h \
@@ -313,11 +322,9 @@ HEADERS += \
     sourcereader.h \
     filesourcereader.h \
     errormessageparser.h \
-    editoroutline.h \
     sourcemapper.h \
     typeslocator.h \
     modelvalidityguard.h \
-    outlinerootupdater.h \
     usagesfinder.h
 
 FORMS += \

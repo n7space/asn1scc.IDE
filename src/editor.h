@@ -38,16 +38,14 @@ class EditorWidget : public TextEditor::TextEditorWidget
     Q_OBJECT
 
 public:
-    explicit EditorWidget();
-    EditorOutline *outline() const;
-
     virtual void findUsages() = 0;
 
 protected:
+    void openFinishedSuccessfully() override;
+
     void finalizeInitialization() override;
     void contextMenuEvent(QContextMenuEvent *) override;
 
-    EditorOutline *m_editorOutline;
     Utils::CommentDefinition m_commentDefinition;
 
 private slots:

@@ -24,17 +24,17 @@
 ****************************************************************************/
 #pragma once
 
-#include "indexupdater.h"
+#include "synchronizedindexupdater.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
 
-class OutlineIndexUpdater : public IndexUpdater
+class OutlineIndexUpdater : public SynchronizedIndexUpdater
 {
     Q_OBJECT
 public:
-    explicit OutlineIndexUpdater(const Model *model, QObject *parent);
+    explicit OutlineIndexUpdater(const Model *model, QObject *parent = nullptr);
 
 protected:
     QModelIndex currentRootIndex() const override;

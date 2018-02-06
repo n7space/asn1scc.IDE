@@ -36,19 +36,13 @@
 #include "asn1acnconstants.h"
 #include "document.h"
 
-#include "editoroutline.h"
-
 using namespace Asn1Acn::Internal;
 using namespace Core;
 
-EditorWidget::EditorWidget()
-    : m_editorOutline(new EditorOutline(this))
+void EditorWidget::openFinishedSuccessfully()
 {
-}
-
-EditorOutline *EditorWidget::outline() const
-{
-    return m_editorOutline;
+    insertExtraToolBarWidget(TextEditorWidget::Left,
+                             new TreeViews::OutlineCombo(textDocument()->filePath().toString(), this));
 }
 
 void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
@@ -78,9 +72,6 @@ void EditorWidget::finalizeInitialization()
     auto document = qobject_cast<Document *>(textDocument());
     connect(document, &Document::extraSelectionsUpdated,
             this, &EditorWidget::onExtraSelectionsUpdated);
-
-    insertExtraToolBarWidget(TextEditorWidget::Left,
-                             new TreeViews::OutlineCombo(this));
 }
 
 void EditorWidget::onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections)

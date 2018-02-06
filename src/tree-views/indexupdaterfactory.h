@@ -26,39 +26,28 @@
 
 #include <QObject>
 
+#include "unsynchronizedindexupdater.h"
+
+class QTreeView;
+
 namespace Asn1Acn {
 namespace Internal {
-
-class EditorWidget;
-
 namespace TreeViews {
+
 class Model;
 class IndexUpdater;
-}
 
-class OutlineRootUpdater : public QObject
+class IndexUpdaterFactory
 {
-    Q_OBJECT
 public:
-    OutlineRootUpdater(EditorWidget *editorWidget,
-                       TreeViews::Model *model,
-                       TreeViews::IndexUpdater *updater,
-                       QObject *parent = nullptr);
+    virtual IndexUpdater *createSynchronizedIndexUpdater(Model *model, QObject *parent = nullptr) const = 0;
 
-signals:
-    void rootChanged();
-
-private slots:
-    void onEditorChanged();
-    void onModelReset();
-
-private:
-    void refreshModelRoot();
-
-    EditorWidget *m_editorWidget;
-    TreeViews::Model *m_model;
-    TreeViews::IndexUpdater *m_indexUpdater;
+    IndexUpdater *createUnsynchronozedIndexUpdater(QTreeView *treeView, Model *model, QObject *parent = nullptr) const
+    {
+        return new UnsynchronizedIndexUpdater(treeView, model, parent);
+    }
 };
 
+} /* namespace TreeViews */
 } /* namespace Asn1Acn */
 } /* namespace Internal */

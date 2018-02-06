@@ -24,17 +24,17 @@
 ****************************************************************************/
 #pragma once
 
-#include "model.h"
+#include "mutablerootmodel.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
 
-class ComboModel : public Model
+class ComboModel : public MutableRootModel
 {
     Q_OBJECT
 public:
-    explicit ComboModel(QObject *parent = 0);
+    explicit ComboModel(const QString &filePath, QObject *parent = 0);
     ~ComboModel();
 
 private:

@@ -53,6 +53,9 @@ public:
 
     const Data::Node *dataNode(const QModelIndex &index) const;
 
+protected slots:
+    virtual void onEndResetModel() = 0;
+
 protected:
     virtual Data::Node *parentOf(const Data::Node *node) const = 0;
     virtual int childrenCount(const Data::Node *node) const = 0;

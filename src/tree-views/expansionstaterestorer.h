@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 N7 Space sp. z o. o.
+** Copyright (C) 2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -22,22 +22,38 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "editoroutline.h"
+#pragma once
 
-#include <editor.h>
+#include <QObject>
 
-#include <tree-views/outlinemodel.h>
-#include <tree-views/outlineindexupdater.h>
+class QTreeView;
 
-#include <outlinerootupdater.h>
+namespace Asn1Acn {
+namespace Internal {
+namespace TreeViews {
 
-using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::TreeViews;
+class Model;
 
-EditorOutline::EditorOutline(EditorWidget *editorWidget)
-    : QObject(editorWidget)
-    , m_model(new OutlineModel(this))
-    , m_indexUpdater(new OutlineIndexUpdater(m_model, this))
-    , m_outlineRootUpdater(new OutlineRootUpdater(editorWidget, m_model, m_indexUpdater, this))
+class ExpansionStateRestorer : public QObject
 {
-}
+    Q_OBJECT
+public:
+    ExpansionStateRestorer(QTreeView *view, const Model *model, QObject *parent = nullptr);
+
+private slots:
+    void onModelAboutToBeReset();
+    void onModelResetFinished();
+
+private:
+    void tryAddIndex(const QModelIndex &index);
+    void addChildrenIndexes(const QModelIndex &parent);
+
+    QStringList m_expandedItems;
+
+    QTreeView *m_view;
+    const Model *const m_model;
+};
+
+} /* namespace TreeViews */
+} /* namespace Asn1Acn */
+} /* namespace Internal */

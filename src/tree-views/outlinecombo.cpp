@@ -28,7 +28,6 @@
 
 #include "combomodel.h"
 #include "outlineindexupdater.h"
-#include "outlinerootupdater.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
@@ -36,20 +35,22 @@ using namespace Asn1Acn::Internal::TreeViews;
 static const int MINIMUM_COMBO_CONTENTS_LENGHT = 22;
 static const int MAXIMUM_COMBO_VISIBLE_ITEMS = 40;
 
-OutlineCombo::OutlineCombo(EditorWidget *editorWidget)
+OutlineCombo::OutlineCombo(const QString &filePath, TextEditor::TextEditorWidget *textEditor)
 {
-    auto model = new ComboModel(this);
-    auto indexUpdater = new OutlineIndexUpdater(model, this);
+    auto model = new ComboModel(filePath, this);
 
-    const auto rootUpdater = new OutlineRootUpdater(editorWidget, model, indexUpdater, this);
+    auto indexUpdater = new OutlineIndexUpdater(model, this);
+    indexUpdater->setEditor(textEditor);
 
     setupComboBox(model);
 
     connect(indexUpdater, &IndexUpdater::currentIndexUpdated,
             this, &OutlineCombo::updateSelection);
 
-    connect(rootUpdater, &OutlineRootUpdater::rootChanged,
-            this, &OutlineCombo::modelRootChanged, Qt::QueuedConnection);
+    connect(model, &ComboModel::modelReset,
+            this, &OutlineCombo::modelRootChanged);
+
+    view()->expandAll();
 }
 
 void OutlineCombo::setupComboBox(Model *model)
