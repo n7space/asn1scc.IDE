@@ -11,7 +11,7 @@ if [[ "$BUILD_OS_NAME" == "osx" ]]; then
 
 elif [[ $CI == "true" && "$BUILD_OS_NAME" == "linux" ]]; then
     if [[ $ENV_WITH_TESTS == "1" ]]; then
-        QT_BIN_LINK="https://github.com/n7mobile/3rdparty-deps/releases/download/qt-creator-${ENV_QTC_VERSION}-with-tests/qt-creator-linux-x86_64-${ENV_QTC_VERSION}.7z"
+        QT_BIN_LINK="https://drive.google.com/uc?export=download&id=13Bm211yDe93iyltOkP1lbd44j6k9yUX3"
     else
         QT_BIN_LINK="http://download.qt.io/official_releases/qtcreator/${ENV_QTC_VERSION_SHORT}/${ENV_QTC_VERSION}/installer_source/linux_gcc_64_rhel72/qtcreator.7z"
     fi
