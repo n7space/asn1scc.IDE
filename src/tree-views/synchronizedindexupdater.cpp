@@ -99,8 +99,8 @@ int SynchronizedIndexUpdater::getCurrentLine() const
 }
 
 QModelIndex SynchronizedIndexUpdater::getIndexFromParent(const QModelIndex &parentIndex,
-                                             const int line,
-                                             const QString &fileName) const
+                                                         const int line,
+                                                         const QString &fileName) const
 {
     for (int row = 0; row < m_model->rowCount(parentIndex); ++row) {
         const auto index = m_model->index(row, 0, parentIndex);
