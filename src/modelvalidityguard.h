@@ -35,10 +35,10 @@ class ModelValidityGuard : public QObject
 {
     Q_OBJECT
 
+public:
     ModelValidityGuard();
     ~ModelValidityGuard() = default;
 
-public:
     static ModelValidityGuard *instance();
 
     void invalidate();
