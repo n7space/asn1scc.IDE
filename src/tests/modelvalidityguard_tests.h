@@ -38,6 +38,7 @@ class ModelValidityGuardTests : public QObject
     Q_OBJECT
 public:
     explicit ModelValidityGuardTests(QObject *parent = 0);
+    ~ModelValidityGuardTests();
 
 private slots:
     void test_noModifiers();

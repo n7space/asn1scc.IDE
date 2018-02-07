@@ -32,8 +32,13 @@ using namespace Asn1Acn::Internal;
 
 ModelValidityGuardTests::ModelValidityGuardTests(QObject *parent)
     : QObject(parent)
-    , m_guard(ModelValidityGuard::instance())
+    , m_guard(new ModelValidityGuard)
 {
+}
+
+ModelValidityGuardTests::~ModelValidityGuardTests()
+{
+    delete m_guard;
 }
 
 void ModelValidityGuardTests::test_noModifiers()
