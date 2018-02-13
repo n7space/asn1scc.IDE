@@ -48,3 +48,18 @@ install:
 
 script:
   - travis/script.sh
+
+before_deploy:
+  - travis/dist.sh
+deploy:
+  provider: releases
+  api_key:
+    secure: SS4OHjm3Rg4mjaiionWSkQS3f8Roaxq2e9rYNYbRoDGnN2X94JsGczMsh1/Nmlip1TVY0+nd8QDrZyG0cSowskYc0TZ0pWT2xvnYpzDq0ptGfEO6t6VFhtcWkUe4FxM7jyaNiYc7+rW5Uz/rKW4zZUP6OPzWfl3TEsjolk1BgqNgdg1PtQUJ6MgLtGdRuLlfMnrZyZuT1mzz5jtU8FW5zrQziTjx1Eos4aJU469Mi75TG687b/MwQWslxq3sO+P56o/zW+OUmlQlZSYrvHOiDJbzMUEcdIab0kalnIZooGmZ9eVsNE0lMRdhHdUjaH46yZo/oBSwkszz6+GVHRbYULWrF5RTIwGrqR6OJ7/t0JbgsaoJkJTDIersMUqLwcXrk4E2bhMAl6UC9owS2224s6IszxT1hTWnNBgGGslE0ofuUPUMUPBlobHSXyWgjxgOahZrG9pBQH0IIKA+V6FMJ/queEoyGzpMOFrn8DqTGyMQCJmOn0lmul2lsmDFWwGcXb2avsFT9Ugj8nykK5f/uMtLnP5G6+hKAQ9aqsJZS5x1XDEHrZgKJ8ZTBzwO3H9z4ItxqmUgphkiJQ02PCP0MnotrzxWBkBAN9dlARujKx5FCt+cWwGEaOk4LP2DF9x+EbCW364uaDnbLf9EflmOOkSkA9fSK8WrkKeN9rlz3jg=
+  file_glob: true
+  file: Asn1Acn-*.tar.gz
+  skip_cleanup: true
+  overwrite: true
+  on:
+    repo: n7space/asn1scc.IDE
+    tags: true
+    condition: $ENV_WITH_TESTS = 0

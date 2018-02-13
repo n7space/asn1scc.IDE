@@ -1,7 +1,7 @@
 # Appveyor project configuration file
 # Build the plugin on Windows environment
 
-version: 0.0.1.{build}
+version: 4.5.0.{build}
 
 image: Visual Studio 2015
 
@@ -14,6 +14,7 @@ environment:
   ENV_QTC_VERSION: 4.5.0
   ENV_QTC_VERSION_SHORT: 4.5
   BUILD_DIR: c:\projects\asn1scc.IDE\build
+  DIST_DIR: c:\projects\asn1scc.IDE\dist
   DOWNLOAD_DIR: c:\projects\asn1scc.IDE\downloads
   VSVER: 14.0
   matrix:
@@ -44,3 +45,24 @@ build_script:
   - cmd: cd %BUILD_DIR%
   - cmd: qmake %APPVEYOR_BUILD_FOLDER%/asn1acn.pro -r "CONFIG+=%configuration%" %ENV_WITH_TESTS% "QTC_SOURCE=%DOWNLOAD_DIR%\qt-src\qt-creator-opensource-src-%ENV_QTC_VERSION%" "QTC_BUILD=%DOWNLOAD_DIR%\qt-bin\bin" "LIBS+=-L%DOWNLOAD_DIR%\qt-libs"
   - cmd: nmake.exe
+
+after_build:
+  - cmd: mkdir %DIST_DIR%
+  - cmd: cd %DIST_DIR%
+  - cmd: mkdir lib\qtcreator\plugins
+  - cmd: copy /Y "%DOWNLOAD_DIR%\qt-bin\bin\lib\qtcreator\plugins\Asn1Acn4.dll" lib\qtcreator\plugins
+  - cmd: 7z a %APPVEYOR_BUILD_FOLDER%\Asn1Acn-%ENV_QTC_VERSION%-win.zip *
+
+artifacts:
+  - path: 'Asn1Acn-*.zip'
+    name: zip_archive
+
+deploy:
+  provider: GitHub
+  description: ' '
+  auth_token:
+    secure: z258P5rF+sdTQQE42sPM21CU6Uw2CWgNsptrCJME6qmFPLHpxTacRYDzEWKVECFq
+  artifact: zip_archive
+  on:
+    appveyor_repo_tag: true
+    ENV_WITH_TESTS:
