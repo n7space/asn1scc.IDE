@@ -25,6 +25,8 @@
 
 #include "indenter.h"
 
+#include <QRegularExpression>
+
 #include <texteditor/tabsettings.h>
 
 using namespace Asn1Acn::Internal;
@@ -60,6 +62,10 @@ int Indenter::indentFor(const QTextBlock &block,
     QTextBlock previous = block.previous();
     if (!previous.isValid())
         return 0;
+
+    QString currentText = block.text();
+    if (!currentText.remove(QRegularExpression("[{}]")).trimmed().isEmpty())
+        return tabSettings.indentationColumn(block.text());
 
     QString previousText = previous.text();
     while (previousText.trimmed().isEmpty()) {

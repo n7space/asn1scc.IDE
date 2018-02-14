@@ -374,6 +374,7 @@ SOURCES += \
     tests/sourcemapper_tests.cpp \
     tests/modelvalidityguard_tests.cpp \
     tests/linkcreator_tests.cpp \
+    tests/indenter_tests.cpp \
     \
     tests/networkreply.cpp \
     tests/parsingserviceproviderstub.cpp \
@@ -406,6 +407,7 @@ HEADERS += \
     tests/sourcemapper_tests.h \
     tests/modelvalidityguard_tests.h \
     tests/linkcreator_tests.h \
+    tests/indenter_tests.h \
     \
     tests/networkreply.h \
     tests/parsingserviceproviderstub.h \

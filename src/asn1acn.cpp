@@ -79,10 +79,11 @@
 #include "tests/autocompleter_tests.h"
 #include "tests/sourcemapper_tests.h"
 #include "tests/modelvalidityguard_tests.h"
+#include "tests/linkcreator_tests.h"
+#include "tests/indenter_tests.h"
 #include "libraries/tests/metadatacheckstatehandler_tests.h"
 #include "libraries/tests/metadatamodel_tests.h"
 #include "libraries/tests/filemodel_tests.h"
-#include "tests/linkcreator_tests.h"
 #include "libraries/tests/modulemetadataparser_tests.h"
 #include "libraries/tests/generalmetadataparser_tests.h"
 #include "tree-views/tests/displayrolevisitor_tests.h"
@@ -315,6 +316,7 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
             << new Tests::SourceMapperTests
             << new Tests::ModelValidityGuardTests
             << new Tests::LinkCreatorTests
+            << new Tests::IndenterTests
                ;
 }
 #endif
