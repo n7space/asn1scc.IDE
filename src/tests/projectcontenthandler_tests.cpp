@@ -38,11 +38,17 @@ using namespace Asn1Acn::Internal::Tests;
 
 ProjectContentHandlerTests::ProjectContentHandlerTests(QObject *parent)
     : QObject(parent)
-    , m_storage(ParsedDataStorage::instance())
-    , m_guard(ModelValidityGuard::instance())
+    , m_storage(new ParsedDataStorage)
+    , m_guard(new ModelValidityGuard)
     , m_createProcessor([](const QString &)->DocumentProcessor * { return new DocumentProcessorStub(); })
 {
     m_fileTypes << "_ERROR_" << "_FAILED_" << "_SUCCESS_";
+}
+
+ProjectContentHandlerTests::~ProjectContentHandlerTests()
+{
+    delete m_storage;
+    delete m_guard;
 }
 
 void ProjectContentHandlerTests::test_singleProjectAddedAndRemoved()
