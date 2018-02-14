@@ -51,6 +51,10 @@ after_build:
   - cmd: cd %DIST_DIR%
   - cmd: mkdir lib\qtcreator\plugins
   - cmd: copy /Y "%DOWNLOAD_DIR%\qt-bin\bin\lib\qtcreator\plugins\Asn1Acn4.dll" lib\qtcreator\plugins
+  - cmd: mkdir share\qtcreator
+  - cmd: robocopy %APPVEYOR_BUILD_FOLDER%\generic-highlighter share\qtcreator\generic-highlighter /E || exit 0
+  - cmd: robocopy %APPVEYOR_BUILD_FOLDER%\templates share\qtcreator\templates /E || exit 0
+  - cmd: robocopy %APPVEYOR_BUILD_FOLDER%\snippets share\qtcreator\snippets /E || exit 0
   - cmd: 7z a %APPVEYOR_BUILD_FOLDER%\Asn1Acn-%ENV_QTC_VERSION%-win.zip *
 
 artifacts:
