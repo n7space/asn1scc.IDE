@@ -20,6 +20,9 @@ cp -r ${PROJECT_DIR}/generic-highlighter ${RESOURCE_DIST_DIR}
 cp -r ${PROJECT_DIR}/templates ${RESOURCE_DIST_DIR}
 cp -r ${PROJECT_DIR}/snippets ${RESOURCE_DIST_DIR}
 
+cp ${PROJECT_DIR}/LICENSE ${DIST_DIR}/${PLUGIN_NAME}-LICENSE
+cp ${PROJECT_DIR}/README.md ${DIST_DIR}/${PLUGIN_NAME}-README.md
+
 pushd ${DIST_DIR}
 tar czf ${PROJECT_DIR}/${PLUGIN_NAME}-${VERSION}-${OS_TAR_SUFFIX}.tar.gz *
 popd

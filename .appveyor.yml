@@ -55,6 +55,8 @@ after_build:
   - cmd: robocopy %APPVEYOR_BUILD_FOLDER%\generic-highlighter share\qtcreator\generic-highlighter /E || exit 0
   - cmd: robocopy %APPVEYOR_BUILD_FOLDER%\templates share\qtcreator\templates /E || exit 0
   - cmd: robocopy %APPVEYOR_BUILD_FOLDER%\snippets share\qtcreator\snippets /E || exit 0
+  - cmd: copy /Y %APPVEYOR_BUILD_FOLDER%\LICENSE Asn1Acn-LICENSE
+  - cmd: copy /Y %APPVEYOR_BUILD_FOLDER%\README.md Asn1Acn-README.md
   - cmd: 7z a %APPVEYOR_BUILD_FOLDER%\Asn1Acn-%ENV_QTC_VERSION%-win.zip *
 
 artifacts:
