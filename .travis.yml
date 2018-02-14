@@ -35,12 +35,11 @@ addons:
     - sourceline: "ppa:beineri/opt-qt593-trusty"
     - ubuntu-toolchain-r-test
     packages:
-    - g++-6
-    - gcc-6
+    - g++-4.9
+    - gcc-4.9
     - qt59-meta-minimal
     - qt59tools
     - p7zip
-    - libstdc++6
     - libgl1-mesa-dev
 
 install:
