@@ -40,75 +40,75 @@ QString networkErrorToString(QNetworkReply::NetworkError error)
     switch(error)
     {
     case QNetworkReply::ConnectionRefusedError:
-        return "ConnectionRefusedError";
+        return QStringLiteral("ConnectionRefusedError");
     case QNetworkReply::RemoteHostClosedError:
-        return "RemoteHostClosedError";
+        return QStringLiteral("RemoteHostClosedError");
     case QNetworkReply::HostNotFoundError:
-        return "HostNotFoundError";
+        return QStringLiteral("HostNotFoundError");
     case QNetworkReply::TimeoutError:
-        return "TimeoutError";
+        return QStringLiteral("TimeoutError");
     case QNetworkReply::OperationCanceledError:
-        return "OperationCanceledError";
+        return QStringLiteral("OperationCanceledError");
     case QNetworkReply::SslHandshakeFailedError:
-        return "SslHandshakeFailedError";
+        return QStringLiteral("SslHandshakeFailedError");
     case QNetworkReply::TemporaryNetworkFailureError:
-        return "TemporaryNetworkFailureError";
+        return QStringLiteral("TemporaryNetworkFailureError");
     case QNetworkReply::NetworkSessionFailedError:
-        return "NetworkSessionFailedError";
+        return QStringLiteral("NetworkSessionFailedError");
     case QNetworkReply::BackgroundRequestNotAllowedError:
-        return "BackgroundRequestNotAllowedError";
+        return QStringLiteral("BackgroundRequestNotAllowedError");
     case QNetworkReply::TooManyRedirectsError:
-        return "TooManyRedirectsError";
+        return QStringLiteral("TooManyRedirectsError");
     case QNetworkReply::InsecureRedirectError:
-        return "InsecureRedirectError";
+        return QStringLiteral("InsecureRedirectError");
     case QNetworkReply::UnknownNetworkError:
-        return "UnknownNetworkError";
+        return QStringLiteral("UnknownNetworkError");
 
     case QNetworkReply::ProxyConnectionRefusedError:
-        return "ProxyConnectionRefusedError";
+        return QStringLiteral("ProxyConnectionRefusedError");
     case QNetworkReply::ProxyConnectionClosedError:
-        return "ProxyConnectionClosedError";
+        return QStringLiteral("ProxyConnectionClosedError");
     case QNetworkReply::ProxyNotFoundError:
-        return "ProxyNotFoundError";
+        return QStringLiteral("ProxyNotFoundError");
     case QNetworkReply::ProxyTimeoutError:
-        return "ProxyTimeoutError";
+        return QStringLiteral("ProxyTimeoutError");
     case QNetworkReply::ProxyAuthenticationRequiredError:
-        return "ProxyAuthenticationRequiredError";
+        return QStringLiteral("ProxyAuthenticationRequiredError");
     case QNetworkReply::UnknownProxyError:
-        return "UnknownProxyError";
+        return QStringLiteral("UnknownProxyError");
 
     case QNetworkReply::ContentAccessDenied:
-        return "ContentAccessDenied";
+        return QStringLiteral("ContentAccessDenied");
     case QNetworkReply::ContentOperationNotPermittedError:
-        return "ContentOperationNotPermittedError";
+        return QStringLiteral("ContentOperationNotPermittedError");
     case QNetworkReply::ContentNotFoundError:
-        return "ContentNotFoundError";
+        return QStringLiteral("ContentNotFoundError");
     case QNetworkReply::AuthenticationRequiredError:
-        return "AuthenticationRequiredError";
+        return QStringLiteral("AuthenticationRequiredError");
     case QNetworkReply::ContentReSendError:
-        return "ContentReSendError";
+        return QStringLiteral("ContentReSendError");
     case QNetworkReply::ContentConflictError:
-        return "ContentConflictError";
+        return QStringLiteral("ContentConflictError");
     case QNetworkReply::ContentGoneError:
-        return "ContentGoneError";
+        return QStringLiteral("ContentGoneError");
     case QNetworkReply::UnknownContentError:
-        return "UnknownContentError";
+        return QStringLiteral("UnknownContentError");
 
     case QNetworkReply::ProtocolUnknownError:
-        return "ProtocolUnknownError";
+        return QStringLiteral("ProtocolUnknownError");
     case QNetworkReply::ProtocolInvalidOperationError:
-        return "ProtocolInvalidOperationError";
+        return QStringLiteral("ProtocolInvalidOperationError");
     case QNetworkReply::ProtocolFailure:
-        return "ProtocolFailure";
+        return QStringLiteral("ProtocolFailure");
 
     case QNetworkReply::InternalServerError:
-        return "InternalServerError";
+        return QStringLiteral("InternalServerError");
     case QNetworkReply::OperationNotImplementedError:
-        return "OperationNotImplementedError";
+        return QStringLiteral("OperationNotImplementedError");
     case QNetworkReply::ServiceUnavailableError:
-        return "ServiceUnavailableError";
+        return QStringLiteral("ServiceUnavailableError");
     case QNetworkReply::UnknownServerError:
-        return "UnknownServerError";
+        return QStringLiteral("UnknownServerError");
     default:
         return {};
     }
@@ -140,11 +140,11 @@ QString processStateToString(const QProcess::ProcessState state)
 {
     switch (state) {
     case QProcess::NotRunning:
-        return "NotRunning";
+        return QStringLiteral("NotRunning");
     case QProcess::Starting:
-        return "Starting";
+        return QStringLiteral("Starting");
     case QProcess::Running:
-        return "Running";
+        return QStringLiteral("Running");
     default:
         return {};
     }
@@ -159,17 +159,17 @@ QString processErrorToString(const QProcess::ProcessError error)
 {
     switch (error) {
     case QProcess::FailedToStart:
-        return "FailedToStart";
+        return QStringLiteral("FailedToStart");
     case QProcess::Crashed:
-        return "Crashed";
+        return QStringLiteral("Crashed");
     case QProcess::Timedout:
-        return "Timedout";
+        return QStringLiteral("Timedout");
     case QProcess::ReadError:
-        return "ReadError";
+        return QStringLiteral("ReadError");
     case QProcess::WriteError:
-        return "WriteError";
+        return QStringLiteral("WriteError");
     case QProcess::UnknownError:
-        return "Error";
+        return QStringLiteral("Error");
     default:
         return {};
     }
