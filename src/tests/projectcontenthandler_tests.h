@@ -41,6 +41,7 @@ class ProjectContentHandlerTests : public QObject
 
 public:
     explicit ProjectContentHandlerTests(QObject *parent = 0);
+    ~ProjectContentHandlerTests();
 
 private slots:
     void test_singleProjectAddedAndRemoved();
