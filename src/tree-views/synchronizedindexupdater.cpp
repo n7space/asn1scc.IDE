@@ -29,6 +29,7 @@
 
 #include "model.h"
 
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
 static const int UPDATE_INTERVAL_MS = 500;
@@ -85,34 +86,37 @@ void SynchronizedIndexUpdater::updateNow()
 
     QModelIndex index;
     if (m_editorWidget != nullptr)
-        index = getIndexFromParent(currentRootIndex(), getCurrentLine(), currentFileName().toString());
+        index = getIndexFromParent(currentRootIndex(), getCurrentLocation());
 
     emit currentIndexUpdated(index);
 }
 
-int SynchronizedIndexUpdater::getCurrentLine() const
+Data::SourceLocation SynchronizedIndexUpdater::getCurrentLocation() const
 {
     int line = 0;
     int column = 0;
     m_editorWidget->convertPosition(m_editorWidget->position(), &line, &column);
-    return line;
+
+    return Data::SourceLocation(currentFileName().toString(), line, column);
 }
 
 QModelIndex SynchronizedIndexUpdater::getIndexFromParent(const QModelIndex &parentIndex,
-                                                         const int line,
-                                                         const QString &fileName) const
+                                                         Data::SourceLocation currentLocation) const
 {
     for (int row = 0; row < m_model->rowCount(parentIndex); ++row) {
         const auto index = m_model->index(row, 0, parentIndex);
-        const auto location = m_model->dataNode(index)->location();
+        const auto node = m_model->dataNode(index);
+        const auto location = node->location();
 
-        if (location.path() != fileName)
+        if (location.path() != currentLocation.path())
             continue;
 
-        if (location.line() == line)
+        if (location.line() == currentLocation.line()
+            && currentLocation.column() >= location.column()
+            && currentLocation.column() <= location.column() + node->name().size())
             return index;
 
-        const auto childIndex = getIndexFromParent(index, line, fileName);
+        const auto childIndex = getIndexFromParent(index, currentLocation);
         if (childIndex.isValid())
             return childIndex;
     }

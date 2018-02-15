@@ -44,12 +44,12 @@ public:
 
 private slots:
     void test_setEmptyEditor();
-    void test_setNonEmpytEditorInitialCursorPosition();
     void test_setNonEmpytEditorChangedPosition();
 
     void test_cursorMovedToModule();
     void test_cursorMovedToTypeDefinition();
     void test_cursorMovedToEmptyLine();
+    void test_cursorMovedToSecondDefinitionInLine();
 
     void test_forceUpdate();
     void test_forceUpdateAfterCursorMoved();
