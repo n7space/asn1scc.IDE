@@ -36,9 +36,6 @@
 
 #include <extensionsystem/pluginmanager.h>
 
-#include <projectexplorer/projectexplorer.h>
-#include <projectexplorer/session.h>
-
 #include <texteditor/texteditorconstants.h>
 
 #include "completion/asnsnippets.h"
@@ -68,6 +65,7 @@
 #include "typeslocator.h"
 #include "tr.h"
 #include "tools.h"
+#include "importmenuitemcontroller.h"
 
 #ifdef WITH_TESTS
 #include "tests/astxmlparser_tests.h"
@@ -239,9 +237,9 @@ void Asn1AcnPlugin::initializeImportFromAsnComponents(ActionContainer *toolsMenu
     Core::Command *command = Core::ActionManager::registerAction(importFromAsnComponents, Constants::IMPORT_FROM_COMPONENTS_LIBRARY);
     connect(importFromAsnComponents, &QAction::triggered, this, &Asn1AcnPlugin::raiseImportComponentWindow);
     toolsMenu->addAction(command);
-    importFromAsnComponents->setEnabled(ProjectExplorer::SessionManager::hasProjects());
-    connect(ProjectExplorer::ProjectExplorerPlugin::instance(), &ProjectExplorer::ProjectExplorerPlugin::fileListChanged,
-            [importFromAsnComponents]() { importFromAsnComponents->setEnabled(ProjectExplorer::SessionManager::hasProjects()); });
+    importFromAsnComponents->setEnabled(false);
+
+    new ImportMenuItemController(importFromAsnComponents, this);
 }
 
 void Asn1AcnPlugin::addToToolsMenu(ActionContainer *container)
