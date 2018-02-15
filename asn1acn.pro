@@ -177,7 +177,8 @@ SOURCES += \
     sourcemapper.cpp \
     typeslocator.cpp \
     modelvalidityguard.cpp \
-    usagesfinder.cpp
+    usagesfinder.cpp \
+    importmenuitemcontroller.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -325,7 +326,8 @@ HEADERS += \
     sourcemapper.h \
     typeslocator.h \
     modelvalidityguard.h \
-    usagesfinder.h
+    usagesfinder.h \
+    importmenuitemcontroller.h
 
 FORMS += \
     options-pages/general.ui \
