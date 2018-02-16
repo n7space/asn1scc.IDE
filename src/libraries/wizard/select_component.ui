@@ -69,7 +69,7 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QTreeView" name="modulesView">
+    <widget class="Wizard::ModulesTreeView" name="modulesView">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -223,6 +223,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Wizard::ModulesTreeView</class>
+   <extends>QTreeView</extends>
+   <header location="global">libraries/wizard/modulestreeview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
