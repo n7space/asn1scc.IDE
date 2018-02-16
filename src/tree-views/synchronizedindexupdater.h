@@ -31,6 +31,8 @@
 #include <texteditor/texteditor.h>
 #include <utils/fileutils.h>
 
+#include <data/sourcelocation.h>
+
 #include "indexupdater.h"
 
 class QTreeView;
@@ -58,8 +60,8 @@ private:
     void updateNow();
     void createUpdateTimer();
 
-    int getCurrentLine() const;
-    QModelIndex getIndexFromParent(const QModelIndex &parentIndex, const int line, const QString &fileName) const;
+    Data::SourceLocation getCurrentLocation() const;
+    QModelIndex getIndexFromParent(const QModelIndex &parentIndex, Data::SourceLocation currentLocation) const;
 
     TextEditor::TextEditorWidget *m_editorWidget;
     QTimer *m_updateIndexTimer;

@@ -66,16 +66,17 @@ OutlineIndexUpdaterTests::~OutlineIndexUpdaterTests()
 TextEditor::TextEditorWidget *OutlineIndexUpdaterTests::createEditorWidget()
 {
     TextEditor::TextDocument *document = new TextEditor::TextDocument;
-    document->setPlainText("Test1 DEFINITIONS ::= BEGIN\n"
-                           "   Num1 ::= INTEGER (-100 .. 1000)\n"
-                           "   Num2 ::= INTEGER (0 .. 1000)\n"
-                           "END\n"
-                           "Test2 DEFINITIONS ::= BEGIN\n"
-                           "    Num3 ::= INTEGER (-100 .. 1000)\n"
-                           "    Num4 ::= INTEGER (0 .. 1000)\n"
-                           "END\n"
-                           "\n"
-                           "\n");
+    document->setPlainText(/*  1 */ "Test1 DEFINITIONS ::= BEGIN\n"
+                           /*  2 */ "   Num1 ::= INTEGER (-100 .. 1000)\n"
+                           /*  3 */ "   Num2 ::= INTEGER (0 .. 1000)\n"
+                           /*  4 */ "END\n"
+                           /*  5 */ "Test2 DEFINITIONS ::= BEGIN\n"
+                           /*  6 */ "    Num3 ::= INTEGER (-100 .. 1000)\n"
+                           /*  7 */ "    Num4 ::= INTEGER (0 .. 1000)\n"
+                           /*  8 */ "    Num5 ::= INTEGER (0 .. 1000) Num6 ::= INTEGER (0 .. 1000)\n"
+                           /*  9 */ "END\n"
+                           /* 10 */ "\n"
+                           /* 11 */ "\n");
 
     Utils::FileName fileName = Utils::FileName::fromString("file1.asn1");
     document->setFilePath(fileName);
@@ -92,14 +93,17 @@ Data::Node *OutlineIndexUpdaterTests::createModelNodes(const QString &filePath)
 {
     const auto root = new Data::File(filePath);
 
-    auto definitions1 = std::make_unique<Data::Definitions>("Module1", Data::SourceLocation{filePath, 0, 0});
-    definitions1->addType(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{filePath, 2, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Module1")));
-    definitions1->addType(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{filePath, 3, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Module1")));
+    auto definitions1 = std::make_unique<Data::Definitions>("Test1", Data::SourceLocation{filePath, 1, 0});
+    definitions1->addType(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{filePath, 2, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test1")));
+    definitions1->addType(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{filePath, 3, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test1")));
     root->add(std::move(definitions1));
 
-    auto definitions2 = std::make_unique<Data::Definitions>("Module2", Data::SourceLocation{filePath, 5, 0});
-    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{filePath, 6, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Module2")));
-    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{filePath, 7, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Module2")));
+    auto definitions2 = std::make_unique<Data::Definitions>("Test2", Data::SourceLocation{filePath, 5, 0});
+    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{filePath, 6, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
+    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{filePath, 7, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
+
+    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num5", Data::SourceLocation{filePath, 8, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
+    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num6", Data::SourceLocation{filePath, 8, 32}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
     root->add(std::move(definitions2));
 
     m_data = root;
@@ -111,24 +115,6 @@ void OutlineIndexUpdaterTests::test_setEmptyEditor()
     QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
 
     m_indexUpdater->setEditor(nullptr);
-
-    QCOMPARE(spy.count(), 1);
-
-    const QVariant result = spy.at(0).at(0);
-    QCOMPARE(result.type(), QVariant::ModelIndex);
-
-    const QModelIndex index = qvariant_cast<QModelIndex>(result);
-    QCOMPARE(index.isValid(), false);
-}
-
-void OutlineIndexUpdaterTests::test_setNonEmpytEditorInitialCursorPosition()
-{
-    QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
-
-    m_editorWidget->gotoLine(0);
-    m_indexUpdater->setEditor(m_editorWidget);
-
-    QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
 
     QCOMPARE(spy.count(), 1);
 
@@ -165,8 +151,10 @@ void OutlineIndexUpdaterTests::test_setNonEmpytEditorChangedPosition()
 void OutlineIndexUpdaterTests::test_cursorMovedToModule()
 {
     QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
+    const int lineNumber = 1;
+    const int columnNumber = 0;
 
-    m_editorWidget->gotoLine(1);
+    m_editorWidget->gotoLine(lineNumber, columnNumber);
     m_indexUpdater->setEditor(m_editorWidget);
 
     QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
@@ -177,7 +165,14 @@ void OutlineIndexUpdaterTests::test_cursorMovedToModule()
     QCOMPARE(result.type(), QVariant::ModelIndex);
 
     const QModelIndex index = qvariant_cast<QModelIndex>(result);
-    QCOMPARE(index.isValid(), false);
+    QCOMPARE(index.isValid(), true);
+
+    const auto node = m_model->dataNode(index);
+    const Data::SourceLocation location = node->location();
+
+    QCOMPARE(location.line(), lineNumber);
+    QCOMPARE(location.column(), columnNumber);
+    QCOMPARE(node->name(), QString("Test1"));
 }
 
 void OutlineIndexUpdaterTests::test_cursorMovedToTypeDefinition()
@@ -207,7 +202,7 @@ void OutlineIndexUpdaterTests::test_cursorMovedToEmptyLine()
 {
     QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
 
-    m_editorWidget->gotoLine(8);
+    m_editorWidget->gotoLine(10);
     m_indexUpdater->setEditor(m_editorWidget);
 
     QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
@@ -219,6 +214,31 @@ void OutlineIndexUpdaterTests::test_cursorMovedToEmptyLine()
 
     const QModelIndex index = qvariant_cast<QModelIndex>(result);
     QCOMPARE(index.isValid(), false);
+}
+
+void OutlineIndexUpdaterTests::test_cursorMovedToSecondDefinitionInLine()
+{
+    QSignalSpy spy(m_indexUpdater, &IndexUpdater::currentIndexUpdated);
+    const int lineNumber = 8;
+    const int columnNumber = 35;
+
+    m_editorWidget->gotoLine(lineNumber, columnNumber);
+    m_indexUpdater->setEditor(m_editorWidget);
+
+    QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
+
+    QCOMPARE(spy.count(), 1);
+
+    const QVariant result = spy.at(0).at(0);
+    QCOMPARE(result.type(), QVariant::ModelIndex);
+
+    const QModelIndex index = qvariant_cast<QModelIndex>(result);
+    QCOMPARE(index.isValid(), true);
+
+    const auto node = m_model->dataNode(index);
+    const Data::SourceLocation location = node->location();
+    QCOMPARE(location.line(), 8);
+    QCOMPARE(location.column(), 32);
 }
 
 void OutlineIndexUpdaterTests::test_forceUpdate()
