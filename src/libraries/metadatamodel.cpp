@@ -61,7 +61,7 @@ Qt::ItemFlags MetadataModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
-    return Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
+    return Qt::ItemIsEnabled | Qt::ItemIsUserCheckable | Qt::ItemIsSelectable;
 }
 
 QModelIndex MetadataModel::index(int row, int column, const QModelIndex &parent) const

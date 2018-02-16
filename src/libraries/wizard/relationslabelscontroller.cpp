@@ -102,15 +102,24 @@ void appendModuleItems(const QList<Metadata::Reference> &references, QTreeWidget
 }
 } // namespace Anonymous
 
-void RelationsLabelsController::onFocusedItemChanged(const QModelIndex &current, const QModelIndex &previous) const
+void RelationsLabelsController::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
-    Q_UNUSED(previous);
+    Q_UNUSED(deselected);
 
-    if (!current.isValid())
-        return;
+    clearRelationsTrees();
+    buildRelationsTrees(selected.indexes().value(0));
+}
 
+void RelationsLabelsController::clearRelationsTrees()
+{
     m_requiresTree->clear();
     m_conflictsTree->clear();
+}
+
+void RelationsLabelsController::buildRelationsTrees(const QModelIndex &current)
+{
+    if (!current.isValid())
+        return;
 
     QList<Metadata::Reference> requirements;
     QList<Metadata::Reference> conflicts;
