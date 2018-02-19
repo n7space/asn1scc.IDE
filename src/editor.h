@@ -44,12 +44,17 @@ protected:
     void openFinishedSuccessfully() override;
 
     void finalizeInitialization() override;
+    void finalizeInitializationAfterDuplication(TextEditorWidget *other) override;
+
     void contextMenuEvent(QContextMenuEvent *) override;
 
     Utils::CommentDefinition m_commentDefinition;
 
 private slots:
     void onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections);
+
+private:
+    void addOutlineCombo();
 };
 
 } // namespace Internal
