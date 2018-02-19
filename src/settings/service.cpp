@@ -54,7 +54,7 @@ void Service::saveOptionsTo(QSettings *s) const
 
 static QString defaultDaemonPath()
 {
-  return Core::ICore::libexecPath() + QLatin1String("/asn1scc/asn1.daemon.exe");
+  return Core::ICore::libexecPath() + QLatin1String("/asn1scc/daemon/asn1.daemon.exe");
 }
 
 void Service::loadOptionsFrom(QSettings *s)
