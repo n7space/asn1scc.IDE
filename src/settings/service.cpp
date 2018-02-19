@@ -25,7 +25,10 @@
 
 #include "service.h"
 
+#include <QDir>
+
 #include <utils/hostosinfo.h>
+#include <plugins/coreplugin/icore.h>
 
 using namespace Asn1Acn::Internal::Settings;
 
@@ -44,14 +47,19 @@ QString Service::name() const
 
 void Service::saveOptionsTo(QSettings *s) const
 {
-    s->setValue(PATH, path());
+    s->setValue(PATH, QDir::fromNativeSeparators(path()));
     s->setValue(BASE_URI, baseUri());
     s->setValue(STAY_ALIVE_PERIOD, stayAlivePeriod());
 }
 
+static QString defaultDaemonPath()
+{
+  return Core::ICore::libexecPath() + QLatin1String("/asn1scc/asn1.daemon.exe");
+}
+
 void Service::loadOptionsFrom(QSettings *s)
 {
-    setPath(s->value(PATH, "/opt/asn1sccDaemon/asn1scc/Daemon/bin/Debug/Daemon.exe").toString()); // TODO good default, TODO windows support
+    setPath(s->value(PATH, defaultDaemonPath()).toString());
     setBaseUri(s->value(BASE_URI,
                         Utils::HostOsInfo::isWindowsHost()
                         ? "http://+:80/Temporary_Listen_Addresses/asn1scc.IDE/"
