@@ -41,8 +41,16 @@ using namespace Core;
 
 void EditorWidget::openFinishedSuccessfully()
 {
-    insertExtraToolBarWidget(TextEditorWidget::Left,
-                             new TreeViews::OutlineCombo(textDocument()->filePath().toString(), this));
+    addOutlineCombo();
+
+    TextEditorWidget::openFinishedSuccessfully();
+}
+
+void EditorWidget::finalizeInitializationAfterDuplication(TextEditorWidget *other)
+{
+    Q_UNUSED(other);
+
+    addOutlineCombo();
 }
 
 void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
@@ -66,7 +74,6 @@ void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
 
 void EditorWidget::finalizeInitialization()
 {
-    // TODO finalizeInitializationAfterDuplication
     // TODO ? setLanguageSettingsId(Constants::SettingsId);
 
     auto document = qobject_cast<Document *>(textDocument());
@@ -77,4 +84,10 @@ void EditorWidget::finalizeInitialization()
 void EditorWidget::onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections)
 {
     setExtraSelections(TextEditorWidget::CodeWarningsSelection, selections);
+}
+
+void EditorWidget::addOutlineCombo()
+{
+    insertExtraToolBarWidget(TextEditorWidget::Left,
+                             new TreeViews::OutlineCombo(textDocument()->filePath().toString(), this));
 }
