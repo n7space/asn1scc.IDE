@@ -42,6 +42,8 @@ using namespace Core;
 void EditorWidget::openFinishedSuccessfully()
 {
     addOutlineCombo();
+
+    TextEditorWidget::openFinishedSuccessfully();
 }
 
 void EditorWidget::finalizeInitializationAfterDuplication(TextEditorWidget *other)
