@@ -60,7 +60,7 @@ after_build:
   - cmd: mkdir bin
   - cmd: curl -fsSL "https://drive.google.com/uc?export=download&id=1tzZdsXU4CHbppf4TQMrkNx-6p0zsCuEt" -o %DOWNLOAD_DIR%\asn1scc.7z
   - cmd: 7z x -y "%DOWNLOAD_DIR%\asn1scc.7z" -o"bin" | findstr /b /r /c:"\<Everything is Ok"
-  - cmd: 7z a %APPVEYOR_BUILD_FOLDER%\Asn1Acn-%ENV_QTC_VERSION%-win.zip *
+  - cmd: 7z a %APPVEYOR_BUILD_FOLDER%\Asn1Acn-%APPVEYOR_REPO_TAG_NAME%-win.zip *
 
 artifacts:
   - path: 'Asn1Acn-*.zip'

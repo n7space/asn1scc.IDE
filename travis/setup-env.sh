@@ -12,8 +12,6 @@ QTC_BUILD_DIR="$( mkdir -p ${QTC_BUILD_DIR_REL} && cd ${QTC_BUILD_DIR_REL} && pw
 DIST_DIR_REL="${PROJECT_DIR}/../asn1scc.IDE-dist"
 DIST_DIR="$( mkdir -p ${DIST_DIR_REL} && cd ${DIST_DIR_REL} && pwd )"
 PLUGIN_NAME="Asn1Acn"
-# TODO better version
-VERSION="4.5.0"
 
 echo "OS: ${BUILD_OS_NAME}"
 echo "Project directory: ${PROJECT_DIR}"

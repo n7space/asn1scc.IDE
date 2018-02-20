@@ -34,5 +34,5 @@ cp ${PROJECT_DIR}/README.md ${DIST_DIR}/${PLUGIN_NAME}-README.md
 
 echo "Creating package"
 pushd ${DIST_DIR}
-tar czf ${PROJECT_DIR}/${PLUGIN_NAME}-${VERSION}-${OS_TAR_SUFFIX}.tar.gz *
+tar czf ${PROJECT_DIR}/${PLUGIN_NAME}-${TRAVIS_TAG}-${OS_TAR_SUFFIX}.tar.gz *
 popd
