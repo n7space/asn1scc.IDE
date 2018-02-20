@@ -44,7 +44,7 @@ ChildReturningVisitor::~ChildReturningVisitor()
 Node *ChildReturningVisitor::valueFor(const Definitions &defs) const
 {
     if (static_cast<std::size_t>(m_index) >= defs.types().size())
-        return defs.variables().at(m_index - defs.types().size()).get();
+        return defs.values().at(m_index - defs.types().size()).get();
     return defs.types().at(m_index).get();
 }
 
@@ -59,9 +59,9 @@ Node *ChildReturningVisitor::valueFor(const TypeAssignment &type) const
     return nullptr;
 }
 
-Node *ChildReturningVisitor::valueFor(const VariableAssignment &variable) const
+Node *ChildReturningVisitor::valueFor(const ValueAssignment &value) const
 {
-    Q_UNUSED(variable);
+    Q_UNUSED(value);
     return nullptr;
 }
 

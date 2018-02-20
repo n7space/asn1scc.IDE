@@ -27,7 +27,7 @@
 #include <data/definitions.h>
 #include <data/file.h>
 #include <data/typeassignment.h>
-#include <data/variableassignment.h>
+#include <data/valueassignment.h>
 #include <data/project.h>
 
 using namespace Asn1Acn::Internal::TreeViews;
@@ -52,9 +52,9 @@ QString DisplayRoleVisitor::valueFor(const TypeAssignment &type) const
     return type.name() + type.type()->label();
 }
 
-QString DisplayRoleVisitor::valueFor(const VariableAssignment &variable) const
+QString DisplayRoleVisitor::valueFor(const ValueAssignment &value) const
 {
-    return variable.name() + variable.type()->label();
+    return value.name() + value.type()->label();
 }
 
 QString DisplayRoleVisitor::valueFor(const Project &project) const

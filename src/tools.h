@@ -22,8 +22,9 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
+
+#include <QString>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -31,6 +32,9 @@ namespace Tools {
 
 void switchBetweenDataAndEncoding();
 void switchBetweenDataAndEncodingInNextSplit();
+
+bool isAsnFile(const QString &path);
+bool isAcnFile(const QString &path);
 
 } // namespace Tools
 } // namespace Internal

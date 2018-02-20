@@ -42,13 +42,11 @@ public:
 private slots:
     void test_emptyFile();
     void test_badXmlRoot();
-    void test_missingAsn1Module();
     void test_emptyDefinitions();
     void test_singleTypeAssignment();
     void test_builtinTypeReference();
     void test_builtinTypeReference_data();
     void test_userDefinedTypeReference();
-    void test_userDefinedTypeReferenceInOtherModule();
     void test_multipleTypeAssignments();
     void test_importedType();
     void test_multipleImportedType();
@@ -57,9 +55,11 @@ private slots:
     void test_sequenceTypeAssingment();
     void test_sequenceOfTypeAssingment();
     void test_choiceTypeAssignment();
-    void test_variableAssignment();
-    void test_importedVariable();
-    void test_multipleImportedVariable();
+    void test_valueAssignment();
+    void test_importedValues();
+    void test_multipleImportedValues();
+    void test_multipleModules();
+    void test_multipleFiles();
 
 private:
     void setXmlData(const QString& str);

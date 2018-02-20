@@ -29,7 +29,7 @@
 #include <data/definitions.h>
 #include <data/file.h>
 #include <data/typeassignment.h>
-#include <data/variableassignment.h>
+#include <data/valueassignment.h>
 #include <data/typereference.h>
 #include <data/project.h>
 
@@ -63,9 +63,9 @@ QIcon DecorationRoleVisitor::valueFor(const TypeAssignment &type) const
     return type.type()->typeIcon();
 }
 
-QIcon DecorationRoleVisitor::valueFor(const VariableAssignment &variable) const
+QIcon DecorationRoleVisitor::valueFor(const ValueAssignment &value) const
 {
-    return variable.type()->variableIcon();
+    return value.type()->valueIcon();
 }
 
 QIcon DecorationRoleVisitor::valueFor(const Project &project) const

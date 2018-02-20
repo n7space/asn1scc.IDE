@@ -96,3 +96,13 @@ void Asn1Acn::Internal::Tools::switchBetweenDataAndEncodingInNextSplit()
     if (!otherFile.isEmpty())
         Core::EditorManager::openEditor(otherFile, Core::Id(), Core::EditorManager::OpenInOtherSplit);
 }
+
+bool Asn1Acn::Internal::Tools::isAsnFile(const QString &path)
+{
+    return Utils::mimeTypeForFile(path).name() == Constants::ASN1_MIMETYPE;
+}
+
+bool Asn1Acn::Internal::Tools::isAcnFile(const QString &path)
+{
+    return Utils::mimeTypeForFile(path).name() == Constants::ACN_MIMETYPE;
+}

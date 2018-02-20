@@ -45,10 +45,10 @@ private:
     Data::Node *valueFor(const Data::Definitions &defs) const override;
     Data::Node *valueFor(const Data::File &file) const override;
     Data::Node *valueFor(const Data::TypeAssignment &type) const override;
-    Data::Node *valueFor(const Data::VariableAssignment &variable) const override;
+    Data::Node *valueFor(const Data::ValueAssignment &value) const override;
     Data::Node *valueFor(const Data::Project &project) const override;
 
-    bool isVariable() const;
+    bool isValue() const;
     template <typename Collection>
     Data::Node *findImportByName(const Collection &col) const;
 

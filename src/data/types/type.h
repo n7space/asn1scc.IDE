@@ -40,7 +40,7 @@ public:
     virtual ~Type() = default;
 
     QIcon typeIcon() const;
-    QIcon variableIcon() const;
+    QIcon valueIcon() const;
 
     virtual QString name() const = 0;
     virtual QString label() const = 0;

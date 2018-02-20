@@ -37,6 +37,7 @@
 #include <messages/messageutils.h>
 #include <messages/messagemanager.h>
 
+#include "tools.h"
 #include "asn1acnconstants.h"
 
 using namespace Asn1Acn::Internal;
@@ -120,21 +121,32 @@ QStringList Asn1SccServiceProvider::additionalArguments() const
     return arguments;
 }
 
+namespace {
+QJsonObject buildFileData(const QString &path, const QString &contents)
+{
+    QJsonObject asnFileData;
+    asnFileData["Name"] = QFileInfo(path).fileName();
+    asnFileData["Contents"] = contents;
+    return asnFileData;
+}
+}
+
 QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QHash<QString, QString> &documents) const
 {
-    QJsonArray documentArray;
+    QJsonArray asnFilesArray;
+    QJsonArray acnFilesArray;
 
     for (auto it = documents.begin(); it != documents.end(); it++) {
-        QJsonObject asnFileData;
-        asnFileData["Name"] = QFileInfo(it.key()).fileName();
-        asnFileData["Contents"] = it.value();
-
-        documentArray.append(asnFileData);
+        if (Tools::isAsnFile(it.key()))
+            asnFilesArray.append(buildFileData(it.key(), it.value()));
+        else if (Tools::isAcnFile(it.key()))
+            acnFilesArray.append(buildFileData(it.key(), it.value()));
     }
 
     QJsonObject files;
-    files["AsnFiles"] = documentArray;
-    files["AcnFiles"] = QJsonArray();
+    files["AsnFiles"] = asnFilesArray;
+    files["AcnFiles"] = acnFilesArray;
+    files["AcnFiles"] = QJsonArray(); // TODO for now (As long as asn1scc fails)
 
     return QJsonDocument(files);
 }

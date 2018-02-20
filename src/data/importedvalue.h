@@ -22,24 +22,29 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "variableassignment.h"
+#pragma once
 
-#include "visitor.h"
+#include <QString>
 
-using namespace Asn1Acn::Internal::Data;
+namespace Asn1Acn {
+namespace Internal {
+namespace Data {
 
-VariableAssignment::VariableAssignment(const QString &name,
-                                       const SourceLocation &location,
-                                       std::unique_ptr<Types::Type> type)
-    : Node(name, location)
-    , m_type(std::move(type))
-{}
-
-VariableAssignment::~VariableAssignment()
+class ImportedValue
 {
-}
+public:
+    ImportedValue(const QString &module, const QString &name)
+        : m_module(module), m_name(name)
+    {}
 
-void VariableAssignment::accept(Visitor &visitor) const
-{
-    visitor.visit(*this);
-}
+    const QString &module() const { return m_module; }
+    const QString &name() const { return m_name; }
+
+private:
+    QString m_module;
+    QString m_name;
+};
+
+} // namespace Data
+} // namespace Internal
+} // namespace Asn1Acn

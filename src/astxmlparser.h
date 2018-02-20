@@ -48,43 +48,48 @@ public:
     std::map<QString, std::unique_ptr<Data::File>> takeData() { return std::move(m_data); }
 
 private:
-    void readASN1AST();
+    void readAstRoot();
     void readAsn1File();
-    void readAsn1Module();
+    void readModules();
+    void readModule();
     void readExportedTypes();
-    void readExportedVariables();
+    void readExportedValues();
     void readImportedModules();
     void readTypeAssignments();
-    void readVariablesAssignments();
-    void readAsn1ModuleChildren();
+    void readValueAssignments();
+    void readModuleChildren();
     void readTypeAssignment();
-    void readVariableAssignment();
+    void readValueAssignment();
 
     void updateCurrentFile();
-    void createNewAsn1Module();
+    void createNewModule();
     QString readIdAttribute();
     QString readNameAttribute();
     int readLineAttribute();
     int readCharPossitionInLineAttribute();
 
     void readImportedModule();
-    void readImportedVariables(const QString &moduleName);
-    void readImportedVariable(const QString &moduleName);
+    void readImportedValues(const QString &moduleName);
+    void readImportedValue(const QString &moduleName);
     void readImportedTypes(const QString &moduleName);
     void readImportedType(const QString &moduleName);
 
     Data::SourceLocation readLocationFromAttributes();
 
     std::unique_ptr<Data::Types::Type> readType();
-    std::unique_ptr<Data::Types::Type> readUserDefinedTypeReference(const Data::SourceLocation &location);
+    std::unique_ptr<Data::Types::Type> readTypeDetails(const Data::SourceLocation &location);
+    std::unique_ptr<Data::Types::Type> readReferenceType(const Data::SourceLocation &location);
+    std::unique_ptr<Data::Types::Type> buildTypeFromName(const Data::SourceLocation &location,
+                                                         const QStringRef &name);
     void readSequence();
     void readSequenceOf();
     void readChoice();
 
-    QString readReferencedTypeNameAttribute();
-    QString readReferencedModuleAttribute();
+    QString readTypeAssignmentAttribute();
+    QString readModuleAttribute();
 
     bool nextRequiredElementIs(const QString &name);
+    bool skipToChildElement(const QString &name);
 
     QXmlStreamReader &m_xmlReader;
     std::map<QString, std::unique_ptr<Data::File>> m_data;

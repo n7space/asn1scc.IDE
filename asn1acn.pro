@@ -75,7 +75,7 @@ SOURCES += \
     data/file.cpp \
     data/project.cpp \
     data/typeassignment.cpp \
-    data/variableassignment.cpp \
+    data/valueassignment.cpp \
     data/typereference.cpp \
     data/definitions.cpp \
     data/visitor.cpp \
@@ -198,7 +198,7 @@ HEADERS += \
     \
     data/sourcelocation.h \
     data/typeassignment.h \
-    data/variableassignment.h \
+    data/valueassignment.h \
     data/definitions.h \
     data/typereference.h \
     data/errormessage.h \
@@ -209,7 +209,7 @@ HEADERS += \
     data/visitor.h \
     data/visitorwithvalue.h \
     data/importedtype.h \
-    data/importedvariable.h \
+    data/importedvalue.h \
     \
     data/types/type.h \
     data/types/userdefinedtype.h \

@@ -50,8 +50,8 @@ private:
     void appendImportedTypes(const Data::Definitions::ImportedTypes &importedTypes);
     void appendInternalTypes(const Data::Definitions::Types &types);
 
-    void appendInternalVariables(const Data::Definitions::Variables &variables);
-    void appendImportedVariables(const Data::Definitions::ImportedVariables &importedVariables);
+    void appendInternalValues(const Data::Definitions::Values &values);
+    void appendImportedValues(const Data::Definitions::ImportedValues &importedValues);
 
     void appendImportedElement(const QString &module, const QString &name);
 

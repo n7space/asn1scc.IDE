@@ -40,22 +40,29 @@ AstXmlParser::AstXmlParser(QXmlStreamReader &xmlReader, const SourceMapper &mapp
 
 bool AstXmlParser::parse()
 {
-    if (nextRequiredElementIs(QStringLiteral("ASN1AST")))
-        readASN1AST();
+    if (nextRequiredElementIs(QStringLiteral("AstRoot")))
+        readAstRoot();
     return !m_xmlReader.hasError();
 }
 
-void AstXmlParser::readASN1AST()
+void AstXmlParser::readAstRoot()
 {
-    while (nextRequiredElementIs(QStringLiteral("Asn1File")))
+    while (skipToChildElement(QStringLiteral("Asn1File")))
         readAsn1File();
 }
 
 void AstXmlParser::readAsn1File()
 {
     updateCurrentFile();
-    while (nextRequiredElementIs(QStringLiteral("Asn1Module")))
-        readAsn1Module();
+    if (nextRequiredElementIs(QStringLiteral("Modules")))
+        readModules();
+    m_xmlReader.skipCurrentElement();
+}
+
+void AstXmlParser::readModules()
+{
+    while (nextRequiredElementIs(QStringLiteral("Module")))
+        readModule();
 }
 
 void AstXmlParser::updateCurrentFile()
@@ -65,38 +72,38 @@ void AstXmlParser::updateCurrentFile()
     m_data.insert(std::make_pair(m_currentFile, std::make_unique<Data::File>(m_currentFile)));
 }
 
-void AstXmlParser::readAsn1ModuleChildren()
+void AstXmlParser::readModuleChildren()
 {
     while (m_xmlReader.readNextStartElement())
     {
         if (m_xmlReader.name() == QStringLiteral("ExportedTypes"))
             readExportedTypes();
-        else if (m_xmlReader.name() == QStringLiteral("ExportedVariables"))
-            readExportedVariables();
+        else if (m_xmlReader.name() == QStringLiteral("ExportedValues"))
+            readExportedValues();
         else if (m_xmlReader.name() == QStringLiteral("ImportedModules"))
             readImportedModules();
         else if (m_xmlReader.name() == QStringLiteral("TypeAssignments"))
             readTypeAssignments();
-        else if (m_xmlReader.name() == QStringLiteral("VariablesAssignments"))
-            readVariablesAssignments();
+        else if (m_xmlReader.name() == QStringLiteral("ValueAssignments"))
+            readValueAssignments();
         else
             m_xmlReader.skipCurrentElement();
     }
 }
 
-void AstXmlParser::createNewAsn1Module()
+void AstXmlParser::createNewModule()
 {
-    const auto location = Data::SourceLocation(m_currentFile, 1, 0); // TODO location of DEFINITIONS begin (fix in asn1scc required)
-    m_currentModule = readIdAttribute();
+    const auto location = readLocationFromAttributes();
+    m_currentModule = readNameAttribute();
     auto module = std::make_unique<Data::Definitions>(m_currentModule, location);
     m_currentDefinitions = module.get();
     m_data[m_currentFile]->add(std::move(module));
 }
 
-void AstXmlParser::readAsn1Module()
+void AstXmlParser::readModule()
 {
-    createNewAsn1Module();
-    readAsn1ModuleChildren();
+    createNewModule();
+    readModuleChildren();
 }
 
 QString AstXmlParser::readIdAttribute()
@@ -104,10 +111,10 @@ QString AstXmlParser::readIdAttribute()
     return m_xmlReader.attributes().value("ID").toString();
 }
 
-void AstXmlParser::readVariablesAssignments()
+void AstXmlParser::readValueAssignments()
 {
-    while (nextRequiredElementIs(QStringLiteral("VariableAssignment")))
-        readVariableAssignment();
+    while (nextRequiredElementIs(QStringLiteral("ValueAssignment")))
+        readValueAssignment();
 }
 
 void AstXmlParser::readTypeAssignments()
@@ -122,32 +129,31 @@ void AstXmlParser::readTypeAssignment()
     const auto location = readLocationFromAttributes();
     const auto name = readNameAttribute();
     auto type = readType();
+    m_xmlReader.skipCurrentElement();
 
     m_currentDefinitions->addType(std::make_unique<Data::TypeAssignment>(name, location, std::move(type)));
     m_data[m_currentFile]->addTypeReference(std::make_unique<Data::TypeReference>(name, m_currentDefinitions->name(), location));
 }
 
-void AstXmlParser::readVariableAssignment()
+void AstXmlParser::readValueAssignment()
 {
     Q_ASSERT(m_currentDefinitions != nullptr);
     const auto location = readLocationFromAttributes();
     const auto name = readNameAttribute();
     auto type = readType();
+    m_xmlReader.skipCurrentElement();
 
-    m_currentDefinitions->addVariable(std::make_unique<Data::VariableAssignment>(name, location, std::move(type)));
+    m_currentDefinitions->addValue(std::make_unique<Data::ValueAssignment>(name, location, std::move(type)));
 }
 
-QString AstXmlParser::readReferencedTypeNameAttribute()
+QString AstXmlParser::readTypeAssignmentAttribute()
 {
-    return m_xmlReader.attributes().value(QStringLiteral("ReferencedTypeName")).toString();
+    return m_xmlReader.attributes().value(QStringLiteral("TypeAssignment")).toString();
 }
 
-QString AstXmlParser::readReferencedModuleAttribute()
+QString AstXmlParser::readModuleAttribute()
 {
-    const auto moduleName = m_xmlReader.attributes().value(QStringLiteral("ReferencedModName")).toString();
-    if (moduleName.isEmpty())
-        return m_currentModule;
-    return moduleName;
+    return m_xmlReader.attributes().value(QStringLiteral("Module")).toString();
 }
 
 QString AstXmlParser::readNameAttribute()
@@ -178,22 +184,22 @@ void AstXmlParser::readImportedModule()
     {
         if (m_xmlReader.name() == QStringLiteral("ImportedTypes"))
             readImportedTypes(moduleName);
-        else if (m_xmlReader.name() == QStringLiteral("ImportedVariables"))
-            readImportedVariables(moduleName);
+        else if (m_xmlReader.name() == QStringLiteral("ImportedValues"))
+            readImportedValues(moduleName);
         else
             m_xmlReader.skipCurrentElement();
     }
 }
 
-void AstXmlParser::readImportedVariables(const QString &moduleName)
+void AstXmlParser::readImportedValues(const QString &moduleName)
 {
-    while (nextRequiredElementIs(QStringLiteral("ImportedVariable")))
-        readImportedVariable(moduleName);
+    while (nextRequiredElementIs(QStringLiteral("ImportedValue")))
+        readImportedValue(moduleName);
 }
 
-void AstXmlParser::readImportedVariable(const QString &moduleName)
+void AstXmlParser::readImportedValue(const QString &moduleName)
 {
-    m_currentDefinitions->addImportedVariable({moduleName, readNameAttribute()});
+    m_currentDefinitions->addImportedValue({moduleName, readNameAttribute()});
     m_xmlReader.skipCurrentElement();
 }
 
@@ -209,7 +215,7 @@ void AstXmlParser::readImportedType(const QString &moduleName)
     m_xmlReader.skipCurrentElement();
 }
 
-void AstXmlParser::readExportedVariables()
+void AstXmlParser::readExportedValues()
 {
     m_xmlReader.skipCurrentElement();
 }
@@ -236,42 +242,49 @@ Data::SourceLocation AstXmlParser::readLocationFromAttributes()
 
 std::unique_ptr<Data::Types::Type> AstXmlParser::readType()
 {
-    if (!nextRequiredElementIs("Type"))
+    if (!skipToChildElement(QStringLiteral("Asn1Type")))
         return {};
 
     const auto location = readLocationFromAttributes();
+    auto type = readTypeDetails(location);
 
-    m_xmlReader.readNextStartElement();
-
-    std::unique_ptr<Data::Types::Type> type;
-
-    const auto name = m_xmlReader.name();
-    if (name == QStringLiteral("ReferenceType")) {
-        type = readUserDefinedTypeReference(location);
-        m_xmlReader.skipCurrentElement();
-    } else {
-        type = Data::Types::BuiltinType::createBuiltinType(name.toString());
-
-        if (name == QStringLiteral("SequenceType"))
-            readSequence();
-        else if (name == QStringLiteral("SequenceOfType"))
-            readSequenceOf();
-        else if (name == QStringLiteral("ChoiceType"))
-            readChoice();
-        else
-            m_xmlReader.skipCurrentElement();
-    }
-
-    m_xmlReader.skipCurrentElement();
     m_xmlReader.skipCurrentElement();
 
     return type;
 }
 
-std::unique_ptr<Data::Types::Type> AstXmlParser::readUserDefinedTypeReference(const Data::SourceLocation &location)
+std::unique_ptr<Data::Types::Type> AstXmlParser::readTypeDetails(const Data::SourceLocation &location)
 {
-    const QString refName = readReferencedTypeNameAttribute();
-    const QString module = readReferencedModuleAttribute();
+    if (!m_xmlReader.readNextStartElement())
+        return {};
+
+    const auto name = m_xmlReader.name();
+    auto type = buildTypeFromName(location, name);
+
+    if (name == QStringLiteral("SEQUENCE"))
+        readSequence();
+    else if (name == QStringLiteral("SEQUENCE_OF"))
+        readSequenceOf();
+    else if (name == QStringLiteral("CHOICE"))
+        readChoice();
+    else
+        m_xmlReader.skipCurrentElement();
+
+    return type;
+}
+
+std::unique_ptr<Data::Types::Type> AstXmlParser::buildTypeFromName(const Data::SourceLocation &location,
+                                                                   const QStringRef &name)
+{
+    if (name == QStringLiteral("REFERENCE_TYPE"))
+        return readReferenceType(location);
+    return Data::Types::BuiltinType::createBuiltinType(name.toString());
+}
+
+std::unique_ptr<Data::Types::Type> AstXmlParser::readReferenceType(const Data::SourceLocation &location)
+{
+    const QString refName = readTypeAssignmentAttribute();
+    const QString module = readModuleAttribute();
 
     auto ref = std::make_unique<Data::TypeReference>(refName, module, location);
 
@@ -282,17 +295,35 @@ std::unique_ptr<Data::Types::Type> AstXmlParser::readUserDefinedTypeReference(co
 
 void AstXmlParser::readSequence()
 {
-    while(nextRequiredElementIs(QStringLiteral("SequenceOrSetChild")))
+    while (skipToChildElement(QStringLiteral("SEQUENCE_COMPONENT"))) {
         readType();
+        m_xmlReader.skipCurrentElement();
+    }
+}
+
+bool AstXmlParser::skipToChildElement(const QString &name)
+{
+    while (m_xmlReader.readNextStartElement())
+    {
+        if (m_xmlReader.name() == name)
+            return true;
+        else
+            m_xmlReader.skipCurrentElement();
+    }
+
+    return false;
 }
 
 void AstXmlParser::readSequenceOf()
 {
-    readType();
+    if (readType())
+        m_xmlReader.skipCurrentElement();
 }
 
 void AstXmlParser::readChoice()
 {
-    while(nextRequiredElementIs(QStringLiteral("ChoiceChild")))
+    while (skipToChildElement(QStringLiteral("CHOICE_ALTERNATIVE"))) {
         readType();
+        m_xmlReader.skipCurrentElement();
+    }
 }

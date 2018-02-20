@@ -59,30 +59,30 @@ void DisplayRoleVisitorTests::test_file()
 void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn()
 {
     QFETCH(QString, typeName);
-    QFETCH(QString, type);
+    QFETCH(QString, typeDisplayName);
 
     TypeAssignment typeAssignment("TypeName", {}, Data::Types::BuiltinType::createBuiltinType(typeName));
 
-    QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: " + type));
+    QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: " + typeDisplayName));
 }
 
 void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn_data()
 {
     QTest::addColumn<QString>("typeName");
-    QTest::addColumn<QString>("type");
+    QTest::addColumn<QString>("typeDisplayName");
 
-    QTest::newRow("Boolean")       << "BooleanType"       << "BOOLEAN";
-    QTest::newRow("Null")          << "NullType"          << "NULL";
-    QTest::newRow("Integer")       << "IntegerType"       << "INTEGER";
-    QTest::newRow("Real")          << "RealType"          << "REAL";
-    QTest::newRow("BitString")     << "BitStringType"     << "BIT STRING";
-    QTest::newRow("OctetString")   << "OctetStringType"   << "OCTET STRING";
-    QTest::newRow("IA5String")     << "IA5StringType"     << "IA5String";
-    QTest::newRow("NumericString") << "NumericStringType" << "NumericString";
-    QTest::newRow("Enumerated")    << "EnumeratedType"    << "ENUMERATED";
-    QTest::newRow("Choice")        << "ChoiceType"        << "CHOICE";
-    QTest::newRow("Sequence")      << "SequenceType"      << "SEQUENCE";
-    QTest::newRow("SequenceOf")    << "SequenceOfType"    << "SEQUENCE OF";
+    QTest::newRow("Boolean")       << "BOOLEAN"       << "BOOLEAN";
+    QTest::newRow("Null")          << "NULL"          << "NULL";
+    QTest::newRow("Integer")       << "INTEGER"       << "INTEGER";
+    QTest::newRow("Real")          << "REAL"          << "REAL";
+    QTest::newRow("BitString")     << "BIT_STRING"    << "BIT STRING";
+    QTest::newRow("OctetString")   << "OCTET_STRING"  << "OCTET STRING";
+    QTest::newRow("IA5String")     << "IA5String"     << "IA5String";
+    QTest::newRow("NumericString") << "NumericString" << "NumericString";
+    QTest::newRow("Enumerated")    << "Enumerated"    << "ENUMERATED";
+    QTest::newRow("Choice")        << "CHOICE"        << "CHOICE";
+    QTest::newRow("Sequence")      << "SEQUENCE"      << "SEQUENCE";
+    QTest::newRow("SequenceOf")    << "SEQUENCE_OF"   << "SEQUENCE OF";
 }
 
 void DisplayRoleVisitorTests::test_typeAssignmentUserDefined()

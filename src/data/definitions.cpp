@@ -48,11 +48,11 @@ void Definitions::addType(std::unique_ptr<TypeAssignment> type)
     m_types.push_back(std::move(type));
 }
 
-void Definitions::addVariable(std::unique_ptr<VariableAssignment> variable)
+void Definitions::addValue(std::unique_ptr<ValueAssignment> value)
 {
-    variable->setParent(this);
-    m_variableByNameMap[variable->name()] = variable.get();
-    m_variables.push_back(std::move(variable));
+    value->setParent(this);
+    m_valueByNameMap[value->name()] = value.get();
+    m_values.push_back(std::move(value));
 }
 
 void Definitions::addImportedType(const ImportedType &type)
@@ -60,9 +60,9 @@ void Definitions::addImportedType(const ImportedType &type)
     m_importedTypes.push_back(type);
 }
 
-void Definitions::addImportedVariable(const ImportedVariable &variable)
+void Definitions::addImportedValue(const ImportedValue &value)
 {
-    m_importedVariables.push_back(variable);
+    m_importedValues.push_back(value);
 }
 
 const TypeAssignment *Definitions::type(const QString &name) const
@@ -71,8 +71,8 @@ const TypeAssignment *Definitions::type(const QString &name) const
     return it != m_typeByNameMap.end() ? it->second : nullptr;
 }
 
-const VariableAssignment *Definitions::variable(const QString &name) const
+const ValueAssignment *Definitions::value(const QString &name) const
 {
-    const auto it = m_variableByNameMap.find(name);
-    return it != m_variableByNameMap.end() ? it->second : nullptr;
+    const auto it = m_valueByNameMap.find(name);
+    return it != m_valueByNameMap.end() ? it->second : nullptr;
 }

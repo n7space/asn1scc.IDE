@@ -24,25 +24,32 @@
 ****************************************************************************/
 #pragma once
 
+#include <memory>
+
 #include <QString>
+
+#include "sourcelocation.h"
+#include "node.h"
+#include "types/type.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-class ImportedVariable
+class ValueAssignment : public Node
 {
 public:
-    ImportedVariable(const QString &module, const QString &name)
-        : m_module(module), m_name(name)
-    {}
+    ValueAssignment(const QString &name,
+                    const SourceLocation &location,
+                    std::unique_ptr<Types::Type> type);
+    ~ValueAssignment() override;
 
-    const QString &module() const { return m_module; }
-    const QString &name() const { return m_name; }
+    void accept(Visitor &visitor) const override;
+
+    const Types::Type *type() const { return m_type.get(); }
 
 private:
-    QString m_module;
-    QString m_name;
+    std::unique_ptr<Types::Type> m_type;
 };
 
 } // namespace Data
