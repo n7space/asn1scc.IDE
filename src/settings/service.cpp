@@ -33,7 +33,7 @@
 using namespace Asn1Acn::Internal::Settings;
 
 static const char PATH[] = "Path";
-static const char BASE_URI[] = "BaseUri";
+static const char LISTENING_URI[] = "ListeningUri";
 static const char STAY_ALIVE_PERIOD[] = "StayAlivePeriod";
 
 Service::~Service()
@@ -48,7 +48,7 @@ QString Service::name() const
 void Service::saveOptionsTo(QSettings *s) const
 {
     s->setValue(PATH, QDir::fromNativeSeparators(path()));
-    s->setValue(BASE_URI, baseUri());
+    s->setValue(LISTENING_URI, listeningUri());
     s->setValue(STAY_ALIVE_PERIOD, stayAlivePeriod());
 }
 
@@ -60,9 +60,17 @@ static QString defaultDaemonPath()
 void Service::loadOptionsFrom(QSettings *s)
 {
     setPath(s->value(PATH, defaultDaemonPath()).toString());
-    setBaseUri(s->value(BASE_URI,
-                        Utils::HostOsInfo::isWindowsHost()
-                        ? "http://+:80/Temporary_Listen_Addresses/asn1scc.IDE/"
-                        : "http://localhost:9749/").toString());
+    setListeningUri(s->value(LISTENING_URI,
+                             Utils::HostOsInfo::isWindowsHost()
+                             ? "http://+:80/Temporary_Listen_Addresses/asn1scc.IDE/"
+                             : "http://localhost:9749/").toString());
     setStayAlivePeriod(s->value(STAY_ALIVE_PERIOD, 1000).toInt());
+}
+
+QString Service::serviceUri() const
+{
+    auto uri = listeningUri();
+    if (Utils::HostOsInfo::isWindowsHost())
+        return uri.replace("//+", "//localhost");
+    return uri;
 }

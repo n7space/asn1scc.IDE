@@ -59,7 +59,7 @@ QWidget *Service::widget()
     if (!m_widget) {
         m_widget = new ServiceWidget;
         m_widget->setPath(m_settings->path());
-        m_widget->setBaseUri(m_settings->baseUri());
+        m_widget->setListeningUri(m_settings->listeningUri());
         m_widget->setStayAlivePeriod(m_settings->stayAlivePeriod());
         m_widget->setWatchdogDisabled(m_settings->watchdogDisabled());
     }
@@ -71,7 +71,7 @@ void Service::apply()
     if (!m_widget)
         return;
     m_settings->setPath(m_widget->path());
-    m_settings->setBaseUri(m_widget->baseUri());
+    m_settings->setListeningUri(m_widget->listeningUri());
     m_settings->setStayAlivePeriod(m_widget->stayAlivePeriod());
     m_settings->changed();
     Settings::save(m_settings);

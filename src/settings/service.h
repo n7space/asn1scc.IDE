@@ -44,8 +44,9 @@ public:
 
     QString name() const override;
 
-    const QString &baseUri() const { return m_baseUri; }
-    void setBaseUri(const QString &uri) { m_baseUri = uri; }
+    QString serviceUri() const;
+    const QString &listeningUri() const { return m_listeningUri; }
+    void setListeningUri(const QString &uri) { m_listeningUri = uri; }
 
     const QString &path() const { return m_path; }
     void setPath(const QString &p) { m_path = p; }
@@ -59,7 +60,7 @@ private:
     void saveOptionsTo(QSettings *s) const override;
     void loadOptionsFrom(QSettings *s) override;
 
-    QString m_baseUri;
+    QString m_listeningUri;
     QString m_path;
     int m_stayAlivePeriod;
 };

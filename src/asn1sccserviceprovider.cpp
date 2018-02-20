@@ -70,7 +70,7 @@ Asn1SccServiceProvider::~Asn1SccServiceProvider()
 
 QNetworkReply *Asn1SccServiceProvider::requestAst(const QHash<QString, QString> &documents) const
 {
-    QNetworkRequest astRequest(QUrl(m_settings->baseUri() + "ast"));
+    QNetworkRequest astRequest(QUrl(m_settings->serviceUri() + "ast"));
     astRequest.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/json");
 
     QByteArray jsonRequestData = buildAstRequestData(documents).toJson();
@@ -109,9 +109,9 @@ QStringList Asn1SccServiceProvider::additionalArguments() const
 {
     QStringList arguments;
 
-    if (!m_settings->baseUri().isEmpty()) {
+    if (!m_settings->listeningUri().isEmpty()) {
         arguments.append(QString("--uri"));
-        arguments.append(m_settings->baseUri());
+        arguments.append(m_settings->listeningUri());
     }
 
     arguments.append(QString("--watchdog"));
@@ -155,7 +155,7 @@ void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatu
 
 void Asn1SccServiceProvider::stayAliveTimeout()
 {
-    auto reply = networkManagerInstance->get(QNetworkRequest(QUrl(m_settings->baseUri() + "stayAlive")));
+    auto reply = networkManagerInstance->get(QNetworkRequest(QUrl(m_settings->serviceUri() + "stayAlive")));
     connect(reply, &QNetworkReply::finished,
             this , &Asn1SccServiceProvider::onStayAliveRequestFinished);
 }
