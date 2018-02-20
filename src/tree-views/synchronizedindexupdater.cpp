@@ -27,6 +27,10 @@
 
 #include <texteditor/textdocument.h>
 
+#include <projectexplorer/session.h>
+#include <projectexplorer/project.h>
+
+#include <data/project.h>
 #include "model.h"
 
 using namespace Asn1Acn::Internal;
@@ -47,18 +51,18 @@ void SynchronizedIndexUpdater::setEditor(TextEditor::TextEditorWidget *editorWid
 
     m_editorWidget = editorWidget;
 
-    if (m_editorWidget != nullptr) {
+    if (!editorEmpty()) {
         connect(m_editorWidget, &QPlainTextEdit::cursorPositionChanged,
                 m_updateIndexTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
         m_updateIndexTimer->start();
     } else {
-        emit currentIndexUpdated(QModelIndex());
+        emit indexSelectionUpdated(QModelIndexList(), QModelIndex());
     }
 }
 
 void SynchronizedIndexUpdater::unsetEditor()
 {
-    if (m_editorWidget != nullptr)
+    if (!editorEmpty())
         m_editorWidget->disconnect(m_updateIndexTimer);
 
     m_editorWidget = nullptr;
@@ -67,37 +71,6 @@ void SynchronizedIndexUpdater::unsetEditor()
 void SynchronizedIndexUpdater::updateCurrentIndex()
 {
     updateNow();
-}
-
-void SynchronizedIndexUpdater::createUpdateTimer()
-{
-    m_updateIndexTimer = new QTimer(this);
-    m_updateIndexTimer->setObjectName("SynchronizedIndexUpdater::UpdateTimer");
-    m_updateIndexTimer->setSingleShot(true);
-    m_updateIndexTimer->setInterval(UPDATE_INTERVAL_MS);
-
-    connect(m_updateIndexTimer, &QTimer::timeout,
-            this, &SynchronizedIndexUpdater::updateNow);
-}
-
-void SynchronizedIndexUpdater::updateNow()
-{
-    m_updateIndexTimer->stop();
-
-    QModelIndex index;
-    if (m_editorWidget != nullptr)
-        index = getIndexFromParent(currentRootIndex(), getCurrentLocation());
-
-    emit currentIndexUpdated(index);
-}
-
-Data::SourceLocation SynchronizedIndexUpdater::getCurrentLocation() const
-{
-    int line = 0;
-    int column = 0;
-    m_editorWidget->convertPosition(m_editorWidget->position(), &line, &column);
-
-    return Data::SourceLocation(currentFileName().toString(), line, column);
 }
 
 QModelIndex SynchronizedIndexUpdater::getIndexFromParent(const QModelIndex &parentIndex,
@@ -124,7 +97,44 @@ QModelIndex SynchronizedIndexUpdater::getIndexFromParent(const QModelIndex &pare
     return QModelIndex();
 }
 
-Utils::FileName SynchronizedIndexUpdater::currentFileName() const
+Data::SourceLocation SynchronizedIndexUpdater::getCurrentLocation() const
+{
+    int line = 0;
+    int column = 0;
+    m_editorWidget->convertPosition(m_editorWidget->position(), &line, &column);
+
+    return Data::SourceLocation(currentFilePath().toString(), line, column);
+}
+
+Utils::FileName SynchronizedIndexUpdater::currentFilePath() const
 {
     return m_editorWidget->textDocument()->filePath();
+}
+
+bool SynchronizedIndexUpdater::editorEmpty() const
+{
+    return m_editorWidget == nullptr;
+}
+
+void SynchronizedIndexUpdater::updateNow()
+{
+    m_updateIndexTimer->stop();
+
+    QModelIndex current;
+    QModelIndexList selected;
+
+    fillSelectedIndexes(current, selected);
+
+    emit indexSelectionUpdated(selected, current);
+}
+
+void SynchronizedIndexUpdater::createUpdateTimer()
+{
+    m_updateIndexTimer = new QTimer(this);
+    m_updateIndexTimer->setObjectName("SynchronizedIndexUpdater::UpdateTimer");
+    m_updateIndexTimer->setSingleShot(true);
+    m_updateIndexTimer->setInterval(UPDATE_INTERVAL_MS);
+
+    connect(m_updateIndexTimer, &QTimer::timeout,
+            this, &SynchronizedIndexUpdater::updateNow);
 }

@@ -52,5 +52,6 @@ void UnsynchronizedIndexUpdater::updateCurrentIndex()
                                         m_lastFocusedItem,
                                         -1,
                                         Qt::MatchRecursive);
-    emit currentIndexUpdated(matches.value(0));
+
+    emit indexSelectionUpdated(matches, matches.value(0));
 }

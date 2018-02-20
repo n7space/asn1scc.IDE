@@ -52,16 +52,40 @@ TypesTreeIndexUpdater::TypesTreeIndexUpdater(const Model *model, QObject *parent
             this, &IndexUpdater::updateCurrentIndex);
 }
 
-QModelIndex TypesTreeIndexUpdater::currentRootIndex() const
+void TypesTreeIndexUpdater::fillSelectedIndexes(QModelIndex &current, QModelIndexList &selected) const
+{
+    if (editorEmpty())
+        return;
+
+    const auto projectName = ProjectExplorer::SessionManager::startupProject()->displayName();
+    const auto location = getCurrentLocation();
+
+    for (const auto projectIndex : searchedIndexes()) {
+        const auto index = getIndexFromParent(projectIndex, location);
+        if (!index.isValid())
+            continue;
+
+        selected.append(index);
+        if (projectIndex.data().toString() == projectName)
+            current = index;
+    }
+}
+
+QModelIndexList TypesTreeIndexUpdater::searchedIndexes() const
 {
     const auto &root = ParsedDataStorage::instance()->root();
-    const auto project = ProjectExplorer::SessionManager::projectForFile(currentFileName());
-    if (!project)
-        return QModelIndex();
-    const auto projectNode = root->project(project->displayName());
-    if (!projectNode)
-        return QModelIndex();
-    return m_model->index(root->valueFor<TypesTreeVisitors::IndexFindingVisitor>(projectNode), 0, QModelIndex());
+    QStringList projectNames = ParsedDataStorage::instance()->getProjectsForFile(currentFilePath().toString());
+
+    QModelIndexList projectIndexes;
+    for (const auto &name : projectNames) {
+        const auto projectNode = root->project(name);
+        const auto projectIndex = m_model->index(root->valueFor<TypesTreeVisitors::IndexFindingVisitor>(projectNode),
+                                                 0,
+                                                 QModelIndex());
+        projectIndexes.append(projectIndex);
+    }
+
+    return projectIndexes;
 }
 
 void TypesTreeIndexUpdater::onEditorChanged(Core::IEditor *editor)

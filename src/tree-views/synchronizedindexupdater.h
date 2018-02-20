@@ -53,15 +53,16 @@ public:
     void unsetEditor();
 
 protected:
-    virtual QModelIndex currentRootIndex() const = 0;
-    Utils::FileName currentFileName() const;
+    QModelIndex getIndexFromParent(const QModelIndex &parentIndex, Data::SourceLocation currentLocation) const;
+    Data::SourceLocation getCurrentLocation() const;
+    Utils::FileName currentFilePath() const;
+    bool editorEmpty() const;
 
 private:
+    virtual void fillSelectedIndexes(QModelIndex &current, QModelIndexList &selected) const = 0;
+
     void updateNow();
     void createUpdateTimer();
-
-    Data::SourceLocation getCurrentLocation() const;
-    QModelIndex getIndexFromParent(const QModelIndex &parentIndex, Data::SourceLocation currentLocation) const;
 
     TextEditor::TextEditorWidget *m_editorWidget;
     QTimer *m_updateIndexTimer;

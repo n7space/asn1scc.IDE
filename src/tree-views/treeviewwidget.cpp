@@ -86,7 +86,7 @@ void TreeViewWidget::setCursorSynchronization(bool syncWithCursor)
     else
         m_indexUpdater.reset(m_indexUpdaterFactory->createUnsynchronozedIndexUpdater(m_treeView, m_model, this));
 
-    connect(m_indexUpdater.get(), &IndexUpdater::currentIndexUpdated,
+    connect(m_indexUpdater.get(), &IndexUpdater::indexSelectionUpdated,
             this, &TreeViewWidget::updateSelection);
 }
 
@@ -100,8 +100,23 @@ QLayout *TreeViewWidget::createLayout()
     return layout;
 }
 
-void TreeViewWidget::updateSelection(const QModelIndex index)
+void TreeViewWidget::updateSelection(const QModelIndexList &selected, const QModelIndex &current)
 {
-    m_treeView->setCurrentIndex(index);
-    m_treeView->scrollTo(index);
+    auto selectionModel = m_treeView->selectionModel();
+
+    selectionModel->select(QModelIndex(), QItemSelectionModel::Clear);
+
+    for (const auto &item : selected) {
+        expandItemsAbove(item);
+        selectionModel->select(item, QItemSelectionModel::Select);
+    }
+
+    selectionModel->setCurrentIndex(current, QItemSelectionModel::NoUpdate);
+    m_treeView->scrollTo(current);
+}
+
+void TreeViewWidget::expandItemsAbove(const QModelIndex &index)
+{
+    for (auto parent = index; parent.isValid(); parent = parent.parent())
+        m_treeView->expand(parent);
 }

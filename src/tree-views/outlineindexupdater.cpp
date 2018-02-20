@@ -33,7 +33,11 @@ OutlineIndexUpdater::OutlineIndexUpdater(const Model *model, QObject *parent)
 {
 }
 
-QModelIndex OutlineIndexUpdater::currentRootIndex() const
+void OutlineIndexUpdater::fillSelectedIndexes(QModelIndex &current, QModelIndexList &selected) const
 {
-    return QModelIndex();
+    if (editorEmpty())
+        return;
+
+    current = getIndexFromParent(QModelIndex(), getCurrentLocation());
+    selected.append(current);
 }

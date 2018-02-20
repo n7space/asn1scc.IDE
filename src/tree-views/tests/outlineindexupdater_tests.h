@@ -25,6 +25,7 @@
 #pragma once
 
 #include <QObject>
+#include <QSignalSpy>
 
 #include <data/node.h>
 
@@ -59,6 +60,8 @@ private slots:
 private:
     Data::Node *createModelNodes(const QString &filePath);
     TextEditor::TextEditorWidget *createEditorWidget();
+
+    void verifySpyReceviedCorrectData(const QSignalSpy &spy);
 
     Data::Node *m_data;
     Model *m_model;

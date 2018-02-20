@@ -44,7 +44,7 @@ public:
     virtual void updateCurrentIndex() = 0;
 
 signals:
-    void currentIndexUpdated(const QModelIndex modelIndex);
+    void indexSelectionUpdated(const QModelIndexList &selected, const QModelIndex &current);
 
 protected:
     const Model *const m_model;

@@ -44,7 +44,7 @@ public:
 
 private slots:
     void modelRootChanged();
-    void updateSelection(const QModelIndex index);
+    void updateSelection(const QModelIndexList &selected, const QModelIndex &current);
 
 private:
     void setupComboBox(Model *model);

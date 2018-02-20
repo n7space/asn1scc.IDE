@@ -36,9 +36,8 @@ class OutlineIndexUpdater : public SynchronizedIndexUpdater
 public:
     explicit OutlineIndexUpdater(const Model *model, QObject *parent = nullptr);
 
-protected:
-    QModelIndex currentRootIndex() const override;
-
+private:
+    void fillSelectedIndexes(QModelIndex &current, QModelIndexList &selected) const override;
 };
 
 } /* namespace TreeViews */
