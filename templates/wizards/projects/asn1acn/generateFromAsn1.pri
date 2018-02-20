@@ -43,7 +43,7 @@ prepare.commands += $$sprintf($$QMAKE_MKDIR_CMD, $$ASN1SCC_PRODUCTS_DIR)
 prepare.commands += && $$sprintf($$QMAKE_MKDIR_CMD, $$ASN1SCC_ICD_DIR)
 
 codeFromAsn1.target += codeFromAsn1
-codeFromAsn1.commands += $$ASN1SCC $${ASN1SCC_GENERATION_OPTIONS} $$ASN1ACNFILES -o $$ASN1SCC_PRODUCTS_DIR
+codeFromAsn1.commands += $$ASN1SCC $${ASN1SCC_GENERATION_OPTIONS} -o $$ASN1SCC_PRODUCTS_DIR $$ASN1ACNFILES
 codeFromAsn1.depends += prepare
 
 icdFromAsn1.target += icdFromAsn1
