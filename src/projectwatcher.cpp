@@ -74,7 +74,7 @@ void ProjectWatcher::onProjectFileListChanged()
     const QSet<QString> watchedMimeTypes { Constants::ASN1_MIMETYPE, Constants::ACN_MIMETYPE };
     const QStringList validFiles = project->files(ProjectExplorer::Project::AllFiles,
                                                   [&watchedMimeTypes](const ProjectExplorer::Node *n) {
-        if (const auto *fn = n->asFileNode())
+        if (const auto fn = n->asFileNode())
             return watchedMimeTypes.contains(Utils::mimeTypeForFile(fn->filePath().toString()).name());
         return false;
     });

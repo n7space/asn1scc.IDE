@@ -42,8 +42,8 @@ public:
     QString path() const;
     void setPath(const QString &path);
 
-    QString baseUri() const;
-    void setBaseUri(const QString &baseUri);
+    QString listeningUri() const;
+    void setListeningUri(const QString &listeningUri);
 
     int stayAlivePeriod() const;
     void setStayAlivePeriod(int i);

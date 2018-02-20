@@ -32,13 +32,13 @@ env:
 addons:
   apt:
     sources:
-    - sourceline: "ppa:beineri/opt-qt593-trusty"
+    - sourceline: "ppa:beineri/opt-qt-5.10.1-trusty"
     - ubuntu-toolchain-r-test
     packages:
-    - g++-4.9
-    - gcc-4.9
-    - qt59-meta-minimal
-    - qt59tools
+    - g++-5
+    - gcc-5
+    - qt510-meta-minimal
+    - qt510tools
     - p7zip
     - libgl1-mesa-dev
 
