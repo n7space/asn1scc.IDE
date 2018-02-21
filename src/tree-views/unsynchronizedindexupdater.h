@@ -43,7 +43,21 @@ protected slots:
     void onModelAboutToBeReset();
 
 private:
-    QString m_lastFocusedItem;
+    void clearSavedPaths();
+
+    void saveCurrentPath();
+    void saveSelectedPaths();
+
+    QModelIndex restoreCurrentPath();
+    QModelIndexList restoreSelectedPaths();
+
+    QStringList treePathForIndex(const QModelIndex &index) const;
+    QModelIndex indexForTreePath(const QStringList &path) const;
+
+    QModelIndex findInParent(const QModelIndex &parent, const QString &displayName) const;
+
+    QStringList m_lastCurrentPath;
+    QList<QStringList> m_selectedTreePaths;
     const QTreeView *const m_view;
 };
 

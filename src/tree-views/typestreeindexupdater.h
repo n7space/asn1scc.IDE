@@ -40,8 +40,10 @@ private slots:
     void onEditorChanged(Core::IEditor *editor);
     void onEditorAboutToClose(Core::IEditor *editor);
 
-protected:
-    QModelIndex currentRootIndex() const override;
+private:
+    void fillSelectedIndexes(QModelIndex &current, QModelIndexList &selected) const override;
+
+    QModelIndexList searchedIndexes() const;
 };
 
 } /* namespace TreeViews */

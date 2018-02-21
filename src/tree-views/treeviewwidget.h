@@ -58,15 +58,17 @@ public:
     void setCursorSynchronization(bool syncWithCursor) override;
 
 public slots:
-    void updateSelection(const QModelIndex index);
+    void updateSelection(const QModelIndexList &selected, const QModelIndex &current);
 
 protected:
-    std::unique_ptr<IndexUpdater> m_indexUpdater;
 
 private:
     QLayout *createLayout();
+    void expandItemsAbove(const QModelIndex &parent);
 
     std::unique_ptr<IndexUpdaterFactory> m_indexUpdaterFactory;
+    std::unique_ptr<IndexUpdater> m_indexUpdater;
+
     Model *m_model;
     TreeView *m_treeView;
 };

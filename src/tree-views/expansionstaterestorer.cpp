@@ -58,13 +58,13 @@ void ExpansionStateRestorer::addChildrenIndexes(const QModelIndex &parent)
 {
     for (int i = 0; i < m_model->rowCount(parent); ++i)
         for (int j = 0; j < m_model->columnCount(parent); ++j)
-            tryAddIndex(parent.child(i, j));
+            tryAddIndex(m_model->index(i, j, parent));
 }
 
 void ExpansionStateRestorer::onModelAboutToBeReset()
 {
     m_expandedItems.clear();
-    tryAddIndex(m_model->index(0, 0, QModelIndex()));
+    addChildrenIndexes(QModelIndex());
 }
 
 void ExpansionStateRestorer::onModelResetFinished()

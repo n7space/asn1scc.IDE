@@ -23,9 +23,10 @@
 **
 ****************************************************************************/
 
-#include <QTreeView>
-
 #include "unsynchronizedindexupdater.h"
+
+#include <QTreeView>
+#include <QItemSelectionModel>
 
 #include "model.h"
 
@@ -41,16 +42,86 @@ UnsynchronizedIndexUpdater::UnsynchronizedIndexUpdater(const QTreeView *view, co
 
 void UnsynchronizedIndexUpdater::onModelAboutToBeReset()
 {
-    const auto currentIndex = m_view->currentIndex();
-    m_lastFocusedItem = currentIndex.isValid() ? currentIndex.data(Qt::DisplayRole).toString() : QString();
+    clearSavedPaths();
+
+    saveCurrentPath();
+    saveSelectedPaths();
 }
 
 void UnsynchronizedIndexUpdater::updateCurrentIndex()
 {
-    const auto matches = m_model->match(m_model->index(0, 0, QModelIndex()),
-                                        Qt::DisplayRole,
-                                        m_lastFocusedItem,
-                                        -1,
-                                        Qt::MatchRecursive);
-    emit currentIndexUpdated(matches.value(0));
+    const auto selected = restoreSelectedPaths();
+    const auto current = restoreCurrentPath();
+
+    emit indexSelectionUpdated(selected, current);
+}
+
+void UnsynchronizedIndexUpdater::clearSavedPaths()
+{
+    m_lastCurrentPath.clear();
+    m_selectedTreePaths.clear();
+}
+
+void UnsynchronizedIndexUpdater::saveCurrentPath()
+{
+    m_lastCurrentPath = treePathForIndex(m_view->currentIndex());
+}
+
+void UnsynchronizedIndexUpdater::saveSelectedPaths()
+{
+    const auto selection = m_view->selectionModel()->selectedIndexes();
+
+    for (const auto &index : selection) {
+        const auto path = treePathForIndex(index);
+        if (!path.empty())
+            m_selectedTreePaths.append(path);
+    }
+}
+
+QModelIndex UnsynchronizedIndexUpdater::restoreCurrentPath()
+{
+    return indexForTreePath(m_lastCurrentPath);
+}
+
+QModelIndexList UnsynchronizedIndexUpdater::restoreSelectedPaths()
+{
+    QModelIndexList selected;
+    for (const auto &path : m_selectedTreePaths) {
+        const auto index = indexForTreePath(path);
+        if (index.isValid())
+            selected.append(index);
+    }
+
+    return selected;
+}
+
+QStringList UnsynchronizedIndexUpdater::treePathForIndex(const QModelIndex &index) const
+{
+    QStringList path;
+    for (auto i = index; i.isValid(); i = i.parent())
+        path.push_front(i.data(Qt::DisplayRole).toString());
+
+    return path;
+}
+
+QModelIndex UnsynchronizedIndexUpdater::indexForTreePath(const QStringList &path) const
+{
+    QModelIndex index;
+    for (const auto &item : path) {
+        index = findInParent(index, item);
+        if (!index.isValid())
+            return QModelIndex();
+    }
+
+    return index;
+}
+
+QModelIndex UnsynchronizedIndexUpdater::findInParent(const QModelIndex &parent, const QString &displayName) const
+{
+    for (int i = 0; i < m_model->rowCount(parent); ++i)
+        for (int j = 0; j < m_model->columnCount(parent); ++j)
+            if (m_model->index(i, j, parent).data(Qt::DisplayRole).toString() == displayName)
+                return m_model->index(i, j, parent);
+
+    return QModelIndex();
 }

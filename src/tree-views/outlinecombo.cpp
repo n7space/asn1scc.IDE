@@ -44,7 +44,7 @@ OutlineCombo::OutlineCombo(const QString &filePath, TextEditor::TextEditorWidget
 
     setupComboBox(model);
 
-    connect(indexUpdater, &IndexUpdater::currentIndexUpdated,
+    connect(indexUpdater, &IndexUpdater::indexSelectionUpdated,
             this, &OutlineCombo::updateSelection);
 
     connect(model, &ComboModel::modelReset,
@@ -74,10 +74,12 @@ void OutlineCombo::modelRootChanged()
     view()->expandAll();
 }
 
-void OutlineCombo::updateSelection(const QModelIndex index)
+void OutlineCombo::updateSelection(const QModelIndexList &selected, const QModelIndex &current)
 {
-    if (index.isValid())
-        setCurrentIndex(index);
+    Q_UNUSED(selected);
+
+    if (current.isValid())
+        setCurrentIndex(current);
     else
         QComboBox::setCurrentIndex(0);
 }
