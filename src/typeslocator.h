@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include <QString>
 #include <QFutureInterface>
+#include <QString>
 
 #include <coreplugin/locator/ilocatorfilter.h>
 
@@ -42,11 +42,14 @@ public:
 
     TypesLocator();
 
-    void accept(Entry selection, QString *newText, int *selectionStart, int *selectionLength) const override;
+    void accept(Entry selection,
+                QString *newText,
+                int *selectionStart,
+                int *selectionLength) const override;
     void refresh(QFutureInterface<void> &future) override;
 
     QList<Entry> matchesFor(QFutureInterface<Entry> &future, const QString &entry) override;
 };
 
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Internal
+} // namespace Asn1Acn

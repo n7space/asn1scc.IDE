@@ -26,15 +26,15 @@
 
 #include <memory>
 
-#include <QObject>
-#include <QString>
 #include <QFuture>
+#include <QObject>
 #include <QPointer>
+#include <QString>
 
 namespace Core {
 class SearchResult;
 class SearchResultItem;
-}
+} // namespace Core
 
 namespace Asn1Acn {
 namespace Internal {
@@ -42,7 +42,7 @@ namespace Internal {
 namespace Data {
 class TypeReference;
 class SourceLocation;
-}
+} // namespace Data
 
 class ParsedDataStorage;
 class SourceReader;
@@ -68,12 +68,12 @@ private:
     void searchAgain();
     void openEditor(const Core::SearchResultItem &item);
     void findAll(Core::SearchResult *search, const UsagesFinderParameters &params);
-    void createWatcher(const QFuture<Data::TypeReference> &future,
-                       Core::SearchResult *search);
+    void createWatcher(const QFuture<Data::TypeReference> &future, Core::SearchResult *search);
     QString readLine(const Data::SourceLocation &loc);
     void displayResults(Core::SearchResult *search,
                         QFutureWatcher<Data::TypeReference> *watcher,
-                        int first, int last);
+                        int first,
+                        int last);
 
     QPointer<ParsedDataStorage> m_storage;
     std::unique_ptr<SourceReader> m_reader;

@@ -31,7 +31,9 @@
 namespace Asn1Acn {
 namespace Internal {
 
-namespace Data { class Node; }
+namespace Data {
+class Node;
+}
 
 namespace Completion {
 
@@ -49,7 +51,7 @@ private:
     Data::Node *valueFor(const Data::Project &project) const override;
 
     bool isValue() const;
-    template <typename Collection>
+    template<typename Collection>
     Data::Node *findImportByName(const Collection &col) const;
 
     QString m_module;

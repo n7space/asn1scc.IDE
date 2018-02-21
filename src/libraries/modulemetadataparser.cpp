@@ -24,8 +24,8 @@
 ****************************************************************************/
 #include "modulemetadataparser.h"
 
-#include <QJsonObject>
 #include <QJsonArray>
+#include <QJsonObject>
 
 #include "metadata/module.h"
 
@@ -33,12 +33,11 @@ using namespace Asn1Acn::Internal::Libraries;
 
 ModuleMetadataParser::ModuleMetadataParser(const QByteArray &data)
     : m_document(QJsonDocument::fromJson(data))
-{
-}
+{}
 
 namespace {
 
-template <typename Func>
+template<typename Func>
 void foreachItem(const QJsonValue &value, Func f)
 {
     for (const auto &item : value.toArray())
@@ -73,7 +72,7 @@ QString readDescription(const QJsonObject &object)
     return readOptionalStringField(object, "description");
 }
 
-template <typename T>
+template<typename T>
 std::unique_ptr<T> readNamedType(const QJsonObject &object)
 {
     return std::make_unique<T>(readName(object), readDescription(object));
@@ -84,9 +83,8 @@ std::unique_ptr<T> readNamedType(const QJsonObject &object)
 std::unique_ptr<Metadata::Element> ModuleMetadataParser::readElement(const QJsonObject &object)
 {
     auto element = readNamedType<Metadata::Element>(object);
-    foreachItem(object["asn1Files"], [&element](const QJsonValue &value) {
-        element->addAsn1File(value.toString());
-    });
+    foreachItem(object["asn1Files"],
+                [&element](const QJsonValue &value) { element->addAsn1File(value.toString()); });
     foreachItem(object["conflicts"], [this, &element](const QJsonValue &value) {
         element->addConflict(readReference(value));
     });

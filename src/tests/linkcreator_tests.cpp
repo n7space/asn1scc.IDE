@@ -29,8 +29,8 @@
 
 #include <QTextCursor>
 
-#include <utils/fileutils.h>
 #include <texteditor/textdocument.h>
+#include <utils/fileutils.h>
 
 #include <data/file.h>
 #include <data/typereference.h>
@@ -52,7 +52,8 @@ LinkCreatorTests::LinkCreatorTests(QObject *parent)
 }
 
 namespace {
-std::unique_ptr<TextEditor::TextDocument> createDocument(const QString &path, const QByteArray &content)
+std::unique_ptr<TextEditor::TextDocument> createDocument(const QString &path,
+                                                         const QByteArray &content)
 {
     auto doc = std::make_unique<TextEditor::TextDocument>();
     doc->setFilePath(Utils::FileName::fromString(path));
@@ -60,7 +61,7 @@ std::unique_ptr<TextEditor::TextDocument> createDocument(const QString &path, co
 
     return doc;
 }
-} // namespace anonymous
+} // namespace
 
 void LinkCreatorTests::test_createLinksInEmptyDocument()
 {
@@ -105,7 +106,9 @@ void LinkCreatorTests::test_createLinksFromEmptyStorage()
 void LinkCreatorTests::test_createHighlight()
 {
     auto file = std::make_unique<Data::File>(m_path);
-    auto ref = std::make_unique<Data::TypeReference>("TypeName", "ModuleName", Data::SourceLocation(m_path, 1, 5));
+    auto ref = std::make_unique<Data::TypeReference>("TypeName",
+                                                     "ModuleName",
+                                                     Data::SourceLocation(m_path, 1, 5));
 
     file->addTypeReference(std::move(ref));
 
@@ -129,14 +132,18 @@ void LinkCreatorTests::test_createHighlight()
 void LinkCreatorTests::test_createTarget()
 {
     auto file = std::make_unique<Data::File>(m_path);
-    auto ref = std::make_unique<Data::TypeReference>("TypeName", "ModuleName", Data::SourceLocation(m_path, 1, 5));
+    auto ref = std::make_unique<Data::TypeReference>("TypeName",
+                                                     "ModuleName",
+                                                     Data::SourceLocation(m_path, 1, 5));
 
     file->addTypeReference(std::move(ref));
 
-    auto typeAssignment = std::make_unique<Data::TypeAssignment>("TypeName",
-                                                                 Data::SourceLocation(m_path, 1, 15),
-                                                                 std::make_unique<Data::Types::Integer>());
-    auto defs = std::make_unique<Data::Definitions>("ModuleName", Data::SourceLocation(m_path, 0, 0));
+    auto typeAssignment
+        = std::make_unique<Data::TypeAssignment>("TypeName",
+                                                 Data::SourceLocation(m_path, 1, 15),
+                                                 std::make_unique<Data::Types::Integer>());
+    auto defs = std::make_unique<Data::Definitions>("ModuleName",
+                                                    Data::SourceLocation(m_path, 0, 0));
 
     defs->addType(std::move(typeAssignment));
     file->add(std::move(defs));

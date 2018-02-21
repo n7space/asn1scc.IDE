@@ -31,13 +31,9 @@
 
 using namespace Asn1Acn::Internal;
 
-Indenter::Indenter()
-{
-}
+Indenter::Indenter() {}
 
-Indenter::~Indenter()
-{
-}
+Indenter::~Indenter() {}
 
 bool Indenter::isElectricCharacter(const QChar &ch) const
 {
@@ -56,8 +52,7 @@ static int adjustForClosingBracket(const QTextBlock &block)
     return 0;
 }
 
-int Indenter::indentFor(const QTextBlock &block,
-                        const TextEditor::TabSettings &tabSettings)
+int Indenter::indentFor(const QTextBlock &block, const TextEditor::TabSettings &tabSettings)
 {
     QTextBlock previous = block.previous();
     if (!previous.isValid())

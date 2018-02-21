@@ -37,8 +37,7 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsedDocumentBuilder
-        : public QObject
+class ParsedDocumentBuilder : public QObject
 {
     Q_OBJECT
 

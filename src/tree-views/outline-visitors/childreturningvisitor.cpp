@@ -34,12 +34,9 @@ using namespace Asn1Acn::Internal::TreeViews::OutlineVisitors;
 
 ChildReturningVisitor::ChildReturningVisitor(int index)
     : m_index(index)
-{
-}
+{}
 
-ChildReturningVisitor::~ChildReturningVisitor()
-{
-}
+ChildReturningVisitor::~ChildReturningVisitor() {}
 
 Node *ChildReturningVisitor::valueFor(const Definitions &defs) const
 {

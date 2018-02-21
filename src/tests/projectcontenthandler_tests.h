@@ -28,8 +28,8 @@
 #include <QObject>
 
 #include <documentprocessor.h>
-#include <parseddatastorage.h>
 #include <modelvalidityguard.h>
+#include <parseddatastorage.h>
 
 namespace Asn1Acn {
 namespace Internal {

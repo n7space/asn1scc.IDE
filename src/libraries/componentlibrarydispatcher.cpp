@@ -32,7 +32,8 @@
 
 using namespace Asn1Acn::Internal::Libraries;
 
-void CompontentLibraryDispatcher::dispatch(const QStringList &directories, const QStringList &files) const
+void CompontentLibraryDispatcher::dispatch(const QStringList &directories,
+                                           const QStringList &files) const
 {
     static const FileSourceReader reader;
 
@@ -47,7 +48,10 @@ void CompontentLibraryDispatcher::dispatch(const QStringList &directories, const
         if (metaFiles.empty())
             continue;
 
-        const auto componentProcessor = new ComponentLibraryProcessor(directory, filesInDirectory.filter("meta.json"), reader);
+        const auto componentProcessor = new ComponentLibraryProcessor(directory,
+                                                                      filesInDirectory.filter(
+                                                                          "meta.json"),
+                                                                      reader);
         componentProcessor->process();
     }
 }

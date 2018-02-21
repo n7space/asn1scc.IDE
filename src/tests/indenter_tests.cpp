@@ -38,8 +38,7 @@ static const int INDENT_SIZE = 4;
 
 IndenterTests::IndenterTests(QObject *parent)
     : QObject(parent)
-{
-}
+{}
 
 void IndenterTests::initTestCase()
 {

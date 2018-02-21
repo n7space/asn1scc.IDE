@@ -41,11 +41,11 @@ RelationsLabelsController::RelationsLabelsController(MetadataModel *model,
     , m_model(model)
     , m_requiresTree(requiresTree)
     , m_conflictsTree(conflictsTree)
-{
-}
+{}
 
 namespace {
-void appendElementItems(const QList<Metadata::Reference> &references, QHash<QString, QTreeWidgetItem *> &parents)
+void appendElementItems(const QList<Metadata::Reference> &references,
+                        QHash<QString, QTreeWidgetItem *> &parents)
 {
     QHash<QString, QTreeWidgetItem *> elements;
     for (const auto &ref : references) {
@@ -69,7 +69,8 @@ void appendElementItems(const QList<Metadata::Reference> &references, QHash<QStr
     }
 }
 
-void appendSubmoduleItems(const QList<Metadata::Reference> &references, QHash<QString, QTreeWidgetItem *> &parents)
+void appendSubmoduleItems(const QList<Metadata::Reference> &references,
+                          QHash<QString, QTreeWidgetItem *> &parents)
 {
     QHash<QString, QTreeWidgetItem *> submoduleItems;
     for (const auto &ref : references) {
@@ -100,9 +101,10 @@ void appendModuleItems(const QList<Metadata::Reference> &references, QTreeWidget
 
     appendSubmoduleItems(references, moduleItems);
 }
-} // namespace Anonymous
+} // namespace
 
-void RelationsLabelsController::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+void RelationsLabelsController::onSelectionChanged(const QItemSelection &selected,
+                                                   const QItemSelection &deselected)
 {
     Q_UNUSED(deselected);
 
@@ -133,7 +135,8 @@ void RelationsLabelsController::buildRelationsTrees(const QModelIndex &current)
     m_conflictsTree->expandAll();
 }
 
-static void appendReferences(const QList<Metadata::Reference> &source, QList<Metadata::Reference> &target)
+static void appendReferences(const QList<Metadata::Reference> &source,
+                             QList<Metadata::Reference> &target)
 {
     for (const auto &item : source)
         if (!target.contains(item))
@@ -153,4 +156,3 @@ void RelationsLabelsController::fillRelations(const QModelIndex &index,
         for (auto j = 0; j < m_model->columnCount(index); ++j)
             fillRelations(index.child(i, j), requirements, conflicts);
 }
-

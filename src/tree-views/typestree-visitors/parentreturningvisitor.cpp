@@ -34,13 +34,9 @@
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::TreeViews::TypesTreeVisitors;
 
-ParentReturningVisitor::ParentReturningVisitor()
-{
-}
+ParentReturningVisitor::ParentReturningVisitor() {}
 
-ParentReturningVisitor::~ParentReturningVisitor()
-{
-}
+ParentReturningVisitor::~ParentReturningVisitor() {}
 
 Node *ParentReturningVisitor::valueFor(const Definitions &defs) const
 {

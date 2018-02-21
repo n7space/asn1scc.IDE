@@ -31,8 +31,7 @@ using namespace Asn1Acn::Internal::Libraries::Tests;
 GeneralMetadataParserTests::GeneralMetadataParserTests(QObject *parent)
     : QObject(parent)
     , m_parsedData("BadName", "BadPath")
-{
-}
+{}
 
 void GeneralMetadataParserTests::test_empty()
 {

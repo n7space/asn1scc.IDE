@@ -55,5 +55,5 @@ private:
 };
 
 } /* namespace Tests */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Internal
+} // namespace Asn1Acn

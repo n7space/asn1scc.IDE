@@ -27,12 +27,12 @@
 
 #include <utils/qtcassert.h>
 
-#include <libraries/metadata/library.h>
-#include <libraries/librarystorage.h>
 #include <libraries/filemodel.h>
+#include <libraries/librarystorage.h>
+#include <libraries/metadata/library.h>
 
-#include "metadatacomponentselector.h"
 #include "filecomponentselector.h"
+#include "metadatacomponentselector.h"
 
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
@@ -48,8 +48,10 @@ SelectComponentsPage::SelectComponentsPage(ComponentImporter &importer, QWidget 
 
     setTitle(QLatin1String("Select components you wish to import"));
 
-    connect(m_ui.modeCombo, &QComboBox::currentTextChanged,
-            this, &SelectComponentsPage::onComboTextChanged);
+    connect(m_ui.modeCombo,
+            &QComboBox::currentTextChanged,
+            this,
+            &SelectComponentsPage::onComboTextChanged);
 }
 
 void SelectComponentsPage::initializePage()
@@ -77,14 +79,13 @@ void SelectComponentsPage::onComboTextChanged(const QString &text)
 
 void SelectComponentsPage::setLibPath()
 {
-    m_libPath = field("builtInRadio").toBool() ?
-                field("builtInCombo").toString() :
-                field("pathChoser").toString();
+    m_libPath = field("builtInRadio").toBool() ? field("builtInCombo").toString()
+                                               : field("pathChoser").toString();
 }
 
 void SelectComponentsPage::setupModel(const QString &key)
 {
-    QTC_ASSERT(key == METADATA_COMBO_KEY || key == FILESYSTEM_COMBO_KEY, return);
+    QTC_ASSERT(key == METADATA_COMBO_KEY || key == FILESYSTEM_COMBO_KEY, return );
 
     if (key == METADATA_COMBO_KEY) {
         setupMetadaModel();
@@ -102,10 +103,14 @@ void SelectComponentsPage::setupMetadaModel()
     m_ui.modulesView->setModel(model);
 
     m_selector.reset(new MetadaComponentSelector(model, m_libPath));
-    m_labelsController.reset(new RelationsLabelsController(model, m_ui.requiresTree, m_ui.conflictsTree));
+    m_labelsController.reset(
+        new RelationsLabelsController(model, m_ui.requiresTree, m_ui.conflictsTree));
 
-    connect(m_ui.modulesView->selectionModel(), &QItemSelectionModel::selectionChanged,
-            m_labelsController.get(), &RelationsLabelsController::onSelectionChanged, Qt::UniqueConnection);
+    connect(m_ui.modulesView->selectionModel(),
+            &QItemSelectionModel::selectionChanged,
+            m_labelsController.get(),
+            &RelationsLabelsController::onSelectionChanged,
+            Qt::UniqueConnection);
 
     m_model.reset(model);
 }
@@ -114,7 +119,9 @@ void SelectComponentsPage::setupFileSystemModel()
 {
     auto model = new FileModel(this);
 
-    static QStringList nameFilter = (QStringList() << "*.asn1" << "*.asn" << "*.acn");
+    static QStringList nameFilter = (QStringList() << "*.asn1"
+                                                   << "*.asn"
+                                                   << "*.acn");
     model->setNameFilters(nameFilter);
     model->setNameFilterDisables(false);
 

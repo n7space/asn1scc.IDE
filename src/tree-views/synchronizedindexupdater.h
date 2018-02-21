@@ -24,9 +24,9 @@
 ****************************************************************************/
 #pragma once
 
+#include <QModelIndex>
 #include <QObject>
 #include <QTimer>
-#include <QModelIndex>
 
 #include <texteditor/texteditor.h>
 #include <utils/fileutils.h>
@@ -53,7 +53,8 @@ public:
     void unsetEditor();
 
 protected:
-    QModelIndex getIndexFromParent(const QModelIndex &parentIndex, Data::SourceLocation currentLocation) const;
+    QModelIndex getIndexFromParent(const QModelIndex &parentIndex,
+                                   Data::SourceLocation currentLocation) const;
     Data::SourceLocation getCurrentLocation() const;
     Utils::FileName currentFilePath() const;
     bool editorEmpty() const;
@@ -69,5 +70,5 @@ private:
 };
 
 } /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Internal
+} // namespace Asn1Acn

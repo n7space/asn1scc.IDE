@@ -40,8 +40,7 @@ SummaryPage::SummaryPage(ComponentImporter &importer, VcsHandler &handler, QWidg
     setTitle(QLatin1String("Summary"));
     m_ui.setupUi(this);
 
-    connect(&m_vcsHandler, &VcsHandler::vcsListChanged,
-            this, &SummaryPage::onVcsListChanged);
+    connect(&m_vcsHandler, &VcsHandler::vcsListChanged, this, &SummaryPage::onVcsListChanged);
 }
 
 void SummaryPage::initializePage()
@@ -88,9 +87,15 @@ void SummaryPage::setVcsCheckboxState(bool enabled)
     setVcsComboState(enabled && m_ui.vcsCheckBox->checkState() == Qt::Checked);
 
     if (enabled)
-        connect(m_ui.vcsCheckBox, &QCheckBox::stateChanged, this, &SummaryPage::onVcsCheckboxStateChanged);
+        connect(m_ui.vcsCheckBox,
+                &QCheckBox::stateChanged,
+                this,
+                &SummaryPage::onVcsCheckboxStateChanged);
     else
-        disconnect(m_ui.vcsCheckBox, &QCheckBox::stateChanged, this, &SummaryPage::onVcsCheckboxStateChanged);
+        disconnect(m_ui.vcsCheckBox,
+                   &QCheckBox::stateChanged,
+                   this,
+                   &SummaryPage::onVcsCheckboxStateChanged);
 }
 
 void SummaryPage::setVcsComboState(bool enabled)
@@ -100,11 +105,15 @@ void SummaryPage::setVcsComboState(bool enabled)
 
     if (enabled) {
         fillVcsComboItems();
-        connect(m_ui.vcsComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-                this, &SummaryPage::onVcsComboIndexChanged);
+        connect(m_ui.vcsComboBox,
+                static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+                this,
+                &SummaryPage::onVcsComboIndexChanged);
     } else {
-        disconnect(m_ui.vcsComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-                   this, &SummaryPage::onVcsComboIndexChanged);
+        disconnect(m_ui.vcsComboBox,
+                   static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+                   this,
+                   &SummaryPage::onVcsComboIndexChanged);
     }
 }
 

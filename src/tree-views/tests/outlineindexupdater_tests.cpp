@@ -26,13 +26,13 @@
 
 #include <QtTest>
 
-#include <QTest>
 #include <QSignalSpy>
+#include <QTest>
 
 #include <texteditor/textdocument.h>
 
-#include <data/file.h>
 #include <data/definitions.h>
+#include <data/file.h>
 #include <data/typeassignment.h>
 #include <data/types/userdefinedtype.h>
 
@@ -93,17 +93,37 @@ Data::Node *OutlineIndexUpdaterTests::createModelNodes(const QString &filePath)
 {
     const auto root = new Data::File(filePath);
 
-    auto definitions1 = std::make_unique<Data::Definitions>("Test1", Data::SourceLocation{filePath, 1, 0});
-    definitions1->addType(std::make_unique<Data::TypeAssignment>("Num1", Data::SourceLocation{filePath, 2, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test1")));
-    definitions1->addType(std::make_unique<Data::TypeAssignment>("Num2", Data::SourceLocation{filePath, 3, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test1")));
+    auto definitions1 = std::make_unique<Data::Definitions>("Test1",
+                                                            Data::SourceLocation{filePath, 1, 0});
+    definitions1->addType(std::make_unique<Data::TypeAssignment>(
+        "Num1",
+        Data::SourceLocation{filePath, 2, 3},
+        std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test1")));
+    definitions1->addType(std::make_unique<Data::TypeAssignment>(
+        "Num2",
+        Data::SourceLocation{filePath, 3, 3},
+        std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test1")));
     root->add(std::move(definitions1));
 
-    auto definitions2 = std::make_unique<Data::Definitions>("Test2", Data::SourceLocation{filePath, 5, 0});
-    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num3", Data::SourceLocation{filePath, 6, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
-    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num4", Data::SourceLocation{filePath, 7, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
+    auto definitions2 = std::make_unique<Data::Definitions>("Test2",
+                                                            Data::SourceLocation{filePath, 5, 0});
+    definitions2->addType(std::make_unique<Data::TypeAssignment>(
+        "Num3",
+        Data::SourceLocation{filePath, 6, 3},
+        std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
+    definitions2->addType(std::make_unique<Data::TypeAssignment>(
+        "Num4",
+        Data::SourceLocation{filePath, 7, 3},
+        std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
 
-    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num5", Data::SourceLocation{filePath, 8, 3}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
-    definitions2->addType(std::make_unique<Data::TypeAssignment>("Num6", Data::SourceLocation{filePath, 8, 32}, std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
+    definitions2->addType(std::make_unique<Data::TypeAssignment>(
+        "Num5",
+        Data::SourceLocation{filePath, 8, 3},
+        std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
+    definitions2->addType(std::make_unique<Data::TypeAssignment>(
+        "Num6",
+        Data::SourceLocation{filePath, 8, 32},
+        std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
     root->add(std::move(definitions2));
 
     m_data = root;

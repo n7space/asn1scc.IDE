@@ -44,7 +44,5 @@ void ActivateHandler::gotoSymbol(const QModelIndex &index)
         return;
 
     const auto location = node->location();
-    Core::EditorManager::openEditorAt(location.path(),
-                                      location.line(),
-                                      location.column());
+    Core::EditorManager::openEditorAt(location.path(), location.line(), location.column());
 }

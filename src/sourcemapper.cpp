@@ -31,7 +31,7 @@ using namespace Asn1Acn::Internal;
 SourceMapper::SourceMapper(const QHash<QString, QString> &documents)
 {
     for (auto it = documents.begin(); it != documents.end(); it++)
-        m_mapping.insert({ QFileInfo(it.key()).fileName(), it.key() });
+        m_mapping.insert({QFileInfo(it.key()).fileName(), it.key()});
 }
 
 QString SourceMapper::findByFileName(const QString &fileName) const

@@ -30,8 +30,8 @@
 #include <coreplugin/iversioncontrol.h>
 #include <coreplugin/vcsmanager.h>
 
-#include <projectexplorer/session.h>
 #include <projectexplorer/project.h>
+#include <projectexplorer/session.h>
 
 #include <utils/qtcassert.h>
 
@@ -45,8 +45,10 @@ VcsHandler::VcsHandler(QObject *parent)
 {
     updateVcsList();
 
-    connect(Core::VcsManager::instance(), &Core::VcsManager::configurationChanged,
-            this, &VcsHandler::onConfigChanged);
+    connect(Core::VcsManager::instance(),
+            &Core::VcsManager::configurationChanged,
+            this,
+            &VcsHandler::onConfigChanged);
 }
 
 const QList<Core::IVersionControl *> VcsHandler::vcsList() const
@@ -67,17 +69,21 @@ void VcsHandler::addToVcs(const QStringList &files)
     const auto vcs = m_vcs[m_index];
 
     if (m_createRepo) {
-        QTC_ASSERT(vcs->supportsOperation(Core::IVersionControl::CreateRepositoryOperation), return);
+        QTC_ASSERT(vcs->supportsOperation(Core::IVersionControl::CreateRepositoryOperation),
+                   return );
 
-        const auto projectPath = ProjectExplorer::SessionManager::startupProject()->projectDirectory().toString();
+        const auto projectPath
+            = ProjectExplorer::SessionManager::startupProject()->projectDirectory().toString();
         if (!vcs->vcsCreateRepository(projectPath))
-            throw std::runtime_error("Could not create repository in \'" + projectPath.toStdString() + "\'");
+            throw std::runtime_error("Could not create repository in \'" + projectPath.toStdString()
+                                     + "\'");
     }
 
-    QTC_ASSERT(vcs->supportsOperation(Core::IVersionControl::AddOperation), return);
+    QTC_ASSERT(vcs->supportsOperation(Core::IVersionControl::AddOperation), return );
     for (const auto &file : files)
         if (!vcs->vcsAdd(file))
-            throw std::runtime_error("Failed to add \'" + file.toStdString() + "\' to version control system");
+            throw std::runtime_error("Failed to add \'" + file.toStdString()
+                                     + "\' to version control system");
 }
 
 void VcsHandler::onConfigChanged()
@@ -89,10 +95,11 @@ void VcsHandler::onConfigChanged()
 namespace {
 Core::IVersionControl *vcsForCurrentProject()
 {
-    const auto projectDir = ProjectExplorer::SessionManager::startupProject()->projectDirectory().toString();
+    const auto projectDir
+        = ProjectExplorer::SessionManager::startupProject()->projectDirectory().toString();
     return Core::VcsManager::findVersionControlForDirectory(projectDir);
 }
-} // namespace Anonymous
+} // namespace
 
 void VcsHandler::updateVcsList()
 {

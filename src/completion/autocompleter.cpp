@@ -128,7 +128,8 @@ bool AutoCompleter::contextAllowsAutoBrackets(const QTextCursor &cursor,
     return !isInComment(cursor) && !isInString(cursor);
 }
 
-bool AutoCompleter::contextAllowsAutoQuotes(const QTextCursor &cursor, const QString &textToInsert) const
+bool AutoCompleter::contextAllowsAutoQuotes(const QTextCursor &cursor,
+                                            const QString &textToInsert) const
 {
     Q_UNUSED(textToInsert);
     return !isInComment(cursor);
@@ -140,7 +141,8 @@ int AutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor)
         return 1;
 
     auto block = cursor.document()->lastBlock();
-    TextEditor::TextDocumentLayout::setBraceDepth(block, 1); // TODO - workaround to reuse code from base class
+    TextEditor::TextDocumentLayout::setBraceDepth(block,
+                                                  1); // TODO - workaround to reuse code from base class
 
     return TextEditor::AutoCompleter::paragraphSeparatorAboutToBeInserted(cursor);
 }
@@ -157,7 +159,8 @@ bool AutoCompleter::tryInsertEndKeyword(QTextCursor &cursor) const
 
 bool AutoCompleter::shouldInsertEndKeyword(QTextCursor &cursor) const
 {
-    return containsBeginKeyword(cursor) && contextAllowsEndKeyword(cursor) && beginKeywordMismatched(cursor);
+    return containsBeginKeyword(cursor) && contextAllowsEndKeyword(cursor)
+           && beginKeywordMismatched(cursor);
 }
 
 bool AutoCompleter::containsBeginKeyword(QTextCursor &cursor) const
@@ -189,7 +192,7 @@ bool AutoCompleter::beginKeywordMismatched(QTextCursor &cursor) const
 {
     QTextCursor moved = cursor;
 
-    while(moved.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor)) {
+    while (moved.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor)) {
         QString text = moved.selectedText();
         moved.clearSelection();
 
@@ -215,7 +218,8 @@ void AutoCompleter::insertEndKeyword(QTextCursor &cursor) const
     cursor.setPosition(pos);
 }
 
-int AutoCompleter::findWordIndexInCurrentLine(const QTextCursor &cursor, const QLatin1String &word) const
+int AutoCompleter::findWordIndexInCurrentLine(const QTextCursor &cursor,
+                                              const QLatin1String &word) const
 {
     QTextCursor moved = cursor;
     moved.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);

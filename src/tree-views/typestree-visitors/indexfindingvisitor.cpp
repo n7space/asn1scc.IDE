@@ -26,8 +26,8 @@
 
 #include <utils/qtcassert.h>
 
-#include <data/project.h>
 #include <data/file.h>
+#include <data/project.h>
 
 #include <tree-views/outline-visitors/childrencountingvisitor.h>
 
@@ -37,12 +37,9 @@ using namespace Asn1Acn::Internal::TreeViews::TypesTreeVisitors;
 
 IndexFindingVisitor::IndexFindingVisitor(const Node *child)
     : OutlineVisitors::IndexFindingVisitor(child)
-{
-}
+{}
 
-IndexFindingVisitor::~IndexFindingVisitor()
-{
-}
+IndexFindingVisitor::~IndexFindingVisitor() {}
 
 int IndexFindingVisitor::valueFor(const File &file) const
 {

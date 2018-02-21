@@ -32,9 +32,7 @@ Definitions::Definitions(const QString &name, const SourceLocation &location)
     : Node(name, location)
 {}
 
-Definitions::~Definitions()
-{
-}
+Definitions::~Definitions() {}
 
 void Definitions::accept(Visitor &visitor) const
 {

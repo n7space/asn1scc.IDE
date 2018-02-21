@@ -29,8 +29,7 @@ using namespace Asn1Acn::Internal::TreeViews::ComboVisitors;
 
 IndexFindingVisitor::IndexFindingVisitor(const Node *child)
     : OutlineVisitors::IndexFindingVisitor(child)
-{
-}
+{}
 
 int IndexFindingVisitor::valueFor(const File &file) const
 {

@@ -35,9 +35,7 @@ TypeAssignment::TypeAssignment(const QString &name,
     , m_type(std::move(type))
 {}
 
-TypeAssignment::~TypeAssignment()
-{
-}
+TypeAssignment::~TypeAssignment() {}
 
 void TypeAssignment::accept(Visitor &visitor) const
 {

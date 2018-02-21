@@ -29,10 +29,10 @@
 
 #include <coreplugin/editormanager/editormanager.h>
 
-#include <data/root.h>
-#include <data/project.h>
-#include <data/file.h>
 #include <data/definitions.h>
+#include <data/file.h>
+#include <data/project.h>
+#include <data/root.h>
 
 #include <tree-views/decorationrolevisitor.h>
 
@@ -49,9 +49,14 @@ TypesLocator::TypesLocator()
     setIncludedByDefault(false);
 }
 
-void TypesLocator::accept(Entry selection, QString *newText, int *selectionStart, int *selectionLength) const
+void TypesLocator::accept(Entry selection,
+                          QString *newText,
+                          int *selectionStart,
+                          int *selectionLength) const
 {
-    Q_UNUSED(newText); Q_UNUSED(selectionStart); Q_UNUSED(selectionLength);
+    Q_UNUSED(newText);
+    Q_UNUSED(selectionStart);
+    Q_UNUSED(selectionLength);
     const auto location = qvariant_cast<Data::SourceLocation>(selection.internalData);
     Core::EditorManager::openEditorAt(location.path(), location.line(), location.column());
 }
@@ -104,9 +109,8 @@ private:
     HighlightInfo selectHighlight(const QRegularExpressionMatch &current,
                                   const QRegularExpressionMatch &parent)
     {
-        return current.hasMatch()
-                ? m_parent->highlightInfo(current)
-                : m_parent->highlightInfo(parent, HighlightInfo::ExtraInfo);
+        return current.hasMatch() ? m_parent->highlightInfo(current)
+                                  : m_parent->highlightInfo(parent, HighlightInfo::ExtraInfo);
     }
 
     Core::ILocatorFilter *m_parent;
@@ -114,7 +118,6 @@ private:
     QList<Entry> m_goodEntries;
     QList<Entry> m_betterEntries;
 };
-
 
 } // namespace
 
@@ -126,8 +129,7 @@ QList<TypesLocator::Entry> TypesLocator::matchesFor(QFutureInterface<Entry> &fut
 
     for (const auto &project : ParsedDataStorage::instance()->root()->projects())
         for (const auto &file : project->files())
-            for (const auto &defs : file->definitionsList())
-            {
+            for (const auto &defs : file->definitionsList()) {
                 if (future.isCanceled())
                     return collector.entries();
                 const auto defsMatch = regExp.match(defs->name());
@@ -139,4 +141,3 @@ QList<TypesLocator::Entry> TypesLocator::matchesFor(QFutureInterface<Entry> &fut
             }
     return collector.entries();
 }
-

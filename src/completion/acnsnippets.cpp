@@ -23,13 +23,12 @@
 **
 ****************************************************************************/
 #include "acnsnippets.h"
-#include "acnsnippets.h"
 
-#include <QLatin1String>
 #include <QCoreApplication>
+#include <QLatin1String>
 
-#include <texteditor/textdocument.h>
 #include <texteditor/snippets/snippetprovider.h>
+#include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
 
 #include <asn1acnconstants.h>

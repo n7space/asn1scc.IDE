@@ -24,8 +24,8 @@
 ****************************************************************************/
 #pragma once
 
-#include <QObject>
 #include <QModelIndex>
+#include <QObject>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -51,5 +51,5 @@ protected:
 };
 
 } /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Internal
+} // namespace Asn1Acn

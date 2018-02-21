@@ -40,8 +40,7 @@ using namespace Asn1Acn::Internal::Libraries::Tests;
 
 FileModelTests::FileModelTests(QObject *parent)
     : QObject(parent)
-{
-}
+{}
 
 void FileModelTests::test_emptyModel()
 {

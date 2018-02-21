@@ -29,8 +29,8 @@
 
 #include <coreplugin/icore.h>
 
-#include "selectsourcepage.h"
 #include "selectcomponentspage.h"
+#include "selectsourcepage.h"
 #include "summarypage.h"
 
 using namespace Asn1Acn::Internal::Libraries;
@@ -54,8 +54,7 @@ void ImportComponentWizard::accept()
     try {
         m_importer.import();
         m_handler.addToVcs(m_importer.importedFiles());
-    }
-    catch (const std::runtime_error &err) {
+    } catch (const std::runtime_error &err) {
         raiseErrorWindow(QString::fromLatin1(err.what()));
     }
 

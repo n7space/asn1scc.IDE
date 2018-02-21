@@ -26,16 +26,14 @@
 
 #include <data/definitions.h>
 #include <data/file.h>
+#include <data/project.h>
 #include <data/typeassignment.h>
 #include <data/valueassignment.h>
-#include <data/project.h>
 
 using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
 
-DisplayRoleVisitor::~DisplayRoleVisitor()
-{
-}
+DisplayRoleVisitor::~DisplayRoleVisitor() {}
 
 QString DisplayRoleVisitor::valueFor(const Definitions &defs) const
 {

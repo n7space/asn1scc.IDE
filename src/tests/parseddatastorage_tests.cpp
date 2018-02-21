@@ -34,8 +34,7 @@ using namespace Asn1Acn::Internal::Tests;
 
 ParsedDataStorageTests::ParsedDataStorageTests(QObject *parent)
     : QObject(parent)
-{
-}
+{}
 
 void ParsedDataStorageTests::test_addAndRemoveProject()
 {

@@ -38,7 +38,7 @@ public:
     General(const QString &name, const QString &path)
         : m_name(name)
         , m_path(path)
-    {}  
+    {}
 
     const QString &name() const { return m_name; }
     const QString &path() const { return m_path; }

@@ -32,8 +32,7 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class FileSourceReader
-        : public SourceReader
+class FileSourceReader : public SourceReader
 {
 public:
     FileSourceReader();

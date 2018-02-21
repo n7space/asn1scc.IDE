@@ -24,10 +24,12 @@
 ****************************************************************************/
 #pragma once
 
-#include <QObject>
 #include <QList>
+#include <QObject>
 
-namespace Core { class IVersionControl; }
+namespace Core {
+class IVersionControl;
+}
 
 namespace Asn1Acn {
 namespace Internal {

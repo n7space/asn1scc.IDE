@@ -32,8 +32,10 @@ using namespace Asn1Acn::Internal;
 Asn1SccDocumentProcessor *Asn1SccDocumentProcessor::create(const QString &projectName)
 {
     return new Asn1SccDocumentProcessor(projectName,
-                                        [](const QHash<QString, QString> &documents)->ParsedDocumentBuilder *
-                                        { return Asn1SccParsedDocumentBuilder::create(documents); },
+                                        [](const QHash<QString, QString> &documents)
+                                            -> ParsedDocumentBuilder * {
+                                            return Asn1SccParsedDocumentBuilder::create(documents);
+                                        },
                                         ParsedDataStorage::instance());
 }
 
@@ -59,12 +61,18 @@ void Asn1SccDocumentProcessor::run()
 {
     m_docBuilder.reset(m_docBuilderCreator(m_documents));
 
-    connect(m_docBuilder.get(), &ParsedDocumentBuilder::finished,
-            this, &Asn1SccDocumentProcessor::onBuilderFinished);
-    connect(m_docBuilder.get(), &ParsedDocumentBuilder::failed,
-            this, &Asn1SccDocumentProcessor::onBuilderFailed);
-    connect(m_docBuilder.get(), &ParsedDocumentBuilder::errored,
-            this, &Asn1SccDocumentProcessor::onBuilderErrored);
+    connect(m_docBuilder.get(),
+            &ParsedDocumentBuilder::finished,
+            this,
+            &Asn1SccDocumentProcessor::onBuilderFinished);
+    connect(m_docBuilder.get(),
+            &ParsedDocumentBuilder::failed,
+            this,
+            &Asn1SccDocumentProcessor::onBuilderFailed);
+    connect(m_docBuilder.get(),
+            &ParsedDocumentBuilder::errored,
+            this,
+            &Asn1SccDocumentProcessor::onBuilderErrored);
 
     m_docBuilder->run();
 }

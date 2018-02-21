@@ -28,26 +28,25 @@
 #include <functional>
 #include <memory>
 
+#include <QFileInfo>
 #include <QHash>
 #include <QString>
-#include <QFileInfo>
 #include <QTextDocument>
 
-#include "parseddocumentbuilder.h"
 #include "documentprocessor.h"
 #include "parseddatastorage.h"
+#include "parseddocumentbuilder.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class Asn1SccDocumentProcessor
-        : public DocumentProcessor
+class Asn1SccDocumentProcessor : public DocumentProcessor
 {
     Q_OBJECT
 public:
-
     using State = DocumentProcessor::State;
-    using DocumentBuilderCreator = std::function<ParsedDocumentBuilder *(const QHash<QString, QString> &documents)>;
+    using DocumentBuilderCreator
+        = std::function<ParsedDocumentBuilder *(const QHash<QString, QString> &documents)>;
 
     static Asn1SccDocumentProcessor *create(const QString &projectName);
 

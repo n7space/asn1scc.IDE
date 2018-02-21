@@ -31,7 +31,9 @@
 #include <libraries/componentimporter.h>
 #include <libraries/wizard/vcshandler.h>
 
-namespace Core { class IVersionControl; }
+namespace Core {
+class IVersionControl;
+}
 
 namespace Asn1Acn {
 namespace Internal {
@@ -43,7 +45,9 @@ class SummaryPage : public QWizardPage
     Q_OBJECT
 
 public:
-    explicit SummaryPage(ComponentImporter &importer, VcsHandler &handler, QWidget *parent = nullptr);
+    explicit SummaryPage(ComponentImporter &importer,
+                         VcsHandler &handler,
+                         QWidget *parent = nullptr);
     void initializePage() override;
 
 private slots:

@@ -27,9 +27,9 @@
 
 #include <memory>
 
+#include <QByteArray>
 #include <QHash>
 #include <QString>
-#include <QByteArray>
 
 #include "asn1sccserviceprovider.h"
 #include "parseddocumentbuilder.h"
@@ -39,8 +39,7 @@ class QJsonObject;
 namespace Asn1Acn {
 namespace Internal {
 
-class Asn1SccParsedDocumentBuilder
-        : public ParsedDocumentBuilder
+class Asn1SccParsedDocumentBuilder : public ParsedDocumentBuilder
 {
     Q_OBJECT
 
@@ -52,7 +51,10 @@ public:
     void run() override;
 
     std::vector<std::unique_ptr<Data::File>> takeDocuments() override;
-    const std::vector<Data::ErrorMessage> &errorMessages() const override { return m_errorMessages; }
+    const std::vector<Data::ErrorMessage> &errorMessages() const override
+    {
+        return m_errorMessages;
+    }
 
 private slots:
     void requestFinished();

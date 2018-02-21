@@ -28,8 +28,8 @@
 
 #include <QString>
 
-#include "sourcelocation.h"
 #include "node.h"
+#include "sourcelocation.h"
 #include "types/type.h"
 
 namespace Asn1Acn {

@@ -34,8 +34,7 @@ using namespace Asn1Acn::Internal::Libraries;
 MetadataModel::MetadataModel(const Metadata::LibraryNode *root, QObject *parent)
     : QAbstractItemModel(parent)
     , m_root(root)
-{
-}
+{}
 
 QVariant MetadataModel::data(const QModelIndex &index, int role) const
 {
@@ -146,8 +145,8 @@ void MetadataModel::selectItems(const MetadataCheckStateHandler::States &items)
 
 void MetadataModel::itemConflicted(const MetadataCheckStateHandler::Conflict &conflict) const
 {
-    QTC_ASSERT(!conflict.first.isEmpty(), return);
-    QTC_ASSERT(!conflict.second.isEmpty(), return);
+    QTC_ASSERT(!conflict.first.isEmpty(), return );
+    QTC_ASSERT(!conflict.second.isEmpty(), return );
 
     emit conflictOccurred(conflict.first, conflict.second);
 }

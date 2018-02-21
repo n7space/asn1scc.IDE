@@ -26,8 +26,8 @@
 
 #include <texteditor/ioutlinewidget.h>
 
-#include "treeviewwidget.h"
 #include "outlineindexupdaterfactory.h"
+#include "treeviewwidget.h"
 
 namespace Asn1Acn {
 namespace Internal {

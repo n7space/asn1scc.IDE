@@ -24,14 +24,14 @@
 ****************************************************************************/
 #pragma once
 
-#include <memory>
 #include <map>
+#include <memory>
 #include <vector>
 
 #include "definitions.h"
+#include "errormessage.h"
 #include "node.h"
 #include "typereference.h"
-#include "errormessage.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -51,7 +51,7 @@ public:
 
     using DefinitionsList = std::vector<std::unique_ptr<Definitions>>;
     using References = std::vector<std::unique_ptr<TypeReference>>;
-    using ReferencesMap = std::multimap<int, TypeReference*>;
+    using ReferencesMap = std::multimap<int, TypeReference *>;
     using ErrorList = std::vector<ErrorMessage>;
 
     const DefinitionsList &definitionsList() const { return m_definitionsList; }

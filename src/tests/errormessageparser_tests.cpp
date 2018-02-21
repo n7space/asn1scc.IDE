@@ -75,7 +75,7 @@ void ErrorMessageParserTests::test_messageWithColumnAndLineNumber()
 
 void ErrorMessageParserTests::test_mappingSourceFiles()
 {
-    const auto parser = ErrorMessageParser(SourceMapper({ {"/abc/xyz.asn", ""} }));
+    const auto parser = ErrorMessageParser(SourceMapper({{"/abc/xyz.asn", ""}}));
     const auto msg = parser.parse("xyz.asn:123:987: error: Message Text");
 
     QVERIFY(msg.isValid());

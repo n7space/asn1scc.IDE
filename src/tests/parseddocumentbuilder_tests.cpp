@@ -25,8 +25,8 @@
 
 #include "parseddocumentbuilder_tests.h"
 
-#include <QtTest>
 #include <QSignalSpy>
+#include <QtTest>
 
 #include "parseddocumentbuilderstub.h"
 
@@ -36,8 +36,7 @@ using namespace Asn1Acn::Internal::Tests;
 ParsedDocumentBuilderTests::ParsedDocumentBuilderTests(QObject *parent)
     : QObject(parent)
     , m_serviceProvider(new ParsingServiceProviderStub)
-{
-}
+{}
 
 ParsedDocumentBuilderTests::~ParsedDocumentBuilderTests()
 {
@@ -46,9 +45,10 @@ ParsedDocumentBuilderTests::~ParsedDocumentBuilderTests()
 
 void ParsedDocumentBuilderTests::test_failed()
 {
-    const QHash<QString, QString> documents = { {"FAILED", "FAILED"} };
+    const QHash<QString, QString> documents = {{"FAILED", "FAILED"}};
 
-    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider, documents);
+    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider,
+                                                                             documents);
     QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);
     QSignalSpy spyErrored(builder, &Asn1SccParsedDocumentBuilder::errored);
     QSignalSpy spyFinished(builder, &Asn1SccParsedDocumentBuilder::finished);
@@ -69,9 +69,12 @@ void ParsedDocumentBuilderTests::test_failed()
 
 void ParsedDocumentBuilderTests::test_error()
 {
-    const QHash<QString, QString> document = { {"ERROR", "{\"ErrorCode\":2,\"Files\":null,\"Messages\":[\"Asn1.asn:8:13: error: No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'\"]}"} };
+    const QHash<QString, QString> document = {
+        {"ERROR",
+         "{\"ErrorCode\":2,\"Files\":null,\"Messages\":[\"Asn1.asn:8:13: error: No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'\"]}"}};
 
-    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider, document);
+    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider,
+                                                                             document);
     QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);
     QSignalSpy spyErrored(builder, &Asn1SccParsedDocumentBuilder::errored);
     QSignalSpy spyFinished(builder, &Asn1SccParsedDocumentBuilder::finished);
@@ -86,7 +89,9 @@ void ParsedDocumentBuilderTests::test_error()
 
     const auto errorMessages = builder->errorMessages();
     QCOMPARE(errorMessages.size(), std::size_t(1));
-    QCOMPARE(errorMessages.at(0).message(), QStringLiteral("No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'"));
+    QCOMPARE(errorMessages.at(0).message(),
+             QStringLiteral(
+                 "No type assignment with name 'Number4' found in the module 'OtherEmptyAsn1'"));
     QCOMPARE(errorMessages.at(0).location().line(), 8);
     QCOMPARE(errorMessages.at(0).location().column(), 13);
 
@@ -99,20 +104,21 @@ void ParsedDocumentBuilderTests::test_error()
 void ParsedDocumentBuilderTests::test_success()
 {
     const QString docXml
-            = R"(<AstRoot>)"
-              R"(  <Asn1File FileName=\"TestFile.asn\">)"
-              R"(    <Modules>)"
-              R"(      <Module Name=\"TestDefinitions\" Line=\"13\" CharPositionInLine=\"42\">)"
-              R"(      </Module>)"
-              R"(    </Modules>)"
-              R"(  </Asn1File>)"
-              R"(</AstRoot>)";
-    const QHash<QString, QString> document = { {"SUCCESS",
-                          QStringLiteral("{\"ErrorCode\":0,\"Files\":[{\"Contents\":")
-                          + '"' + docXml + '"' +
-                          ",\"Name\":\"AST.xml\"}],\"Messages\":null}"} };
+        = R"(<AstRoot>)"
+          R"(  <Asn1File FileName=\"TestFile.asn\">)"
+          R"(    <Modules>)"
+          R"(      <Module Name=\"TestDefinitions\" Line=\"13\" CharPositionInLine=\"42\">)"
+          R"(      </Module>)"
+          R"(    </Modules>)"
+          R"(  </Asn1File>)"
+          R"(</AstRoot>)";
+    const QHash<QString, QString> document = {
+        {"SUCCESS",
+         QStringLiteral("{\"ErrorCode\":0,\"Files\":[{\"Contents\":") + '"' + docXml + '"'
+             + ",\"Name\":\"AST.xml\"}],\"Messages\":null}"}};
 
-    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider, document);
+    Asn1SccParsedDocumentBuilder *builder = new Asn1SccParsedDocumentBuilder(m_serviceProvider,
+                                                                             document);
     QSignalSpy spyFailed(builder, &Asn1SccParsedDocumentBuilder::failed);
     QSignalSpy spyErrored(builder, &Asn1SccParsedDocumentBuilder::errored);
     QSignalSpy spyFinished(builder, &Asn1SccParsedDocumentBuilder::finished);

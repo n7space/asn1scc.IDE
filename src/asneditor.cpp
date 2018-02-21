@@ -27,20 +27,20 @@
 
 #include <QApplication>
 
-#include <texteditor/texteditoractionhandler.h>
 #include <texteditor/basehoverhandler.h>
+#include <texteditor/texteditoractionhandler.h>
 
-#include "completion/autocompleter.h"
-#include "completion/asncompletionassist.h"
-#include "filesourcereader.h"
 #include "asn1acnconstants.h"
-#include "linkcreator.h"
-#include "referencefinder.h"
-#include "parseddatastorage.h"
-#include "usagesfinder.h"
 #include "asndocument.h"
+#include "completion/asncompletionassist.h"
+#include "completion/autocompleter.h"
+#include "filesourcereader.h"
 #include "indenter.h"
+#include "linkcreator.h"
+#include "parseddatastorage.h"
+#include "referencefinder.h"
 #include "tr.h"
+#include "usagesfinder.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -75,17 +75,16 @@ AsnEditorFactory::AsnEditorFactory()
     setUseGenericHighlighter(true);
 
     setEditorActionHandlers(TextEditorActionHandler::Format
-                          | TextEditorActionHandler::UnCommentSelection
-                          | TextEditorActionHandler::UnCollapseAll
-                          | TextEditorActionHandler::FollowSymbolUnderCursor);
+                            | TextEditorActionHandler::UnCommentSelection
+                            | TextEditorActionHandler::UnCollapseAll
+                            | TextEditorActionHandler::FollowSymbolUnderCursor);
 }
 
 AsnEditorWidget::AsnEditorWidget()
     : m_usagesFinder(new UsagesFinder(ParsedDataStorage::instance(),
                                       std::make_unique<FileSourceReader>(),
                                       this))
-{
-}
+{}
 
 AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
                                                   bool resolveTarget,

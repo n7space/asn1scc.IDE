@@ -24,8 +24,8 @@
 ****************************************************************************/
 #pragma once
 
-#include <QString>
 #include <QIcon>
+#include <QString>
 
 #include <utils/theme/theme.h>
 
@@ -50,7 +50,7 @@ private:
     virtual QString baseIconFile() const = 0;
 };
 
-}
+} // namespace Types
 } // namespace Data
 } // namespace Internal
 } // namespace Asn1Acn

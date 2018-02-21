@@ -24,14 +24,14 @@
 ****************************************************************************/
 #include "typestreeindexupdater.h"
 
-#include <projectexplorer/session.h>
 #include <projectexplorer/project.h>
+#include <projectexplorer/session.h>
 
 #include <coreplugin/editormanager/editormanager.h>
 
-#include <parseddatastorage.h>
-#include <data/root.h>
 #include <data/project.h>
+#include <data/root.h>
+#include <parseddatastorage.h>
 
 #include "typestree-visitors/indexfindingvisitor.h"
 
@@ -42,17 +42,21 @@ using namespace Asn1Acn::Internal::TreeViews;
 TypesTreeIndexUpdater::TypesTreeIndexUpdater(const Model *model, QObject *parent)
     : SynchronizedIndexUpdater(model, parent)
 {
-    connect(Core::EditorManager::instance(), &Core::EditorManager::currentEditorChanged,
-            this, &TypesTreeIndexUpdater::onEditorChanged);
+    connect(Core::EditorManager::instance(),
+            &Core::EditorManager::currentEditorChanged,
+            this,
+            &TypesTreeIndexUpdater::onEditorChanged);
 
-    connect(Core::EditorManager::instance(), &Core::EditorManager::editorAboutToClose,
-            this, &TypesTreeIndexUpdater::onEditorAboutToClose);
+    connect(Core::EditorManager::instance(),
+            &Core::EditorManager::editorAboutToClose,
+            this,
+            &TypesTreeIndexUpdater::onEditorAboutToClose);
 
-    connect(m_model, &Model::modelReset,
-            this, &IndexUpdater::updateCurrentIndex);
+    connect(m_model, &Model::modelReset, this, &IndexUpdater::updateCurrentIndex);
 }
 
-void TypesTreeIndexUpdater::fillSelectedIndexes(QModelIndex &current, QModelIndexList &selected) const
+void TypesTreeIndexUpdater::fillSelectedIndexes(QModelIndex &current,
+                                                QModelIndexList &selected) const
 {
     if (editorEmpty())
         return;
@@ -74,14 +78,16 @@ void TypesTreeIndexUpdater::fillSelectedIndexes(QModelIndex &current, QModelInde
 QModelIndexList TypesTreeIndexUpdater::searchedIndexes() const
 {
     const auto &root = ParsedDataStorage::instance()->root();
-    QStringList projectNames = ParsedDataStorage::instance()->getProjectsForFile(currentFilePath().toString());
+    QStringList projectNames = ParsedDataStorage::instance()->getProjectsForFile(
+        currentFilePath().toString());
 
     QModelIndexList projectIndexes;
     for (const auto &name : projectNames) {
         const auto projectNode = root->project(name);
-        const auto projectIndex = m_model->index(root->valueFor<TypesTreeVisitors::IndexFindingVisitor>(projectNode),
-                                                 0,
-                                                 QModelIndex());
+        const auto projectIndex
+            = m_model->index(root->valueFor<TypesTreeVisitors::IndexFindingVisitor>(projectNode),
+                             0,
+                             QModelIndex());
         projectIndexes.append(projectIndex);
     }
 
@@ -91,7 +97,8 @@ QModelIndexList TypesTreeIndexUpdater::searchedIndexes() const
 void TypesTreeIndexUpdater::onEditorChanged(Core::IEditor *editor)
 {
     Q_UNUSED(editor);
-    TextEditor::TextEditorWidget *editorWidget = TextEditor::TextEditorWidget::currentTextEditorWidget();
+    TextEditor::TextEditorWidget *editorWidget
+        = TextEditor::TextEditorWidget::currentTextEditorWidget();
     setEditor(editorWidget);
 }
 

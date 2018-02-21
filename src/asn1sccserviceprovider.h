@@ -25,16 +25,16 @@
 
 #pragma once
 
-#include <QNetworkReply>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 #include <QJsonDocument>
 
 #include <QFileInfo>
+#include <QHash>
 #include <QObject>
 #include <QProcess>
 #include <QTimer>
-#include <QHash>
 
 #include "settings/service.h"
 
@@ -43,8 +43,7 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class Asn1SccServiceProvider
-        : public ParsingServiceProvider
+class Asn1SccServiceProvider : public ParsingServiceProvider
 {
     Q_OBJECT
 
@@ -56,7 +55,11 @@ public:
 
     void start();
     void stop();
-    void restart() { stop(); start(); }
+    void restart()
+    {
+        stop();
+        start();
+    }
 
 private slots:
     void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -77,5 +80,5 @@ private:
     Settings::ServiceConstPtr m_settings;
 };
 
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Internal
+} // namespace Asn1Acn

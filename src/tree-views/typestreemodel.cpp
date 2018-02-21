@@ -38,13 +38,13 @@ using namespace Asn1Acn::Internal::Data;
 TypesTreeModel::TypesTreeModel(QObject *parent)
     : Model(parent)
 {
-    connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelChanged,
-            this, &TypesTreeModel::endResetModel);
+    connect(ModelValidityGuard::instance(),
+            &ModelValidityGuard::modelChanged,
+            this,
+            &TypesTreeModel::endResetModel);
 }
 
-TypesTreeModel::~TypesTreeModel()
-{
-}
+TypesTreeModel::~TypesTreeModel() {}
 
 void TypesTreeModel::onEndResetModel()
 {

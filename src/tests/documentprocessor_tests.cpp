@@ -38,15 +38,17 @@ using namespace Asn1Acn::Internal::Tests;
 DocumentProcessorTests::DocumentProcessorTests(QObject *parent)
     : QObject(parent)
     , m_fileDir("/test/dir/")
-    , m_docBuilderCreator([](const QHash<QString, QString> &documents)->ParsedDocumentBuilder *
-                          { return new ParsedDocumentBuilderStub(documents); })
+    , m_docBuilderCreator([](const QHash<QString, QString> &documents) -> ParsedDocumentBuilder * {
+        return new ParsedDocumentBuilderStub(documents);
+    })
     , m_storage(std::make_unique<ParsedDataStorage>())
-{
-}
+{}
 
 void DocumentProcessorTests::test_unstarted()
 {
-    DocumentProcessor *dp = new Asn1SccDocumentProcessor("ProjectName", m_docBuilderCreator, m_storage.get());
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor("ProjectName",
+                                                         m_docBuilderCreator,
+                                                         m_storage.get());
 
     QCOMPARE(dp->state(), DocumentProcessor::State::Unfinished);
 
@@ -62,7 +64,9 @@ void DocumentProcessorTests::test_successful()
     const QString content("SUCCESS");
     const QString filePath = m_fileDir + fileName;
 
-    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator, m_storage.get());
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName,
+                                                         m_docBuilderCreator,
+                                                         m_storage.get());
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
     dp->addToRun(filePath, content);
@@ -79,7 +83,9 @@ void DocumentProcessorTests::test_error()
     const QString content("ERROR");
     const QString filePath = m_fileDir + fileName;
 
-    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator, m_storage.get());
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName,
+                                                         m_docBuilderCreator,
+                                                         m_storage.get());
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
     dp->addToRun(filePath, content);
@@ -96,7 +102,9 @@ void DocumentProcessorTests::test_failed()
     const QString content("FAILED");
     const QString filePath = m_fileDir + fileName;
 
-    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator, m_storage.get());
+    DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName,
+                                                         m_docBuilderCreator,
+                                                         m_storage.get());
     QSignalSpy spy(dp, &DocumentProcessor::processingFinished);
 
     dp->addToRun(filePath, content);
@@ -120,7 +128,9 @@ void DocumentProcessorTests::test_multipleProcessors()
     std::vector<QSignalSpy *> spies;
 
     for (int i = 0; i < processorsCnt; i++) {
-        DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName, m_docBuilderCreator, m_storage.get());
+        DocumentProcessor *dp = new Asn1SccDocumentProcessor(m_projectName,
+                                                             m_docBuilderCreator,
+                                                             m_storage.get());
         dp->addToRun(filePath, content);
         spies.push_back(new QSignalSpy(dp, &DocumentProcessor::processingFinished));
 
@@ -133,7 +143,11 @@ void DocumentProcessorTests::test_multipleProcessors()
     for (int i = 0; i < processorsCnt - 1; i++)
         examine(processors[i], *spies[i], DocumentProcessor::State::Outdated, fileName, filePath);
 
-    examine(processors[processorsCnt - 1], *spies[processorsCnt - 1], DocumentProcessor::State::Successful, fileName, filePath);
+    examine(processors[processorsCnt - 1],
+            *spies[processorsCnt - 1],
+            DocumentProcessor::State::Successful,
+            fileName,
+            filePath);
 
     for (int i = 0; i < processorsCnt; i++) {
         delete processors[i];

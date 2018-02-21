@@ -25,14 +25,14 @@
 
 #pragma once
 
-#include <memory>
 #include <map>
+#include <memory>
 
 #include <QMutex>
 #include <QString>
 
-#include "metadata/library.h"
 #include "metadata/general.h"
+#include "metadata/library.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -69,7 +69,6 @@ private:
 
     mutable QMutex m_libraryMutex;
 };
-
 
 } // namespace Libraries
 } // namespace Internal

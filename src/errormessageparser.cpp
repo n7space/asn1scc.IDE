@@ -30,8 +30,7 @@ using namespace Asn1Acn::Internal;
 
 ErrorMessageParser::ErrorMessageParser(const SourceMapper &pathMapper)
     : m_pathMapping(pathMapper)
-{
-}
+{}
 
 Data::ErrorMessage ErrorMessageParser::parse(const QString &message) const
 {
@@ -42,6 +41,8 @@ Data::ErrorMessage ErrorMessageParser::parse(const QString &message) const
         return {};
 
     const auto path = m_pathMapping.findByFileName(match.captured(1));
-    const auto loc = Data::SourceLocation(path, match.captured(2).toInt(), match.captured(3).toInt());
+    const auto loc = Data::SourceLocation(path,
+                                          match.captured(2).toInt(),
+                                          match.captured(3).toInt());
     return {loc, match.captured(4)};
 }

@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include <QHash>
 #include <QFileSystemModel>
+#include <QHash>
 
 namespace Asn1Acn {
 namespace Internal {

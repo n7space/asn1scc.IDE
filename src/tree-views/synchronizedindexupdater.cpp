@@ -27,11 +27,11 @@
 
 #include <texteditor/textdocument.h>
 
-#include <projectexplorer/session.h>
 #include <projectexplorer/project.h>
+#include <projectexplorer/session.h>
 
-#include <data/project.h>
 #include "model.h"
+#include <data/project.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
@@ -52,8 +52,10 @@ void SynchronizedIndexUpdater::setEditor(TextEditor::TextEditorWidget *editorWid
     m_editorWidget = editorWidget;
 
     if (!editorEmpty()) {
-        connect(m_editorWidget, &QPlainTextEdit::cursorPositionChanged,
-                m_updateIndexTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+        connect(m_editorWidget,
+                &QPlainTextEdit::cursorPositionChanged,
+                m_updateIndexTimer,
+                static_cast<void (QTimer::*)()>(&QTimer::start));
         m_updateIndexTimer->start();
     } else {
         emit indexSelectionUpdated(QModelIndexList(), QModelIndex());
@@ -135,6 +137,5 @@ void SynchronizedIndexUpdater::createUpdateTimer()
     m_updateIndexTimer->setSingleShot(true);
     m_updateIndexTimer->setInterval(UPDATE_INTERVAL_MS);
 
-    connect(m_updateIndexTimer, &QTimer::timeout,
-            this, &SynchronizedIndexUpdater::updateNow);
+    connect(m_updateIndexTimer, &QTimer::timeout, this, &SynchronizedIndexUpdater::updateNow);
 }

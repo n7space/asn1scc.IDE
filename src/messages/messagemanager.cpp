@@ -58,9 +58,10 @@ QString decorateMessage(const QString &message, MessageManager::Type type)
 {
     return currentTime() + prefix(type) + message;
 }
-} // namespace Anonymous
+} // namespace
 
 void MessageManager::write(const QString &message, MessageManager::Type type)
 {
-    Core::MessageManager::write(decorateMessage(message, type),  Core::MessageManager::PrintToOutputPaneFlag::Silent);
+    Core::MessageManager::write(decorateMessage(message, type),
+                                Core::MessageManager::PrintToOutputPaneFlag::Silent);
 }

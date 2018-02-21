@@ -33,8 +33,7 @@ using namespace Asn1Acn::Internal::Completion;
 
 UserTypesProposalsBuilder::UserTypesProposalsBuilder(const Data::File *data)
     : m_data(data)
-{
-}
+{}
 
 void UserTypesProposalsBuilder::fillProposals()
 {
@@ -55,7 +54,8 @@ void UserTypesProposalsBuilder::appendInternalTypes(const Data::Definitions::Typ
         addProposal(type->name(), type->valueFor<TreeViews::DecorationRoleVisitor>());
 }
 
-void UserTypesProposalsBuilder::appendImportedTypes(const Data::Definitions::ImportedTypes &importedTypes)
+void UserTypesProposalsBuilder::appendImportedTypes(
+    const Data::Definitions::ImportedTypes &importedTypes)
 {
     foreach (const auto &importedType, importedTypes)
         appendImportedElement(importedType.module(), importedType.name());
@@ -67,7 +67,8 @@ void UserTypesProposalsBuilder::appendInternalValues(const Data::Definitions::Va
         addProposal(value->name(), value->valueFor<TreeViews::DecorationRoleVisitor>());
 }
 
-void UserTypesProposalsBuilder::appendImportedValues(const Data::Definitions::ImportedValues &importedValues)
+void UserTypesProposalsBuilder::appendImportedValues(
+    const Data::Definitions::ImportedValues &importedValues)
 {
     foreach (const auto &importedValue, importedValues)
         appendImportedElement(importedValue.module(), importedValue.name());
@@ -78,6 +79,7 @@ void UserTypesProposalsBuilder::appendImportedElement(const QString &module, con
     static const auto defaultIcon = QIcon(":/codemodel/images/member.png");
     const auto searchRoot = m_data->parent() != nullptr ? m_data->parent() : m_data;
     const auto node = searchRoot->valueFor<ImportFindingVisitor>(module, name);
-    const auto icon = node == nullptr ? defaultIcon : node->valueFor<TreeViews::DecorationRoleVisitor>();
+    const auto icon = node == nullptr ? defaultIcon
+                                      : node->valueFor<TreeViews::DecorationRoleVisitor>();
     addProposal(name, icon);
 }

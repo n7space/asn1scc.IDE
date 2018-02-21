@@ -29,8 +29,7 @@ using namespace Asn1Acn::Internal;
 
 ParsingServiceProviderStub::ParsingServiceProviderStub(QObject *parent)
     : ParsingServiceProvider(parent)
-{
-}
+{}
 
 QNetworkReply *ParsingServiceProviderStub::requestAst(const QHash<QString, QString> &documents) const
 {

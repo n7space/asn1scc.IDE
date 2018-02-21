@@ -25,19 +25,23 @@
 
 #include "unsynchronizedindexupdater.h"
 
-#include <QTreeView>
 #include <QItemSelectionModel>
+#include <QTreeView>
 
 #include "model.h"
 
 using namespace Asn1Acn::Internal::TreeViews;
 
-UnsynchronizedIndexUpdater::UnsynchronizedIndexUpdater(const QTreeView *view, const Model *model, QObject *parent)
+UnsynchronizedIndexUpdater::UnsynchronizedIndexUpdater(const QTreeView *view,
+                                                       const Model *model,
+                                                       QObject *parent)
     : IndexUpdater(model, parent)
     , m_view(view)
 {
-    connect(model, &Model::modelAboutToBeReset,
-            this, &UnsynchronizedIndexUpdater::onModelAboutToBeReset);
+    connect(model,
+            &Model::modelAboutToBeReset,
+            this,
+            &UnsynchronizedIndexUpdater::onModelAboutToBeReset);
 }
 
 void UnsynchronizedIndexUpdater::onModelAboutToBeReset()
@@ -116,7 +120,8 @@ QModelIndex UnsynchronizedIndexUpdater::indexForTreePath(const QStringList &path
     return index;
 }
 
-QModelIndex UnsynchronizedIndexUpdater::findInParent(const QModelIndex &parent, const QString &displayName) const
+QModelIndex UnsynchronizedIndexUpdater::findInParent(const QModelIndex &parent,
+                                                     const QString &displayName) const
 {
     for (int i = 0; i < m_model->rowCount(parent); ++i)
         for (int j = 0; j < m_model->columnCount(parent); ++j)

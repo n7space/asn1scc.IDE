@@ -29,9 +29,7 @@
 
 using namespace Asn1Acn::Internal::Settings;
 
-Settings::~Settings()
-{
-}
+Settings::~Settings() {}
 
 void Settings::saveTo(QSettings *s) const
 {

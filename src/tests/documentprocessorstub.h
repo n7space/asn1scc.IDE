@@ -28,8 +28,8 @@
 #include <memory>
 #include <vector>
 
-#include <QString>
 #include <QHash>
+#include <QString>
 
 #include <documentprocessor.h>
 
@@ -37,12 +37,10 @@ namespace Asn1Acn {
 namespace Internal {
 namespace Tests {
 
-class DocumentProcessorStub
-        : public DocumentProcessor
+class DocumentProcessorStub : public DocumentProcessor
 {
     Q_OBJECT
 public:
-
     using State = DocumentProcessor::State;
 
     DocumentProcessorStub(const QString &project = QString());

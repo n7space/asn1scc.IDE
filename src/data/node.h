@@ -37,8 +37,7 @@ class Visitor;
 class Node
 {
 protected:
-    Node(const QString &name,
-         const SourceLocation &location)
+    Node(const QString &name, const SourceLocation &location)
         : m_name(name)
         , m_location(location)
         , m_parent(nullptr)
@@ -49,7 +48,7 @@ public:
 
     virtual void accept(Visitor &visitor) const = 0;
 
-    template <typename VisitorType, typename... Args>
+    template<typename VisitorType, typename... Args>
     typename VisitorType::ValueType valueFor(Args... args) const
     {
         VisitorType visitor(args...);

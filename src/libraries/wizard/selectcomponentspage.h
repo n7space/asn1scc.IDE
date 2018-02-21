@@ -33,8 +33,8 @@
 #include <libraries/componentimporter.h>
 #include <libraries/metadatamodel.h>
 
-#include "relationslabelscontroller.h"
 #include "componentselector.h"
+#include "relationslabelscontroller.h"
 
 #include "ui_select_component.h"
 

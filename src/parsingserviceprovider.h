@@ -27,23 +27,24 @@
 
 #include <QObject>
 
-#include <QNetworkReply>
 #include <QList>
+#include <QNetworkReply>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ParsingServiceProvider
-    : public QObject
+class ParsingServiceProvider : public QObject
 {
     Q_OBJECT
 
 public:
-    ParsingServiceProvider(QObject *parent = 0) : QObject(parent) {}
+    ParsingServiceProvider(QObject *parent = 0)
+        : QObject(parent)
+    {}
     virtual ~ParsingServiceProvider() = default;
 
     virtual QNetworkReply *requestAst(const QHash<QString, QString> &documents) const = 0;
 };
 
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Internal
+} // namespace Asn1Acn

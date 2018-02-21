@@ -25,8 +25,8 @@
 
 #include "generalmetadataprocessor.h"
 
-#include "librarystorage.h"
 #include "generalmetadataparser.h"
+#include "librarystorage.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Libraries;
@@ -39,8 +39,7 @@ GeneralMetadataProcessor::GeneralMetadataProcessor(const QString &path,
     , m_reader(reader)
     , m_path(path)
     , m_file(file)
-{
-}
+{}
 
 void GeneralMetadataProcessor::process()
 {

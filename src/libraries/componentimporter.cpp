@@ -29,9 +29,9 @@
 
 #include <QFile>
 
-#include <projectexplorer/session.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectnodes.h>
+#include <projectexplorer/session.h>
 
 using namespace Asn1Acn::Internal::Libraries;
 
@@ -84,7 +84,8 @@ QStringList ComponentImporter::copyFilesToProject()
 void ComponentImporter::createTargetDir(QDir &parent, const QString &path)
 {
     if (!parent.mkpath(path))
-        throw std::runtime_error("Could not create directory \'" + parent.filePath(path).toStdString() + "\'");
+        throw std::runtime_error("Could not create directory \'"
+                                 + parent.filePath(path).toStdString() + "\'");
 }
 
 void ComponentImporter::copyFile(const QString &source, const QString &target)
@@ -93,7 +94,8 @@ void ComponentImporter::copyFile(const QString &source, const QString &target)
         throw std::runtime_error("Could not replace exisitng file \'" + target.toStdString() + "\'");
 
     if (!QFile::copy(source, target))
-        throw std::runtime_error("Could not copy \'" + source.toStdString() + "\' to \'" + target.toStdString() + "\'");
+        throw std::runtime_error("Could not copy \'" + source.toStdString() + "\' to \'"
+                                 + target.toStdString() + "\'");
 }
 
 QString ComponentImporter::targetFileName(const QString &file)
@@ -102,13 +104,15 @@ QString ComponentImporter::targetFileName(const QString &file)
     return m_targetDir.filePath(relativeSrcPath);
 }
 
-void ComponentImporter::addFilesToProject(const ProjectExplorer::Project *project, const QStringList &files)
+void ComponentImporter::addFilesToProject(const ProjectExplorer::Project *project,
+                                          const QStringList &files)
 {
     m_importedFiles = createUniqueFilesList(project, files);
     project->rootProjectNode()->addFiles(m_importedFiles);
 }
 
-QStringList ComponentImporter::createUniqueFilesList(const ProjectExplorer::Project *project, const QStringList &newFiles)
+QStringList ComponentImporter::createUniqueFilesList(const ProjectExplorer::Project *project,
+                                                     const QStringList &newFiles)
 {
     QStringList uniqueFiles;
     const auto projectFiles = project->files(ProjectExplorer::Project::SourceFiles);

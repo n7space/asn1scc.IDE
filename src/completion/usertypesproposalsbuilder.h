@@ -30,8 +30,8 @@
 
 #include <texteditor/codeassist/assistproposalitem.h>
 
-#include <data/file.h>
 #include <data/definitions.h>
+#include <data/file.h>
 
 #include "proposalsbuilder.h"
 

@@ -27,10 +27,10 @@
 
 #include <QAction>
 
+#include <projectexplorer/project.h>
 #include <projectexplorer/projectexplorer.h>
 #include <projectexplorer/projectnodes.h>
 #include <projectexplorer/session.h>
-#include <projectexplorer/project.h>
 
 using namespace Asn1Acn::Internal;
 
@@ -39,11 +39,15 @@ ImportMenuItemController::ImportMenuItemController(QAction *menuItem, QObject *p
     , m_menuItem(menuItem)
     , m_currentProject(nullptr)
 {
-    connect(ProjectExplorer::SessionManager::instance(), &ProjectExplorer::SessionManager::startupProjectChanged,
-            this, &ImportMenuItemController::onActiveProjectChanged);
+    connect(ProjectExplorer::SessionManager::instance(),
+            &ProjectExplorer::SessionManager::startupProjectChanged,
+            this,
+            &ImportMenuItemController::onActiveProjectChanged);
 
-    connect(ProjectExplorer::SessionManager::instance(), &ProjectExplorer::SessionManager::aboutToRemoveProject,
-            this, &ImportMenuItemController::onAboutToRemoveProject);
+    connect(ProjectExplorer::SessionManager::instance(),
+            &ProjectExplorer::SessionManager::aboutToRemoveProject,
+            this,
+            &ImportMenuItemController::onAboutToRemoveProject);
 }
 
 void ImportMenuItemController::onActiveProjectChanged(ProjectExplorer::Project *project)
@@ -54,8 +58,10 @@ void ImportMenuItemController::onActiveProjectChanged(ProjectExplorer::Project *
 
     const auto projectNode = m_currentProject->rootProjectNode();
     if (projectNode == nullptr)
-        connect(project, &ProjectExplorer::Project::parsingFinished,
-                this, &ImportMenuItemController::onProjectLoadingFinished);
+        connect(project,
+                &ProjectExplorer::Project::parsingFinished,
+                this,
+                &ImportMenuItemController::onProjectLoadingFinished);
 
     updateMenuItemState(projectNode);
 }
@@ -74,8 +80,10 @@ void ImportMenuItemController::onProjectLoadingFinished()
 void ImportMenuItemController::refreshCurrentProject(ProjectExplorer::Project *project)
 {
     if (m_currentProject != nullptr) {
-        disconnect(m_currentProject, &ProjectExplorer::Project::parsingFinished,
-                   this, &ImportMenuItemController::onProjectLoadingFinished);
+        disconnect(m_currentProject,
+                   &ProjectExplorer::Project::parsingFinished,
+                   this,
+                   &ImportMenuItemController::onProjectLoadingFinished);
         m_menuItem->setEnabled(false);
     }
 

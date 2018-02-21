@@ -28,19 +28,49 @@
 
 using namespace Asn1Acn::Internal::Completion;
 
-static const QStringList KEYWORDS = { "PLUS-INFINITY", "MINUS-INFINITY", "AUTOMATIC", "TAGS", "EXPLICIT", "IMPLICIT",
-                                      "BEGIN", "END", "ALL EXCEPT", "EXPORTS", "DEFINITIONS", "APPLICATION", "PRIVATE",
-                                      "UNIVERSAL", "EXCEPT", "UNION", "INTERSECTION FROM" };
+static const QStringList KEYWORDS = {"PLUS-INFINITY",
+                                     "MINUS-INFINITY",
+                                     "AUTOMATIC",
+                                     "TAGS",
+                                     "EXPLICIT",
+                                     "IMPLICIT",
+                                     "BEGIN",
+                                     "END",
+                                     "ALL EXCEPT",
+                                     "EXPORTS",
+                                     "DEFINITIONS",
+                                     "APPLICATION",
+                                     "PRIVATE",
+                                     "UNIVERSAL",
+                                     "EXCEPT",
+                                     "UNION",
+                                     "INTERSECTION FROM"};
 
-static const QStringList TYPES = { "ENUMERATED", "INTEGER", "REAL", "BOOLEAN", "CHOICE", "SET", "SEQUENCE",
-                                   "OCTET STRING", "BIT STRING", "IA5String" };
+static const QStringList TYPES = {"ENUMERATED",
+                                  "INTEGER",
+                                  "REAL",
+                                  "BOOLEAN",
+                                  "CHOICE",
+                                  "SET",
+                                  "SEQUENCE",
+                                  "OCTET STRING",
+                                  "BIT STRING",
+                                  "IA5String"};
 
-static const QStringList BUILTIN = { "NULL", "FALSE", "TRUE" };
+static const QStringList BUILTIN = {"NULL", "FALSE", "TRUE"};
 
-static const QStringList ATTRIBUTES = { "SIZE", "OPTIONAL", "MIN", "MAX", "DEFAULT", "WITH COMPONENT", "WITH COMPONENTS",
-                                        "INCLUDES", "ABSENT", "PRESENT", "PATTERN" };
+static const QStringList ATTRIBUTES = {"SIZE",
+                                       "OPTIONAL",
+                                       "MIN",
+                                       "MAX",
+                                       "DEFAULT",
+                                       "WITH COMPONENT",
+                                       "WITH COMPONENTS",
+                                       "INCLUDES",
+                                       "ABSENT",
+                                       "PRESENT",
+                                       "PATTERN"};
 
 AsnKeywordProposalsBuilder::AsnKeywordProposalsBuilder()
     : KeywordProposalsBuilder(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
-{
-}
+{}

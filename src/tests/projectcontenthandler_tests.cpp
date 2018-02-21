@@ -25,13 +25,13 @@
 
 #include "projectcontenthandler_tests.h"
 
-#include <QtTest>
 #include <QSignalSpy>
+#include <QtTest>
 
 #include <projectcontenthandler.h>
 
-#include "sourcereadermock.h"
 #include "documentprocessorstub.h"
+#include "sourcereadermock.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
@@ -40,9 +40,12 @@ ProjectContentHandlerTests::ProjectContentHandlerTests(QObject *parent)
     : QObject(parent)
     , m_storage(new ParsedDataStorage)
     , m_guard(new ModelValidityGuard)
-    , m_createProcessor([](const QString &)->DocumentProcessor * { return new DocumentProcessorStub(); })
+    , m_createProcessor(
+          [](const QString &) -> DocumentProcessor * { return new DocumentProcessorStub(); })
 {
-    m_fileTypes << "_ERROR_" << "_FAILED_" << "_SUCCESS_";
+    m_fileTypes << "_ERROR_"
+                << "_FAILED_"
+                << "_SUCCESS_";
 }
 
 ProjectContentHandlerTests::~ProjectContentHandlerTests()
@@ -234,7 +237,8 @@ void ProjectContentHandlerTests::removeProject(const QString &projectName)
     QCOMPARE(m_guard->isValid(), true);
 }
 
-void ProjectContentHandlerTests::fileListChanged(const QString &projectName, const QStringList &files)
+void ProjectContentHandlerTests::fileListChanged(const QString &projectName,
+                                                 const QStringList &files)
 {
     QSignalSpy spyAboutToUpdate(m_guard, &ModelValidityGuard::modelAboutToChange);
     QSignalSpy spyUpdated(m_guard, &ModelValidityGuard::modelChanged);

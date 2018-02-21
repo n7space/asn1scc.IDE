@@ -26,6 +26,4 @@
 
 using namespace Asn1Acn::Internal::Data;
 
-Visitor::~Visitor()
-{
-}
+Visitor::~Visitor() {}

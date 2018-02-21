@@ -24,8 +24,8 @@
 ****************************************************************************/
 #pragma once
 
-#include <data/visitorwithvalue.h>
 #include <data/node.h>
+#include <data/visitorwithvalue.h>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -50,7 +50,7 @@ private:
 
     const Data::Node *m_child;
 
-    template <typename Collection>
+    template<typename Collection>
     int findIndexIn(const Collection &items) const;
 };
 

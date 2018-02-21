@@ -24,8 +24,8 @@
 ****************************************************************************/
 #pragma once
 
-#include <QTextCursor>
 #include <QChar>
+#include <QTextCursor>
 
 #include <texteditor/texteditor.h>
 
@@ -40,8 +40,7 @@ class ParsedDataStorage;
 class ReferenceFinder
 {
 public:
-    ReferenceFinder(const TextEditor::TextDocument &document,
-                    const ParsedDataStorage *storage);
+    ReferenceFinder(const TextEditor::TextDocument &document, const ParsedDataStorage *storage);
 
     Data::TypeReference findAt(const QTextCursor &cursor) const;
 

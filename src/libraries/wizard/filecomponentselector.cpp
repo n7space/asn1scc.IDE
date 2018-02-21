@@ -32,12 +32,13 @@
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
-FileComponentSelector::FileComponentSelector(FileModel *model, const QStringList nameFilter, QObject *parent)
+FileComponentSelector::FileComponentSelector(FileModel *model,
+                                             const QStringList nameFilter,
+                                             QObject *parent)
     : ComponentSelector(parent)
     , m_model(model)
     , m_nameFilter(nameFilter)
-{
-}
+{}
 
 QStringList FileComponentSelector::pathsToImport()
 {
@@ -67,12 +68,12 @@ QStringList FileComponentSelector::pathsFromChildIndex(const QModelIndex &child)
 
     if (m_model->isDir(child))
         return m_model->rowCount(child) > 0
-               ? selectedPathsFromModelItem(m_model->filePath(child))
-               : selectedPathsFromFilesystemItem(m_model->filePath(child));
+                   ? selectedPathsFromModelItem(m_model->filePath(child))
+                   : selectedPathsFromFilesystemItem(m_model->filePath(child));
 
     QTC_ASSERT(state == Qt::Checked, return {});
 
-    return { m_model->filePath(child) };
+    return {m_model->filePath(child)};
 }
 
 QStringList FileComponentSelector::selectedPathsFromFilesystemItem(const QString &path) const

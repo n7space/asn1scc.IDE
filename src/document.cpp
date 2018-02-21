@@ -29,11 +29,11 @@
 
 #include <coreplugin/idocument.h>
 
-#include <projectexplorer/session.h>
 #include <projectexplorer/project.h>
+#include <projectexplorer/session.h>
 
-#include <texteditor/texteditorsettings.h>
 #include <texteditor/fontsettings.h>
+#include <texteditor/texteditorsettings.h>
 
 #include "projectcontenthandler.h"
 
@@ -46,11 +46,13 @@ Document::Document()
     m_processorTimer.setSingleShot(true);
     m_processorTimer.setInterval(PROCESS_DOCUMENT_INTERVAL_MS);
 
-    connect(&m_processorTimer, &QTimer::timeout,
-            this, &Document::processDocument, Qt::UniqueConnection);
+    connect(&m_processorTimer,
+            &QTimer::timeout,
+            this,
+            &Document::processDocument,
+            Qt::UniqueConnection);
 
-    connect(this, &Core::IDocument::filePathChanged,
-            this, &Document::onFilePathChanged);
+    connect(this, &Core::IDocument::filePathChanged, this, &Document::onFilePathChanged);
 }
 
 void Document::scheduleProcessDocument()
@@ -65,11 +67,12 @@ void Document::onFilePathChanged(const Utils::FileName &oldPath, const Utils::Fi
 
     updateExtraSelections();
 
-    connect(this, &Core::IDocument::contentsChanged,
-            this, &Document::scheduleProcessDocument);
+    connect(this, &Core::IDocument::contentsChanged, this, &Document::scheduleProcessDocument);
 
-    connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelChanged,
-            this, &Document::onModelChanged);
+    connect(ModelValidityGuard::instance(),
+            &ModelValidityGuard::modelChanged,
+            this,
+            &Document::onModelChanged);
 }
 
 void Document::onModelChanged()
@@ -78,15 +81,16 @@ void Document::onModelChanged()
 }
 
 namespace {
-QList<QTextEdit::ExtraSelection> errorsToSelection(const std::vector<Data::ErrorMessage> &errorMessages,
-                                                   QTextDocument *textDocument)
+QList<QTextEdit::ExtraSelection> errorsToSelection(
+    const std::vector<Data::ErrorMessage> &errorMessages, QTextDocument *textDocument)
 {
-    const auto errorFormat = TextEditor::TextEditorSettings::instance()->fontSettings().toTextCharFormat(TextEditor::C_ERROR);
+    const auto errorFormat = TextEditor::TextEditorSettings::instance()
+                                 ->fontSettings()
+                                 .toTextCharFormat(TextEditor::C_ERROR);
 
     QList<QTextEdit::ExtraSelection> result;
 
     for (const auto &message : errorMessages) {
-
         const auto &location = message.location();
 
         QTextEdit::ExtraSelection selection;
@@ -115,8 +119,8 @@ void Document::processDocument()
 
 void Document::updateExtraSelections() const
 {
-    const auto file = ParsedDataStorage::instance()->getFileForPathFromProject(activeProjectName(),
-                                                                               filePath().toString());
+    const auto file = ParsedDataStorage::instance()
+                          ->getFileForPathFromProject(activeProjectName(), filePath().toString());
     if (file == nullptr)
         return;
 

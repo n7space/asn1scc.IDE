@@ -26,8 +26,8 @@
 
 #include <QIcon>
 
-#include <coreplugin/editormanager/ieditor.h>
 #include <coreplugin/editormanager/editormanager.h>
+#include <coreplugin/editormanager/ieditor.h>
 
 #include <texteditor/codeassist/assistproposalitem.h>
 #include <texteditor/codeassist/genericproposal.h>
@@ -35,10 +35,10 @@
 
 #include "data/file.h"
 
-#include "asn1acnconstants.h"
-#include "parseddatastorage.h"
 #include "acneditor.h"
+#include "asn1acnconstants.h"
 #include "asneditor.h"
+#include "parseddatastorage.h"
 
 #include "usertypesproposalsbuilder.h"
 
@@ -48,10 +48,10 @@ static const int COMPLETER_ACTIVATION_LENGHT = 2;
 
 CompletionAssistProcessor::CompletionAssistProcessor(const QString &snippetsGroup)
     : m_snippetCollector(snippetsGroup, QIcon(":/texteditor/images/snippet.png"))
-{
-}
+{}
 
-TextEditor::IAssistProposal *CompletionAssistProcessor::perform(const TextEditor::AssistInterface *interface)
+TextEditor::IAssistProposal *CompletionAssistProcessor::perform(
+    const TextEditor::AssistInterface *interface)
 {
     if (interface->reason() != TextEditor::ExplicitlyInvoked && !shouldAccept(interface))
         return nullptr;
@@ -62,14 +62,17 @@ TextEditor::IAssistProposal *CompletionAssistProcessor::perform(const TextEditor
     appendProposalsFromSnippets(proposals);
     appendProposalsFromKeywords(proposals);
 
-    TextEditor::IAssistProposal *proposal = new TextEditor::GenericProposal(findStartOfName(interface), proposals);
+    TextEditor::IAssistProposal *proposal = new TextEditor::GenericProposal(findStartOfName(
+                                                                                interface),
+                                                                            proposals);
 
     delete interface;
 
     return proposal;
 }
 
-void CompletionAssistProcessor::appendProposalsFromUserTypes(Proposals &proposals, const QString &fileName) const
+void CompletionAssistProcessor::appendProposalsFromUserTypes(Proposals &proposals,
+                                                             const QString &fileName) const
 {
     ParsedDataStorage *storage = ParsedDataStorage::instance();
 

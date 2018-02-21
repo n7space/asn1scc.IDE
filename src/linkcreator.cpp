@@ -38,8 +38,7 @@ LinkCreator::LinkCreator(const TextEditor::TextDocument &document, const ParsedD
     : m_documentPath(document.filePath().toString())
     , m_textDocument(document)
     , m_storage(storage)
-{
-}
+{}
 
 LinkCreator::Link LinkCreator::createHighlightLink(const QTextCursor &cursor) const
 {
@@ -56,7 +55,8 @@ LinkCreator::Link LinkCreator::createTargetLink(const QTextCursor &cursor) const
     return getTargetSymbolLink(typeRef, sourceSymbol);
 }
 
-LinkCreator::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSource, const QTextCursor &cursor) const
+LinkCreator::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSource,
+                                             const QTextCursor &cursor) const
 {
     Link symbol(m_documentPath);
 
@@ -71,7 +71,8 @@ LinkCreator::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSo
     return symbol;
 }
 
-LinkCreator::Link LinkCreator::getTargetSymbolLink(const Data::TypeReference &symbolSource, const Link &symbol) const
+LinkCreator::Link LinkCreator::getTargetSymbolLink(const Data::TypeReference &symbolSource,
+                                                   const Link &symbol) const
 {
     Link target = symbol;
 
@@ -90,7 +91,8 @@ LinkCreator::Link LinkCreator::getTargetSymbolLink(const Data::TypeReference &sy
     return target;
 }
 
-Data::SourceLocation LinkCreator::getTargetLocation(const QString &typeName, const QString &moduleName) const
+Data::SourceLocation LinkCreator::getTargetLocation(const QString &typeName,
+                                                    const QString &moduleName) const
 {
     const auto projects = m_storage->getProjectsForFile(m_documentPath);
 

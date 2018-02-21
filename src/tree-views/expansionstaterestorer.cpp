@@ -38,11 +38,15 @@ ExpansionStateRestorer::ExpansionStateRestorer(QTreeView *view, const Model *mod
     , m_view(view)
     , m_model(model)
 {
-    connect(m_model, &QAbstractItemModel::modelAboutToBeReset,
-            this, &ExpansionStateRestorer::onModelAboutToBeReset);
+    connect(m_model,
+            &QAbstractItemModel::modelAboutToBeReset,
+            this,
+            &ExpansionStateRestorer::onModelAboutToBeReset);
 
-    connect(m_model, &QAbstractItemModel::modelReset,
-            this, &ExpansionStateRestorer::onModelResetFinished);
+    connect(m_model,
+            &QAbstractItemModel::modelReset,
+            this,
+            &ExpansionStateRestorer::onModelResetFinished);
 }
 
 void ExpansionStateRestorer::tryAddIndex(const QModelIndex &index)

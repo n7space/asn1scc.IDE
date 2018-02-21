@@ -54,7 +54,9 @@ private:
     void clearRelationsTrees();
     void buildRelationsTrees(const QModelIndex &current);
 
-    void fillRelations(const QModelIndex &index, QList<Metadata::Reference> &requirements, QList<Metadata::Reference> &conflicts) const;
+    void fillRelations(const QModelIndex &index,
+                       QList<Metadata::Reference> &requirements,
+                       QList<Metadata::Reference> &conflicts) const;
 
     MetadataModel *m_model;
 

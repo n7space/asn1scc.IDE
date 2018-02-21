@@ -27,9 +27,9 @@
 
 #include <memory>
 
+#include <QObject>
 #include <QSettings>
 #include <QString>
-#include <QObject>
 
 #include <coreplugin/icore.h>
 
@@ -57,7 +57,7 @@ protected:
     virtual void loadOptionsFrom(QSettings *s) = 0;
 };
 
-template <typename Type>
+template<typename Type>
 std::shared_ptr<Type> load()
 {
     auto r = std::make_shared<Type>();
@@ -65,7 +65,7 @@ std::shared_ptr<Type> load()
     return r;
 }
 
-template <typename Type>
+template<typename Type>
 void save(std::shared_ptr<Type> settings)
 {
     settings->saveTo(Core::ICore::settings());

@@ -24,8 +24,8 @@
 ****************************************************************************/
 #pragma once
 
-#include <memory>
 #include <map>
+#include <memory>
 #include <vector>
 
 #include "file.h"

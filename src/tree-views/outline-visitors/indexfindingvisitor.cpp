@@ -34,19 +34,17 @@ using namespace Asn1Acn::Internal::TreeViews::OutlineVisitors;
 
 IndexFindingVisitor::IndexFindingVisitor(const Node *child)
     : m_child(child)
-{
-}
+{}
 
-IndexFindingVisitor::~IndexFindingVisitor()
-{
-}
+IndexFindingVisitor::~IndexFindingVisitor() {}
 
-template <typename Collection>
+template<typename Collection>
 int IndexFindingVisitor::findIndexIn(const Collection &items) const
 {
     using ValueType = typename Collection::value_type;
-    const auto it = std::find_if(std::begin(items), std::end(items),
-                                 [this](const ValueType &item){ return item.get() == m_child; });
+    const auto it = std::find_if(std::begin(items), std::end(items), [this](const ValueType &item) {
+        return item.get() == m_child;
+    });
     if (it == items.end())
         return -1;
     return std::distance(std::begin(items), it);

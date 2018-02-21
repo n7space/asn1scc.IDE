@@ -49,8 +49,7 @@ void NetworkReply::setErrored()
 void NetworkReply::run()
 {
     QTimer *timer = new QTimer;
-    connect(timer, &QTimer::timeout,
-            this, &NetworkReply::onTimerTimeout);
+    connect(timer, &QTimer::timeout, this, &NetworkReply::onTimerTimeout);
 
     timer->setSingleShot(true);
     timer->setInterval(REPLY_WAIT_TIME_MS);

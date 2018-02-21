@@ -39,13 +39,12 @@ KeywordProposalsBuilder::KeywordProposalsBuilder(const QStringList &keywords,
     , m_types(types)
     , m_builtin(builtin)
     , m_attributes(attributes)
-{
-}
+{}
 
 static QIcon buildIcon(Utils::Theme::Color theme)
 {
-    return Utils::Icon({{QLatin1String(":/codemodel/images/keyword.png"),
-                         theme}}, Utils::Icon::Tint).icon();
+    return Utils::Icon({{QLatin1String(":/codemodel/images/keyword.png"), theme}}, Utils::Icon::Tint)
+        .icon();
 }
 
 void KeywordProposalsBuilder::fillProposals()
@@ -63,6 +62,6 @@ void KeywordProposalsBuilder::fillProposals()
 
 void KeywordProposalsBuilder::appendProposalsGroup(const QStringList &group, const QIcon &icon)
 {
-    foreach(const QString &word, group)
+    foreach (const QString &word, group)
         addProposal(word, icon);
 }

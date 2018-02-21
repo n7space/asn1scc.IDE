@@ -32,9 +32,7 @@
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal::TreeViews::OutlineVisitors;
 
-ChildrenCountingVisitor::~ChildrenCountingVisitor()
-{
-}
+ChildrenCountingVisitor::~ChildrenCountingVisitor() {}
 
 int ChildrenCountingVisitor::valueFor(const Definitions &defs) const
 {
