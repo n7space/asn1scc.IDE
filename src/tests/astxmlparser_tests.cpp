@@ -136,30 +136,20 @@ void AstXmlParserTests::test_builtinTypeReference_data()
     QTest::addColumn<QString>("xmlTypeName");
     QTest::addColumn<QString>("typeName");
 
-    QTest::newRow("Boolean") << "BOOLEAN"
-                             << "BOOLEAN";
-    QTest::newRow("Null") << "NULL"
-                          << "NULL";
-    QTest::newRow("Integer") << "INTEGER"
-                             << "INTEGER";
-    QTest::newRow("Real") << "REAL"
-                          << "REAL";
-    QTest::newRow("BitString") << "BIT_STRING"
-                               << "BIT STRING";
-    QTest::newRow("OctetString") << "OCTET_STRING"
-                                 << "OCTET STRING";
-    QTest::newRow("IA5String") << "IA5String"
-                               << "IA5String";
-    QTest::newRow("NumericString") << "NumericString"
-                                   << "NumericString";
-    QTest::newRow("Enumerated") << "Enumerated"
-                                << "ENUMERATED";
-    QTest::newRow("Choice") << "CHOICE"
-                            << "CHOICE";
-    QTest::newRow("Sequence") << "SEQUENCE"
-                              << "SEQUENCE";
-    QTest::newRow("SequenceOf") << "SEQUENCE_OF"
-                                << "SEQUENCE OF";
+    // clang-format off
+    QTest::newRow("Boolean")       << "BOOLEAN"       << "BOOLEAN";
+    QTest::newRow("Null")          << "NULL"          << "NULL";
+    QTest::newRow("Integer")       << "INTEGER"       << "INTEGER";
+    QTest::newRow("Real")          << "REAL"          << "REAL";
+    QTest::newRow("BitString")     << "BIT_STRING"    << "BIT STRING";
+    QTest::newRow("OctetString")   << "OCTET_STRING"  << "OCTET STRING";
+    QTest::newRow("IA5String")     << "IA5String"     << "IA5String";
+    QTest::newRow("NumericString") << "NumericString" << "NumericString";
+    QTest::newRow("Enumerated")    << "Enumerated"    << "ENUMERATED";
+    QTest::newRow("Choice")        << "CHOICE"        << "CHOICE";
+    QTest::newRow("Sequence")      << "SEQUENCE"      << "SEQUENCE";
+    QTest::newRow("SequenceOf")    << "SEQUENCE_OF"   << "SEQUENCE OF";
+    // clang-format on
 }
 
 void AstXmlParserTests::test_userDefinedTypeReference()
@@ -358,7 +348,7 @@ void AstXmlParserTests::test_sequenceTypeAssingment()
           R"(                <WithComponentConstraints/>)"
           R"(                <SEQUENCE_COMPONENT Name="a" Line="13" CharPositionInLine="3">)"
           R"(                  <Asn1Type Line="13" CharPositionInLine="8">)"
-          R"("                   <INTEGER/>)"
+          R"(                    <INTEGER/>)"
           R"(                  </Asn1Type>)"
           R"(                </SEQUENCE_COMPONENT>)"
           R"(                <SEQUENCE_COMPONENT Name="b" Line="14" CharPositionInLine="2">)"
@@ -638,6 +628,47 @@ void AstXmlParserTests::test_multipleFiles()
 
     QCOMPARE(m_parsedData["File.asn"]->definitions("Defs")->type("MyInt")->location().line(), 11);
     QCOMPARE(m_parsedData["File2.asn"]->definitions("Defs2")->type("MyInt2")->location().line(), 9);
+}
+
+void AstXmlParserTests::test_parametrizedInstancesContentsAreIgnored()
+{
+    parse(
+        R"(<?xml version="1.0" encoding="utf-8"?>)"
+        R"(<AstRoot>)"
+        R"(  <Asn1File FileName="Test2File.asn">)"
+        R"(    <Modules>)"
+        R"(      <Module Name="Defs" Line="13" CharPositionInLine="42">)"
+        R"(        <TypeAssignments>)"
+        R"(          <TypeAssignment Name="MySeq" Line="11" CharPositionInLine="9">)"
+        R"(            <Asn1Type Line="12" CharPositionInLine="19" ParameterizedTypeInstance="true">)"
+        R"(              <SEQUENCE>)"
+        R"(                <Constraints/>)"
+        R"(                <WithComponentConstraints/>)"
+        R"(                <SEQUENCE_COMPONENT Name="b" Line="14" CharPositionInLine="2">)"
+        R"(                  <Asn1Type Line="14" CharPositionInLine="4">)"
+        R"(                    <REFERENCE_TYPE Module="Other" TypeAssignment="MyInt"/>")
+        R"(                  </Asn1Type>)"
+        R"(                </SEQUENCE_COMPONENT>)"
+        R"(              </SEQUENCE>)"
+        R"(            </Asn1Type>)"
+        R"(          </TypeAssignment>)"
+        R"(        </TypeAssignments>)"
+        R"(      </Module>)"
+        R"(    </Modules>)"
+        R"(  </Asn1File>)"
+        R"(</AstRoot>)");
+
+    const auto seq = m_parsedData["Test2File.asn"]->definitions("Defs")->type("MySeq");
+    QCOMPARE(seq->type()->name(), QStringLiteral("SEQUENCE"));
+
+    QCOMPARE(seq->location().line(), 11);
+    QCOMPARE(seq->location().column(), 9);
+    QCOMPARE(seq->location().path(), QLatin1String("Test2File.asn"));
+
+    QCOMPARE(m_parsedData["Test2File.asn"]->referencesMap().size(), std::size_t{1});
+
+    const auto ref = m_parsedData["Test2File.asn"]->referencesMap().find(14);
+    QVERIFY(ref == m_parsedData["Test2File.asn"]->referencesMap().end());
 }
 
 void AstXmlParserTests::parsingFails(const QString &xmlData)

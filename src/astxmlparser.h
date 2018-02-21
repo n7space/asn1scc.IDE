@@ -67,6 +67,7 @@ private:
     QString readNameAttribute();
     int readLineAttribute();
     int readCharPossitionInLineAttribute();
+    bool isParametrizedTypeInstance() const;
 
     void readImportedModule();
     void readImportedValues(const QString &moduleName);
@@ -81,6 +82,8 @@ private:
     std::unique_ptr<Data::Types::Type> readReferenceType(const Data::SourceLocation &location);
     std::unique_ptr<Data::Types::Type> buildTypeFromName(const Data::SourceLocation &location,
                                                          const QStringRef &name);
+
+    void readTypeContents(const QStringRef &name);
     void readSequence();
     void readSequenceOf();
     void readChoice();

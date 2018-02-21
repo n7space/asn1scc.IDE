@@ -253,14 +253,31 @@ std::unique_ptr<Data::Types::Type> AstXmlParser::readType()
     return type;
 }
 
+bool AstXmlParser::isParametrizedTypeInstance() const
+{
+    const auto value = m_xmlReader.attributes().value(QLatin1String("ParameterizedTypeInstance"));
+    return !value.isNull() && value == QStringLiteral("true");
+}
+
 std::unique_ptr<Data::Types::Type> AstXmlParser::readTypeDetails(const Data::SourceLocation &location)
 {
+    const bool isParametrized = isParametrizedTypeInstance();
     if (!m_xmlReader.readNextStartElement())
         return {};
 
     const auto name = m_xmlReader.name();
     auto type = buildTypeFromName(location, name);
 
+    if (isParametrized)
+        m_xmlReader.skipCurrentElement();
+    else
+        readTypeContents(name);
+
+    return type;
+}
+
+void AstXmlParser::readTypeContents(const QStringRef &name)
+{
     if (name == QStringLiteral("SEQUENCE"))
         readSequence();
     else if (name == QStringLiteral("SEQUENCE_OF"))
@@ -269,8 +286,6 @@ std::unique_ptr<Data::Types::Type> AstXmlParser::readTypeDetails(const Data::Sou
         readChoice();
     else
         m_xmlReader.skipCurrentElement();
-
-    return type;
 }
 
 std::unique_ptr<Data::Types::Type> AstXmlParser::buildTypeFromName(
