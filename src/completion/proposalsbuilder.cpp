@@ -26,9 +26,7 @@
 
 using namespace Asn1Acn::Internal::Completion;
 
-ProposalsBuilder::~ProposalsBuilder()
-{
-}
+ProposalsBuilder::~ProposalsBuilder() {}
 
 Proposals ProposalsBuilder::buildProposals()
 {

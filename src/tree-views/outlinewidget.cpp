@@ -28,27 +28,26 @@
 
 #include <utils/qtcassert.h>
 
-#include <asneditor.h>
 #include <acneditor.h>
+#include <asneditor.h>
 #include <editor.h>
 
 #include <texteditor/textdocument.h>
 
-#include <tree-views/outlinemodel.h>
 #include <tree-views/outlineindexupdaterfactory.h>
+#include <tree-views/outlinemodel.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
 OutlineWidget::OutlineWidget(Model *model, std::unique_ptr<OutlineIndexUpdaterFactory> factory)
     : TreeViewWidget(model, std::move(factory))
-{
-}
+{}
 
 bool OutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const
 {
     return qobject_cast<AcnEditor *>(editor) != nullptr
-            || qobject_cast<AsnEditor *>(editor) != nullptr;
+           || qobject_cast<AsnEditor *>(editor) != nullptr;
 }
 
 TextEditor::IOutlineWidget *OutlineWidgetFactory::createWidget(Core::IEditor *editor)

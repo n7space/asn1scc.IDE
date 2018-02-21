@@ -56,10 +56,7 @@ public:
         return num < childrenCount() ? m_submodules[num].get() : nullptr;
     }
 
-    int childrenCount() const override
-    {
-        return static_cast<int>(m_submodules.size());
-    }
+    int childrenCount() const override { return static_cast<int>(m_submodules.size()); }
 
     int childIndex(const LibraryNode *child) const override
     {

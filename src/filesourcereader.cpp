@@ -27,14 +27,12 @@
 
 #include <QFile>
 
-#include <coreplugin/idocument.h>
 #include <coreplugin/editormanager/documentmodel.h>
+#include <coreplugin/idocument.h>
 
 using namespace Asn1Acn::Internal;
 
-FileSourceReader::FileSourceReader()
-{
-}
+FileSourceReader::FileSourceReader() {}
 
 QString FileSourceReader::readContent(const QString &fileName) const
 {

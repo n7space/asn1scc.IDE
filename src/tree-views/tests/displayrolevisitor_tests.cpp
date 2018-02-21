@@ -26,12 +26,12 @@
 
 #include <QtTest>
 
+#include <data/definitions.h>
+#include <data/file.h>
+#include <data/typeassignment.h>
+#include <data/typereference.h>
 #include <data/types/builtintypes.h>
 #include <data/types/userdefinedtype.h>
-#include <data/typereference.h>
-#include <data/definitions.h>
-#include <data/typeassignment.h>
-#include <data/file.h>
 
 using namespace Asn1Acn::Internal::TreeViews::Tests;
 using namespace Asn1Acn::Internal::TreeViews;
@@ -39,8 +39,7 @@ using namespace Asn1Acn::Internal::Data;
 
 DisplayRoleVisitorTests::DisplayRoleVisitorTests(QObject *parent)
     : QObject(parent)
-{
-}
+{}
 
 void DisplayRoleVisitorTests::test_definitions()
 {
@@ -61,7 +60,9 @@ void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn()
     QFETCH(QString, typeName);
     QFETCH(QString, typeDisplayName);
 
-    TypeAssignment typeAssignment("TypeName", {}, Data::Types::BuiltinType::createBuiltinType(typeName));
+    TypeAssignment typeAssignment("TypeName",
+                                  {},
+                                  Data::Types::BuiltinType::createBuiltinType(typeName));
 
     QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: " + typeDisplayName));
 }
@@ -87,6 +88,8 @@ void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn_data()
 
 void DisplayRoleVisitorTests::test_typeAssignmentUserDefined()
 {
-    TypeAssignment typeAssignment("TypeName", {}, std::make_unique<Data::Types::UserdefinedType>("type", "module"));
+    TypeAssignment typeAssignment("TypeName",
+                                  {},
+                                  std::make_unique<Data::Types::UserdefinedType>("type", "module"));
     QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: type.module"));
 }

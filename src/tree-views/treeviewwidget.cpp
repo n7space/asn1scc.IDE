@@ -29,15 +29,14 @@
 
 #include <coreplugin/find/itemviewfind.h>
 
-#include "expansionstaterestorer.h"
 #include "activatehandler.h"
+#include "expansionstaterestorer.h"
 
 using namespace Asn1Acn::Internal::TreeViews;
 
 TreeView::TreeView(QWidget *parent)
     : Utils::NavigationTreeView(parent)
-{
-}
+{}
 
 void TreeView::contextMenuEvent(QContextMenuEvent *event)
 {
@@ -56,11 +55,12 @@ void TreeView::contextMenuEvent(QContextMenuEvent *event)
     event->accept();
 }
 
-TreeViewWidget::TreeViewWidget(Model *model, std::unique_ptr<IndexUpdaterFactory> indexUpdaterFactory)
+TreeViewWidget::TreeViewWidget(Model *model,
+                               std::unique_ptr<IndexUpdaterFactory> indexUpdaterFactory)
     : m_indexUpdaterFactory(std::move(indexUpdaterFactory))
     , m_model(model)
     , m_treeView(new TreeView(this))
-{   
+{
     model->setParent(this);
 
     setLayout(createLayout());
@@ -68,8 +68,9 @@ TreeViewWidget::TreeViewWidget(Model *model, std::unique_ptr<IndexUpdaterFactory
     m_treeView->setModel(model);
     m_treeView->setExpandsOnDoubleClick(false);
 
-    connect(m_treeView, &QAbstractItemView::activated,
-            [this](const QModelIndex &index){ ActivateHandler::gotoSymbol(index); });
+    connect(m_treeView, &QAbstractItemView::activated, [this](const QModelIndex &index) {
+        ActivateHandler::gotoSymbol(index);
+    });
 
     new ExpansionStateRestorer(m_treeView, model, this);
 }
@@ -84,10 +85,13 @@ void TreeViewWidget::setCursorSynchronization(bool syncWithCursor)
     if (syncWithCursor)
         m_indexUpdater.reset(m_indexUpdaterFactory->createSynchronizedIndexUpdater(m_model, this));
     else
-        m_indexUpdater.reset(m_indexUpdaterFactory->createUnsynchronozedIndexUpdater(m_treeView, m_model, this));
+        m_indexUpdater.reset(
+            m_indexUpdaterFactory->createUnsynchronozedIndexUpdater(m_treeView, m_model, this));
 
-    connect(m_indexUpdater.get(), &IndexUpdater::indexSelectionUpdated,
-            this, &TreeViewWidget::updateSelection);
+    connect(m_indexUpdater.get(),
+            &IndexUpdater::indexSelectionUpdated,
+            this,
+            &TreeViewWidget::updateSelection);
 }
 
 QLayout *TreeViewWidget::createLayout()

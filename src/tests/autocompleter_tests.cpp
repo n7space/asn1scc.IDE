@@ -128,7 +128,11 @@ void AutoCompleterTests::test_cursorNotInComment()
 void AutoCompleterTests::test_insertMatchingBraceEmptyString()
 {
     int skippedChars = 5;
-    QString ret = m_completer->insertMatchingBrace(QTextCursor(), QString(), QChar(), true, &skippedChars);
+    QString ret = m_completer->insertMatchingBrace(QTextCursor(),
+                                                   QString(),
+                                                   QChar(),
+                                                   true,
+                                                   &skippedChars);
 
     QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 5);
@@ -137,7 +141,11 @@ void AutoCompleterTests::test_insertMatchingBraceEmptyString()
 void AutoCompleterTests::test_insertMatchingBraceForLeftBrace()
 {
     int skippedChars = 5;
-    QString ret = m_completer->insertMatchingBrace(QTextCursor(), QString("("), QChar(), true, &skippedChars);
+    QString ret = m_completer->insertMatchingBrace(QTextCursor(),
+                                                   QString("("),
+                                                   QChar(),
+                                                   true,
+                                                   &skippedChars);
 
     QCOMPARE(ret, QStringLiteral(")"));
     QCOMPARE(skippedChars, 5);
@@ -146,7 +154,11 @@ void AutoCompleterTests::test_insertMatchingBraceForLeftBrace()
 void AutoCompleterTests::test_insertMatchingBraceForRigthBrace()
 {
     int skippedChars = 5;
-    QString ret = m_completer->insertMatchingBrace(QTextCursor(), QString(")"), QChar(')'), true, &skippedChars);
+    QString ret = m_completer->insertMatchingBrace(QTextCursor(),
+                                                   QString(")"),
+                                                   QChar(')'),
+                                                   true,
+                                                   &skippedChars);
 
     QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 6);
@@ -155,7 +167,11 @@ void AutoCompleterTests::test_insertMatchingBraceForRigthBrace()
 void AutoCompleterTests::test_insertMatchingBraceForText()
 {
     int skippedChars = 5;
-    QString ret = m_completer->insertMatchingBrace(QTextCursor(), QString("Test string"), QChar(')'), true, &skippedChars);
+    QString ret = m_completer->insertMatchingBrace(QTextCursor(),
+                                                   QString("Test string"),
+                                                   QChar(')'),
+                                                   true,
+                                                   &skippedChars);
 
     QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 5);
@@ -164,7 +180,11 @@ void AutoCompleterTests::test_insertMatchingBraceForText()
 void AutoCompleterTests::test_insertMatchingQuoteEmptyString()
 {
     int skippedChars = 5;
-    QString ret = m_completer->insertMatchingQuote(QTextCursor(), QString(), QChar(), true, &skippedChars);
+    QString ret = m_completer->insertMatchingQuote(QTextCursor(),
+                                                   QString(),
+                                                   QChar(),
+                                                   true,
+                                                   &skippedChars);
 
     QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 5);
@@ -173,7 +193,11 @@ void AutoCompleterTests::test_insertMatchingQuoteEmptyString()
 void AutoCompleterTests::test_insertMatchingQuoteForText()
 {
     int skippedChars = 5;
-    QString ret = m_completer->insertMatchingQuote(QTextCursor(), QString("Test string"), QChar('"'), true, &skippedChars);
+    QString ret = m_completer->insertMatchingQuote(QTextCursor(),
+                                                   QString("Test string"),
+                                                   QChar('"'),
+                                                   true,
+                                                   &skippedChars);
 
     QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 5);
@@ -182,7 +206,11 @@ void AutoCompleterTests::test_insertMatchingQuoteForText()
 void AutoCompleterTests::test_insertMatchingQuoteForSkippedQuote()
 {
     int skippedChars = 5;
-    QString ret = m_completer->insertMatchingQuote(QTextCursor(), QString("\""), QChar('"'), true, &skippedChars);
+    QString ret = m_completer->insertMatchingQuote(QTextCursor(),
+                                                   QString("\""),
+                                                   QChar('"'),
+                                                   true,
+                                                   &skippedChars);
 
     QCOMPARE(ret, QString());
     QCOMPARE(skippedChars, 6);
@@ -191,7 +219,11 @@ void AutoCompleterTests::test_insertMatchingQuoteForSkippedQuote()
 void AutoCompleterTests::test_insertMatchingQuoteForQuote()
 {
     int skippedChars = 5;
-    QString ret = m_completer->insertMatchingQuote(QTextCursor(), QString("\""), QChar(), false, &skippedChars);
+    QString ret = m_completer->insertMatchingQuote(QTextCursor(),
+                                                   QString("\""),
+                                                   QChar(),
+                                                   false,
+                                                   &skippedChars);
 
     QCOMPARE(ret, QString("\""));
     QCOMPARE(skippedChars, 5);
@@ -204,7 +236,11 @@ void AutoCompleterTests::test_insertQuoteInsideMatchedQuotes()
     QTextCursor cursor(document);
     cursor.setPosition(1);
 
-    QString ret = m_completer->insertMatchingQuote(cursor, QString("\""), QChar(), false, &skippedChars);
+    QString ret = m_completer->insertMatchingQuote(cursor,
+                                                   QString("\""),
+                                                   QChar(),
+                                                   false,
+                                                   &skippedChars);
 
     QCOMPARE(ret, QString());
 
@@ -331,4 +367,3 @@ void AutoCompleterTests::test_insertEndForBeginWhenEndIsCommented()
 
     delete document;
 }
-

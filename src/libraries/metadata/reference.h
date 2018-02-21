@@ -34,9 +34,7 @@ namespace Metadata {
 class Reference
 {
 public:
-    Reference(const QString &module,
-              const QString &submodule,
-              const QString &element)
+    Reference(const QString &module, const QString &submodule, const QString &element)
         : m_module(module)
         , m_submodule(submodule)
         , m_element(element)
@@ -46,9 +44,9 @@ public:
     const QString &submodule() const { return m_submodule; }
     const QString &element() const { return m_element; }
 
-    bool operator==(const Reference &other) const {
-        return m_module == other.m_module
-               && m_submodule == other.m_submodule
+    bool operator==(const Reference &other) const
+    {
+        return m_module == other.m_module && m_submodule == other.m_submodule
                && m_element == other.m_element;
     }
 

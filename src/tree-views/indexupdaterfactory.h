@@ -40,14 +40,17 @@ class IndexUpdater;
 class IndexUpdaterFactory
 {
 public:
-    virtual IndexUpdater *createSynchronizedIndexUpdater(Model *model, QObject *parent = nullptr) const = 0;
+    virtual IndexUpdater *createSynchronizedIndexUpdater(Model *model,
+                                                         QObject *parent = nullptr) const = 0;
 
-    IndexUpdater *createUnsynchronozedIndexUpdater(QTreeView *treeView, Model *model, QObject *parent = nullptr) const
+    IndexUpdater *createUnsynchronozedIndexUpdater(QTreeView *treeView,
+                                                   Model *model,
+                                                   QObject *parent = nullptr) const
     {
         return new UnsynchronizedIndexUpdater(treeView, model, parent);
     }
 };
 
 } /* namespace TreeViews */
-} /* namespace Asn1Acn */
-} /* namespace Internal */
+} // namespace Internal
+} // namespace Asn1Acn

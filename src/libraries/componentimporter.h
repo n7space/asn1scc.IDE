@@ -25,9 +25,9 @@
 
 #pragma once
 
+#include <QDir>
 #include <QString>
 #include <QStringList>
-#include <QDir>
 
 namespace ProjectExplorer {
 class Project;
@@ -54,7 +54,8 @@ private:
     QString targetFileName(const QString &file);
     void addFilesToProject(const ProjectExplorer::Project *project, const QStringList &files);
     void copyFile(const QString &source, const QString &target);
-    QStringList createUniqueFilesList(const ProjectExplorer::Project *project, const QStringList &newFiles);
+    QStringList createUniqueFilesList(const ProjectExplorer::Project *project,
+                                      const QStringList &newFiles);
 
     QStringList m_sourceFiles;
     QStringList m_importedFiles;

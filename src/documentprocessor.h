@@ -24,30 +24,23 @@
 ****************************************************************************/
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include <QObject>
 #include <QString>
 
-#include "data/file.h"
 #include "data/errormessage.h"
+#include "data/file.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class DocumentProcessor
-        : public QObject
+class DocumentProcessor : public QObject
 {
     Q_OBJECT
 public:
-    enum class State {
-        Unfinished,
-        Successful,
-        Failed,
-        Errored,
-        Outdated
-    };
+    enum class State { Unfinished, Successful, Failed, Errored, Outdated };
 
     virtual ~DocumentProcessor() = default;
 

@@ -28,8 +28,8 @@
 #include <QMenu>
 #include <QString>
 
-#include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
+#include <coreplugin/actionmanager/actionmanager.h>
 
 #include <tree-views/outlinecombo.h>
 
@@ -77,8 +77,10 @@ void EditorWidget::finalizeInitialization()
     // TODO ? setLanguageSettingsId(Constants::SettingsId);
 
     auto document = qobject_cast<Document *>(textDocument());
-    connect(document, &Document::extraSelectionsUpdated,
-            this, &EditorWidget::onExtraSelectionsUpdated);
+    connect(document,
+            &Document::extraSelectionsUpdated,
+            this,
+            &EditorWidget::onExtraSelectionsUpdated);
 }
 
 void EditorWidget::onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections)
@@ -89,5 +91,6 @@ void EditorWidget::onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelectio
 void EditorWidget::addOutlineCombo()
 {
     insertExtraToolBarWidget(TextEditorWidget::Left,
-                             new TreeViews::OutlineCombo(textDocument()->filePath().toString(), this));
+                             new TreeViews::OutlineCombo(textDocument()->filePath().toString(),
+                                                         this));
 }

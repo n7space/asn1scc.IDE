@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include <QObject>
 #include <QMutex>
+#include <QObject>
 
 namespace Asn1Acn {
 namespace Internal {

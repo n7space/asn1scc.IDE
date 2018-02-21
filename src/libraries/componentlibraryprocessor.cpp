@@ -43,8 +43,7 @@ ComponentLibraryProcessor::ComponentLibraryProcessor(const QString &path,
     , m_reader(reader)
     , m_path(path)
     , m_files(files)
-{
-}
+{}
 
 void ComponentLibraryProcessor::process()
 {
@@ -57,8 +56,7 @@ void ComponentLibraryProcessor::process()
         try {
             auto module = parser.parse();
             library->addModule(std::move(module));
-        }
-        catch (const ModuleMetadataParser::Error &err) {
+        } catch (const ModuleMetadataParser::Error &err) {
             Q_UNUSED(err);
             // TODO: continue helps develop; in final implementation it should be return instead
             continue;

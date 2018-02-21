@@ -35,8 +35,8 @@ using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::OptionsPages;
 
 General::General(Settings::GeneralPtr settings)
-    : m_settings(settings),
-      m_widget(nullptr)
+    : m_settings(settings)
+    , m_widget(nullptr)
 {
     setId(Constants::GENERAL_SETTINGS_ID);
     setDisplayName(Tr::tr("General"));
@@ -47,7 +47,7 @@ General::General(Settings::GeneralPtr settings)
 
 bool General::matches(const QString &searchKeyWord) const
 {
-    const QStringList keywords { "asn1scc", "asn1.exe", "asn1", "asn.1", "acn" };
+    const QStringList keywords{"asn1scc", "asn1.exe", "asn1", "asn.1", "acn"};
     for (const auto &keyword : keywords)
         if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;

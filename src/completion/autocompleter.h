@@ -34,7 +34,6 @@ namespace Completion {
 class AutoCompleter : public TextEditor::AutoCompleter
 {
 public:
-
     bool isInComment(const QTextCursor &cursor) const override;
     bool isInString(const QTextCursor &cursor) const override;
     QString insertMatchingBrace(const QTextCursor &cursor,
@@ -49,8 +48,10 @@ public:
                                 int *skippedChars) const override;
     QString insertParagraphSeparator(const QTextCursor &cursor) const override;
     int paragraphSeparatorAboutToBeInserted(QTextCursor &cursor) override;
-    bool contextAllowsAutoBrackets(const QTextCursor &cursor, const QString &textToInsert) const override;
-    bool contextAllowsAutoQuotes(const QTextCursor &cursor, const QString &textToInsert) const override;
+    bool contextAllowsAutoBrackets(const QTextCursor &cursor,
+                                   const QString &textToInsert) const override;
+    bool contextAllowsAutoQuotes(const QTextCursor &cursor,
+                                 const QString &textToInsert) const override;
 
 private:
     bool tryInsertEndKeyword(QTextCursor &cursor) const;

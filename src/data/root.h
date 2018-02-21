@@ -24,9 +24,9 @@
 ****************************************************************************/
 #pragma once
 
+#include <map>
 #include <memory>
 #include <vector>
-#include <map>
 
 #include <QString>
 
@@ -56,7 +56,7 @@ public:
 
 private:
     Projects m_projects;
-    std::map<QString, Project*> m_nameToProjectMap;
+    std::map<QString, Project *> m_nameToProjectMap;
 };
 
 } // namespace Data

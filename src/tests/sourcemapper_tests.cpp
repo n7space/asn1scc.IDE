@@ -33,8 +33,7 @@ using namespace Asn1Acn::Internal;
 
 SourceMapperTests::SourceMapperTests(QObject *parent)
     : QObject(parent)
-{
-}
+{}
 
 void SourceMapperTests::test_missingMapping()
 {
@@ -45,7 +44,7 @@ void SourceMapperTests::test_missingMapping()
 
 void SourceMapperTests::test_mapping()
 {
-    SourceMapper mapper({ {"/a/bcd", ""}, {"/x/xyz", ""} });
+    SourceMapper mapper({{"/a/bcd", ""}, {"/x/xyz", ""}});
 
     QCOMPARE(mapper.findByFileName("xyz"), QStringLiteral("/x/xyz"));
     QCOMPARE(mapper.findByFileName("bcd"), QStringLiteral("/a/bcd"));

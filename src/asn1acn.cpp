@@ -26,29 +26,29 @@
 
 #include <QMenu>
 
-#include <coreplugin/icore.h>
-#include <coreplugin/jsexpander.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/coreconstants.h>
-#include <coreplugin/progressmanager/progressmanager.h>
 #include <coreplugin/editormanager/editormanager.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/jsexpander.h>
+#include <coreplugin/progressmanager/progressmanager.h>
 
 #include <extensionsystem/pluginmanager.h>
 
 #include <texteditor/texteditorconstants.h>
 
-#include "completion/asnsnippets.h"
 #include "completion/acnsnippets.h"
+#include "completion/asnsnippets.h"
 
-#include "settings/settings.h"
 #include "settings/general.h"
-#include "settings/service.h"
 #include "settings/libraries.h"
+#include "settings/service.h"
+#include "settings/settings.h"
 
 #include "options-pages/general.h"
-#include "options-pages/service.h"
 #include "options-pages/libraries.h"
+#include "options-pages/service.h"
 
 #include "tree-views/outlinewidget.h"
 #include "tree-views/typestreewidget.h"
@@ -56,38 +56,38 @@
 #include "libraries/componentdirectorywatcher.h"
 #include "libraries/componentlibrarydispatcher.h"
 
-#include "asneditor.h"
 #include "acneditor.h"
-#include "projectwatcher.h"
+#include "asn1acnconstants.h"
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
-#include "asn1acnconstants.h"
-#include "typeslocator.h"
-#include "tr.h"
-#include "tools.h"
+#include "asneditor.h"
 #include "importmenuitemcontroller.h"
+#include "projectwatcher.h"
+#include "tools.h"
+#include "tr.h"
+#include "typeslocator.h"
 
 #ifdef WITH_TESTS
-#include "tests/astxmlparser_tests.h"
-#include "tests/errormessageparser_tests.h"
-#include "tests/parseddocumentbuilder_tests.h"
-#include "tests/documentprocessor_tests.h"
-#include "tests/projectcontenthandler_tests.h"
-#include "tests/parseddatastorage_tests.h"
-#include "tests/autocompleter_tests.h"
-#include "tests/sourcemapper_tests.h"
-#include "tests/modelvalidityguard_tests.h"
-#include "tests/linkcreator_tests.h"
-#include "tests/indenter_tests.h"
+#include "libraries/tests/filemodel_tests.h"
+#include "libraries/tests/generalmetadataparser_tests.h"
 #include "libraries/tests/metadatacheckstatehandler_tests.h"
 #include "libraries/tests/metadatamodel_tests.h"
-#include "libraries/tests/filemodel_tests.h"
 #include "libraries/tests/modulemetadataparser_tests.h"
-#include "libraries/tests/generalmetadataparser_tests.h"
+#include "tests/astxmlparser_tests.h"
+#include "tests/autocompleter_tests.h"
+#include "tests/documentprocessor_tests.h"
+#include "tests/errormessageparser_tests.h"
+#include "tests/indenter_tests.h"
+#include "tests/linkcreator_tests.h"
+#include "tests/modelvalidityguard_tests.h"
+#include "tests/parseddatastorage_tests.h"
+#include "tests/parseddocumentbuilder_tests.h"
+#include "tests/projectcontenthandler_tests.h"
+#include "tests/sourcemapper_tests.h"
+#include "tree-views/tests/combomodel_tests.h"
 #include "tree-views/tests/displayrolevisitor_tests.h"
 #include "tree-views/tests/outlineindexupdater_tests.h"
 #include "tree-views/tests/outlinemodel_tests.h"
-#include "tree-views/tests/combomodel_tests.h"
 #include "tree-views/tests/typestreemodel_tests.h"
 #endif
 
@@ -121,7 +121,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     const auto serviceSettings = Settings::load<Settings::Service>();
     const auto librariesSettings = Settings::load<Settings::Libraries>();
 
-    addAutoReleasedObject(new AsnEditorFactory);  
+    addAutoReleasedObject(new AsnEditorFactory);
     addAutoReleasedObject(new AcnEditorFactory);
 
     addAutoReleasedObject(new ProjectWatcher);
@@ -135,8 +135,8 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new TypesLocator);
 
-    const auto directoryWatcher = new Libraries::ComponentDirectoryWatcher(librariesSettings,
-                                                                           std::make_unique<Libraries::CompontentLibraryDispatcher>());
+    const auto directoryWatcher = new Libraries::ComponentDirectoryWatcher(
+        librariesSettings, std::make_unique<Libraries::CompontentLibraryDispatcher>());
     addAutoReleasedObject(directoryWatcher);
 
     Completion::AsnSnippets::registerGroup();
@@ -150,10 +150,14 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     Core::JsExpander::registerQObjectForJs(QLatin1String("Asn1Acn"), new Asn1AcnJsExtension);
 
-    connect(Core::ProgressManager::instance(), &Core::ProgressManager::taskStarted,
-            this, &Asn1AcnPlugin::onTaskStarted);
-    connect(Core::ProgressManager::instance(), &Core::ProgressManager::allTasksFinished,
-            this, &Asn1AcnPlugin::onTaskFinished);
+    connect(Core::ProgressManager::instance(),
+            &Core::ProgressManager::taskStarted,
+            this,
+            &Asn1AcnPlugin::onTaskStarted);
+    connect(Core::ProgressManager::instance(),
+            &Core::ProgressManager::allTasksFinished,
+            this,
+            &Asn1AcnPlugin::onTaskFinished);
 
     return true;
 }
@@ -190,7 +194,7 @@ void Asn1AcnPlugin::initializeFindUsagesAction(ActionContainer *toolsMenu,
 static EditorWidget *currentEditorWidget()
 {
     if (auto currentEditor = Core::EditorManager::currentEditor())
-        return qobject_cast<EditorWidget*>(currentEditor->widget());
+        return qobject_cast<EditorWidget *>(currentEditor->widget());
     return nullptr;
 }
 
@@ -205,7 +209,10 @@ void Asn1AcnPlugin::initializeSwitchAction(ActionContainer *toolsMenu,
                                            const Context &context)
 {
     QAction *switchAction = new QAction(tr("Switch Data/Encoding"), this);
-    Core::Command *command = Core::ActionManager::registerAction(switchAction, Constants::SWITCH_DATA_ENCODING, context, true);
+    Core::Command *command = Core::ActionManager::registerAction(switchAction,
+                                                                 Constants::SWITCH_DATA_ENCODING,
+                                                                 context,
+                                                                 true);
     command->setDefaultKeySequence(QKeySequence(Qt::Key_F4));
     connect(switchAction, &QAction::triggered, []() { Tools::switchBetweenDataAndEncoding(); });
     toolsMenu->addAction(command);
@@ -215,17 +222,27 @@ void Asn1AcnPlugin::initializeSwitchAction(ActionContainer *toolsMenu,
 void Asn1AcnPlugin::initializeFollowSymbolAction(ActionContainer *toolsMenu,
                                                  ActionContainer *contextMenu)
 {
-    Core::Command *command = Core::ActionManager::ActionManager::command(TextEditor::Constants::FOLLOW_SYMBOL_UNDER_CURSOR);
+    Core::Command *command = Core::ActionManager::ActionManager::command(
+        TextEditor::Constants::FOLLOW_SYMBOL_UNDER_CURSOR);
     contextMenu->addAction(command);
     toolsMenu->addAction(command);
 }
 
-void Asn1AcnPlugin::initializeOpenInNextSplitAction(ActionContainer *toolsMenu, const Context &context)
+void Asn1AcnPlugin::initializeOpenInNextSplitAction(ActionContainer *toolsMenu,
+                                                    const Context &context)
 {
-    QAction *openInNextSplitAction = new QAction(tr("Open Corresponding Data/Encoding in Next Split"), this);
-    Core::Command *command = Core::ActionManager::registerAction(openInNextSplitAction, Constants::OPEN_DATA_ENCODING_IN_NEXT_SPLIT, context, true);
-    command->setDefaultKeySequence(QKeySequence(Utils::HostOsInfo::isMacHost() ? tr("Meta+E, F4") : tr("Ctrl+E, F4")));
-    connect(openInNextSplitAction, &QAction::triggered, []() { Tools::switchBetweenDataAndEncodingInNextSplit(); });
+    QAction *openInNextSplitAction
+        = new QAction(tr("Open Corresponding Data/Encoding in Next Split"), this);
+    Core::Command *command
+        = Core::ActionManager::registerAction(openInNextSplitAction,
+                                              Constants::OPEN_DATA_ENCODING_IN_NEXT_SPLIT,
+                                              context,
+                                              true);
+    command->setDefaultKeySequence(
+        QKeySequence(Utils::HostOsInfo::isMacHost() ? tr("Meta+E, F4") : tr("Ctrl+E, F4")));
+    connect(openInNextSplitAction, &QAction::triggered, []() {
+        Tools::switchBetweenDataAndEncodingInNextSplit();
+    });
     toolsMenu->addAction(command);
 }
 
@@ -233,9 +250,15 @@ void Asn1AcnPlugin::initializeImportFromAsnComponents(ActionContainer *toolsMenu
 {
     toolsMenu->addSeparator();
 
-    QAction *importFromAsnComponents = new QAction(tr("Import from ASN.1 components library..."), this);
-    Core::Command *command = Core::ActionManager::registerAction(importFromAsnComponents, Constants::IMPORT_FROM_COMPONENTS_LIBRARY);
-    connect(importFromAsnComponents, &QAction::triggered, this, &Asn1AcnPlugin::raiseImportComponentWindow);
+    QAction *importFromAsnComponents = new QAction(tr("Import from ASN.1 components library..."),
+                                                   this);
+    Core::Command *command
+        = Core::ActionManager::registerAction(importFromAsnComponents,
+                                              Constants::IMPORT_FROM_COMPONENTS_LIBRARY);
+    connect(importFromAsnComponents,
+            &QAction::triggered,
+            this,
+            &Asn1AcnPlugin::raiseImportComponentWindow);
     toolsMenu->addAction(command);
     importFromAsnComponents->setEnabled(false);
 
@@ -271,7 +294,8 @@ void Asn1AcnPlugin::raiseImportComponentWindow()
     if (!m_importComponentWizard.isNull()) {
         Core::ICore::raiseWindow(m_importComponentWizard);
     } else {
-        m_importComponentWizard = new Libraries::Wizard::ImportComponentWizard(Core::ICore::mainWindow());
+        m_importComponentWizard = new Libraries::Wizard::ImportComponentWizard(
+            Core::ICore::mainWindow());
         m_importComponentWizard->show();
     }
 }
@@ -293,29 +317,23 @@ void Asn1AcnPlugin::onTaskFinished(Core::Id id)
 #ifdef WITH_TESTS
 QList<QObject *> Asn1AcnPlugin::createTestObjects() const
 {
-    return QList<QObject *>()
-            << new Libraries::Tests::ModuleMetadataParserTests
-            << new Libraries::Tests::GeneralMetadataParserTests
-            << new Libraries::Tests::MetadataModelTests
-            << new Libraries::Tests::MetadataCheckStateHandlerTests
-            << new Libraries::Tests::FileModelTests
-            << new TreeViews::Tests::DisplayRoleVisitorTests
-            << new TreeViews::Tests::OutlineIndexUpdaterTests
-            << new TreeViews::Tests::OutlineModelTests
-            << new TreeViews::Tests::ComboModelTests
-            << new TreeViews::Tests::TypesTreeModelTests
-            << new Tests::AstXmlParserTests
-            << new Tests::ErrorMessageParserTests
-            << new Tests::ParsedDocumentBuilderTests
-            << new Tests::DocumentProcessorTests
-            << new Tests::ProjectContentHandlerTests
-            << new Tests::ParsedDataStorageTests
-            << new Tests::AutoCompleterTests
-            << new Tests::SourceMapperTests
-            << new Tests::ModelValidityGuardTests
-            << new Tests::LinkCreatorTests
-            << new Tests::IndenterTests
-               ;
+    return QList<QObject *>() << new Libraries::Tests::ModuleMetadataParserTests
+                              << new Libraries::Tests::GeneralMetadataParserTests
+                              << new Libraries::Tests::MetadataModelTests
+                              << new Libraries::Tests::MetadataCheckStateHandlerTests
+                              << new Libraries::Tests::FileModelTests
+                              << new TreeViews::Tests::DisplayRoleVisitorTests
+                              << new TreeViews::Tests::OutlineIndexUpdaterTests
+                              << new TreeViews::Tests::OutlineModelTests
+                              << new TreeViews::Tests::ComboModelTests
+                              << new TreeViews::Tests::TypesTreeModelTests
+                              << new Tests::AstXmlParserTests << new Tests::ErrorMessageParserTests
+                              << new Tests::ParsedDocumentBuilderTests
+                              << new Tests::DocumentProcessorTests
+                              << new Tests::ProjectContentHandlerTests
+                              << new Tests::ParsedDataStorageTests << new Tests::AutoCompleterTests
+                              << new Tests::SourceMapperTests << new Tests::ModelValidityGuardTests
+                              << new Tests::LinkCreatorTests << new Tests::IndenterTests;
 }
 #endif
 

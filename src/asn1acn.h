@@ -28,8 +28,8 @@
 
 #include <extensionsystem/iplugin.h>
 
-#include <coreplugin/icontext.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
+#include <coreplugin/icontext.h>
 
 #include "libraries/wizard/importcomponentwizard.h"
 
@@ -61,18 +61,22 @@ private:
 
     void initializeMenus();
 
-    void initializeSwitchAction(ActionContainer *toolsMenu, ActionContainer *contextMenu, const Context &context);
+    void initializeSwitchAction(ActionContainer *toolsMenu,
+                                ActionContainer *contextMenu,
+                                const Context &context);
     void initializeFollowSymbolAction(ActionContainer *toolsMenu, ActionContainer *contextMenu);
     void initializeOpenInNextSplitAction(ActionContainer *toolsMenu, const Context &context);
     void initializeImportFromAsnComponents(ActionContainer *toolsMenu);
-    void initializeFindUsagesAction(ActionContainer *toolsMenu, ActionContainer *contextMenu, const Context &context);
+    void initializeFindUsagesAction(ActionContainer *toolsMenu,
+                                    ActionContainer *contextMenu,
+                                    const Context &context);
 
     void addToToolsMenu(ActionContainer *container);
 
     QPointer<Libraries::Wizard::ImportComponentWizard> m_importComponentWizard;
     QAction *m_findUsagesAction;
 
-#ifdef WITH_TESTS   
+#ifdef WITH_TESTS
     QList<QObject *> createTestObjects() const override;
 #endif
 };

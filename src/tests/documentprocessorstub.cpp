@@ -25,8 +25,8 @@
 
 #include "documentprocessorstub.h"
 
-#include <QList>
 #include <QFileInfo>
+#include <QList>
 
 #include <data/file.h>
 
@@ -36,8 +36,7 @@ using namespace Asn1Acn::Internal::Tests;
 DocumentProcessorStub::DocumentProcessorStub(const QString &project)
     : m_state(State::Unfinished)
     , m_projectName(project)
-{
-}
+{}
 
 void DocumentProcessorStub::addToRun(const QString &filePath, const QString &docContent)
 {

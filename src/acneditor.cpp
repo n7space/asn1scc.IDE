@@ -27,13 +27,13 @@
 
 #include <QCoreApplication>
 
-#include <texteditor/texteditoractionhandler.h>
 #include <texteditor/basehoverhandler.h>
+#include <texteditor/texteditoractionhandler.h>
 
-#include "completion/autocompleter.h"
-#include "completion/acncompletionassist.h"
-#include "asn1acnconstants.h"
 #include "acndocument.h"
+#include "asn1acnconstants.h"
+#include "completion/acncompletionassist.h"
+#include "completion/autocompleter.h"
 #include "indenter.h"
 #include "tr.h"
 

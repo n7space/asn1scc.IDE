@@ -25,8 +25,8 @@
 
 #include "selectsourcepage.h"
 
-#include <QWidget>
 #include <QVBoxLayout>
+#include <QWidget>
 
 #include <coreplugin/icore.h>
 
@@ -51,8 +51,10 @@ SelectSourcePage::SelectSourcePage(ComponentImporter &importer, QWidget *parent)
     connect(m_libraries.get(), &Settings::Libraries::changed, this, &SelectSourcePage::refreshPaths);
     connect(m_ui.builtInRadio, &QRadioButton::toggled, this, &SelectSourcePage::builtInRadioToggled);
 
-    connect(m_ui.asn1sccPathChooser, &Utils::PathChooser::pathChanged,
-            this, &SelectSourcePage::completeChanged);
+    connect(m_ui.asn1sccPathChooser,
+            &Utils::PathChooser::pathChanged,
+            this,
+            &SelectSourcePage::completeChanged);
 
     m_ui.builtInRadio->setChecked(true);
 

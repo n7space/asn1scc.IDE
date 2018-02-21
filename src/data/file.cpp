@@ -30,12 +30,9 @@ using namespace Asn1Acn::Internal::Data;
 
 File::File(const QString &path)
     : Node(path, {path, 0, 0})
-{
-}
+{}
 
-File::~File()
-{
-}
+File::~File() {}
 
 void File::accept(Visitor &visitor) const
 {

@@ -24,8 +24,8 @@
 ****************************************************************************/
 #pragma once
 
-#include <QString>
 #include <QMap>
+#include <QString>
 
 #include "data/errormessage.h"
 

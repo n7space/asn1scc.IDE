@@ -32,10 +32,11 @@ TypeReference::TypeReference(const SourceLocation &location)
     : m_location(location)
 {}
 
-TypeReference::TypeReference(const QString &name, const QString &module, const SourceLocation &location)
+TypeReference::TypeReference(const QString &name,
+                             const QString &module,
+                             const SourceLocation &location)
     : TypeReference(location)
 {
     m_name = name;
     m_module = module;
 }
-

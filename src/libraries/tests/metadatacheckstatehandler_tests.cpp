@@ -29,13 +29,13 @@
 
 #include <QtTest/QtTest>
 
+#include <libraries/metadata/element.h>
 #include <libraries/metadata/library.h>
 #include <libraries/metadata/module.h>
 #include <libraries/metadata/submodule.h>
-#include <libraries/metadata/element.h>
 
-#include <libraries/metadatamodel.h>
 #include <libraries/metadatacheckstatehandler.h>
+#include <libraries/metadatamodel.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Libraries;
@@ -55,7 +55,9 @@ std::unique_ptr<Metadata::Submodule> createSubmodule(const int elementsCnt, cons
     return submodule;
 }
 
-std::unique_ptr<Metadata::Module> createModule(const int submodulesCnt, const int elementsCnt, const QString &name)
+std::unique_ptr<Metadata::Module> createModule(const int submodulesCnt,
+                                               const int elementsCnt,
+                                               const QString &name)
 {
     auto module = std::make_unique<Metadata::Module>(name, name);
     for (int i = 0; i < submodulesCnt; i++) {
@@ -66,7 +68,9 @@ std::unique_ptr<Metadata::Module> createModule(const int submodulesCnt, const in
     return module;
 }
 
-std::unique_ptr<Metadata::Library> createLibrary(const int modulesCnt, const int submodulesCnt, const int elementsCnt)
+std::unique_ptr<Metadata::Library> createLibrary(const int modulesCnt,
+                                                 const int submodulesCnt,
+                                                 const int elementsCnt)
 {
     QString name = QString("library");
     auto library = std::make_unique<Metadata::Library>(name);
@@ -96,7 +100,10 @@ QModelIndex getIndexByName(const MetadataModel *model, const QModelIndex &index,
     return QModelIndex();
 }
 
-void setDependecies(const MetadataModel *model, const QString &owner, const References &requires, const References &conflicts)
+void setDependecies(const MetadataModel *model,
+                    const QString &owner,
+                    const References &requires,
+                    const References &conflicts)
 {
     const auto ownerIndex = getIndexByName(model, model->rootIndex(), owner);
     QVERIFY(ownerIndex.isValid());
@@ -112,7 +119,7 @@ void setDependecies(const MetadataModel *model, const QString &owner, const Refe
         element->addConflict(c);
 }
 
-} // namespace Anonymous
+} // namespace
 
 MetadataCheckStateHandlerTests::MetadataCheckStateHandlerTests(QObject *parent)
     : QObject(parent)
@@ -124,7 +131,9 @@ void MetadataCheckStateHandlerTests::test_singleElementChecked()
     const auto model = std::make_unique<MetadataModel>(library.get());
     MetadataCheckStateHandler handler(model.get());
 
-    auto index = getIndexByName(model.get(), model->rootIndex(), "library_module0_submodule0_element0");
+    auto index = getIndexByName(model.get(),
+                                model->rootIndex(),
+                                "library_module0_submodule0_element0");
     bool ret = handler.changeCheckStates(index, Qt::Checked);
     QVERIFY(ret);
 
@@ -146,7 +155,9 @@ void MetadataCheckStateHandlerTests::test_allParentChildrenChecked()
     const auto model = std::make_unique<MetadataModel>(library.get());
     MetadataCheckStateHandler handler(model.get());
 
-    auto index = getIndexByName(model.get(), model->rootIndex(), "library_module0_submodule0_element0");
+    auto index = getIndexByName(model.get(),
+                                model->rootIndex(),
+                                "library_module0_submodule0_element0");
     bool ret = handler.changeCheckStates(index, Qt::Checked);
     QVERIFY(ret);
 
@@ -176,10 +187,14 @@ void MetadataCheckStateHandlerTests::test_elementWithSingleRequirementChecked()
     MetadataCheckStateHandler handler(model.get());
 
     References requirements;
-    requirements << Metadata::Reference("library_module0", "library_module0_submodule0", "library_module0_submodule0_element1");
+    requirements << Metadata::Reference("library_module0",
+                                        "library_module0_submodule0",
+                                        "library_module0_submodule0_element1");
     setDependecies(model.get(), "library_module0_submodule0_element0", requirements, {});
 
-    auto index = getIndexByName(model.get(), model->rootIndex(), "library_module0_submodule0_element0");
+    auto index = getIndexByName(model.get(),
+                                model->rootIndex(),
+                                "library_module0_submodule0_element0");
     bool ret = handler.changeCheckStates(index, Qt::Checked);
     QVERIFY(ret);
 
@@ -189,7 +204,9 @@ void MetadataCheckStateHandlerTests::test_elementWithSingleRequirementChecked()
     QVERIFY(changed.contains(index));
     QCOMPARE(changed.value(index), Qt::Checked);
 
-    auto required = getIndexByName(model.get(), model->rootIndex(), "library_module0_submodule0_element1");
+    auto required = getIndexByName(model.get(),
+                                   model->rootIndex(),
+                                   "library_module0_submodule0_element1");
     QVERIFY(changed.contains(required));
     QCOMPARE(changed.value(required), Qt::Checked);
 
@@ -206,7 +223,9 @@ void MetadataCheckStateHandlerTests::test_parentWithDependendtChildrenChecked()
     MetadataCheckStateHandler handler(model.get());
 
     References requirements;
-    requirements << Metadata::Reference("library_module0", "library_module0_submodule0", "library_module0_submodule0_element1");
+    requirements << Metadata::Reference("library_module0",
+                                        "library_module0_submodule0",
+                                        "library_module0_submodule0_element1");
     setDependecies(model.get(), "library_module0_submodule0_element0", requirements, {});
 
     auto index = getIndexByName(model.get(), model->rootIndex(), "library_module0_submodule0");
@@ -237,10 +256,14 @@ void MetadataCheckStateHandlerTests::test_elementWithRequirementInOtherModule()
     MetadataCheckStateHandler handler(model.get());
 
     References requirements;
-    requirements << Metadata::Reference("library_module1", "library_module1_submodule0", "library_module1_submodule0_element0");
+    requirements << Metadata::Reference("library_module1",
+                                        "library_module1_submodule0",
+                                        "library_module1_submodule0_element0");
     setDependecies(model.get(), "library_module0_submodule0_element0", requirements, {});
 
-    auto index = getIndexByName(model.get(), model->rootIndex(), "library_module0_submodule0_element0");
+    auto index = getIndexByName(model.get(),
+                                model->rootIndex(),
+                                "library_module0_submodule0_element0");
     bool ret = handler.changeCheckStates(index, Qt::Checked);
     QVERIFY(ret);
 
@@ -255,7 +278,9 @@ void MetadataCheckStateHandlerTests::test_elementWithRequirementInOtherModule()
         QCOMPARE(changed.value(parent), Qt::PartiallyChecked);
     }
 
-    auto required = getIndexByName(model.get(), model->rootIndex(), "library_module1_submodule0_element0");
+    auto required = getIndexByName(model.get(),
+                                   model->rootIndex(),
+                                   "library_module1_submodule0_element0");
 
     QVERIFY(changed.contains(required));
     QCOMPARE(changed.value(required), Qt::Checked);
@@ -273,14 +298,20 @@ void MetadataCheckStateHandlerTests::test_conflictingElementChecked()
     MetadataCheckStateHandler handler(model.get());
 
     References conflicts;
-    conflicts << Metadata::Reference("library_module0", "library_module0_submodule0", "library_module0_submodule0_element0");
+    conflicts << Metadata::Reference("library_module0",
+                                     "library_module0_submodule0",
+                                     "library_module0_submodule0_element0");
     setDependecies(model.get(), "library_module0_submodule0_element1", {}, conflicts);
 
     conflicts.clear();
-    conflicts << Metadata::Reference("library_module0", "library_module0_submodule0", "library_module0_submodule0_element1");
+    conflicts << Metadata::Reference("library_module0",
+                                     "library_module0_submodule0",
+                                     "library_module0_submodule0_element1");
     setDependecies(model.get(), "library_module0_submodule0_element0", {}, conflicts);
 
-    auto index = getIndexByName(model.get(), model->rootIndex(), "library_module0_submodule0_element0");
+    auto index = getIndexByName(model.get(),
+                                model->rootIndex(),
+                                "library_module0_submodule0_element0");
     bool ret = handler.changeCheckStates(index, Qt::Checked);
     QVERIFY(ret);
 
@@ -288,7 +319,9 @@ void MetadataCheckStateHandlerTests::test_conflictingElementChecked()
     QVERIFY(changed.contains(index));
     QCOMPARE(changed.value(index), Qt::Checked);
 
-    auto conflictingIndex = getIndexByName(model.get(), model->rootIndex(), "library_module0_submodule0_element1");
+    auto conflictingIndex = getIndexByName(model.get(),
+                                           model->rootIndex(),
+                                           "library_module0_submodule0_element1");
     ret = handler.changeCheckStates(conflictingIndex, Qt::Checked);
 
     QVERIFY(!ret);
@@ -301,11 +334,15 @@ void MetadataCheckStateHandlerTests::test_parentWithConflictingChildrenChecked()
     MetadataCheckStateHandler handler(model.get());
 
     References conflicts;
-    conflicts << Metadata::Reference("library_module0", "library_module0_submodule0", "library_module0_submodule0_element0");
+    conflicts << Metadata::Reference("library_module0",
+                                     "library_module0_submodule0",
+                                     "library_module0_submodule0_element0");
     setDependecies(model.get(), "library_module0_submodule0_element1", {}, conflicts);
 
     conflicts.clear();
-    conflicts << Metadata::Reference("library_module0", "library_module0_submodule0", "library_module0_submodule0_element1");
+    conflicts << Metadata::Reference("library_module0",
+                                     "library_module0_submodule0",
+                                     "library_module0_submodule0_element1");
     setDependecies(model.get(), "library_module0_submodule0_element0", {}, conflicts);
 
     auto index = getIndexByName(model.get(), model->rootIndex(), "library_module0_submodule0");
@@ -324,11 +361,15 @@ void MetadataCheckStateHandlerTests::test_cyclicDependedncy()
     MetadataCheckStateHandler handler(model.get());
 
     References requirements;
-    requirements << Metadata::Reference("library_module0", "library_module0_submodule0", "library_module0_submodule0_element0");
+    requirements << Metadata::Reference("library_module0",
+                                        "library_module0_submodule0",
+                                        "library_module0_submodule0_element0");
     setDependecies(model.get(), "library_module0_submodule0_element1", requirements, {});
 
     requirements.clear();
-    requirements << Metadata::Reference("library_module0", "library_module0_submodule0", "library_module0_submodule0_element1");
+    requirements << Metadata::Reference("library_module0",
+                                        "library_module0_submodule0",
+                                        "library_module0_submodule0_element1");
     setDependecies(model.get(), "library_module0_submodule0_element0", requirements, {});
 
     auto index = getIndexByName(model.get(), model->rootIndex(), "library_module0_submodule0");
@@ -359,15 +400,22 @@ void MetadataCheckStateHandlerTests::test_parentNodeWithChildDependencyInOtherMo
     MetadataCheckStateHandler handler(model.get());
 
     References requirements;
-    requirements << Metadata::Reference("library_module1", "library_module1_submodule0", "library_module1_submodule0_element0");
-    requirements << Metadata::Reference("library_module1", "library_module1_submodule0", "library_module1_submodule0_element1");
+    requirements << Metadata::Reference("library_module1",
+                                        "library_module1_submodule0",
+                                        "library_module1_submodule0_element0");
+    requirements << Metadata::Reference("library_module1",
+                                        "library_module1_submodule0",
+                                        "library_module1_submodule0_element1");
     setDependecies(model.get(), "library_module0_submodule0_element0", requirements, {});
 
     requirements.clear();
-    requirements << Metadata::Reference("library_module1", "library_module1_submodule0", "library_module1_submodule0_element0");
-    requirements << Metadata::Reference("library_module1", "library_module1_submodule0", "library_module1_submodule0_element2");
+    requirements << Metadata::Reference("library_module1",
+                                        "library_module1_submodule0",
+                                        "library_module1_submodule0_element0");
+    requirements << Metadata::Reference("library_module1",
+                                        "library_module1_submodule0",
+                                        "library_module1_submodule0_element2");
     setDependecies(model.get(), "library_module1_submodule0_element1", requirements, {});
-
 
     auto index = getIndexByName(model.get(), model->rootIndex(), "library_module0");
     bool ret = handler.changeCheckStates(index, Qt::Checked);
@@ -375,7 +423,10 @@ void MetadataCheckStateHandlerTests::test_parentNodeWithChildDependencyInOtherMo
 
     const auto &changed = handler.changedIndexes();
     QVERIFY(changed.contains(getIndexByName(model.get(), model->rootIndex(), "library_module0")));
-    QVERIFY(changed.contains(getIndexByName(model.get(), model->rootIndex(), "library_module1_submodule0_element0")));
-    QVERIFY(changed.contains(getIndexByName(model.get(), model->rootIndex(), "library_module1_submodule0_element1")));
-    QVERIFY(changed.contains(getIndexByName(model.get(), model->rootIndex(), "library_module1_submodule0_element2")));
+    QVERIFY(changed.contains(
+        getIndexByName(model.get(), model->rootIndex(), "library_module1_submodule0_element0")));
+    QVERIFY(changed.contains(
+        getIndexByName(model.get(), model->rootIndex(), "library_module1_submodule0_element1")));
+    QVERIFY(changed.contains(
+        getIndexByName(model.get(), model->rootIndex(), "library_module1_submodule0_element2")));
 }

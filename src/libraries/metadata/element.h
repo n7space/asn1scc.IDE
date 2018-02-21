@@ -24,8 +24,8 @@
 ****************************************************************************/
 #pragma once
 
-#include <QString>
 #include <QList>
+#include <QString>
 
 #include "librarynode.h"
 #include "reference.h"
@@ -46,9 +46,17 @@ public:
     void addConflict(const Reference &conflict) { m_conflicts.append(conflict); }
     void addRequirement(const Reference &requirement) { m_requirements.append(requirement); }
 
-    LibraryNode *child(int num) const override { Q_UNUSED(num); return nullptr; }
+    LibraryNode *child(int num) const override
+    {
+        Q_UNUSED(num);
+        return nullptr;
+    }
     int childrenCount() const override { return 0; }
-    int childIndex(const LibraryNode *child) const override { Q_UNUSED(child); return -1; }
+    int childIndex(const LibraryNode *child) const override
+    {
+        Q_UNUSED(child);
+        return -1;
+    }
 
     QList<Reference> conflicts() const override { return m_conflicts; }
     QList<Reference> requirements() const override { return m_requirements; }

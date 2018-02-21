@@ -25,18 +25,18 @@
 
 #include "asn1sccparseddocumentbuilder.h"
 
-#include <QNetworkReply>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
 #include <QJsonValue>
+#include <QNetworkReply>
 
 #include <extensionsystem/pluginmanager.h>
 
 #include <messages/messageutils.h>
 
-#include "data/file.h"
 #include "data/definitions.h"
+#include "data/file.h"
 
 #include "astxmlparser.h"
 #include "errormessageparser.h"
@@ -49,24 +49,25 @@ ParsedDocumentBuilder *Asn1SccParsedDocumentBuilder::create(const QHash<QString,
     return new Asn1SccParsedDocumentBuilder(serviceProvider, documents);
 }
 
-Asn1SccParsedDocumentBuilder::Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider, const QHash<QString, QString> &documents)
+Asn1SccParsedDocumentBuilder::Asn1SccParsedDocumentBuilder(ParsingServiceProvider *serviceProvider,
+                                                           const QHash<QString, QString> &documents)
     : m_serviceProvider(serviceProvider)
     , m_documentSources(documents)
-{
-}
+{}
 
 void Asn1SccParsedDocumentBuilder::run()
 {
     QNetworkReply *reply = m_serviceProvider->requestAst(m_documentSources);
 
-    QObject::connect(reply, &QNetworkReply::finished,
-                     this, &Asn1SccParsedDocumentBuilder::requestFinished);
+    QObject::connect(reply,
+                     &QNetworkReply::finished,
+                     this,
+                     &Asn1SccParsedDocumentBuilder::requestFinished);
 }
 
 void Asn1SccParsedDocumentBuilder::requestFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
-
 
     if (reply->error() == QNetworkReply::NoError) {
         Messages::messageNetworkReply(reply);
@@ -85,8 +86,7 @@ void Asn1SccParsedDocumentBuilder::parseResponse(const QByteArray &jsonData)
     if (responseContainsAst(json)) {
         parseXML(getAstXml(json));
         emit finished();
-    }
-    else {
+    } else {
         storeErrorMessages(json);
         emit errored();
     }

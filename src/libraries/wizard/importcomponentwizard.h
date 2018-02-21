@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include <QWizard>
 #include <QWidget>
+#include <QWizard>
 
 #include <libraries/componentimporter.h>
 #include <libraries/wizard/vcshandler.h>

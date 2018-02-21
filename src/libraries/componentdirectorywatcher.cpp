@@ -34,9 +34,10 @@ using namespace Asn1Acn::Internal::Libraries;
 
 static const int WAIT_TIMEOUT_MS = 2000;
 
-ComponentDirectoryWatcher::ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries,
-                                                     std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
-                                                     QObject *parent)
+ComponentDirectoryWatcher::ComponentDirectoryWatcher(
+    Settings::LibrariesConstPtr libraries,
+    std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
+    QObject *parent)
     : QObject(parent)
     , m_fsWatcher(std::make_unique<QFileSystemWatcher>())
     , m_dispatcher(std::move(dispatcher))
@@ -47,15 +48,27 @@ ComponentDirectoryWatcher::ComponentDirectoryWatcher(Settings::LibrariesConstPtr
     m_resetWatch.setInterval(WAIT_TIMEOUT_MS);
     m_resetWatch.setSingleShot(true);
 
-    connect(&m_resetWatch, &QTimer::timeout,
-            this, &ComponentDirectoryWatcher::resetWatched, Qt::UniqueConnection);
+    connect(&m_resetWatch,
+            &QTimer::timeout,
+            this,
+            &ComponentDirectoryWatcher::resetWatched,
+            Qt::UniqueConnection);
 
-    connect(m_fsWatcher.get(), &QFileSystemWatcher::fileChanged,
-            this, &ComponentDirectoryWatcher::filesChanged, Qt::UniqueConnection);
-    connect(m_fsWatcher.get(), &QFileSystemWatcher::directoryChanged,
-            this, &ComponentDirectoryWatcher::filesChanged, Qt::UniqueConnection);
-    connect(m_libraries.get(), &Settings::Libraries::changed, this,
-            &ComponentDirectoryWatcher::configChanged, Qt::UniqueConnection);
+    connect(m_fsWatcher.get(),
+            &QFileSystemWatcher::fileChanged,
+            this,
+            &ComponentDirectoryWatcher::filesChanged,
+            Qt::UniqueConnection);
+    connect(m_fsWatcher.get(),
+            &QFileSystemWatcher::directoryChanged,
+            this,
+            &ComponentDirectoryWatcher::filesChanged,
+            Qt::UniqueConnection);
+    connect(m_libraries.get(),
+            &Settings::Libraries::changed,
+            this,
+            &ComponentDirectoryWatcher::configChanged,
+            Qt::UniqueConnection);
 }
 
 void ComponentDirectoryWatcher::configChanged()
@@ -99,7 +112,6 @@ void ComponentDirectoryWatcher::addMainDirectory(const QString &path)
     for (const auto &subPath : subDirectories)
         addSubDirectory(dir.filePath(subPath));
 }
-
 
 void ComponentDirectoryWatcher::addSubDirectory(const QString &path)
 {

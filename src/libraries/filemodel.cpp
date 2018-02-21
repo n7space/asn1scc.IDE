@@ -30,8 +30,7 @@ using namespace Asn1Acn::Internal::Libraries;
 FileModel::FileModel(QObject *parent)
     : QFileSystemModel(parent)
 {
-    connect(this, &QFileSystemModel::directoryLoaded,
-            this, &FileModel::onDirectoryLoaded);
+    connect(this, &QFileSystemModel::directoryLoaded, this, &FileModel::onDirectoryLoaded);
 }
 
 Qt::ItemFlags FileModel::flags(const QModelIndex &index) const
@@ -62,7 +61,6 @@ QVariant FileModel::data(const QModelIndex &index, int role) const
 bool FileModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (role == Qt::CheckStateRole) {
-
         if (!index.isValid())
             return false;
 
@@ -103,7 +101,6 @@ void FileModel::setParentCheck(const QModelIndex &index)
     auto checkState = parentState(index);
 
     for (auto parent = index.parent(); parent.isValid(); parent = parent.parent()) {
-
         changeCheckState(parent, checkState);
         checkState = parentState(parent);
 

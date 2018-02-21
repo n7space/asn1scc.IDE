@@ -29,10 +29,10 @@
 
 #include <libraries/metadatamodel.h>
 
+#include <libraries/metadata/element.h>
 #include <libraries/metadata/library.h>
 #include <libraries/metadata/module.h>
 #include <libraries/metadata/submodule.h>
-#include <libraries/metadata/element.h>
 
 #include <3rdparty/tests/modeltest.h>
 
@@ -42,8 +42,7 @@ using namespace Asn1Acn::Internal::Libraries::Tests;
 
 MetadataModelTests::MetadataModelTests(QObject *parent)
     : QObject(parent)
-{
-}
+{}
 
 void MetadataModelTests::test_emptyModel()
 {
@@ -55,21 +54,31 @@ void MetadataModelTests::test_emptyModel()
 
 void MetadataModelTests::test_modelWithDummyPopulation()
 {
-    auto element1 = std::make_unique<Metadata::Element>(QLatin1String("Element_1_Name"), QLatin1String("Element_1_Description"));
-    auto element2 = std::make_unique<Metadata::Element>(QLatin1String("Element_2_Name"), QLatin1String("Element_2_Description"));
-    auto submodule1 = std::make_unique<Metadata::Submodule>(QLatin1String("Submodule_1_Name"), QLatin1String("Submodule_1_Description"));
+    auto element1 = std::make_unique<Metadata::Element>(QLatin1String("Element_1_Name"),
+                                                        QLatin1String("Element_1_Description"));
+    auto element2 = std::make_unique<Metadata::Element>(QLatin1String("Element_2_Name"),
+                                                        QLatin1String("Element_2_Description"));
+    auto submodule1 = std::make_unique<Metadata::Submodule>(QLatin1String("Submodule_1_Name"),
+                                                            QLatin1String(
+                                                                "Submodule_1_Description"));
     submodule1->addElement(std::move(element1));
     submodule1->addElement(std::move(element2));
 
-    auto element3 = std::make_unique<Metadata::Element>(QLatin1String("Element_3_Name"), QLatin1String("Element_3_Description"));
-    auto element4 = std::make_unique<Metadata::Element>(QLatin1String("Element_4_Name"), QLatin1String("Element_4_Description"));
-    auto submodule2 = std::make_unique<Metadata::Submodule>(QLatin1String("Submodule_2_Name"), QLatin1String("Submodule_2_Description"));
+    auto element3 = std::make_unique<Metadata::Element>(QLatin1String("Element_3_Name"),
+                                                        QLatin1String("Element_3_Description"));
+    auto element4 = std::make_unique<Metadata::Element>(QLatin1String("Element_4_Name"),
+                                                        QLatin1String("Element_4_Description"));
+    auto submodule2 = std::make_unique<Metadata::Submodule>(QLatin1String("Submodule_2_Name"),
+                                                            QLatin1String(
+                                                                "Submodule_2_Description"));
     submodule2->addElement(std::move(element3));
     submodule2->addElement(std::move(element4));
 
-    auto module1 = std::make_unique<Metadata::Module>(QLatin1String("Module_1_Name"), QLatin1String("Module_1_Description"));
+    auto module1 = std::make_unique<Metadata::Module>(QLatin1String("Module_1_Name"),
+                                                      QLatin1String("Module_1_Description"));
     module1->addSubmodule(std::move(submodule1));
-    auto module2 = std::make_unique<Metadata::Module>(QLatin1String("Module_2_Name"), QLatin1String("Module_2_Description"));
+    auto module2 = std::make_unique<Metadata::Module>(QLatin1String("Module_2_Name"),
+                                                      QLatin1String("Module_2_Description"));
     module2->addSubmodule(std::move(submodule2));
 
     auto library = std::make_unique<Metadata::Library>(QLatin1String("LibraryName"));

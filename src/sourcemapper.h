@@ -26,8 +26,8 @@
 
 #include <map>
 
-#include <QString>
 #include <QHash>
+#include <QString>
 
 namespace Asn1Acn {
 namespace Internal {

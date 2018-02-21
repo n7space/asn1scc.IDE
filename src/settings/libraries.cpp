@@ -30,7 +30,7 @@
 
 using namespace Asn1Acn::Internal::Settings;
 
-static const char LIBPATH_PATH[] = { "Paths" };
+static const char LIBPATH_PATH[] = {"Paths"};
 static const char RELATIVE_ASN1LIB_PATH[] = "/asn1acn/libs";
 
 namespace {
@@ -64,9 +64,7 @@ Libraries::Libraries()
     m_detectedLibPaths += listLibs(userLibRootDir());
 }
 
-Libraries::~Libraries()
-{
-}
+Libraries::~Libraries() {}
 
 QString Libraries::name() const
 {

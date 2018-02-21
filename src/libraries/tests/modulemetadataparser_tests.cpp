@@ -29,10 +29,9 @@
 using namespace Asn1Acn::Internal::Libraries::Tests;
 
 ModuleMetadataParserTests::ModuleMetadataParserTests(QObject *parent)
-    : QObject(parent),
-      m_parsedData(std::make_unique<Metadata::Module>("BadName", "BadDesc"))
-{
-}
+    : QObject(parent)
+    , m_parsedData(std::make_unique<Metadata::Module>("BadName", "BadDesc"))
+{}
 
 void ModuleMetadataParserTests::test_emptyFile()
 {
@@ -195,8 +194,7 @@ void ModuleMetadataParserTests::parsingFails(const QString &jsonData)
     try {
         parser.parse();
         QFAIL("Parsing should fail");
-    }
-    catch (const ModuleMetadataParser::Error &err) {
+    } catch (const ModuleMetadataParser::Error &err) {
         QVERIFY(QLatin1String(err.what()).size() > 0);
     }
 }

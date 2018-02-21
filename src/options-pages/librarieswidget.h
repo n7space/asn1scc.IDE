@@ -24,9 +24,9 @@
 ****************************************************************************/
 #pragma once
 
-#include <QWidget>
-#include <QTreeWidgetItem>
 #include <QStringList>
+#include <QTreeWidgetItem>
+#include <QWidget>
 
 #include "ui_libraries.h"
 
@@ -61,4 +61,3 @@ private:
 } // namespace OptionsPages
 } // namespace Internal
 } // namespace Asn1Acn
-

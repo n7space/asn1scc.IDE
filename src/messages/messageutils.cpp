@@ -37,8 +37,7 @@ namespace {
 
 QString networkErrorToString(QNetworkReply::NetworkError error)
 {
-    switch(error)
-    {
+    switch (error) {
     case QNetworkReply::ConnectionRefusedError:
         return QStringLiteral("ConnectionRefusedError");
     case QNetworkReply::RemoteHostClosedError:
@@ -112,7 +111,6 @@ QString networkErrorToString(QNetworkReply::NetworkError error)
     default:
         return {};
     }
-
 }
 
 QString networkReplyError(const QNetworkReply *reply)
@@ -122,8 +120,8 @@ QString networkReplyError(const QNetworkReply *reply)
 
 QString networkReplyStatus(const QNetworkReply *reply)
 {
-    return reply->error() == QNetworkReply::NoError
-            ? QString("Status: Success.") : QString("Status: Error.");
+    return reply->error() == QNetworkReply::NoError ? QString("Status: Success.")
+                                                    : QString("Status: Error.");
 }
 
 QString networkReplyUrl(const QNetworkReply *reply)
@@ -185,7 +183,7 @@ QString processBaseMessage(const QProcess *process)
     return process->program() + ": " + processState(process);
 }
 
-} // namespace Anonymous
+} // namespace
 
 void Asn1Acn::Internal::Messages::messageNetworkReply(const QNetworkReply *reply)
 {

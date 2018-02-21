@@ -37,8 +37,7 @@ ModelValidityGuard *ModelValidityGuard::instance()
 
 ModelValidityGuard::ModelValidityGuard()
     : m_modifiersCnt(0)
-{
-}
+{}
 
 bool ModelValidityGuard::isValid() const
 {

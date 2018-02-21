@@ -25,9 +25,9 @@
 
 #pragma once
 
-#include <QTreeView>
-#include <QStringList>
 #include <QModelIndex>
+#include <QStringList>
+#include <QTreeView>
 
 namespace Asn1Acn {
 namespace Internal {

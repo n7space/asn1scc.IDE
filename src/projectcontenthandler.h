@@ -29,23 +29,22 @@
 #include <QString>
 #include <QStringList>
 
-#include "parseddatastorage.h"
 #include "documentprocessor.h"
-#include "sourcereader.h"
 #include "modelvalidityguard.h"
+#include "parseddatastorage.h"
+#include "sourcereader.h"
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ProjectContentHandler
-        : public QObject
+class ProjectContentHandler : public QObject
 {
     Q_OBJECT
 
 public:
     static ProjectContentHandler *create();
 
-    ProjectContentHandler(std::function<DocumentProcessor *(const QString&)>,
+    ProjectContentHandler(std::function<DocumentProcessor *(const QString &)>,
                           const SourceReader *sourceReader,
                           ParsedDataStorage *storage,
                           ModelValidityGuard *guard);
@@ -68,7 +67,8 @@ private:
 
     void processFiles(const QString &projectName, const QStringList &filePaths);
 
-    DocumentProcessor *createDocumentProcessor(const QString &projectName, const QStringList &filePaths) const;
+    DocumentProcessor *createDocumentProcessor(const QString &projectName,
+                                               const QStringList &filePaths) const;
     void startProcessing(DocumentProcessor *dp);
     void allProcessingFinished();
 
@@ -79,7 +79,8 @@ private:
                                         std::vector<std::unique_ptr<Data::File>> parsedDocuments,
                                         const std::vector<Data::ErrorMessage> &errorMessages);
 
-    void refreshErrorMessages(Data::File *file, const std::vector<Data::ErrorMessage> &errorMessages);
+    void refreshErrorMessages(Data::File *file,
+                              const std::vector<Data::ErrorMessage> &errorMessages);
 
     ParsedDataStorage *m_storage;
     ModelValidityGuard *m_guard;

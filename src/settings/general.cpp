@@ -29,9 +29,7 @@ using namespace Asn1Acn::Internal::Settings;
 
 static const char ASN1SCC_PATH[] = "Asn1SccPath";
 
-General::~General()
-{
-}
+General::~General() {}
 
 QString General::name() const
 {
@@ -45,7 +43,7 @@ void General::saveOptionsTo(QSettings *s) const
 
 static QString defaultAsn1sccPath()
 {
-  return Core::ICore::libexecPath() + QLatin1String("/asn1scc/asn1.exe");
+    return Core::ICore::libexecPath() + QLatin1String("/asn1scc/asn1.exe");
 }
 
 void General::loadOptionsFrom(QSettings *s)

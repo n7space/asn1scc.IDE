@@ -34,12 +34,9 @@ using namespace Asn1Acn::Internal::Data;
 
 OutlineModel::OutlineModel(const QString &filePath, QObject *parent)
     : MutableRootModel(filePath, parent)
-{
-}
+{}
 
-OutlineModel::~OutlineModel()
-{
-}
+OutlineModel::~OutlineModel() {}
 
 Node *OutlineModel::parentOf(const Node *node) const
 {

@@ -31,7 +31,7 @@ class QAction;
 namespace ProjectExplorer {
 class Project;
 class ProjectNode;
-}
+} // namespace ProjectExplorer
 
 namespace Asn1Acn {
 namespace Internal {

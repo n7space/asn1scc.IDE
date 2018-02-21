@@ -31,9 +31,9 @@
 #include <texteditor/ioutlinewidget.h>
 #include <utils/navigationtreeview.h>
 
-#include "model.h"
 #include "indexupdater.h"
 #include "indexupdaterfactory.h"
+#include "model.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -61,7 +61,6 @@ public slots:
     void updateSelection(const QModelIndexList &selected, const QModelIndex &current);
 
 protected:
-
 private:
     QLayout *createLayout();
     void expandItemsAbove(const QModelIndex &parent);

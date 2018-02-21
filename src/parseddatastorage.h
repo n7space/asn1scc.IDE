@@ -24,15 +24,15 @@
 ****************************************************************************/
 #pragma once
 
-#include <QObject>
 #include <QHash>
 #include <QMutex>
+#include <QObject>
 #include <QString>
 
 #include <memory>
 
-#include "data/root.h"
 #include "data/file.h"
+#include "data/root.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -61,8 +61,12 @@ public:
     const QStringList getProjectsForFile(const QString &filePath) const;
     const QStringList getFilesPathsFromProject(const QString &projectName) const;
 
-    Data::SourceLocation getDefinitionLocation(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const;
-    const Data::TypeAssignment *getTypeAssignment(const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const;
+    Data::SourceLocation getDefinitionLocation(const QString &path,
+                                               const QString &typeAssignmentName,
+                                               const QString &definitionsName) const;
+    const Data::TypeAssignment *getTypeAssignment(const QString &path,
+                                                  const QString &typeAssignmentName,
+                                                  const QString &definitionsName) const;
 
     int getProjectBuildersCount(const QString &projectName) const;
     void setProjectBuildersCount(const QString &projectName, const int version) const;

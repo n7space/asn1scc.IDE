@@ -28,8 +28,8 @@
 #include <QSet>
 #include <QString>
 
-#include <projectexplorer/session.h>
 #include <projectexplorer/projectnodes.h>
+#include <projectexplorer/session.h>
 #include <utils/mimetypes/mimedatabase.h>
 
 #include <utils/qtcassert.h>
@@ -42,10 +42,14 @@ using namespace Asn1Acn::Internal;
 ProjectWatcher::ProjectWatcher()
 {
     ProjectExplorer::SessionManager *sessionManager = ProjectExplorer::SessionManager::instance();
-    connect(sessionManager, &ProjectExplorer::SessionManager::projectRemoved,
-            this, &ProjectWatcher::onProjectRemoved);
-    connect(sessionManager, &ProjectExplorer::SessionManager::projectAdded,
-            this, &ProjectWatcher::onProjectAdded);
+    connect(sessionManager,
+            &ProjectExplorer::SessionManager::projectRemoved,
+            this,
+            &ProjectWatcher::onProjectRemoved);
+    connect(sessionManager,
+            &ProjectExplorer::SessionManager::projectAdded,
+            this,
+            &ProjectWatcher::onProjectAdded);
 }
 
 void ProjectWatcher::onProjectAdded(ProjectExplorer::Project *project)
@@ -53,8 +57,10 @@ void ProjectWatcher::onProjectAdded(ProjectExplorer::Project *project)
     ProjectContentHandler *proc = ProjectContentHandler::create();
     proc->handleProjectAdded(project->displayName());
 
-    connect(project, &ProjectExplorer::Project::fileListChanged,
-            this, &ProjectWatcher::onProjectFileListChanged);
+    connect(project,
+            &ProjectExplorer::Project::fileListChanged,
+            this,
+            &ProjectWatcher::onProjectFileListChanged);
 }
 
 void ProjectWatcher::onProjectRemoved(ProjectExplorer::Project *project)
@@ -62,8 +68,10 @@ void ProjectWatcher::onProjectRemoved(ProjectExplorer::Project *project)
     ProjectContentHandler *proc = ProjectContentHandler::create();
     proc->handleProjectRemoved(project->displayName());
 
-    disconnect(project, &ProjectExplorer::Project::fileListChanged,
-               this, &ProjectWatcher::onProjectFileListChanged);
+    disconnect(project,
+               &ProjectExplorer::Project::fileListChanged,
+               this,
+               &ProjectWatcher::onProjectFileListChanged);
 }
 
 void ProjectWatcher::onProjectFileListChanged()
@@ -71,13 +79,15 @@ void ProjectWatcher::onProjectFileListChanged()
     ProjectExplorer::Project *project = qobject_cast<ProjectExplorer::Project *>(sender());
     QTC_ASSERT(project != nullptr, return );
 
-    const QSet<QString> watchedMimeTypes { Constants::ASN1_MIMETYPE, Constants::ACN_MIMETYPE };
-    const QStringList validFiles = project->files(ProjectExplorer::Project::AllFiles,
-                                                  [&watchedMimeTypes](const ProjectExplorer::Node *n) {
-        if (const auto fn = n->asFileNode())
-            return watchedMimeTypes.contains(Utils::mimeTypeForFile(fn->filePath().toString()).name());
-        return false;
-    });
+    const QSet<QString> watchedMimeTypes{Constants::ASN1_MIMETYPE, Constants::ACN_MIMETYPE};
+    const QStringList validFiles
+        = project->files(ProjectExplorer::Project::AllFiles,
+                         [&watchedMimeTypes](const ProjectExplorer::Node *n) {
+                             if (const auto fn = n->asFileNode())
+                                 return watchedMimeTypes.contains(
+                                     Utils::mimeTypeForFile(fn->filePath().toString()).name());
+                             return false;
+                         });
 
     ProjectContentHandler *proc = ProjectContentHandler::create();
     proc->handleFileListChanged(project->displayName(), validFiles);

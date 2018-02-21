@@ -25,8 +25,8 @@
 
 #include "metadatacomponentselector.h"
 
-#include <QFileInfo>
 #include <QDirIterator>
+#include <QFileInfo>
 #include <QMessageBox>
 
 #include <libraries/librarystorage.h>
@@ -34,13 +34,17 @@
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
-MetadaComponentSelector::MetadaComponentSelector(MetadataModel *model, const QString &path, QObject *parent)
+MetadaComponentSelector::MetadaComponentSelector(MetadataModel *model,
+                                                 const QString &path,
+                                                 QObject *parent)
     : ComponentSelector(parent)
     , m_model(model)
     , m_path(path)
 {
-    connect(m_model, &MetadataModel::conflictOccurred,
-            this, &MetadaComponentSelector::onConflictOccured);
+    connect(m_model,
+            &MetadataModel::conflictOccurred,
+            this,
+            &MetadaComponentSelector::onConflictOccured);
 }
 
 void MetadaComponentSelector::onConflictOccured(const QString &first, const QString &second) const

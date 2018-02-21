@@ -32,6 +32,5 @@ IndexUpdater::IndexUpdater(const Model *model, QObject *parent)
     : QObject(parent)
     , m_model(model)
 {
-    connect(model, &Model::modelReset,
-            this, &IndexUpdater::updateCurrentIndex);
+    connect(model, &Model::modelReset, this, &IndexUpdater::updateCurrentIndex);
 }

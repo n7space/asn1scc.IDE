@@ -27,8 +27,8 @@
 
 #include <QDir>
 
-#include <utils/hostosinfo.h>
 #include <plugins/coreplugin/icore.h>
+#include <utils/hostosinfo.h>
 
 using namespace Asn1Acn::Internal::Settings;
 
@@ -36,9 +36,7 @@ static const char PATH[] = "Path";
 static const char LISTENING_URI[] = "ListeningUri";
 static const char STAY_ALIVE_PERIOD[] = "StayAlivePeriod";
 
-Service::~Service()
-{
-}
+Service::~Service() {}
 
 QString Service::name() const
 {
@@ -54,7 +52,7 @@ void Service::saveOptionsTo(QSettings *s) const
 
 static QString defaultDaemonPath()
 {
-  return Core::ICore::libexecPath() + QLatin1String("/asn1scc/daemon/asn1.daemon.exe");
+    return Core::ICore::libexecPath() + QLatin1String("/asn1scc/daemon/asn1.daemon.exe");
 }
 
 void Service::loadOptionsFrom(QSettings *s)
@@ -62,8 +60,9 @@ void Service::loadOptionsFrom(QSettings *s)
     setPath(s->value(PATH, defaultDaemonPath()).toString());
     setListeningUri(s->value(LISTENING_URI,
                              Utils::HostOsInfo::isWindowsHost()
-                             ? "http://+:80/Temporary_Listen_Addresses/asn1scc.IDE/"
-                             : "http://localhost:9749/").toString());
+                                 ? "http://+:80/Temporary_Listen_Addresses/asn1scc.IDE/"
+                                 : "http://localhost:9749/")
+                        .toString());
     setStayAlivePeriod(s->value(STAY_ALIVE_PERIOD, 1000).toInt());
 }
 

@@ -25,42 +25,47 @@
 
 #include "asn1sccserviceprovider.h"
 
-#include <QString>
 #include <QSettings>
+#include <QString>
 
 #include <QJsonArray>
 #include <QJsonObject>
 
 #include <coreplugin/icore.h>
 
-#include <utils/qtcassert.h>
-#include <messages/messageutils.h>
 #include <messages/messagemanager.h>
+#include <messages/messageutils.h>
+#include <utils/qtcassert.h>
 
-#include "tools.h"
 #include "asn1acnconstants.h"
+#include "tools.h"
 
 using namespace Asn1Acn::Internal;
 
 Q_GLOBAL_STATIC(QNetworkAccessManager, networkManagerInstance)
 
 Asn1SccServiceProvider::Asn1SccServiceProvider(Settings::ServiceConstPtr settings)
-    : m_asn1sccService(new QProcess(this)),
-      m_serviceStarted(false),
-      m_settings(settings)
+    : m_asn1sccService(new QProcess(this))
+    , m_serviceStarted(false)
+    , m_settings(settings)
 {
     updateConfigFromSettings();
 
-    connect(m_asn1sccService, &QProcess::stateChanged,
-            [this](QProcess::ProcessState newState) {
-        Q_UNUSED(newState); Messages::messageProcess(m_asn1sccService);
-    } );
+    connect(m_asn1sccService, &QProcess::stateChanged, [this](QProcess::ProcessState newState) {
+        Q_UNUSED(newState);
+        Messages::messageProcess(m_asn1sccService);
+    });
 
-    connect(m_settings.get(), &Settings::Service::changed, this, &Asn1SccServiceProvider::settingsChanged);
+    connect(m_settings.get(),
+            &Settings::Service::changed,
+            this,
+            &Asn1SccServiceProvider::settingsChanged);
 
     // QProcess::finished is overloaded, hence the cast
-    connect(m_asn1sccService, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            this, &Asn1SccServiceProvider::onProcessFinished);
+    connect(m_asn1sccService,
+            static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+            this,
+            &Asn1SccServiceProvider::onProcessFinished);
 }
 
 Asn1SccServiceProvider::~Asn1SccServiceProvider()
@@ -81,7 +86,7 @@ QNetworkReply *Asn1SccServiceProvider::requestAst(const QHash<QString, QString> 
 
 void Asn1SccServiceProvider::start()
 {
-    QTC_ASSERT(m_serviceStarted == false, return);
+    QTC_ASSERT(m_serviceStarted == false, return );
     Messages::MessageManager::write("Starting Asn1Scc service...",
                                     Messages::MessageManager::Type::Process);
     m_serviceStarted = true;
@@ -129,9 +134,10 @@ QJsonObject buildFileData(const QString &path, const QString &contents)
     asnFileData["Contents"] = contents;
     return asnFileData;
 }
-}
+} // namespace
 
-QJsonDocument Asn1SccServiceProvider::buildAstRequestData(const QHash<QString, QString> &documents) const
+QJsonDocument Asn1SccServiceProvider::buildAstRequestData(
+    const QHash<QString, QString> &documents) const
 {
     QJsonArray asnFilesArray;
     QJsonArray acnFilesArray;
@@ -156,8 +162,7 @@ void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatu
     Q_UNUSED(exitCode);
     Q_UNUSED(exitStatus);
 
-    Messages::MessageManager::write("Process finished...",
-                                    Messages::MessageManager::Type::Process);
+    Messages::MessageManager::write("Process finished...", Messages::MessageManager::Type::Process);
 
     if (m_serviceStarted) {
         m_asn1sccService->start();
@@ -167,15 +172,18 @@ void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatu
 
 void Asn1SccServiceProvider::stayAliveTimeout()
 {
-    auto reply = networkManagerInstance->get(QNetworkRequest(QUrl(m_settings->serviceUri() + "stayAlive")));
-    connect(reply, &QNetworkReply::finished,
-            this , &Asn1SccServiceProvider::onStayAliveRequestFinished);
+    auto reply = networkManagerInstance->get(
+        QNetworkRequest(QUrl(m_settings->serviceUri() + "stayAlive")));
+    connect(reply,
+            &QNetworkReply::finished,
+            this,
+            &Asn1SccServiceProvider::onStayAliveRequestFinished);
 }
 
 void Asn1SccServiceProvider::onStayAliveRequestFinished()
 {
     const auto reply = qobject_cast<QNetworkReply *>(sender());
-    QTC_ASSERT(reply != nullptr, return);
+    QTC_ASSERT(reply != nullptr, return );
 
     if (m_serviceStarted && reply->error() != QNetworkReply::NoError) {
         Messages::messageNetworkReplyError(reply);
@@ -193,11 +201,16 @@ void Asn1SccServiceProvider::updateConfigFromSettings()
     m_stayAliveTimer.setInterval(m_settings->stayAlivePeriod() / 2);
 
     if (m_settings->watchdogDisabled()) {
-        disconnect(&m_stayAliveTimer, &QTimer::timeout,
-                   this, &Asn1SccServiceProvider::stayAliveTimeout);
+        disconnect(&m_stayAliveTimer,
+                   &QTimer::timeout,
+                   this,
+                   &Asn1SccServiceProvider::stayAliveTimeout);
     } else {
-        connect(&m_stayAliveTimer, &QTimer::timeout,
-                this, &Asn1SccServiceProvider::stayAliveTimeout, Qt::UniqueConnection);
+        connect(&m_stayAliveTimer,
+                &QTimer::timeout,
+                this,
+                &Asn1SccServiceProvider::stayAliveTimeout,
+                Qt::UniqueConnection);
     }
 }
 

@@ -26,8 +26,8 @@
 
 #include <utils/qtcassert.h>
 
-#include <data/project.h>
 #include <data/file.h>
+#include <data/project.h>
 
 #include <tree-views/outline-visitors/childrencountingvisitor.h>
 
@@ -37,12 +37,9 @@ using namespace Asn1Acn::Internal::TreeViews::TypesTreeVisitors;
 
 ChildReturningVisitor::ChildReturningVisitor(int index)
     : OutlineVisitors::ChildReturningVisitor(index)
-{
-}
+{}
 
-ChildReturningVisitor::~ChildReturningVisitor()
-{
-}
+ChildReturningVisitor::~ChildReturningVisitor() {}
 
 Node *ChildReturningVisitor::valueFor(const File &file) const
 {

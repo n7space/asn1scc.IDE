@@ -31,8 +31,7 @@ using namespace Asn1Acn::Internal::Libraries;
 
 MetadataCheckStateHandler::MetadataCheckStateHandler(const MetadataModel *model)
     : m_model(model)
-{
-}
+{}
 
 const MetadataCheckStateHandler::States &MetadataCheckStateHandler::changedIndexes() const
 {
@@ -44,7 +43,8 @@ const MetadataCheckStateHandler::Conflict &MetadataCheckStateHandler::conflict()
     return m_conflict;
 }
 
-bool MetadataCheckStateHandler::changeCheckStates(const QModelIndex &index, const Qt::CheckState state)
+bool MetadataCheckStateHandler::changeCheckStates(const QModelIndex &index,
+                                                  const Qt::CheckState state)
 {
     bool checkSuccessful = true;
 
@@ -103,7 +103,8 @@ bool MetadataCheckStateHandler::updateChildren(const QModelIndex &index, const Q
     return true;
 }
 
-bool MetadataCheckStateHandler::updateParent(const QModelIndex &index, const Qt::CheckState childState)
+bool MetadataCheckStateHandler::updateParent(const QModelIndex &index,
+                                             const Qt::CheckState childState)
 {
     auto state = parentState(index, childState);
 
@@ -142,7 +143,8 @@ bool MetadataCheckStateHandler::hasNoConflicts(const QModelIndex &index)
         if (!testedIndex.isValid())
             continue;
 
-        if (m_model->data(testedIndex, Qt::CheckStateRole) == Qt::Checked || m_changedIndexes.contains(testedIndex)) {
+        if (m_model->data(testedIndex, Qt::CheckStateRole) == Qt::Checked
+            || m_changedIndexes.contains(testedIndex)) {
             m_conflict = qMakePair(currentNode->name(), m_model->dataNode(testedIndex)->name());
             return false;
         }
@@ -158,7 +160,8 @@ QModelIndex MetadataCheckStateHandler::findRelative(const Metadata::Reference &r
     return findChildByName(submodule, reference.element());
 }
 
-QModelIndex MetadataCheckStateHandler::findChildByName(const QModelIndex &parent, const QString &name) const
+QModelIndex MetadataCheckStateHandler::findChildByName(const QModelIndex &parent,
+                                                       const QString &name) const
 {
     if (!parent.isValid())
         return {};
@@ -174,7 +177,8 @@ QModelIndex MetadataCheckStateHandler::findChildByName(const QModelIndex &parent
     return {};
 }
 
-Qt::CheckState MetadataCheckStateHandler::parentState(const QModelIndex &index, const Qt::CheckState state) const
+Qt::CheckState MetadataCheckStateHandler::parentState(const QModelIndex &index,
+                                                      const Qt::CheckState state) const
 {
     const auto parent = index.parent();
 

@@ -30,8 +30,7 @@ using namespace Asn1Acn::Internal::Tests;
 
 ParsedDocumentBuilderStub::ParsedDocumentBuilderStub(const QHash<QString, QString> &documents)
     : m_rawDocuments(documents)
-{
-}
+{}
 
 void ParsedDocumentBuilderStub::run()
 {

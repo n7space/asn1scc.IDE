@@ -28,10 +28,10 @@
 
 #include <data/definitions.h>
 #include <data/file.h>
-#include <data/typeassignment.h>
-#include <data/valueassignment.h>
-#include <data/typereference.h>
 #include <data/project.h>
+#include <data/typeassignment.h>
+#include <data/typereference.h>
+#include <data/valueassignment.h>
 
 #include <utils/icon.h>
 
@@ -39,16 +39,15 @@ using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
 using namespace Asn1Acn::Internal;
 
-DecorationRoleVisitor::~DecorationRoleVisitor()
-{
-}
+DecorationRoleVisitor::~DecorationRoleVisitor() {}
 
 QIcon DecorationRoleVisitor::valueFor(const Definitions &defs) const
 {
     Q_UNUSED(defs);
     const static QIcon icon(Utils::Icon({{QLatin1String(":/utils/images/namespace.png"),
-                                          Utils::Theme::IconsCodeModelKeywordColor}
-                                 }, Utils::Icon::Tint).icon());
+                                          Utils::Theme::IconsCodeModelKeywordColor}},
+                                        Utils::Icon::Tint)
+                                .icon());
     return icon;
 }
 

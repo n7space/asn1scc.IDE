@@ -24,10 +24,10 @@
 ****************************************************************************/
 #include "importfindingvisitor.h"
 
-#include <data/root.h>
 #include <data/definitions.h>
 #include <data/file.h>
 #include <data/project.h>
+#include <data/root.h>
 
 using namespace Asn1Acn::Internal::Completion;
 using namespace Asn1Acn::Internal::Data;
@@ -35,8 +35,7 @@ using namespace Asn1Acn::Internal::Data;
 ImportFindingVisitor::ImportFindingVisitor(const QString &module, const QString &import)
     : m_module(module)
     , m_import(import)
-{
-}
+{}
 
 Node *ImportFindingVisitor::valueFor(const Root &root) const
 {
@@ -52,9 +51,7 @@ Node *ImportFindingVisitor::valueFor(const Definitions &defs) const
 {
     if (defs.name() != m_module)
         return nullptr;
-    return isValue()
-            ? findImportByName(defs.values())
-            : findImportByName(defs.types());
+    return isValue() ? findImportByName(defs.values()) : findImportByName(defs.types());
 }
 
 bool ImportFindingVisitor::isValue() const
@@ -62,7 +59,7 @@ bool ImportFindingVisitor::isValue() const
     return m_import.size() > 0 && m_import[0].isLower();
 }
 
-template <typename Collection>
+template<typename Collection>
 Node *ImportFindingVisitor::findImportByName(const Collection &col) const
 {
     for (const auto &element : col)

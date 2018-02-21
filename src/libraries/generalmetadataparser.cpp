@@ -24,17 +24,16 @@
 ****************************************************************************/
 #include "generalmetadataparser.h"
 
-#include <QJsonObject>
-#include <QJsonArray>
 #include <QFileInfo>
+#include <QJsonArray>
+#include <QJsonObject>
 
 using namespace Asn1Acn::Internal::Libraries;
 
 GeneralMetadataParser::GeneralMetadataParser(const QByteArray &data, const QString &path)
     : m_document(QJsonDocument::fromJson(data))
     , m_path(path)
-{
-}
+{}
 
 QString GeneralMetadataParser::readName(const QJsonObject &object)
 {

@@ -25,20 +25,20 @@
 
 #include "tools.h"
 
+#include <QDir>
 #include <QFileInfo>
 #include <QString>
 #include <QStringList>
-#include <QDir>
 
-#include <utils/qtcassert.h>
-#include <utils/mimetypes/mimedatabase.h>
 #include <coreplugin/editormanager/editormanager.h>
+#include <utils/mimetypes/mimedatabase.h>
+#include <utils/qtcassert.h>
 
 #include "asn1acnconstants.h"
 
 using namespace Asn1Acn;
 
-static QStringList matchingSuffixesForFile(const QString& path)
+static QStringList matchingSuffixesForFile(const QString &path)
 {
     auto mimeType = Utils::mimeTypeForFile(path).name();
     if (mimeType == Constants::ASN1_MIMETYPE)
@@ -61,7 +61,7 @@ static QStringList baseNameWithAllSuffixes(const QString &baseName, const QStrin
     return result;
 }
 
-static QString correspondingDataOrEncoding(const QString& path)
+static QString correspondingDataOrEncoding(const QString &path)
 {
     const QFileInfo fileInfo(path);
     const auto suffixes = matchingSuffixesForFile(path);
@@ -94,7 +94,9 @@ void Asn1Acn::Internal::Tools::switchBetweenDataAndEncodingInNextSplit()
 {
     const QString otherFile = findDataOrEncodingForCurrentDocument();
     if (!otherFile.isEmpty())
-        Core::EditorManager::openEditor(otherFile, Core::Id(), Core::EditorManager::OpenInOtherSplit);
+        Core::EditorManager::openEditor(otherFile,
+                                        Core::Id(),
+                                        Core::EditorManager::OpenInOtherSplit);
 }
 
 bool Asn1Acn::Internal::Tools::isAsnFile(const QString &path)

@@ -30,8 +30,8 @@
 #include <texteditor/texteditor.h>
 
 #include "data/file.h"
-#include "data/typereference.h"
 #include "data/sourcelocation.h"
+#include "data/typereference.h"
 
 #include "parseddatastorage.h"
 
@@ -41,7 +41,6 @@ namespace Internal {
 class LinkCreator
 {
 public:
-
     using Link = TextEditor::TextEditorWidget::Link;
 
     LinkCreator(const TextEditor::TextDocument &document, const ParsedDataStorage *storage);

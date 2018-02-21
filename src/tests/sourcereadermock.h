@@ -33,8 +33,7 @@ namespace Asn1Acn {
 namespace Internal {
 namespace Tests {
 
-class SourceReaderMock
-        : public SourceReader
+class SourceReaderMock : public SourceReader
 {
 public:
     SourceReaderMock();

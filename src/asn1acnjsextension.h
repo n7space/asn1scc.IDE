@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include <QString>
 #include <QObject>
+#include <QString>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -36,7 +36,9 @@ class Asn1AcnJsExtension : public QObject
     Q_OBJECT
 
 public:
-    Asn1AcnJsExtension(QObject *parent = 0) : QObject(parent) { }
+    Asn1AcnJsExtension(QObject *parent = 0)
+        : QObject(parent)
+    {}
 
     Q_INVOKABLE QString toAsn1TypeName(QString in);
 };

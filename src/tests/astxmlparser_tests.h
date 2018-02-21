@@ -62,9 +62,9 @@ private slots:
     void test_multipleFiles();
 
 private:
-    void setXmlData(const QString& str);
-    void parsingFails(const QString& xmlData);
-    void parse(const QString& xmlData);
+    void setXmlData(const QString &str);
+    void parsingFails(const QString &xmlData);
+    void parse(const QString &xmlData);
 
     QXmlStreamReader m_xmlReader;
     SourceMapper m_pathMapper;

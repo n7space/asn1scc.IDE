@@ -26,8 +26,8 @@
 
 #include <QMap>
 
-#include "data/types/userdefinedtype.h"
 #include "data/types/builtintypes.h"
+#include "data/types/userdefinedtype.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -35,8 +35,7 @@ AstXmlParser::AstXmlParser(QXmlStreamReader &xmlReader, const SourceMapper &mapp
     : m_xmlReader(xmlReader)
     , m_currentDefinitions(nullptr)
     , m_pathMapper(mapper)
-{
-}
+{}
 
 bool AstXmlParser::parse()
 {
@@ -74,8 +73,7 @@ void AstXmlParser::updateCurrentFile()
 
 void AstXmlParser::readModuleChildren()
 {
-    while (m_xmlReader.readNextStartElement())
-    {
+    while (m_xmlReader.readNextStartElement()) {
         if (m_xmlReader.name() == QStringLiteral("ExportedTypes"))
             readExportedTypes();
         else if (m_xmlReader.name() == QStringLiteral("ExportedValues"))
@@ -131,8 +129,10 @@ void AstXmlParser::readTypeAssignment()
     auto type = readType();
     m_xmlReader.skipCurrentElement();
 
-    m_currentDefinitions->addType(std::make_unique<Data::TypeAssignment>(name, location, std::move(type)));
-    m_data[m_currentFile]->addTypeReference(std::make_unique<Data::TypeReference>(name, m_currentDefinitions->name(), location));
+    m_currentDefinitions->addType(
+        std::make_unique<Data::TypeAssignment>(name, location, std::move(type)));
+    m_data[m_currentFile]->addTypeReference(
+        std::make_unique<Data::TypeReference>(name, m_currentDefinitions->name(), location));
 }
 
 void AstXmlParser::readValueAssignment()
@@ -143,7 +143,8 @@ void AstXmlParser::readValueAssignment()
     auto type = readType();
     m_xmlReader.skipCurrentElement();
 
-    m_currentDefinitions->addValue(std::make_unique<Data::ValueAssignment>(name, location, std::move(type)));
+    m_currentDefinitions->addValue(
+        std::make_unique<Data::ValueAssignment>(name, location, std::move(type)));
 }
 
 QString AstXmlParser::readTypeAssignmentAttribute()
@@ -180,8 +181,7 @@ void AstXmlParser::readImportedModules()
 void AstXmlParser::readImportedModule()
 {
     const auto moduleName = readIdAttribute();
-    while (m_xmlReader.readNextStartElement())
-    {
+    while (m_xmlReader.readNextStartElement()) {
         if (m_xmlReader.name() == QStringLiteral("ImportedTypes"))
             readImportedTypes(moduleName);
         else if (m_xmlReader.name() == QStringLiteral("ImportedValues"))
@@ -237,7 +237,7 @@ bool AstXmlParser::nextRequiredElementIs(const QString &name)
 
 Data::SourceLocation AstXmlParser::readLocationFromAttributes()
 {
-    return { m_currentFile, readLineAttribute(), readCharPossitionInLineAttribute() };
+    return {m_currentFile, readLineAttribute(), readCharPossitionInLineAttribute()};
 }
 
 std::unique_ptr<Data::Types::Type> AstXmlParser::readType()
@@ -273,15 +273,16 @@ std::unique_ptr<Data::Types::Type> AstXmlParser::readTypeDetails(const Data::Sou
     return type;
 }
 
-std::unique_ptr<Data::Types::Type> AstXmlParser::buildTypeFromName(const Data::SourceLocation &location,
-                                                                   const QStringRef &name)
+std::unique_ptr<Data::Types::Type> AstXmlParser::buildTypeFromName(
+    const Data::SourceLocation &location, const QStringRef &name)
 {
     if (name == QStringLiteral("REFERENCE_TYPE"))
         return readReferenceType(location);
     return Data::Types::BuiltinType::createBuiltinType(name.toString());
 }
 
-std::unique_ptr<Data::Types::Type> AstXmlParser::readReferenceType(const Data::SourceLocation &location)
+std::unique_ptr<Data::Types::Type> AstXmlParser::readReferenceType(
+    const Data::SourceLocation &location)
 {
     const QString refName = readTypeAssignmentAttribute();
     const QString module = readModuleAttribute();
@@ -303,8 +304,7 @@ void AstXmlParser::readSequence()
 
 bool AstXmlParser::skipToChildElement(const QString &name)
 {
-    while (m_xmlReader.readNextStartElement())
-    {
+    while (m_xmlReader.readNextStartElement()) {
         if (m_xmlReader.name() == name)
             return true;
         else

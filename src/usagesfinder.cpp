@@ -27,16 +27,16 @@
 #include <QDir>
 #include <QFutureInterface>
 
-#include <coreplugin/find/searchresultwindow.h>
 #include <coreplugin/editormanager/editormanager.h>
+#include <coreplugin/find/searchresultwindow.h>
 #include <coreplugin/progressmanager/futureprogress.h>
 #include <coreplugin/progressmanager/progressmanager.h>
 #include <utils/runextensions.h>
 
-#include <data/typereference.h>
-#include <data/root.h>
-#include <data/project.h>
 #include <data/file.h>
+#include <data/project.h>
+#include <data/root.h>
+#include <data/typereference.h>
 
 #include "asn1acnconstants.h"
 #include "parseddatastorage.h"
@@ -52,29 +52,26 @@ UsagesFinder::UsagesFinder(ParsedDataStorage *storage,
     : QObject(parent)
     , m_storage(storage)
     , m_reader(std::move(reader))
-{
-}
+{}
 
-UsagesFinder::~UsagesFinder()
-{
-}
+UsagesFinder::~UsagesFinder() {}
 
 void UsagesFinder::findUsages(const QString &module, const QString &type)
 {
-    SearchResult *search
-            = SearchResultWindow::instance()->startNewSearch(tr("ASN.1 Usages:"),
-                                                             QString(),
-                                                             module + "::" + type,
-                                                             SearchResultWindow::SearchOnly,
-                                                             SearchResultWindow::PreserveCaseDisabled,
-                                                             QLatin1String("AsnEditor"));
-     search->setSearchAgainSupported(true);
-     connect(search, &SearchResult::searchAgainRequested, this, &UsagesFinder::searchAgain);
+    SearchResult *search = SearchResultWindow::instance()
+                               ->startNewSearch(tr("ASN.1 Usages:"),
+                                                QString(),
+                                                module + "::" + type,
+                                                SearchResultWindow::SearchOnly,
+                                                SearchResultWindow::PreserveCaseDisabled,
+                                                QLatin1String("AsnEditor"));
+    search->setSearchAgainSupported(true);
+    connect(search, &SearchResult::searchAgainRequested, this, &UsagesFinder::searchAgain);
 
-     UsagesFinderParameters params { module, type };
-     search->setUserData(qVariantFromValue(params));
+    UsagesFinderParameters params{module, type};
+    search->setUserData(qVariantFromValue(params));
 
-     findAll(search, params);
+    findAll(search, params);
 }
 
 void UsagesFinder::searchAgain()
@@ -92,11 +89,9 @@ static void performSearch(QFutureInterface<TypeReference> &future,
     future.setProgressRange(0, storage->getDocumentsCount());
 
     for (const auto &project : storage->root()->projects())
-        for (const auto &file : project->files())
-        {
+        for (const auto &file : project->files()) {
             for (const auto &ref : file->references())
-                if (ref->module() == params.module
-                        && ref->name() == params.type)
+                if (ref->module() == params.module && ref->name() == params.type)
                     future.reportResult(*ref);
             future.setProgressValue(future.progressValue() + 1);
         }
@@ -106,7 +101,8 @@ static void performSearch(QFutureInterface<TypeReference> &future,
 
 void UsagesFinder::displayResults(SearchResult *search,
                                   QFutureWatcher<TypeReference> *watcher,
-                                  int first, int last)
+                                  int first,
+                                  int last)
 {
     for (int index = first; index != last; ++index) {
         auto result = watcher->future().resultAt(index);
@@ -118,8 +114,7 @@ void UsagesFinder::displayResults(SearchResult *search,
     }
 }
 
-void UsagesFinder::createWatcher(const QFuture<TypeReference> &future,
-                                 SearchResult *search)
+void UsagesFinder::createWatcher(const QFuture<TypeReference> &future, SearchResult *search)
 {
     auto watcher = new QFutureWatcher<TypeReference>();
 
@@ -128,7 +123,9 @@ void UsagesFinder::createWatcher(const QFuture<TypeReference> &future,
         watcher->deleteLater();
     });
 
-    connect(watcher, &QFutureWatcherBase::resultsReadyAt, this,
+    connect(watcher,
+            &QFutureWatcherBase::resultsReadyAt,
+            this,
             [this, search, watcher](int first, int last) {
                 this->displayResults(search, watcher, first, last);
             });
@@ -146,14 +143,14 @@ void UsagesFinder::createWatcher(const QFuture<TypeReference> &future,
 
 void UsagesFinder::findAll(SearchResult *search, const UsagesFinderParameters &params)
 {
-    connect(search, &SearchResult::activated,
-            this, &UsagesFinder::openEditor);
+    connect(search, &SearchResult::activated, this, &UsagesFinder::openEditor);
 
     SearchResultWindow::instance()->popup(IOutputPane::ModeSwitch | IOutputPane::WithFocus);
     auto result = Utils::runAsync(performSearch, m_storage, params);
     createWatcher(result, search);
 
-    auto progress = ProgressManager::addTask(result, tr("Searching for Usages"),
+    auto progress = ProgressManager::addTask(result,
+                                             tr("Searching for Usages"),
                                              Constants::TASK_SEARCH);
 
     connect(progress, &FutureProgress::clicked, search, &SearchResult::popup);

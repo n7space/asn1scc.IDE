@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include <QTimer>
 #include <QTextEdit>
+#include <QTimer>
 
 #include <texteditor/textdocument.h>
 

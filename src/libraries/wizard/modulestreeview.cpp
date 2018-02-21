@@ -34,11 +34,9 @@ ModulesTreeView::ModulesTreeView(QWidget *parent)
     : QTreeView(parent)
     , m_blockEvents(false)
 {
-    connect(this, &QTreeView::collapsed,
-            this, &ModulesTreeView::onExpansionChanged);
+    connect(this, &QTreeView::collapsed, this, &ModulesTreeView::onExpansionChanged);
 
-    connect(this, &QTreeView::expanded,
-            this, &ModulesTreeView::onExpansionChanged);
+    connect(this, &QTreeView::expanded, this, &ModulesTreeView::onExpansionChanged);
 }
 
 void ModulesTreeView::mouseReleaseEvent(QMouseEvent *event)

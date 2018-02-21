@@ -24,12 +24,12 @@
 ****************************************************************************/
 #pragma once
 
+#include <memory>
 #include <stdexcept>
 #include <string>
-#include <memory>
 
-#include <QJsonDocument>
 #include <QByteArray>
+#include <QJsonDocument>
 
 #include "metadata/reference.h"
 
@@ -41,7 +41,7 @@ namespace Metadata {
 class Module;
 class Submodule;
 class Element;
-}
+} // namespace Metadata
 
 class ModuleMetadataParser
 {

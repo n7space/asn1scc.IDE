@@ -25,17 +25,17 @@
 #pragma once
 
 #include <map>
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include <QString>
 #include <QStringList>
 
-#include "typeassignment.h"
-#include "valueassignment.h"
 #include "importedtype.h"
 #include "importedvalue.h"
 #include "node.h"
+#include "typeassignment.h"
+#include "valueassignment.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -66,7 +66,7 @@ public:
     const ImportedTypes &importedTypes() const { return m_importedTypes; }
     const ImportedValues &importedValues() const { return m_importedValues; }
 
-    template <typename Functor>
+    template<typename Functor>
     void forAllNodes(Functor fun) const
     {
         for (const auto &type : types())
@@ -78,8 +78,8 @@ public:
 private:
     Types m_types;
     Values m_values;
-    std::map<QString, TypeAssignment*> m_typeByNameMap;
-    std::map<QString, ValueAssignment*> m_valueByNameMap;
+    std::map<QString, TypeAssignment *> m_typeByNameMap;
+    std::map<QString, ValueAssignment *> m_valueByNameMap;
     ImportedTypes m_importedTypes;
     ImportedValues m_importedValues;
 };

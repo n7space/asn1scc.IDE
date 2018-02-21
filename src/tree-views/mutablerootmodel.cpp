@@ -34,8 +34,10 @@ MutableRootModel::MutableRootModel(const QString &filePath, QObject *parent)
     , m_filePath(filePath)
 {
     setRoot(ParsedDataStorage::instance()->getAnyFileForPath(m_filePath));
-    connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelChanged,
-            this, &MutableRootModel::onEndResetModel);
+    connect(ModelValidityGuard::instance(),
+            &ModelValidityGuard::modelChanged,
+            this,
+            &MutableRootModel::onEndResetModel);
 }
 
 void MutableRootModel::onEndResetModel()

@@ -44,7 +44,7 @@ private:
     Data::Node *valueFor(const Data::File &file) const override;
 };
 
-} // namespace OutlineVisitors
+} // namespace ComboVisitors
 } // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

@@ -26,8 +26,8 @@
 
 #include <tree-views/outline-visitors/indexfindingvisitor.h>
 
-#include <data/node.h>
 #include <data/file.h>
+#include <data/node.h>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -44,7 +44,7 @@ private:
     int valueFor(const Data::File &file) const override;
 };
 
-} // namespace OutlineVisitors
+} // namespace ComboVisitors
 } // namespace TreeViews
 } // namespace Internal
 } // namespace Asn1Acn

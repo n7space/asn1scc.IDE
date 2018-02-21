@@ -61,7 +61,7 @@ public:
     void setParent(LibraryNode *parent) { m_parent = parent; }
 
 protected:
-    template <typename Collection>
+    template<typename Collection>
     int findChildIndex(const Collection &col, const LibraryNode *child) const
     {
         int idx = 0;

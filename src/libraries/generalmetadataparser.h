@@ -27,8 +27,8 @@
 #include <stdexcept>
 #include <string>
 
-#include <QJsonDocument>
 #include <QByteArray>
+#include <QJsonDocument>
 
 #include "metadata/general.h"
 
@@ -39,8 +39,7 @@ namespace Libraries {
 class GeneralMetadataParser
 {
 public:
-    GeneralMetadataParser(const QByteArray &data,
-                          const QString &path);
+    GeneralMetadataParser(const QByteArray &data, const QString &path);
 
     Metadata::General parse();
 

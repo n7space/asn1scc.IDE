@@ -27,8 +27,8 @@
 
 #include <memory>
 
-#include <QString>
 #include <QHash>
+#include <QString>
 
 #include "data/file.h"
 
@@ -38,8 +38,7 @@ namespace Asn1Acn {
 namespace Internal {
 namespace Tests {
 
-class ParsedDocumentBuilderStub
-        : public ParsedDocumentBuilder
+class ParsedDocumentBuilderStub : public ParsedDocumentBuilder
 {
     Q_OBJECT
 

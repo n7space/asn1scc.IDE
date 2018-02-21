@@ -24,8 +24,8 @@
 ****************************************************************************/
 #include "model.h"
 
-#include "displayrolevisitor.h"
 #include "decorationrolevisitor.h"
+#include "displayrolevisitor.h"
 
 #include "modelvalidityguard.h"
 
@@ -36,13 +36,13 @@ Model::Model(QObject *parent)
     : QAbstractItemModel(parent)
     , m_root(nullptr)
 {
-    connect(ModelValidityGuard::instance(), &ModelValidityGuard::modelAboutToChange,
-            this, &Model::beginResetModel);
+    connect(ModelValidityGuard::instance(),
+            &ModelValidityGuard::modelAboutToChange,
+            this,
+            &Model::beginResetModel);
 }
 
-Model::~Model()
-{
-}
+Model::~Model() {}
 
 QVariant Model::data(const QModelIndex &index, int role) const
 {
@@ -124,5 +124,5 @@ void Model::setRoot(const Node *root)
 
 const Node *Model::dataNode(const QModelIndex &index) const
 {
-    return index.isValid() ? static_cast<Node*>(index.internalPointer()) : m_root;
+    return index.isValid() ? static_cast<Node *>(index.internalPointer()) : m_root;
 }

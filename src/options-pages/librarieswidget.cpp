@@ -24,20 +24,20 @@
 ****************************************************************************/
 #include "librarieswidget.h"
 
-#include <QTextEdit>
-#include <QFileDialog>
 #include <QFile>
+#include <QFileDialog>
 #include <QFormLayout>
-#include <QWidget>
 #include <QLabel>
 #include <QLineEdit>
+#include <QTextEdit>
 #include <QVBoxLayout>
+#include <QWidget>
 
 #include <utils/detailswidget.h>
 
-#include <libraries/metadata/general.h>
-#include <libraries/librarystorage.h>
 #include <libraries/generalmetadataparser.h>
+#include <libraries/librarystorage.h>
+#include <libraries/metadata/general.h>
 #include <tr.h>
 
 using namespace Asn1Acn::Internal::OptionsPages;
@@ -55,12 +55,11 @@ const int LibEntryItemType = QTreeWidgetItem::UserType + 1;
 
 class LibEntryItem : public QTreeWidgetItem
 {
-  public:
+public:
     LibEntryItem(QTreeWidgetItem *parent, const QString &path)
         : QTreeWidgetItem(parent, LibEntryItemType)
         , m_info(Libraries::LibraryStorage::instance()->generalMetadata(path))
-    {
-    }
+    {}
 
     const Libraries::Metadata::General &info() const { return m_info; }
 
@@ -180,31 +179,31 @@ LibrariesWidget::LibrariesWidget(QWidget *parent)
     m_ui.detailsWidget->setState(Utils::DetailsWidget::NoSummary);
     m_ui.detailsWidget->setVisible(false);
 
-    connect(m_ui.treeWidget, &QTreeWidget::itemClicked, [this](QTreeWidgetItem* item, int) {
+    connect(m_ui.treeWidget, &QTreeWidget::itemClicked, [this](QTreeWidgetItem *item, int) {
         m_ui.removeButton->setEnabled(isManualItem(item));
         const auto libItem = asLibEntryItem(item);
         m_ui.detailsWidget->setVisible(libItem != nullptr);
         m_detailsWidget->load(libItem);
     });
 
-    connect(m_ui.removeButton, &QPushButton::clicked, [this](){
-       for (const auto &item : m_ui.treeWidget->selectedItems())
-           delete item;
+    connect(m_ui.removeButton, &QPushButton::clicked, [this]() {
+        for (const auto &item : m_ui.treeWidget->selectedItems())
+            delete item;
     });
 
     connect(m_ui.addButton, &QPushButton::clicked, [this]() {
-       const auto dir = QFileDialog::getExistingDirectory(this, tr("Select ASN.1/ACN components library directory"));
-       if (dir.isEmpty())
-           return;
-       new LibEntryItem(m_manualRootItem, dir);
+        const auto dir
+            = QFileDialog::getExistingDirectory(this,
+                                                tr("Select ASN.1/ACN components library directory"));
+        if (dir.isEmpty())
+            return;
+        new LibEntryItem(m_manualRootItem, dir);
     });
 
     m_ui.treeWidget->expandAll();
 }
 
-LibrariesWidget::~LibrariesWidget()
-{
-}
+LibrariesWidget::~LibrariesWidget() {}
 
 namespace {
 void replaceAllChildren(QTreeWidgetItem *item, const QStringList &texts)
@@ -214,7 +213,7 @@ void replaceAllChildren(QTreeWidgetItem *item, const QStringList &texts)
     for (const auto &text : texts)
         new LibEntryItem(item, text);
 }
-}
+} // namespace
 
 void LibrariesWidget::setDetectedLibPaths(const QStringList &paths)
 {

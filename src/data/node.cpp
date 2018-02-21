@@ -26,6 +26,4 @@
 
 using namespace Asn1Acn::Internal::Data;
 
-Node::~Node()
-{
-}
+Node::~Node() {}

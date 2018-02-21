@@ -30,7 +30,7 @@ namespace Asn1Acn {
 namespace Internal {
 namespace Data {
 
-template <typename Value>
+template<typename Value>
 class VisitorWithValue : public Visitor
 {
 public:

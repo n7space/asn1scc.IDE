@@ -27,9 +27,9 @@
 
 #include <memory>
 
+#include <QFileSystemWatcher>
 #include <QObject>
 #include <QTimer>
-#include <QFileSystemWatcher>
 
 #include <settings/libraries.h>
 

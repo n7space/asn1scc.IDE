@@ -29,8 +29,7 @@ using namespace Asn1Acn::Internal::Tests;
 
 SourceReaderMock::SourceReaderMock()
     : m_content("Test content")
-{
-}
+{}
 
 QString SourceReaderMock::readContent(const QString &fileName) const
 {

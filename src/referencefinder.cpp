@@ -35,8 +35,7 @@ ReferenceFinder::ReferenceFinder(const TextEditor::TextDocument &document,
                                  const ParsedDataStorage *storage)
     : m_textDocument(document)
     , m_storage(storage)
-{
-}
+{}
 
 Data::TypeReference ReferenceFinder::findAt(const QTextCursor &cursor) const
 {
@@ -54,7 +53,7 @@ Data::TypeReference ReferenceFinder::findAt(const Data::File *file, int line, in
         return Data::TypeReference();
 
     const auto range = file->referencesMap().equal_range(line);
-    for(auto it = range.first; it != range.second; it++) {
+    for (auto it = range.first; it != range.second; it++) {
         const auto referedColumn = it->second->location().column();
         const auto size = it->second->name().size();
         if (col >= referedColumn && col <= referedColumn + size)

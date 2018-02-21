@@ -30,10 +30,9 @@
 
 using namespace Asn1Acn::Internal::Data::Types;
 
-
 QIcon Type::createIcon(Utils::Theme::Color color) const
 {
-    return QIcon(Utils::Icon({ { baseIconFile(), color} }, Utils::Icon::Tint).icon());
+    return QIcon(Utils::Icon({{baseIconFile(), color}}, Utils::Icon::Tint).icon());
 }
 
 QIcon Type::typeIcon() const

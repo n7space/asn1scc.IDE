@@ -33,8 +33,7 @@ namespace Asn1Acn {
 namespace Internal {
 namespace Tests {
 
-class ParsedDataStorageTests
-        : public QObject
+class ParsedDataStorageTests : public QObject
 {
     Q_OBJECT
 
@@ -66,4 +65,3 @@ private:
 } // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn
-

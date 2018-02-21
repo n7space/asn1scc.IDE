@@ -34,10 +34,12 @@ ServiceWidget::ServiceWidget(QWidget *parent)
     m_ui.setupUi(this);
 
     m_ui.pathChooser->setExpectedKind(Utils::PathChooser::ExistingCommand);
-    const auto uriRegExp = QRegularExpression("https?://([a-zA-Z0-9._\\-]+|[+])(:[0-9]+)?(/[a-zA-Z0-9._/\\-]+)?/");
+    const auto uriRegExp = QRegularExpression(
+        "https?://([a-zA-Z0-9._\\-]+|[+])(:[0-9]+)?(/[a-zA-Z0-9._/\\-]+)?/");
     m_ui.uriEdit->setValidator(new QRegularExpressionValidator(uriRegExp, this));
-    connect(m_ui.uriEdit, &QLineEdit::textChanged, [this](const QString&) {
-       m_ui.uriEdit->setStyleSheet(m_ui.uriEdit->hasAcceptableInput() ? QLatin1String() : QLatin1String("color: red;"));
+    connect(m_ui.uriEdit, &QLineEdit::textChanged, [this](const QString &) {
+        m_ui.uriEdit->setStyleSheet(
+            m_ui.uriEdit->hasAcceptableInput() ? QLatin1String() : QLatin1String("color: red;"));
     });
 }
 

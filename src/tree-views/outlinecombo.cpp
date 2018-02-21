@@ -44,11 +44,12 @@ OutlineCombo::OutlineCombo(const QString &filePath, TextEditor::TextEditorWidget
 
     setupComboBox(model);
 
-    connect(indexUpdater, &IndexUpdater::indexSelectionUpdated,
-            this, &OutlineCombo::updateSelection);
+    connect(indexUpdater,
+            &IndexUpdater::indexSelectionUpdated,
+            this,
+            &OutlineCombo::updateSelection);
 
-    connect(model, &ComboModel::modelReset,
-            this, &OutlineCombo::modelRootChanged);
+    connect(model, &ComboModel::modelReset, this, &OutlineCombo::modelRootChanged);
 
     view()->expandAll();
 }
@@ -65,8 +66,9 @@ void OutlineCombo::setupComboBox(Model *model)
     setMaxVisibleItems(MAXIMUM_COMBO_VISIBLE_ITEMS);
     setContextMenuPolicy(Qt::NoContextMenu);
 
-    connect(this, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
-            [this]() { ActivateHandler::gotoSymbol(view()->currentIndex()); });
+    connect(this, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), [this]() {
+        ActivateHandler::gotoSymbol(view()->currentIndex());
+    });
 }
 
 void OutlineCombo::modelRootChanged()

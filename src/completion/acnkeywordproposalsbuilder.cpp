@@ -28,18 +28,37 @@
 
 using namespace Asn1Acn::Internal::Completion;
 
-static const QStringList KEYWORDS = { "BEGIN", "END", "DEFINITIONS", "CONSTANT" };
+static const QStringList KEYWORDS = {"BEGIN", "END", "DEFINITIONS", "CONSTANT"};
 
-static const QStringList TYPES = { "INTEGER", "BOOLEAN" };
+static const QStringList TYPES = {"INTEGER", "BOOLEAN"};
 
-static const QStringList BUILTIN = { "NULL", "big", "little", "pos-int", "twos-complement", "BCD", "ASCII",
-                                     "IEEE754-1985-32", "IEEE754-1985-64", "byte", "word", "dword" };
+static const QStringList BUILTIN = {"NULL",
+                                    "big",
+                                    "little",
+                                    "pos-int",
+                                    "twos-complement",
+                                    "BCD",
+                                    "ASCII",
+                                    "IEEE754-1985-32",
+                                    "IEEE754-1985-64",
+                                    "byte",
+                                    "word",
+                                    "dword"};
 
-static const QStringList ATTRIBUTES = { "endianness", "encoding", "size", "null-terminated", "termination-pattern",
-                                        "align-to-next", "encode-values", "true-value", "false-value", "pattern",
-                                        "mapping-function", "present-when", "determinant" };
+static const QStringList ATTRIBUTES = {"endianness",
+                                       "encoding",
+                                       "size",
+                                       "null-terminated",
+                                       "termination-pattern",
+                                       "align-to-next",
+                                       "encode-values",
+                                       "true-value",
+                                       "false-value",
+                                       "pattern",
+                                       "mapping-function",
+                                       "present-when",
+                                       "determinant"};
 
 AcnKeywordProposalsBuilder::AcnKeywordProposalsBuilder()
     : KeywordProposalsBuilder(KEYWORDS, TYPES, BUILTIN, ATTRIBUTES)
-{
-}
+{}

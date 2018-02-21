@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include <QModelIndex>
 #include <QAbstractItemModel>
+#include <QModelIndex>
 
 #include <libraries/metadata/librarynode.h>
 

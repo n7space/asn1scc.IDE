@@ -34,7 +34,8 @@ class ImportedValue
 {
 public:
     ImportedValue(const QString &module, const QString &name)
-        : m_module(module), m_name(name)
+        : m_module(module)
+        , m_name(name)
     {}
 
     const QString &module() const { return m_module; }

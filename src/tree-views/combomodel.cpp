@@ -34,12 +34,9 @@ using namespace Asn1Acn::Internal::Data;
 
 ComboModel::ComboModel(const QString &filePath, QObject *parent)
     : MutableRootModel(filePath, parent)
-{
-}
+{}
 
-ComboModel::~ComboModel()
-{
-}
+ComboModel::~ComboModel() {}
 
 Node *ComboModel::parentOf(const Node *node) const
 {

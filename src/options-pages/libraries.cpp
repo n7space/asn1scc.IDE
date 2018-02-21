@@ -35,8 +35,8 @@ using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::OptionsPages;
 
 Libraries::Libraries(Settings::LibrariesPtr settings)
-    : m_settings(settings),
-      m_widget(nullptr)
+    : m_settings(settings)
+    , m_widget(nullptr)
 {
     setId(Constants::LIBRARIES_SETTINGS_ID);
     setDisplayName(Tr::tr("Libraries"));
@@ -47,7 +47,7 @@ Libraries::Libraries(Settings::LibrariesPtr settings)
 
 bool Libraries::matches(const QString &searchKeyWord) const
 {
-    const QStringList keywords { "asn1", "asn.1", "acn", "libraries", "components" };
+    const QStringList keywords{"asn1", "asn.1", "acn", "libraries", "components"};
     for (const auto &keyword : keywords)
         if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;

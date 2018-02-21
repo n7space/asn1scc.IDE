@@ -32,8 +32,7 @@ using namespace Asn1Acn::Internal::Completion;
 
 AsnCompletionAssistProcessor::AsnCompletionAssistProcessor()
     : CompletionAssistProcessor(QLatin1String(Constants::ASN1_SNIPPETS_GROUP_ID))
-{
-}
+{}
 
 std::unique_ptr<ProposalsBuilder> AsnCompletionAssistProcessor::createKeywordsProposalsBuilder() const
 {

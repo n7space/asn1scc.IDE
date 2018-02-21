@@ -30,8 +30,7 @@ using namespace Asn1Acn::Internal::TreeViews;
 
 OutlineIndexUpdater::OutlineIndexUpdater(const Model *model, QObject *parent)
     : SynchronizedIndexUpdater(model, parent)
-{
-}
+{}
 
 void OutlineIndexUpdater::fillSelectedIndexes(QModelIndex &current, QModelIndexList &selected) const
 {
