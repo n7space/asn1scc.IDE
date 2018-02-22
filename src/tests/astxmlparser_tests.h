@@ -60,6 +60,7 @@ private slots:
     void test_multipleImportedValues();
     void test_multipleModules();
     void test_multipleFiles();
+    void test_parametrizedInstancesContentsAreIgnored();
 
 private:
     void setXmlData(const QString &str);
