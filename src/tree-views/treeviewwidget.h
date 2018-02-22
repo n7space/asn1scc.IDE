@@ -61,6 +61,8 @@ public slots:
     void updateSelection(const QModelIndexList &selected, const QModelIndex &current);
 
 protected:
+    TreeView *m_treeView;
+
 private:
     QLayout *createLayout();
     void expandItemsAbove(const QModelIndex &parent);
@@ -69,7 +71,6 @@ private:
     std::unique_ptr<IndexUpdater> m_indexUpdater;
 
     Model *m_model;
-    TreeView *m_treeView;
 };
 
 } // namespace TreeViews
