@@ -130,11 +130,6 @@ const QHash<QPersistentModelIndex, Qt::CheckState> &MetadataModel::selectedItems
     return m_selectedItems;
 }
 
-QModelIndex MetadataModel::rootIndex() const
-{
-    return createIndex(0, 0, const_cast<Metadata::LibraryNode *>(m_root));
-}
-
 void MetadataModel::selectItems(const MetadataCheckStateHandler::States &items)
 {
     for (auto it = items.begin(); it != items.end(); ++it) {

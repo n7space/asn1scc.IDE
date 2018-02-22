@@ -80,20 +80,20 @@ void FileModel::setItemCheck(const QModelIndex &index, const QVariant &value)
     emit dataChanged(index, index);
 }
 
-void FileModel::setChildrenCheck(const QModelIndex &index, const QVariant &value)
+void FileModel::setChildrenCheck(const QModelIndex &parent, const QVariant &value)
 {
-    if (!index.isValid())
+    if (!parent.isValid())
         return;
 
-    for (int i = 0; i < rowCount(index); ++i) {
-        for (int j = 0; j < columnCount(index); ++j) {
-            auto child = index.child(i, j);
+    for (int i = 0; i < rowCount(parent); ++i) {
+        for (int j = 0; j < columnCount(parent); ++j) {
+            const auto child = index(i, j, parent);
             changeCheckState(child, value);
             setChildrenCheck(child, value);
         }
     }
 
-    emit dataChanged(index.child(0, 0), index.child(rowCount(index), rowCount(index)));
+    emit dataChanged(parent.child(0, 0), parent.child(rowCount(parent), rowCount(parent)));
 }
 
 void FileModel::setParentCheck(const QModelIndex &index)

@@ -84,11 +84,11 @@ bool MetadataCheckStateHandler::check(const QModelIndex &index, const Qt::CheckS
     return true;
 }
 
-bool MetadataCheckStateHandler::updateChildren(const QModelIndex &index, const Qt::CheckState state)
+bool MetadataCheckStateHandler::updateChildren(const QModelIndex &parent, const Qt::CheckState state)
 {
-    for (auto i = 0; i < m_model->rowCount(index); ++i) {
-        for (auto j = 0; j < m_model->columnCount(index); ++j) {
-            auto child = index.child(i, j);
+    for (auto i = 0; i < m_model->rowCount(parent); ++i) {
+        for (auto j = 0; j < m_model->columnCount(parent); ++j) {
+            auto child = m_model->index(i, j, parent);
 
             m_changedIndexes.insert(child, state);
 
@@ -155,7 +155,7 @@ bool MetadataCheckStateHandler::hasNoConflicts(const QModelIndex &index)
 
 QModelIndex MetadataCheckStateHandler::findRelative(const Metadata::Reference &reference) const
 {
-    const auto module = findChildByName(m_model->rootIndex(), reference.module());
+    const auto module = findChildByName(QModelIndex(), reference.module());
     const auto submodule = findChildByName(module, reference.submodule());
     return findChildByName(submodule, reference.element());
 }
@@ -163,12 +163,9 @@ QModelIndex MetadataCheckStateHandler::findRelative(const Metadata::Reference &r
 QModelIndex MetadataCheckStateHandler::findChildByName(const QModelIndex &parent,
                                                        const QString &name) const
 {
-    if (!parent.isValid())
-        return {};
-
     for (int i = 0; i < m_model->rowCount(parent); ++i) {
         for (int j = 0; j < m_model->columnCount(parent); ++j) {
-            auto child = parent.child(i, j);
+            auto child = m_model->index(i, j, parent);
             if (m_model->dataNode(child)->name() == name)
                 return child;
         }
@@ -184,7 +181,7 @@ Qt::CheckState MetadataCheckStateHandler::parentState(const QModelIndex &index,
 
     for (auto i = 0; i < m_model->rowCount(parent); ++i) {
         for (auto j = 0; j < m_model->columnCount(parent); ++j) {
-            const auto child = parent.child(i, j);
+            const auto child = m_model->index(i, j, parent);
 
             if (m_model->data(child, Qt::CheckStateRole) != state
                 && (!m_changedIndexes.contains(child) || m_changedIndexes.value(child) != state))
