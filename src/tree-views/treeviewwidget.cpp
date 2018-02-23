@@ -57,9 +57,10 @@ void TreeView::contextMenuEvent(QContextMenuEvent *event)
 
 TreeViewWidget::TreeViewWidget(Model *model,
                                std::unique_ptr<IndexUpdaterFactory> indexUpdaterFactory)
-    : m_indexUpdaterFactory(std::move(indexUpdaterFactory))
+    : m_treeView(new TreeView(this))
+    , m_indexUpdaterFactory(std::move(indexUpdaterFactory))
+    , m_indexUpdater(nullptr)
     , m_model(model)
-    , m_treeView(new TreeView(this))
 {
     model->setParent(this);
 

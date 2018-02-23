@@ -42,7 +42,9 @@ using namespace Asn1Acn::Internal::TreeViews;
 
 OutlineWidget::OutlineWidget(Model *model, std::unique_ptr<OutlineIndexUpdaterFactory> factory)
     : TreeViewWidget(model, std::move(factory))
-{}
+{
+    m_treeView->expandAll();
+}
 
 bool OutlineWidgetFactory::supportsEditor(Core::IEditor *editor) const
 {
