@@ -53,7 +53,7 @@ private:
     bool uncheck(const QModelIndex &index);
     bool check(const QModelIndex &index, const Qt::CheckState state);
 
-    bool updateChildren(const QModelIndex &index, const Qt::CheckState state);
+    bool updateChildren(const QModelIndex &parent, const Qt::CheckState state);
     bool updateParent(const QModelIndex &index, const Qt::CheckState childState);
 
     bool handleRelatives(const QModelIndex &index);

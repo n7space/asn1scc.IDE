@@ -50,7 +50,6 @@ public:
     int columnCount(const QModelIndex &parent) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
-    QModelIndex rootIndex() const;
     const Metadata::LibraryNode *dataNode(const QModelIndex &index) const;
     const QHash<QPersistentModelIndex, Qt::CheckState> &selectedItems() const;
 
