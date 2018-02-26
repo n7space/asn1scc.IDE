@@ -43,12 +43,10 @@
 #include "completion/acnsnippets.h"
 #include "completion/asnsnippets.h"
 
-#include "settings/general.h"
 #include "settings/libraries.h"
 #include "settings/service.h"
 #include "settings/settings.h"
 
-#include "options-pages/general.h"
 #include "options-pages/libraries.h"
 #include "options-pages/service.h"
 
@@ -120,7 +118,6 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
-    const auto generalSettings = Settings::load<Settings::General>();
     const auto serviceSettings = Settings::load<Settings::Service>();
     const auto librariesSettings = Settings::load<Settings::Libraries>();
 
@@ -132,7 +129,6 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(new TreeViews::OutlineWidgetFactory);
     addAutoReleasedObject(new TreeViews::TypesTreeWidgetFactory);
 
-    addAutoReleasedObject(new OptionsPages::General(generalSettings));
     addAutoReleasedObject(new OptionsPages::Service(serviceSettings));
     addAutoReleasedObject(new OptionsPages::Libraries(librariesSettings));
 
