@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 N7 Space sp. z o. o.
+** Copyright (C) 2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -22,30 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QWidget>
-
-#include "ui_general.h"
+#include <projectexplorer/kitmanager.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace OptionsPages {
 
-class GeneralWidget : public QWidget
+class KitInformation : public ProjectExplorer::KitInformation
 {
-    Q_OBJECT
 public:
-    explicit GeneralWidget(QWidget *parent = nullptr);
+    using Kit = ProjectExplorer::Kit;
+    using Task = ProjectExplorer::Task;
 
-    QString asn1sccPath() const;
-    void setAsn1SccPath(const QString &path);
+    KitInformation();
 
-private:
-    Ui::GeneralOptionsPage m_ui;
+    static Core::Id id();
+    static bool hasAsn1Exe(const Kit *k);
+    static Utils::FileName asn1Exe(const Kit *k);
+    static void setAsn1Exe(Kit *k, const Utils::FileName &v);
+
+    QVariant defaultValue(const Kit *k) const override;
+    QList<Task> validate(const Kit *k) const override;
+
+    ItemList toUserOutput(const Kit *kit) const override;
+    ProjectExplorer::KitConfigWidget *createConfigWidget(Kit *kit) const override;
+
+    void addToEnvironment(const Kit *k, Utils::Environment &env) const override;
+    void addToMacroExpander(Kit *kit, Utils::MacroExpander *expander) const override;
 };
 
-} // namespace OptionsPages
 } // namespace Internal
 } // namespace Asn1Acn

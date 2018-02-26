@@ -21,6 +21,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #######################################################################
 
+isEmpty(ASN1SCC): ASN1SCC = $$(ASN1SCC)
 isEmpty(ASN1SCC): ASN1SCC = asn1.exe
 isEmpty(ASN1SCC_PRODUCTS_DIR): ASN1SCC_PRODUCTS_DIR = $${OUT_PWD}/asn1sccGenerated/src
 isEmpty(ASN1SCC_GENERATION_OPTIONS): ASN1SCC_GENERATION_OPTIONS = -c -ACN

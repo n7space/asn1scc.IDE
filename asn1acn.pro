@@ -117,15 +117,12 @@ SOURCES += \
     tree-views/typestreewidget.cpp \
     tree-views/expansionstaterestorer.cpp \
     \
-    options-pages/general.cpp \
     options-pages/service.cpp \
     options-pages/libraries.cpp \
     options-pages/servicewidget.cpp \
-    options-pages/generalwidget.cpp \
     options-pages/librarieswidget.cpp \
     \
     settings/settings.cpp \
-    settings/general.cpp \
     settings/service.cpp \
     settings/libraries.cpp \
     \
@@ -179,7 +176,9 @@ SOURCES += \
     typeslocator.cpp \
     modelvalidityguard.cpp \
     usagesfinder.cpp \
-    importmenuitemcontroller.cpp
+    importmenuitemcontroller.cpp \
+    kitinformation.cpp \
+    kitconfigwidget.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -251,15 +250,12 @@ HEADERS += \
     tree-views/typestreeindexupdaterfactory.h \
     tree-views/outlineindexupdaterfactory.h \
     \
-    options-pages/general.h \
     options-pages/service.h \
     options-pages/libraries.h \
     options-pages/servicewidget.h \
-    options-pages/generalwidget.h \
     options-pages/librarieswidget.h \
     \
     settings/settings.h \
-    settings/general.h \
     settings/service.h \
     settings/libraries.h \
     \
@@ -329,10 +325,11 @@ HEADERS += \
     typeslocator.h \
     modelvalidityguard.h \
     usagesfinder.h \
-    importmenuitemcontroller.h
+    importmenuitemcontroller.h \
+    kitinformation.h \
+    kitconfigwidget.h
 
 FORMS += \
-    options-pages/general.ui \
     options-pages/service.ui \
     options-pages/libraries.ui \
     \

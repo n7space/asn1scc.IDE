@@ -22,7 +22,10 @@
 #######################################################################
 
 if(NOT ASN1SCC)
+  set(ASN1SCC $ENV{ASN1SCC})
+  if(NOT ASN1SCC)
     set(ASN1SCC asn1.exe)
+  endif()
 endif()
 
 if(NOT ASN1SCC_GENERATION_OPTIONS)

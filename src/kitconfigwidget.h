@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 N7 Space sp. z o. o.
+** Copyright (C) 2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -22,36 +22,37 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QPointer>
-
-#include <coreplugin/dialogs/ioptionspage.h>
-
-#include <settings/general.h>
+#include <projectexplorer/kitconfigwidget.h>
+#include <utils/pathchooser.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace OptionsPages {
 
-class GeneralWidget;
-
-class General : public Core::IOptionsPage
+class KitConfigWidget : public ProjectExplorer::KitConfigWidget
 {
+    Q_OBJECT
 public:
-    General(Settings::GeneralPtr settings);
+    KitConfigWidget(ProjectExplorer::Kit *kit, const ProjectExplorer::KitInformation *ki);
+    ~KitConfigWidget();
 
-    bool matches(const QString &searchKeyWord) const override;
-    QWidget *widget() override;
-    void apply() override;
-    void finish() override;
+    QString displayName() const override;
+    QString toolTip() const override;
+    void makeReadOnly() override;
+    void refresh() override;
+
+    QWidget *mainWidget() const override;
+    QWidget *buttonWidget() const override;
+
+    void setPalette(const QPalette &p) override;
 
 private:
-    Settings::GeneralPtr m_settings;
-    QPointer<GeneralWidget> m_widget;
+    void pathWasChanged();
+
+    Utils::PathChooser *m_chooser;
+    bool m_ignoreChange = false;
 };
 
-} // namespace OptionsPages
 } // namespace Internal
 } // namespace Asn1Acn
