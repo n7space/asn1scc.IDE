@@ -26,6 +26,7 @@
 
 #include "model.h"
 
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
 OutlineIndexUpdater::OutlineIndexUpdater(const Model *model,
@@ -39,6 +40,6 @@ void OutlineIndexUpdater::fillSelectedIndexes(QModelIndex &current, QModelIndexL
     if (editorEmpty())
         return;
 
-    current = getIndexFromParent(QModelIndex(), getCurrentLocation());
+    current = findIndexInLocation(QModelIndex(), getCurrentLocation());
     selected.append(current);
 }

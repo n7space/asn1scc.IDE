@@ -80,28 +80,53 @@ void SynchronizedIndexUpdater::updateCurrentIndex()
         updateNow();
 }
 
-QModelIndex SynchronizedIndexUpdater::getIndexFromParent(const QModelIndex &parentIndex,
-                                                         Data::SourceLocation currentLocation) const
-{
-    for (int row = 0; row < m_model->rowCount(parentIndex); ++row) {
-        const auto index = m_model->index(row, 0, parentIndex);
-        const auto node = m_model->dataNode(index);
-        const auto location = node->location();
+namespace {
 
-        if (location.path() != currentLocation.path())
+using Match = std::pair<QModelIndex, int>;
+
+bool locationMatches(const Data::SourceLocation &cursorLocation,
+                     const Data::SourceLocation &itemLocation)
+{
+    return itemLocation.line() == cursorLocation.line()
+           && cursorLocation.column() >= itemLocation.column();
+}
+
+bool isBetterMatch(const Match &currentMatch, const Data::SourceLocation &itemLocation)
+{
+    return !currentMatch.first.isValid() || itemLocation.column() > currentMatch.second;
+}
+
+void findMatchInParent(const Model *model,
+                       const QModelIndex &parentIndex,
+                       Data::SourceLocation cursorLocation,
+                       Match &currentBestMatch)
+{
+    for (int row = 0; row < model->rowCount(parentIndex); ++row) {
+        const auto index = model->index(row, 0, parentIndex);
+        const auto indexLocation = model->dataNode(index)->location();
+
+        if (indexLocation.path() != cursorLocation.path()
+            || indexLocation.line() > cursorLocation.line())
             continue;
 
-        if (location.line() == currentLocation.line()
-            && currentLocation.column() >= location.column()
-            && currentLocation.column() <= location.column() + node->name().size())
-            return index;
+        if (locationMatches(cursorLocation, indexLocation)
+            && isBetterMatch(currentBestMatch, indexLocation))
+            currentBestMatch = std::make_pair(index, indexLocation.column());
 
-        const auto childIndex = getIndexFromParent(index, currentLocation);
-        if (childIndex.isValid())
-            return childIndex;
+        findMatchInParent(model, index, cursorLocation, currentBestMatch);
     }
+}
 
-    return QModelIndex();
+} // namespace
+
+QModelIndex SynchronizedIndexUpdater::findIndexInLocation(const QModelIndex &parentIndex,
+                                                          Data::SourceLocation cursorLocation) const
+{
+    Match found = std::make_pair(QModelIndex(), -1);
+
+    findMatchInParent(m_model, parentIndex, cursorLocation, found);
+
+    return found.first;
 }
 
 Data::SourceLocation SynchronizedIndexUpdater::getCurrentLocation() const

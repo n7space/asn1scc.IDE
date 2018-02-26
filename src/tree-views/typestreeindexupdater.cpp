@@ -65,7 +65,7 @@ void TypesTreeIndexUpdater::fillSelectedIndexes(QModelIndex &current,
     const auto location = getCurrentLocation();
 
     for (const auto projectIndex : searchedIndexes()) {
-        const auto index = getIndexFromParent(projectIndex, location);
+        const auto index = findIndexInLocation(projectIndex, location);
         if (!index.isValid())
             continue;
 

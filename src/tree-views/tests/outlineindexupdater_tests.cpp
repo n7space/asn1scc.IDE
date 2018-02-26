@@ -95,7 +95,7 @@ TextEditor::TextEditorWidget *OutlineIndexUpdaterTests::createEditorWidget()
                  /*  5 */ "Test2 DEFINITIONS ::= BEGIN\n"
                  /*  6 */ "    Num3 ::= INTEGER (-100 .. 1000)\n"
                  /*  7 */ "    Num4 ::= INTEGER (0 .. 1000)\n"
-                 /*  8 */ "    Num5 ::= INTEGER (0 .. 1000) Num6 ::= INTEGER (0 .. 1000)\n"
+                 /*  8 */ "    Num5 ::= INTEGER (0 .. 1000)           Num6 ::= INTEGER (0 .. 1000)\n"
                  /*  9 */ "END\n"
                  /* 10 */ "\n"
                  /* 11 */ "\n");
@@ -142,7 +142,7 @@ Data::Node *OutlineIndexUpdaterTests::createModelNodes(const QString &filePath)
         std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
     definitions2->addType(std::make_unique<Data::TypeAssignment>(
         "Num6",
-        Data::SourceLocation{filePath, 8, 32},
+        Data::SourceLocation{filePath, 8, 42},
         std::make_unique<Data::Types::UserdefinedType>("UserTypeName", "Test2")));
     root->add(std::move(definitions2));
 
@@ -177,7 +177,7 @@ void OutlineIndexUpdaterTests::test_setNonEmpytEditorChangedPosition()
     QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
 
     QCOMPARE(spy.count(), 1);
-    verifySpyReceviedCorrectData(spy);
+    verifySpyReceivedCorrectData(spy);
 
     const auto index = qvariant_cast<QModelIndex>(spy.at(0).at(1));
     const auto node = m_model->dataNode(index);
@@ -197,7 +197,7 @@ void OutlineIndexUpdaterTests::test_cursorMovedToModule()
     QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
 
     QCOMPARE(spy.count(), 1);
-    verifySpyReceviedCorrectData(spy);
+    verifySpyReceivedCorrectData(spy);
 
     const auto index = qvariant_cast<QModelIndex>(spy.at(0).at(1));
     const auto node = m_model->dataNode(index);
@@ -219,7 +219,7 @@ void OutlineIndexUpdaterTests::test_cursorMovedToTypeDefinition()
     QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
 
     QCOMPARE(spy.count(), 1);
-    verifySpyReceviedCorrectData(spy);
+    verifySpyReceivedCorrectData(spy);
 
     const auto index = qvariant_cast<QModelIndex>(spy.at(0).at(1));
     const auto node = m_model->dataNode(index);
@@ -249,7 +249,7 @@ void OutlineIndexUpdaterTests::test_cursorMovedToSecondDefinitionInLine()
 {
     QSignalSpy spy(m_indexUpdater, &IndexUpdater::indexSelectionUpdated);
     const int lineNumber = 8;
-    const int columnNumber = 35;
+    const int columnNumber = 45;
 
     m_editorWidget->gotoLine(lineNumber, columnNumber);
     m_indexUpdater->setEditor(m_editorWidget);
@@ -257,13 +257,34 @@ void OutlineIndexUpdaterTests::test_cursorMovedToSecondDefinitionInLine()
     QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
 
     QCOMPARE(spy.count(), 1);
-    verifySpyReceviedCorrectData(spy);
+    verifySpyReceivedCorrectData(spy);
 
     const auto index = qvariant_cast<QModelIndex>(spy.at(0).at(1));
     const auto node = m_model->dataNode(index);
     const Data::SourceLocation location = node->location();
     QCOMPARE(location.line(), 8);
-    QCOMPARE(location.column(), 32);
+    QCOMPARE(location.column(), 42);
+}
+
+void OutlineIndexUpdaterTests::test_cursorMovedBetweenDefinitions()
+{
+    QSignalSpy spy(m_indexUpdater, &IndexUpdater::indexSelectionUpdated);
+    const int lineNumber = 8;
+    const int columnNumber = 40;
+
+    m_editorWidget->gotoLine(lineNumber, columnNumber);
+    m_indexUpdater->setEditor(m_editorWidget);
+
+    QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
+
+    QCOMPARE(spy.count(), 1);
+    verifySpyReceivedCorrectData(spy);
+
+    const auto index = qvariant_cast<QModelIndex>(spy.at(0).at(1));
+    const auto node = m_model->dataNode(index);
+    const Data::SourceLocation location = node->location();
+    QCOMPARE(location.line(), 8);
+    QCOMPARE(location.column(), 3);
 }
 
 void OutlineIndexUpdaterTests::test_forceUpdate()
@@ -276,7 +297,7 @@ void OutlineIndexUpdaterTests::test_forceUpdate()
     m_indexUpdater->updateCurrentIndex();
 
     QCOMPARE(spy.count(), 1);
-    verifySpyReceviedCorrectData(spy);
+    verifySpyReceivedCorrectData(spy);
 
     const auto index = qvariant_cast<QModelIndex>(spy.at(0).at(1));
     const auto node = m_model->dataNode(index);
@@ -294,7 +315,7 @@ void OutlineIndexUpdaterTests::test_forceUpdateAfterCursorMoved()
     m_indexUpdater->updateCurrentIndex();
 
     QCOMPARE(spy.count(), 1);
-    verifySpyReceviedCorrectData(spy);
+    verifySpyReceivedCorrectData(spy);
 
     const auto index = qvariant_cast<QModelIndex>(spy.at(0).at(1));
     const auto node = m_model->dataNode(index);
@@ -320,7 +341,7 @@ void OutlineIndexUpdaterTests::test_removeEditorAfterLineUpdate()
     QCOMPARE(index.isValid(), false);
 }
 
-void OutlineIndexUpdaterTests::verifySpyReceviedCorrectData(const QSignalSpy &spy)
+void OutlineIndexUpdaterTests::verifySpyReceivedCorrectData(const QSignalSpy &spy)
 {
     QCOMPARE(spy.count(), 1);
 

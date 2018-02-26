@@ -58,8 +58,8 @@ public:
     void unsetEditor();
 
 protected:
-    QModelIndex getIndexFromParent(const QModelIndex &parentIndex,
-                                   Data::SourceLocation currentLocation) const;
+    QModelIndex findIndexInLocation(const QModelIndex &parentIndex,
+                                    Data::SourceLocation cursorLocation) const;
     Data::SourceLocation getCurrentLocation() const;
     Utils::FileName currentFilePath() const;
     bool editorEmpty() const;
