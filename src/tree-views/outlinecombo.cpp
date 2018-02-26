@@ -28,6 +28,7 @@
 
 #include "combomodel.h"
 #include "outlineindexupdater.h"
+#include "parseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
@@ -39,7 +40,7 @@ OutlineCombo::OutlineCombo(const QString &filePath, TextEditor::TextEditorWidget
 {
     auto model = new ComboModel(filePath, this);
 
-    auto indexUpdater = new OutlineIndexUpdater(model, this);
+    auto indexUpdater = new OutlineIndexUpdater(model, ParsedDataStorage::instance(), this);
     indexUpdater->setEditor(textEditor);
 
     setupComboBox(model);

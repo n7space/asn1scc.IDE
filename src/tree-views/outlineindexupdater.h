@@ -28,13 +28,18 @@
 
 namespace Asn1Acn {
 namespace Internal {
+
+class ParsedDataStorage;
+
 namespace TreeViews {
 
 class OutlineIndexUpdater : public SynchronizedIndexUpdater
 {
     Q_OBJECT
 public:
-    explicit OutlineIndexUpdater(const Model *model, QObject *parent = nullptr);
+    explicit OutlineIndexUpdater(const Model *model,
+                                 const ParsedDataStorage *const storage,
+                                 QObject *parent = nullptr);
 
 private:
     void fillSelectedIndexes(QModelIndex &current, QModelIndexList &selected) const override;

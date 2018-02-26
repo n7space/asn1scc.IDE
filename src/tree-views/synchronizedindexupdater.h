@@ -39,13 +39,18 @@ class QTreeView;
 
 namespace Asn1Acn {
 namespace Internal {
+
+class ParsedDataStorage;
+
 namespace TreeViews {
 
 class SynchronizedIndexUpdater : public IndexUpdater
 {
     Q_OBJECT
 public:
-    explicit SynchronizedIndexUpdater(const Model *model, QObject *parent);
+    explicit SynchronizedIndexUpdater(const Model *model,
+                                      const ParsedDataStorage *const storage,
+                                      QObject *parent);
 
     void updateCurrentIndex() override;
 
@@ -53,16 +58,19 @@ public:
     void unsetEditor();
 
 protected:
-    QModelIndex getIndexFromParent(const QModelIndex &parentIndex,
-                                   Data::SourceLocation currentLocation) const;
+    QModelIndex findIndexInLocation(const QModelIndex &parentIndex,
+                                    Data::SourceLocation cursorLocation) const;
     Data::SourceLocation getCurrentLocation() const;
     Utils::FileName currentFilePath() const;
     bool editorEmpty() const;
+
+    const ParsedDataStorage *const m_storage;
 
 private:
     virtual void fillSelectedIndexes(QModelIndex &current, QModelIndexList &selected) const = 0;
 
     void updateNow();
+    bool updateAllowed();
     void createUpdateTimer();
 
     TextEditor::TextEditorWidget *m_editorWidget;

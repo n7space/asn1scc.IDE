@@ -30,6 +30,7 @@
 
 #include "indexupdaterfactory.h"
 #include "outlineindexupdater.h"
+#include "parseddatastorage.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -44,7 +45,7 @@ public:
     IndexUpdater *createSynchronizedIndexUpdater(Model *model,
                                                  QObject *parent = nullptr) const override
     {
-        auto indexUpdater = new OutlineIndexUpdater(model, parent);
+        auto indexUpdater = new OutlineIndexUpdater(model, ParsedDataStorage::instance(), parent);
         indexUpdater->setEditor(TextEditor::TextEditorWidget::currentTextEditorWidget());
         return indexUpdater;
     }

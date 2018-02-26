@@ -30,16 +30,20 @@
 #include <projectexplorer/project.h>
 #include <projectexplorer/session.h>
 
-#include "model.h"
 #include <data/project.h>
+#include <parseddatastorage.h>
+#include <tree-views/model.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
 static const int UPDATE_INTERVAL_MS = 500;
 
-SynchronizedIndexUpdater::SynchronizedIndexUpdater(const Model *model, QObject *parent)
+SynchronizedIndexUpdater::SynchronizedIndexUpdater(const Model *model,
+                                                   const ParsedDataStorage *const storage,
+                                                   QObject *parent)
     : IndexUpdater(model, parent)
+    , m_storage(storage)
     , m_editorWidget(nullptr)
 {
     createUpdateTimer();
@@ -72,31 +76,57 @@ void SynchronizedIndexUpdater::unsetEditor()
 
 void SynchronizedIndexUpdater::updateCurrentIndex()
 {
-    updateNow();
+    if (updateAllowed())
+        updateNow();
 }
 
-QModelIndex SynchronizedIndexUpdater::getIndexFromParent(const QModelIndex &parentIndex,
-                                                         Data::SourceLocation currentLocation) const
-{
-    for (int row = 0; row < m_model->rowCount(parentIndex); ++row) {
-        const auto index = m_model->index(row, 0, parentIndex);
-        const auto node = m_model->dataNode(index);
-        const auto location = node->location();
+namespace {
 
-        if (location.path() != currentLocation.path())
+using Match = std::pair<QModelIndex, int>;
+
+bool locationMatches(const Data::SourceLocation &cursorLocation,
+                     const Data::SourceLocation &itemLocation)
+{
+    return itemLocation.line() == cursorLocation.line()
+           && cursorLocation.column() >= itemLocation.column();
+}
+
+bool isBetterMatch(const Match &currentMatch, const Data::SourceLocation &itemLocation)
+{
+    return !currentMatch.first.isValid() || itemLocation.column() > currentMatch.second;
+}
+
+void findMatchInParent(const Model *model,
+                       const QModelIndex &parentIndex,
+                       Data::SourceLocation cursorLocation,
+                       Match &currentBestMatch)
+{
+    for (int row = 0; row < model->rowCount(parentIndex); ++row) {
+        const auto index = model->index(row, 0, parentIndex);
+        const auto indexLocation = model->dataNode(index)->location();
+
+        if (indexLocation.path() != cursorLocation.path()
+            || indexLocation.line() > cursorLocation.line())
             continue;
 
-        if (location.line() == currentLocation.line()
-            && currentLocation.column() >= location.column()
-            && currentLocation.column() <= location.column() + node->name().size())
-            return index;
+        if (locationMatches(cursorLocation, indexLocation)
+            && isBetterMatch(currentBestMatch, indexLocation))
+            currentBestMatch = std::make_pair(index, indexLocation.column());
 
-        const auto childIndex = getIndexFromParent(index, currentLocation);
-        if (childIndex.isValid())
-            return childIndex;
+        findMatchInParent(model, index, cursorLocation, currentBestMatch);
     }
+}
 
-    return QModelIndex();
+} // namespace
+
+QModelIndex SynchronizedIndexUpdater::findIndexInLocation(const QModelIndex &parentIndex,
+                                                          Data::SourceLocation cursorLocation) const
+{
+    Match found = std::make_pair(QModelIndex(), -1);
+
+    findMatchInParent(m_model, parentIndex, cursorLocation, found);
+
+    return found.first;
 }
 
 Data::SourceLocation SynchronizedIndexUpdater::getCurrentLocation() const
@@ -118,6 +148,16 @@ bool SynchronizedIndexUpdater::editorEmpty() const
     return m_editorWidget == nullptr;
 }
 
+bool SynchronizedIndexUpdater::updateAllowed()
+{
+    if (editorEmpty())
+        return false;
+
+    const auto file = m_storage->getAnyFileForPath(currentFilePath().toString());
+
+    return file != nullptr && !file->isPolluted();
+}
+
 void SynchronizedIndexUpdater::updateNow()
 {
     m_updateIndexTimer->stop();
@@ -137,5 +177,8 @@ void SynchronizedIndexUpdater::createUpdateTimer()
     m_updateIndexTimer->setSingleShot(true);
     m_updateIndexTimer->setInterval(UPDATE_INTERVAL_MS);
 
-    connect(m_updateIndexTimer, &QTimer::timeout, this, &SynchronizedIndexUpdater::updateNow);
+    connect(m_updateIndexTimer,
+            &QTimer::timeout,
+            this,
+            &SynchronizedIndexUpdater::updateCurrentIndex);
 }

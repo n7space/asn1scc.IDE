@@ -51,6 +51,7 @@ private slots:
     void test_cursorMovedToTypeDefinition();
     void test_cursorMovedToEmptyLine();
     void test_cursorMovedToSecondDefinitionInLine();
+    void test_cursorMovedBetweenDefinitions();
 
     void test_forceUpdate();
     void test_forceUpdateAfterCursorMoved();
@@ -60,13 +61,16 @@ private slots:
 private:
     Data::Node *createModelNodes(const QString &filePath);
     TextEditor::TextEditorWidget *createEditorWidget();
+    ParsedDataStorage *createStorage();
 
-    void verifySpyReceviedCorrectData(const QSignalSpy &spy);
+    void verifySpyReceivedCorrectData(const QSignalSpy &spy);
 
     Data::Node *m_data;
     Model *m_model;
     OutlineIndexUpdater *m_indexUpdater;
     TextEditor::TextEditorWidget *m_editorWidget;
+
+    ParsedDataStorage *m_storage;
 };
 
 } // namespace Tests

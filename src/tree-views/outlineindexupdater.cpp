@@ -26,10 +26,13 @@
 
 #include "model.h"
 
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
-OutlineIndexUpdater::OutlineIndexUpdater(const Model *model, QObject *parent)
-    : SynchronizedIndexUpdater(model, parent)
+OutlineIndexUpdater::OutlineIndexUpdater(const Model *model,
+                                         const ParsedDataStorage *const storage,
+                                         QObject *parent)
+    : SynchronizedIndexUpdater(model, storage, parent)
 {}
 
 void OutlineIndexUpdater::fillSelectedIndexes(QModelIndex &current, QModelIndexList &selected) const
@@ -37,6 +40,6 @@ void OutlineIndexUpdater::fillSelectedIndexes(QModelIndex &current, QModelIndexL
     if (editorEmpty())
         return;
 
-    current = getIndexFromParent(QModelIndex(), getCurrentLocation());
+    current = findIndexInLocation(QModelIndex(), getCurrentLocation());
     selected.append(current);
 }

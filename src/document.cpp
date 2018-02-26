@@ -67,7 +67,7 @@ void Document::onFilePathChanged(const Utils::FileName &oldPath, const Utils::Fi
 
     updateExtraSelections();
 
-    connect(this, &Core::IDocument::contentsChanged, this, &Document::scheduleProcessDocument);
+    connect(this, &Core::IDocument::contentsChanged, this, &Document::onFileContentChanged);
 
     connect(ModelValidityGuard::instance(),
             &ModelValidityGuard::modelChanged,
@@ -78,6 +78,18 @@ void Document::onFilePathChanged(const Utils::FileName &oldPath, const Utils::Fi
 void Document::onModelChanged()
 {
     updateExtraSelections();
+}
+
+void Document::onFileContentChanged()
+{
+    auto file = ParsedDataStorage::instance()->getAnyFileForPath(filePath().toString());
+    if (file == nullptr)
+        return;
+
+    file->setPolluted();
+    file->clearReferences();
+
+    scheduleProcessDocument();
 }
 
 namespace {

@@ -41,16 +41,17 @@ class Document : public TextEditor::TextDocument
 
 public:
     explicit Document();
-    void scheduleProcessDocument();
 
 signals:
     void extraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections) const;
 
 private slots:
     void onModelChanged();
+    void onFileContentChanged();
+    void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
 
 private:
-    void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
+    void scheduleProcessDocument();
     void processDocument();
 
     void updateExtraSelections() const;
