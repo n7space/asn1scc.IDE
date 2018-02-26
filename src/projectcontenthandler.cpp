@@ -194,7 +194,6 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(
             m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));
         }
 
-        file->clearReferences();
         refreshErrorMessages(file, errorMessages);
     }
 }

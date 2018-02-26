@@ -42,7 +42,7 @@ void Project::accept(Visitor &visitor) const
 
 void Project::add(std::unique_ptr<File> file)
 {
-    const QString path = file->location().path();
+    const QString path = file->name();
 
     remove(path);
 
@@ -58,7 +58,7 @@ void Project::remove(const QString &path)
         m_filesByPathMap.erase(mapIt);
 
     for (auto vecIt = m_files.begin(); vecIt != m_files.end(); vecIt++) {
-        if ((*vecIt)->location().path() == path) {
+        if ((*vecIt)->name() == path) {
             m_files.erase(vecIt);
             break;
         }

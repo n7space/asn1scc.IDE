@@ -30,6 +30,7 @@ using namespace Asn1Acn::Internal::Data;
 
 File::File(const QString &path)
     : Node(path, {path, 0, 0})
+    , m_polluted(false)
 {}
 
 File::~File() {}

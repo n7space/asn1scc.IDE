@@ -61,6 +61,9 @@ public:
     const References &references() const { return m_references; }
     const ErrorList &errors() const { return m_errorList; }
 
+    void setPolluted() { m_polluted = true; }
+    bool isPolluted() const { return m_polluted; }
+
     void clearReferences();
     void clearErrors();
 
@@ -71,6 +74,8 @@ private:
     ErrorList m_errorList;
 
     std::map<QString, Definitions *> m_definitionsByNameMap;
+
+    bool m_polluted;
 };
 
 } // namespace Data

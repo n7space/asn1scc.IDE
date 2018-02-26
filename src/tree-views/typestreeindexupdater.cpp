@@ -40,7 +40,7 @@
 using namespace Asn1Acn::Internal::TreeViews;
 
 TypesTreeIndexUpdater::TypesTreeIndexUpdater(const Model *model, QObject *parent)
-    : SynchronizedIndexUpdater(model, parent)
+    : SynchronizedIndexUpdater(model, ParsedDataStorage::instance(), parent)
 {
     connect(Core::EditorManager::instance(),
             &Core::EditorManager::currentEditorChanged,
@@ -77,9 +77,8 @@ void TypesTreeIndexUpdater::fillSelectedIndexes(QModelIndex &current,
 
 QModelIndexList TypesTreeIndexUpdater::searchedIndexes() const
 {
-    const auto &root = ParsedDataStorage::instance()->root();
-    QStringList projectNames = ParsedDataStorage::instance()->getProjectsForFile(
-        currentFilePath().toString());
+    const auto &root = m_storage->root();
+    QStringList projectNames = m_storage->getProjectsForFile(currentFilePath().toString());
 
     QModelIndexList projectIndexes;
     for (const auto &name : projectNames) {

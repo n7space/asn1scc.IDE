@@ -36,6 +36,8 @@
 #include <data/typeassignment.h>
 #include <data/types/userdefinedtype.h>
 
+#include <parseddatastorage.h>
+
 #include <tree-views/outlinemodel.h>
 
 using namespace Asn1Acn::Internal;
@@ -48,11 +50,12 @@ OutlineIndexUpdaterTests::OutlineIndexUpdaterTests(QObject *parent)
     : QObject(parent)
 {
     m_editorWidget = createEditorWidget();
+    m_storage = createStorage();
 
     m_model = new OutlineModel(QString());
     m_model->setRoot(createModelNodes(m_editorWidget->textDocument()->filePath().toString()));
 
-    m_indexUpdater = new OutlineIndexUpdater(m_model, nullptr);
+    m_indexUpdater = new OutlineIndexUpdater(m_model, m_storage, nullptr);
 }
 
 OutlineIndexUpdaterTests::~OutlineIndexUpdaterTests()
@@ -61,25 +64,42 @@ OutlineIndexUpdaterTests::~OutlineIndexUpdaterTests()
     delete m_model;
     delete m_editorWidget;
     delete m_data;
+    delete m_storage;
+}
+
+ParsedDataStorage *OutlineIndexUpdaterTests::createStorage()
+{
+    auto storage = new ParsedDataStorage();
+
+    const QString projectName("projectName");
+    const QString filePath = m_editorWidget->textDocument()->filePath().toString();
+
+    storage->addProject(projectName);
+    storage->addFileToProject(projectName, std::make_unique<Data::File>(filePath));
+
+    return storage;
 }
 
 TextEditor::TextEditorWidget *OutlineIndexUpdaterTests::createEditorWidget()
 {
     TextEditor::TextDocument *document = new TextEditor::TextDocument;
-    document->setPlainText(/*  1 */ "Test1 DEFINITIONS ::= BEGIN\n"
-                           /*  2 */ "   Num1 ::= INTEGER (-100 .. 1000)\n"
-                           /*  3 */ "   Num2 ::= INTEGER (0 .. 1000)\n"
-                           /*  4 */ "END\n"
-                           /*  5 */ "Test2 DEFINITIONS ::= BEGIN\n"
-                           /*  6 */ "    Num3 ::= INTEGER (-100 .. 1000)\n"
-                           /*  7 */ "    Num4 ::= INTEGER (0 .. 1000)\n"
-                           /*  8 */ "    Num5 ::= INTEGER (0 .. 1000) Num6 ::= INTEGER (0 .. 1000)\n"
-                           /*  9 */ "END\n"
-                           /* 10 */ "\n"
-                           /* 11 */ "\n");
-
     Utils::FileName fileName = Utils::FileName::fromString("file1.asn1");
     document->setFilePath(fileName);
+
+    // clang-format off
+    document->setPlainText(
+                 /*  1 */ "Test1 DEFINITIONS ::= BEGIN\n"
+                 /*  2 */ "   Num1 ::= INTEGER (-100 .. 1000)\n"
+                 /*  3 */ "   Num2 ::= INTEGER (0 .. 1000)\n"
+                 /*  4 */ "END\n"
+                 /*  5 */ "Test2 DEFINITIONS ::= BEGIN\n"
+                 /*  6 */ "    Num3 ::= INTEGER (-100 .. 1000)\n"
+                 /*  7 */ "    Num4 ::= INTEGER (0 .. 1000)\n"
+                 /*  8 */ "    Num5 ::= INTEGER (0 .. 1000) Num6 ::= INTEGER (0 .. 1000)\n"
+                 /*  9 */ "END\n"
+                 /* 10 */ "\n"
+                 /* 11 */ "\n");
+    // clang-format on
 
     QSharedPointer<TextEditor::TextDocument> documentPointer(document);
 
@@ -291,9 +311,7 @@ void OutlineIndexUpdaterTests::test_removeEditorAfterLineUpdate()
     m_editorWidget->gotoLine(lineNumber);
     m_indexUpdater->setEditor(nullptr);
 
-    QVERIFY(spy.wait(RESPONSE_WAIT_MAX_TIME_MS));
-
-    QCOMPARE(spy.count(), 2);
+    QCOMPARE(spy.count(), 1);
 
     const QVariant current = spy.at(0).at(1);
     QCOMPARE(current.type(), QVariant::ModelIndex);

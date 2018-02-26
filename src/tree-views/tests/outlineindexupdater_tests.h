@@ -60,6 +60,7 @@ private slots:
 private:
     Data::Node *createModelNodes(const QString &filePath);
     TextEditor::TextEditorWidget *createEditorWidget();
+    ParsedDataStorage *createStorage();
 
     void verifySpyReceviedCorrectData(const QSignalSpy &spy);
 
@@ -67,6 +68,8 @@ private:
     Model *m_model;
     OutlineIndexUpdater *m_indexUpdater;
     TextEditor::TextEditorWidget *m_editorWidget;
+
+    ParsedDataStorage *m_storage;
 };
 
 } // namespace Tests

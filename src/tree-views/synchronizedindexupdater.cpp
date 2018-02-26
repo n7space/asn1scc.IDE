@@ -30,16 +30,20 @@
 #include <projectexplorer/project.h>
 #include <projectexplorer/session.h>
 
-#include "model.h"
 #include <data/project.h>
+#include <parseddatastorage.h>
+#include <tree-views/model.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TreeViews;
 
 static const int UPDATE_INTERVAL_MS = 500;
 
-SynchronizedIndexUpdater::SynchronizedIndexUpdater(const Model *model, QObject *parent)
+SynchronizedIndexUpdater::SynchronizedIndexUpdater(const Model *model,
+                                                   const ParsedDataStorage *const storage,
+                                                   QObject *parent)
     : IndexUpdater(model, parent)
+    , m_storage(storage)
     , m_editorWidget(nullptr)
 {
     createUpdateTimer();
@@ -72,7 +76,8 @@ void SynchronizedIndexUpdater::unsetEditor()
 
 void SynchronizedIndexUpdater::updateCurrentIndex()
 {
-    updateNow();
+    if (updateAllowed())
+        updateNow();
 }
 
 QModelIndex SynchronizedIndexUpdater::getIndexFromParent(const QModelIndex &parentIndex,
@@ -118,6 +123,16 @@ bool SynchronizedIndexUpdater::editorEmpty() const
     return m_editorWidget == nullptr;
 }
 
+bool SynchronizedIndexUpdater::updateAllowed()
+{
+    if (editorEmpty())
+        return false;
+
+    const auto file = m_storage->getAnyFileForPath(currentFilePath().toString());
+
+    return file != nullptr && !file->isPolluted();
+}
+
 void SynchronizedIndexUpdater::updateNow()
 {
     m_updateIndexTimer->stop();
@@ -137,5 +152,8 @@ void SynchronizedIndexUpdater::createUpdateTimer()
     m_updateIndexTimer->setSingleShot(true);
     m_updateIndexTimer->setInterval(UPDATE_INTERVAL_MS);
 
-    connect(m_updateIndexTimer, &QTimer::timeout, this, &SynchronizedIndexUpdater::updateNow);
+    connect(m_updateIndexTimer,
+            &QTimer::timeout,
+            this,
+            &SynchronizedIndexUpdater::updateCurrentIndex);
 }

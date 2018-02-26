@@ -55,7 +55,7 @@ public:
     void addFileToProject(const QString &projectName, std::unique_ptr<Data::File> file);
     void removeFileFromProject(const QString &projectName, const QString &filePath);
 
-    const Data::File *getAnyFileForPath(const QString &filePath) const;
+    Data::File *getAnyFileForPath(const QString &filePath) const;
     Data::File *getFileForPathFromProject(const QString &project, const QString &path);
 
     const QStringList getProjectsForFile(const QString &filePath) const;
@@ -80,7 +80,7 @@ private:
     const QStringList getFilesPathsFromProjectInternal(const QString &projectName) const;
     void removeFileFromProjectInternal(const QString &projectName, const QString &filePath);
 
-    const Data::File *getFileForPathInternal(const QString &filePath) const;
+    Data::File *getFileForPathInternal(const QString &filePath) const;
 
     Data::SourceLocation getLocationFromModule(const Data::Definitions &moduleDefinition,
                                                const QString &typeAssignmentName) const;
