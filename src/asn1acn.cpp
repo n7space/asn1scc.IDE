@@ -38,6 +38,8 @@
 
 #include <texteditor/texteditorconstants.h>
 
+#include <projectexplorer/kitmanager.h>
+
 #include "completion/acnsnippets.h"
 #include "completion/asnsnippets.h"
 
@@ -62,6 +64,7 @@
 #include "asn1sccserviceprovider.h"
 #include "asneditor.h"
 #include "importmenuitemcontroller.h"
+#include "kitinformation.h"
 #include "projectwatcher.h"
 #include "tools.h"
 #include "tr.h"
@@ -158,6 +161,8 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
             &Core::ProgressManager::allTasksFinished,
             this,
             &Asn1AcnPlugin::onTaskFinished);
+
+    ProjectExplorer::KitManager::registerKitInformation(new KitInformation);
 
     return true;
 }

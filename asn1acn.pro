@@ -179,7 +179,9 @@ SOURCES += \
     typeslocator.cpp \
     modelvalidityguard.cpp \
     usagesfinder.cpp \
-    importmenuitemcontroller.cpp
+    importmenuitemcontroller.cpp \
+    kitinformation.cpp \
+    kitconfigwidget.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -329,7 +331,9 @@ HEADERS += \
     typeslocator.h \
     modelvalidityguard.h \
     usagesfinder.h \
-    importmenuitemcontroller.h
+    importmenuitemcontroller.h \
+    kitinformation.h \
+    kitconfigwidget.h
 
 FORMS += \
     options-pages/general.ui \
