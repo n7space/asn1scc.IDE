@@ -43,7 +43,6 @@ private slots:
     void test_wrongFormatMessage();
     void test_messageWithOnlyLineNumber();
     void test_messageWithColumnAndLineNumber();
-    void test_mappingSourceFiles();
 };
 
 } // namespace Tests
