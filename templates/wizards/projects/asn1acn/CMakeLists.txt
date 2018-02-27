@@ -18,7 +18,7 @@ set(SOURCES ${ASN1ACNSOURCES} ${ASN1SCC_CPP_PRODUCTS})
 
 if(SOURCES)
     set(TARGET_NAME ${PROJECT_NAME})
-    add_executable(${TARGET_NAME} ${SOURCES})
+    add_library(${TARGET_NAME} ${SOURCES})
 endif()
 
 include(configureAsn1SccTarget.cmake)

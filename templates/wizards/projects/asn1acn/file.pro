@@ -1,6 +1,4 @@
-TEMPLATE = app
-CONFIG += console
-CONFIG -= app_bundle
+TEMPLATE = lib
 CONFIG -= qt
 
 %{JS: if (%{AddAsnFile} && %{AddAcnFile})

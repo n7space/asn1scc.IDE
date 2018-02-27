@@ -29,7 +29,7 @@ defineReplace(filterASN1ACNFiles) {
         extension = $$last(splitted)
 
         equals(extension, asn)|equals(extension, asn1)|equals(extension, acn) {
-            fileNames += $${_PRO_FILE_PWD_}/$${file}
+            fileNames += $$shell_quote($${_PRO_FILE_PWD_}/$${file})
         }
     }
 
@@ -39,20 +39,20 @@ defineReplace(filterASN1ACNFiles) {
 ASN1ACNFILES = $$filterASN1ACNFiles($${DISTFILES})
 
 prepare.target += prepare
-prepare.commands += $$sprintf($$QMAKE_MKDIR_CMD, $$ASN1SCC_PRODUCTS_DIR)
-prepare.commands += && $$sprintf($$QMAKE_MKDIR_CMD, $$ASN1SCC_ICD_DIR)
+prepare.commands += $$sprintf($$QMAKE_MKDIR_CMD, $$shell_quote($$ASN1SCC_PRODUCTS_DIR))
+prepare.commands += && $$sprintf($$QMAKE_MKDIR_CMD, $$shell_quote($$ASN1SCC_ICD_DIR))
 
 codeFromAsn1.target += codeFromAsn1
-codeFromAsn1.commands += $$ASN1SCC $${ASN1SCC_GENERATION_OPTIONS} -o $$ASN1SCC_PRODUCTS_DIR $$ASN1ACNFILES
+codeFromAsn1.commands += $$ASN1SCC $${ASN1SCC_GENERATION_OPTIONS} -o $$shell_quote($$ASN1SCC_PRODUCTS_DIR) $$ASN1ACNFILES
 codeFromAsn1.depends += prepare
 
 icdFromAsn1.target += icdFromAsn1
-icdFromAsn1.commands += $$ASN1SCC $${ASN1SCC_ICD_OPTIONS} $${ASN1SCC_ICD_DIR}/$${ASN1SCC_ICD_FILE} $$ASN1ACNFILES
+icdFromAsn1.commands += $$ASN1SCC $${ASN1SCC_ICD_OPTIONS} $$shell_quote($${ASN1SCC_ICD_DIR}/$${ASN1SCC_ICD_FILE}) $$ASN1ACNFILES
 icdFromAsn1.depends += prepare
 
 cleanGenerated.target += cleanGenerated
-cleanGenerated.commands += $$QMAKE_DEL_TREE $$ASN1SCC_PRODUCTS_DIR
-cleanGenerated.commands += $$QMAKE_DEL_TREE $$ASN1SCC_ICD_DIR
+cleanGenerated.commands += $$QMAKE_DEL_TREE $$shell_quote($$ASN1SCC_PRODUCTS_DIR)
+cleanGenerated.commands += $$QMAKE_DEL_TREE $$shell_quote($$ASN1SCC_ICD_DIR)
 clean.depends += cleanGenerated
 
 QMAKE_EXTRA_TARGETS += prepare codeFromAsn1 icdFromAsn1 cleanGenerated clean

@@ -53,7 +53,7 @@ defineReplace(createHeadersList) {
     headersNames = $${1}
 
     for(name, headersNames) {
-        header = $${ASN1SCC_PRODUCTS_DIR}/$${name}.h
+        header = $$clean_path($${ASN1SCC_PRODUCTS_DIR}/$${name}.h)
         headers += $$header
     }
 
@@ -64,7 +64,7 @@ defineReplace(createSourcesList) {
     sourcesNames = $${1}
 
     for(name, sourcesNames) {
-        source = $${ASN1SCC_PRODUCTS_DIR}/$${name}.c
+        source = $$clean_path($${ASN1SCC_PRODUCTS_DIR}/$${name}.c)
         sources += $$source
     }
 
