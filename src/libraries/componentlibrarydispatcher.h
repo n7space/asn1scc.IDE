@@ -37,7 +37,7 @@ class CompontentLibraryDispatcher : public QObject
     Q_OBJECT
 
 public slots:
-    void dispatch(const QStringList &librariesDirectory, const QStringList &metadataFiles) const;
+    static void dispatch(const QStringList &directories, const QStringList &files);
 };
 
 } // namespace Libraries

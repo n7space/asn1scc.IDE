@@ -44,9 +44,7 @@ class ComponentDirectoryWatcher : public QObject
     Q_OBJECT
 
 public:
-    ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries,
-                              std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
-                              QObject *parent = nullptr);
+    ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries, QObject *parent = nullptr);
 
 private slots:
     void configChanged();
@@ -61,7 +59,6 @@ private:
     void removeAll();
 
     std::unique_ptr<QFileSystemWatcher> m_fsWatcher;
-    std::unique_ptr<CompontentLibraryDispatcher> m_dispatcher;
     Settings::LibrariesConstPtr m_libraries;
 
     QTimer m_resetWatch;
