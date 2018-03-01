@@ -35,13 +35,15 @@
 
 #include <utils/detailswidget.h>
 
+#include <libraries/componentlibrarydispatcher.h>
 #include <libraries/generalmetadataparser.h>
 #include <libraries/librarystorage.h>
 #include <libraries/metadata/general.h>
+
 #include <tr.h>
 
-using namespace Asn1Acn::Internal::OptionsPages;
 using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::OptionsPages;
 
 namespace {
 
@@ -191,14 +193,7 @@ LibrariesWidget::LibrariesWidget(QWidget *parent)
             delete item;
     });
 
-    connect(m_ui.addButton, &QPushButton::clicked, [this]() {
-        const auto dir
-            = QFileDialog::getExistingDirectory(this,
-                                                tr("Select ASN.1/ACN components library directory"));
-        if (dir.isEmpty())
-            return;
-        new LibEntryItem(m_manualRootItem, dir);
-    });
+    connect(m_ui.addButton, &QPushButton::clicked, this, &LibrariesWidget::addExisitingLibraryDir);
 
     m_ui.treeWidget->expandAll();
 }
@@ -231,6 +226,20 @@ QStringList LibrariesWidget::manualLibPaths() const
     for (int i = 0; i < m_manualRootItem->childCount(); ++i)
         res << static_cast<LibEntryItem *>(m_manualRootItem->child(i))->info().path();
     return res;
+}
+
+void LibrariesWidget::addExisitingLibraryDir()
+{
+    const auto dir
+        = QFileDialog::getExistingDirectory(this,
+                                            tr("Select ASN.1/ACN components library directory"));
+    if (dir.isEmpty())
+        return;
+
+    const auto path = QFileInfo(dir, "info.json").filePath();
+    Libraries::CompontentLibraryDispatcher::dispatch(QStringList() << dir, QStringList() << path);
+
+    new LibEntryItem(m_manualRootItem, dir);
 }
 
 bool LibrariesWidget::isManualItem(QTreeWidgetItem *item) const

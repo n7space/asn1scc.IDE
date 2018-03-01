@@ -46,6 +46,9 @@ public:
 
     QStringList manualLibPaths() const;
 
+private slots:
+    void addExisitingLibraryDir();
+
 private:
     class DetailsWidget;
     bool isManualItem(QTreeWidgetItem *item) const;

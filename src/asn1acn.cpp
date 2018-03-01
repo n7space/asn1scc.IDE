@@ -134,8 +134,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new TypesLocator);
 
-    const auto directoryWatcher = new Libraries::ComponentDirectoryWatcher(
-        librariesSettings, std::make_unique<Libraries::CompontentLibraryDispatcher>());
+    const auto directoryWatcher = new Libraries::ComponentDirectoryWatcher(librariesSettings);
     addAutoReleasedObject(directoryWatcher);
 
     Completion::AsnSnippets::registerGroup();

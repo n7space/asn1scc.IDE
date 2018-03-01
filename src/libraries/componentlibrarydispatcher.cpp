@@ -32,8 +32,7 @@
 
 using namespace Asn1Acn::Internal::Libraries;
 
-void CompontentLibraryDispatcher::dispatch(const QStringList &directories,
-                                           const QStringList &files) const
+void CompontentLibraryDispatcher::dispatch(const QStringList &directories, const QStringList &files)
 {
     static const FileSourceReader reader;
 

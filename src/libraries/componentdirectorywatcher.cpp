@@ -34,13 +34,10 @@ using namespace Asn1Acn::Internal::Libraries;
 
 static const int WAIT_TIMEOUT_MS = 2000;
 
-ComponentDirectoryWatcher::ComponentDirectoryWatcher(
-    Settings::LibrariesConstPtr libraries,
-    std::unique_ptr<CompontentLibraryDispatcher> dispatcher,
-    QObject *parent)
+ComponentDirectoryWatcher::ComponentDirectoryWatcher(Settings::LibrariesConstPtr libraries,
+                                                     QObject *parent)
     : QObject(parent)
     , m_fsWatcher(std::make_unique<QFileSystemWatcher>())
-    , m_dispatcher(std::move(dispatcher))
     , m_libraries(libraries)
 {
     resetWatched();
@@ -94,7 +91,7 @@ void ComponentDirectoryWatcher::addAllLibraries()
     for (const auto &libPath : libPaths)
         addMainDirectory(libPath);
 
-    m_dispatcher->dispatch(libPaths, m_fsWatcher->files());
+    CompontentLibraryDispatcher::dispatch(libPaths, m_fsWatcher->files());
 }
 
 void ComponentDirectoryWatcher::addMainDirectory(const QString &path)
