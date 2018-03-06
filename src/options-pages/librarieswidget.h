@@ -52,6 +52,7 @@ private slots:
 private:
     class DetailsWidget;
     bool isManualItem(QTreeWidgetItem *item) const;
+    QTreeWidgetItem *findManualItem(const QString &path) const;
 
     Ui::LibrariesOptionsPage m_ui;
 

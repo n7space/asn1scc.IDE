@@ -228,6 +228,14 @@ QStringList LibrariesWidget::manualLibPaths() const
     return res;
 }
 
+QTreeWidgetItem *LibrariesWidget::findManualItem(const QString &path) const
+{
+    for (int i = 0; i < m_manualRootItem->childCount(); ++i)
+        if (static_cast<LibEntryItem *>(m_manualRootItem->child(i))->info().path() == path)
+            return m_manualRootItem->child(i);
+    return nullptr;
+}
+
 void LibrariesWidget::addExisitingLibraryDir()
 {
     const auto dir
@@ -235,6 +243,12 @@ void LibrariesWidget::addExisitingLibraryDir()
                                             tr("Select ASN.1/ACN components library directory"));
     if (dir.isEmpty())
         return;
+
+    const auto item = findManualItem(dir);
+    if (item != nullptr) {
+        item->setSelected(true);
+        return;
+    }
 
     const auto path = QFileInfo(dir, "info.json").filePath();
     Libraries::CompontentLibraryDispatcher::dispatch(QStringList() << dir, QStringList() << path);
