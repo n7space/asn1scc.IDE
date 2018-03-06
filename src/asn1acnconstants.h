@@ -22,7 +22,6 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 namespace Asn1Acn {
@@ -30,10 +29,10 @@ namespace Constants {
 
 // Settings keys
 
-const char SETTINGS_CATEGORY[]  = "J.Asn1Acn";
+const char SETTINGS_CATEGORY[] = "J.Asn1Acn";
 const char SETTINGS_CATEGORY_DISPLAY[] = QT_TRANSLATE_NOOP(Asn1Acn, "ASN.1/ACN");
-const char SERVICE_SETTINGS_ID[] = "B.Asn1Acn.Service";
-const char LIBRARIES_SETTINGS_ID[] = "C.Asn1Acn.Libraries";
+const char SERVICE_SETTINGS_ID[] = "C.Asn1Acn.Service";
+const char LIBRARIES_SETTINGS_ID[] = "A.Asn1Acn.Libraries";
 
 const char SETTINGS_GROUP[] = "Asn1Acn";
 
@@ -60,18 +59,19 @@ const char ACN_SNIPPETS_GROUP_ID[] = "ACN";
 
 // Menus
 
-const char M_TOOLS_ASN[]                      = "Asn1Acn.Tools.Menu";
-const char SWITCH_DATA_ENCODING[]             = "Asn1Acn.SwitchDataEncoding";
+const char M_TOOLS_ASN[] = "Asn1Acn.Tools.Menu";
+const char SWITCH_DATA_ENCODING[] = "Asn1Acn.SwitchDataEncoding";
 const char OPEN_DATA_ENCODING_IN_NEXT_SPLIT[] = "Asn1Acn.SwitchDataEncodingInNextSplit";
-const char IMPORT_FROM_COMPONENTS_LIBRARY[]   = "Asn1Acn.ImportFromComponentsLibrary";
-const char FIND_USAGES[]                      = "Asn1Acn.FindUsages";
+const char IMPORT_FROM_COMPONENTS_LIBRARY[] = "Asn1Acn.ImportFromComponentsLibrary";
+const char FIND_USAGES[] = "Asn1Acn.FindUsages";
 
 // Icons
 
 const char OPTIONS_CATEGORY_ICON[] = ":/asn1acn/images/options_category.png";
 
 // Tasks
-const char TASK_SEARCH[]              = "Asn1Acn.Task.Search";
 
-} // namespace Asn1Acn
+const char TASK_SEARCH[] = "Asn1Acn.Task.Search";
+
 } // namespace Constants
+} // namespace Asn1Acn
