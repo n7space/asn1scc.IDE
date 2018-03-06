@@ -42,6 +42,8 @@ ImportComponentWizard::ImportComponentWizard(QWidget *parent)
     setAttribute(Qt::WA_DeleteOnClose);
     connect(Core::ICore::instance(), &Core::ICore::coreAboutToClose, this, &QWidget::close);
 
+    setWindowTitle(tr("Import ASN.1/ACN components"));
+
     addPage(new SelectSourcePage(m_importer));
     addPage(new SelectComponentsPage(m_importer));
     addPage(new SummaryPage(m_importer, m_handler));
