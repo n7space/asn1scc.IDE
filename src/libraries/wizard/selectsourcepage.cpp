@@ -77,7 +77,7 @@ bool SelectSourcePage::validatePage()
 
 bool SelectSourcePage::isComplete() const
 {
-    return !(m_ui.customRadio->isChecked() && m_ui.asn1sccPathChooser->path().isEmpty());
+    return m_ui.builtInRadio->isChecked() || m_ui.asn1sccPathChooser->isValid();
 }
 
 void SelectSourcePage::refreshPaths()
