@@ -141,9 +141,22 @@ void UsagesFinder::createWatcher(const QFuture<TypeReference> &future, SearchRes
     watcher->setFuture(future);
 }
 
+namespace {
+void openEditor(const SearchResultItem &item)
+{
+    if (item.path.size() > 0) {
+        EditorManager::openEditorAt(QDir::fromNativeSeparators(item.path.first()),
+                                    item.mainRange.begin.line,
+                                    item.mainRange.begin.column);
+    } else {
+        EditorManager::openEditor(QDir::fromNativeSeparators(item.text));
+    }
+}
+} // namespace
+
 void UsagesFinder::findAll(SearchResult *search, const UsagesFinderParameters &params)
 {
-    connect(search, &SearchResult::activated, this, &UsagesFinder::openEditor);
+    connect(search, &SearchResult::activated, &openEditor); // connection must outlive UsagesFinder
 
     SearchResultWindow::instance()->popup(IOutputPane::ModeSwitch | IOutputPane::WithFocus);
     auto result = Utils::runAsync(performSearch, m_storage, params);
@@ -154,17 +167,6 @@ void UsagesFinder::findAll(SearchResult *search, const UsagesFinderParameters &p
                                              Constants::TASK_SEARCH);
 
     connect(progress, &FutureProgress::clicked, search, &SearchResult::popup);
-}
-
-void UsagesFinder::openEditor(const SearchResultItem &item)
-{
-    if (item.path.size() > 0) {
-        EditorManager::openEditorAt(QDir::fromNativeSeparators(item.path.first()),
-                                    item.mainRange.begin.line,
-                                    item.mainRange.begin.column);
-    } else {
-        EditorManager::openEditor(QDir::fromNativeSeparators(item.text));
-    }
 }
 
 QString UsagesFinder::readLine(const Data::SourceLocation &loc)
