@@ -47,6 +47,7 @@ class SelectSourcePage : public QWizardPage
 public:
     explicit SelectSourcePage(ComponentImporter &importer, QWidget *parent = nullptr);
 
+    void initializePage() override;
     bool validatePage() override;
     bool isComplete() const override;
 
@@ -55,6 +56,8 @@ private slots:
     void builtInRadioToggled(bool checked);
 
 private:
+    bool configHasBuiltInLibraries() const;
+
     Ui::SelectSourcePage m_ui;
     Settings::LibrariesConstPtr m_libraries;
 
