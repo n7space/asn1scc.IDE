@@ -21,6 +21,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #######################################################################
 
+ASN1_MAIN_GENERATED_HEADER = $${ASN1SCC_PRODUCTS_DIR}/asn1crt.h
+
+defineReplace(createDependencyOrder) {
+  file = $${1}
+  fileName = $${2}
+
+  eval($${file}_custom.target = $${file})
+  eval($${file}_custom.depends = $${ASN1_MAIN_GENERATED_HEADER})
+  eval(export($${file}_custom.target))
+  eval(export($${file}_custom.depends))
+
+  QMAKE_EXTRA_TARGETS += $${file}_custom
+  export(QMAKE_EXTRA_TARGETS)
+
+  return($$file)
+}
+
 defineReplace(createFileNames) {
     allFiles = $${1}
 
@@ -49,23 +66,13 @@ defineReplace(createEmptyFiles) {
     return($$files)
 }
 
-defineReplace(createHeadersList) {
-    headersNames = $${1}
-
-    for(name, headersNames) {
-        header = $$clean_path($${ASN1SCC_PRODUCTS_DIR}/$${name}.h)
-        headers += $$header
-    }
-
-    return($$createEmptyFiles($$headers))
-}
-
-defineReplace(createSourcesList) {
+defineReplace(createGeneratedFilesList) {
     sourcesNames = $${1}
+    extension = $${2}
 
     for(name, sourcesNames) {
-        source = $$clean_path($${ASN1SCC_PRODUCTS_DIR}/$${name}.c)
-        sources += $$source
+        source = $$clean_path($${ASN1SCC_PRODUCTS_DIR}/$${name}.$${extension})
+        sources += $$createDependencyOrder($$source, $$name)
     }
 
     return($$createEmptyFiles($$sources))
@@ -74,7 +81,7 @@ defineReplace(createSourcesList) {
 names = $$createFileNames($$DISTFILES)
 
 !isEmpty(names) {
-    PERSISTENT_HEADERS = $${ASN1SCC_PRODUCTS_DIR}/asn1crt.h
+    PERSISTENT_HEADERS = $${ASN1_MAIN_GENERATED_HEADER}
     PERSISTENT_SOURCES = $${ASN1SCC_PRODUCTS_DIR}/asn1crt.c $${ASN1SCC_PRODUCTS_DIR}/real.c
 
     contains(ASN1SCC_GENERATION_OPTIONS, -ACN) {
@@ -82,7 +89,7 @@ names = $$createFileNames($$DISTFILES)
     }
 }
 
-SOURCES += $$createSourcesList($$names) $$createEmptyFiles($$PERSISTENT_SOURCES)
-HEADERS += $$createHeadersList($$names) $$createEmptyFiles($$PERSISTENT_HEADERS)
+SOURCES += $$createGeneratedFilesList($$names, "c") $$createEmptyFiles($$PERSISTENT_SOURCES)
+HEADERS += $$createGeneratedFilesList($$names, "h") $$createEmptyFiles($$PERSISTENT_HEADERS)
 
 INCLUDEPATH += $$ASN1SCC_PRODUCTS_DIR
