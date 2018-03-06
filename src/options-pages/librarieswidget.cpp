@@ -181,12 +181,14 @@ LibrariesWidget::LibrariesWidget(QWidget *parent)
     m_ui.detailsWidget->setState(Utils::DetailsWidget::NoSummary);
     m_ui.detailsWidget->setVisible(false);
 
-    connect(m_ui.treeWidget, &QTreeWidget::itemClicked, [this](QTreeWidgetItem *item, int) {
-        m_ui.removeButton->setEnabled(isManualItem(item));
-        const auto libItem = asLibEntryItem(item);
-        m_ui.detailsWidget->setVisible(libItem != nullptr);
-        m_detailsWidget->load(libItem);
-    });
+    connect(m_ui.treeWidget,
+            &QTreeWidget::currentItemChanged,
+            [this](QTreeWidgetItem *item, QTreeWidgetItem *) {
+                m_ui.removeButton->setEnabled(isManualItem(item));
+                const auto libItem = asLibEntryItem(item);
+                m_ui.detailsWidget->setVisible(libItem != nullptr);
+                m_detailsWidget->load(libItem);
+            });
 
     connect(m_ui.removeButton, &QPushButton::clicked, [this]() {
         for (const auto &item : m_ui.treeWidget->selectedItems())
