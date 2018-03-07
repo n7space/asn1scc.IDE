@@ -66,7 +66,6 @@ public:
 
 private:
     void searchAgain();
-    void openEditor(const Core::SearchResultItem &item);
     void findAll(Core::SearchResult *search, const UsagesFinderParameters &params);
     void createWatcher(const QFuture<Data::TypeReference> &future, Core::SearchResult *search);
     QString readLine(const Data::SourceLocation &loc);
