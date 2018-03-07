@@ -22,7 +22,6 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
 #include <memory>
@@ -33,15 +32,13 @@
 
 #include "data/file.h"
 
-#include "sourcemapper.h"
-
 namespace Asn1Acn {
 namespace Internal {
 
 class AstXmlParser
 {
 public:
-    explicit AstXmlParser(QXmlStreamReader &xmlReader, const SourceMapper &mapper = SourceMapper());
+    explicit AstXmlParser(QXmlStreamReader &xmlReader);
 
     bool parse();
 
@@ -99,8 +96,6 @@ private:
     QString m_currentFile;
     QString m_currentModule;
     Data::Definitions *m_currentDefinitions;
-
-    SourceMapper m_pathMapper;
 };
 
 } // namespace Internal

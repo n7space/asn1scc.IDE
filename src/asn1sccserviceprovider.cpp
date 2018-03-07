@@ -130,7 +130,7 @@ namespace {
 QJsonObject buildFileData(const QString &path, const QString &contents)
 {
     QJsonObject asnFileData;
-    asnFileData["Name"] = QFileInfo(path).fileName();
+    asnFileData["Name"] = path;
     asnFileData["Contents"] = contents;
     return asnFileData;
 }

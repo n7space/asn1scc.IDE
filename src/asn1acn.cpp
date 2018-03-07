@@ -85,7 +85,6 @@
 #include "tests/parseddatastorage_tests.h"
 #include "tests/parseddocumentbuilder_tests.h"
 #include "tests/projectcontenthandler_tests.h"
-#include "tests/sourcemapper_tests.h"
 #include "tree-views/tests/combomodel_tests.h"
 #include "tree-views/tests/displayrolevisitor_tests.h"
 #include "tree-views/tests/outlineindexupdater_tests.h"
@@ -350,7 +349,6 @@ QList<QObject *> Asn1AcnPlugin::createTestObjects() const
                               << new Tests::DocumentProcessorTests
                               << new Tests::ProjectContentHandlerTests
                               << new Tests::ParsedDataStorageTests << new Tests::AutoCompleterTests
-                              << new Tests::SourceMapperTests << new Tests::ModelValidityGuardTests
                               << new Tests::LinkCreatorTests << new Tests::IndenterTests;
 }
 #endif

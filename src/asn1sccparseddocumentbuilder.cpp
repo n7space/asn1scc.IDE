@@ -97,7 +97,7 @@ void Asn1SccParsedDocumentBuilder::parseXML(const QString &textData)
     QXmlStreamReader reader;
     reader.addData(textData);
 
-    AstXmlParser parser(reader, SourceMapper(m_documentSources));
+    AstXmlParser parser(reader);
     parser.parse();
 
     auto parsedData = parser.takeData();
@@ -117,7 +117,7 @@ bool Asn1SccParsedDocumentBuilder::responseContainsAst(const QJsonObject &json)
 
 void Asn1SccParsedDocumentBuilder::storeErrorMessages(const QJsonObject &json)
 {
-    const auto parser = ErrorMessageParser(SourceMapper(m_documentSources));
+    const auto parser = ErrorMessageParser();
     for (const auto message : json[QLatin1Literal("Messages")].toArray()) {
         const auto msg = parser.parse(message.toString());
         if (msg.isValid())

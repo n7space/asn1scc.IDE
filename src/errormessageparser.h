@@ -29,19 +29,14 @@
 
 #include "data/errormessage.h"
 
-#include "sourcemapper.h"
-
 namespace Asn1Acn {
 namespace Internal {
 
 class ErrorMessageParser
 {
 public:
-    explicit ErrorMessageParser(const SourceMapper &pathMapper = SourceMapper());
+    explicit ErrorMessageParser();
     Data::ErrorMessage parse(const QString &message) const;
-
-private:
-    SourceMapper m_pathMapping;
 };
 
 } // namespace Internal
