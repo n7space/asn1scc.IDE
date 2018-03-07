@@ -24,6 +24,13 @@ wget -O ${DOWNLOAD_DIR}/asn1scc.7z "https://drive.google.com/uc?export=download&
 mkdir -p ${LIBEXEC_DIST_DIR}
 7zr x -o${LIBEXEC_DIST_DIR} ${DOWNLOAD_DIR}/asn1scc.7z
 
+echo "Downloading PUS-C lib to distribute with plugin"
+PUSC_VERSION="1.0.0rc7"
+wget -O ${DOWNLOAD_DIR}/pusc-lib.7z "https://github.com/n7space/asn1-pusc-lib/releases/download/${PUSC_VERSION}/Asn1Acn-PusC-Library-${PUSC_VERSION}.7z"
+PUSC_LIB_DIR=${RESOURCE_DIST_DIR}/asn1acn/libs/PUS-C
+mkdir -p ${PUSC_LIB_DIR}
+7zr x -o${PUSC_LIB_DIR} ${DOWNLOAD_DIR}/pusc-lib.7z
+
 echo "Copy static files"
 mkdir -p ${RESOURCE_DIST_DIR}
 cp -r ${PROJECT_DIR}/generic-highlighter ${RESOURCE_DIST_DIR}
