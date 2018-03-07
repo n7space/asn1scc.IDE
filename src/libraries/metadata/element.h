@@ -43,6 +43,8 @@ public:
     {}
 
     void addAsn1File(const QString &file) { m_asn1Files.append(file); }
+    void addAdditionalFile(const QString &file) { m_additionalFiles.append(file); }
+
     void addConflict(const Reference &conflict) { m_conflicts.append(conflict); }
     void addRequirement(const Reference &requirement) { m_requirements.append(requirement); }
 
@@ -62,9 +64,12 @@ public:
     QList<Reference> requirements() const override { return m_requirements; }
 
     const QStringList asn1Files() const override { return m_asn1Files; }
+    const QStringList additionalFiles() const override { return m_additionalFiles; }
 
 private:
     QStringList m_asn1Files;
+    QStringList m_additionalFiles;
+
     QList<Reference> m_conflicts;
     QList<Reference> m_requirements;
 };

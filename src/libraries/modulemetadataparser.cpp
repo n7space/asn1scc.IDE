@@ -85,6 +85,9 @@ std::unique_ptr<Metadata::Element> ModuleMetadataParser::readElement(const QJson
     auto element = readNamedType<Metadata::Element>(object);
     foreachItem(object["asn1Files"],
                 [&element](const QJsonValue &value) { element->addAsn1File(value.toString()); });
+    foreachItem(object["additionalFiles"], [&element](const QJsonValue &value) {
+        element->addAdditionalFile(value.toString());
+    });
     foreachItem(object["conflicts"], [this, &element](const QJsonValue &value) {
         element->addConflict(readReference(value));
     });
