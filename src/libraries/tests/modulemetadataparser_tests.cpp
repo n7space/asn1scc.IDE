@@ -105,6 +105,7 @@ void ModuleMetadataParserTests::test_emptyElement()
     QCOMPARE(element->name(), QLatin1Literal("ElementName"));
     QCOMPARE(element->description(), QLatin1Literal("ElementDesc"));
     QCOMPARE(element->asn1Files().size(), 0);
+    QCOMPARE(element->additionalFiles().size(), 0);
     QCOMPARE(element->conflicts().size(), 0);
     QCOMPARE(element->requirements().size(), 0);
 }
@@ -120,6 +121,7 @@ void ModuleMetadataParserTests::test_completeElement()
                   {
                     "name": "ElementName",
                     "asn1Files": ["f1", "f2", "f3"],
+                    "additionalFiles": ["a1", "a2", "a3"],
                     "conflicts": ["c1", "c2"],
                     "requires": ["r1"]
                   }
@@ -132,7 +134,9 @@ void ModuleMetadataParserTests::test_completeElement()
     const auto submodule = m_parsedData->submodules().at(0).get();
     QCOMPARE(static_cast<int>(submodule->elements().size()), 1);
     const auto element = submodule->elements().at(0).get();
+
     QCOMPARE(element->asn1Files(), (QStringList{"f1", "f2", "f3"}));
+    QCOMPARE(element->additionalFiles(), (QStringList{"a1", "a2", "a3"}));
 
     QCOMPARE(element->conflicts().size(), 2);
     QCOMPARE(element->conflicts().at(0).element(), QStringLiteral("c1"));

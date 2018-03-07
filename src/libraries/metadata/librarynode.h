@@ -56,6 +56,7 @@ public:
     virtual QList<Reference> requirements() const { return {}; }
 
     virtual const QStringList asn1Files() const { return {}; }
+    virtual const QStringList additionalFiles() const { return {}; }
 
     LibraryNode *parent() const { return m_parent; }
     void setParent(LibraryNode *parent) { m_parent = parent; }

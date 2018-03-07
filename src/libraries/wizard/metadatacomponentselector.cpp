@@ -76,6 +76,7 @@ QStringList MetadaComponentSelector::fileNamesFromSelectedItems() const
 
         const auto libraryNode = m_model->dataNode(it.key());
         fileNames.append(libraryNode->asn1Files());
+        fileNames.append(libraryNode->additionalFiles());
     }
 
     return fileNames;
