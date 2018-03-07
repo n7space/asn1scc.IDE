@@ -52,6 +52,7 @@
                 "name": { "$ref": "#/definitions/nonEmptyString" },
                 "description": { "type": "string" },
                 "asn1Files": { "$ref": "#/definitions/fileList" },
+                "additionalFiles": { "$ref": "#/definitions/fileList" },
                 "conflicts": { "$ref": "#/definitions/referenceList" },
                 "requires": { "$ref": "#/definitions/referenceList" }
               },
