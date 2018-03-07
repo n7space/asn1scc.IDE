@@ -71,6 +71,8 @@ private:
                                     ActionContainer *contextMenu,
                                     const Context &context);
 
+    void addImportFromAsnComponentsToToolsMenu(ActionContainer *toolsMenu, QAction *action);
+    void addImportFromAsnComponentsToProjectMenu(QAction *action);
     void addToToolsMenu(ActionContainer *container);
 
     QPointer<Libraries::Wizard::ImportComponentWizard> m_importComponentWizard;

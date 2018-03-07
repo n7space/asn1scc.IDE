@@ -39,6 +39,7 @@
 #include <texteditor/texteditorconstants.h>
 
 #include <projectexplorer/kitmanager.h>
+#include <projectexplorer/projectexplorerconstants.h>
 
 #include "completion/acnsnippets.h"
 #include "completion/asnsnippets.h"
@@ -246,23 +247,40 @@ void Asn1AcnPlugin::initializeOpenInNextSplitAction(ActionContainer *toolsMenu,
     toolsMenu->addAction(command);
 }
 
+void Asn1AcnPlugin::addImportFromAsnComponentsToToolsMenu(ActionContainer *toolsMenu,
+                                                          QAction *action)
+{
+    auto command = Core::ActionManager::registerAction(action,
+                                                       Constants::IMPORT_FROM_COMPONENTS_LIBRARY);
+    toolsMenu->addAction(command);
+}
+
+void Asn1AcnPlugin::addImportFromAsnComponentsToProjectMenu(QAction *action)
+{
+    Core::Context projecTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);
+    auto menu = Core::ActionManager::createMenu(ProjectExplorer::Constants::M_PROJECTCONTEXT);
+    auto command = Core::ActionManager::registerAction(action,
+                                                       Constants::IMPORT_FROM_COMPONENTS_LIBRARY,
+                                                       projecTreeContext);
+    menu->addAction(command, ProjectExplorer::Constants::G_PROJECT_FILES);
+}
+
 void Asn1AcnPlugin::initializeImportFromAsnComponents(ActionContainer *toolsMenu)
 {
     toolsMenu->addSeparator();
 
     QAction *importFromAsnComponents = new QAction(tr("Import from ASN.1 components library..."),
                                                    this);
-    Core::Command *command
-        = Core::ActionManager::registerAction(importFromAsnComponents,
-                                              Constants::IMPORT_FROM_COMPONENTS_LIBRARY);
     connect(importFromAsnComponents,
             &QAction::triggered,
             this,
             &Asn1AcnPlugin::raiseImportComponentWindow);
-    toolsMenu->addAction(command);
     importFromAsnComponents->setEnabled(false);
 
     new ImportMenuItemController(importFromAsnComponents, this);
+
+    addImportFromAsnComponentsToToolsMenu(toolsMenu, importFromAsnComponents);
+    addImportFromAsnComponentsToProjectMenu(importFromAsnComponents);
 }
 
 void Asn1AcnPlugin::addToToolsMenu(ActionContainer *container)
