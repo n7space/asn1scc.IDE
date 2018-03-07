@@ -39,9 +39,9 @@ defineReplace(filterASN1ACNFiles) {
 ASN1ACNFILES = $$filterASN1ACNFiles($${DISTFILES})
 
 codeFromAsn1.target += $${ASN1_MAIN_GENERATED_HEADER}
-codeFromAsn1.commands += $$sprintf($$QMAKE_MKDIR_CMD, $$shell_quote($$ASN1SCC_PRODUCTS_DIR))
+codeFromAsn1.commands += $$sprintf($$QMAKE_MKDIR_CMD, $$shell_quote($$ASN1SCC_SRC_DIR))
 codeFromAsn1.commands += $$escape_expand(\\n\\t)
-codeFromAsn1.commands += $$ASN1SCC $${ASN1SCC_GENERATION_OPTIONS} -o $$shell_quote($$ASN1SCC_PRODUCTS_DIR) $$ASN1ACNFILES
+codeFromAsn1.commands += $$ASN1SCC $${ASN1SCC_GENERATION_OPTIONS} -o $$shell_quote($$ASN1SCC_SRC_DIR) $$ASN1ACNFILES
 codeFromAsn1.depends += $$ASN1ACNFILES
 
 icdFromAsn1.target += icdFromAsn1
@@ -51,9 +51,7 @@ icdFromAsn1.commands += $$ASN1SCC $${ASN1SCC_ICD_OPTIONS} $$shell_quote($${ASN1S
 icdFromAsn1.depends += $$ASN1ACNFILES
 
 cleanGenerated.target += cleanGenerated
-cleanGenerated.commands += $$QMAKE_DEL_TREE $$shell_quote($$ASN1SCC_PRODUCTS_DIR)
-cleanGenerated.commands += $$escape_expand(\\n\\t)
-cleanGenerated.commands += $$QMAKE_DEL_TREE $$shell_quote($$ASN1SCC_ICD_DIR)
+cleanGenerated.commands += - $$QMAKE_DEL_TREE $$shell_quote($$ASN1SCC_PRODUCTS_DIR)
 clean.depends += cleanGenerated
 
 QMAKE_EXTRA_TARGETS += codeFromAsn1 icdFromAsn1 cleanGenerated clean
