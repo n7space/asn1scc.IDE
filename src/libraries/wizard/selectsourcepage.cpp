@@ -56,13 +56,22 @@ SelectSourcePage::SelectSourcePage(ComponentImporter &importer, QWidget *parent)
             this,
             &SelectSourcePage::completeChanged);
 
-    m_ui.builtInRadio->setChecked(true);
-
     registerField("builtInRadio", m_ui.builtInRadio);
     registerField("customRadio", m_ui.customRadio);
 
     registerField("builtInCombo", m_ui.builtInCombo, "currentData");
     registerField("pathChoser", m_ui.asn1sccPathChooser, "path", "pathChanged");
+}
+
+void SelectSourcePage::initializePage()
+{
+    if (configHasBuiltInLibraries()) {
+        m_ui.builtInRadio->setChecked(true);
+    } else {
+        m_ui.builtInRadio->setEnabled(false);
+        m_ui.customRadio->setChecked(true);
+    }
+    QWizardPage::initializePage();
 }
 
 bool SelectSourcePage::validatePage()
@@ -101,4 +110,9 @@ void SelectSourcePage::builtInRadioToggled(bool checked)
         m_ui.builtInCombo->clear();
 
     emit completeChanged();
+}
+
+bool SelectSourcePage::configHasBuiltInLibraries() const
+{
+    return !m_libraries->libPaths().isEmpty();
 }
