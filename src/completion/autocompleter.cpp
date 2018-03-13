@@ -140,11 +140,12 @@ int AutoCompleter::paragraphSeparatorAboutToBeInserted(QTextCursor &cursor)
     if (tryInsertEndKeyword(cursor))
         return 1;
 
-    auto block = cursor.document()->lastBlock();
-    TextEditor::TextDocumentLayout::setBraceDepth(block,
-                                                  1); // TODO - workaround to reuse code from base class
+    if (!bracesBalanced(cursor.document()->firstBlock())) {
+        setBraceDepthInBlocks(cursor.block(), 1);
+        return TextEditor::AutoCompleter::paragraphSeparatorAboutToBeInserted(cursor);
+    }
 
-    return TextEditor::AutoCompleter::paragraphSeparatorAboutToBeInserted(cursor);
+    return 0;
 }
 
 bool AutoCompleter::tryInsertEndKeyword(QTextCursor &cursor) const
@@ -231,4 +232,37 @@ void AutoCompleter::moveCursorInCurrentLine(QTextCursor &cursor, const int posit
 {
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, position);
+}
+
+bool AutoCompleter::bracesBalanced(const QTextBlock &firstBlock)
+{
+    int totalBalance = 0;
+
+    for (auto block = firstBlock; block.isValid(); block = block.next())
+        totalBalance += bracesBalanceInBlock(block);
+
+    return totalBalance <= 0;
+}
+
+int AutoCompleter::bracesBalanceInBlock(const QTextBlock &block)
+{
+    int balance = 0;
+
+    for (const auto &p : TextEditor::TextDocumentLayout::parentheses(block)) {
+        QTextCursor cursor(block);
+        moveCursorInCurrentLine(cursor, p.pos);
+
+        if (isInComment(cursor) || isInString(cursor))
+            continue;
+
+        p.type == TextEditor::Parenthesis::Opened ? ++balance : --balance;
+    }
+
+    return balance;
+}
+
+void AutoCompleter::setBraceDepthInBlocks(const QTextBlock &firstBlock, int depth)
+{
+    for (auto block = firstBlock; block.isValid(); block = block.next())
+        TextEditor::TextDocumentLayout::setBraceDepth(block, depth);
 }

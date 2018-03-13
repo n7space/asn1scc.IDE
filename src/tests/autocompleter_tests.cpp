@@ -31,6 +31,7 @@
 #include <QTextDocument>
 
 #include <texteditor/tabsettings.h>
+#include <texteditor/textdocumentlayout.h>
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Tests;
@@ -366,4 +367,92 @@ void AutoCompleterTests::test_insertEndForBeginWhenEndIsCommented()
     QCOMPARE(document->toPlainText(), expected);
 
     delete document;
+}
+
+void AutoCompleterTests::test_insertCurlyBraceMatch()
+{
+    QString text("{"
+                 "\n");
+
+    QTextDocument *document = new QTextDocument(text);
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::EndOfLine);
+
+    TextEditor::TextDocumentLayout::setParentheses(
+        document->firstBlock(),
+        TextEditor::Parentheses() << TextEditor::Parenthesis(TextEditor::Parenthesis::Type::Opened,
+                                                             QLatin1Char('{'),
+                                                             0));
+
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor);
+
+    QString expected("{\n"
+                     "}"
+                     "\n");
+
+    QCOMPARE(ret, 1);
+    QCOMPARE(document->toPlainText(), expected);
+
+    delete document;
+}
+
+void AutoCompleterTests::test_insertCurlyBraceMismatch()
+{
+    QString text("{\n"
+                 "}\n"
+                 "\n");
+
+    QTextDocument *document = new QTextDocument(text);
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::EndOfLine);
+
+    TextEditor::TextDocumentLayout::setParentheses(
+        document->firstBlock(),
+        TextEditor::Parentheses() << TextEditor::Parenthesis(TextEditor::Parenthesis::Type::Opened,
+                                                             QLatin1Char('{'),
+                                                             0));
+    TextEditor::TextDocumentLayout::setParentheses(
+        document->firstBlock().next(),
+        TextEditor::Parentheses() << TextEditor::Parenthesis(TextEditor::Parenthesis::Type::Closed,
+                                                             QLatin1Char('}'),
+                                                             0));
+
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor);
+
+    QString expected = text;
+
+    QCOMPARE(ret, 0);
+    QCOMPARE(document->toPlainText(), expected);
+}
+
+void AutoCompleterTests::test_insertCurlyBraceMatchInComment()
+{
+    QString text("{\n"
+                 "-- }\n"
+                 "\n");
+
+    QTextDocument *document = new QTextDocument(text);
+    QTextCursor cursor(document);
+    cursor.movePosition(QTextCursor::EndOfLine);
+
+    TextEditor::TextDocumentLayout::setParentheses(
+        document->firstBlock(),
+        TextEditor::Parentheses() << TextEditor::Parenthesis(TextEditor::Parenthesis::Type::Opened,
+                                                             QLatin1Char('{'),
+                                                             0));
+    TextEditor::TextDocumentLayout::setParentheses(
+        document->firstBlock().next(),
+        TextEditor::Parentheses() << TextEditor::Parenthesis(TextEditor::Parenthesis::Type::Closed,
+                                                             QLatin1Char('}'),
+                                                             4));
+
+    QString expected("{\n"
+                     "}\n"
+                     "-- }\n"
+                     "\n");
+
+    int ret = m_completer->paragraphSeparatorAboutToBeInserted(cursor);
+
+    QCOMPARE(ret, 1);
+    QCOMPARE(document->toPlainText(), expected);
 }
