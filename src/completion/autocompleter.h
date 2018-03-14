@@ -63,8 +63,12 @@ private:
 
     int findWordIndexInCurrentLine(const QTextCursor &cursor, const QLatin1String &word) const;
     void moveCursorInCurrentLine(QTextCursor &cursor, const int position) const;
+
+    bool bracesBalanced(const QTextBlock &firstBlock);
+    int bracesBalanceInBlock(const QTextBlock &block);
+    void setBraceDepthInBlocks(const QTextBlock &firstBlock, int depth);
 };
 
-} /* nameapsce Completion */
+} /* namespace Completion */
 } /* namespace Internal */
 } /* namespace Asn1Acn */

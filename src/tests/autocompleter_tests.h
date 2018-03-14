@@ -71,6 +71,10 @@ private slots:
     void test_insertEndForBeginNotInTheEndOfLine();
     void test_insertEndForBeginWhenEndIsCommented();
 
+    void test_insertCurlyBraceMatch();
+    void test_insertCurlyBraceMismatch();
+    void test_insertCurlyBraceMatchInComment();
+
 private:
     Completion::AutoCompleter *m_completer;
 };
