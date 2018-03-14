@@ -40,8 +40,11 @@ namespace Libraries {
 class ComponentImporter
 {
 public:
+    ComponentImporter(ProjectExplorer::Project *project);
+
     void setDirectory(const QString &path);
     void setFiles(const QStringList &files);
+    void setProject(ProjectExplorer::Project *project);
 
     const QStringList &sourceFiles() const;
     const QStringList &importedFiles() const;
@@ -52,7 +55,7 @@ private:
     QStringList copyFilesToProject();
     void createTargetDir(QDir &parent, const QString &path);
     QString targetFileName(const QString &file);
-    void addFilesToProject(const ProjectExplorer::Project *project, const QStringList &files);
+    void addFilesToProject(const QStringList &files);
     void copyFile(const QString &source, const QString &target);
     QStringList createUniqueFilesList(const ProjectExplorer::Project *project,
                                       const QStringList &newFiles);
@@ -62,6 +65,8 @@ private:
 
     QDir m_sourceDir;
     QDir m_targetDir;
+
+    ProjectExplorer::Project *m_project;
 };
 
 } // namespace Libraries
