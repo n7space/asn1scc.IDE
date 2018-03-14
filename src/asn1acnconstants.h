@@ -62,7 +62,8 @@ const char ACN_SNIPPETS_GROUP_ID[] = "ACN";
 const char M_TOOLS_ASN[] = "Asn1Acn.Tools.Menu";
 const char SWITCH_DATA_ENCODING[] = "Asn1Acn.SwitchDataEncoding";
 const char OPEN_DATA_ENCODING_IN_NEXT_SPLIT[] = "Asn1Acn.SwitchDataEncodingInNextSplit";
-const char IMPORT_FROM_COMPONENTS_LIBRARY[] = "Asn1Acn.ImportFromComponentsLibrary";
+const char IMPORT_FROM_COMPONENTS_LIBRARY_CONTEXT[] = "Asn1Acn.ImportFromComponentsLibraryContext";
+const char IMPORT_FROM_COMPONENTS_LIBRARY_TOOLBAR[] = "Asn1Acn.ImportFromComponentsLibraryToolbar";
 const char FIND_USAGES[] = "Asn1Acn.FindUsages";
 
 // Icons

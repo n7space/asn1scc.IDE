@@ -43,6 +43,8 @@
 #include <projectexplorer/projecttree.h>
 #include <projectexplorer/session.h>
 
+#include <utils/parameteraction.h>
+
 #include "completion/acnsnippets.h"
 #include "completion/asnsnippets.h"
 
@@ -252,7 +254,16 @@ void Asn1AcnPlugin::addImportFromAsnComponentsToToolsMenu(ActionContainer *tools
 {
     toolsMenu->addSeparator();
 
-    QAction *action = new QAction(tr("Import from ASN.1 components library..."), this);
+    auto *action = new Utils::ParameterAction(tr("Import from ASN.1 components library..."),
+                                              tr("Import from ASN.1 components library to \"%1\"..."),
+                                              Utils::ParameterAction::AlwaysEnabled,
+                                              this);
+
+    connect(ProjectExplorer::SessionManager::instance(),
+            &ProjectExplorer::SessionManager::startupProjectChanged,
+            [action](ProjectExplorer::Project *project) {
+                action->setParameter(project != nullptr ? project->displayName() : QString());
+            });
 
     connect(action, &QAction::triggered, [this]() {
         raiseImportComponentWindow(ProjectExplorer::SessionManager::startupProject());
@@ -262,8 +273,10 @@ void Asn1AcnPlugin::addImportFromAsnComponentsToToolsMenu(ActionContainer *tools
 
     new ImportMenuItemController(action, this);
 
-    auto command = Core::ActionManager::registerAction(action,
-                                                       Constants::IMPORT_FROM_COMPONENTS_LIBRARY);
+    auto command
+        = Core::ActionManager::registerAction(action,
+                                              Constants::IMPORT_FROM_COMPONENTS_LIBRARY_TOOLBAR);
+    command->setAttribute(Core::Command::CA_UpdateText);
     toolsMenu->addAction(command);
 }
 
@@ -279,11 +292,12 @@ void Asn1AcnPlugin::addImportFromAsnComponentsToProjectMenu()
 
     new ImportMenuItemController(action, this);
 
-    Core::Context projecTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);
+    Core::Context projectTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);
     auto menu = Core::ActionManager::createMenu(ProjectExplorer::Constants::M_PROJECTCONTEXT);
-    auto command = Core::ActionManager::registerAction(action,
-                                                       Constants::IMPORT_FROM_COMPONENTS_LIBRARY,
-                                                       projecTreeContext);
+    auto command
+        = Core::ActionManager::registerAction(action,
+                                              Constants::IMPORT_FROM_COMPONENTS_LIBRARY_CONTEXT,
+                                              projectTreeContext);
     menu->addAction(command, ProjectExplorer::Constants::G_PROJECT_FILES);
 }
 
