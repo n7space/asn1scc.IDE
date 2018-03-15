@@ -37,8 +37,8 @@
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
-static const QString METADATA_COMBO_KEY("Metadata");
 static const QString FILESYSTEM_COMBO_KEY("File System");
+static const QString METADATA_COMBO_KEY("Metadata");
 
 SelectComponentsPage::SelectComponentsPage(ComponentImporter &importer, QWidget *parent)
     : QWizardPage(parent)
@@ -58,11 +58,9 @@ void SelectComponentsPage::initializePage()
 {
     setLibPath();
 
-    // TODO: Tools->Options should allow to configure if default should be metadata or filesystem?
-    m_ui.modeCombo->setCurrentIndex(0);
-    m_ui.modeCombo->setEnabled(LibraryStorage::instance()->library(m_libPath) != nullptr);
-
-    setupModel(FILESYSTEM_COMBO_KEY);
+    const auto lib = LibraryStorage::instance()->library(m_libPath);
+    lib == nullptr ? intializeForSelectedLib(lib, FILESYSTEM_COMBO_KEY)
+                   : intializeForSelectedLib(lib, METADATA_COMBO_KEY);
 }
 
 bool SelectComponentsPage::validatePage()
@@ -134,4 +132,16 @@ void SelectComponentsPage::setupFileSystemModel()
     m_labelsController.reset();
 
     m_model.reset(model);
+}
+
+void SelectComponentsPage::intializeForSelectedLib(const Metadata::Library *const lib,
+                                                   const QString &key)
+{
+    const int idx = m_ui.modeCombo->findText(key);
+
+    QTC_ASSERT(idx != -1, return );
+
+    m_ui.modeCombo->setCurrentIndex(idx);
+    m_ui.modeCombo->setEnabled(lib != nullptr);
+    setupModel(key);
 }

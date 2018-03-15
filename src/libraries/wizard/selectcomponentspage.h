@@ -41,6 +41,11 @@
 namespace Asn1Acn {
 namespace Internal {
 namespace Libraries {
+
+namespace Metadata {
+class Library;
+}
+
 namespace Wizard {
 
 class SelectComponentsPage : public QWizardPage
@@ -62,6 +67,7 @@ private:
     void setupModel(const QString &key);
     void setupMetadaModel();
     void setupFileSystemModel();
+    void intializeForSelectedLib(const Metadata::Library *const lib, const QString &key);
 
     Ui::SelectComponent m_ui;
     QString m_libPath;
