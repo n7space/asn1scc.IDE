@@ -22,42 +22,36 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
 
-#include <QObject>
+#include "importprojectmenuitemcontroller.h"
 
-namespace Utils {
-class ParameterAction;
+#include <QAction>
+
+#include <projectexplorer/project.h>
+#include <projectexplorer/projectexplorer.h>
+#include <projectexplorer/projectnodes.h>
+#include <projectexplorer/projecttree.h>
+
+using namespace Asn1Acn::Internal;
+
+ImportProjectMenuItemController::ImportProjectMenuItemController(QAction *menuItem, QObject *parent)
+    : QObject(parent)
+    , m_menuItem(menuItem)
+{
+    connect(ProjectExplorer::ProjectTree::instance(),
+            &ProjectExplorer::ProjectTree::currentProjectChanged,
+            this,
+            &ImportProjectMenuItemController::onCurrentProjectChanged);
 }
 
-namespace ProjectExplorer {
-class Project;
-class ProjectNode;
-} // namespace ProjectExplorer
-
-namespace Asn1Acn {
-namespace Internal {
-
-class ImportMenuItemController : public QObject
+void ImportProjectMenuItemController::onCurrentProjectChanged(ProjectExplorer::Project *project)
 {
-    Q_OBJECT
+    if (project == nullptr)
+        return;
 
-public:
-    ImportMenuItemController(Utils::ParameterAction *menuItem, QObject *parent = nullptr);
+    const auto node = project->rootProjectNode();
+    if (node == nullptr)
+        return;
 
-private slots:
-    void onActiveProjectChanged(ProjectExplorer::Project *project);
-    void onProjectLoadingFinished();
-
-    void onAboutToRemoveProject(ProjectExplorer::Project *project);
-
-private:
-    void refreshCurrentProject(ProjectExplorer::Project *project);
-    void updateMenuItemState(const ProjectExplorer::ProjectNode *node);
-
-    Utils::ParameterAction *m_menuItem;
-    ProjectExplorer::Project *m_currentProject;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+    m_menuItem->setEnabled(node->supportsAction(ProjectExplorer::AddExistingFile, node));
+}

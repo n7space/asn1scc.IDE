@@ -26,37 +26,27 @@
 
 #include <QObject>
 
-namespace Utils {
-class ParameterAction;
-}
+class QAction;
 
 namespace ProjectExplorer {
 class Project;
-class ProjectNode;
 } // namespace ProjectExplorer
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ImportMenuItemController : public QObject
+class ImportProjectMenuItemController : public QObject
 {
     Q_OBJECT
 
 public:
-    ImportMenuItemController(Utils::ParameterAction *menuItem, QObject *parent = nullptr);
+    ImportProjectMenuItemController(QAction *menuItem, QObject *parent = nullptr);
 
 private slots:
-    void onActiveProjectChanged(ProjectExplorer::Project *project);
-    void onProjectLoadingFinished();
-
-    void onAboutToRemoveProject(ProjectExplorer::Project *project);
+    void onCurrentProjectChanged(ProjectExplorer::Project *project);
 
 private:
-    void refreshCurrentProject(ProjectExplorer::Project *project);
-    void updateMenuItemState(const ProjectExplorer::ProjectNode *node);
-
-    Utils::ParameterAction *m_menuItem;
-    ProjectExplorer::Project *m_currentProject;
+    QAction *m_menuItem;
 };
 
 } // namespace Internal

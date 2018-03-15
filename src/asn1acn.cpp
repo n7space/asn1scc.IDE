@@ -67,6 +67,7 @@
 #include "asn1sccserviceprovider.h"
 #include "asneditor.h"
 #include "importmenuitemcontroller.h"
+#include "importprojectmenuitemcontroller.h"
 #include "kitinformation.h"
 #include "projectwatcher.h"
 #include "tools.h"
@@ -259,12 +260,6 @@ void Asn1AcnPlugin::addImportFromAsnComponentsToToolsMenu(ActionContainer *tools
                                               Utils::ParameterAction::AlwaysEnabled,
                                               this);
 
-    connect(ProjectExplorer::SessionManager::instance(),
-            &ProjectExplorer::SessionManager::startupProjectChanged,
-            [action](ProjectExplorer::Project *project) {
-                action->setParameter(project != nullptr ? project->displayName() : QString());
-            });
-
     connect(action, &QAction::triggered, [this]() {
         raiseImportComponentWindow(ProjectExplorer::SessionManager::startupProject());
     });
@@ -290,7 +285,7 @@ void Asn1AcnPlugin::addImportFromAsnComponentsToProjectMenu()
 
     action->setEnabled(false);
 
-    new ImportMenuItemController(action, this);
+    new ImportProjectMenuItemController(action, this);
 
     Core::Context projectTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);
     auto menu = Core::ActionManager::createMenu(ProjectExplorer::Constants::M_PROJECTCONTEXT);

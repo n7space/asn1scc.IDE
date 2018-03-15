@@ -32,9 +32,11 @@
 #include <projectexplorer/projectnodes.h>
 #include <projectexplorer/session.h>
 
+#include <utils/parameteraction.h>
+
 using namespace Asn1Acn::Internal;
 
-ImportMenuItemController::ImportMenuItemController(QAction *menuItem, QObject *parent)
+ImportMenuItemController::ImportMenuItemController(Utils::ParameterAction *menuItem, QObject *parent)
     : QObject(parent)
     , m_menuItem(menuItem)
     , m_currentProject(nullptr)
@@ -53,8 +55,12 @@ ImportMenuItemController::ImportMenuItemController(QAction *menuItem, QObject *p
 void ImportMenuItemController::onActiveProjectChanged(ProjectExplorer::Project *project)
 {
     refreshCurrentProject(project);
-    if (m_currentProject == nullptr)
+    if (m_currentProject == nullptr) {
+        m_menuItem->setParameter(QString());
         return;
+    }
+
+    m_menuItem->setParameter(m_currentProject->displayName());
 
     const auto projectNode = m_currentProject->rootProjectNode();
     if (projectNode == nullptr)

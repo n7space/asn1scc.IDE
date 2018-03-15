@@ -176,6 +176,7 @@ SOURCES += \
     modelvalidityguard.cpp \
     usagesfinder.cpp \
     importmenuitemcontroller.cpp \
+    importprojectmenuitemcontroller.cpp\
     kitinformation.cpp \
     kitconfigwidget.cpp
 
@@ -324,6 +325,7 @@ HEADERS += \
     modelvalidityguard.h \
     usagesfinder.h \
     importmenuitemcontroller.h \
+    importprojectmenuitemcontroller.h \
     kitinformation.h \
     kitconfigwidget.h
 
