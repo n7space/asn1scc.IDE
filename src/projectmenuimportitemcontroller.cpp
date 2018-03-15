@@ -22,32 +22,36 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
 
-#include <QObject>
+#include "projectmenuimportitemcontroller.h"
 
-class QAction;
+#include <QAction>
 
-namespace ProjectExplorer {
-class Project;
-} // namespace ProjectExplorer
+#include <projectexplorer/project.h>
+#include <projectexplorer/projectexplorer.h>
+#include <projectexplorer/projectnodes.h>
+#include <projectexplorer/projecttree.h>
 
-namespace Asn1Acn {
-namespace Internal {
+using namespace Asn1Acn::Internal;
 
-class ImportProjectMenuItemController : public QObject
+ProjectMenuImportItemController::ProjectMenuImportItemController(QAction *menuItem, QObject *parent)
+    : QObject(parent)
+    , m_menuItem(menuItem)
 {
-    Q_OBJECT
+    connect(ProjectExplorer::ProjectTree::instance(),
+            &ProjectExplorer::ProjectTree::currentProjectChanged,
+            this,
+            &ProjectMenuImportItemController::onCurrentProjectChanged);
+}
 
-public:
-    ImportProjectMenuItemController(QAction *menuItem, QObject *parent = nullptr);
+void ProjectMenuImportItemController::onCurrentProjectChanged(ProjectExplorer::Project *project)
+{
+    if (project == nullptr)
+        return;
 
-private slots:
-    void onCurrentProjectChanged(ProjectExplorer::Project *project);
+    const auto node = project->rootProjectNode();
+    if (node == nullptr)
+        return;
 
-private:
-    QAction *m_menuItem;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+    m_menuItem->setEnabled(node->supportsAction(ProjectExplorer::AddExistingFile, node));
+}

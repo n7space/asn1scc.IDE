@@ -175,8 +175,8 @@ SOURCES += \
     typeslocator.cpp \
     modelvalidityguard.cpp \
     usagesfinder.cpp \
-    importmenuitemcontroller.cpp \
-    importprojectmenuitemcontroller.cpp\
+    toolsmenuimportitemcontroller.cpp \
+    projectmenuimportitemcontroller.cpp\
     kitinformation.cpp \
     kitconfigwidget.cpp
 
@@ -324,8 +324,8 @@ HEADERS += \
     typeslocator.h \
     modelvalidityguard.h \
     usagesfinder.h \
-    importmenuitemcontroller.h \
-    importprojectmenuitemcontroller.h \
+    toolsmenuimportitemcontroller.h \
+    projectmenuimportitemcontroller.h \
     kitinformation.h \
     kitconfigwidget.h
 

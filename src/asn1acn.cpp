@@ -66,11 +66,11 @@
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
 #include "asneditor.h"
-#include "importmenuitemcontroller.h"
-#include "importprojectmenuitemcontroller.h"
 #include "kitinformation.h"
+#include "projectmenuimportitemcontroller.h"
 #include "projectwatcher.h"
 #include "tools.h"
+#include "toolsmenuimportitemcontroller.h"
 #include "tr.h"
 #include "typeslocator.h"
 
@@ -266,7 +266,7 @@ void Asn1AcnPlugin::addImportFromAsnComponentsToToolsMenu(ActionContainer *tools
 
     action->setEnabled(false);
 
-    new ImportMenuItemController(action, this);
+    new ToolsMenuImportItemController(action, this);
 
     auto command
         = Core::ActionManager::registerAction(action,
@@ -285,7 +285,7 @@ void Asn1AcnPlugin::addImportFromAsnComponentsToProjectMenu()
 
     action->setEnabled(false);
 
-    new ImportProjectMenuItemController(action, this);
+    new ProjectMenuImportItemController(action, this);
 
     Core::Context projectTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);
     auto menu = Core::ActionManager::createMenu(ProjectExplorer::Constants::M_PROJECTCONTEXT);

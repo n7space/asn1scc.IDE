@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "importmenuitemcontroller.h"
+#include "toolsmenuimportitemcontroller.h"
 
 #include <QAction>
 
@@ -36,7 +36,8 @@
 
 using namespace Asn1Acn::Internal;
 
-ImportMenuItemController::ImportMenuItemController(Utils::ParameterAction *menuItem, QObject *parent)
+ToolsMenuImportItemController::ToolsMenuImportItemController(Utils::ParameterAction *menuItem,
+                                                             QObject *parent)
     : QObject(parent)
     , m_menuItem(menuItem)
     , m_currentProject(nullptr)
@@ -44,15 +45,15 @@ ImportMenuItemController::ImportMenuItemController(Utils::ParameterAction *menuI
     connect(ProjectExplorer::SessionManager::instance(),
             &ProjectExplorer::SessionManager::startupProjectChanged,
             this,
-            &ImportMenuItemController::onActiveProjectChanged);
+            &ToolsMenuImportItemController::onActiveProjectChanged);
 
     connect(ProjectExplorer::SessionManager::instance(),
             &ProjectExplorer::SessionManager::aboutToRemoveProject,
             this,
-            &ImportMenuItemController::onAboutToRemoveProject);
+            &ToolsMenuImportItemController::onAboutToRemoveProject);
 }
 
-void ImportMenuItemController::onActiveProjectChanged(ProjectExplorer::Project *project)
+void ToolsMenuImportItemController::onActiveProjectChanged(ProjectExplorer::Project *project)
 {
     refreshCurrentProject(project);
     if (m_currentProject == nullptr) {
@@ -67,36 +68,36 @@ void ImportMenuItemController::onActiveProjectChanged(ProjectExplorer::Project *
         connect(project,
                 &ProjectExplorer::Project::parsingFinished,
                 this,
-                &ImportMenuItemController::onProjectLoadingFinished);
+                &ToolsMenuImportItemController::onProjectLoadingFinished);
 
     updateMenuItemState(projectNode);
 }
 
-void ImportMenuItemController::onAboutToRemoveProject(ProjectExplorer::Project *project)
+void ToolsMenuImportItemController::onAboutToRemoveProject(ProjectExplorer::Project *project)
 {
     if (project == m_currentProject)
         refreshCurrentProject(nullptr);
 }
 
-void ImportMenuItemController::onProjectLoadingFinished()
+void ToolsMenuImportItemController::onProjectLoadingFinished()
 {
     updateMenuItemState(m_currentProject->rootProjectNode());
 }
 
-void ImportMenuItemController::refreshCurrentProject(ProjectExplorer::Project *project)
+void ToolsMenuImportItemController::refreshCurrentProject(ProjectExplorer::Project *project)
 {
     if (m_currentProject != nullptr) {
         disconnect(m_currentProject,
                    &ProjectExplorer::Project::parsingFinished,
                    this,
-                   &ImportMenuItemController::onProjectLoadingFinished);
+                   &ToolsMenuImportItemController::onProjectLoadingFinished);
         m_menuItem->setEnabled(false);
     }
 
     m_currentProject = project;
 }
 
-void ImportMenuItemController::updateMenuItemState(const ProjectExplorer::ProjectNode *node)
+void ToolsMenuImportItemController::updateMenuItemState(const ProjectExplorer::ProjectNode *node)
 {
     if (node == nullptr)
         return;
