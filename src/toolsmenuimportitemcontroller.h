@@ -26,7 +26,9 @@
 
 #include <QObject>
 
-class QAction;
+namespace Utils {
+class ParameterAction;
+}
 
 namespace ProjectExplorer {
 class Project;
@@ -36,12 +38,12 @@ class ProjectNode;
 namespace Asn1Acn {
 namespace Internal {
 
-class ImportMenuItemController : public QObject
+class ToolsMenuImportItemController : public QObject
 {
     Q_OBJECT
 
 public:
-    ImportMenuItemController(QAction *menuItem, QObject *parent = nullptr);
+    ToolsMenuImportItemController(Utils::ParameterAction *menuItem, QObject *parent = nullptr);
 
 private slots:
     void onActiveProjectChanged(ProjectExplorer::Project *project);
@@ -53,7 +55,7 @@ private:
     void refreshCurrentProject(ProjectExplorer::Project *project);
     void updateMenuItemState(const ProjectExplorer::ProjectNode *node);
 
-    QAction *m_menuItem;
+    Utils::ParameterAction *m_menuItem;
     ProjectExplorer::Project *m_currentProject;
 };
 

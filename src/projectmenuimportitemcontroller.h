@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 N7 Space sp. z o. o.
+** Copyright (C) 2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -22,53 +22,32 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <QDir>
-#include <QString>
-#include <QStringList>
+#include <QObject>
+
+class QAction;
 
 namespace ProjectExplorer {
 class Project;
-}
+} // namespace ProjectExplorer
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Libraries {
 
-class ComponentImporter
+class ProjectMenuImportItemController : public QObject
 {
+    Q_OBJECT
+
 public:
-    ComponentImporter(ProjectExplorer::Project *project);
+    ProjectMenuImportItemController(QAction *menuItem, QObject *parent = nullptr);
 
-    void setDirectory(const QString &path);
-    void setFiles(const QStringList &files);
-    void setProject(ProjectExplorer::Project *project);
-
-    const QStringList &sourceFiles() const;
-    const QStringList &importedFiles() const;
-
-    void import();
+private slots:
+    void onCurrentProjectChanged(ProjectExplorer::Project *project);
 
 private:
-    QStringList copyFilesToProject();
-    void createTargetDir(QDir &parent, const QString &path);
-    QString targetFileName(const QString &file);
-    void addFilesToProject(const QStringList &files);
-    void copyFile(const QString &source, const QString &target);
-    QStringList createUniqueFilesList(const ProjectExplorer::Project *project,
-                                      const QStringList &newFiles);
-
-    QStringList m_sourceFiles;
-    QStringList m_importedFiles;
-
-    QDir m_sourceDir;
-    QDir m_targetDir;
-
-    ProjectExplorer::Project *m_project;
+    QAction *m_menuItem;
 };
 
-} // namespace Libraries
 } // namespace Internal
 } // namespace Asn1Acn

@@ -35,9 +35,18 @@
 
 using namespace Asn1Acn::Internal::Libraries;
 
+ComponentImporter::ComponentImporter(ProjectExplorer::Project *project)
+    : m_project(project)
+{}
+
 void ComponentImporter::setFiles(const QStringList &files)
 {
     m_sourceFiles = files;
+}
+
+void ComponentImporter::setProject(ProjectExplorer::Project *project)
+{
+    m_project = project;
 }
 
 const QStringList &ComponentImporter::sourceFiles() const
@@ -57,13 +66,11 @@ void ComponentImporter::setDirectory(const QString &path)
 
 void ComponentImporter::import()
 {
-    const auto project = ProjectExplorer::SessionManager::startupProject();
-
-    const auto projectDir = QDir(project->projectDirectory().toString());
+    const auto projectDir = QDir(m_project->projectDirectory().toString());
     m_targetDir = QDir(projectDir.filePath(m_sourceDir.dirName()));
 
     const auto copied = copyFilesToProject();
-    addFilesToProject(project, copied);
+    addFilesToProject(copied);
 }
 
 QStringList ComponentImporter::copyFilesToProject()
@@ -104,11 +111,10 @@ QString ComponentImporter::targetFileName(const QString &file)
     return m_targetDir.filePath(relativeSrcPath);
 }
 
-void ComponentImporter::addFilesToProject(const ProjectExplorer::Project *project,
-                                          const QStringList &files)
+void ComponentImporter::addFilesToProject(const QStringList &files)
 {
-    m_importedFiles = createUniqueFilesList(project, files);
-    project->rootProjectNode()->addFiles(m_importedFiles);
+    m_importedFiles = createUniqueFilesList(m_project, files);
+    m_project->rootProjectNode()->addFiles(m_importedFiles);
 }
 
 QStringList ComponentImporter::createUniqueFilesList(const ProjectExplorer::Project *project,

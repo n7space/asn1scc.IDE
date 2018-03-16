@@ -36,8 +36,9 @@
 using namespace Asn1Acn::Internal::Libraries;
 using namespace Asn1Acn::Internal::Libraries::Wizard;
 
-ImportComponentWizard::ImportComponentWizard(QWidget *parent)
+ImportComponentWizard::ImportComponentWizard(ProjectExplorer::Project *project, QWidget *parent)
     : QWizard(parent)
+    , m_importer(project)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     connect(Core::ICore::instance(), &Core::ICore::coreAboutToClose, this, &QWidget::close);
@@ -49,6 +50,11 @@ ImportComponentWizard::ImportComponentWizard(QWidget *parent)
     addPage(new SummaryPage(m_importer, m_handler));
 
     setOption(NoBackButtonOnStartPage);
+}
+
+void ImportComponentWizard::setProject(ProjectExplorer::Project *project)
+{
+    m_importer.setProject(project);
 }
 
 void ImportComponentWizard::accept()

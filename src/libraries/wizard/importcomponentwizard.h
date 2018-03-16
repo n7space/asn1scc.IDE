@@ -41,7 +41,9 @@ class ImportComponentWizard : public QWizard
     Q_OBJECT
 
 public:
-    ImportComponentWizard(QWidget *parent = nullptr);
+    ImportComponentWizard(ProjectExplorer::Project *project, QWidget *parent = nullptr);
+
+    void setProject(ProjectExplorer::Project *project);
 
     void accept() override;
 

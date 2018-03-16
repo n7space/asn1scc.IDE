@@ -40,6 +40,10 @@
 
 #include <projectexplorer/kitmanager.h>
 #include <projectexplorer/projectexplorerconstants.h>
+#include <projectexplorer/projecttree.h>
+#include <projectexplorer/session.h>
+
+#include <utils/parameteraction.h>
 
 #include "completion/acnsnippets.h"
 #include "completion/asnsnippets.h"
@@ -62,10 +66,11 @@
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
 #include "asneditor.h"
-#include "importmenuitemcontroller.h"
 #include "kitinformation.h"
+#include "projectmenuimportitemcontroller.h"
 #include "projectwatcher.h"
 #include "tools.h"
+#include "toolsmenuimportitemcontroller.h"
 #include "tr.h"
 #include "typeslocator.h"
 
@@ -246,40 +251,55 @@ void Asn1AcnPlugin::initializeOpenInNextSplitAction(ActionContainer *toolsMenu,
     toolsMenu->addAction(command);
 }
 
-void Asn1AcnPlugin::addImportFromAsnComponentsToToolsMenu(ActionContainer *toolsMenu,
-                                                          QAction *action)
+void Asn1AcnPlugin::addImportFromAsnComponentsToToolsMenu(ActionContainer *toolsMenu)
 {
-    auto command = Core::ActionManager::registerAction(action,
-                                                       Constants::IMPORT_FROM_COMPONENTS_LIBRARY);
+    toolsMenu->addSeparator();
+
+    auto *action = new Utils::ParameterAction(tr("Import from ASN.1 components library..."),
+                                              tr("Import from ASN.1 components library to \"%1\"..."),
+                                              Utils::ParameterAction::AlwaysEnabled,
+                                              this);
+
+    connect(action, &QAction::triggered, [this]() {
+        raiseImportComponentWindow(ProjectExplorer::SessionManager::startupProject());
+    });
+
+    action->setEnabled(false);
+
+    new ToolsMenuImportItemController(action, this);
+
+    auto command
+        = Core::ActionManager::registerAction(action,
+                                              Constants::IMPORT_FROM_COMPONENTS_LIBRARY_TOOLBAR);
+    command->setAttribute(Core::Command::CA_UpdateText);
     toolsMenu->addAction(command);
 }
 
-void Asn1AcnPlugin::addImportFromAsnComponentsToProjectMenu(QAction *action)
+void Asn1AcnPlugin::addImportFromAsnComponentsToProjectMenu()
 {
-    Core::Context projecTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);
+    QAction *action = new QAction(tr("Import from ASN.1 components library..."), this);
+
+    connect(action, &QAction::triggered, [this]() {
+        raiseImportComponentWindow(ProjectExplorer::ProjectTree::currentProject());
+    });
+
+    action->setEnabled(false);
+
+    new ProjectMenuImportItemController(action, this);
+
+    Core::Context projectTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);
     auto menu = Core::ActionManager::createMenu(ProjectExplorer::Constants::M_PROJECTCONTEXT);
-    auto command = Core::ActionManager::registerAction(action,
-                                                       Constants::IMPORT_FROM_COMPONENTS_LIBRARY,
-                                                       projecTreeContext);
+    auto command
+        = Core::ActionManager::registerAction(action,
+                                              Constants::IMPORT_FROM_COMPONENTS_LIBRARY_CONTEXT,
+                                              projectTreeContext);
     menu->addAction(command, ProjectExplorer::Constants::G_PROJECT_FILES);
 }
 
 void Asn1AcnPlugin::initializeImportFromAsnComponents(ActionContainer *toolsMenu)
 {
-    toolsMenu->addSeparator();
-
-    QAction *importFromAsnComponents = new QAction(tr("Import from ASN.1 components library..."),
-                                                   this);
-    connect(importFromAsnComponents,
-            &QAction::triggered,
-            this,
-            &Asn1AcnPlugin::raiseImportComponentWindow);
-    importFromAsnComponents->setEnabled(false);
-
-    new ImportMenuItemController(importFromAsnComponents, this);
-
-    addImportFromAsnComponentsToToolsMenu(toolsMenu, importFromAsnComponents);
-    addImportFromAsnComponentsToProjectMenu(importFromAsnComponents);
+    addImportFromAsnComponentsToToolsMenu(toolsMenu);
+    addImportFromAsnComponentsToProjectMenu();
 }
 
 void Asn1AcnPlugin::addToToolsMenu(ActionContainer *container)
@@ -306,13 +326,14 @@ ExtensionSystem::IPlugin::ShutdownFlag Asn1AcnPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
-void Asn1AcnPlugin::raiseImportComponentWindow()
+void Asn1AcnPlugin::raiseImportComponentWindow(ProjectExplorer::Project *project)
 {
     if (!m_importComponentWizard.isNull()) {
+        m_importComponentWizard->setProject(project);
         Core::ICore::raiseWindow(m_importComponentWizard);
     } else {
-        m_importComponentWizard = new Libraries::Wizard::ImportComponentWizard(
-            Core::ICore::mainWindow());
+        m_importComponentWizard
+            = new Libraries::Wizard::ImportComponentWizard(project, Core::ICore::mainWindow());
         m_importComponentWizard->show();
     }
 }

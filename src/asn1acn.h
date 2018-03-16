@@ -50,7 +50,7 @@ public:
     ShutdownFlag aboutToShutdown() override;
 
 private slots:
-    void raiseImportComponentWindow();
+    void raiseImportComponentWindow(ProjectExplorer::Project *project);
     void findUsages();
     void onTaskStarted(Core::Id id);
     void onTaskFinished(Core::Id id);
@@ -71,8 +71,8 @@ private:
                                     ActionContainer *contextMenu,
                                     const Context &context);
 
-    void addImportFromAsnComponentsToToolsMenu(ActionContainer *toolsMenu, QAction *action);
-    void addImportFromAsnComponentsToProjectMenu(QAction *action);
+    void addImportFromAsnComponentsToToolsMenu(ActionContainer *toolsMenu);
+    void addImportFromAsnComponentsToProjectMenu();
     void addToToolsMenu(ActionContainer *container);
 
     QPointer<Libraries::Wizard::ImportComponentWizard> m_importComponentWizard;
