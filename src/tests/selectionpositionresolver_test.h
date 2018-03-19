@@ -24,39 +24,50 @@
 ****************************************************************************/
 #pragma once
 
-#include <texteditor/texteditor.h>
+#include <memory>
 
-#include <utils/uncommentselection.h>
+#include <QObject>
+
+#include <selectionpositionresolver.h>
+#include <texteditor/textdocument.h>
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Tests {
 
-class EditorOutline;
-
-class EditorWidget : public TextEditor::TextEditorWidget
+class SelectionPositionResolverTests : public QObject
 {
     Q_OBJECT
 
 public:
-    virtual void findUsages() = 0;
-
-protected:
-    void openFinishedSuccessfully() override;
-
-    void finalizeInitialization() override;
-    void finalizeInitializationAfterDuplication(TextEditorWidget *other) override;
-
-    void mouseDoubleClickEvent(QMouseEvent *e) override;
-    void contextMenuEvent(QContextMenuEvent *) override;
-
-    Utils::CommentDefinition m_commentDefinition;
+    explicit SelectionPositionResolverTests(QObject *parent = 0);
+    ~SelectionPositionResolverTests() = default;
 
 private slots:
-    void onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections);
+    void test_emptyDocument();
+    void test_singleWord();
+    void test_singleWordOnlyHyphens();
+
+    void test_wordWithHyphenInMiddle();
+    void test_wordWithMultipleHyhpens();
+    void test_selectHyphensAsPartOfWord();
+
+    void test_wordWithHyphensAtEnd();
+    void test_selectHyphensAsWordEnding();
+
+    void test_wordWithHyphensAtStart();
+    void test_selectHyphensAsWordStarting();
+
+    void test_wordPrecededWithHyphensOnlyWord();
+    void test_wordFollowedByHyphensOnlyWord();
 
 private:
-    void addOutlineCombo();
+    QTextCursor getInitializedCursor(const QByteArray &content, const int position);
+
+    std::unique_ptr<TextEditor::TextDocument> m_doc;
+    SelectionPositionResolver m_resolver;
 };
 
+} // namespace Tests
 } // namespace Internal
 } // namespace Asn1Acn

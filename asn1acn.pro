@@ -178,7 +178,8 @@ SOURCES += \
     toolsmenuimportitemcontroller.cpp \
     projectmenuimportitemcontroller.cpp\
     kitinformation.cpp \
-    kitconfigwidget.cpp
+    kitconfigwidget.cpp \
+    selectionpositionresolver.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -327,7 +328,8 @@ HEADERS += \
     toolsmenuimportitemcontroller.h \
     projectmenuimportitemcontroller.h \
     kitinformation.h \
-    kitconfigwidget.h
+    kitconfigwidget.h \
+    selectionpositionresolver.h
 
 FORMS += \
     options-pages/service.ui \
@@ -375,6 +377,7 @@ SOURCES += \
     tests/modelvalidityguard_tests.cpp \
     tests/linkcreator_tests.cpp \
     tests/indenter_tests.cpp \
+    tests/selectionpositionresolver_test.cpp \
     \
     tests/networkreply.cpp \
     tests/parsingserviceproviderstub.cpp \
@@ -407,6 +410,7 @@ HEADERS += \
     tests/modelvalidityguard_tests.h \
     tests/linkcreator_tests.h \
     tests/indenter_tests.h \
+    tests/selectionpositionresolver_test.h \
     \
     tests/networkreply.h \
     tests/parsingserviceproviderstub.h \

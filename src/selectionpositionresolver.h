@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017 N7 Space sp. z o. o.
+** Copyright (C) 2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -24,38 +24,26 @@
 ****************************************************************************/
 #pragma once
 
-#include <texteditor/texteditor.h>
-
-#include <utils/uncommentselection.h>
+class QTextCursor;
 
 namespace Asn1Acn {
 namespace Internal {
 
-class EditorOutline;
-
-class EditorWidget : public TextEditor::TextEditorWidget
+class SelectionPositionResolver
 {
-    Q_OBJECT
-
 public:
-    virtual void findUsages() = 0;
+    int startPosition() const { return m_selectionStartPosition; }
+    int endPosition() const { return m_selectionEndPosition; }
 
-protected:
-    void openFinishedSuccessfully() override;
-
-    void finalizeInitialization() override;
-    void finalizeInitializationAfterDuplication(TextEditorWidget *other) override;
-
-    void mouseDoubleClickEvent(QMouseEvent *e) override;
-    void contextMenuEvent(QContextMenuEvent *) override;
-
-    Utils::CommentDefinition m_commentDefinition;
-
-private slots:
-    void onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelection> &selections);
+    void resolve(const QTextCursor &cursor);
 
 private:
-    void addOutlineCombo();
+    void initSelection(QTextCursor &cursor) const;
+    int rightSelectionBound(const QTextCursor &cursor) const;
+    int leftSelectionBound(const QTextCursor &cursor) const;
+
+    int m_selectionStartPosition;
+    int m_selectionEndPosition;
 };
 
 } // namespace Internal

@@ -27,6 +27,7 @@
 
 #include <QMenu>
 #include <QString>
+#include <QTextCursor>
 
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -35,6 +36,7 @@
 
 #include "asn1acnconstants.h"
 #include "document.h"
+#include "selectionpositionresolver.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Core;
@@ -51,6 +53,23 @@ void EditorWidget::finalizeInitializationAfterDuplication(TextEditorWidget *othe
     Q_UNUSED(other);
 
     addOutlineCombo();
+}
+
+void EditorWidget::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    QTextCursor cursor = textCursor();
+
+    const int initPos = cursor.position();
+    TextEditorWidget::mouseDoubleClickEvent(e);
+    cursor.setPosition(initPos);
+
+    static SelectionPositionResolver resolver;
+    resolver.resolve(cursor);
+
+    cursor.setPosition(resolver.startPosition());
+    cursor.setPosition(resolver.endPosition(), QTextCursor::KeepAnchor);
+
+    setTextCursor(cursor);
 }
 
 void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
