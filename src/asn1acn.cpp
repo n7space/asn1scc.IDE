@@ -179,6 +179,7 @@ void Asn1AcnPlugin::initializeMenus()
     initializeOpenInNextSplitAction(toolsMenu, context);
     initializeFollowSymbolAction(toolsMenu, contextMenu);
     initializeFindUsagesAction(toolsMenu, contextMenu, context);
+    initializeBuildICDAction(toolsMenu);
     initializeImportFromAsnComponents(toolsMenu);
 
     addToToolsMenu(toolsMenu);
@@ -195,6 +196,45 @@ void Asn1AcnPlugin::initializeFindUsagesAction(ActionContainer *toolsMenu,
     contextMenu->addAction(command);
     toolsMenu->addAction(command);
     m_findUsagesAction = action;
+}
+
+void Asn1AcnPlugin::addBuildICDToToolsMenu(ActionContainer *toolsMenu)
+{
+    auto action = new Utils::ParameterAction(tr("Build ICD..."),
+                                             tr("Build ICD from \"%1\"..."),
+                                             Utils::ParameterAction::AlwaysEnabled,
+                                             this);
+
+    action->setEnabled(false);
+
+    connect(ProjectExplorer::SessionManager::instance(),
+            &ProjectExplorer::SessionManager::startupProjectChanged,
+            [action](ProjectExplorer::Project *project) {
+                action->setEnabled(project != nullptr);
+                action->setParameter(project == nullptr ? QString() : project->displayName());
+            });
+
+    auto command = Core::ActionManager::registerAction(action, Constants::BUILD_ICD_TOOLBAR);
+    command->setAttribute(Core::Command::CA_UpdateText);
+    toolsMenu->addAction(command);
+}
+
+void Asn1AcnPlugin::addBuildICDToProjectMenu()
+{
+    QAction *action = new QAction(tr("Build ICD..."), this);
+
+    Core::Context projectTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);
+    auto menu = Core::ActionManager::createMenu(ProjectExplorer::Constants::M_PROJECTCONTEXT);
+    auto command = Core::ActionManager::registerAction(action,
+                                                       Constants::BUILD_ICD_CONTEXT,
+                                                       projectTreeContext);
+    menu->addAction(command, ProjectExplorer::Constants::G_PROJECT_FILES);
+}
+
+void Asn1AcnPlugin::initializeBuildICDAction(ActionContainer *toolsMenu)
+{
+    addBuildICDToProjectMenu();
+    addBuildICDToToolsMenu(toolsMenu);
 }
 
 static EditorWidget *currentEditorWidget()
@@ -256,10 +296,10 @@ void Asn1AcnPlugin::addImportFromAsnComponentsToToolsMenu(ActionContainer *tools
 {
     toolsMenu->addSeparator();
 
-    auto *action = new Utils::ParameterAction(tr("Import from ASN.1 components library..."),
-                                              tr("Import from ASN.1 components library to \"%1\"..."),
-                                              Utils::ParameterAction::AlwaysEnabled,
-                                              this);
+    auto action = new Utils::ParameterAction(tr("Import from ASN.1 components library..."),
+                                             tr("Import from ASN.1 components library to \"%1\"..."),
+                                             Utils::ParameterAction::AlwaysEnabled,
+                                             this);
 
     connect(action, &QAction::triggered, [this]() {
         raiseImportComponentWindow(ProjectExplorer::SessionManager::startupProject());

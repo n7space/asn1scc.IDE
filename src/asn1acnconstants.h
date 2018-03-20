@@ -65,6 +65,7 @@ const char OPEN_DATA_ENCODING_IN_NEXT_SPLIT[] = "Asn1Acn.SwitchDataEncodingInNex
 const char IMPORT_FROM_COMPONENTS_LIBRARY_CONTEXT[] = "Asn1Acn.ImportFromComponentsLibraryContext";
 const char IMPORT_FROM_COMPONENTS_LIBRARY_TOOLBAR[] = "Asn1Acn.ImportFromComponentsLibraryToolbar";
 const char FIND_USAGES[] = "Asn1Acn.FindUsages";
+const char BUILD_ICD[] = "Asn1Acn.BuildICD";
 
 // Icons
 
