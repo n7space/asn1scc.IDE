@@ -179,7 +179,9 @@ SOURCES += \
     projectmenuimportitemcontroller.cpp\
     kitinformation.cpp \
     kitconfigwidget.cpp \
-    selectionpositionresolver.cpp
+    selectionpositionresolver.cpp \
+    buildicdstep.cpp \
+    icderrorparser.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -329,7 +331,9 @@ HEADERS += \
     projectmenuimportitemcontroller.h \
     kitinformation.h \
     kitconfigwidget.h \
-    selectionpositionresolver.h
+    selectionpositionresolver.h \
+    buildicdstep.h \
+    icderrorparser.h
 
 FORMS += \
     options-pages/service.ui \

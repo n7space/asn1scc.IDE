@@ -66,6 +66,7 @@
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
 #include "asneditor.h"
+#include "buildicdstep.h"
 #include "kitinformation.h"
 #include "projectmenuimportitemcontroller.h"
 #include "projectwatcher.h"
@@ -214,6 +215,10 @@ void Asn1AcnPlugin::addBuildICDToToolsMenu(ActionContainer *toolsMenu)
                 action->setParameter(project == nullptr ? QString() : project->displayName());
             });
 
+    connect(action, &QAction::triggered, []() {
+        BuildICD::runBuild(ProjectExplorer::SessionManager::startupProject());
+    });
+
     auto command = Core::ActionManager::registerAction(action, Constants::BUILD_ICD_TOOLBAR);
     command->setAttribute(Core::Command::CA_UpdateText);
     toolsMenu->addAction(command);
@@ -222,6 +227,10 @@ void Asn1AcnPlugin::addBuildICDToToolsMenu(ActionContainer *toolsMenu)
 void Asn1AcnPlugin::addBuildICDToProjectMenu()
 {
     QAction *action = new QAction(tr("Build ICD..."), this);
+
+    connect(action, &QAction::triggered, []() {
+        BuildICD::runBuild(ProjectExplorer::ProjectTree::currentProject());
+    });
 
     Core::Context projectTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);
     auto menu = Core::ActionManager::createMenu(ProjectExplorer::Constants::M_PROJECTCONTEXT);
