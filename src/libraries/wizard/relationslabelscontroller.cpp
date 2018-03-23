@@ -43,6 +43,11 @@ RelationsLabelsController::RelationsLabelsController(MetadataModel *model,
     , m_conflictsTree(conflictsTree)
 {}
 
+RelationsLabelsController::~RelationsLabelsController()
+{
+    clearRelationsTrees();
+}
+
 namespace {
 void appendElementItems(const QList<Metadata::Reference> &references,
                         QHash<QString, QTreeWidgetItem *> &parents)

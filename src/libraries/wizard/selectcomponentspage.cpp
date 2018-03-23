@@ -52,6 +52,16 @@ SelectComponentsPage::SelectComponentsPage(ComponentImporter &importer, QWidget 
             &QComboBox::currentTextChanged,
             this,
             &SelectComponentsPage::onComboTextChanged);
+
+    connect(LibraryStorage::instance(),
+            &LibraryStorage::aboutToChange,
+            this,
+            &SelectComponentsPage::onLibrariesInvalidated);
+
+    connect(LibraryStorage::instance(),
+            &LibraryStorage::changed,
+            this,
+            &SelectComponentsPage::onLibrariesValidated);
 }
 
 void SelectComponentsPage::initializePage()
@@ -75,6 +85,20 @@ void SelectComponentsPage::onComboTextChanged(const QString &text)
     setupModel(text);
 }
 
+void SelectComponentsPage::onLibrariesInvalidated()
+{
+    m_model.reset(nullptr);
+    m_selector.reset(nullptr);
+    m_labelsController.reset(nullptr);
+
+    m_ui.modulesView->setModel(nullptr);
+}
+
+void SelectComponentsPage::onLibrariesValidated()
+{
+    setupModel(m_currentKey);
+}
+
 void SelectComponentsPage::setLibPath()
 {
     m_libPath = field("builtInRadio").toBool() ? field("builtInCombo").toString()
@@ -84,6 +108,8 @@ void SelectComponentsPage::setLibPath()
 void SelectComponentsPage::setupModel(const QString &key)
 {
     QTC_ASSERT(key == METADATA_COMBO_KEY || key == FILESYSTEM_COMBO_KEY, return );
+
+    m_currentKey = key;
 
     if (key == METADATA_COMBO_KEY) {
         setupMetadaModel();
