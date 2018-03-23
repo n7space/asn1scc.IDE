@@ -216,7 +216,7 @@ void Asn1AcnPlugin::addBuildICDToToolsMenu(ActionContainer *toolsMenu)
             });
 
     connect(action, &QAction::triggered, []() {
-        BuildICD::runBuild(ProjectExplorer::SessionManager::startupProject());
+        ICDBuilder::runBuild(ProjectExplorer::SessionManager::startupProject());
     });
 
     auto command = Core::ActionManager::registerAction(action, Constants::BUILD_ICD_TOOLBAR);
@@ -229,7 +229,7 @@ void Asn1AcnPlugin::addBuildICDToProjectMenu()
     QAction *action = new QAction(tr("Build ICD..."), this);
 
     connect(action, &QAction::triggered, []() {
-        BuildICD::runBuild(ProjectExplorer::ProjectTree::currentProject());
+        ICDBuilder::runBuild(ProjectExplorer::ProjectTree::currentProject());
     });
 
     Core::Context projectTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);

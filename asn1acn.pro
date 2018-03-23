@@ -181,7 +181,8 @@ SOURCES += \
     kitconfigwidget.cpp \
     selectionpositionresolver.cpp \
     buildicdstep.cpp \
-    icderrorparser.cpp
+    icderrorparser.cpp \
+    icdstepscache.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -333,7 +334,8 @@ HEADERS += \
     kitconfigwidget.h \
     selectionpositionresolver.h \
     buildicdstep.h \
-    icderrorparser.h
+    icderrorparser.h \
+    icdstepscache.h
 
 FORMS += \
     options-pages/service.ui \

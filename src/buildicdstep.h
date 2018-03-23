@@ -32,7 +32,7 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class BuildICD
+class ICDBuilder
 {
 public:
     static void runBuild(ProjectExplorer::Project *project);
@@ -47,7 +47,6 @@ public:
 
     bool init(QList<const BuildStep *> &earlierSteps) override;
     void run(QFutureInterface<bool> &) override;
-    bool immutable() const override;
 
     ProjectExplorer::BuildStepConfigWidget *createConfigWidget() override { return nullptr; }
 

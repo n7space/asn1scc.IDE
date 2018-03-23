@@ -41,28 +41,41 @@
 #include <utils/qtcassert.h>
 
 #include <icderrorparser.h>
+#include <icdstepscache.h>
 
 using namespace Asn1Acn::Internal;
 
 static const char ICD_BS_ID[] = "ASN1ACN.BuildICDStep";
 static QString OUTPUT_PATH(QDir::toNativeSeparators("asn1sccGenerated/icd/"));
 
-void BuildICD::runBuild(ProjectExplorer::Project *project)
+static BuildICDStep *createStep(const ProjectExplorer::Project *project, ICDStepsCache &cache)
 {
-    QTC_ASSERT(project != nullptr, return );
-
     const auto target = project->activeTarget();
     if (target == nullptr)
-        return;
+        return nullptr;
 
     auto buildConfig = target->activeBuildConfiguration();
     if (buildConfig == nullptr)
+        return nullptr;
+
+    auto step = new BuildICDStep(
+        buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD)));
+    cache.add(project->displayName(), step);
+
+    return step;
+}
+
+void ICDBuilder::runBuild(ProjectExplorer::Project *project)
+{
+    QTC_ASSERT(project != nullptr, return );
+
+    static ICDStepsCache cache;
+
+    auto *step = cache.get(project->displayName());
+    if (step == nullptr && (step = createStep(project, cache)) == nullptr)
         return;
 
-    const auto icdStep = new BuildICDStep(
-        buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD)));
-
-    ProjectExplorer::BuildManager::appendStep(icdStep, QLatin1String("ICD"));
+    ProjectExplorer::BuildManager::appendStep(step, QLatin1String("ICD"));
 }
 
 BuildICDStep::BuildICDStep(ProjectExplorer::BuildStepList *parent)
@@ -78,21 +91,16 @@ BuildICDStep::BuildICDStep(ProjectExplorer::BuildStepList *parent)
     });
 
     connect(&m_commandWatcher, &QFutureWatcher<bool>::finished, this, &BuildICDStep::onFinish);
-
-    setOutputParser(new ICDErrorParser);
-}
-
-bool BuildICDStep::immutable() const
-{
-    return false;
 }
 
 bool BuildICDStep::init(QList<const BuildStep *> &earlierSteps)
 {
     if (m_commandFuture || !updateRunParams()) {
-        reportRunResult(m_inputFuture, false);
+        addOutput(tr("Build initialization failed"), BuildStep::OutputFormat::ErrorMessage);
         return false;
     }
+
+    setOutputParser(new ICDErrorParser);
 
     return AbstractProcessStep::init(earlierSteps);
 }
