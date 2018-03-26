@@ -70,9 +70,14 @@ private:
     void initializeFindUsagesAction(ActionContainer *toolsMenu,
                                     ActionContainer *contextMenu,
                                     const Context &context);
+    void initializeBuildICDAction(ActionContainer *toolsMenu);
+
+    void addBuildICDToToolsMenu(ActionContainer *toolsMenu);
+    void addBuildICDToProjectMenu();
 
     void addImportFromAsnComponentsToToolsMenu(ActionContainer *toolsMenu);
     void addImportFromAsnComponentsToProjectMenu();
+
     void addToToolsMenu(ActionContainer *container);
 
     QPointer<Libraries::Wizard::ImportComponentWizard> m_importComponentWizard;
