@@ -46,6 +46,7 @@ public:
                               QTreeWidget *requiresTree,
                               QTreeWidget *conflictsTree,
                               QObject *parent = nullptr);
+    ~RelationsLabelsController();
 
 public slots:
     void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);

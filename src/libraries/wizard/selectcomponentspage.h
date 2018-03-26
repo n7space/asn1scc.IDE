@@ -61,6 +61,9 @@ public:
 private slots:
     void onComboTextChanged(const QString &text);
 
+    void onLibrariesInvalidated();
+    void onLibrariesValidated();
+
 private:
     void setLibPath();
 
@@ -71,6 +74,7 @@ private:
 
     Ui::SelectComponent m_ui;
     QString m_libPath;
+    QString m_currentKey;
 
     std::unique_ptr<QAbstractItemModel> m_model;
 
