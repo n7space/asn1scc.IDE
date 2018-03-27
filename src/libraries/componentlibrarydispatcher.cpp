@@ -25,32 +25,60 @@
 
 #include "componentlibrarydispatcher.h"
 
+#include <QRegularExpression>
+
 #include "componentlibraryprocessor.h"
 #include "generalmetadataprocessor.h"
 
 #include "filesourcereader.h"
 
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Libraries;
+
+namespace {
+QStringList filterByDirectory(const QStringList &files, const QString &directory)
+{
+    static const QString slashOrBackslash = QLatin1String("(") + QRegularExpression::escape("/")
+                                            + QLatin1String("|") + QRegularExpression::escape("\\")
+                                            + QLatin1String(")");
+
+    QRegularExpression re(QRegularExpression::escape(directory) + slashOrBackslash);
+
+    return files.filter(re);
+}
+
+void tryStartGeneralMetadataProcessing(const QStringList &filesInDirectory,
+                                       const QString &directory,
+                                       const FileSourceReader &reader)
+{
+    const auto generalProcessor
+        = new GeneralMetadataProcessor(directory,
+                                       filesInDirectory.filter("info.json").join(" "),
+                                       reader);
+    generalProcessor->process();
+}
+
+void tryStartServicesMetadataProcessing(const QStringList &filesInDirectory,
+                                        const QString &directory,
+                                        const FileSourceReader &reader)
+{
+    const auto metaFiles = filesInDirectory.filter("meta.json");
+    if (metaFiles.empty())
+        return;
+
+    const auto componentProcessor = new ComponentLibraryProcessor(directory, metaFiles, reader);
+    componentProcessor->process();
+}
+} // namespace
 
 void CompontentLibraryDispatcher::dispatch(const QStringList &directories, const QStringList &files)
 {
     static const FileSourceReader reader;
 
     for (const auto &directory : directories) {
-        const auto filesInDirectory = files.filter(directory);
+        const auto filesInDirectory = filterByDirectory(files, directory);
 
-        const auto infoFile = filesInDirectory.filter("info.json").join(" ");
-        const auto generalProcessor = new GeneralMetadataProcessor(directory, infoFile, reader);
-        generalProcessor->process();
-
-        const auto metaFiles = filesInDirectory.filter("meta.json");
-        if (metaFiles.empty())
-            continue;
-
-        const auto componentProcessor = new ComponentLibraryProcessor(directory,
-                                                                      filesInDirectory.filter(
-                                                                          "meta.json"),
-                                                                      reader);
-        componentProcessor->process();
+        tryStartGeneralMetadataProcessing(filesInDirectory, directory, reader);
+        tryStartServicesMetadataProcessing(filesInDirectory, directory, reader);
     }
 }
