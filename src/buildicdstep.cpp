@@ -223,8 +223,25 @@ void BuildICDStep::finishInput(bool success)
     m_inputFuture = QFutureInterface<bool>();
 }
 
+namespace {
+QString quoteOne(const QString &file)
+{
+    return QLatin1Char('"') + file + QLatin1Char('"');
+}
+
+QStringList quoteList(const QStringList &files)
+{
+    QStringList res;
+    for (const auto &file : files)
+        res << quoteOne(file);
+    return res;
+}
+} // namespace
+
 QString BuildICDStep::argument()
 {
-    QString files = m_sources.join(QLatin1Char(' '));
-    return files + QString(" -icdAcn ") + m_outputPath + m_outputFilename;
+    const auto in = quoteList(m_sources).join(QLatin1Char(' '));
+    const auto out = quoteOne(m_outputPath + m_outputFilename);
+
+    return QString(" -icdAcn ") + out + QString(" ") + in;
 }

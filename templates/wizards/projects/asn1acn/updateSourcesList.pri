@@ -27,12 +27,14 @@ defineReplace(createDependencyOrder) {
   file = $${1}
   fileName = $${2}
 
-  eval($${file}_custom.target = $${file})
-  eval($${file}_custom.depends = $${ASN1_MAIN_GENERATED_HEADER})
-  eval(export($${file}_custom.target))
-  eval(export($${file}_custom.depends))
+  stripedFile = $$replace(file, " ", "")
 
-  QMAKE_EXTRA_TARGETS += $${file}_custom
+  eval($${stripedFile}_custom.target = $${file})
+  eval($${stripedFile}_custom.depends = $${ASN1_MAIN_GENERATED_HEADER})
+  eval(export($${stripedFile}_custom.target))
+  eval(export($${stripedFile}_custom.depends))
+
+  QMAKE_EXTRA_TARGETS += $${stripedFile}_custom
   export(QMAKE_EXTRA_TARGETS)
 
   return($$file)
@@ -61,7 +63,7 @@ defineReplace(createEmptyFiles) {
     for(file, files) {
         write_file($$file, contents)
         unix|macx {
-            system("touch -t 197001020000 $${file}")
+            system("touch -t 197001020000 $$shell_quote($${file})")
         } else {
             touch($$file, $${QMAKE_QMAKE})
         }
