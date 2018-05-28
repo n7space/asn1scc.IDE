@@ -145,7 +145,7 @@ void AstXmlParserTests::test_builtinTypeReference_data()
     QTest::newRow("OctetString")   << "OCTET_STRING"  << "OCTET STRING";
     QTest::newRow("IA5String")     << "IA5String"     << "IA5String";
     QTest::newRow("NumericString") << "NumericString" << "NumericString";
-    QTest::newRow("Enumerated")    << "Enumerated"    << "ENUMERATED";
+    QTest::newRow("Enumerated")    << "ENUMERATED"    << "ENUMERATED";
     QTest::newRow("Choice")        << "CHOICE"        << "CHOICE";
     QTest::newRow("Sequence")      << "SEQUENCE"      << "SEQUENCE";
     QTest::newRow("SequenceOf")    << "SEQUENCE_OF"   << "SEQUENCE OF";
