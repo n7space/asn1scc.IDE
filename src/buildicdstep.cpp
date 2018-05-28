@@ -25,7 +25,6 @@
 
 #include "buildicdstep.h"
 
-#include <QRegularExpression>
 #include <QStringList>
 
 #include <projectexplorer/buildconfiguration.h>
@@ -34,14 +33,18 @@
 #include <projectexplorer/processparameters.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectexplorerconstants.h>
+#include <projectexplorer/projectnodes.h>
 #include <projectexplorer/target.h>
 
 #include <kitinformation.h>
 
+#include <utils/mimetypes/mimedatabase.h>
 #include <utils/qtcassert.h>
 
 #include <icderrorparser.h>
 #include <icdstepscache.h>
+
+#include "asn1acnconstants.h"
 
 using namespace Asn1Acn::Internal;
 
@@ -151,8 +154,12 @@ bool BuildICDStep::updateSourcesList()
 {
     const auto project = target()->project();
 
-    static const QRegularExpression re("\\.asn1?$");
-    m_sources = project->files(ProjectExplorer::Project::SourceFiles).filter(re);
+    m_sources = project->files([](const ProjectExplorer::Node *n) {
+        if (const auto fn = n->asFileNode())
+            return Utils::mimeTypeForFile(fn->filePath().toString()).name()
+                   == Constants::ASN1_MIMETYPE;
+        return false;
+    });
 
     if (m_sources.isEmpty()) {
         addOutput(tr("No ASN.1 present in project"), BuildStep::OutputFormat::ErrorMessage);
@@ -229,11 +236,11 @@ QString quoteOne(const QString &file)
     return QLatin1Char('"') + file + QLatin1Char('"');
 }
 
-QStringList quoteList(const QStringList &files)
+QStringList quoteList(const Utils::FileNameList &files)
 {
     QStringList res;
     for (const auto &file : files)
-        res << quoteOne(file);
+        res << quoteOne(file.toString());
     return res;
 }
 } // namespace

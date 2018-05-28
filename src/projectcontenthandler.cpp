@@ -33,6 +33,7 @@
 #include "filesourcereader.h"
 
 using namespace Asn1Acn::Internal;
+using FileNameList = Utils::FileNameList;
 
 ProjectContentHandler *ProjectContentHandler::create()
 {
@@ -76,13 +77,13 @@ void ProjectContentHandler::handleProjectRemoved(const QString &projectName)
 }
 
 void ProjectContentHandler::handleFileListChanged(const QString &projectName,
-                                                  const QStringList &fileList)
+                                                  const FileNameList &fileList)
 {
     removeStaleFiles(projectName, fileList);
     processFiles(projectName, fileList);
 }
 
-void ProjectContentHandler::handleFileContentChanged(const QString &path)
+void ProjectContentHandler::handleFileContentChanged(const Utils::FileName &path)
 {
     QStringList projects = m_storage->getProjectsForFile(path);
 
@@ -99,40 +100,35 @@ void ProjectContentHandler::handleFileContentChanged(const QString &path)
 }
 
 void ProjectContentHandler::removeStaleFiles(const QString &projectName,
-                                             const QStringList &filePaths)
+                                             const FileNameList &filePaths)
 {
-    QStringList stalePaths = getStaleFilesPaths(projectName, filePaths);
+    const auto stalePaths = getStaleFilesPaths(projectName, filePaths);
 
-    foreach (const QString &stalePath, stalePaths)
+    foreach (const auto &stalePath, stalePaths)
         m_storage->removeFileFromProject(projectName, stalePath);
 }
 
-void ProjectContentHandler::processFiles(const QString &projectName, const QStringList &filePaths)
+void ProjectContentHandler::processFiles(const QString &projectName, const FileNameList &filePaths)
 {
     DocumentProcessor *dp = createDocumentProcessor(projectName, filePaths);
     startProcessing(dp);
 }
 
-QStringList ProjectContentHandler::getStaleFilesPaths(const QString &projectName,
-                                                      const QStringList &filePaths) const
+FileNameList ProjectContentHandler::getStaleFilesPaths(const QString &projectName,
+                                                       const FileNameList &filePaths) const
 {
-    QStringList staleFileList = m_storage->getFilesPathsFromProject(projectName);
-    QSet<QString> pathsToRemove = staleFileList.toSet().subtract(filePaths.toSet());
-
-    QStringList ret;
-    foreach (const QString &stalePath, pathsToRemove)
-        ret.append(stalePath);
-
-    return ret;
+    const auto staleFileList = m_storage->getFilesPathsFromProject(projectName);
+    const auto pathsToRemove = staleFileList.toSet().subtract(filePaths.toSet());
+    return pathsToRemove.toList();
 }
 
-DocumentProcessor *ProjectContentHandler::createDocumentProcessor(const QString &projectName,
-                                                                  const QStringList &filePaths) const
+DocumentProcessor *ProjectContentHandler::createDocumentProcessor(
+    const QString &projectName, const FileNameList &filePaths) const
 {
     DocumentProcessor *docProcessor = m_createProcessor(projectName);
 
     for (const auto &path : filePaths)
-        docProcessor->addToRun(path, m_sourceReader->readContent(path));
+        docProcessor->addToRun(path.toString(), m_sourceReader->readContent(path.toString()));
 
     return docProcessor;
 }
@@ -187,8 +183,8 @@ void ProjectContentHandler::handleFilesProcesedWithFailure(
     const std::vector<Data::ErrorMessage> &errorMessages)
 {
     for (size_t i = 0; i < parsedDocuments.size(); i++) {
-        auto file = m_storage->getFileForPathFromProject(projectName,
-                                                         parsedDocuments[i]->location().path());
+        const auto path = Utils::FileName::fromString(parsedDocuments[i]->location().path());
+        auto file = m_storage->getFileForPathFromProject(projectName, path);
         if (file == nullptr) {
             file = parsedDocuments[i].get();
             m_storage->addFileToProject(projectName, std::move(parsedDocuments[i]));

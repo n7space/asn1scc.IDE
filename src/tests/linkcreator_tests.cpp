@@ -126,7 +126,7 @@ void LinkCreatorTests::test_createHighlight()
     QCOMPARE(link.linkTextEnd, 13);
     QCOMPARE(link.targetFileName, m_path);
 
-    m_storage->removeFileFromProject(m_project, m_path);
+    m_storage->removeFileFromProject(m_project, Utils::FileName::fromString(m_path));
 }
 
 void LinkCreatorTests::test_createTarget()
@@ -161,5 +161,5 @@ void LinkCreatorTests::test_createTarget()
     QCOMPARE(link.targetLine, 1);
     QCOMPARE(link.targetFileName, m_path);
 
-    m_storage->removeFileFromProject(m_project, m_path);
+    m_storage->removeFileFromProject(m_project, Utils::FileName::fromString(m_path));
 }

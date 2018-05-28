@@ -80,14 +80,12 @@ void ProjectWatcher::onProjectFileListChanged()
     QTC_ASSERT(project != nullptr, return );
 
     const QSet<QString> watchedMimeTypes{Constants::ASN1_MIMETYPE, Constants::ACN_MIMETYPE};
-    const QStringList validFiles
-        = project->files(ProjectExplorer::Project::AllFiles,
-                         [&watchedMimeTypes](const ProjectExplorer::Node *n) {
-                             if (const auto fn = n->asFileNode())
-                                 return watchedMimeTypes.contains(
-                                     Utils::mimeTypeForFile(fn->filePath().toString()).name());
-                             return false;
-                         });
+    const auto validFiles = project->files([&watchedMimeTypes](const ProjectExplorer::Node *n) {
+        if (const auto fn = n->asFileNode())
+            return watchedMimeTypes.contains(
+                Utils::mimeTypeForFile(fn->filePath().toString()).name());
+        return false;
+    });
 
     ProjectContentHandler *proc = ProjectContentHandler::create();
     proc->handleFileListChanged(project->displayName(), validFiles);

@@ -60,6 +60,6 @@ TextEditor::IOutlineWidget *OutlineWidgetFactory::createWidget(Core::IEditor *ed
     EditorWidget *editorWidget = qobject_cast<EditorWidget *>(baseEditor->widget());
     QTC_ASSERT(editorWidget, return 0);
 
-    return new OutlineWidget(new OutlineModel(editorWidget->textDocument()->filePath().toString()),
+    return new OutlineWidget(new OutlineModel(editorWidget->textDocument()->filePath()),
                              std::make_unique<OutlineIndexUpdaterFactory>());
 }

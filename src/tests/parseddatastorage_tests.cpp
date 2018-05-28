@@ -80,7 +80,7 @@ void ParsedDataStorageTests::test_addAndRemoveFileFromProject()
     const QString project("testProject");
     storage->addProject(project);
 
-    const QString path = pathFromName("testFile");
+    const auto path = pathFromName("testFile");
 
     addFileToProject(storage, project, path);
     QCOMPARE(storage->getProjectsCount(), 1);
@@ -131,7 +131,7 @@ void ParsedDataStorageTests::test_addAndRemoveMultipleFilesFromProject()
     QCOMPARE(storage->getProjectsCount(), 2);
     QCOMPARE(storage->getDocumentsCount(), 0);
 
-    const QString path = pathFromName("testFile");
+    const auto path = pathFromName("testFile");
     addFileToProject(storage, firstProject, path);
     addFileToProject(storage, secondProject, path);
 
@@ -186,7 +186,7 @@ void ParsedDataStorageTests::test_updateFileInOneProject()
     const auto files = storage->getFilesPathsFromProject(project);
     QCOMPARE(static_cast<int>(files.size()), 1);
 
-    const QString path = files.at(0);
+    const auto path = files.at(0);
     const auto documentAny = storage->getAnyFileForPath(path);
     const auto documentFromProject = storage->getFileForPathFromProject(project, path);
 
@@ -208,7 +208,7 @@ void ParsedDataStorageTests::test_updateFileInMultipleProjects()
     QCOMPARE(storage->getProjectsCount(), 2);
     QCOMPARE(storage->getDocumentsCount(), 0);
 
-    const QString path = pathFromName("testFile");
+    const auto path = pathFromName("testFile");
     addFileToProject(storage, firstProject, path);
     addFileToProject(storage, secondProject, path);
 
@@ -233,13 +233,13 @@ void ParsedDataStorageTests::test_getFilesFromNonExistingProject()
 
 void ParsedDataStorageTests::addFileToProject(ParsedDataStorage *storage,
                                               const QString &project,
-                                              const QString &filePath)
+                                              const Utils::FileName &filePath)
 {
-    auto document = std::make_unique<Data::File>(filePath);
+    auto document = std::make_unique<Data::File>(filePath.toString());
     storage->addFileToProject(project, std::move(document));
 }
 
-QString ParsedDataStorageTests::pathFromName(const QString &name)
+Utils::FileName ParsedDataStorageTests::pathFromName(const QString &name)
 {
-    return QString("/test/file/path/") + name;
+    return Utils::FileName::fromString("/test/file/path/" + name);
 }

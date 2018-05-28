@@ -27,7 +27,8 @@
 
 #include <QObject>
 #include <QString>
-#include <QStringList>
+
+#include <utils/fileutils.h>
 
 #include "documentprocessor.h"
 #include "modelvalidityguard.h"
@@ -54,21 +55,22 @@ public:
     void handleProjectAdded(const QString &projectName);
     void handleProjectRemoved(const QString &projectName);
 
-    void handleFileListChanged(const QString &projectName, const QStringList &fileList);
-    void handleFileContentChanged(const QString &path);
+    void handleFileListChanged(const QString &projectName, const Utils::FileNameList &fileList);
+    void handleFileContentChanged(const Utils::FileName &path);
 
 private slots:
     void onFilesProcessingFinished(const QString &projectName);
 
 private:
-    void removeStaleFiles(const QString &projectName, const QStringList &filePaths);
+    void removeStaleFiles(const QString &projectName, const Utils::FileNameList &filePaths);
 
-    QStringList getStaleFilesPaths(const QString &projectName, const QStringList &filePaths) const;
+    Utils::FileNameList getStaleFilesPaths(const QString &projectName,
+                                           const Utils::FileNameList &filePaths) const;
 
-    void processFiles(const QString &projectName, const QStringList &filePaths);
+    void processFiles(const QString &projectName, const Utils::FileNameList &filePaths);
 
     DocumentProcessor *createDocumentProcessor(const QString &projectName,
-                                               const QStringList &filePaths) const;
+                                               const Utils::FileNameList &filePaths) const;
     void startProcessing(DocumentProcessor *dp);
     void allProcessingFinished();
 

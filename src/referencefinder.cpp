@@ -42,8 +42,7 @@ Data::TypeReference ReferenceFinder::findAt(const QTextCursor &cursor) const
     if (!isProperAsn1IdentifierChar(m_textDocument.characterAt(cursor.position())))
         return Data::TypeReference();
 
-    const auto path = m_textDocument.filePath().toString();
-    const auto file = m_storage->getAnyFileForPath(path);
+    const auto file = m_storage->getAnyFileForPath(m_textDocument.filePath());
     return findAt(file, cursor.blockNumber() + 1, cursor.columnNumber());
 }
 

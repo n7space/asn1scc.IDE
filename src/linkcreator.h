@@ -41,24 +41,23 @@ namespace Internal {
 class LinkCreator
 {
 public:
-    using Link = TextEditor::TextEditorWidget::Link;
-
     LinkCreator(const TextEditor::TextDocument &document, const ParsedDataStorage *storage);
 
-    Link createHighlightLink(const QTextCursor &cursor) const;
-    Link createTargetLink(const QTextCursor &cursor) const;
+    Utils::Link createHighlightLink(const QTextCursor &cursor) const;
+    Utils::Link createTargetLink(const QTextCursor &cursor) const;
 
 private:
-    Link getSymbolLink(const Data::TypeReference &symbolSource, const QTextCursor &cursor) const;
+    Utils::Link getSymbolLink(const Data::TypeReference &symbolSource,
+                              const QTextCursor &cursor) const;
 
-    Link getTargetSymbolLink(const Data::TypeReference &symbolSource, const Link &symbol) const;
+    Utils::Link getTargetSymbolLink(const Data::TypeReference &symbolSource,
+                                    const Utils::Link &symbol) const;
 
     Data::SourceLocation getTargetLocation(const QString &typeName, const QString &moduleName) const;
     Data::SourceLocation getTargetLocationFromProject(const QString &projectName,
                                                       const QString &typeName,
                                                       const QString &moduleName) const;
 
-    const QString m_documentPath;
     const TextEditor::TextDocument &m_textDocument;
     const ParsedDataStorage *m_storage;
 };
