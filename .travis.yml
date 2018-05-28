@@ -40,6 +40,7 @@ addons:
     - gcc-5
     - qt510-meta-minimal
     - qt510tools
+    - qt510script
     - p7zip
     - libgl1-mesa-dev
 
