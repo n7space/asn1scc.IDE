@@ -78,7 +78,7 @@ private:
     QString m_asn1sccCommand;
     QString m_outputPath;
     const QString m_outputFilename;
-    QStringList m_sources;
+    Utils::FileNameList m_sources;
 };
 
 } // namespace Internal

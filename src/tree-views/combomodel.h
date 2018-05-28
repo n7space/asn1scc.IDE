@@ -34,7 +34,7 @@ class ComboModel : public MutableRootModel
 {
     Q_OBJECT
 public:
-    explicit ComboModel(const QString &filePath, QObject *parent = 0);
+    explicit ComboModel(const Utils::FileName &filePath, QObject *parent = 0);
     ~ComboModel();
 
 private:

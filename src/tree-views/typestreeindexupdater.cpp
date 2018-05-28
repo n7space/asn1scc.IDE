@@ -78,7 +78,7 @@ void TypesTreeIndexUpdater::fillSelectedIndexes(QModelIndex &current,
 QModelIndexList TypesTreeIndexUpdater::searchedIndexes() const
 {
     const auto &root = m_storage->root();
-    QStringList projectNames = m_storage->getProjectsForFile(currentFilePath().toString());
+    QStringList projectNames = m_storage->getProjectsForFile(currentFilePath());
 
     QModelIndexList projectIndexes;
     for (const auto &name : projectNames) {

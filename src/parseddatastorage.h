@@ -31,6 +31,8 @@
 
 #include <memory>
 
+#include <utils/fileutils.h>
+
 #include "data/file.h"
 #include "data/root.h"
 
@@ -53,18 +55,18 @@ public:
     void removeProject(const QString &projectName);
 
     void addFileToProject(const QString &projectName, std::unique_ptr<Data::File> file);
-    void removeFileFromProject(const QString &projectName, const QString &filePath);
+    void removeFileFromProject(const QString &projectName, const Utils::FileName &filePath);
 
-    Data::File *getAnyFileForPath(const QString &filePath) const;
-    Data::File *getFileForPathFromProject(const QString &project, const QString &path);
+    Data::File *getAnyFileForPath(const Utils::FileName &filePath) const;
+    Data::File *getFileForPathFromProject(const QString &project, const Utils::FileName &path);
 
-    const QStringList getProjectsForFile(const QString &filePath) const;
-    const QStringList getFilesPathsFromProject(const QString &projectName) const;
+    const QStringList getProjectsForFile(const Utils::FileName &filePath) const;
+    const Utils::FileNameList getFilesPathsFromProject(const QString &project) const;
 
-    Data::SourceLocation getDefinitionLocation(const QString &path,
+    Data::SourceLocation getDefinitionLocation(const Utils::FileName &path,
                                                const QString &typeAssignmentName,
                                                const QString &definitionsName) const;
-    const Data::TypeAssignment *getTypeAssignment(const QString &path,
+    const Data::TypeAssignment *getTypeAssignment(const Utils::FileName &path,
                                                   const QString &typeAssignmentName,
                                                   const QString &definitionsName) const;
 
@@ -76,11 +78,11 @@ public:
     int getDocumentsCount();
 
 private:
-    const QStringList getProjectsForFileInternal(const QString &filePath) const;
-    const QStringList getFilesPathsFromProjectInternal(const QString &projectName) const;
-    void removeFileFromProjectInternal(const QString &projectName, const QString &filePath);
+    const QStringList getProjectsForFileInternal(const Utils::FileName &filePath) const;
+    const Utils::FileNameList getFilesPathsFromProjectInternal(const QString &projectName) const;
+    void removeFileFromProjectInternal(const QString &projectName, const Utils::FileName &filePath);
 
-    Data::File *getFileForPathInternal(const QString &filePath) const;
+    Data::File *getFileForPathInternal(const Utils::FileName &filePath) const;
 
     Data::SourceLocation getLocationFromModule(const Data::Definitions &moduleDefinition,
                                                const QString &typeAssignmentName) const;

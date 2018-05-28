@@ -23,8 +23,8 @@ sudo: required
 
 env:
   global:
-    - ENV_QTC_VERSION="4.5.0"
-    - ENV_QTC_VERSION_SHORT="4.5"
+    - ENV_QTC_VERSION="4.6.1"
+    - ENV_QTC_VERSION_SHORT="4.6"
     - PUSC_VERSION="1.0.1"
   matrix:
     - ENV_WITH_TESTS=1
@@ -40,6 +40,7 @@ addons:
     - gcc-5
     - qt510-meta-minimal
     - qt510tools
+    - qt510script
     - p7zip
     - libgl1-mesa-dev
 

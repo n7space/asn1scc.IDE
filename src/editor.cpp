@@ -110,6 +110,5 @@ void EditorWidget::onExtraSelectionsUpdated(const QList<QTextEdit::ExtraSelectio
 void EditorWidget::addOutlineCombo()
 {
     insertExtraToolBarWidget(TextEditorWidget::Left,
-                             new TreeViews::OutlineCombo(textDocument()->filePath().toString(),
-                                                         this));
+                             new TreeViews::OutlineCombo(textDocument()->filePath(), this));
 }

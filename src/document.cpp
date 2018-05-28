@@ -82,7 +82,7 @@ void Document::onModelChanged()
 
 void Document::onFileContentChanged()
 {
-    auto file = ParsedDataStorage::instance()->getAnyFileForPath(filePath().toString());
+    auto file = ParsedDataStorage::instance()->getAnyFileForPath(filePath());
     if (file == nullptr)
         return;
 
@@ -123,16 +123,14 @@ QList<QTextEdit::ExtraSelection> errorsToSelection(
 
 void Document::processDocument()
 {
-    const QString path = filePath().toString();
-
     ProjectContentHandler *handler = ProjectContentHandler::create();
-    handler->handleFileContentChanged(path);
+    handler->handleFileContentChanged(filePath());
 }
 
 void Document::updateExtraSelections() const
 {
-    const auto file = ParsedDataStorage::instance()
-                          ->getFileForPathFromProject(activeProjectName(), filePath().toString());
+    const auto file = ParsedDataStorage::instance()->getFileForPathFromProject(activeProjectName(),
+                                                                               filePath());
     if (file == nullptr)
         return;
 

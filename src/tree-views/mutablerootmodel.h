@@ -24,6 +24,8 @@
 ****************************************************************************/
 #pragma once
 
+#include <utils/fileutils.h>
+
 #include "model.h"
 
 namespace Asn1Acn {
@@ -34,13 +36,13 @@ class MutableRootModel : public Model
 {
     Q_OBJECT
 protected:
-    explicit MutableRootModel(const QString &filePath, QObject *parent = 0);
+    explicit MutableRootModel(const Utils::FileName &filePath, QObject *parent = 0);
 
 private:
     void onEndResetModel() override;
 
 private:
-    QString m_filePath;
+    Utils::FileName m_filePath;
 };
 
 } // namespace TreeViews

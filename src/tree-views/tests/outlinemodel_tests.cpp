@@ -45,7 +45,7 @@ OutlineModelTests::~OutlineModelTests() {}
 
 void OutlineModelTests::test_emptyModel()
 {
-    ModelTest testEmptyModel(new OutlineModel(QString(), this), this);
+    ModelTest testEmptyModel(new OutlineModel({}, this), this);
 }
 
 void OutlineModelTests::test_modelWithDummyPopulation()
@@ -77,7 +77,7 @@ void OutlineModelTests::test_modelWithDummyPopulation()
                                                std::make_unique<Data::Types::Integer>()));
     root->add(std::move(definitions2));
 
-    auto model = new OutlineModel(filePath, this);
+    auto model = new OutlineModel(Utils::FileName::fromString(filePath), this);
     model->setRoot(root.get());
 
     ModelTest testNonEmptyModel(model, this);

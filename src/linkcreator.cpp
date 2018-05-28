@@ -35,30 +35,29 @@
 using namespace Asn1Acn::Internal;
 
 LinkCreator::LinkCreator(const TextEditor::TextDocument &document, const ParsedDataStorage *storage)
-    : m_documentPath(document.filePath().toString())
-    , m_textDocument(document)
+    : m_textDocument(document)
     , m_storage(storage)
 {}
 
-LinkCreator::Link LinkCreator::createHighlightLink(const QTextCursor &cursor) const
+Utils::Link LinkCreator::createHighlightLink(const QTextCursor &cursor) const
 {
     const auto typeRef = ReferenceFinder(m_textDocument, m_storage).findAt(cursor);
     return getSymbolLink(typeRef, cursor);
 }
 
-LinkCreator::Link LinkCreator::createTargetLink(const QTextCursor &cursor) const
+Utils::Link LinkCreator::createTargetLink(const QTextCursor &cursor) const
 {
     const auto typeRef = ReferenceFinder(m_textDocument, m_storage).findAt(cursor);
 
-    Link sourceSymbol = getSymbolLink(typeRef, cursor);
+    Utils::Link sourceSymbol = getSymbolLink(typeRef, cursor);
 
     return getTargetSymbolLink(typeRef, sourceSymbol);
 }
 
-LinkCreator::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSource,
-                                             const QTextCursor &cursor) const
+Utils::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSource,
+                                       const QTextCursor &cursor) const
 {
-    Link symbol(m_documentPath);
+    Utils::Link symbol(m_textDocument.filePath().toString());
 
     QTextCursor selection = Utils::Text::selectAt(cursor,
                                                   symbolSource.location().line(),
@@ -71,12 +70,12 @@ LinkCreator::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSo
     return symbol;
 }
 
-LinkCreator::Link LinkCreator::getTargetSymbolLink(const Data::TypeReference &symbolSource,
-                                                   const Link &symbol) const
+Utils::Link LinkCreator::getTargetSymbolLink(const Data::TypeReference &symbolSource,
+                                             const Utils::Link &symbol) const
 {
-    Link target = symbol;
+    Utils::Link target = symbol;
 
-    Data::SourceLocation targetLocation = m_storage->getDefinitionLocation(m_documentPath,
+    Data::SourceLocation targetLocation = m_storage->getDefinitionLocation(m_textDocument.filePath(),
                                                                            symbolSource.name(),
                                                                            symbolSource.module());
 
@@ -94,7 +93,7 @@ LinkCreator::Link LinkCreator::getTargetSymbolLink(const Data::TypeReference &sy
 Data::SourceLocation LinkCreator::getTargetLocation(const QString &typeName,
                                                     const QString &moduleName) const
 {
-    const auto projects = m_storage->getProjectsForFile(m_documentPath);
+    const auto projects = m_storage->getProjectsForFile(m_textDocument.filePath());
 
     for (const QString &projectName : projects) {
         const auto location = getTargetLocationFromProject(projectName, typeName, moduleName);
@@ -111,7 +110,7 @@ Data::SourceLocation LinkCreator::getTargetLocationFromProject(const QString &pr
 {
     const auto paths = m_storage->getFilesPathsFromProject(projectName);
     for (const auto &path : paths) {
-        if (path == m_documentPath)
+        if (path == m_textDocument.filePath())
             continue;
 
         const auto location = m_storage->getDefinitionLocation(path, typeName, moduleName);

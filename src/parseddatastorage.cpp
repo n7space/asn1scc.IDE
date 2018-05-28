@@ -42,7 +42,7 @@ ParsedDataStorage *ParsedDataStorage::instance()
     return &instance_;
 }
 
-Data::File *ParsedDataStorage::getAnyFileForPath(const QString &filePath) const
+Data::File *ParsedDataStorage::getAnyFileForPath(const Utils::FileName &filePath) const
 {
     QMutexLocker locker(&m_documentsMutex);
 
@@ -50,7 +50,7 @@ Data::File *ParsedDataStorage::getAnyFileForPath(const QString &filePath) const
 }
 
 Data::File *ParsedDataStorage::getFileForPathFromProject(const QString &projectName,
-                                                         const QString &filePath)
+                                                         const Utils::FileName &filePath)
 {
     QMutexLocker locker(&m_documentsMutex);
 
@@ -58,7 +58,7 @@ Data::File *ParsedDataStorage::getFileForPathFromProject(const QString &projectN
     if (project == nullptr)
         return nullptr;
 
-    return project->file(filePath);
+    return project->file(filePath.toString());
 }
 
 void ParsedDataStorage::addProject(const QString &projectName)
@@ -75,21 +75,21 @@ void ParsedDataStorage::removeProject(const QString &projectName)
     m_root->remove(projectName);
 }
 
-const QStringList ParsedDataStorage::getProjectsForFile(const QString &filePath) const
+const QStringList ParsedDataStorage::getProjectsForFile(const Utils::FileName &filePath) const
 {
     QMutexLocker locker(&m_documentsMutex);
 
     return getProjectsForFileInternal(filePath);
 }
 
-const QStringList ParsedDataStorage::getFilesPathsFromProject(const QString &projectName) const
+const Utils::FileNameList ParsedDataStorage::getFilesPathsFromProject(const QString &project) const
 {
     QMutexLocker locker(&m_documentsMutex);
 
-    return getFilesPathsFromProjectInternal(projectName);
+    return getFilesPathsFromProjectInternal(project);
 }
 
-Data::SourceLocation ParsedDataStorage::getDefinitionLocation(const QString &path,
+Data::SourceLocation ParsedDataStorage::getDefinitionLocation(const Utils::FileName &path,
                                                               const QString &typeAssignmentName,
                                                               const QString &definitionsName) const
 {
@@ -97,8 +97,9 @@ Data::SourceLocation ParsedDataStorage::getDefinitionLocation(const QString &pat
     return (type == nullptr) ? Data::SourceLocation() : type->location();
 }
 
-const Data::TypeAssignment *ParsedDataStorage::getTypeAssignment(
-    const QString &path, const QString &typeAssignmentName, const QString &definitionsName) const
+const Data::TypeAssignment *ParsedDataStorage::getTypeAssignment(const Utils::FileName &path,
+                                                                 const QString &typeAssignmentName,
+                                                                 const QString &definitionsName) const
 {
     QMutexLocker locker(&m_documentsMutex);
 
@@ -156,7 +157,8 @@ void ParsedDataStorage::addFileToProject(const QString &projectName,
     project->add(std::move(file));
 }
 
-void ParsedDataStorage::removeFileFromProject(const QString &projectName, const QString &filePath)
+void ParsedDataStorage::removeFileFromProject(const QString &projectName,
+                                              const Utils::FileName &filePath)
 {
     QMutexLocker locker(&m_documentsMutex);
 
@@ -183,46 +185,47 @@ int ParsedDataStorage::getDocumentsCount()
 }
 
 void ParsedDataStorage::removeFileFromProjectInternal(const QString &projectName,
-                                                      const QString &filePath)
+                                                      const Utils::FileName &filePath)
 {
     auto prj = m_root->project(projectName);
     if (prj == nullptr)
         return;
 
-    prj->remove(filePath);
+    prj->remove(filePath.toString());
 }
 
-const QStringList ParsedDataStorage::getProjectsForFileInternal(const QString &filePath) const
+const QStringList ParsedDataStorage::getProjectsForFileInternal(const Utils::FileName &filePath) const
 {
     QStringList res;
 
     const auto &projects = m_root->projects();
     for (const auto &project : projects) {
-        if (project->file(filePath) != nullptr)
+        if (project->file(filePath.toString()) != nullptr)
             res.append(project->name());
     }
 
     return res;
 }
 
-const QStringList ParsedDataStorage::getFilesPathsFromProjectInternal(const QString &projectName) const
+const Utils::FileNameList ParsedDataStorage::getFilesPathsFromProjectInternal(
+    const QString &projectName) const
 {
     const auto project = m_root->project(projectName);
     if (project == nullptr)
-        return QStringList();
+        return {};
 
-    QStringList ret;
+    Utils::FileNameList ret;
     for (const auto &file : project->files())
-        ret.append(file->name());
+        ret.append(Utils::FileName::fromString(file->name()));
 
     return ret;
 }
 
-Data::File *ParsedDataStorage::getFileForPathInternal(const QString &filePath) const
+Data::File *ParsedDataStorage::getFileForPathInternal(const Utils::FileName &filePath) const
 {
     for (auto it = m_root->projects().begin(); it != m_root->projects().end(); it++)
-        if ((*it)->file(filePath) != nullptr)
-            return (*it)->file(filePath);
+        if ((*it)->file(filePath.toString()) != nullptr)
+            return (*it)->file(filePath.toString());
 
     return nullptr;
 }

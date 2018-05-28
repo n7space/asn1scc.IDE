@@ -45,7 +45,7 @@ ComboModelTests::~ComboModelTests() {}
 
 void ComboModelTests::test_emptyModel()
 {
-    ModelTest testEmptyModel(new ComboModel(QString(), this), this);
+    ModelTest testEmptyModel(new ComboModel({}, this), this);
 }
 
 void ComboModelTests::test_modelWithDummyPopulation()
@@ -78,7 +78,7 @@ void ComboModelTests::test_modelWithDummyPopulation()
                                                std::make_unique<Data::Types::Integer>()));
     root->add(std::move(definitions2));
 
-    auto model = new ComboModel(filePath, this);
+    auto model = new ComboModel(Utils::FileName::fromString(filePath), this);
     model->setRoot(root.get());
 
     ModelTest testNonEmptyModel(model, this);

@@ -86,9 +86,9 @@ AsnEditorWidget::AsnEditorWidget()
                                       this))
 {}
 
-AsnEditorWidget::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
-                                                  bool resolveTarget,
-                                                  bool inNextSplit)
+Utils::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
+                                        bool resolveTarget,
+                                        bool inNextSplit)
 {
     Q_UNUSED(inNextSplit);
 

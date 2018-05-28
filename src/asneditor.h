@@ -60,9 +60,9 @@ public:
     void findUsages() override;
 
 protected:
-    Link findLinkAt(const QTextCursor &,
-                    bool resolveTarget = true,
-                    bool inNextSplit = false) override;
+    Utils::Link findLinkAt(const QTextCursor &,
+                           bool resolveTarget = true,
+                           bool inNextSplit = false) override;
 
 private:
     UsagesFinder *m_usagesFinder;

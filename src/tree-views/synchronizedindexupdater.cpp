@@ -153,7 +153,7 @@ bool SynchronizedIndexUpdater::updateAllowed()
     if (editorEmpty())
         return false;
 
-    const auto file = m_storage->getAnyFileForPath(currentFilePath().toString());
+    const auto file = m_storage->getAnyFileForPath(currentFilePath());
 
     return file != nullptr && !file->isPolluted();
 }

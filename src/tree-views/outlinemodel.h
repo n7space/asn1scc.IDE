@@ -25,6 +25,7 @@
 #pragma once
 
 #include "mutablerootmodel.h"
+
 namespace Asn1Acn {
 namespace Internal {
 namespace TreeViews {
@@ -33,7 +34,7 @@ class OutlineModel : public MutableRootModel
 {
     Q_OBJECT
 public:
-    explicit OutlineModel(const QString &filePath, QObject *parent = 0);
+    explicit OutlineModel(const Utils::FileName &filePath, QObject *parent = 0);
     ~OutlineModel();
 
 private:
