@@ -72,6 +72,7 @@ void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn_data()
     QTest::addColumn<QString>("typeName");
     QTest::addColumn<QString>("typeDisplayName");
 
+    // clang-format off
     QTest::newRow("Boolean")       << "BOOLEAN"       << "BOOLEAN";
     QTest::newRow("Null")          << "NULL"          << "NULL";
     QTest::newRow("Integer")       << "INTEGER"       << "INTEGER";
@@ -80,10 +81,11 @@ void DisplayRoleVisitorTests::test_typeAssignmentBuiltIn_data()
     QTest::newRow("OctetString")   << "OCTET_STRING"  << "OCTET STRING";
     QTest::newRow("IA5String")     << "IA5String"     << "IA5String";
     QTest::newRow("NumericString") << "NumericString" << "NumericString";
-    QTest::newRow("Enumerated")    << "Enumerated"    << "ENUMERATED";
+    QTest::newRow("Enumerated")    << "ENUMERATED"    << "ENUMERATED";
     QTest::newRow("Choice")        << "CHOICE"        << "CHOICE";
     QTest::newRow("Sequence")      << "SEQUENCE"      << "SEQUENCE";
     QTest::newRow("SequenceOf")    << "SEQUENCE_OF"   << "SEQUENCE OF";
+    // clang-format on
 }
 
 void DisplayRoleVisitorTests::test_typeAssignmentUserDefined()

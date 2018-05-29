@@ -53,8 +53,8 @@ std::unique_ptr<Type> BuiltinType::createBuiltinType(const QString &name)
     if (name == QStringLiteral("NumericString"))
         return std::make_unique<NumericString>();
 
-    if (name == QStringLiteral("Enumerated"))
-        return std::make_unique<Enumarated>();
+    if (name == QStringLiteral("ENUMERATED"))
+        return std::make_unique<Enumerated>();
 
     if (name == QStringLiteral("CHOICE"))
         return std::make_unique<Choice>();

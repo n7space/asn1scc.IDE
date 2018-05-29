@@ -139,7 +139,7 @@ private:
     }
 };
 
-class Enumarated : public BuiltinType
+class Enumerated : public BuiltinType
 {
 public:
     QString name() const override { return QLatin1String("ENUMERATED"); }
