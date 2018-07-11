@@ -71,6 +71,7 @@ private:
                                     ActionContainer *contextMenu,
                                     const Context &context);
     void initializeBuildICDAction(ActionContainer *toolsMenu);
+    void initializeGenerateTestsAction(ActionContainer *toolsMenu);
 
     void addBuildICDToToolsMenu(ActionContainer *toolsMenu);
     void addBuildICDToProjectMenu();

@@ -185,6 +185,7 @@ void Asn1AcnPlugin::initializeMenus()
     initializeFollowSymbolAction(toolsMenu, contextMenu);
     initializeFindUsagesAction(toolsMenu, contextMenu, context);
     initializeBuildICDAction(toolsMenu);
+    initializeGenerateTestsAction(toolsMenu);
     initializeImportFromAsnComponents(toolsMenu);
 
     addToToolsMenu(toolsMenu);
@@ -242,6 +243,30 @@ void Asn1AcnPlugin::addBuildICDToProjectMenu()
                                                        Constants::BUILD_ICD_CONTEXT,
                                                        projectTreeContext);
     menu->addAction(command, ProjectExplorer::Constants::G_PROJECT_FILES);
+}
+
+void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu)
+{
+    auto action = new Utils::ParameterAction(tr("Generate Tests..."),
+                                             tr("Generate Tests for \"%1\"..."),
+                                             Utils::ParameterAction::AlwaysEnabled,
+                                             this);
+    action->setEnabled(false);
+
+    connect(ProjectExplorer::SessionManager::instance(),
+            &ProjectExplorer::SessionManager::startupProjectChanged,
+            [action](ProjectExplorer::Project *project) {
+                action->setEnabled(project != nullptr);
+                action->setParameter(project == nullptr ? QString() : project->displayName());
+            });
+
+    /* connect(action, &QAction::triggered, []() {
+        TODO: open Generate Tests window
+    }); */
+
+    auto command = Core::ActionManager::registerAction(action, Constants::GENERATE_TESTS);
+    command->setAttribute(Core::Command::CA_UpdateText);
+    toolsMenu->addAction(command);
 }
 
 void Asn1AcnPlugin::initializeBuildICDAction(ActionContainer *toolsMenu)

@@ -68,6 +68,7 @@ const char IMPORT_FROM_COMPONENTS_LIBRARY_TOOLBAR[] = "Asn1Acn.ImportFromCompone
 const char BUILD_ICD_CONTEXT[] = "Asn1Acn.BuildICDContext";
 const char BUILD_ICD_TOOLBAR[] = "Asn1Acn.BuildICDToolbar";
 const char FIND_USAGES[] = "Asn1Acn.FindUsages";
+const char GENERATE_TESTS[] = "Asn1Acn.GenerateTests";
 
 // Icons
 
