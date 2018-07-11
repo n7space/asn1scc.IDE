@@ -134,6 +134,22 @@ QJsonObject buildFileData(const QString &path, const QString &contents)
     asnFileData["Contents"] = contents;
     return asnFileData;
 }
+
+QJsonObject buildAstGenerationOptions()
+{
+    QJsonObject fieldPrefix;
+    fieldPrefix["Case"] = "FieldPrefixAuto";
+
+    QJsonObject encoding;
+    encoding["Case"] = "ACN";
+
+    QJsonObject options;
+    options["TypePrefix"] = "T";
+    options["FieldPrefix"] = fieldPrefix;
+    options["Encoding"] = encoding;
+
+    return options;
+}
 } // namespace
 
 QJsonDocument Asn1SccServiceProvider::buildAstRequestData(
@@ -149,12 +165,12 @@ QJsonDocument Asn1SccServiceProvider::buildAstRequestData(
             acnFilesArray.append(buildFileData(it.key(), it.value()));
     }
 
-    QJsonObject files;
-    files["AsnFiles"] = asnFilesArray;
-    files["AcnFiles"] = acnFilesArray;
-    files["AcnFiles"] = QJsonArray(); // TODO for now (As long as asn1scc fails)
+    QJsonObject input;
+    input["AsnFiles"] = asnFilesArray;
+    input["AcnFiles"] = acnFilesArray;
+    input["Options"] = buildAstGenerationOptions();
 
-    return QJsonDocument(files);
+    return QJsonDocument(input);
 }
 
 void Asn1SccServiceProvider::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
