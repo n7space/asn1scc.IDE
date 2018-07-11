@@ -89,7 +89,7 @@ names = $$createFileNames($$DISTFILES)
     PERSISTENT_HEADERS = $${ASN1_MAIN_GENERATED_HEADER}
     PERSISTENT_SOURCES = $${ASN1SCC_SRC_DIR}/asn1crt.c $${ASN1SCC_SRC_DIR}/real.c
 
-    contains(ASN1SCC_GENERATION_OPTIONS, -ACN) {
+    contains(ASN1SCC_GENERATION_OPTIONS, --acn-enc) {
         PERSISTENT_SOURCES += $${ASN1SCC_SRC_DIR}/acn.c
     }
 }

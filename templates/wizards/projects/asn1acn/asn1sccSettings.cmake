@@ -29,7 +29,7 @@ if(NOT ASN1SCC)
 endif()
 
 if(NOT ASN1SCC_GENERATION_OPTIONS)
-    set(ASN1SCC_GENERATION_OPTIONS -c -ACN)
+    set(ASN1SCC_GENERATION_OPTIONS --c-lang --acn-enc --field-prefix AUTO --type-prefix T)
 endif()
 
 if(NOT ASN1SCC_PRODUCTS_DIR)
@@ -45,5 +45,5 @@ if(NOT ASN1SCC_ICD_FILE)
 endif()
 
 if(NOT ASN1SCC_ICD_OPTIONS)
-    set(ASN1SCC_ICD_OPTIONS -icdAcn)
+    set(ASN1SCC_ICD_OPTIONS --field-prefix AUTO --type-prefix T -icdAcn)
 endif()
