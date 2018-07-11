@@ -33,6 +33,7 @@ const char SETTINGS_CATEGORY[] = "J.Asn1Acn";
 const char SETTINGS_CATEGORY_DISPLAY[] = QT_TRANSLATE_NOOP(Asn1Acn, "ASN.1/ACN");
 const char SERVICE_SETTINGS_ID[] = "C.Asn1Acn.Service";
 const char LIBRARIES_SETTINGS_ID[] = "A.Asn1Acn.Libraries";
+const char TESTGENERATOR_SETTINGS_ID[] = "B.Asn1Acn.TestGenerator";
 
 const char SETTINGS_GROUP[] = "Asn1Acn";
 

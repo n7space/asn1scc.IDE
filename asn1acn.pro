@@ -119,12 +119,15 @@ SOURCES += \
     \
     options-pages/service.cpp \
     options-pages/libraries.cpp \
+    options-pages/testgenerator.cpp \
     options-pages/servicewidget.cpp \
     options-pages/librarieswidget.cpp \
+    options-pages/testgeneratorwidget.cpp \
     \
     settings/settings.cpp \
     settings/service.cpp \
     settings/libraries.cpp \
+    settings/testgenerator.cpp \
     \
     libraries/modulemetadataparser.cpp \
     libraries/generalmetadataparser.cpp \
@@ -256,12 +259,15 @@ HEADERS += \
     \
     options-pages/service.h \
     options-pages/libraries.h \
+    options-pages/testgenerator.h \
     options-pages/servicewidget.h \
     options-pages/librarieswidget.h \
+    options-pages/testgeneratorwidget.h \
     \
     settings/settings.h \
     settings/service.h \
     settings/libraries.h \
+    settings/testgenerator.h \
     \
     libraries/modulemetadataparser.h \
     libraries/generalmetadataparser.h \
@@ -340,6 +346,7 @@ HEADERS += \
 FORMS += \
     options-pages/service.ui \
     options-pages/libraries.ui \
+    options-pages/testgenerator.ui \
     \
     libraries/wizard/import_component.ui \
     libraries/wizard/select_component.ui \
