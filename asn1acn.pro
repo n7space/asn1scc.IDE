@@ -129,6 +129,9 @@ SOURCES += \
     settings/libraries.cpp \
     settings/testgenerator.cpp \
     \
+    test-generator/testgeneratorparamsdialog.cpp \
+    test-generator/testgeneratorparamswidget.cpp \
+    \
     libraries/modulemetadataparser.cpp \
     libraries/generalmetadataparser.cpp \
     libraries/componentimporter.cpp \
@@ -269,6 +272,9 @@ HEADERS += \
     settings/libraries.h \
     settings/testgenerator.h \
     \
+    test-generator/testgeneratorparamsdialog.h \
+    test-generator/testgeneratorparamswidget.h \
+    \
     libraries/modulemetadataparser.h \
     libraries/generalmetadataparser.h \
     libraries/componentimporter.h \
@@ -344,6 +350,8 @@ HEADERS += \
     icdstepscache.h
 
 FORMS += \
+    test-generator/testgeneratorparams.ui \
+    \
     options-pages/service.ui \
     options-pages/libraries.ui \
     options-pages/testgenerator.ui \

@@ -63,6 +63,8 @@
 #include "libraries/componentdirectorywatcher.h"
 #include "libraries/componentlibrarydispatcher.h"
 
+#include "test-generator/testgeneratorparamsdialog.h"
+
 #include "acneditor.h"
 #include "asn1acnconstants.h"
 #include "asn1acnjsextension.h"
@@ -260,9 +262,11 @@ void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu)
                 action->setParameter(project == nullptr ? QString() : project->displayName());
             });
 
-    /* connect(action, &QAction::triggered, []() {
-        TODO: open Generate Tests window
-    }); */
+    connect(action, &QAction::triggered, [this]() {
+        if (m_testGeneratorDialog.isNull())
+            m_testGeneratorDialog = new TestGenerator::TestGeneratorParamsDialog;
+        m_testGeneratorDialog->exec();
+    });
 
     auto command = Core::ActionManager::registerAction(action, Constants::GENERATE_TESTS);
     command->setAttribute(Core::Command::CA_UpdateText);
