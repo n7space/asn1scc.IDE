@@ -82,45 +82,26 @@ void ICDBuilder::runBuild(ProjectExplorer::Project *project)
 }
 
 BuildICDStep::BuildICDStep(ProjectExplorer::BuildStepList *parent)
-    : AbstractProcessStep(parent, Core::Id(ICD_BS_ID))
-    , m_commandFuture(nullptr)
+    : Asn1AcnBuildStep(parent, ICD_BS_ID, QStringLiteral("icd"))
     , m_outputFilename("icd.html")
-{
-    setDefaultDisplayName(tr("icd"));
-
-    connect(&m_inputWatcher, &QFutureWatcher<bool>::canceled, this, [this]() {
-        if (m_commandFuture)
-            m_commandFuture->cancel();
-    });
-
-    connect(&m_commandWatcher, &QFutureWatcher<bool>::finished, this, &BuildICDStep::onFinish);
-}
+{}
 
 bool BuildICDStep::init(QList<const BuildStep *> &earlierSteps)
 {
-    if (m_commandFuture || !updateRunParams()) {
-        addOutput(tr("Build initialization failed"), BuildStep::OutputFormat::ErrorMessage);
+    if (!updateRunParams()) {
+        addOutput(tr("Could not initialize build params"), BuildStep::OutputFormat::ErrorMessage);
         return false;
     }
 
     setOutputParser(new ICDErrorParser);
 
-    return AbstractProcessStep::init(earlierSteps);
+    return Asn1AcnBuildStep::init(earlierSteps);
 }
 
 bool BuildICDStep::updateRunParams()
 {
-    const auto bc = buildConfiguration();
-
-    updateEnvironment(bc);
-
-    return updateOutputDirectory(bc) && updateAsn1SccCommand() && updateSourcesList();
-}
-
-void BuildICDStep::updateEnvironment(const ProjectExplorer::BuildConfiguration *bc)
-{
-    auto *pp = processParameters();
-    pp->setEnvironment(bc->environment());
+    return updateOutputDirectory(buildConfiguration()) && updateAsn1SccCommand()
+           && updateSourcesList();
 }
 
 bool BuildICDStep::updateOutputDirectory(const ProjectExplorer::BuildConfiguration *bc)
@@ -169,67 +150,6 @@ bool BuildICDStep::updateSourcesList()
     return true;
 }
 
-void BuildICDStep::run(QFutureInterface<bool> &f)
-{
-    emit addOutput(tr("Running ICD build"), BuildStep::OutputFormat::NormalMessage);
-
-    updateInput(f);
-    updateProcess(m_asn1sccCommand, argument());
-    updateCommand();
-
-    AbstractProcessStep::run(*m_commandFuture);
-}
-
-void BuildICDStep::updateInput(QFutureInterface<bool> &f)
-{
-    m_inputFuture = f;
-    m_inputFuture.setProgressRange(0, 1);
-    m_inputFuture.setProgressValue(0);
-    m_inputWatcher.setFuture(m_inputFuture.future());
-}
-
-void BuildICDStep::updateProcess(const QString &command, const QString &arg)
-{
-    auto *pp = processParameters();
-    pp->setCommand(command);
-    pp->setArguments(arg);
-    pp->resolveAll();
-}
-
-void BuildICDStep::updateCommand()
-{
-    QTC_ASSERT(!m_commandFuture || m_commandFuture->future().isFinished(), return );
-    m_commandFuture.reset(new QFutureInterface<bool>);
-    m_commandWatcher.setFuture(m_commandFuture->future());
-}
-
-void BuildICDStep::onFinish()
-{
-    bool success = finishCommand();
-    finishInput(success);
-}
-
-bool BuildICDStep::finishCommand()
-{
-    bool success = false;
-    if (m_commandFuture->isCanceled())
-        emit addOutput(tr("ICD build cancelled"), BuildStep::OutputFormat::ErrorMessage);
-    else if (m_commandFuture->isFinished())
-        success = m_commandFuture->future().result();
-
-    m_commandFuture.reset();
-
-    return success;
-}
-
-void BuildICDStep::finishInput(bool success)
-{
-    m_inputFuture.setProgressValue(1);
-    reportRunResult(m_inputFuture, success);
-
-    m_inputFuture = QFutureInterface<bool>();
-}
-
 namespace {
 QString quoteOne(const QString &file)
 {
@@ -245,10 +165,15 @@ QStringList quoteList(const Utils::FileNameList &files)
 }
 } // namespace
 
-QString BuildICDStep::argument()
+QString BuildICDStep::arguments() const
 {
     const auto in = quoteList(m_sources).join(QLatin1Char(' '));
     const auto out = quoteOne(m_outputPath + m_outputFilename);
 
     return QString(" -icdAcn ") + out + QString(" ") + in;
+}
+
+QString BuildICDStep::executablePath() const
+{
+    return m_asn1sccCommand;
 }

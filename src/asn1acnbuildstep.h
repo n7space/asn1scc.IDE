@@ -24,41 +24,50 @@
 ****************************************************************************/
 #pragma once
 
-#include "asn1acnbuildstep.h"
+#include <memory>
+
+#include <QFutureWatcher>
 
 #include <projectexplorer/abstractprocessstep.h>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ICDBuilder
-{
-public:
-    static void runBuild(ProjectExplorer::Project *project);
-};
-
-class BuildICDStep : public Asn1AcnBuildStep
+class Asn1AcnBuildStep : public ProjectExplorer::AbstractProcessStep
 {
     Q_OBJECT
 
 public:
-    explicit BuildICDStep(ProjectExplorer::BuildStepList *parent);
+    explicit Asn1AcnBuildStep(ProjectExplorer::BuildStepList *parent,
+                              const char *id,
+                              const QString &displayName);
 
     bool init(QList<const BuildStep *> &earlierSteps) override;
+    void run(QFutureInterface<bool> &) override;
+
+    ProjectExplorer::BuildStepConfigWidget *createConfigWidget() override { return nullptr; }
+
+private slots:
+    void onFinish();
 
 private:
-    bool updateRunParams();
-    bool updateOutputDirectory(const ProjectExplorer::BuildConfiguration *bc);
-    bool updateAsn1SccCommand();
-    bool updateSourcesList();
+    virtual QString executablePath() const = 0;
+    virtual QString arguments() const = 0;
 
-    QString arguments() const override;
-    QString executablePath() const override;
+    void updateInput(QFutureInterface<bool> &f);
+    void updateProcess(const QString &command, const QString &arg);
+    void updateCommand();
 
-    QString m_asn1sccCommand;
-    QString m_outputPath;
-    const QString m_outputFilename;
-    Utils::FileNameList m_sources;
+    bool finishCommand();
+    void finishInput(bool success);
+
+    void updateEnvironment(const ProjectExplorer::BuildConfiguration *bc);
+
+    QFutureWatcher<bool> m_inputWatcher;
+    QFutureInterface<bool> m_inputFuture;
+
+    QFutureWatcher<bool> m_commandWatcher;
+    std::unique_ptr<QFutureInterface<bool>> m_commandFuture;
 };
 
 } // namespace Internal
