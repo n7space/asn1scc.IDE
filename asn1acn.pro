@@ -131,6 +131,8 @@ SOURCES += \
     \
     test-generator/testgeneratorparamsdialog.cpp \
     test-generator/testgeneratorparamswidget.cpp \
+    test-generator/testgeneratorrunner.cpp \
+    test-generator/testgeneratorparamsprovider.cpp \
     \
     libraries/modulemetadataparser.cpp \
     libraries/generalmetadataparser.cpp \
@@ -275,6 +277,8 @@ HEADERS += \
     \
     test-generator/testgeneratorparamsdialog.h \
     test-generator/testgeneratorparamswidget.h \
+    test-generator/testgeneratorrunner.h \
+    test-generator/testgeneratorparamsprovider.h \
     \
     libraries/modulemetadataparser.h \
     libraries/generalmetadataparser.h \

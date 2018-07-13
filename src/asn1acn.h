@@ -34,6 +34,7 @@
 #include "libraries/wizard/importcomponentwizard.h"
 
 #include "test-generator/testgeneratorparamsdialog.h"
+#include "test-generator/testgeneratorparamsprovider.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -84,7 +85,9 @@ private:
     void addToToolsMenu(ActionContainer *container);
 
     QPointer<Libraries::Wizard::ImportComponentWizard> m_importComponentWizard;
+
     QPointer<TestGenerator::TestGeneratorParamsDialog> m_testGeneratorDialog;
+    std::shared_ptr<TestGenerator::TestGeneratorParamsProvider> m_testGeneratorProvider;
     QAction *m_findUsagesAction;
 
 #ifdef WITH_TESTS

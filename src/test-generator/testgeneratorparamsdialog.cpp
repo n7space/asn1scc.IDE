@@ -23,23 +23,29 @@
 **
 ****************************************************************************/
 
+#include <QPushButton>
+
 #include "testgeneratorparamsdialog.h"
 
 #include "testgeneratorparamswidget.h"
+#include "testgeneratorrunner.h"
 
 #include "parseddatastorage.h"
 
 #include <projectexplorer/project.h>
 #include <projectexplorer/session.h>
 
-#include <QDebug>
-
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TestGenerator;
 
-TestGeneratorParamsDialog::TestGeneratorParamsDialog(QWidget *parent)
+TestGeneratorParamsDialog::TestGeneratorParamsDialog(TestGeneratorParamsProviderPtr provider,
+                                                     QWidget *parent)
     : QDialog(parent)
+    , m_provider(provider)
 {
     m_widget = new TestGeneratorWidget(this);
+
+    m_runner = std::make_unique<TestGeneratorRunner>(provider);
 
     connect(m_widget->buttonBox(),
             &QDialogButtonBox::accepted,
@@ -51,17 +57,23 @@ TestGeneratorParamsDialog::TestGeneratorParamsDialog(QWidget *parent)
 
 int TestGeneratorParamsDialog::exec()
 {
-    m_widget->clearMainStructCandidates();
-    m_widget->setPath(QStringLiteral(""));
+    m_widget->setPath(
+        ProjectExplorer::SessionManager::startupProject()->projectDirectory().toString());
 
+    m_widget->clearMainStructCandidates();
     fillMainStructCandidates();
+    letProceed(m_widget->comboBox()->count() > 0);
 
     return QDialog::exec();
 }
 
 void TestGeneratorParamsDialog::accept()
 {
-    // TODO: Add actual running of MalTester here
+    m_provider->setMainStructureName(m_widget->mainStruct());
+    m_provider->setOutputPath(m_widget->path());
+
+    m_runner->run();
+
     QDialog::accept();
 }
 
@@ -99,4 +111,10 @@ void TestGeneratorParamsDialog::fillMainStructCandidatesFromDefinitions(
         for (const auto &type : types)
             m_widget->addMainStructCandidate(type->name());
     }
+}
+
+void TestGeneratorParamsDialog::letProceed(bool val)
+{
+    m_widget->comboBox()->setEnabled(val);
+    m_widget->buttonBox()->button(QDialogButtonBox::Ok)->setEnabled(val);
 }

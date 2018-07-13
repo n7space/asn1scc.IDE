@@ -29,7 +29,7 @@
 
 #include "data/file.h"
 
-class QDialogButtonBox;
+#include "testgeneratorrunner.h"
 
 namespace Asn1Acn {
 namespace Internal {
@@ -41,7 +41,8 @@ class TestGeneratorParamsDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit TestGeneratorParamsDialog(QWidget *parent = nullptr);
+    explicit TestGeneratorParamsDialog(TestGeneratorParamsProviderPtr provider,
+                                       QWidget *parent = nullptr);
 
 public slots:
     int exec() override;
@@ -52,7 +53,11 @@ private:
     void fillMainStructCandidatesFromProject(const QString &projectName);
     void fillMainStructCandidatesFromDefinitions(const Data::File::DefinitionsList &defs);
 
+    void letProceed(bool val);
+
     TestGeneratorWidget *m_widget;
+    TestGeneratorParamsProviderPtr m_provider;
+    std::unique_ptr<TestGeneratorRunner> m_runner;
 };
 
 } // namespace TestGenerator

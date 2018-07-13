@@ -24,33 +24,48 @@
 ****************************************************************************/
 #pragma once
 
-#include <QWidget>
+#include <memory>
 
-#include "ui_testgeneratorparams.h"
+#include <QFutureWatcher>
+
+#include "testgeneratorparamsprovider.h"
+
+#include "asn1acnbuildstep.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TestGenerator {
 
-class TestGeneratorWidget : public QWidget
+class TestGeneratorStep : public Asn1AcnBuildStep
 {
     Q_OBJECT
+
 public:
-    explicit TestGeneratorWidget(QWidget *parent = nullptr);
-
-    QString path() const;
-    void setPath(const QString &path);
-
-    QString mainStruct() const;
-    void addMainStructCandidate(const QString &mainStruct);
-
-    void clearMainStructCandidates();
-
-    const QDialogButtonBox *buttonBox() const { return m_ui.buttonBox; }
-    QComboBox *comboBox() { return m_ui.comboBox; }
+    explicit TestGeneratorStep(ProjectExplorer::BuildStepList *parent,
+                               const TestGeneratorParamsProviderPtr params);
 
 private:
-    Ui::TestGeneratorParamsWidget m_ui;
+    QString executablePath() const override;
+    QString arguments() const override;
+
+    QString asn1sccArgument() const;
+    QString mainStructureArgument() const;
+    QString outputPathArgument() const;
+    QString fileArgument() const;
+
+    const TestGeneratorParamsProviderPtr m_params;
+};
+
+class TestGeneratorRunner
+{
+public:
+    TestGeneratorRunner(const TestGeneratorParamsProviderPtr params);
+    void run();
+
+private:
+    TestGeneratorStep *createStep(const ProjectExplorer::Project *project);
+
+    const TestGeneratorParamsProviderPtr m_params;
 };
 
 } // namespace TestGenerator

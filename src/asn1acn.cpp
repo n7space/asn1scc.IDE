@@ -170,7 +170,11 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
             this,
             &Asn1AcnPlugin::onTaskFinished);
 
-    ProjectExplorer::KitManager::registerKitInformation(new KitInformation);
+    auto kitInfo = new KitInformation;
+    ProjectExplorer::KitManager::registerKitInformation(kitInfo);
+
+    m_testGeneratorProvider = std::make_shared<TestGenerator::TestGeneratorParamsProvider>(
+        testGeneratorSettings);
 
     return true;
 }
@@ -264,7 +268,8 @@ void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu)
 
     connect(action, &QAction::triggered, [this]() {
         if (m_testGeneratorDialog.isNull())
-            m_testGeneratorDialog = new TestGenerator::TestGeneratorParamsDialog;
+            m_testGeneratorDialog = new TestGenerator::TestGeneratorParamsDialog(
+                m_testGeneratorProvider);
         m_testGeneratorDialog->exec();
     });
 

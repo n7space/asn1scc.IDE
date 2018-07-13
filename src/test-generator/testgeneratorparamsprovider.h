@@ -24,34 +24,41 @@
 ****************************************************************************/
 #pragma once
 
-#include <QWidget>
+#include <memory>
 
-#include "ui_testgeneratorparams.h"
+#include <QString>
+
+#include <projectexplorer/target.h>
+
+#include "kitinformation.h"
+#include "settings/testgenerator.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TestGenerator {
 
-class TestGeneratorWidget : public QWidget
+class TestGeneratorParamsProvider
 {
-    Q_OBJECT
 public:
-    explicit TestGeneratorWidget(QWidget *parent = nullptr);
+    TestGeneratorParamsProvider(Settings::TestGeneratorConstPtr settings);
 
-    QString path() const;
-    void setPath(const QString &path);
+    QString asn1sccPath(const ProjectExplorer::Target *target) const;
+    QString testGeneratorPath() const;
+    QString outputPath() const;
+    QString mainStructureName() const;
+    QString asn1acnFiles() const;
 
-    QString mainStruct() const;
-    void addMainStructCandidate(const QString &mainStruct);
-
-    void clearMainStructCandidates();
-
-    const QDialogButtonBox *buttonBox() const { return m_ui.buttonBox; }
-    QComboBox *comboBox() { return m_ui.comboBox; }
+    void setMainStructureName(const QString &name);
+    void setOutputPath(const QString &path);
 
 private:
-    Ui::TestGeneratorParamsWidget m_ui;
+    QString m_outputPath;
+    QString m_mainStructureName;
+
+    Settings::TestGeneratorConstPtr m_settings;
 };
+
+using TestGeneratorParamsProviderPtr = std::shared_ptr<TestGeneratorParamsProvider>;
 
 } // namespace TestGenerator
 } // namespace Internal
