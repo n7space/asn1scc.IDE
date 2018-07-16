@@ -24,44 +24,33 @@
 ****************************************************************************/
 #pragma once
 
-#include <QDialog>
+#include "asn1acnstepscache.h"
 
-#include "data/file.h"
+#include <projectexplorer/session.h>
 
-#include "asn1acnbuildsteprunner.h"
-
-#include "testgeneratorparamsprovider.h"
-#include "testgeneratorrunner.h"
+namespace ProjectExplorer {
+class BuildStepList;
+class Project;
+} // namespace ProjectExplorer
 
 namespace Asn1Acn {
 namespace Internal {
-namespace TestGenerator {
 
-class TestGeneratorWidget;
+class Asn1AcnBuildStep;
 
-class TestGeneratorParamsDialog : public QDialog
+class Asn1AcnBuildStepRunner
 {
-    Q_OBJECT
 public:
-    explicit TestGeneratorParamsDialog(TestGeneratorParamsProviderPtr provider,
-                                       QWidget *parent = nullptr);
-
-public slots:
-    int exec() override;
-    void accept() override;
+    void run(ProjectExplorer::Project *project = ProjectExplorer::SessionManager::startupProject());
 
 private:
-    void fillMainStructCandidates();
-    void fillMainStructCandidatesFromProject(const QString &projectName);
-    void fillMainStructCandidatesFromDefinitions(const Data::File::DefinitionsList &defs);
+    virtual Asn1AcnBuildStep *createStep(ProjectExplorer::BuildStepList *stepList) const = 0;
+    virtual QString progressLabelText() const = 0;
 
-    void letProceed(bool val);
+    Asn1AcnBuildStep *newStep(const ProjectExplorer::Project *project);
 
-    TestGeneratorWidget *m_widget;
-    TestGeneratorParamsProviderPtr m_provider;
-    std::unique_ptr<Asn1AcnBuildStepRunner> m_runner;
+    Asn1AcnStepsCache m_cache;
 };
 
-} // namespace TestGenerator
 } // namespace Internal
 } // namespace Asn1Acn

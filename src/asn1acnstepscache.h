@@ -24,44 +24,34 @@
 ****************************************************************************/
 #pragma once
 
-#include <QDialog>
+#include <QHash>
+#include <QObject>
 
-#include "data/file.h"
-
-#include "asn1acnbuildsteprunner.h"
-
-#include "testgeneratorparamsprovider.h"
-#include "testgeneratorrunner.h"
+namespace ProjectExplorer {
+class Project;
+}
 
 namespace Asn1Acn {
 namespace Internal {
-namespace TestGenerator {
 
-class TestGeneratorWidget;
+class Asn1AcnBuildStep;
 
-class TestGeneratorParamsDialog : public QDialog
+class Asn1AcnStepsCache : public QObject
 {
     Q_OBJECT
-public:
-    explicit TestGeneratorParamsDialog(TestGeneratorParamsProviderPtr provider,
-                                       QWidget *parent = nullptr);
 
-public slots:
-    int exec() override;
-    void accept() override;
+public:
+    Asn1AcnStepsCache(QObject *parent = 0);
+
+    void add(const QString &id, Asn1AcnBuildStep *step);
+    Asn1AcnBuildStep *get(const QString &id) const;
+
+private slots:
+    void onAboutToRemoveProject(ProjectExplorer::Project *p);
 
 private:
-    void fillMainStructCandidates();
-    void fillMainStructCandidatesFromProject(const QString &projectName);
-    void fillMainStructCandidatesFromDefinitions(const Data::File::DefinitionsList &defs);
-
-    void letProceed(bool val);
-
-    TestGeneratorWidget *m_widget;
-    TestGeneratorParamsProviderPtr m_provider;
-    std::unique_ptr<Asn1AcnBuildStepRunner> m_runner;
+    QHash<QString, Asn1AcnBuildStep *> m_steps;
 };
 
-} // namespace TestGenerator
 } // namespace Internal
 } // namespace Asn1Acn

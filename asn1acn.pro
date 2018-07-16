@@ -190,8 +190,9 @@ SOURCES += \
     selectionpositionresolver.cpp \
     buildicdstep.cpp \
     icderrorparser.cpp \
-    icdstepscache.cpp \
-    asn1acnbuildstep.cpp
+    asn1acnstepscache.cpp \
+    asn1acnbuildstep.cpp \
+    asn1acnbuildsteprunner.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -352,8 +353,9 @@ HEADERS += \
     selectionpositionresolver.h \
     buildicdstep.h \
     icderrorparser.h \
-    icdstepscache.h \
-    asn1acnbuildstep.h
+    asn1acnstepscache.h \
+    asn1acnbuildstep.h \
+    asn1acnbuildsteprunner.h
 
 FORMS += \
     test-generator/testgeneratorparams.ui \

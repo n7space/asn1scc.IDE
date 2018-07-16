@@ -28,13 +28,16 @@
 
 #include <projectexplorer/abstractprocessstep.h>
 
+#include "asn1acnbuildsteprunner.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
-class ICDBuilder
+class ICDBuilder : public Asn1AcnBuildStepRunner
 {
-public:
-    static void runBuild(ProjectExplorer::Project *project);
+private:
+    Asn1AcnBuildStep *createStep(ProjectExplorer::BuildStepList *stepList) const override;
+    QString progressLabelText() const override;
 };
 
 class BuildICDStep : public Asn1AcnBuildStep

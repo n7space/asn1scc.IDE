@@ -22,36 +22,42 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#include "asn1acnbuildsteprunner.h"
 
-#include "icdstepscache.h"
-
+#include <projectexplorer/buildconfiguration.h>
+#include <projectexplorer/buildmanager.h>
+#include <projectexplorer/buildstep.h>
 #include <projectexplorer/project.h>
-#include <projectexplorer/session.h>
+#include <projectexplorer/projectexplorerconstants.h>
+#include <projectexplorer/target.h>
 
-#include "buildicdstep.h"
+#include "asn1acnbuildstep.h"
 
 using namespace Asn1Acn::Internal;
 
-ICDStepsCache::ICDStepsCache(QObject *parent)
-    : QObject(parent)
+void Asn1AcnBuildStepRunner::run(ProjectExplorer::Project *project)
 {
-    connect(ProjectExplorer::SessionManager::instance(),
-            &ProjectExplorer::SessionManager::aboutToRemoveProject,
-            this,
-            &ICDStepsCache::onAboutToRemoveProject);
+    auto *step = m_cache.get(project->displayName());
+    if (step == nullptr && (step = newStep(project)) == nullptr)
+        return;
+
+    ProjectExplorer::BuildManager::appendStep(step, progressLabelText());
 }
 
-void ICDStepsCache::add(const QString &id, BuildICDStep *step)
+Asn1AcnBuildStep *Asn1AcnBuildStepRunner::newStep(const ProjectExplorer::Project *project)
 {
-    m_steps.insert(id, step);
-}
+    const auto target = project->activeTarget();
+    if (target == nullptr)
+        return nullptr;
 
-BuildICDStep *ICDStepsCache::get(const QString &id) const
-{
-    return m_steps.contains(id) ? m_steps.value(id) : nullptr;
-}
+    auto buildConfig = target->activeBuildConfiguration();
+    if (buildConfig == nullptr)
+        return nullptr;
 
-void ICDStepsCache::onAboutToRemoveProject(ProjectExplorer::Project *p)
-{
-    m_steps.remove(p->displayName());
+    auto stepsList = buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD));
+    auto step = createStep(stepsList);
+
+    m_cache.add(project->displayName(), step);
+
+    return step;
 }

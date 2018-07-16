@@ -22,36 +22,36 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
 
-#include <QHash>
-#include <QObject>
+#include "asn1acnstepscache.h"
 
-namespace ProjectExplorer {
-class Project;
+#include <projectexplorer/project.h>
+#include <projectexplorer/session.h>
+
+#include "buildicdstep.h"
+
+using namespace Asn1Acn::Internal;
+
+Asn1AcnStepsCache::Asn1AcnStepsCache(QObject *parent)
+    : QObject(parent)
+{
+    connect(ProjectExplorer::SessionManager::instance(),
+            &ProjectExplorer::SessionManager::aboutToRemoveProject,
+            this,
+            &Asn1AcnStepsCache::onAboutToRemoveProject);
 }
 
-namespace Asn1Acn {
-namespace Internal {
-
-class BuildICDStep;
-
-class ICDStepsCache : public QObject
+void Asn1AcnStepsCache::add(const QString &id, Asn1AcnBuildStep *step)
 {
-    Q_OBJECT
+    m_steps.insert(id, step);
+}
 
-public:
-    ICDStepsCache(QObject *parent = 0);
+Asn1AcnBuildStep *Asn1AcnStepsCache::get(const QString &id) const
+{
+    return m_steps.contains(id) ? m_steps.value(id) : nullptr;
+}
 
-    void add(const QString &id, BuildICDStep *step);
-    BuildICDStep *get(const QString &id) const;
-
-private slots:
-    void onAboutToRemoveProject(ProjectExplorer::Project *p);
-
-private:
-    QHash<QString, BuildICDStep *> m_steps;
-};
-
-} // namespace Internal
-} // namespace Asn1Acn
+void Asn1AcnStepsCache::onAboutToRemoveProject(ProjectExplorer::Project *p)
+{
+    m_steps.remove(p->displayName());
+}

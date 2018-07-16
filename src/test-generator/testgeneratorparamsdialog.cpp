@@ -25,15 +25,13 @@
 
 #include <QPushButton>
 
-#include "testgeneratorparamsdialog.h"
-
-#include "testgeneratorparamswidget.h"
-#include "testgeneratorrunner.h"
-
-#include "parseddatastorage.h"
-
 #include <projectexplorer/project.h>
 #include <projectexplorer/session.h>
+
+#include "testgeneratorparamsdialog.h"
+#include "testgeneratorparamswidget.h"
+
+#include "parseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TestGenerator;
@@ -44,7 +42,6 @@ TestGeneratorParamsDialog::TestGeneratorParamsDialog(TestGeneratorParamsProvider
     , m_provider(provider)
 {
     m_widget = new TestGeneratorWidget(this);
-
     m_runner = std::make_unique<TestGeneratorRunner>(provider);
 
     connect(m_widget->buttonBox(),

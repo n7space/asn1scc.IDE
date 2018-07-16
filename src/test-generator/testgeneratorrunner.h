@@ -31,10 +31,25 @@
 #include "testgeneratorparamsprovider.h"
 
 #include "asn1acnbuildstep.h"
+#include "asn1acnbuildsteprunner.h"
+
+#include "asn1acnstepscache.h"
 
 namespace Asn1Acn {
 namespace Internal {
 namespace TestGenerator {
+
+class TestGeneratorRunner : public Asn1AcnBuildStepRunner
+{
+public:
+    TestGeneratorRunner(const TestGeneratorParamsProviderPtr params);
+
+private:
+    Asn1AcnBuildStep *createStep(ProjectExplorer::BuildStepList *stepList) const override;
+    QString progressLabelText() const override;
+
+    const TestGeneratorParamsProviderPtr m_params;
+};
 
 class TestGeneratorStep : public Asn1AcnBuildStep
 {
@@ -52,18 +67,6 @@ private:
     QString mainStructureArgument() const;
     QString outputPathArgument() const;
     QString fileArgument() const;
-
-    const TestGeneratorParamsProviderPtr m_params;
-};
-
-class TestGeneratorRunner
-{
-public:
-    TestGeneratorRunner(const TestGeneratorParamsProviderPtr params);
-    void run();
-
-private:
-    TestGeneratorStep *createStep(const ProjectExplorer::Project *project);
 
     const TestGeneratorParamsProviderPtr m_params;
 };

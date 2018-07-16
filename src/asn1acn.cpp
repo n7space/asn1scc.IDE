@@ -173,9 +173,6 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     auto kitInfo = new KitInformation;
     ProjectExplorer::KitManager::registerKitInformation(kitInfo);
 
-    m_testGeneratorProvider = std::make_shared<TestGenerator::TestGeneratorParamsProvider>(
-        testGeneratorSettings);
-
     return true;
 }
 
@@ -226,8 +223,10 @@ void Asn1AcnPlugin::addBuildICDToToolsMenu(ActionContainer *toolsMenu)
                 action->setParameter(project == nullptr ? QString() : project->displayName());
             });
 
-    connect(action, &QAction::triggered, []() {
-        ICDBuilder::runBuild(ProjectExplorer::SessionManager::startupProject());
+    connect(action, &QAction::triggered, [this]() {
+        if (m_builder == nullptr)
+            m_builder = std::make_shared<ICDBuilder>();
+        m_builder->run();
     });
 
     auto command = Core::ActionManager::registerAction(action, Constants::BUILD_ICD_TOOLBAR);
@@ -239,8 +238,10 @@ void Asn1AcnPlugin::addBuildICDToProjectMenu()
 {
     QAction *action = new QAction(tr("Build ICD..."), this);
 
-    connect(action, &QAction::triggered, []() {
-        ICDBuilder::runBuild(ProjectExplorer::ProjectTree::currentProject());
+    connect(action, &QAction::triggered, [this]() {
+        if (m_builder == nullptr)
+            m_builder = std::make_shared<ICDBuilder>();
+        m_builder->run(ProjectExplorer::ProjectTree::currentProject());
     });
 
     Core::Context projectTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);
@@ -267,9 +268,11 @@ void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu)
             });
 
     connect(action, &QAction::triggered, [this]() {
-        if (m_testGeneratorDialog.isNull())
-            m_testGeneratorDialog = new TestGenerator::TestGeneratorParamsDialog(
-                m_testGeneratorProvider);
+        if (m_testGeneratorDialog.isNull()) {
+            auto paramsProvider = std::make_shared<TestGenerator::TestGeneratorParamsProvider>(
+                Settings::load<Settings::TestGenerator>());
+            m_testGeneratorDialog = new TestGenerator::TestGeneratorParamsDialog(paramsProvider);
+        }
         m_testGeneratorDialog->exec();
     });
 

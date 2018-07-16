@@ -42,32 +42,23 @@
 
 #include "asn1acnconstants.h"
 
+using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TestGenerator;
 
 static const char GENERATE_TESTS_BS_ID[] = "ASN1ACN.TestGeneratorStep";
-
-TestGeneratorStep *TestGeneratorRunner::createStep(const ProjectExplorer::Project *project)
-{
-    const auto target = project->activeTarget();
-    if (target == nullptr)
-        return nullptr;
-
-    auto buildConfig = target->activeBuildConfiguration();
-    if (buildConfig == nullptr)
-        return nullptr;
-
-    auto stepsList = buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD));
-    return new TestGeneratorStep(stepsList, m_params);
-}
 
 TestGeneratorRunner::TestGeneratorRunner(const TestGeneratorParamsProviderPtr params)
     : m_params(params)
 {}
 
-void TestGeneratorRunner::run()
+Asn1AcnBuildStep *TestGeneratorRunner::createStep(ProjectExplorer::BuildStepList *stepList) const
 {
-    auto project = ProjectExplorer::SessionManager::startupProject();
-    ProjectExplorer::BuildManager::appendStep(createStep(project), QLatin1String("Test Generator"));
+    return new TestGeneratorStep(stepList, m_params);
+}
+
+QString TestGeneratorRunner::progressLabelText() const
+{
+    return QStringLiteral("Test Generator");
 }
 
 TestGeneratorStep::TestGeneratorStep(ProjectExplorer::BuildStepList *parent,

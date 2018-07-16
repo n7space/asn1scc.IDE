@@ -42,43 +42,23 @@
 #include <utils/qtcassert.h>
 
 #include <icderrorparser.h>
-#include <icdstepscache.h>
 
 #include "asn1acnconstants.h"
+#include "asn1acnstepscache.h"
 
 using namespace Asn1Acn::Internal;
 
 static const char ICD_BS_ID[] = "ASN1ACN.BuildICDStep";
 static QString OUTPUT_PATH(QDir::toNativeSeparators("asn1sccGenerated/icd/"));
 
-static BuildICDStep *createStep(const ProjectExplorer::Project *project, ICDStepsCache &cache)
+Asn1AcnBuildStep *ICDBuilder::createStep(ProjectExplorer::BuildStepList *stepList) const
 {
-    const auto target = project->activeTarget();
-    if (target == nullptr)
-        return nullptr;
-
-    auto buildConfig = target->activeBuildConfiguration();
-    if (buildConfig == nullptr)
-        return nullptr;
-
-    auto step = new BuildICDStep(
-        buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD)));
-    cache.add(project->displayName(), step);
-
-    return step;
+    return new BuildICDStep(stepList);
 }
 
-void ICDBuilder::runBuild(ProjectExplorer::Project *project)
+QString ICDBuilder::progressLabelText() const
 {
-    QTC_ASSERT(project != nullptr, return );
-
-    static ICDStepsCache cache;
-
-    auto *step = cache.get(project->displayName());
-    if (step == nullptr && (step = createStep(project, cache)) == nullptr)
-        return;
-
-    ProjectExplorer::BuildManager::appendStep(step, QLatin1String("ICD"));
+    return QStringLiteral("icd");
 }
 
 BuildICDStep::BuildICDStep(ProjectExplorer::BuildStepList *parent)
