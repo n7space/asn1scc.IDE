@@ -51,13 +51,13 @@ private:
     const TestGeneratorParamsProviderPtr m_params;
 };
 
-class TestGeneratorStep : public Asn1AcnBuildStep
+class TestGeneratorBuildStep : public Asn1AcnBuildStep
 {
     Q_OBJECT
 
 public:
-    explicit TestGeneratorStep(ProjectExplorer::BuildStepList *parent,
-                               const TestGeneratorParamsProviderPtr params);
+    explicit TestGeneratorBuildStep(ProjectExplorer::BuildStepList *parent,
+                                    const TestGeneratorParamsProviderPtr params);
 
 private:
     QString executablePath() const override;

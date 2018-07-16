@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "buildicdstep.h"
+#include "icdbuilder.h"
 
 #include <QStringList>
 
@@ -48,12 +48,12 @@
 
 using namespace Asn1Acn::Internal;
 
-static const char ICD_BS_ID[] = "ASN1ACN.BuildICDStep";
+static const char ICD_BS_ID[] = "ASN1ACN.ICDBuildStep";
 static QString OUTPUT_PATH(QDir::toNativeSeparators("asn1sccGenerated/icd/"));
 
 Asn1AcnBuildStep *ICDBuilder::createStep(ProjectExplorer::BuildStepList *stepList) const
 {
-    return new BuildICDStep(stepList);
+    return new ICDBuildStep(stepList);
 }
 
 QString ICDBuilder::progressLabelText() const
@@ -61,12 +61,12 @@ QString ICDBuilder::progressLabelText() const
     return QStringLiteral("icd");
 }
 
-BuildICDStep::BuildICDStep(ProjectExplorer::BuildStepList *parent)
+ICDBuildStep::ICDBuildStep(ProjectExplorer::BuildStepList *parent)
     : Asn1AcnBuildStep(parent, ICD_BS_ID, QStringLiteral("icd"))
     , m_outputFilename("icd.html")
 {}
 
-bool BuildICDStep::init(QList<const BuildStep *> &earlierSteps)
+bool ICDBuildStep::init(QList<const BuildStep *> &earlierSteps)
 {
     if (!updateRunParams()) {
         addOutput(tr("Could not initialize build params"), BuildStep::OutputFormat::ErrorMessage);
@@ -78,13 +78,13 @@ bool BuildICDStep::init(QList<const BuildStep *> &earlierSteps)
     return Asn1AcnBuildStep::init(earlierSteps);
 }
 
-bool BuildICDStep::updateRunParams()
+bool ICDBuildStep::updateRunParams()
 {
     return updateOutputDirectory(buildConfiguration()) && updateAsn1SccCommand()
            && updateSourcesList();
 }
 
-bool BuildICDStep::updateOutputDirectory(const ProjectExplorer::BuildConfiguration *bc)
+bool ICDBuildStep::updateOutputDirectory(const ProjectExplorer::BuildConfiguration *bc)
 {
     m_outputPath = bc->buildDirectory().appendPath(OUTPUT_PATH).toString();
 
@@ -97,7 +97,7 @@ bool BuildICDStep::updateOutputDirectory(const ProjectExplorer::BuildConfigurati
     return true;
 }
 
-bool BuildICDStep::updateAsn1SccCommand()
+bool ICDBuildStep::updateAsn1SccCommand()
 {
     m_asn1sccCommand = KitInformation::hasAsn1Exe(target()->kit())
                            ? KitInformation::asn1Exe(target()->kit()).toString()
@@ -111,7 +111,7 @@ bool BuildICDStep::updateAsn1SccCommand()
     return true;
 }
 
-bool BuildICDStep::updateSourcesList()
+bool ICDBuildStep::updateSourcesList()
 {
     const auto project = target()->project();
 
@@ -145,7 +145,7 @@ QStringList quoteList(const Utils::FileNameList &files)
 }
 } // namespace
 
-QString BuildICDStep::arguments() const
+QString ICDBuildStep::arguments() const
 {
     const auto in = quoteList(m_sources).join(QLatin1Char(' '));
     const auto out = quoteOne(m_outputPath + m_outputFilename);
@@ -153,7 +153,7 @@ QString BuildICDStep::arguments() const
     return QString(" -icdAcn ") + out + QString(" ") + in;
 }
 
-QString BuildICDStep::executablePath() const
+QString ICDBuildStep::executablePath() const
 {
     return m_asn1sccCommand;
 }

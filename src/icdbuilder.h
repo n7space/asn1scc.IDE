@@ -40,12 +40,12 @@ private:
     QString progressLabelText() const override;
 };
 
-class BuildICDStep : public Asn1AcnBuildStep
+class ICDBuildStep : public Asn1AcnBuildStep
 {
     Q_OBJECT
 
 public:
-    explicit BuildICDStep(ProjectExplorer::BuildStepList *parent);
+    explicit ICDBuildStep(ProjectExplorer::BuildStepList *parent);
 
     bool init(QList<const BuildStep *> &earlierSteps) override;
 

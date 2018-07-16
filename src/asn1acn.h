@@ -36,7 +36,7 @@
 #include "test-generator/testgeneratorparamsdialog.h"
 #include "test-generator/testgeneratorparamsprovider.h"
 
-#include "buildicdstep.h"
+#include "icdbuilder.h"
 
 namespace Asn1Acn {
 namespace Internal {

@@ -45,7 +45,7 @@
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::TestGenerator;
 
-static const char GENERATE_TESTS_BS_ID[] = "ASN1ACN.TestGeneratorStep";
+static const char GENERATE_TESTS_BS_ID[] = "ASN1ACN.TestGeneratorBuildStep";
 
 TestGeneratorRunner::TestGeneratorRunner(const TestGeneratorParamsProviderPtr params)
     : m_params(params)
@@ -53,7 +53,7 @@ TestGeneratorRunner::TestGeneratorRunner(const TestGeneratorParamsProviderPtr pa
 
 Asn1AcnBuildStep *TestGeneratorRunner::createStep(ProjectExplorer::BuildStepList *stepList) const
 {
-    return new TestGeneratorStep(stepList, m_params);
+    return new TestGeneratorBuildStep(stepList, m_params);
 }
 
 QString TestGeneratorRunner::progressLabelText() const
@@ -61,23 +61,23 @@ QString TestGeneratorRunner::progressLabelText() const
     return QStringLiteral("Test Generator");
 }
 
-TestGeneratorStep::TestGeneratorStep(ProjectExplorer::BuildStepList *parent,
-                                     const TestGeneratorParamsProviderPtr params)
+TestGeneratorBuildStep::TestGeneratorBuildStep(ProjectExplorer::BuildStepList *parent,
+                                               const TestGeneratorParamsProviderPtr params)
     : Asn1AcnBuildStep(parent, GENERATE_TESTS_BS_ID, QStringLiteral("Test Generator"))
     , m_params(params)
 {}
 
-QString TestGeneratorStep::executablePath() const
+QString TestGeneratorBuildStep::executablePath() const
 {
     return m_params->testGeneratorPath();
 }
 
-QString TestGeneratorStep::arguments() const
+QString TestGeneratorBuildStep::arguments() const
 {
     return asn1sccArgument() + mainStructureArgument() + outputPathArgument() + fileArgument();
 }
 
-QString TestGeneratorStep::asn1sccArgument() const
+QString TestGeneratorBuildStep::asn1sccArgument() const
 {
     auto path = m_params->asn1sccPath(target());
     if (path.isEmpty())
@@ -86,7 +86,7 @@ QString TestGeneratorStep::asn1sccArgument() const
     return QStringLiteral("--asn1scc-path ") + path + QChar(' ');
 }
 
-QString TestGeneratorStep::mainStructureArgument() const
+QString TestGeneratorBuildStep::mainStructureArgument() const
 {
     auto mainStruct = m_params->mainStructureName();
     QTC_ASSERT(!mainStruct.isEmpty(), return {});
@@ -94,7 +94,7 @@ QString TestGeneratorStep::mainStructureArgument() const
     return QStringLiteral("--main-structure ") + mainStruct + QChar(' ');
 }
 
-QString TestGeneratorStep::outputPathArgument() const
+QString TestGeneratorBuildStep::outputPathArgument() const
 {
     auto outputPath = m_params->outputPath();
     QTC_ASSERT(!outputPath.isEmpty(), return {});
@@ -102,7 +102,7 @@ QString TestGeneratorStep::outputPathArgument() const
     return QStringLiteral("--output-dir ") + outputPath + QChar(' ');
 }
 
-QString TestGeneratorStep::fileArgument() const
+QString TestGeneratorBuildStep::fileArgument() const
 {
     const auto project = target()->project();
 

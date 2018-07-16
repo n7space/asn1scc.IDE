@@ -70,7 +70,7 @@
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
 #include "asneditor.h"
-#include "buildicdstep.h"
+#include "icdbuilder.h"
 #include "kitinformation.h"
 #include "projectmenuimportitemcontroller.h"
 #include "projectwatcher.h"
