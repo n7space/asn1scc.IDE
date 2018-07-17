@@ -168,6 +168,11 @@ QJsonDocument Asn1SccServiceProvider::buildAstRequestData(
     QJsonObject input;
     input["AsnFiles"] = asnFilesArray;
     input["AcnFiles"] = acnFilesArray;
+
+    /* TODO: since AST parser is not ready to work with fields introduced through ACN files,
+     * it is harmful to include them in daemon call*/
+    input["AcnFiles"] = QJsonArray();
+
     input["Options"] = buildAstGenerationOptions();
 
     return QJsonDocument(input);
