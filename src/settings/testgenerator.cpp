@@ -28,7 +28,6 @@
 #include <QDir>
 
 #include <plugins/coreplugin/icore.h>
-#include <utils/hostosinfo.h>
 
 using namespace Asn1Acn::Internal::Settings;
 
@@ -48,7 +47,7 @@ void TestGenerator::saveOptionsTo(QSettings *s) const
 
 static QString defaultTestGeneratorPath()
 {
-    return Core::ICore::libexecPath() + QLatin1String("/MalTester/app/app");
+    return Core::ICore::libexecPath() + QLatin1String("/MalTester/");
 }
 
 void TestGenerator::loadOptionsFrom(QSettings *s)

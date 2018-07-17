@@ -28,8 +28,6 @@
 #include <projectexplorer/project.h>
 #include <projectexplorer/session.h>
 
-#include "icdbuilder.h"
-
 using namespace Asn1Acn::Internal;
 
 Asn1AcnStepsCache::Asn1AcnStepsCache(QObject *parent)

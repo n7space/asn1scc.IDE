@@ -41,7 +41,7 @@ TestGeneratorParamsDialog::TestGeneratorParamsDialog(TestGeneratorParamsProvider
     : QDialog(parent)
     , m_provider(provider)
 {
-    m_widget = new TestGeneratorWidget(this);
+    m_widget = new TestGeneratorParamsWidget(this);
     m_runner = std::make_unique<TestGeneratorRunner>(provider);
 
     connect(m_widget->buttonBox(),

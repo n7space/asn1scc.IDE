@@ -26,6 +26,7 @@
 
 #include <memory>
 
+#include <QFutureInterface>
 #include <QFutureWatcher>
 
 #include <projectexplorer/abstractprocessstep.h>

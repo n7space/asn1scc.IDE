@@ -37,7 +37,7 @@ namespace Asn1Acn {
 namespace Internal {
 namespace TestGenerator {
 
-class TestGeneratorWidget;
+class TestGeneratorParamsWidget;
 
 class TestGeneratorParamsDialog : public QDialog
 {
@@ -57,7 +57,7 @@ private:
 
     void letProceed(bool val);
 
-    TestGeneratorWidget *m_widget;
+    TestGeneratorParamsWidget *m_widget;
     TestGeneratorParamsProviderPtr m_provider;
     std::unique_ptr<Asn1AcnBuildStepRunner> m_runner;
 };

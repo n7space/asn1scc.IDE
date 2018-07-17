@@ -24,16 +24,10 @@
 ****************************************************************************/
 #pragma once
 
-#include <memory>
-
-#include <QFutureWatcher>
-
 #include "testgeneratorparamsprovider.h"
 
 #include "asn1acnbuildstep.h"
 #include "asn1acnbuildsteprunner.h"
-
-#include "asn1acnstepscache.h"
 
 namespace Asn1Acn {
 namespace Internal {

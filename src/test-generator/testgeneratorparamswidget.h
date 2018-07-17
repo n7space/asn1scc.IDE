@@ -32,11 +32,11 @@ namespace Asn1Acn {
 namespace Internal {
 namespace TestGenerator {
 
-class TestGeneratorWidget : public QWidget
+class TestGeneratorParamsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TestGeneratorWidget(QWidget *parent = nullptr);
+    explicit TestGeneratorParamsWidget(QWidget *parent = nullptr);
 
     QString path() const;
     void setPath(const QString &path);

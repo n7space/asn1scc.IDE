@@ -25,17 +25,10 @@
 
 #include "testgeneratorrunner.h"
 
-#include <projectexplorer/buildconfiguration.h>
-#include <projectexplorer/buildmanager.h>
-#include <projectexplorer/buildstep.h>
-#include <projectexplorer/processparameters.h>
 #include <projectexplorer/project.h>
-#include <projectexplorer/projectexplorerconstants.h>
 #include <projectexplorer/projectnodes.h>
 #include <projectexplorer/session.h>
 #include <projectexplorer/target.h>
-
-#include <kitinformation.h>
 
 #include <utils/mimetypes/mimedatabase.h>
 #include <utils/qtcassert.h>

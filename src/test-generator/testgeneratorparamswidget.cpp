@@ -22,38 +22,39 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #include "testgeneratorparamswidget.h"
 
 using namespace Asn1Acn::Internal::TestGenerator;
 
-TestGeneratorWidget::TestGeneratorWidget(QWidget *parent)
+TestGeneratorParamsWidget::TestGeneratorParamsWidget(QWidget *parent)
     : QWidget(parent)
 {
     m_ui.setupUi(this);
     m_ui.pathChooser->setExpectedKind(Utils::PathChooser::ExistingDirectory);
 }
 
-QString TestGeneratorWidget::path() const
+QString TestGeneratorParamsWidget::path() const
 {
     return m_ui.pathChooser->path();
 }
 
-void TestGeneratorWidget::setPath(const QString &path)
+void TestGeneratorParamsWidget::setPath(const QString &path)
 {
     m_ui.pathChooser->setPath(path);
 }
 
-QString TestGeneratorWidget::mainStruct() const
+QString TestGeneratorParamsWidget::mainStruct() const
 {
     return m_ui.comboBox->currentText();
 }
 
-void TestGeneratorWidget::addMainStructCandidate(const QString &mainStruct)
+void TestGeneratorParamsWidget::addMainStructCandidate(const QString &mainStruct)
 {
     m_ui.comboBox->addItem(mainStruct);
 }
 
-void TestGeneratorWidget::clearMainStructCandidates()
+void TestGeneratorParamsWidget::clearMainStructCandidates()
 {
     m_ui.comboBox->clear();
 }

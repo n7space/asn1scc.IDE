@@ -24,9 +24,9 @@
 ****************************************************************************/
 #pragma once
 
-#include "asn1acnstepscache.h"
-
 #include <projectexplorer/session.h>
+
+#include "asn1acnstepscache.h"
 
 namespace ProjectExplorer {
 class BuildStepList;

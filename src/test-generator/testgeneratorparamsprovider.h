@@ -28,10 +28,11 @@
 
 #include <QString>
 
-#include <projectexplorer/target.h>
-
-#include "kitinformation.h"
 #include "settings/testgenerator.h"
+
+namespace ProjectExplorer {
+class Target;
+}
 
 namespace Asn1Acn {
 namespace Internal {

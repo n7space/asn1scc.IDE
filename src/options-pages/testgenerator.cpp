@@ -26,9 +26,9 @@
 
 #include <QWidget>
 
-#include <asn1acnconstants.h>
 #include <tr.h>
 
+#include "asn1acnconstants.h"
 #include "testgeneratorwidget.h"
 
 using namespace Asn1Acn::Internal;

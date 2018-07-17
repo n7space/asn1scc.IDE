@@ -24,10 +24,9 @@
 ****************************************************************************/
 #pragma once
 
-#include "asn1acnbuildstep.h"
-
 #include <projectexplorer/abstractprocessstep.h>
 
+#include "asn1acnbuildstep.h"
 #include "asn1acnbuildsteprunner.h"
 
 namespace Asn1Acn {
