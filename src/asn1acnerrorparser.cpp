@@ -23,25 +23,31 @@
 **
 ****************************************************************************/
 
-#include <qobjectdefs.h>
+#include "asn1acnerrorparser.h"
 
-#include <projectexplorer/ioutputparser.h>
+#include <projectexplorer/projectexplorerconstants.h>
+#include <projectexplorer/task.h>
 
-#include <errormessageparser.h>
+#include <data/errormessage.h>
 
-namespace Asn1Acn {
-namespace Internal {
+using namespace Asn1Acn::Internal;
 
-class ICDErrorParser : public ProjectExplorer::IOutputParser
+void Asn1AcnErrorParser::stdError(const QString &line)
 {
-    Q_OBJECT
+    if (line.isEmpty())
+        return;
 
-public:
-    void stdError(const QString &line) override;
+    const auto error = m_parser.parse(line);
+    if (!error.isValid())
+        return;
 
-private:
-    ErrorMessageParser m_parser;
-};
+    ProjectExplorer::Task task(ProjectExplorer::Task::Error,
+                               error.message(),
+                               Utils::FileName::fromString(error.location().path()),
+                               error.location().line(),
+                               ProjectExplorer::Constants::TASK_CATEGORY_COMPILE);
 
-} // namespace Internal
-} // namespace Asn1Acn
+    emit addTask(task, 1);
+
+    IOutputParser::stdError(line);
+}

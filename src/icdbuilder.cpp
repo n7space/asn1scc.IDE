@@ -36,8 +36,6 @@
 
 #include <utils/mimetypes/mimedatabase.h>
 
-#include <icderrorparser.h>
-
 #include "asn1acnconstants.h"
 
 using namespace Asn1Acn::Internal;
@@ -66,8 +64,6 @@ bool ICDBuildStep::init(QList<const BuildStep *> &earlierSteps)
         addOutput(tr("Could not initialize build params"), BuildStep::OutputFormat::ErrorMessage);
         return false;
     }
-
-    setOutputParser(new ICDErrorParser);
 
     return Asn1AcnBuildStep::init(earlierSteps);
 }
