@@ -31,6 +31,8 @@
 
 #include <utils/qtcassert.h>
 
+#include "asn1acnerrorparser.h"
+
 using namespace Asn1Acn::Internal;
 
 Asn1AcnBuildStep::Asn1AcnBuildStep(ProjectExplorer::BuildStepList *parent,
@@ -57,6 +59,8 @@ bool Asn1AcnBuildStep::init(QList<const BuildStep *> &earlierSteps)
     }
 
     updateEnvironment(buildConfiguration());
+
+    setOutputParser(new Asn1AcnErrorParser);
 
     return AbstractProcessStep::init(earlierSteps);
 }

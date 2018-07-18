@@ -189,7 +189,7 @@ SOURCES += \
     kitconfigwidget.cpp \
     selectionpositionresolver.cpp \
     icdbuilder.cpp \
-    icderrorparser.cpp \
+    asn1acnerrorparser.cpp \
     asn1acnstepscache.cpp \
     asn1acnbuildstep.cpp \
     asn1acnbuildsteprunner.cpp
@@ -352,7 +352,7 @@ HEADERS += \
     kitconfigwidget.h \
     selectionpositionresolver.h \
     icdbuilder.h \
-    icderrorparser.h \
+    asn1acnerrorparser.h \
     asn1acnstepscache.h \
     asn1acnbuildstep.h \
     asn1acnbuildsteprunner.h
