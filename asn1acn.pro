@@ -119,12 +119,20 @@ SOURCES += \
     \
     options-pages/service.cpp \
     options-pages/libraries.cpp \
+    options-pages/testgenerator.cpp \
     options-pages/servicewidget.cpp \
     options-pages/librarieswidget.cpp \
+    options-pages/testgeneratorwidget.cpp \
     \
     settings/settings.cpp \
     settings/service.cpp \
     settings/libraries.cpp \
+    settings/testgenerator.cpp \
+    \
+    test-generator/testgeneratorparamsdialog.cpp \
+    test-generator/testgeneratorparamswidget.cpp \
+    test-generator/testgeneratorrunner.cpp \
+    test-generator/testgeneratorparamsprovider.cpp \
     \
     libraries/modulemetadataparser.cpp \
     libraries/generalmetadataparser.cpp \
@@ -180,9 +188,11 @@ SOURCES += \
     kitinformation.cpp \
     kitconfigwidget.cpp \
     selectionpositionresolver.cpp \
-    buildicdstep.cpp \
+    icdbuilder.cpp \
     icderrorparser.cpp \
-    icdstepscache.cpp
+    asn1acnstepscache.cpp \
+    asn1acnbuildstep.cpp \
+    asn1acnbuildsteprunner.cpp
 
 HEADERS += \
     completion/autocompleter.h \
@@ -256,12 +266,20 @@ HEADERS += \
     \
     options-pages/service.h \
     options-pages/libraries.h \
+    options-pages/testgenerator.h \
     options-pages/servicewidget.h \
     options-pages/librarieswidget.h \
+    options-pages/testgeneratorwidget.h \
     \
     settings/settings.h \
     settings/service.h \
     settings/libraries.h \
+    settings/testgenerator.h \
+    \
+    test-generator/testgeneratorparamsdialog.h \
+    test-generator/testgeneratorparamswidget.h \
+    test-generator/testgeneratorrunner.h \
+    test-generator/testgeneratorparamsprovider.h \
     \
     libraries/modulemetadataparser.h \
     libraries/generalmetadataparser.h \
@@ -333,13 +351,18 @@ HEADERS += \
     kitinformation.h \
     kitconfigwidget.h \
     selectionpositionresolver.h \
-    buildicdstep.h \
+    icdbuilder.h \
     icderrorparser.h \
-    icdstepscache.h
+    asn1acnstepscache.h \
+    asn1acnbuildstep.h \
+    asn1acnbuildsteprunner.h
 
 FORMS += \
+    test-generator/testgeneratorparams.ui \
+    \
     options-pages/service.ui \
     options-pages/libraries.ui \
+    options-pages/testgenerator.ui \
     \
     libraries/wizard/import_component.ui \
     libraries/wizard/select_component.ui \

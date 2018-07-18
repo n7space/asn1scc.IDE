@@ -33,6 +33,7 @@ const char SETTINGS_CATEGORY[] = "J.Asn1Acn";
 const char SETTINGS_CATEGORY_DISPLAY[] = QT_TRANSLATE_NOOP(Asn1Acn, "ASN.1/ACN");
 const char SERVICE_SETTINGS_ID[] = "C.Asn1Acn.Service";
 const char LIBRARIES_SETTINGS_ID[] = "A.Asn1Acn.Libraries";
+const char TESTGENERATOR_SETTINGS_ID[] = "B.Asn1Acn.TestGenerator";
 
 const char SETTINGS_GROUP[] = "Asn1Acn";
 
@@ -67,6 +68,7 @@ const char IMPORT_FROM_COMPONENTS_LIBRARY_TOOLBAR[] = "Asn1Acn.ImportFromCompone
 const char BUILD_ICD_CONTEXT[] = "Asn1Acn.BuildICDContext";
 const char BUILD_ICD_TOOLBAR[] = "Asn1Acn.BuildICDToolbar";
 const char FIND_USAGES[] = "Asn1Acn.FindUsages";
+const char GENERATE_TESTS[] = "Asn1Acn.GenerateTests";
 
 // Icons
 

@@ -33,6 +33,11 @@
 
 #include "libraries/wizard/importcomponentwizard.h"
 
+#include "test-generator/testgeneratorparamsdialog.h"
+#include "test-generator/testgeneratorparamsprovider.h"
+
+#include "icdbuilder.h"
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -59,7 +64,7 @@ private:
     using ActionContainer = Core::ActionContainer;
     using Context = Core::Context;
 
-    void initializeMenus();
+    void initializeMenus(Settings::TestGeneratorConstPtr settings);
 
     void initializeSwitchAction(ActionContainer *toolsMenu,
                                 ActionContainer *contextMenu,
@@ -71,6 +76,8 @@ private:
                                     ActionContainer *contextMenu,
                                     const Context &context);
     void initializeBuildICDAction(ActionContainer *toolsMenu);
+    void initializeGenerateTestsAction(ActionContainer *toolsMenu,
+                                       Settings::TestGeneratorConstPtr settings);
 
     void addBuildICDToToolsMenu(ActionContainer *toolsMenu);
     void addBuildICDToProjectMenu();
@@ -81,7 +88,12 @@ private:
     void addToToolsMenu(ActionContainer *container);
 
     QPointer<Libraries::Wizard::ImportComponentWizard> m_importComponentWizard;
+
+    QPointer<TestGenerator::TestGeneratorParamsDialog> m_testGeneratorDialog;
+
     QAction *m_findUsagesAction;
+
+    std::shared_ptr<ICDBuilder> m_builder;
 
 #ifdef WITH_TESTS
     QList<QObject *> createTestObjects() const override;

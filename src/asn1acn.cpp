@@ -51,9 +51,11 @@
 #include "settings/libraries.h"
 #include "settings/service.h"
 #include "settings/settings.h"
+#include "settings/testgenerator.h"
 
 #include "options-pages/libraries.h"
 #include "options-pages/service.h"
+#include "options-pages/testgenerator.h"
 
 #include "tree-views/outlinewidget.h"
 #include "tree-views/typestreewidget.h"
@@ -61,12 +63,14 @@
 #include "libraries/componentdirectorywatcher.h"
 #include "libraries/componentlibrarydispatcher.h"
 
+#include "test-generator/testgeneratorparamsdialog.h"
+
 #include "acneditor.h"
 #include "asn1acnconstants.h"
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
 #include "asneditor.h"
-#include "buildicdstep.h"
+#include "icdbuilder.h"
 #include "kitinformation.h"
 #include "projectmenuimportitemcontroller.h"
 #include "projectwatcher.h"
@@ -127,6 +131,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     const auto serviceSettings = Settings::load<Settings::Service>();
     const auto librariesSettings = Settings::load<Settings::Libraries>();
+    const auto testGeneratorSettings = Settings::load<Settings::TestGenerator>();
 
     addAutoReleasedObject(new AsnEditorFactory);
     addAutoReleasedObject(new AcnEditorFactory);
@@ -138,6 +143,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     addAutoReleasedObject(new OptionsPages::Service(serviceSettings));
     addAutoReleasedObject(new OptionsPages::Libraries(librariesSettings));
+    addAutoReleasedObject(new OptionsPages::TestGenerator(testGeneratorSettings));
 
     addAutoReleasedObject(new TypesLocator);
 
@@ -151,7 +157,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(sp);
     sp->start();
 
-    initializeMenus();
+    initializeMenus(testGeneratorSettings);
 
     Core::JsExpander::registerQObjectForJs(QLatin1String("Asn1Acn"), new Asn1AcnJsExtension);
 
@@ -164,12 +170,13 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
             this,
             &Asn1AcnPlugin::onTaskFinished);
 
-    ProjectExplorer::KitManager::registerKitInformation(new KitInformation);
+    auto kitInfo = new KitInformation;
+    ProjectExplorer::KitManager::registerKitInformation(kitInfo);
 
     return true;
 }
 
-void Asn1AcnPlugin::initializeMenus()
+void Asn1AcnPlugin::initializeMenus(Settings::TestGeneratorConstPtr testGeneratorSettings)
 {
     auto toolsMenu = Core::ActionManager::createMenu(Constants::M_TOOLS_ASN);
     auto contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
@@ -181,6 +188,7 @@ void Asn1AcnPlugin::initializeMenus()
     initializeFollowSymbolAction(toolsMenu, contextMenu);
     initializeFindUsagesAction(toolsMenu, contextMenu, context);
     initializeBuildICDAction(toolsMenu);
+    initializeGenerateTestsAction(toolsMenu, testGeneratorSettings);
     initializeImportFromAsnComponents(toolsMenu);
 
     addToToolsMenu(toolsMenu);
@@ -215,8 +223,10 @@ void Asn1AcnPlugin::addBuildICDToToolsMenu(ActionContainer *toolsMenu)
                 action->setParameter(project == nullptr ? QString() : project->displayName());
             });
 
-    connect(action, &QAction::triggered, []() {
-        ICDBuilder::runBuild(ProjectExplorer::SessionManager::startupProject());
+    connect(action, &QAction::triggered, [this]() {
+        if (m_builder == nullptr)
+            m_builder = std::make_shared<ICDBuilder>();
+        m_builder->run();
     });
 
     auto command = Core::ActionManager::registerAction(action, Constants::BUILD_ICD_TOOLBAR);
@@ -228,8 +238,10 @@ void Asn1AcnPlugin::addBuildICDToProjectMenu()
 {
     QAction *action = new QAction(tr("Build ICD..."), this);
 
-    connect(action, &QAction::triggered, []() {
-        ICDBuilder::runBuild(ProjectExplorer::ProjectTree::currentProject());
+    connect(action, &QAction::triggered, [this]() {
+        if (m_builder == nullptr)
+            m_builder = std::make_shared<ICDBuilder>();
+        m_builder->run(ProjectExplorer::ProjectTree::currentProject());
     });
 
     Core::Context projectTreeContext(ProjectExplorer::Constants::C_PROJECT_TREE);
@@ -238,6 +250,36 @@ void Asn1AcnPlugin::addBuildICDToProjectMenu()
                                                        Constants::BUILD_ICD_CONTEXT,
                                                        projectTreeContext);
     menu->addAction(command, ProjectExplorer::Constants::G_PROJECT_FILES);
+}
+
+void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu,
+                                                  Settings::TestGeneratorConstPtr settings)
+{
+    auto action = new Utils::ParameterAction(tr("Generate Tests..."),
+                                             tr("Generate Tests for \"%1\"..."),
+                                             Utils::ParameterAction::AlwaysEnabled,
+                                             this);
+    action->setEnabled(false);
+
+    connect(ProjectExplorer::SessionManager::instance(),
+            &ProjectExplorer::SessionManager::startupProjectChanged,
+            [action](ProjectExplorer::Project *project) {
+                action->setEnabled(project != nullptr);
+                action->setParameter(project == nullptr ? QString() : project->displayName());
+            });
+
+    connect(action, &QAction::triggered, [this, settings]() {
+        if (m_testGeneratorDialog.isNull()) {
+            auto paramsProvider = std::make_shared<TestGenerator::TestGeneratorParamsProvider>(
+                settings);
+            m_testGeneratorDialog = new TestGenerator::TestGeneratorParamsDialog(paramsProvider);
+        }
+        m_testGeneratorDialog->exec();
+    });
+
+    auto command = Core::ActionManager::registerAction(action, Constants::GENERATE_TESTS);
+    command->setAttribute(Core::Command::CA_UpdateText);
+    toolsMenu->addAction(command);
 }
 
 void Asn1AcnPlugin::initializeBuildICDAction(ActionContainer *toolsMenu)

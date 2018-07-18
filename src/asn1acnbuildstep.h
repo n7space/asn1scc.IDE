@@ -24,26 +24,24 @@
 ****************************************************************************/
 #pragma once
 
+#include <memory>
+
+#include <QFutureInterface>
 #include <QFutureWatcher>
-#include <qobjectdefs.h>
 
 #include <projectexplorer/abstractprocessstep.h>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ICDBuilder
-{
-public:
-    static void runBuild(ProjectExplorer::Project *project);
-};
-
-class BuildICDStep : public ProjectExplorer::AbstractProcessStep
+class Asn1AcnBuildStep : public ProjectExplorer::AbstractProcessStep
 {
     Q_OBJECT
 
 public:
-    explicit BuildICDStep(ProjectExplorer::BuildStepList *parent);
+    explicit Asn1AcnBuildStep(ProjectExplorer::BuildStepList *parent,
+                              const char *id,
+                              const QString &displayName);
 
     bool init(QList<const BuildStep *> &earlierSteps) override;
     void run(QFutureInterface<bool> &) override;
@@ -54,11 +52,8 @@ private slots:
     void onFinish();
 
 private:
-    bool updateRunParams();
-    void updateEnvironment(const ProjectExplorer::BuildConfiguration *bc);
-    bool updateOutputDirectory(const ProjectExplorer::BuildConfiguration *bc);
-    bool updateAsn1SccCommand();
-    bool updateSourcesList();
+    virtual QString executablePath() const = 0;
+    virtual QString arguments() const = 0;
 
     void updateInput(QFutureInterface<bool> &f);
     void updateProcess(const QString &command, const QString &arg);
@@ -67,18 +62,13 @@ private:
     bool finishCommand();
     void finishInput(bool success);
 
-    QString argument();
+    void updateEnvironment(const ProjectExplorer::BuildConfiguration *bc);
 
     QFutureWatcher<bool> m_inputWatcher;
     QFutureInterface<bool> m_inputFuture;
 
     QFutureWatcher<bool> m_commandWatcher;
     std::unique_ptr<QFutureInterface<bool>> m_commandFuture;
-
-    QString m_asn1sccCommand;
-    QString m_outputPath;
-    const QString m_outputFilename;
-    Utils::FileNameList m_sources;
 };
 
 } // namespace Internal

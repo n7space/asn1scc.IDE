@@ -24,33 +24,32 @@
 ****************************************************************************/
 #pragma once
 
-#include <QHash>
-#include <QObject>
+#include <projectexplorer/session.h>
+
+#include "asn1acnstepscache.h"
 
 namespace ProjectExplorer {
+class BuildStepList;
 class Project;
-}
+} // namespace ProjectExplorer
 
 namespace Asn1Acn {
 namespace Internal {
 
-class BuildICDStep;
+class Asn1AcnBuildStep;
 
-class ICDStepsCache : public QObject
+class Asn1AcnBuildStepRunner
 {
-    Q_OBJECT
-
 public:
-    ICDStepsCache(QObject *parent = 0);
-
-    void add(const QString &id, BuildICDStep *step);
-    BuildICDStep *get(const QString &id) const;
-
-private slots:
-    void onAboutToRemoveProject(ProjectExplorer::Project *p);
+    void run(ProjectExplorer::Project *project = ProjectExplorer::SessionManager::startupProject());
 
 private:
-    QHash<QString, BuildICDStep *> m_steps;
+    virtual Asn1AcnBuildStep *createStep(ProjectExplorer::BuildStepList *stepList) const = 0;
+    virtual QString progressLabelText() const = 0;
+
+    Asn1AcnBuildStep *newStep(const ProjectExplorer::Project *project);
+
+    Asn1AcnStepsCache m_cache;
 };
 
 } // namespace Internal

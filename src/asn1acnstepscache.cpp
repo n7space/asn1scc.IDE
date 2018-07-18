@@ -23,35 +23,33 @@
 **
 ****************************************************************************/
 
-#include "icdstepscache.h"
+#include "asn1acnstepscache.h"
 
 #include <projectexplorer/project.h>
 #include <projectexplorer/session.h>
 
-#include "buildicdstep.h"
-
 using namespace Asn1Acn::Internal;
 
-ICDStepsCache::ICDStepsCache(QObject *parent)
+Asn1AcnStepsCache::Asn1AcnStepsCache(QObject *parent)
     : QObject(parent)
 {
     connect(ProjectExplorer::SessionManager::instance(),
             &ProjectExplorer::SessionManager::aboutToRemoveProject,
             this,
-            &ICDStepsCache::onAboutToRemoveProject);
+            &Asn1AcnStepsCache::onAboutToRemoveProject);
 }
 
-void ICDStepsCache::add(const QString &id, BuildICDStep *step)
+void Asn1AcnStepsCache::add(const QString &id, Asn1AcnBuildStep *step)
 {
     m_steps.insert(id, step);
 }
 
-BuildICDStep *ICDStepsCache::get(const QString &id) const
+Asn1AcnBuildStep *Asn1AcnStepsCache::get(const QString &id) const
 {
     return m_steps.contains(id) ? m_steps.value(id) : nullptr;
 }
 
-void ICDStepsCache::onAboutToRemoveProject(ProjectExplorer::Project *p)
+void Asn1AcnStepsCache::onAboutToRemoveProject(ProjectExplorer::Project *p)
 {
     m_steps.remove(p->displayName());
 }
