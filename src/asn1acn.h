@@ -64,7 +64,7 @@ private:
     using ActionContainer = Core::ActionContainer;
     using Context = Core::Context;
 
-    void initializeMenus();
+    void initializeMenus(Settings::TestGeneratorConstPtr settings);
 
     void initializeSwitchAction(ActionContainer *toolsMenu,
                                 ActionContainer *contextMenu,
@@ -76,7 +76,8 @@ private:
                                     ActionContainer *contextMenu,
                                     const Context &context);
     void initializeBuildICDAction(ActionContainer *toolsMenu);
-    void initializeGenerateTestsAction(ActionContainer *toolsMenu);
+    void initializeGenerateTestsAction(ActionContainer *toolsMenu,
+                                       Settings::TestGeneratorConstPtr settings);
 
     void addBuildICDToToolsMenu(ActionContainer *toolsMenu);
     void addBuildICDToProjectMenu();
@@ -89,6 +90,7 @@ private:
     QPointer<Libraries::Wizard::ImportComponentWizard> m_importComponentWizard;
 
     QPointer<TestGenerator::TestGeneratorParamsDialog> m_testGeneratorDialog;
+
     QAction *m_findUsagesAction;
 
     std::shared_ptr<ICDBuilder> m_builder;

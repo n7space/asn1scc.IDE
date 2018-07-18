@@ -157,7 +157,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     addAutoReleasedObject(sp);
     sp->start();
 
-    initializeMenus();
+    initializeMenus(testGeneratorSettings);
 
     Core::JsExpander::registerQObjectForJs(QLatin1String("Asn1Acn"), new Asn1AcnJsExtension);
 
@@ -176,7 +176,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     return true;
 }
 
-void Asn1AcnPlugin::initializeMenus()
+void Asn1AcnPlugin::initializeMenus(Settings::TestGeneratorConstPtr testGeneratorSettings)
 {
     auto toolsMenu = Core::ActionManager::createMenu(Constants::M_TOOLS_ASN);
     auto contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
@@ -188,7 +188,7 @@ void Asn1AcnPlugin::initializeMenus()
     initializeFollowSymbolAction(toolsMenu, contextMenu);
     initializeFindUsagesAction(toolsMenu, contextMenu, context);
     initializeBuildICDAction(toolsMenu);
-    initializeGenerateTestsAction(toolsMenu);
+    initializeGenerateTestsAction(toolsMenu, testGeneratorSettings);
     initializeImportFromAsnComponents(toolsMenu);
 
     addToToolsMenu(toolsMenu);
@@ -252,7 +252,8 @@ void Asn1AcnPlugin::addBuildICDToProjectMenu()
     menu->addAction(command, ProjectExplorer::Constants::G_PROJECT_FILES);
 }
 
-void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu)
+void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu,
+                                                  Settings::TestGeneratorConstPtr settings)
 {
     auto action = new Utils::ParameterAction(tr("Generate Tests..."),
                                              tr("Generate Tests for \"%1\"..."),
@@ -267,10 +268,10 @@ void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu)
                 action->setParameter(project == nullptr ? QString() : project->displayName());
             });
 
-    connect(action, &QAction::triggered, [this]() {
+    connect(action, &QAction::triggered, [this, settings]() {
         if (m_testGeneratorDialog.isNull()) {
             auto paramsProvider = std::make_shared<TestGenerator::TestGeneratorParamsProvider>(
-                Settings::load<Settings::TestGenerator>());
+                settings);
             m_testGeneratorDialog = new TestGenerator::TestGeneratorParamsDialog(paramsProvider);
         }
         m_testGeneratorDialog->exec();
