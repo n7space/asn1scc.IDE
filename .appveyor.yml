@@ -1,7 +1,7 @@
 # Appveyor project configuration file
 # Build the plugin on Windows environment
 
-version: 4.6.1.{build}
+version: 4.7.0.{build}
 
 image: Visual Studio 2015
 
@@ -11,8 +11,8 @@ environment:
   QTDIR: C:\Qt\5.10.1\msvc2015
   ENV_QTC_PLATFORM: vs2015_32
   ENV_MSVC_PLATFORM: x86
-  ENV_QTC_VERSION: 4.6.1
-  ENV_QTC_VERSION_SHORT: 4.6
+  ENV_QTC_VERSION: 4.7.0
+  ENV_QTC_VERSION_SHORT: 4.7
   BUILD_DIR: c:\projects\asn1scc.IDE\build
   DIST_DIR: c:\projects\asn1scc.IDE\dist
   DOWNLOAD_DIR: c:\projects\asn1scc.IDE\downloads
