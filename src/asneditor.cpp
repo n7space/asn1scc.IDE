@@ -86,17 +86,16 @@ AsnEditorWidget::AsnEditorWidget()
                                       this))
 {}
 
-Utils::Link AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
-                                        bool resolveTarget,
-                                        bool inNextSplit)
+void AsnEditorWidget::findLinkAt(const QTextCursor &cursor,
+                                 Utils::ProcessLinkCallback &&processLinkCallback,
+                                 bool resolveTarget,
+                                 bool inNextSplit)
 {
     Q_UNUSED(inNextSplit);
 
     LinkCreator linkCreator(*textDocument(), ParsedDataStorage::instance());
-    if (resolveTarget)
-        return linkCreator.createTargetLink(cursor);
-    else
-        return linkCreator.createHighlightLink(cursor);
+    processLinkCallback(resolveTarget ? linkCreator.createTargetLink(cursor)
+                                      : linkCreator.createHighlightLink(cursor));
 }
 
 void AsnEditorWidget::findUsages()

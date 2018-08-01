@@ -48,7 +48,7 @@ class Asn1AcnPlugin : public ExtensionSystem::IPlugin
 
 public:
     Asn1AcnPlugin();
-    ~Asn1AcnPlugin();
+    ~Asn1AcnPlugin() override;
 
     bool initialize(const QStringList &arguments, QString *errorString) override;
     void extensionsInitialized() override;
@@ -98,6 +98,8 @@ private:
 #ifdef WITH_TESTS
     QList<QObject *> createTestObjects() const override;
 #endif
+
+    class Asn1AcnPluginPrivate *d = nullptr;
 };
 
 } // namespace Internal

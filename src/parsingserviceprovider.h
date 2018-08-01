@@ -38,7 +38,7 @@ class ParsingServiceProvider : public QObject
     Q_OBJECT
 
 public:
-    ParsingServiceProvider(QObject *parent = 0)
+    ParsingServiceProvider(QObject *parent = nullptr)
         : QObject(parent)
     {}
     virtual ~ParsingServiceProvider() = default;

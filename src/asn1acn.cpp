@@ -106,26 +106,59 @@
 namespace Asn1Acn {
 namespace Internal {
 
-Asn1AcnPlugin::Asn1AcnPlugin()
+class Asn1AcnPluginPrivate
 {
-    // Create your members
-}
+public:
+    Asn1AcnPluginPrivate(Settings::ServicePtr serviceSettings,
+                         Settings::LibrariesPtr librariesSettings,
+                         Settings::TestGeneratorPtr testGeneratorSettings)
+        : m_optionsPagesService(serviceSettings)
+        , m_optionsPagesLibraries(librariesSettings)
+        , m_optionsPagesTestGenerator(testGeneratorSettings)
+        , m_componentDirectoryWatcher(librariesSettings)
+        , m_asn1sccServiceProvider(serviceSettings)
+        , m_kitInformation(new KitInformation)
+    {
+        ExtensionSystem::PluginManager::addObject(&m_asn1sccServiceProvider);
+        ProjectExplorer::KitManager::registerKitInformation(m_kitInformation);
+
+        m_asn1sccServiceProvider.start();
+    }
+
+    ~Asn1AcnPluginPrivate()
+    {
+        ExtensionSystem::PluginManager::removeObject(&m_asn1sccServiceProvider);
+        ProjectExplorer::KitManager::deregisterKitInformation(m_kitInformation);
+    }
+
+    TreeViews::OutlineWidgetFactory m_outlineWidgetFactory;
+    TreeViews::TypesTreeWidgetFactory m_typesTreeWidgetFactory;
+    AsnEditorFactory m_asnEditorFactory;
+    AcnEditorFactory m_acnEditorFactory;
+    ProjectWatcher m_projectWatcher;
+    TypesLocator m_typesLocator;
+
+    OptionsPages::Service m_optionsPagesService;
+    OptionsPages::Libraries m_optionsPagesLibraries;
+    OptionsPages::TestGenerator m_optionsPagesTestGenerator;
+
+    Libraries::ComponentDirectoryWatcher m_componentDirectoryWatcher;
+
+    Asn1SccServiceProvider m_asn1sccServiceProvider;
+
+    KitInformation *m_kitInformation;
+};
+
+Asn1AcnPlugin::Asn1AcnPlugin() {}
 
 Asn1AcnPlugin::~Asn1AcnPlugin()
 {
-    // Unregister objects from the plugin manager's object pool
-    // Delete members
+    delete d;
+    d = nullptr;
 }
 
 bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
-    // Register objects in the plugin manager's object pool
-    // Load settings
-    // Add actions to menus
-    // Connect to other plugins' signals
-    // In the initialize function, a plugin can be sure that the plugins it
-    // depends on have initialized their members.
-
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
@@ -133,29 +166,10 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     const auto librariesSettings = Settings::load<Settings::Libraries>();
     const auto testGeneratorSettings = Settings::load<Settings::TestGenerator>();
 
-    addAutoReleasedObject(new AsnEditorFactory);
-    addAutoReleasedObject(new AcnEditorFactory);
-
-    addAutoReleasedObject(new ProjectWatcher);
-
-    addAutoReleasedObject(new TreeViews::OutlineWidgetFactory);
-    addAutoReleasedObject(new TreeViews::TypesTreeWidgetFactory);
-
-    addAutoReleasedObject(new OptionsPages::Service(serviceSettings));
-    addAutoReleasedObject(new OptionsPages::Libraries(librariesSettings));
-    addAutoReleasedObject(new OptionsPages::TestGenerator(testGeneratorSettings));
-
-    addAutoReleasedObject(new TypesLocator);
-
-    const auto directoryWatcher = new Libraries::ComponentDirectoryWatcher(librariesSettings);
-    addAutoReleasedObject(directoryWatcher);
+    d = new Asn1AcnPluginPrivate(serviceSettings, librariesSettings, testGeneratorSettings);
 
     Completion::AsnSnippets::registerGroup();
     Completion::AcnSnippets::registerGroup();
-
-    Asn1SccServiceProvider *sp = new Asn1SccServiceProvider(serviceSettings);
-    addAutoReleasedObject(sp);
-    sp->start();
 
     initializeMenus(testGeneratorSettings);
 
@@ -169,9 +183,6 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
             &Core::ProgressManager::allTasksFinished,
             this,
             &Asn1AcnPlugin::onTaskFinished);
-
-    auto kitInfo = new KitInformation;
-    ProjectExplorer::KitManager::registerKitInformation(kitInfo);
 
     return true;
 }
