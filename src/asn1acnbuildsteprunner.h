@@ -41,6 +41,7 @@ class Asn1AcnBuildStep;
 class Asn1AcnBuildStepRunner
 {
 public:
+    virtual ~Asn1AcnBuildStepRunner() = default;
     void run(ProjectExplorer::Project *project = ProjectExplorer::SessionManager::startupProject());
 
 private:
