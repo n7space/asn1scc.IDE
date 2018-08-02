@@ -119,20 +119,20 @@ SOURCES += \
     \
     options-pages/service.cpp \
     options-pages/libraries.cpp \
-    options-pages/testgenerator.cpp \
+    options-pages/maltester.cpp \
     options-pages/servicewidget.cpp \
     options-pages/librarieswidget.cpp \
-    options-pages/testgeneratorwidget.cpp \
+    options-pages/maltesterwidget.cpp \
     \
     settings/settings.cpp \
     settings/service.cpp \
     settings/libraries.cpp \
-    settings/testgenerator.cpp \
+    settings/maltester.cpp \
     \
-    test-generator/testgeneratorparamsdialog.cpp \
-    test-generator/testgeneratorparamswidget.cpp \
-    test-generator/testgeneratorrunner.cpp \
-    test-generator/testgeneratorparamsprovider.cpp \
+    maltester/maltesterparamsdialog.cpp \
+    maltester/maltesterparamswidget.cpp \
+    maltester/maltesterrunner.cpp \
+    maltester/maltesterparamsprovider.cpp \
     \
     libraries/modulemetadataparser.cpp \
     libraries/generalmetadataparser.cpp \
@@ -266,20 +266,20 @@ HEADERS += \
     \
     options-pages/service.h \
     options-pages/libraries.h \
-    options-pages/testgenerator.h \
+    options-pages/maltester.h \
     options-pages/servicewidget.h \
     options-pages/librarieswidget.h \
-    options-pages/testgeneratorwidget.h \
+    options-pages/maltesterwidget.h \
     \
     settings/settings.h \
     settings/service.h \
     settings/libraries.h \
-    settings/testgenerator.h \
+    settings/maltester.h \
     \
-    test-generator/testgeneratorparamsdialog.h \
-    test-generator/testgeneratorparamswidget.h \
-    test-generator/testgeneratorrunner.h \
-    test-generator/testgeneratorparamsprovider.h \
+    maltester/maltesterparamsdialog.h \
+    maltester/maltesterparamswidget.h \
+    maltester/maltesterrunner.h \
+    maltester/maltesterparamsprovider.h \
     \
     libraries/modulemetadataparser.h \
     libraries/generalmetadataparser.h \
@@ -358,11 +358,11 @@ HEADERS += \
     asn1acnbuildsteprunner.h
 
 FORMS += \
-    test-generator/testgeneratorparams.ui \
+    maltester/maltesterparams.ui \
     \
     options-pages/service.ui \
     options-pages/libraries.ui \
-    options-pages/testgenerator.ui \
+    options-pages/maltester.ui \
     \
     libraries/wizard/import_component.ui \
     libraries/wizard/select_component.ui \

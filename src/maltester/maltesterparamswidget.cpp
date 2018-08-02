@@ -22,46 +22,38 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "maltesterparamswidget.h"
 
-#include <QDialog>
+using namespace Asn1Acn::Internal::MalTester;
 
-#include "data/file.h"
-
-#include "asn1acnbuildsteprunner.h"
-
-#include "testgeneratorparamsprovider.h"
-#include "testgeneratorrunner.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace TestGenerator {
-
-class TestGeneratorParamsWidget;
-
-class TestGeneratorParamsDialog : public QDialog
+MalTesterParamsWidget::MalTesterParamsWidget(QWidget *parent)
+    : QWidget(parent)
 {
-    Q_OBJECT
-public:
-    explicit TestGeneratorParamsDialog(TestGeneratorParamsProviderPtr provider,
-                                       QWidget *parent = nullptr);
+    m_ui.setupUi(this);
+    m_ui.pathChooser->setExpectedKind(Utils::PathChooser::ExistingDirectory);
+}
 
-public slots:
-    int exec() override;
-    void accept() override;
+QString MalTesterParamsWidget::path() const
+{
+    return m_ui.pathChooser->path();
+}
 
-private:
-    void fillRootTypeCandidates();
-    void fillRootTypeCandidatesFromProject(const QString &projectName);
-    void fillRootTypeCandidatesFromDefinitions(const Data::File::DefinitionsList &defs);
+void MalTesterParamsWidget::setPath(const QString &path)
+{
+    m_ui.pathChooser->setPath(path);
+}
 
-    void letProceed(bool val);
+QString MalTesterParamsWidget::rootType() const
+{
+    return m_ui.comboBox->currentText();
+}
 
-    TestGeneratorParamsWidget *m_widget;
-    TestGeneratorParamsProviderPtr m_provider;
-    std::unique_ptr<Asn1AcnBuildStepRunner> m_runner;
-};
+void MalTesterParamsWidget::addRootTypeCandidate(const QString &rootType)
+{
+    m_ui.comboBox->addItem(rootType);
+}
 
-} // namespace TestGenerator
-} // namespace Internal
-} // namespace Asn1Acn
+void MalTesterParamsWidget::clearRootTypeCandidates()
+{
+    m_ui.comboBox->clear();
+}

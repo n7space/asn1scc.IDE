@@ -22,23 +22,34 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "testgeneratorwidget.h"
+#include "maltester.h"
 
-using namespace Asn1Acn::Internal::OptionsPages;
+#include <QDir>
 
-TestGeneratorWidget::TestGeneratorWidget(QWidget *parent)
-    : QWidget(parent)
+#include <plugins/coreplugin/icore.h>
+
+using namespace Asn1Acn::Internal::Settings;
+
+static const char PATH[] = "MalTesterPath";
+
+MalTester::~MalTester() {}
+
+QString MalTester::name() const
 {
-    m_ui.setupUi(this);
-    m_ui.pathChooser->setExpectedKind(Utils::PathChooser::ExistingCommand);
+    return QLatin1String("MalTester");
 }
 
-QString TestGeneratorWidget::path() const
+void MalTester::saveOptionsTo(QSettings *s) const
 {
-    return m_ui.pathChooser->path();
+    s->setValue(PATH, QDir::fromNativeSeparators(path()));
 }
 
-void TestGeneratorWidget::setPath(const QString &path)
+static QString defaultMalTesterPath()
 {
-    m_ui.pathChooser->setPath(path);
+    return Core::ICore::libexecPath() + QLatin1String("/MalTester/");
+}
+
+void MalTester::loadOptionsFrom(QSettings *s)
+{
+    setPath(s->value(PATH, defaultMalTesterPath()).toString());
 }

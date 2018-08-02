@@ -24,47 +24,35 @@
 ****************************************************************************/
 #pragma once
 
-#include "testgeneratorparamsprovider.h"
+#include <QWidget>
 
-#include "asn1acnbuildstep.h"
-#include "asn1acnbuildsteprunner.h"
+#include "ui_maltesterparams.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace TestGenerator {
+namespace MalTester {
 
-class TestGeneratorRunner : public Asn1AcnBuildStepRunner
-{
-public:
-    TestGeneratorRunner(const TestGeneratorParamsProviderPtr params);
-
-private:
-    Asn1AcnBuildStep *createStep(ProjectExplorer::BuildStepList *stepList) const override;
-    QString progressLabelText() const override;
-
-    const TestGeneratorParamsProviderPtr m_params;
-};
-
-class TestGeneratorBuildStep : public Asn1AcnBuildStep
+class MalTesterParamsWidget : public QWidget
 {
     Q_OBJECT
-
 public:
-    explicit TestGeneratorBuildStep(ProjectExplorer::BuildStepList *parent,
-                                    const TestGeneratorParamsProviderPtr params);
+    explicit MalTesterParamsWidget(QWidget *parent = nullptr);
+
+    QString path() const;
+    void setPath(const QString &path);
+
+    QString rootType() const;
+    void addRootTypeCandidate(const QString &rootType);
+
+    void clearRootTypeCandidates();
+
+    const QDialogButtonBox *buttonBox() const { return m_ui.buttonBox; }
+    QComboBox *comboBox() { return m_ui.comboBox; }
 
 private:
-    QString executablePath() const override;
-    QString arguments() const override;
-
-    QString asn1sccArgument() const;
-    QString rootTypeArgument() const;
-    QString outputPathArgument() const;
-    QString fileArgument() const;
-
-    const TestGeneratorParamsProviderPtr m_params;
+    Ui::MalTesterParamsWidget m_ui;
 };
 
-} // namespace TestGenerator
+} // namespace MalTester
 } // namespace Internal
 } // namespace Asn1Acn

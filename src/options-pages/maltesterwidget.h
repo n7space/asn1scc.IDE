@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2018 N7 Space sp. z o. o.
+** Copyright (C) 2017-2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -22,39 +22,29 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+#pragma once
 
-#include "testgeneratorparamswidget.h"
+#include <QWidget>
 
-using namespace Asn1Acn::Internal::TestGenerator;
+#include "ui_maltester.h"
 
-TestGeneratorParamsWidget::TestGeneratorParamsWidget(QWidget *parent)
-    : QWidget(parent)
+namespace Asn1Acn {
+namespace Internal {
+namespace OptionsPages {
+
+class MalTesterWidget : public QWidget
 {
-    m_ui.setupUi(this);
-    m_ui.pathChooser->setExpectedKind(Utils::PathChooser::ExistingDirectory);
-}
+    Q_OBJECT
+public:
+    explicit MalTesterWidget(QWidget *parent = nullptr);
 
-QString TestGeneratorParamsWidget::path() const
-{
-    return m_ui.pathChooser->path();
-}
+    QString path() const;
+    void setPath(const QString &path);
 
-void TestGeneratorParamsWidget::setPath(const QString &path)
-{
-    m_ui.pathChooser->setPath(path);
-}
+private:
+    Ui::MalTesterOptionsPage m_ui;
+};
 
-QString TestGeneratorParamsWidget::rootType() const
-{
-    return m_ui.comboBox->currentText();
-}
-
-void TestGeneratorParamsWidget::addRootTypeCandidate(const QString &rootType)
-{
-    m_ui.comboBox->addItem(rootType);
-}
-
-void TestGeneratorParamsWidget::clearRootTypeCandidates()
-{
-    m_ui.comboBox->clear();
-}
+} // namespace OptionsPages
+} // namespace Internal
+} // namespace Asn1Acn

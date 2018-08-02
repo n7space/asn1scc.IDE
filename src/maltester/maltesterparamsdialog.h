@@ -24,35 +24,43 @@
 ****************************************************************************/
 #pragma once
 
-#include <QWidget>
+#include <QDialog>
 
-#include "ui_testgeneratorparams.h"
+#include "data/file.h"
+
+#include "asn1acnbuildsteprunner.h"
+
+#include "maltesterparamsprovider.h"
+#include "maltesterrunner.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace TestGenerator {
+namespace MalTester {
 
-class TestGeneratorParamsWidget : public QWidget
+class MalTesterParamsWidget;
+
+class MalTesterParamsDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit TestGeneratorParamsWidget(QWidget *parent = nullptr);
+    explicit MalTesterParamsDialog(MalTesterParamsProviderPtr provider, QWidget *parent = nullptr);
 
-    QString path() const;
-    void setPath(const QString &path);
-
-    QString rootType() const;
-    void addRootTypeCandidate(const QString &rootType);
-
-    void clearRootTypeCandidates();
-
-    const QDialogButtonBox *buttonBox() const { return m_ui.buttonBox; }
-    QComboBox *comboBox() { return m_ui.comboBox; }
+public slots:
+    int exec() override;
+    void accept() override;
 
 private:
-    Ui::TestGeneratorParamsWidget m_ui;
+    void fillRootTypeCandidates();
+    void fillRootTypeCandidatesFromProject(const QString &projectName);
+    void fillRootTypeCandidatesFromDefinitions(const Data::File::DefinitionsList &defs);
+
+    void letProceed(bool val);
+
+    MalTesterParamsWidget *m_widget;
+    MalTesterParamsProviderPtr m_provider;
+    std::unique_ptr<Asn1AcnBuildStepRunner> m_runner;
 };
 
-} // namespace TestGenerator
+} // namespace MalTester
 } // namespace Internal
 } // namespace Asn1Acn

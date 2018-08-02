@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2018 N7 Space sp. z o. o.
+** Copyright (C) 2017-2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -22,45 +22,41 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
 #include <memory>
 
 #include <QString>
 
-#include "settings/testgenerator.h"
-
-namespace ProjectExplorer {
-class Target;
-}
+#include "settings.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace TestGenerator {
+namespace Settings {
 
-class TestGeneratorParamsProvider
+class MalTester : public Settings
 {
+    Q_OBJECT
 public:
-    TestGeneratorParamsProvider(Settings::TestGeneratorConstPtr settings);
+    MalTester() = default;
+    ~MalTester() override;
 
-    QString asn1sccPath(const ProjectExplorer::Target *target) const;
-    QString testGeneratorPath() const;
-    QString outputPath() const;
-    QString rootTypeName() const;
-    QString asn1acnFiles() const;
+    QString name() const override;
 
-    void setRootTypeName(const QString &name);
-    void setOutputPath(const QString &path);
+    const QString &path() const { return m_path; }
+    void setPath(const QString &p) { m_path = p; }
 
 private:
-    QString m_outputPath;
-    QString m_rootTypeName;
+    void saveOptionsTo(QSettings *s) const override;
+    void loadOptionsFrom(QSettings *s) override;
 
-    Settings::TestGeneratorConstPtr m_settings;
+    QString m_path;
 };
 
-using TestGeneratorParamsProviderPtr = std::shared_ptr<TestGeneratorParamsProvider>;
+using MalTesterPtr = std::shared_ptr<MalTester>;
+using MalTesterConstPtr = std::shared_ptr<const MalTester>;
 
-} // namespace TestGenerator
+} // namespace Settings
 } // namespace Internal
 } // namespace Asn1Acn

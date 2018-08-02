@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2018 N7 Space sp. z o. o.
+** Copyright (C) 2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -24,27 +24,47 @@
 ****************************************************************************/
 #pragma once
 
-#include <QWidget>
+#include "maltesterparamsprovider.h"
 
-#include "ui_testgenerator.h"
+#include "asn1acnbuildstep.h"
+#include "asn1acnbuildsteprunner.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace OptionsPages {
+namespace MalTester {
 
-class TestGeneratorWidget : public QWidget
+class MalTesterRunner : public Asn1AcnBuildStepRunner
 {
-    Q_OBJECT
 public:
-    explicit TestGeneratorWidget(QWidget *parent = nullptr);
-
-    QString path() const;
-    void setPath(const QString &path);
+    MalTesterRunner(const MalTesterParamsProviderPtr params);
 
 private:
-    Ui::TestGeneratorOptionsPage m_ui;
+    Asn1AcnBuildStep *createStep(ProjectExplorer::BuildStepList *stepList) const override;
+    QString progressLabelText() const override;
+
+    const MalTesterParamsProviderPtr m_params;
 };
 
-} // namespace OptionsPages
+class MalTesterBuildStep : public Asn1AcnBuildStep
+{
+    Q_OBJECT
+
+public:
+    explicit MalTesterBuildStep(ProjectExplorer::BuildStepList *parent,
+                                const MalTesterParamsProviderPtr params);
+
+private:
+    QString executablePath() const override;
+    QString arguments() const override;
+
+    QString asn1sccArgument() const;
+    QString rootTypeArgument() const;
+    QString outputPathArgument() const;
+    QString fileArgument() const;
+
+    const MalTesterParamsProviderPtr m_params;
+};
+
+} // namespace MalTester
 } // namespace Internal
 } // namespace Asn1Acn

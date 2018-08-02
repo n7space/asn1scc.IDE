@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>N7 Space sp. z o. o.</author>
- <class>Asn1Acn::Internal::TestGenerator::TestGeneratorParamsWidget</class>
- <widget class="QWidget" name="Asn1Acn::Internal::TestGenerator::TestGeneratorParamsWidget">
+ <class>Asn1Acn::Internal::MalTester::MalTesterParamsWidget</class>
+ <widget class="QWidget" name="Asn1Acn::Internal::MalTester::MalTesterParamsWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -64,7 +64,7 @@
       <number>1</number>
      </property>
      <property name="text">
-      <string>Test Generator run parameters:</string>
+      <string>asn1scc.MalTester run parameters:</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
@@ -86,7 +86,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Main Structure: </string>
+      <string>Root Type:</string>
      </property>
     </widget>
    </item>

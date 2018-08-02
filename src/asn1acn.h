@@ -33,8 +33,8 @@
 
 #include "libraries/wizard/importcomponentwizard.h"
 
-#include "test-generator/testgeneratorparamsdialog.h"
-#include "test-generator/testgeneratorparamsprovider.h"
+#include "maltester/maltesterparamsdialog.h"
+#include "maltester/maltesterparamsprovider.h"
 
 #include "icdbuilder.h"
 
@@ -64,7 +64,7 @@ private:
     using ActionContainer = Core::ActionContainer;
     using Context = Core::Context;
 
-    void initializeMenus(Settings::TestGeneratorConstPtr settings);
+    void initializeMenus(Settings::MalTesterConstPtr malTesterSettings);
 
     void initializeSwitchAction(ActionContainer *toolsMenu,
                                 ActionContainer *contextMenu,
@@ -77,7 +77,7 @@ private:
                                     const Context &context);
     void initializeBuildICDAction(ActionContainer *toolsMenu);
     void initializeGenerateTestsAction(ActionContainer *toolsMenu,
-                                       Settings::TestGeneratorConstPtr settings);
+                                       Settings::MalTesterConstPtr settings);
 
     void addBuildICDToToolsMenu(ActionContainer *toolsMenu);
     void addBuildICDToProjectMenu();
@@ -89,7 +89,7 @@ private:
 
     QPointer<Libraries::Wizard::ImportComponentWizard> m_importComponentWizard;
 
-    QPointer<TestGenerator::TestGeneratorParamsDialog> m_testGeneratorDialog;
+    QPointer<MalTester::MalTesterParamsDialog> m_malTesterDialog;
 
     QAction *m_findUsagesAction;
 

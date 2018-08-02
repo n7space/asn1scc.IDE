@@ -22,37 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #include <QPushButton>
 
 #include <projectexplorer/project.h>
 #include <projectexplorer/session.h>
 
-#include "testgeneratorparamsdialog.h"
-#include "testgeneratorparamswidget.h"
+#include "maltesterparamsdialog.h"
+#include "maltesterparamswidget.h"
 
 #include "parseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::TestGenerator;
+using namespace Asn1Acn::Internal::MalTester;
 
-TestGeneratorParamsDialog::TestGeneratorParamsDialog(TestGeneratorParamsProviderPtr provider,
-                                                     QWidget *parent)
+MalTesterParamsDialog::MalTesterParamsDialog(MalTesterParamsProviderPtr provider, QWidget *parent)
     : QDialog(parent)
     , m_provider(provider)
 {
-    m_widget = new TestGeneratorParamsWidget(this);
-    m_runner = std::make_unique<TestGeneratorRunner>(provider);
+    m_widget = new MalTesterParamsWidget(this);
+    m_runner = std::make_unique<MalTesterRunner>(provider);
 
     connect(m_widget->buttonBox(),
             &QDialogButtonBox::accepted,
             this,
-            &TestGeneratorParamsDialog::accept);
+            &MalTesterParamsDialog::accept);
 
     connect(m_widget->buttonBox(), &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
-int TestGeneratorParamsDialog::exec()
+int MalTesterParamsDialog::exec()
 {
     m_widget->setPath(
         ProjectExplorer::SessionManager::startupProject()->projectDirectory().toString());
@@ -64,7 +62,7 @@ int TestGeneratorParamsDialog::exec()
     return QDialog::exec();
 }
 
-void TestGeneratorParamsDialog::accept()
+void MalTesterParamsDialog::accept()
 {
     m_provider->setRootTypeName(m_widget->rootType());
     m_provider->setOutputPath(m_widget->path());
@@ -82,12 +80,12 @@ QString projectName()
 }
 } // namespace
 
-void TestGeneratorParamsDialog::fillRootTypeCandidates()
+void MalTesterParamsDialog::fillRootTypeCandidates()
 {
     fillRootTypeCandidatesFromProject(projectName());
 }
 
-void TestGeneratorParamsDialog::fillRootTypeCandidatesFromProject(const QString &projectName)
+void MalTesterParamsDialog::fillRootTypeCandidatesFromProject(const QString &projectName)
 {
     auto storage = ParsedDataStorage::instance();
     const auto &paths = storage->getFilesPathsFromProject(projectName);
@@ -100,7 +98,7 @@ void TestGeneratorParamsDialog::fillRootTypeCandidatesFromProject(const QString 
     }
 }
 
-void TestGeneratorParamsDialog::fillRootTypeCandidatesFromDefinitions(
+void MalTesterParamsDialog::fillRootTypeCandidatesFromDefinitions(
     const Data::File::DefinitionsList &defs)
 {
     for (const auto &def : defs) {
@@ -110,7 +108,7 @@ void TestGeneratorParamsDialog::fillRootTypeCandidatesFromDefinitions(
     }
 }
 
-void TestGeneratorParamsDialog::letProceed(bool val)
+void MalTesterParamsDialog::letProceed(bool val)
 {
     m_widget->comboBox()->setEnabled(val);
     m_widget->buttonBox()->button(QDialogButtonBox::Ok)->setEnabled(val);

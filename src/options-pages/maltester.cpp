@@ -22,30 +22,30 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "testgenerator.h"
+#include "maltester.h"
 
 #include <QWidget>
 
 #include <tr.h>
 
 #include "asn1acnconstants.h"
-#include "testgeneratorwidget.h"
+#include "maltesterwidget.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::OptionsPages;
 
-TestGenerator::TestGenerator(Settings::TestGeneratorPtr settings)
+MalTester::MalTester(Settings::MalTesterPtr settings)
     : m_settings(settings)
     , m_widget(nullptr)
 {
-    setId(Constants::TESTGENERATOR_SETTINGS_ID);
+    setId(Constants::MALTESTER_SETTINGS_ID);
     setDisplayName(Tr::tr("Test Generator"));
     setCategory(Constants::SETTINGS_CATEGORY);
     setDisplayCategory(Tr::tr(Constants::SETTINGS_CATEGORY_DISPLAY));
     setCategoryIcon(Utils::Icon(Constants::OPTIONS_CATEGORY_ICON));
 }
 
-bool TestGenerator::matches(const QString &searchKeyWord) const
+bool MalTester::matches(const QString &searchKeyWord) const
 {
     const QStringList keywords{"asn1", "asn.1", "acn", "test", "generator"};
     for (const auto &keyword : keywords)
@@ -54,16 +54,16 @@ bool TestGenerator::matches(const QString &searchKeyWord) const
     return Core::IOptionsPage::matches(searchKeyWord);
 }
 
-QWidget *TestGenerator::widget()
+QWidget *MalTester::widget()
 {
     if (!m_widget) {
-        m_widget = new TestGeneratorWidget;
+        m_widget = new MalTesterWidget;
         m_widget->setPath(m_settings->path());
     }
     return m_widget;
 }
 
-void TestGenerator::apply()
+void MalTester::apply()
 {
     if (!m_widget)
         return;
@@ -72,7 +72,7 @@ void TestGenerator::apply()
     Settings::save(m_settings);
 }
 
-void TestGenerator::finish()
+void MalTester::finish()
 {
     delete m_widget;
 }

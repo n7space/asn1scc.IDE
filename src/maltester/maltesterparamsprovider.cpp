@@ -22,53 +22,52 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
-#include "testgeneratorparamsprovider.h"
+#include "maltesterparamsprovider.h"
 
 #include <projectexplorer/target.h>
 
 #include "kitinformation.h"
 
 using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::TestGenerator;
+using namespace Asn1Acn::Internal::MalTester;
 
-TestGeneratorParamsProvider::TestGeneratorParamsProvider(Settings::TestGeneratorConstPtr settings)
+MalTesterParamsProvider::MalTesterParamsProvider(Settings::MalTesterConstPtr settings)
     : m_settings(settings)
 {}
 
-void TestGeneratorParamsProvider::setRootTypeName(const QString &name)
+void MalTesterParamsProvider::setRootTypeName(const QString &name)
 {
     m_rootTypeName = name;
 }
 
-void TestGeneratorParamsProvider::setOutputPath(const QString &path)
+void MalTesterParamsProvider::setOutputPath(const QString &path)
 {
     m_outputPath = path;
 }
 
-QString TestGeneratorParamsProvider::asn1sccPath(const ProjectExplorer::Target *target) const
+QString MalTesterParamsProvider::asn1sccPath(const ProjectExplorer::Target *target) const
 {
     return KitInformation::hasAsn1Exe(target->kit())
                ? KitInformation::asn1Exe(target->kit()).toString()
                : QString();
 }
 
-QString TestGeneratorParamsProvider::testGeneratorPath() const
+QString MalTesterParamsProvider::malTesterPath() const
 {
     return m_settings->path();
 }
 
-QString TestGeneratorParamsProvider::outputPath() const
+QString MalTesterParamsProvider::outputPath() const
 {
     return m_outputPath;
 }
 
-QString TestGeneratorParamsProvider::rootTypeName() const
+QString MalTesterParamsProvider::rootTypeName() const
 {
     return m_rootTypeName;
 }
 
-QString TestGeneratorParamsProvider::asn1acnFiles() const
+QString MalTesterParamsProvider::asn1acnFiles() const
 {
     return {};
 }

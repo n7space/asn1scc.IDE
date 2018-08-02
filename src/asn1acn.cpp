@@ -49,13 +49,13 @@
 #include "completion/asnsnippets.h"
 
 #include "settings/libraries.h"
+#include "settings/maltester.h"
 #include "settings/service.h"
 #include "settings/settings.h"
-#include "settings/testgenerator.h"
 
 #include "options-pages/libraries.h"
+#include "options-pages/maltester.h"
 #include "options-pages/service.h"
-#include "options-pages/testgenerator.h"
 
 #include "tree-views/outlinewidget.h"
 #include "tree-views/typestreewidget.h"
@@ -63,7 +63,7 @@
 #include "libraries/componentdirectorywatcher.h"
 #include "libraries/componentlibrarydispatcher.h"
 
-#include "test-generator/testgeneratorparamsdialog.h"
+#include "maltester/maltesterparamsdialog.h"
 
 #include "acneditor.h"
 #include "asn1acnconstants.h"
@@ -111,10 +111,10 @@ class Asn1AcnPluginPrivate
 public:
     Asn1AcnPluginPrivate(Settings::ServicePtr serviceSettings,
                          Settings::LibrariesPtr librariesSettings,
-                         Settings::TestGeneratorPtr testGeneratorSettings)
+                         Settings::MalTesterPtr malTesterSettings)
         : m_optionsPagesService(serviceSettings)
         , m_optionsPagesLibraries(librariesSettings)
-        , m_optionsPagesTestGenerator(testGeneratorSettings)
+        , m_optionsPagesMalTester(malTesterSettings)
         , m_componentDirectoryWatcher(librariesSettings)
         , m_asn1sccServiceProvider(serviceSettings)
         , m_kitInformation(new KitInformation)
@@ -140,7 +140,7 @@ public:
 
     OptionsPages::Service m_optionsPagesService;
     OptionsPages::Libraries m_optionsPagesLibraries;
-    OptionsPages::TestGenerator m_optionsPagesTestGenerator;
+    OptionsPages::MalTester m_optionsPagesMalTester;
 
     Libraries::ComponentDirectoryWatcher m_componentDirectoryWatcher;
 
@@ -164,14 +164,14 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     const auto serviceSettings = Settings::load<Settings::Service>();
     const auto librariesSettings = Settings::load<Settings::Libraries>();
-    const auto testGeneratorSettings = Settings::load<Settings::TestGenerator>();
+    const auto malTesterSettings = Settings::load<Settings::MalTester>();
 
-    d = new Asn1AcnPluginPrivate(serviceSettings, librariesSettings, testGeneratorSettings);
+    d = new Asn1AcnPluginPrivate(serviceSettings, librariesSettings, malTesterSettings);
 
     Completion::AsnSnippets::registerGroup();
     Completion::AcnSnippets::registerGroup();
 
-    initializeMenus(testGeneratorSettings);
+    initializeMenus(malTesterSettings);
 
     Core::JsExpander::registerQObjectForJs(QLatin1String("Asn1Acn"), new Asn1AcnJsExtension);
 
@@ -187,7 +187,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     return true;
 }
 
-void Asn1AcnPlugin::initializeMenus(Settings::TestGeneratorConstPtr testGeneratorSettings)
+void Asn1AcnPlugin::initializeMenus(Settings::MalTesterConstPtr malTesterSettings)
 {
     auto toolsMenu = Core::ActionManager::createMenu(Constants::M_TOOLS_ASN);
     auto contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
@@ -199,7 +199,7 @@ void Asn1AcnPlugin::initializeMenus(Settings::TestGeneratorConstPtr testGenerato
     initializeFollowSymbolAction(toolsMenu, contextMenu);
     initializeFindUsagesAction(toolsMenu, contextMenu, context);
     initializeBuildICDAction(toolsMenu);
-    initializeGenerateTestsAction(toolsMenu, testGeneratorSettings);
+    initializeGenerateTestsAction(toolsMenu, malTesterSettings);
     initializeImportFromAsnComponents(toolsMenu);
 
     addToToolsMenu(toolsMenu);
@@ -264,7 +264,7 @@ void Asn1AcnPlugin::addBuildICDToProjectMenu()
 }
 
 void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu,
-                                                  Settings::TestGeneratorConstPtr settings)
+                                                  Settings::MalTesterConstPtr settings)
 {
     auto action = new Utils::ParameterAction(tr("Generate Tests..."),
                                              tr("Generate Tests for \"%1\"..."),
@@ -280,12 +280,11 @@ void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu,
             });
 
     connect(action, &QAction::triggered, [this, settings]() {
-        if (m_testGeneratorDialog.isNull()) {
-            auto paramsProvider = std::make_shared<TestGenerator::TestGeneratorParamsProvider>(
-                settings);
-            m_testGeneratorDialog = new TestGenerator::TestGeneratorParamsDialog(paramsProvider);
+        if (m_malTesterDialog.isNull()) {
+            auto paramsProvider = std::make_shared<MalTester::MalTesterParamsProvider>(settings);
+            m_malTesterDialog = new MalTester::MalTesterParamsDialog(paramsProvider);
         }
-        m_testGeneratorDialog->exec();
+        m_malTesterDialog->exec();
     });
 
     auto command = Core::ActionManager::registerAction(action, Constants::GENERATE_TESTS);

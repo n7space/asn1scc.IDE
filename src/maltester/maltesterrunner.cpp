@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "testgeneratorrunner.h"
+#include "maltesterrunner.h"
 
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectnodes.h>
@@ -36,41 +36,41 @@
 #include "asn1acnconstants.h"
 
 using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::TestGenerator;
+using namespace Asn1Acn::Internal::MalTester;
 
-static const char GENERATE_TESTS_BS_ID[] = "ASN1ACN.TestGeneratorBuildStep";
+static const char GENERATE_TESTS_BS_ID[] = "ASN1ACN.MalTesterBuildStep";
 
-TestGeneratorRunner::TestGeneratorRunner(const TestGeneratorParamsProviderPtr params)
+MalTesterRunner::MalTesterRunner(const MalTesterParamsProviderPtr params)
     : m_params(params)
 {}
 
-Asn1AcnBuildStep *TestGeneratorRunner::createStep(ProjectExplorer::BuildStepList *stepList) const
+Asn1AcnBuildStep *MalTesterRunner::createStep(ProjectExplorer::BuildStepList *stepList) const
 {
-    return new TestGeneratorBuildStep(stepList, m_params);
+    return new MalTesterBuildStep(stepList, m_params);
 }
 
-QString TestGeneratorRunner::progressLabelText() const
+QString MalTesterRunner::progressLabelText() const
 {
     return QStringLiteral("Test Generator");
 }
 
-TestGeneratorBuildStep::TestGeneratorBuildStep(ProjectExplorer::BuildStepList *parent,
-                                               const TestGeneratorParamsProviderPtr params)
-    : Asn1AcnBuildStep(parent, GENERATE_TESTS_BS_ID, QStringLiteral("Test Generator"))
+MalTesterBuildStep::MalTesterBuildStep(ProjectExplorer::BuildStepList *parent,
+                                       const MalTesterParamsProviderPtr params)
+    : Asn1AcnBuildStep(parent, GENERATE_TESTS_BS_ID, QStringLiteral("asn1scc.MalTester"))
     , m_params(params)
 {}
 
-QString TestGeneratorBuildStep::executablePath() const
+QString MalTesterBuildStep::executablePath() const
 {
-    return m_params->testGeneratorPath();
+    return m_params->malTesterPath();
 }
 
-QString TestGeneratorBuildStep::arguments() const
+QString MalTesterBuildStep::arguments() const
 {
     return asn1sccArgument() + rootTypeArgument() + outputPathArgument() + fileArgument();
 }
 
-QString TestGeneratorBuildStep::asn1sccArgument() const
+QString MalTesterBuildStep::asn1sccArgument() const
 {
     auto path = m_params->asn1sccPath(target());
     if (path.isEmpty())
@@ -79,7 +79,7 @@ QString TestGeneratorBuildStep::asn1sccArgument() const
     return QStringLiteral("--asn1scc-path ") + path + QChar(' ');
 }
 
-QString TestGeneratorBuildStep::rootTypeArgument() const
+QString MalTesterBuildStep::rootTypeArgument() const
 {
     auto rootType = m_params->rootTypeName();
     QTC_ASSERT(!rootType.isEmpty(), return {});
@@ -87,7 +87,7 @@ QString TestGeneratorBuildStep::rootTypeArgument() const
     return QStringLiteral("--root-type ") + rootType + QChar(' ');
 }
 
-QString TestGeneratorBuildStep::outputPathArgument() const
+QString MalTesterBuildStep::outputPathArgument() const
 {
     auto outputPath = m_params->outputPath();
     QTC_ASSERT(!outputPath.isEmpty(), return {});
@@ -95,7 +95,7 @@ QString TestGeneratorBuildStep::outputPathArgument() const
     return QStringLiteral("--output-dir ") + outputPath + QChar(' ');
 }
 
-QString TestGeneratorBuildStep::fileArgument() const
+QString MalTesterBuildStep::fileArgument() const
 {
     const auto project = target()->project();
 

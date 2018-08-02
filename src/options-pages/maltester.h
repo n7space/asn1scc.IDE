@@ -22,41 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <memory>
+#include <QPointer>
 
-#include <QString>
+#include <coreplugin/dialogs/ioptionspage.h>
 
-#include "settings.h"
+#include <settings/maltester.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Settings {
+namespace OptionsPages {
 
-class TestGenerator : public Settings
+class MalTesterWidget;
+
+class MalTester : public Core::IOptionsPage
 {
-    Q_OBJECT
 public:
-    TestGenerator() = default;
-    virtual ~TestGenerator();
+    MalTester(Settings::MalTesterPtr settings);
 
-    QString name() const override;
-
-    const QString &path() const { return m_path; }
-    void setPath(const QString &p) { m_path = p; }
+    bool matches(const QString &searchKeyWord) const override;
+    QWidget *widget() override;
+    void apply() override;
+    void finish() override;
 
 private:
-    void saveOptionsTo(QSettings *s) const override;
-    void loadOptionsFrom(QSettings *s) override;
-
-    QString m_path;
+    Settings::MalTesterPtr m_settings;
+    QPointer<MalTesterWidget> m_widget;
 };
 
-using TestGeneratorPtr = std::shared_ptr<TestGenerator>;
-using TestGeneratorConstPtr = std::shared_ptr<const TestGenerator>;
-
-} // namespace Settings
+} // namespace OptionsPages
 } // namespace Internal
 } // namespace Asn1Acn
