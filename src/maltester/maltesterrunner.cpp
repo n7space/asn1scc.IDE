@@ -51,7 +51,7 @@ Asn1AcnBuildStep *MalTesterRunner::createStep(ProjectExplorer::BuildStepList *st
 
 QString MalTesterRunner::progressLabelText() const
 {
-    return QStringLiteral("Test Generator");
+    return QStringLiteral("asn1scc.MalTester");
 }
 
 MalTesterBuildStep::MalTesterBuildStep(ProjectExplorer::BuildStepList *parent,

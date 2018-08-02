@@ -266,8 +266,8 @@ void Asn1AcnPlugin::addBuildICDToProjectMenu()
 void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu,
                                                   Settings::MalTesterConstPtr settings)
 {
-    auto action = new Utils::ParameterAction(tr("Generate Tests..."),
-                                             tr("Generate Tests for \"%1\"..."),
+    auto action = new Utils::ParameterAction(tr("Execute asn1scc.MalTester..."),
+                                             tr("Execute asn1scc.MalTester \"%1\"..."),
                                              Utils::ParameterAction::AlwaysEnabled,
                                              this);
     action->setEnabled(false);

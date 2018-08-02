@@ -39,7 +39,7 @@ MalTester::MalTester(Settings::MalTesterPtr settings)
     , m_widget(nullptr)
 {
     setId(Constants::MALTESTER_SETTINGS_ID);
-    setDisplayName(Tr::tr("Test Generator"));
+    setDisplayName(Tr::tr("asn1scc.MalTester"));
     setCategory(Constants::SETTINGS_CATEGORY);
     setDisplayCategory(Tr::tr(Constants::SETTINGS_CATEGORY_DISPLAY));
     setCategoryIcon(Utils::Icon(Constants::OPTIONS_CATEGORY_ICON));
