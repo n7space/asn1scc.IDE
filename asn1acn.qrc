@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/asn1acn">
         <file>images/options_category.png</file>
+        <file>images/options_category@2x.png</file>
         <file>images/outline/bitstring.png</file>
         <file>images/outline/choice.png</file>
         <file>images/outline/enumerated.png</file>

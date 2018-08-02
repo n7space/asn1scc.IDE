@@ -72,10 +72,6 @@ const char BUILD_ICD_TOOLBAR[] = "Asn1Acn.BuildICDToolbar";
 const char FIND_USAGES[] = "Asn1Acn.FindUsages";
 const char GENERATE_TESTS[] = "Asn1Acn.GenerateTests";
 
-// Icons
-
-const char OPTIONS_CATEGORY_ICON[] = ":/asn1acn/images/options_category.png";
-
 // Tasks
 
 const char TASK_SEARCH[] = "Asn1Acn.Task.Search";

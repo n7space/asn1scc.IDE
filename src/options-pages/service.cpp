@@ -42,7 +42,9 @@ Service::Service(Settings::ServicePtr settings)
     setDisplayName(Tr::tr("Service"));
     setCategory(Constants::SETTINGS_CATEGORY);
     setDisplayCategory(Tr::tr(Constants::SETTINGS_CATEGORY_DISPLAY));
-    setCategoryIcon(Utils::Icon(Constants::OPTIONS_CATEGORY_ICON));
+    setCategoryIcon(
+        Utils::Icon({{":/asn1acn/images/options_category.png", Utils::Theme::PanelTextColorDark}},
+                    Utils::Icon::Tint));
 }
 
 bool Service::matches(const QString &searchKeyWord) const

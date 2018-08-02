@@ -41,8 +41,6 @@ Libraries::Libraries(Settings::LibrariesPtr settings)
     setId(Constants::LIBRARIES_SETTINGS_ID);
     setDisplayName(Tr::tr("Libraries"));
     setCategory(Constants::SETTINGS_CATEGORY);
-    setDisplayCategory(Tr::tr(Constants::SETTINGS_CATEGORY_DISPLAY));
-    setCategoryIcon(Utils::Icon(Constants::OPTIONS_CATEGORY_ICON));
 }
 
 bool Libraries::matches(const QString &searchKeyWord) const
