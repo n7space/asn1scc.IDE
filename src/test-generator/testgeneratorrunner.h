@@ -58,7 +58,7 @@ private:
     QString arguments() const override;
 
     QString asn1sccArgument() const;
-    QString mainStructureArgument() const;
+    QString rootTypeArgument() const;
     QString outputPathArgument() const;
     QString fileArgument() const;
 

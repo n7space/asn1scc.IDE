@@ -57,8 +57,8 @@ int TestGeneratorParamsDialog::exec()
     m_widget->setPath(
         ProjectExplorer::SessionManager::startupProject()->projectDirectory().toString());
 
-    m_widget->clearMainStructCandidates();
-    fillMainStructCandidates();
+    m_widget->clearRootTypeCandidates();
+    fillRootTypeCandidates();
     letProceed(m_widget->comboBox()->count() > 0);
 
     return QDialog::exec();
@@ -66,7 +66,7 @@ int TestGeneratorParamsDialog::exec()
 
 void TestGeneratorParamsDialog::accept()
 {
-    m_provider->setMainStructureName(m_widget->mainStruct());
+    m_provider->setRootTypeName(m_widget->rootType());
     m_provider->setOutputPath(m_widget->path());
 
     m_runner->run();
@@ -82,12 +82,12 @@ QString projectName()
 }
 } // namespace
 
-void TestGeneratorParamsDialog::fillMainStructCandidates()
+void TestGeneratorParamsDialog::fillRootTypeCandidates()
 {
-    fillMainStructCandidatesFromProject(projectName());
+    fillRootTypeCandidatesFromProject(projectName());
 }
 
-void TestGeneratorParamsDialog::fillMainStructCandidatesFromProject(const QString &projectName)
+void TestGeneratorParamsDialog::fillRootTypeCandidatesFromProject(const QString &projectName)
 {
     auto storage = ParsedDataStorage::instance();
     const auto &paths = storage->getFilesPathsFromProject(projectName);
@@ -96,17 +96,17 @@ void TestGeneratorParamsDialog::fillMainStructCandidatesFromProject(const QStrin
         if (!file)
             continue;
 
-        fillMainStructCandidatesFromDefinitions(file->definitionsList());
+        fillRootTypeCandidatesFromDefinitions(file->definitionsList());
     }
 }
 
-void TestGeneratorParamsDialog::fillMainStructCandidatesFromDefinitions(
+void TestGeneratorParamsDialog::fillRootTypeCandidatesFromDefinitions(
     const Data::File::DefinitionsList &defs)
 {
     for (const auto &def : defs) {
         auto &types = def->types();
         for (const auto &type : types)
-            m_widget->addMainStructCandidate(type->name());
+            m_widget->addRootTypeCandidate(def->name() + "." + type->name());
     }
 }
 

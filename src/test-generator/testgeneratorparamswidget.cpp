@@ -44,17 +44,17 @@ void TestGeneratorParamsWidget::setPath(const QString &path)
     m_ui.pathChooser->setPath(path);
 }
 
-QString TestGeneratorParamsWidget::mainStruct() const
+QString TestGeneratorParamsWidget::rootType() const
 {
     return m_ui.comboBox->currentText();
 }
 
-void TestGeneratorParamsWidget::addMainStructCandidate(const QString &mainStruct)
+void TestGeneratorParamsWidget::addRootTypeCandidate(const QString &rootType)
 {
-    m_ui.comboBox->addItem(mainStruct);
+    m_ui.comboBox->addItem(rootType);
 }
 
-void TestGeneratorParamsWidget::clearMainStructCandidates()
+void TestGeneratorParamsWidget::clearRootTypeCandidates()
 {
     m_ui.comboBox->clear();
 }

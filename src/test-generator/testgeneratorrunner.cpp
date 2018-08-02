@@ -67,7 +67,7 @@ QString TestGeneratorBuildStep::executablePath() const
 
 QString TestGeneratorBuildStep::arguments() const
 {
-    return asn1sccArgument() + mainStructureArgument() + outputPathArgument() + fileArgument();
+    return asn1sccArgument() + rootTypeArgument() + outputPathArgument() + fileArgument();
 }
 
 QString TestGeneratorBuildStep::asn1sccArgument() const
@@ -79,12 +79,12 @@ QString TestGeneratorBuildStep::asn1sccArgument() const
     return QStringLiteral("--asn1scc-path ") + path + QChar(' ');
 }
 
-QString TestGeneratorBuildStep::mainStructureArgument() const
+QString TestGeneratorBuildStep::rootTypeArgument() const
 {
-    auto mainStruct = m_params->mainStructureName();
-    QTC_ASSERT(!mainStruct.isEmpty(), return {});
+    auto rootType = m_params->rootTypeName();
+    QTC_ASSERT(!rootType.isEmpty(), return {});
 
-    return QStringLiteral("--main-structure ") + mainStruct + QChar(' ');
+    return QStringLiteral("--root-type ") + rootType + QChar(' ');
 }
 
 QString TestGeneratorBuildStep::outputPathArgument() const

@@ -41,10 +41,10 @@ public:
     QString path() const;
     void setPath(const QString &path);
 
-    QString mainStruct() const;
-    void addMainStructCandidate(const QString &mainStruct);
+    QString rootType() const;
+    void addRootTypeCandidate(const QString &rootType);
 
-    void clearMainStructCandidates();
+    void clearRootTypeCandidates();
 
     const QDialogButtonBox *buttonBox() const { return m_ui.buttonBox; }
     QComboBox *comboBox() { return m_ui.comboBox; }

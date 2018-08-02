@@ -51,9 +51,9 @@ public slots:
     void accept() override;
 
 private:
-    void fillMainStructCandidates();
-    void fillMainStructCandidatesFromProject(const QString &projectName);
-    void fillMainStructCandidatesFromDefinitions(const Data::File::DefinitionsList &defs);
+    void fillRootTypeCandidates();
+    void fillRootTypeCandidatesFromProject(const QString &projectName);
+    void fillRootTypeCandidatesFromDefinitions(const Data::File::DefinitionsList &defs);
 
     void letProceed(bool val);
 

@@ -36,9 +36,9 @@ TestGeneratorParamsProvider::TestGeneratorParamsProvider(Settings::TestGenerator
     : m_settings(settings)
 {}
 
-void TestGeneratorParamsProvider::setMainStructureName(const QString &name)
+void TestGeneratorParamsProvider::setRootTypeName(const QString &name)
 {
-    m_mainStructureName = name;
+    m_rootTypeName = name;
 }
 
 void TestGeneratorParamsProvider::setOutputPath(const QString &path)
@@ -63,9 +63,9 @@ QString TestGeneratorParamsProvider::outputPath() const
     return m_outputPath;
 }
 
-QString TestGeneratorParamsProvider::mainStructureName() const
+QString TestGeneratorParamsProvider::rootTypeName() const
 {
-    return m_mainStructureName;
+    return m_rootTypeName;
 }
 
 QString TestGeneratorParamsProvider::asn1acnFiles() const

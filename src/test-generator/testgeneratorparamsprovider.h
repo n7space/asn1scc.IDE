@@ -46,15 +46,15 @@ public:
     QString asn1sccPath(const ProjectExplorer::Target *target) const;
     QString testGeneratorPath() const;
     QString outputPath() const;
-    QString mainStructureName() const;
+    QString rootTypeName() const;
     QString asn1acnFiles() const;
 
-    void setMainStructureName(const QString &name);
+    void setRootTypeName(const QString &name);
     void setOutputPath(const QString &path);
 
 private:
     QString m_outputPath;
-    QString m_mainStructureName;
+    QString m_rootTypeName;
 
     Settings::TestGeneratorConstPtr m_settings;
 };
