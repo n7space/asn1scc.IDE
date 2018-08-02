@@ -41,13 +41,11 @@ MalTester::MalTester(Settings::MalTesterPtr settings)
     setId(Constants::MALTESTER_SETTINGS_ID);
     setDisplayName(Tr::tr("asn1scc.MalTester"));
     setCategory(Constants::SETTINGS_CATEGORY);
-    setDisplayCategory(Tr::tr(Constants::SETTINGS_CATEGORY_DISPLAY));
-    setCategoryIcon(Utils::Icon(Constants::OPTIONS_CATEGORY_ICON));
 }
 
 bool MalTester::matches(const QString &searchKeyWord) const
 {
-    const QStringList keywords{"asn1", "asn.1", "acn", "test", "generator"};
+    const QStringList keywords{"asn1", "asn.1", "acn", "test", "maltester", "asn1scc"};
     for (const auto &keyword : keywords)
         if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;
