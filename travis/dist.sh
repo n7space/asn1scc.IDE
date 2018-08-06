@@ -24,6 +24,15 @@ wget -O ${DOWNLOAD_DIR}/asn1scc.7z "https://drive.google.com/uc?export=download&
 mkdir -p ${LIBEXEC_DIST_DIR}
 7zr x -o${LIBEXEC_DIST_DIR} ${DOWNLOAD_DIR}/asn1scc.7z
 
+if [[ $BUILD_OS_NAME == 'linux' ]]; then
+    echo "Downloading asn1scc.MalTester to distribute with plugin"
+    wget -O ${DOWNLOAD_DIR}/maltester.7z "https://github.com/n7space/asn1scc.MalTester/releases/download/${MALTESTER_VERSION}/asn1scc-MalTester-${MALTESTER_VERSION}-linux-x64.tar.gz"
+    mkdir -p ${LIBEXEC_DIST_DIR}
+    pushd ${LIBEXEC_DIST_DIR}
+    tar -xvf ${DOWNLOAD_DIR}/maltester.7z
+    popd
+fi
+
 echo "Downloading PUS-C lib to distribute with plugin"
 wget -O ${DOWNLOAD_DIR}/pusc-lib.7z "https://github.com/n7space/asn1-pusc-lib/releases/download/${PUSC_VERSION}/Asn1Acn-PusC-Library-${PUSC_VERSION}.7z"
 PUSC_LIB_DIR=${RESOURCE_DIST_DIR}/asn1acn/libs/PUS-C
