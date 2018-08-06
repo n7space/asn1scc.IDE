@@ -18,6 +18,7 @@ environment:
   DOWNLOAD_DIR: c:\projects\asn1scc.IDE\downloads
   VSVER: 14.0
   PUSC_VERSION: 1.0.1
+  MALTESTER_VERSION: 0.2
   matrix:
   - ENV_WITH_TESTS: BUILD_TESTS=1
   - ENV_WITH_TESTS:
@@ -61,9 +62,11 @@ after_build:
   - cmd: mkdir bin
   - cmd: curl -fsSL "https://drive.google.com/uc?export=download&id=1tzZdsXU4CHbppf4TQMrkNx-6p0zsCuEt" -o %DOWNLOAD_DIR%\asn1scc.7z
   - cmd: mkdir share\qtcreator\asn1acn\libs\PUS-C
-  - cmd: curl -fsSL "https://github.com/n7space/asn1-pusc-lib/releases/download/%PUSC_VERSION%/Asn1Acn-PusC-Library-%PUSC_VERSION%.7z" -o %DOWNLOAD_DIR%/pusc-lib.7z 
+  - cmd: curl -fsSL "https://github.com/n7space/asn1-pusc-lib/releases/download/%PUSC_VERSION%/Asn1Acn-PusC-Library-%PUSC_VERSION%.7z" -o %DOWNLOAD_DIR%/pusc-lib.7z
+  - cmd: curl -fsSL "https://github.com/n7space/asn1scc.MalTester/releases/download/%MALTESTER_VERSION%/asn1scc-MalTester-%MALTESTER_VERSION%-win.zip" -o %DOWNLOAD_DIR%/maltester.zip
   - cmd: 7z x -y "%DOWNLOAD_DIR%\pusc-lib.7z" -o"share\qtcreator\asn1acn\libs\PUS-C" | findstr /b /r /c:"\<Everything is Ok"
   - cmd: 7z x -y "%DOWNLOAD_DIR%\asn1scc.7z" -o"bin" | findstr /b /r /c:"\<Everything is Ok"
+  - cmd: 7z x -y "%DOWNLOAD_DIR%\maltester.zip" -o"bin" | findstr /b /r /c:"\<Everything is Ok"
   - cmd: 7z a %APPVEYOR_BUILD_FOLDER%\Asn1Acn-%APPVEYOR_REPO_TAG_NAME%-win.zip *
 
 artifacts:
