@@ -27,6 +27,7 @@
 #include <QDir>
 
 #include <plugins/coreplugin/icore.h>
+#include <utils/hostosinfo.h>
 
 using namespace Asn1Acn::Internal::Settings;
 
@@ -46,7 +47,11 @@ void MalTester::saveOptionsTo(QSettings *s) const
 
 static QString defaultMalTesterPath()
 {
-    return Core::ICore::libexecPath() + QLatin1String("/MalTester/");
+    const auto path = Core::ICore::libexecPath()
+                      + QLatin1String("/asn1scc.MalTester/asn1scc-maltester");
+    if (Utils::HostOsInfo::isWindowsHost())
+        return path + ".exe";
+    return path;
 }
 
 void MalTester::loadOptionsFrom(QSettings *s)
