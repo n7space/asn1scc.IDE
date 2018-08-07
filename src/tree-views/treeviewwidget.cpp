@@ -69,7 +69,7 @@ TreeViewWidget::TreeViewWidget(Model *model,
     m_treeView->setModel(model);
     m_treeView->setExpandsOnDoubleClick(false);
 
-    connect(m_treeView, &QAbstractItemView::activated, [this](const QModelIndex &index) {
+    connect(m_treeView, &QAbstractItemView::activated, [](const QModelIndex &index) {
         ActivateHandler::gotoSymbol(index);
     });
 
