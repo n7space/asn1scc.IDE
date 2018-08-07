@@ -47,10 +47,10 @@ void MalTester::saveOptionsTo(QSettings *s) const
 
 static QString defaultMalTesterPath()
 {
-    const auto path = Core::ICore::libexecPath()
-                      + QLatin1String("/asn1scc.MalTester/asn1scc-maltester");
+    const QString path = Core::ICore::libexecPath()
+                         + QLatin1String("/asn1scc.MalTester/asn1scc-maltester");
     if (Utils::HostOsInfo::isWindowsHost())
-        return path + ".exe";
+        return path + QLatin1String(".exe");
     return path;
 }
 
