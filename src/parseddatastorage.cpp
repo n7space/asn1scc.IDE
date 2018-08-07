@@ -169,7 +169,7 @@ int ParsedDataStorage::getProjectsCount()
 {
     QMutexLocker locker(&m_documentsMutex);
 
-    return m_root->projects().size();
+    return static_cast<int>(m_root->projects().size());
 }
 
 int ParsedDataStorage::getDocumentsCount()
@@ -179,7 +179,7 @@ int ParsedDataStorage::getDocumentsCount()
     QMutexLocker locker(&m_documentsMutex);
 
     for (auto it = m_root->projects().begin(); it != m_root->projects().end(); it++)
-        cnt += (*it)->files().size();
+        cnt += static_cast<int>((*it)->files().size());
 
     return cnt;
 }

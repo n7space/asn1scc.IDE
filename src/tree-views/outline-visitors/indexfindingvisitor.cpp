@@ -47,14 +47,14 @@ int IndexFindingVisitor::findIndexIn(const Collection &items) const
     });
     if (it == items.end())
         return -1;
-    return std::distance(std::begin(items), it);
+    return static_cast<int>(std::distance(std::begin(items), it));
 }
 
 int IndexFindingVisitor::valueFor(const Definitions &defs) const
 {
     const auto valueIdx = findIndexIn(defs.values());
     if (valueIdx != -1)
-        return defs.types().size() + valueIdx;
+        return static_cast<int>(defs.types().size()) + valueIdx;
     return findIndexIn(defs.types());
 }
 
