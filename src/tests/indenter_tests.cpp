@@ -33,7 +33,6 @@
 
 using namespace Asn1Acn::Internal::Tests;
 
-static const int TAB_SIZE = 4;
 static const int INDENT_SIZE = 4;
 
 IndenterTests::IndenterTests(QObject *parent)
