@@ -36,7 +36,7 @@ class MessageManager
     MessageManager() = default;
 
 public:
-    enum class Type { Process, Communication };
+    enum class Type { Process, Communication, Metadata };
 
     static void write(const QString &message, Type type);
 };

@@ -47,7 +47,9 @@ QString prefix(MessageManager::Type type)
         break;
     case MessageManager::Type::Communication:
         typeName = "Communication:";
-    default:
+        break;
+    case MessageManager::Type::Metadata:
+        typeName = "Metadata:";
         break;
     }
 

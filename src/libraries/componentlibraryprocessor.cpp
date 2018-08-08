@@ -27,6 +27,10 @@
 
 #include <memory>
 
+#include <utils/qtcassert.h>
+
+#include <messages/messagemanager.h>
+
 #include "metadata/library.h"
 
 #include "librarystorage.h"
@@ -57,8 +61,9 @@ void ComponentLibraryProcessor::process()
             auto module = parser.parse();
             library->addModule(std::move(module));
         } catch (const ModuleMetadataParser::Error &err) {
-            Q_UNUSED(err);
-            // TODO: continue helps develop; in final implementation it should be return instead
+            using Messages::MessageManager;
+            MessageManager::write(QLatin1Literal("Parsing failed - ") + err.what(),
+                                  MessageManager::Type::Metadata);
             continue;
         }
     }
