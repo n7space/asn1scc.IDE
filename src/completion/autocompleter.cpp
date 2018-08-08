@@ -45,8 +45,6 @@ bool AutoCompleter::isInComment(const QTextCursor &cursor) const
 
 bool AutoCompleter::isInString(const QTextCursor &cursor) const
 {
-    // TODO: multiline strings in ASN?
-    // TODO: escaping string?
     QTextCursor moved = cursor;
     moved.movePosition(QTextCursor::StartOfLine);
     const int positionInLine = cursor.position() - moved.position();

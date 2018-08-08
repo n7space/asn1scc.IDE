@@ -67,7 +67,7 @@ AsnEditorFactory::AsnEditorFactory()
     setAutoCompleterCreator([]() { return new Completion::AutoCompleter; });
     setIndenterCreator([]() { return new Indenter; });
 
-    addHoverHandler(new TextEditor::BaseHoverHandler); // TODO maybe better hover tips?
+    addHoverHandler(new TextEditor::BaseHoverHandler);
 
     setCodeFoldingSupported(true);
     setMarksVisible(true);

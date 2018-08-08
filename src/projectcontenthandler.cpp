@@ -87,13 +87,12 @@ void ProjectContentHandler::handleFileContentChanged(const Utils::FileName &path
 {
     QStringList projects = m_storage->getProjectsForFile(path);
 
-    // TODO: Is this conditions still needed?
     if (projects.empty()) {
         allProcessingFinished();
         return;
     }
 
-    for (const QString projectName : projects) {
+    for (const QString &projectName : projects) {
         const auto paths = m_storage->getFilesPathsFromProject(projectName);
         processFiles(projectName, paths);
     }

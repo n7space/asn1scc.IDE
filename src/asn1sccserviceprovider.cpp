@@ -94,7 +94,7 @@ void Asn1SccServiceProvider::start()
     m_stayAliveTimer.start();
     m_asn1sccService->start();
 
-    if (!m_asn1sccService->waitForStarted()) // TODO handle error?
+    if (!m_asn1sccService->waitForStarted())
         Messages::messageProcessError(m_asn1sccService);
 }
 
@@ -107,7 +107,7 @@ void Asn1SccServiceProvider::stop()
     m_stayAliveTimer.stop();
     m_asn1sccService->terminate();
 
-    if (!m_asn1sccService->waitForFinished()) // TODO handle error?
+    if (!m_asn1sccService->waitForFinished())
         Messages::messageProcessError(m_asn1sccService);
 }
 
@@ -170,7 +170,7 @@ QJsonDocument Asn1SccServiceProvider::buildAstRequestData(
     input["AcnFiles"] = acnFilesArray;
 
     /* TODO: since AST parser is not ready to work with fields introduced through ACN files,
-     * it is harmful to include them in daemon call*/
+     * it is harmful to include them in daemon call (#169)*/
     input["AcnFiles"] = QJsonArray();
 
     input["Options"] = buildAstGenerationOptions();

@@ -93,8 +93,6 @@ void EditorWidget::contextMenuEvent(QContextMenuEvent *e)
 
 void EditorWidget::finalizeInitialization()
 {
-    // TODO ? setLanguageSettingsId(Constants::SettingsId);
-
     auto document = qobject_cast<Document *>(textDocument());
     connect(document,
             &Document::extraSelectionsUpdated,

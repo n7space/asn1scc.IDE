@@ -62,7 +62,7 @@ AcnEditorFactory::AcnEditorFactory()
     setIndenterCreator([]() { return new Indenter; });
     setAutoCompleterCreator([]() { return new Completion::AutoCompleter; });
 
-    addHoverHandler(new TextEditor::BaseHoverHandler); // TODO maybe better tips?
+    addHoverHandler(new TextEditor::BaseHoverHandler);
 
     setCodeFoldingSupported(true);
     setMarksVisible(true);
@@ -77,5 +77,5 @@ AcnEditorFactory::AcnEditorFactory()
 
 void AcnEditorWidget::findUsages()
 {
-    // TODO acn
+    // TODO #166
 }
