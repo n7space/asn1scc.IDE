@@ -5,9 +5,9 @@
     \"Vendor\" : \"N7 Space sp. z o.o.\",
     \"Copyright\" : \"(C) 2017-2018 N7 Space sp. z o.o.\",
     \"License\" : \"GPL v3.0\",
-    \"Description\" : \"Plugin for asn1scc - ASN.1/ACN compiler for embedded systems \",
+    \"Description\" : \"Plugin for asn1scc - ASN.1/ACN compiler for embedded systems\",
     \"Url\" : \"http://n7space.com\",
-    \"Category\" : \"Modeling\",
+    \"Category\" : \"Other Languages\",
     $$dependencyList,
 
     \"Mimetypes\" : \"
