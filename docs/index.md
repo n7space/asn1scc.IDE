@@ -28,5 +28,5 @@ Many features of plugin depends on [ASN1SCC](https://github.com/ttsiodras/asn1sc
 # See also
  * [Features](features.html)
  * [Building from source](building.html)
- * [Configuration] (configuration.html)
+ * [Configuration](configuration.html)
  * [Troubleshooting](troubleshooting.html)

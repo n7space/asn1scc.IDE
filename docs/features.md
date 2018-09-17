@@ -14,6 +14,10 @@ Suggestions based on existing models requires working ASN1SCC and files need to 
 Code snippets can be used to speed up typing.
 ![Screen-Snippets](images/screen-snippets.png)
 
+## Error highlighting
+Errors in code are highlighted - both during typing and on compilation.
+![Screen-Errors](images/screen-errors.png)
+
 ## New project type
 QMake and CMake projects with ASN.1/ACN models can be created. ASN.1/ACN files are used to generate C code, included in project itself.
 ![Screen-New-Project](images/screen-new-project.png)
