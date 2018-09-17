@@ -16,7 +16,7 @@ Code snippets can be used to speed up typing.
 
 ## Error highlighting
 Errors in code are highlighted - both during typing and on compilation.
-![Screen-Errors](images/screen-errors.png)
+![Screen-Error](images/screen-error.png)
 
 ## New project type
 QMake and CMake projects with ASN.1/ACN models can be created. ASN.1/ACN files are used to generate C code, included in project itself.
