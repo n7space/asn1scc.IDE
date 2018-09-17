@@ -19,7 +19,7 @@ It is possible, that in case of wrongly configured environment, general messages
 
 # Likely issues
 |Issue                           |Message Keywords         |Possible Causes           |
-|--------------------------------|-------------------------|--------------------------|
+|:-------------------------------|:------------------------|:-------------------------|
 |Service process fails to start  | Type: **PROCESS**. State: **NotRunning**. Description: **FailedToStart** | Provided service path is invalid or user does not have correct access permissions to run service executable.|
 |Connection is refused          | Type: **COMMUNICATION**. Status: **Error**. Description: **ConnectionRefusedError**. | The service process is not running due to invalid service configuration - see issue service process fails to start or port provided as part of *Listening URI* is invalid or already taken.|
 |Host was not found             | Type: **COMMUNICATION**. Status: **Error**. Description: **HostNotFoundError**.| The host name was not found - provided *Listening URI* is invalid.|
