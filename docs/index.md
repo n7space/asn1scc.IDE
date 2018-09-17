@@ -1,11 +1,9 @@
-# asn1scc.IDE
-Qt Creator plugin for asn1scc - ASN.1/ACN compiler for embedded systems
+**asn1scc.IDE** is a [Qt Creator](https://www.qt.io/download) plugin for [ASN1SCC](https://github.com/ttsiodras/asn1scc) - ASN.1/ACN compiler for embedded systems.
 
-[![Build Status](https://travis-ci.org/n7space/asn1scc.IDE.svg?branch=master)](https://travis-ci.org/n7space/asn1scc.IDE)
-[![Build status](https://ci.appveyor.com/api/projects/status/4vtpq8py5dc53s7b/branch/master?svg=true)](https://ci.appveyor.com/project/hcorg/asn1scc-ide/branch/master)
+Plugin was developed by [N7 Space](http://www.n7space.com) under a programme and funded by European Space Agency ([ESA](http://www.esa.int)) and is distributed under [GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html) license.
 
 ## Installation
- 0. Install desired version of [QtCreator](https://www.qt.io/download), if you don't have one already
+ 0. Install desired version of [Qt Creator](https://www.qt.io/download), if you don't have one already
  1. Download plugin [release](https://github.com/n7space/asn1scc.IDE/releases) corresponding to installed QtCreator version (plugin's version is based on compatible QtCreator's version, so, for example, plugin 4.5.0 should work with QtCreator 4.5.1, but for QtCreator 4.6.0 plugin 4.6.x is required)
  2. Unpack release package contents into QtCreator installation directory:
     * `/opt/Qt/Tools/QtCreator/` on Linux  
