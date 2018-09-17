@@ -8,7 +8,7 @@ Plugin was developed by [N7 Space](http://www.n7space.com) under a programme and
  2. Unpack release package contents into QtCreator installation directory:
     * `/opt/Qt/Tools/QtCreator/` on Linux  
     * `C:\Qt\Tools\QtCreator` on Windows   
- 3. Run QtCreator - plugin should be available on plugins list in *Help > About Plugins...*
+ 3. Run QtCreator - plugin should be available on plugins list in *Help > About Plugins...* ![Screen-About](images/screen-about.png)
  
 ## ASN1SCC requirements
 Most features of plugin depends on properly working [ASN1SCC](https://github.com/ttsiodras/asn1scc) compiler. It is distributed along with plugin itself, or plugin can be configured to use different one. To run compiler system requires:
