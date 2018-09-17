@@ -18,8 +18,16 @@ The *General Messages* window can be opened by selecting *Window* -> *Output Pan
 It is possible, that in case of wrongly configured environment, general messages window will be highly polluted with messages about errored requests. To restrain number of the messages, service _watchdog_ can be disabled, or alternatively, stay alive period can be extended.
 
 # Likely issues
-|Issue                           |Message Keywords         |Possible Causes           |
-|:-------------------------------|:------------------------|:-------------------------|
-|Service process fails to start  | Type: **PROCESS**. State: **NotRunning**. Description: **FailedToStart** | Provided service path is invalid or user does not have correct access permissions to run service executable.|
-|Connection is refused          | Type: **COMMUNICATION**. Status: **Error**. Description: **ConnectionRefusedError**. | The service process is not running due to invalid service configuration - see issue service process fails to start or port provided as part of *Listening URI* is invalid or already taken.|
-|Host was not found             | Type: **COMMUNICATION**. Status: **Error**. Description: **HostNotFoundError**.| The host name was not found - provided *Listening URI* is invalid.|
+<dl>
+  <dt>Service process fails to start</dt>
+  <dd>Type: <b>PROCESS</b>. State: <b>NotRunning</b>. Description: <b>FailedToStart</b><br/>
+      Provided service path is invalid or user does not have correct access permissions to run service executable.</dd>
+
+  <dt>Connection is refused</dt>
+  <dd>Type: <b>COMMUNICATION</b>. Status: <b>Error</b>. Description: <b>ConnectionRefusedError</b><br/>
+      The service process is not running due to invalid service configuration - see issue service process fails to start or port provided as part of <i>Listening URI</i> is invalid or already taken.</dd>
+      
+  <dt>Host was not found</dt>
+  <dd>Type: <b>COMMUNICATION</b>. Status: <b>Error</b>. Description: <b>HostNotFoundError</b><br/>
+      The host name was not found - provided <i>Listening URI</i> is invalid.</dd>
+</dl>
