@@ -3,10 +3,11 @@
 Plugin was developed by [N7 Space](http://www.n7space.com) under a programme and funded by European Space Agency ([ESA](http://www.esa.int)) and is distributed under [GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html) license.
 
 # Main features
- * Support for ASN.1 files in QMake and CMake projects
- * Outline view for ASN.1 files
- * ASN.1 Types view for all models in project
- * 'Find Usages' for ASN.1 types
+ * Code highlighting, snippets, auto-completion and completion suggestions.
+ * Support for ASN.1 files in QMake and CMake projects.
+ * Outline view for ASN.1 files.
+ * ASN.1 Types view for all models in project.
+ * 'Find Usages' and 'Type locator' (Ctrl+K) for ASN.1 types.
 
 # Requirements
  * OS supported by Qt Creator (plugin was tested on Debian 9 and Windows 10).
@@ -23,3 +24,23 @@ Many features of plugin depends on [ASN1SCC](https://github.com/ttsiodras/asn1sc
     * `/opt/Qt/Tools/QtCreator/` on Linux  
     * `C:\Qt\Tools\QtCreator` on Windows   
  3. Run Qt Creator - plugin should be available on plugins list in *Help > About Plugins...* ![Screen-About](images/screen-about.png)
+ 
+# Features
+Plugin extends existing Qt Creator's features to support ASN.1 and ACN files and models.
+
+## Code highlighting
+ASN.1 and ACN syntax is now highlighted in editor.
+![Screen-Highlight](images/screen-highlight.png)
+
+## Code completion
+Code auto-completion (`{} ''` etc.) and basic completion suggestions are available for all ASN.1 and ACN files. 
+Suggestions based on existing models requires working ASN1SCC and files needs to be in proper project.
+![Screen-Completion](images/screen-completion.png)
+
+## Code snippets
+Code snippets can be used to speed up typing.
+![Screen-Snippets](images/screen-snippets.png)
+
+## New project type
+QMake and CMake projects with ASN.1/ACN models can be created. ASN.1/ACN files are used to generate C code, included in project itself.
+![Screen-New-Project](images/screen-new-project.png)
