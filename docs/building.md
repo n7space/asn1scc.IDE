@@ -12,8 +12,8 @@ Below are instructions for both developers or users, that, for any reason, need 
 
 ## QMake configuration
 While configuring build, two options needs to be set properly, for plugin to build:
- * QTC_SOURCE - path to Qt Creator source (default `/opt/qt-creator-dev/qt-creator`)
- * QTC_BUILD - path to build Qt Creator (default `/opt/qt-creator-dev/build-debug`)
+ * `QTC_SOURCE` - path to Qt Creator source (default `/opt/qt-creator-dev/qt-creator`)
+ * `QTC_BUILD` - path to build Qt Creator (default `/opt/qt-creator-dev/build-debug`)
 
 ## Executing tests
 To run unit tests of plugin, execute Qt Creator with `-test "ASN.1/ACN"` option.
@@ -28,5 +28,5 @@ Developers need to update Travis environment each time supported Qt Creator vers
  4. Configure Qt Creator build: `qmake -r ../qtcreator CONFIG+=release BUILD_TESTS=1`
  5. Build Qt Creator: `make`
  6. Prepare Qt Creator distribution: `make INSTALL_ROOT=~/qtcreator install`
- 7. Go to `~/qtcreator` and compress it `7z a ../qtcreator.7z *`
+ 7. Go to `~/qtcreator` and compress it: `7z a ../qtcreator.7z *`
  8. Make new archive available for Travis machine
