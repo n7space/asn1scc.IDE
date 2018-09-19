@@ -1,9 +1,9 @@
 # Building
 
-Below are the instructions for both developers or users that, for any reason, need to rebuild plugin from source and not rely on the distributed packages.
+Below are the instructions for both developers or users that, for any reason, need to rebuild plugin from the source and not rely on the distributed packages.
 
 ## Requirements
- * Clone of plugin source `https://github.com/n7space/asn1scc.IDE.git`
+ * Clone of the plugin source `https://github.com/n7space/asn1scc.IDE.git`
  * C++14 compatible compiler
  * Qt 5.11.1
  * Qt Creator v4.7.0 built from source (instructions [here](https://doc-snapshots.qt.io/qtcreator-extending/getting-and-building.html))
@@ -11,29 +11,29 @@ Below are the instructions for both developers or users that, for any reason, ne
  * [for development] Separate Qt Creator for editing source
  
 ## Compilation
- 1. Checkout desired plugin version
- 2. Create folder for build
- 3. Go into build dir and execute `qmake -r <path to plugin source>/asn1acn.pro <qmake options>`, see below for available options
+ 1. Checkout the desired plugin version
+ 2. Create folder for the build
+ 3. Go into the build directory and execute `qmake -r <path to plugin source>/asn1acn.pro <QMake options, OPTION=VALUE>`, see below for available options
  4. Build plugin (`make` on Linux, `bjam`/`nmake` on Windows etc.)
  5. Qt Creator selected during `qmake` run should have plugin installed
 
 ## Building using Qt Creator
  1. Open `asn1acn.pro` in Qt Creator
- 2. Configure build using options below
+ 2. Configure the build using options below
  
 ## QMake options
-While configuring build two options need to be set properly for plugin to build:
- * `QTC_SOURCE` - path to Qt Creator source
+While configuring the build two options need to be set properly for plugin to build properly:
+ * `QTC_SOURCE` - path to Qt Creator's source
  * `QTC_BUILD` - path to Qt Creator's build
 
 If not provided, Linux defaults will be used (`/opt/qt-creator-dev/qt-creator` and `/opt/qt-creator-dev/build-debug`), which might result in multiple compilation errrors (missing includes etc.).
  
 ## Executing tests
-To run unit tests of plugin, execute Qt Creator with `-test "ASN.1/ACN"` option.
-Executing tests in "release" mode requires Qt Creator to be built with `CONFIG+=release BUILD_TESTS=1` qmake options.
+To run unit tests of the plugin, execute Qt Creator with `-test "ASN.1/ACN"` option.
+Executing tests in "release" mode requires Qt Creator to be built with `CONFIG+=release BUILD_TESTS=1` QMake options.
 
 ## Updating Travis
-Travis task executes plugin's unit tests, which requires proper build of Qt Creator, which is not distributed.
+Travis task executes plugin's unit tests, which requires specific build of Qt Creator, which is not distributed.
 Developers need to update Travis environment each time supported Qt Creator version is changed.
  1. Create Ubuntu 14.04 machine with g++, make and 7z packages
  2. Install proper Qt package (recommended - [ppa:beineri](https://launchpad.net/~beineri))
