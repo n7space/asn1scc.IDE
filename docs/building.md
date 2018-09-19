@@ -1,6 +1,6 @@
 # Building
 
-Below are instructions for both developers or users, that, for any reason, need to rebuild plugin from source and not rely on distributed packages.
+Below are the instructions for both developers or users that, for any reason, need to rebuild plugin from source and not rely on the distributed packages.
 
 ## Requirements
  * Clone of plugin source `https://github.com/n7space/asn1scc.IDE.git`
@@ -22,9 +22,11 @@ Below are instructions for both developers or users, that, for any reason, need 
  2. Configure build using options below
  
 ## QMake options
-While configuring build, two options needs to be set properly, for plugin to build:
- * `QTC_SOURCE` - path to Qt Creator source (default `/opt/qt-creator-dev/qt-creator`)
- * `QTC_BUILD` - path to build Qt Creator (default `/opt/qt-creator-dev/build-debug`)
+While configuring build two options need to be set properly for plugin to build:
+ * `QTC_SOURCE` - path to Qt Creator source
+ * `QTC_BUILD` - path to Qt Creator's build
+
+If not provided, Linux defaults will be used (`/opt/qt-creator-dev/qt-creator` and `/opt/qt-creator-dev/build-debug`), which might result in multiple compilation errrors (missing includes etc.).
  
 ## Executing tests
 To run unit tests of plugin, execute Qt Creator with `-test "ASN.1/ACN"` option.
@@ -34,7 +36,7 @@ Executing tests in "release" mode requires Qt Creator to be built with `CONFIG+=
 Travis task executes plugin's unit tests, which requires proper build of Qt Creator, which is not distributed.
 Developers need to update Travis environment each time supported Qt Creator version is changed.
  1. Create Ubuntu 14.04 machine with g++, make and 7z packages
- 2. Install proper Qt package (probably from [ppa:beineri](https://launchpad.net/~beineri))
+ 2. Install proper Qt package (recommended - [ppa:beineri](https://launchpad.net/~beineri))
  3. Clone required Qt Creator version and checkout tag
  4. Configure Qt Creator build: `qmake -r ../qtcreator CONFIG+=release BUILD_TESTS=1`
  5. Build Qt Creator: `make`
