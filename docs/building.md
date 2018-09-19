@@ -9,12 +9,23 @@ Below are instructions for both developers or users, that, for any reason, need 
  * Qt Creator v4.7.0 built from source (instructions [here](https://doc-snapshots.qt.io/qtcreator-extending/getting-and-building.html))
  * [for debugging] Qt Creator built from source with `CONFIG+=debug`
  * [for development] Separate Qt Creator for editing source
+ 
+## Compilation
+ 1. Checkout desired plugin version
+ 2. Create folder for build
+ 3. Go into build dir and execute `qmake -r <path to plugin source>/asn1acn.pro <qmake options>`, see below for available options
+ 4. Build plugin (`make` on Linux, `bjam`/`nmake` on Windows etc.)
+ 5. Qt Creator selected during `qmake` run should have plugin installed
 
-## QMake configuration
+## Building using Qt Creator
+ 1. Open `asn1acn.pro` in Qt Creator
+ 2. Configure build using options below
+ 
+## QMake options
 While configuring build, two options needs to be set properly, for plugin to build:
  * `QTC_SOURCE` - path to Qt Creator source (default `/opt/qt-creator-dev/qt-creator`)
  * `QTC_BUILD` - path to build Qt Creator (default `/opt/qt-creator-dev/build-debug`)
-
+ 
 ## Executing tests
 To run unit tests of plugin, execute Qt Creator with `-test "ASN.1/ACN"` option.
 Executing tests in "release" mode requires Qt Creator to be built with `CONFIG+=release BUILD_TESTS=1` qmake options.
