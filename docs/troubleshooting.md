@@ -1,6 +1,6 @@
 # Troubleshooting
 
-ASN.1/ACN IDE is strongly bonded with asn1scc compiler, as IDE functionality relies on data produced by compiler. IDE and asn1scc compiler are two independent beings, and connection between them is performed utilizing client - server architecture. To achieve this, asn1scc compiler was wrapped in service, which being run internally in IDE, is capable of receiving HTTP requests, and send back replies carrying relevant data produced by asn1scc. Since that, correct configuration of service is needed in order to provide full IDE functionality.
+ASN.1/ACN IDE is strongly bonded with asn1scc compiler, as IDE functionality relies on data produced by compiler. IDE and asn1scc compiler are two independent beings, and connection between them is performed utilizing client - server architecture. To achieve this, asn1scc compiler is being run internally by IDE, in mode in which it is capable of receiving HTTP requests, and sending back replies. As a result, correct configuration of asn1scc service is needed in order to provide full IDE functionality.
 
 ## How-tos
 
@@ -8,7 +8,7 @@ ASN.1/ACN IDE is strongly bonded with asn1scc compiler, as IDE functionality rel
 See [Configuration](configuration.html).
 
 ### How to know something is wrong?
-The issues with service configuration can be observed inside widgets, which present data structures: ASN.1 Types View and Outline. The widgets should show populated tree of data structures defined inside project loaded in IDE. If loaded project is valid and contains the data to be shown, but the widgets are still empty (Outline) or contains only project name (ASN.1 Types View), this is a sign of issues in service communication.
+The issues with service configuration can be observed inside widgets, which present data structures: ASN.1 Types View and Outline. The widgets should show populated tree of data structures defined inside project loaded in IDE. If loaded project is valid and contains the data to be shown, but the widgets are still empty (Outline) or contain only project name (ASN.1 Types View), this is a sign of issues in service communication.
 
 ### How to get insights of what is happening?
 The relevant events connected with service activity are logged in *General Messages* output pane.
