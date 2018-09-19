@@ -12,6 +12,7 @@ Library is a folder tree containing ASN.1 and ACN files and optional additional 
 Auto-detected libraries are the one found in Qt Creator installation directory:
  * default `/opt/Qt/Tools/QtCreator/share/qtcreator/asn1acn/libs` on Linux
  * default `C:\Qt\Tools\QtCreator\share\qtcreator\asn1acn\libs` on Windows
+
 or in user's local settings:
  * `~/.config/QtProject/qtcreator/asn1acn/libs` on Linux
  * `%APPDATA%\QtProject\qtcreator\asn1acn\libs` on Windows
