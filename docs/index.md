@@ -1,10 +1,10 @@
 **asn1scc.IDE** is a [Qt Creator](https://www.qt.io/download) plugin for [ASN1SCC](https://github.com/ttsiodras/asn1scc) - ASN.1/ACN compiler for embedded systems.
 
-Plugin was developed by [N7 Space](http://www.n7space.com) under a programme and funded by European Space Agency ([ESA](http://www.esa.int)) and is distributed under [GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html) license.
+Plugin was developed by [N7 Space](http://www.n7space.com) and funded by European Space Agency ([ESA](http://www.esa.int)) and is distributed under [GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html) license.
 
 # Main features
  * Code highlighting, snippets, auto-completion and completion suggestions.
- * Support for ASN.1 files in QMake and CMake projects.
+ * Support for ASN.1 and ACN files in QMake and CMake projects.
  * Outline view for ASN.1 files.
  * ASN.1 Types view for all models in project.
  * 'Find Usages' and 'Type locator' (Ctrl+K) for ASN.1 types.
@@ -14,7 +14,7 @@ Plugin was developed by [N7 Space](http://www.n7space.com) under a programme and
  * Installed [Qt Creator](https://www.qt.io/download) release.
 
 ## ASN1SCC requirements
-Many features of plugin depends on [ASN1SCC](https://github.com/ttsiodras/asn1scc) compiler. It is distributed along with plugin itself, or plugin can be configured to use user-provided one. ASN1SCC is F#/.NET based, so to run it system requires:
+Many features of the plugin depends on [ASN1SCC](https://github.com/ttsiodras/asn1scc) compiler. It is distributed along with the plugin itself. IDE can also be configured to use user-provided compiler version. ASN1SCC is F#/.NET based, so to run it system requires:
   * `mono` package on Linux
   * .NET Framework 4.6 on Windows (preinstalled in Windows 10 and newer)
 
