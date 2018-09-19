@@ -9,11 +9,11 @@ This option page list ASN.1 components libraries available for user as models' i
 
 Library is a folder tree containing ASN.1 and ACN files and optional additional JSON metadata.
 
-Auto-detected libraries are the one found in Qt Creator installation directory:
+Auto-detected libraries are the ones found in Qt Creator installation directory:
  * default `/opt/Qt/Tools/QtCreator/share/qtcreator/asn1acn/libs` on Linux
  * default `C:\Qt\Tools\QtCreator\share\qtcreator\asn1acn\libs` on Windows
 
-or in user's local settings:
+or in user's local settings directories:
  * `~/.config/QtProject/qtcreator/asn1acn/libs` on Linux
  * `%APPDATA%\QtProject\qtcreator\asn1acn\libs` on Windows
  
@@ -29,6 +29,6 @@ Usually default settings should work for most users, as by default plugin execut
 ![Options-Service](images/options-service.png)
 
  * Service path - path to ASN1SCC Daemon executable.
- * Listening URI - URI on which daemon should listen for plugin requests, might needs change if default address is blocked for any reason.
+ * Listening URI - URI on which daemon should listen for plugin requests, might need change if default address is blocked for any reason.
  * Stay alive period - daemon will quit if no messages from plugin are recevied in provided period; used mostly for debugging.
- * Disable watchdog - daemon will no longer be restarted on lack of communication.
+ * Disable watchdog - daemon will no longer be restarted due to lack of communication.
