@@ -2,7 +2,7 @@
 
 ASN.1/ACN IDE is strongly bonded with asn1scc compiler, as IDE functionality relies on data produced by compiler. IDE and asn1scc compiler are two independent beings, and connection between them is performed utilizing client - server architecture. To achieve this, asn1scc compiler was wrapped in service, which being run internally in IDE, is capable of receiving HTTP requests, and send back replies carrying relevant data produced by asn1scc. Since that, correct configuration of service is needed in order to provide full IDE functionality.
 
-# How-tos
+## How-tos
 
 ### How to change service settings?
 See [Configuration](configuration.html).
