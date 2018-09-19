@@ -15,10 +15,10 @@ The relevant events connected with service activity are logged in *General Messa
 ![Messages](images/messages.png)
 
 ### How to open general messages window?
-The *General Messages* window can be opened by selecting *Window* -> *Output Panes* -> *General Messages*. The menu item also display the keyboard shortcuts which can be used.
+The *General Messages* window can be opened by selecting *Window* -> *Output Panes* -> *General Messages* (default shortcut: `Alt + 6`).
 
 ### How to make general messages window less polluted?
-It is possible, that in case of wrongly configured environment, general messages window will be highly polluted with messages about errored requests. To restrain number of the messages, service _watchdog_ can be disabled, or alternatively, stay alive period can be extended.
+It is possible that in case of wrongly configured environment general messages window will be highly polluted with messages about failed requests. To restrain number of the messages, service _watchdog_ can be disabled, or alternatively, stay alive period can be extended.
 
 ## Likely issues
 <dl>
