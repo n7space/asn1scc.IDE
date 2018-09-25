@@ -33,8 +33,8 @@
 
 #include "libraries/wizard/importcomponentwizard.h"
 
-#include "maltester/maltesterparamsdialog.h"
-#include "maltester/maltesterparamsprovider.h"
+#include "fuzzer/fuzzerparamsdialog.h"
+#include "fuzzer/fuzzerparamsprovider.h"
 
 #include "icdbuilder.h"
 
@@ -64,7 +64,7 @@ private:
     using ActionContainer = Core::ActionContainer;
     using Context = Core::Context;
 
-    void initializeMenus(Settings::MalTesterConstPtr malTesterSettings);
+    void initializeMenus(Settings::FuzzerConstPtr fuzzerSettings);
 
     void initializeSwitchAction(ActionContainer *toolsMenu,
                                 ActionContainer *contextMenu,
@@ -77,7 +77,7 @@ private:
                                     const Context &context);
     void initializeBuildICDAction(ActionContainer *toolsMenu);
     void initializeGenerateTestsAction(ActionContainer *toolsMenu,
-                                       Settings::MalTesterConstPtr settings);
+                                       Settings::FuzzerConstPtr settings);
 
     void addBuildICDToToolsMenu(ActionContainer *toolsMenu);
     void addBuildICDToProjectMenu();
@@ -89,7 +89,7 @@ private:
 
     QPointer<Libraries::Wizard::ImportComponentWizard> m_importComponentWizard;
 
-    QPointer<MalTester::MalTesterParamsDialog> m_malTesterDialog;
+    QPointer<Fuzzer::FuzzerParamsDialog> m_fuzzerDialog;
 
     QAction *m_findUsagesAction;
 

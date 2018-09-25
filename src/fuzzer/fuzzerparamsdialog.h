@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2018 N7 Space sp. z o. o.
+** Copyright (C) 2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -24,33 +24,43 @@
 ****************************************************************************/
 #pragma once
 
-#include <QPointer>
+#include <QDialog>
 
-#include <coreplugin/dialogs/ioptionspage.h>
+#include "data/file.h"
 
-#include <settings/maltester.h>
+#include "asn1acnbuildsteprunner.h"
+
+#include "fuzzerparamsprovider.h"
+#include "fuzzerrunner.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace OptionsPages {
+namespace Fuzzer {
 
-class MalTesterWidget;
+class FuzzerParamsWidget;
 
-class MalTester : public Core::IOptionsPage
+class FuzzerParamsDialog : public QDialog
 {
+    Q_OBJECT
 public:
-    MalTester(Settings::MalTesterPtr settings);
+    explicit FuzzerParamsDialog(FuzzerParamsProviderPtr provider, QWidget *parent = nullptr);
 
-    bool matches(const QString &searchKeyWord) const override;
-    QWidget *widget() override;
-    void apply() override;
-    void finish() override;
+public slots:
+    int exec() override;
+    void accept() override;
 
 private:
-    Settings::MalTesterPtr m_settings;
-    QPointer<MalTesterWidget> m_widget;
+    void fillRootTypeCandidates();
+    void fillRootTypeCandidatesFromProject(const QString &projectName);
+    void fillRootTypeCandidatesFromDefinitions(const Data::File::DefinitionsList &defs);
+
+    void letProceed(bool val);
+
+    FuzzerParamsWidget *m_widget;
+    FuzzerParamsProviderPtr m_provider;
+    std::unique_ptr<Asn1AcnBuildStepRunner> m_runner;
 };
 
-} // namespace OptionsPages
+} // namespace Fuzzer
 } // namespace Internal
 } // namespace Asn1Acn

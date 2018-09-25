@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2018 N7 Space sp. z o. o.
+** Copyright (C) 2017-2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -22,37 +22,23 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "fuzzerwidget.h"
 
-#include <QWidget>
+using namespace Asn1Acn::Internal::OptionsPages;
 
-#include "ui_maltesterparams.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace MalTester {
-
-class MalTesterParamsWidget : public QWidget
+FuzzerWidget::FuzzerWidget(QWidget *parent)
+    : QWidget(parent)
 {
-    Q_OBJECT
-public:
-    explicit MalTesterParamsWidget(QWidget *parent = nullptr);
+    m_ui.setupUi(this);
+    m_ui.pathChooser->setExpectedKind(Utils::PathChooser::ExistingCommand);
+}
 
-    QString path() const;
-    void setPath(const QString &path);
+QString FuzzerWidget::path() const
+{
+    return m_ui.pathChooser->path();
+}
 
-    QString rootType() const;
-    void addRootTypeCandidate(const QString &rootType);
-
-    void clearRootTypeCandidates();
-
-    const QDialogButtonBox *buttonBox() const { return m_ui.buttonBox; }
-    QComboBox *comboBox() { return m_ui.comboBox; }
-
-private:
-    Ui::MalTesterParamsWidget m_ui;
-};
-
-} // namespace MalTester
-} // namespace Internal
-} // namespace Asn1Acn
+void FuzzerWidget::setPath(const QString &path)
+{
+    m_ui.pathChooser->setPath(path);
+}

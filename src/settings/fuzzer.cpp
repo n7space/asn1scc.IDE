@@ -22,7 +22,7 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "maltester.h"
+#include "fuzzer.h"
 
 #include <QDir>
 
@@ -31,30 +31,30 @@
 
 using namespace Asn1Acn::Internal::Settings;
 
-static const char PATH[] = "MalTesterPath";
+static const char PATH[] = "FuzzerPath";
 
-MalTester::~MalTester() {}
+Fuzzer::~Fuzzer() {}
 
-QString MalTester::name() const
+QString Fuzzer::name() const
 {
-    return QLatin1String("MalTester");
+    return QLatin1String("Fuzzer");
 }
 
-void MalTester::saveOptionsTo(QSettings *s) const
+void Fuzzer::saveOptionsTo(QSettings *s) const
 {
     s->setValue(PATH, QDir::fromNativeSeparators(path()));
 }
 
-static QString defaultMalTesterPath()
+static QString defaultFuzzerPath()
 {
     const QString path = Core::ICore::libexecPath()
-                         + QLatin1String("/asn1scc-MalTester/asn1scc-maltester");
+                         + QLatin1String("/asn1scc-Fuzzer/asn1scc-fuzzer");
     if (Utils::HostOsInfo::isWindowsHost())
         return path + QLatin1String(".exe");
     return path;
 }
 
-void MalTester::loadOptionsFrom(QSettings *s)
+void Fuzzer::loadOptionsFrom(QSettings *s)
 {
-    setPath(s->value(PATH, defaultMalTesterPath()).toString());
+    setPath(s->value(PATH, defaultFuzzerPath()).toString());
 }

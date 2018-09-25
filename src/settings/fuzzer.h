@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2018 N7 Space sp. z o. o.
+** Copyright (C) 2017-2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -22,49 +22,41 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
+
 #pragma once
 
-#include "maltesterparamsprovider.h"
+#include <memory>
 
-#include "asn1acnbuildstep.h"
-#include "asn1acnbuildsteprunner.h"
+#include <QString>
+
+#include "settings.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace MalTester {
+namespace Settings {
 
-class MalTesterRunner : public Asn1AcnBuildStepRunner
-{
-public:
-    MalTesterRunner(const MalTesterParamsProviderPtr params);
-
-private:
-    Asn1AcnBuildStep *createStep(ProjectExplorer::BuildStepList *stepList) const override;
-    QString progressLabelText() const override;
-
-    const MalTesterParamsProviderPtr m_params;
-};
-
-class MalTesterBuildStep : public Asn1AcnBuildStep
+class Fuzzer : public Settings
 {
     Q_OBJECT
-
 public:
-    explicit MalTesterBuildStep(ProjectExplorer::BuildStepList *parent,
-                                const MalTesterParamsProviderPtr params);
+    Fuzzer() = default;
+    ~Fuzzer() override;
+
+    QString name() const override;
+
+    const QString &path() const { return m_path; }
+    void setPath(const QString &p) { m_path = p; }
 
 private:
-    QString executablePath() const override;
-    QString arguments() const override;
+    void saveOptionsTo(QSettings *s) const override;
+    void loadOptionsFrom(QSettings *s) override;
 
-    QString asn1sccArgument() const;
-    QString rootTypeArgument() const;
-    QString outputPathArgument() const;
-    QString fileArgument() const;
-
-    const MalTesterParamsProviderPtr m_params;
+    QString m_path;
 };
 
-} // namespace MalTester
+using FuzzerPtr = std::shared_ptr<Fuzzer>;
+using FuzzerConstPtr = std::shared_ptr<const Fuzzer>;
+
+} // namespace Settings
 } // namespace Internal
 } // namespace Asn1Acn

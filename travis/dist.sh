@@ -25,11 +25,11 @@ mkdir -p ${LIBEXEC_DIST_DIR}
 7zr x -o${LIBEXEC_DIST_DIR} ${DOWNLOAD_DIR}/asn1scc.7z
 
 if [[ $BUILD_OS_NAME == 'linux' ]]; then
-    echo "Downloading asn1scc.MalTester to distribute with plugin"
-    wget -O ${DOWNLOAD_DIR}/maltester.7z "https://github.com/n7space/asn1scc.MalTester/releases/download/${MALTESTER_VERSION}/asn1scc-MalTester-${MALTESTER_VERSION}-linux-x64.tar.gz"
+    echo "Downloading asn1scc.Fuzzer to distribute with plugin"
+    wget -O ${DOWNLOAD_DIR}/fuzzer.7z "https://github.com/n7space/asn1scc.Fuzzer/releases/download/${FUZZER_VERSION}/asn1scc-Fuzzer-${FUZZER_VERSION}-linux-x64.tar.gz"
     mkdir -p ${LIBEXEC_DIST_DIR}
     pushd ${LIBEXEC_DIST_DIR}
-    tar -xvf ${DOWNLOAD_DIR}/maltester.7z
+    tar -xvf ${DOWNLOAD_DIR}/fuzzer.7z
     popd
 fi
 

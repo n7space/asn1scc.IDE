@@ -22,41 +22,35 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
 #pragma once
 
-#include <memory>
+#include <QPointer>
 
-#include <QString>
+#include <coreplugin/dialogs/ioptionspage.h>
 
-#include "settings.h"
+#include <settings/fuzzer.h>
 
 namespace Asn1Acn {
 namespace Internal {
-namespace Settings {
+namespace OptionsPages {
 
-class MalTester : public Settings
+class FuzzerWidget;
+
+class Fuzzer : public Core::IOptionsPage
 {
-    Q_OBJECT
 public:
-    MalTester() = default;
-    ~MalTester() override;
+    Fuzzer(Settings::FuzzerPtr settings);
 
-    QString name() const override;
-
-    const QString &path() const { return m_path; }
-    void setPath(const QString &p) { m_path = p; }
+    bool matches(const QString &searchKeyWord) const override;
+    QWidget *widget() override;
+    void apply() override;
+    void finish() override;
 
 private:
-    void saveOptionsTo(QSettings *s) const override;
-    void loadOptionsFrom(QSettings *s) override;
-
-    QString m_path;
+    Settings::FuzzerPtr m_settings;
+    QPointer<FuzzerWidget> m_widget;
 };
 
-using MalTesterPtr = std::shared_ptr<MalTester>;
-using MalTesterConstPtr = std::shared_ptr<const MalTester>;
-
-} // namespace Settings
+} // namespace OptionsPages
 } // namespace Internal
 } // namespace Asn1Acn

@@ -19,8 +19,8 @@ or in user's local settings directories:
  
 User can add folders using `Add` button, which will be listed in 'Manual' list.
 
-## asn1scc.MalTester
-This page configures path to [asn1scc.MalTester](https://github.com/n7space/asn1scc.MalTester) tool, which can be used to generate test cases based on ASN.1/ACN models.
+## asn1scc.Fuzzer
+This page configures path to [asn1scc.Fuzzer](https://github.com/n7space/asn1scc.Fuzzer) tool, which can be used to generate test cases based on ASN.1/ACN models.
 
 ## Service
 The plugin relies on [ASN1SCC](https://github.com/ttsiodras/asn1scc) compiler to process ASN.1 files.

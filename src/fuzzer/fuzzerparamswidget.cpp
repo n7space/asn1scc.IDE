@@ -22,45 +22,38 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#pragma once
+#include "fuzzerparamswidget.h"
 
-#include <QDialog>
+using namespace Asn1Acn::Internal::Fuzzer;
 
-#include "data/file.h"
-
-#include "asn1acnbuildsteprunner.h"
-
-#include "maltesterparamsprovider.h"
-#include "maltesterrunner.h"
-
-namespace Asn1Acn {
-namespace Internal {
-namespace MalTester {
-
-class MalTesterParamsWidget;
-
-class MalTesterParamsDialog : public QDialog
+FuzzerParamsWidget::FuzzerParamsWidget(QWidget *parent)
+    : QWidget(parent)
 {
-    Q_OBJECT
-public:
-    explicit MalTesterParamsDialog(MalTesterParamsProviderPtr provider, QWidget *parent = nullptr);
+    m_ui.setupUi(this);
+    m_ui.pathChooser->setExpectedKind(Utils::PathChooser::ExistingDirectory);
+}
 
-public slots:
-    int exec() override;
-    void accept() override;
+QString FuzzerParamsWidget::path() const
+{
+    return m_ui.pathChooser->path();
+}
 
-private:
-    void fillRootTypeCandidates();
-    void fillRootTypeCandidatesFromProject(const QString &projectName);
-    void fillRootTypeCandidatesFromDefinitions(const Data::File::DefinitionsList &defs);
+void FuzzerParamsWidget::setPath(const QString &path)
+{
+    m_ui.pathChooser->setPath(path);
+}
 
-    void letProceed(bool val);
+QString FuzzerParamsWidget::rootType() const
+{
+    return m_ui.comboBox->currentText();
+}
 
-    MalTesterParamsWidget *m_widget;
-    MalTesterParamsProviderPtr m_provider;
-    std::unique_ptr<Asn1AcnBuildStepRunner> m_runner;
-};
+void FuzzerParamsWidget::addRootTypeCandidate(const QString &rootType)
+{
+    m_ui.comboBox->addItem(rootType);
+}
 
-} // namespace MalTester
-} // namespace Internal
-} // namespace Asn1Acn
+void FuzzerParamsWidget::clearRootTypeCandidates()
+{
+    m_ui.comboBox->clear();
+}

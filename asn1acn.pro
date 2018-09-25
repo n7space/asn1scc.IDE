@@ -119,20 +119,20 @@ SOURCES += \
     \
     options-pages/service.cpp \
     options-pages/libraries.cpp \
-    options-pages/maltester.cpp \
+    options-pages/fuzzer.cpp \
     options-pages/servicewidget.cpp \
     options-pages/librarieswidget.cpp \
-    options-pages/maltesterwidget.cpp \
+    options-pages/fuzzerwidget.cpp \
     \
     settings/settings.cpp \
     settings/service.cpp \
     settings/libraries.cpp \
-    settings/maltester.cpp \
+    settings/fuzzer.cpp \
     \
-    maltester/maltesterparamsdialog.cpp \
-    maltester/maltesterparamswidget.cpp \
-    maltester/maltesterrunner.cpp \
-    maltester/maltesterparamsprovider.cpp \
+    fuzzer/fuzzerparamsdialog.cpp \
+    fuzzer/fuzzerparamswidget.cpp \
+    fuzzer/fuzzerrunner.cpp \
+    fuzzer/fuzzerparamsprovider.cpp \
     \
     libraries/modulemetadataparser.cpp \
     libraries/generalmetadataparser.cpp \
@@ -266,20 +266,20 @@ HEADERS += \
     \
     options-pages/service.h \
     options-pages/libraries.h \
-    options-pages/maltester.h \
+    options-pages/fuzzer.h \
     options-pages/servicewidget.h \
     options-pages/librarieswidget.h \
-    options-pages/maltesterwidget.h \
+    options-pages/fuzzerwidget.h \
     \
     settings/settings.h \
     settings/service.h \
     settings/libraries.h \
-    settings/maltester.h \
+    settings/fuzzer.h \
     \
-    maltester/maltesterparamsdialog.h \
-    maltester/maltesterparamswidget.h \
-    maltester/maltesterrunner.h \
-    maltester/maltesterparamsprovider.h \
+    fuzzer/fuzzerparamsdialog.h \
+    fuzzer/fuzzerparamswidget.h \
+    fuzzer/fuzzerrunner.h \
+    fuzzer/fuzzerparamsprovider.h \
     \
     libraries/modulemetadataparser.h \
     libraries/generalmetadataparser.h \
@@ -358,11 +358,11 @@ HEADERS += \
     asn1acnbuildsteprunner.h
 
 FORMS += \
-    maltester/maltesterparams.ui \
+    fuzzer/fuzzerparams.ui \
     \
     options-pages/service.ui \
     options-pages/libraries.ui \
-    options-pages/maltester.ui \
+    options-pages/fuzzer.ui \
     \
     libraries/wizard/import_component.ui \
     libraries/wizard/select_component.ui \

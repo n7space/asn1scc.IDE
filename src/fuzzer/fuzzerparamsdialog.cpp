@@ -27,30 +27,27 @@
 #include <projectexplorer/project.h>
 #include <projectexplorer/session.h>
 
-#include "maltesterparamsdialog.h"
-#include "maltesterparamswidget.h"
+#include "fuzzerparamsdialog.h"
+#include "fuzzerparamswidget.h"
 
 #include "parseddatastorage.h"
 
 using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::MalTester;
+using namespace Asn1Acn::Internal::Fuzzer;
 
-MalTesterParamsDialog::MalTesterParamsDialog(MalTesterParamsProviderPtr provider, QWidget *parent)
+FuzzerParamsDialog::FuzzerParamsDialog(FuzzerParamsProviderPtr provider, QWidget *parent)
     : QDialog(parent)
     , m_provider(provider)
 {
-    m_widget = new MalTesterParamsWidget(this);
-    m_runner = std::make_unique<MalTesterRunner>(provider);
+    m_widget = new FuzzerParamsWidget(this);
+    m_runner = std::make_unique<FuzzerRunner>(provider);
 
-    connect(m_widget->buttonBox(),
-            &QDialogButtonBox::accepted,
-            this,
-            &MalTesterParamsDialog::accept);
+    connect(m_widget->buttonBox(), &QDialogButtonBox::accepted, this, &FuzzerParamsDialog::accept);
 
     connect(m_widget->buttonBox(), &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
-int MalTesterParamsDialog::exec()
+int FuzzerParamsDialog::exec()
 {
     m_widget->setPath(
         ProjectExplorer::SessionManager::startupProject()->projectDirectory().toString());
@@ -62,7 +59,7 @@ int MalTesterParamsDialog::exec()
     return QDialog::exec();
 }
 
-void MalTesterParamsDialog::accept()
+void FuzzerParamsDialog::accept()
 {
     m_provider->setRootTypeName(m_widget->rootType());
     m_provider->setOutputPath(m_widget->path());
@@ -80,12 +77,12 @@ QString projectName()
 }
 } // namespace
 
-void MalTesterParamsDialog::fillRootTypeCandidates()
+void FuzzerParamsDialog::fillRootTypeCandidates()
 {
     fillRootTypeCandidatesFromProject(projectName());
 }
 
-void MalTesterParamsDialog::fillRootTypeCandidatesFromProject(const QString &projectName)
+void FuzzerParamsDialog::fillRootTypeCandidatesFromProject(const QString &projectName)
 {
     auto storage = ParsedDataStorage::instance();
     const auto &paths = storage->getFilesPathsFromProject(projectName);
@@ -98,7 +95,7 @@ void MalTesterParamsDialog::fillRootTypeCandidatesFromProject(const QString &pro
     }
 }
 
-void MalTesterParamsDialog::fillRootTypeCandidatesFromDefinitions(
+void FuzzerParamsDialog::fillRootTypeCandidatesFromDefinitions(
     const Data::File::DefinitionsList &defs)
 {
     for (const auto &def : defs) {
@@ -108,7 +105,7 @@ void MalTesterParamsDialog::fillRootTypeCandidatesFromDefinitions(
     }
 }
 
-void MalTesterParamsDialog::letProceed(bool val)
+void FuzzerParamsDialog::letProceed(bool val)
 {
     m_widget->comboBox()->setEnabled(val);
     m_widget->buttonBox()->button(QDialogButtonBox::Ok)->setEnabled(val);

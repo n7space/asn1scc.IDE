@@ -48,13 +48,13 @@
 #include "completion/acnsnippets.h"
 #include "completion/asnsnippets.h"
 
+#include "settings/fuzzer.h"
 #include "settings/libraries.h"
-#include "settings/maltester.h"
 #include "settings/service.h"
 #include "settings/settings.h"
 
+#include "options-pages/fuzzer.h"
 #include "options-pages/libraries.h"
-#include "options-pages/maltester.h"
 #include "options-pages/service.h"
 
 #include "tree-views/outlinewidget.h"
@@ -63,7 +63,7 @@
 #include "libraries/componentdirectorywatcher.h"
 #include "libraries/componentlibrarydispatcher.h"
 
-#include "maltester/maltesterparamsdialog.h"
+#include "fuzzer/fuzzerparamsdialog.h"
 
 #include "acneditor.h"
 #include "asn1acnconstants.h"
@@ -111,10 +111,10 @@ class Asn1AcnPluginPrivate
 public:
     Asn1AcnPluginPrivate(Settings::ServicePtr serviceSettings,
                          Settings::LibrariesPtr librariesSettings,
-                         Settings::MalTesterPtr malTesterSettings)
+                         Settings::FuzzerPtr fuzzerSettings)
         : m_optionsPagesService(serviceSettings)
         , m_optionsPagesLibraries(librariesSettings)
-        , m_optionsPagesMalTester(malTesterSettings)
+        , m_optionsPagesFuzzer(fuzzerSettings)
         , m_componentDirectoryWatcher(librariesSettings)
         , m_asn1sccServiceProvider(serviceSettings)
         , m_kitInformation(new KitInformation)
@@ -140,7 +140,7 @@ public:
 
     OptionsPages::Service m_optionsPagesService;
     OptionsPages::Libraries m_optionsPagesLibraries;
-    OptionsPages::MalTester m_optionsPagesMalTester;
+    OptionsPages::Fuzzer m_optionsPagesFuzzer;
 
     Libraries::ComponentDirectoryWatcher m_componentDirectoryWatcher;
 
@@ -164,14 +164,14 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     const auto serviceSettings = Settings::load<Settings::Service>();
     const auto librariesSettings = Settings::load<Settings::Libraries>();
-    const auto malTesterSettings = Settings::load<Settings::MalTester>();
+    const auto fuzzerSettings = Settings::load<Settings::Fuzzer>();
 
-    d = new Asn1AcnPluginPrivate(serviceSettings, librariesSettings, malTesterSettings);
+    d = new Asn1AcnPluginPrivate(serviceSettings, librariesSettings, fuzzerSettings);
 
     Completion::AsnSnippets::registerGroup();
     Completion::AcnSnippets::registerGroup();
 
-    initializeMenus(malTesterSettings);
+    initializeMenus(fuzzerSettings);
 
     Core::JsExpander::registerQObjectForJs(QLatin1String("Asn1Acn"), new Asn1AcnJsExtension);
 
@@ -187,7 +187,7 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
     return true;
 }
 
-void Asn1AcnPlugin::initializeMenus(Settings::MalTesterConstPtr malTesterSettings)
+void Asn1AcnPlugin::initializeMenus(Settings::FuzzerConstPtr fuzzerSettings)
 {
     auto toolsMenu = Core::ActionManager::createMenu(Constants::M_TOOLS_ASN);
     auto contextMenu = Core::ActionManager::createMenu(Constants::CONTEXT_MENU);
@@ -199,7 +199,7 @@ void Asn1AcnPlugin::initializeMenus(Settings::MalTesterConstPtr malTesterSetting
     initializeFollowSymbolAction(toolsMenu, contextMenu);
     initializeFindUsagesAction(toolsMenu, contextMenu, context);
     initializeBuildICDAction(toolsMenu);
-    initializeGenerateTestsAction(toolsMenu, malTesterSettings);
+    initializeGenerateTestsAction(toolsMenu, fuzzerSettings);
     initializeImportFromAsnComponents(toolsMenu);
 
     addToToolsMenu(toolsMenu);
@@ -264,10 +264,10 @@ void Asn1AcnPlugin::addBuildICDToProjectMenu()
 }
 
 void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu,
-                                                  Settings::MalTesterConstPtr settings)
+                                                  Settings::FuzzerConstPtr settings)
 {
-    auto action = new Utils::ParameterAction(tr("Execute asn1scc.MalTester..."),
-                                             tr("Execute asn1scc.MalTester \"%1\"..."),
+    auto action = new Utils::ParameterAction(tr("Execute asn1scc.Fuzzer..."),
+                                             tr("Execute asn1scc.Fuzzer \"%1\"..."),
                                              Utils::ParameterAction::AlwaysEnabled,
                                              this);
     action->setEnabled(false);
@@ -280,11 +280,11 @@ void Asn1AcnPlugin::initializeGenerateTestsAction(ActionContainer *toolsMenu,
             });
 
     connect(action, &QAction::triggered, [this, settings]() {
-        if (m_malTesterDialog.isNull()) {
-            auto paramsProvider = std::make_shared<MalTester::MalTesterParamsProvider>(settings);
-            m_malTesterDialog = new MalTester::MalTesterParamsDialog(paramsProvider);
+        if (m_fuzzerDialog.isNull()) {
+            auto paramsProvider = std::make_shared<Fuzzer::FuzzerParamsProvider>(settings);
+            m_fuzzerDialog = new Fuzzer::FuzzerParamsDialog(paramsProvider);
         }
-        m_malTesterDialog->exec();
+        m_fuzzerDialog->exec();
     });
 
     auto command = Core::ActionManager::registerAction(action, Constants::GENERATE_TESTS);

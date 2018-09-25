@@ -24,43 +24,47 @@
 ****************************************************************************/
 #pragma once
 
-#include <memory>
+#include "fuzzerparamsprovider.h"
 
-#include <QString>
-
-#include "settings/maltester.h"
-
-namespace ProjectExplorer {
-class Target;
-}
+#include "asn1acnbuildstep.h"
+#include "asn1acnbuildsteprunner.h"
 
 namespace Asn1Acn {
 namespace Internal {
-namespace MalTester {
+namespace Fuzzer {
 
-class MalTesterParamsProvider
+class FuzzerRunner : public Asn1AcnBuildStepRunner
 {
 public:
-    MalTesterParamsProvider(Settings::MalTesterConstPtr settings);
-
-    QString asn1sccPath(const ProjectExplorer::Target *target) const;
-    QString malTesterPath() const;
-    QString outputPath() const;
-    QString rootTypeName() const;
-    QString asn1acnFiles() const;
-
-    void setRootTypeName(const QString &name);
-    void setOutputPath(const QString &path);
+    FuzzerRunner(const FuzzerParamsProviderPtr params);
 
 private:
-    QString m_outputPath;
-    QString m_rootTypeName;
+    Asn1AcnBuildStep *createStep(ProjectExplorer::BuildStepList *stepList) const override;
+    QString progressLabelText() const override;
 
-    Settings::MalTesterConstPtr m_settings;
+    const FuzzerParamsProviderPtr m_params;
 };
 
-using MalTesterParamsProviderPtr = std::shared_ptr<MalTesterParamsProvider>;
+class FuzzerBuildStep : public Asn1AcnBuildStep
+{
+    Q_OBJECT
 
-} // namespace MalTester
+public:
+    explicit FuzzerBuildStep(ProjectExplorer::BuildStepList *parent,
+                             const FuzzerParamsProviderPtr params);
+
+private:
+    QString executablePath() const override;
+    QString arguments() const override;
+
+    QString asn1sccArgument() const;
+    QString rootTypeArgument() const;
+    QString outputPathArgument() const;
+    QString fileArgument() const;
+
+    const FuzzerParamsProviderPtr m_params;
+};
+
+} // namespace Fuzzer
 } // namespace Internal
 } // namespace Asn1Acn

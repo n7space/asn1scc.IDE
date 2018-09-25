@@ -22,46 +22,46 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "maltester.h"
+#include "fuzzer.h"
 
 #include <QWidget>
 
 #include <tr.h>
 
 #include "asn1acnconstants.h"
-#include "maltesterwidget.h"
+#include "fuzzerwidget.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::OptionsPages;
 
-MalTester::MalTester(Settings::MalTesterPtr settings)
+Fuzzer::Fuzzer(Settings::FuzzerPtr settings)
     : m_settings(settings)
     , m_widget(nullptr)
 {
-    setId(Constants::MALTESTER_SETTINGS_ID);
-    setDisplayName(Tr::tr("asn1scc.MalTester"));
+    setId(Constants::FUZZER_SETTINGS_ID);
+    setDisplayName(Tr::tr("asn1scc.Fuzzer"));
     setCategory(Constants::SETTINGS_CATEGORY);
 }
 
-bool MalTester::matches(const QString &searchKeyWord) const
+bool Fuzzer::matches(const QString &searchKeyWord) const
 {
-    const QStringList keywords{"asn1", "asn.1", "acn", "test", "maltester", "asn1scc"};
+    const QStringList keywords{"asn1", "asn.1", "acn", "test", "fuzzer", "asn1scc"};
     for (const auto &keyword : keywords)
         if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
             return true;
     return Core::IOptionsPage::matches(searchKeyWord);
 }
 
-QWidget *MalTester::widget()
+QWidget *Fuzzer::widget()
 {
     if (!m_widget) {
-        m_widget = new MalTesterWidget;
+        m_widget = new FuzzerWidget;
         m_widget->setPath(m_settings->path());
     }
     return m_widget;
 }
 
-void MalTester::apply()
+void Fuzzer::apply()
 {
     if (!m_widget)
         return;
@@ -70,7 +70,7 @@ void MalTester::apply()
     Settings::save(m_settings);
 }
 
-void MalTester::finish()
+void Fuzzer::finish()
 {
     delete m_widget;
 }

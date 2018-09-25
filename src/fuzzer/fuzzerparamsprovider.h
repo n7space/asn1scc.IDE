@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2018 N7 Space sp. z o. o.
+** Copyright (C) 2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -24,27 +24,43 @@
 ****************************************************************************/
 #pragma once
 
-#include <QWidget>
+#include <memory>
 
-#include "ui_maltester.h"
+#include <QString>
+
+#include "settings/fuzzer.h"
+
+namespace ProjectExplorer {
+class Target;
+}
 
 namespace Asn1Acn {
 namespace Internal {
-namespace OptionsPages {
+namespace Fuzzer {
 
-class MalTesterWidget : public QWidget
+class FuzzerParamsProvider
 {
-    Q_OBJECT
 public:
-    explicit MalTesterWidget(QWidget *parent = nullptr);
+    FuzzerParamsProvider(Settings::FuzzerConstPtr settings);
 
-    QString path() const;
-    void setPath(const QString &path);
+    QString asn1sccPath(const ProjectExplorer::Target *target) const;
+    QString fuzzerPath() const;
+    QString outputPath() const;
+    QString rootTypeName() const;
+    QString asn1acnFiles() const;
+
+    void setRootTypeName(const QString &name);
+    void setOutputPath(const QString &path);
 
 private:
-    Ui::MalTesterOptionsPage m_ui;
+    QString m_outputPath;
+    QString m_rootTypeName;
+
+    Settings::FuzzerConstPtr m_settings;
 };
 
-} // namespace OptionsPages
+using FuzzerParamsProviderPtr = std::shared_ptr<FuzzerParamsProvider>;
+
+} // namespace Fuzzer
 } // namespace Internal
 } // namespace Asn1Acn

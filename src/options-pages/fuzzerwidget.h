@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2018 N7 Space sp. z o. o.
+** Copyright (C) 2017-2018 N7 Space sp. z o. o.
 ** Contact: http://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
@@ -22,38 +22,29 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "maltesterparamswidget.h"
+#pragma once
 
-using namespace Asn1Acn::Internal::MalTester;
+#include <QWidget>
 
-MalTesterParamsWidget::MalTesterParamsWidget(QWidget *parent)
-    : QWidget(parent)
+#include "ui_fuzzer.h"
+
+namespace Asn1Acn {
+namespace Internal {
+namespace OptionsPages {
+
+class FuzzerWidget : public QWidget
 {
-    m_ui.setupUi(this);
-    m_ui.pathChooser->setExpectedKind(Utils::PathChooser::ExistingDirectory);
-}
+    Q_OBJECT
+public:
+    explicit FuzzerWidget(QWidget *parent = nullptr);
 
-QString MalTesterParamsWidget::path() const
-{
-    return m_ui.pathChooser->path();
-}
+    QString path() const;
+    void setPath(const QString &path);
 
-void MalTesterParamsWidget::setPath(const QString &path)
-{
-    m_ui.pathChooser->setPath(path);
-}
+private:
+    Ui::FuzzerOptionsPage m_ui;
+};
 
-QString MalTesterParamsWidget::rootType() const
-{
-    return m_ui.comboBox->currentText();
-}
-
-void MalTesterParamsWidget::addRootTypeCandidate(const QString &rootType)
-{
-    m_ui.comboBox->addItem(rootType);
-}
-
-void MalTesterParamsWidget::clearRootTypeCandidates()
-{
-    m_ui.comboBox->clear();
-}
+} // namespace OptionsPages
+} // namespace Internal
+} // namespace Asn1Acn

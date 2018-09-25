@@ -28,8 +28,7 @@
 
 using namespace Asn1Acn::Internal;
 
-ErrorMessageParser::ErrorMessageParser()
-{}
+ErrorMessageParser::ErrorMessageParser() {}
 
 Data::ErrorMessage ErrorMessageParser::parse(const QString &message) const
 {

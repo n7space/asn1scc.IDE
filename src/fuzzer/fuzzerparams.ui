@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>N7 Space sp. z o. o.</author>
- <class>Asn1Acn::Internal::MalTester::MalTesterParamsWidget</class>
- <widget class="QWidget" name="Asn1Acn::Internal::MalTester::MalTesterParamsWidget">
+ <class>Asn1Acn::Internal::Fuzzer::FuzzerParamsWidget</class>
+ <widget class="QWidget" name="Asn1Acn::Internal::Fuzzer::FuzzerParamsWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -64,7 +64,7 @@
       <number>1</number>
      </property>
      <property name="text">
-      <string>asn1scc.MalTester run parameters:</string>
+      <string>asn1scc.Fuzzer run parameters:</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>

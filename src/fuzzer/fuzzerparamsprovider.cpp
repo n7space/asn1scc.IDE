@@ -22,52 +22,52 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "maltesterparamsprovider.h"
+#include "fuzzerparamsprovider.h"
 
 #include <projectexplorer/target.h>
 
 #include "kitinformation.h"
 
 using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::MalTester;
+using namespace Asn1Acn::Internal::Fuzzer;
 
-MalTesterParamsProvider::MalTesterParamsProvider(Settings::MalTesterConstPtr settings)
+FuzzerParamsProvider::FuzzerParamsProvider(Settings::FuzzerConstPtr settings)
     : m_settings(settings)
 {}
 
-void MalTesterParamsProvider::setRootTypeName(const QString &name)
+void FuzzerParamsProvider::setRootTypeName(const QString &name)
 {
     m_rootTypeName = name;
 }
 
-void MalTesterParamsProvider::setOutputPath(const QString &path)
+void FuzzerParamsProvider::setOutputPath(const QString &path)
 {
     m_outputPath = path;
 }
 
-QString MalTesterParamsProvider::asn1sccPath(const ProjectExplorer::Target *target) const
+QString FuzzerParamsProvider::asn1sccPath(const ProjectExplorer::Target *target) const
 {
     return KitInformation::hasAsn1Exe(target->kit())
                ? KitInformation::asn1Exe(target->kit()).toString()
                : QString();
 }
 
-QString MalTesterParamsProvider::malTesterPath() const
+QString FuzzerParamsProvider::fuzzerPath() const
 {
     return m_settings->path();
 }
 
-QString MalTesterParamsProvider::outputPath() const
+QString FuzzerParamsProvider::outputPath() const
 {
     return m_outputPath;
 }
 
-QString MalTesterParamsProvider::rootTypeName() const
+QString FuzzerParamsProvider::rootTypeName() const
 {
     return m_rootTypeName;
 }
 
-QString MalTesterParamsProvider::asn1acnFiles() const
+QString FuzzerParamsProvider::asn1acnFiles() const
 {
     return {};
 }

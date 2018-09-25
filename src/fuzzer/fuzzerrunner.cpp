@@ -23,7 +23,7 @@
 **
 ****************************************************************************/
 
-#include "maltesterrunner.h"
+#include "fuzzerrunner.h"
 
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectnodes.h>
@@ -36,41 +36,41 @@
 #include "asn1acnconstants.h"
 
 using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::MalTester;
+using namespace Asn1Acn::Internal::Fuzzer;
 
-static const char GENERATE_TESTS_BS_ID[] = "ASN1ACN.MalTesterBuildStep";
+static const char GENERATE_TESTS_BS_ID[] = "ASN1ACN.FuzzerBuildStep";
 
-MalTesterRunner::MalTesterRunner(const MalTesterParamsProviderPtr params)
+FuzzerRunner::FuzzerRunner(const FuzzerParamsProviderPtr params)
     : m_params(params)
 {}
 
-Asn1AcnBuildStep *MalTesterRunner::createStep(ProjectExplorer::BuildStepList *stepList) const
+Asn1AcnBuildStep *FuzzerRunner::createStep(ProjectExplorer::BuildStepList *stepList) const
 {
-    return new MalTesterBuildStep(stepList, m_params);
+    return new FuzzerBuildStep(stepList, m_params);
 }
 
-QString MalTesterRunner::progressLabelText() const
+QString FuzzerRunner::progressLabelText() const
 {
-    return QStringLiteral("asn1scc.MalTester");
+    return QStringLiteral("asn1scc.Fuzzer");
 }
 
-MalTesterBuildStep::MalTesterBuildStep(ProjectExplorer::BuildStepList *parent,
-                                       const MalTesterParamsProviderPtr params)
-    : Asn1AcnBuildStep(parent, GENERATE_TESTS_BS_ID, QStringLiteral("asn1scc.MalTester"))
+FuzzerBuildStep::FuzzerBuildStep(ProjectExplorer::BuildStepList *parent,
+                                 const FuzzerParamsProviderPtr params)
+    : Asn1AcnBuildStep(parent, GENERATE_TESTS_BS_ID, QStringLiteral("asn1scc.Fuzzer"))
     , m_params(params)
 {}
 
-QString MalTesterBuildStep::executablePath() const
+QString FuzzerBuildStep::executablePath() const
 {
-    return m_params->malTesterPath();
+    return m_params->fuzzerPath();
 }
 
-QString MalTesterBuildStep::arguments() const
+QString FuzzerBuildStep::arguments() const
 {
     return asn1sccArgument() + rootTypeArgument() + outputPathArgument() + fileArgument();
 }
 
-QString MalTesterBuildStep::asn1sccArgument() const
+QString FuzzerBuildStep::asn1sccArgument() const
 {
     auto path = m_params->asn1sccPath(target());
     if (path.isEmpty())
@@ -79,7 +79,7 @@ QString MalTesterBuildStep::asn1sccArgument() const
     return QStringLiteral("--asn1scc-path ") + path + QChar(' ');
 }
 
-QString MalTesterBuildStep::rootTypeArgument() const
+QString FuzzerBuildStep::rootTypeArgument() const
 {
     auto rootType = m_params->rootTypeName();
     QTC_ASSERT(!rootType.isEmpty(), return {});
@@ -87,7 +87,7 @@ QString MalTesterBuildStep::rootTypeArgument() const
     return QStringLiteral("--root-type ") + rootType + QChar(' ');
 }
 
-QString MalTesterBuildStep::outputPathArgument() const
+QString FuzzerBuildStep::outputPathArgument() const
 {
     auto outputPath = m_params->outputPath();
     QTC_ASSERT(!outputPath.isEmpty(), return {});
@@ -95,7 +95,7 @@ QString MalTesterBuildStep::outputPathArgument() const
     return QStringLiteral("--output-dir ") + outputPath + QChar(' ');
 }
 
-QString MalTesterBuildStep::fileArgument() const
+QString FuzzerBuildStep::fileArgument() const
 {
     const auto project = target()->project();
 
