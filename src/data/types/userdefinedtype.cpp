@@ -39,7 +39,7 @@ QString UserdefinedType::name() const
 
 QString UserdefinedType::label() const
 {
-    return ": " + name() + "." + m_module;
+    return ": " + m_module + "." + name();
 }
 
 QString UserdefinedType::baseIconFile() const
