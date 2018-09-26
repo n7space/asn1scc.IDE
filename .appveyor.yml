@@ -11,7 +11,7 @@ environment:
   QTDIR: C:\Qt\5.11.1\msvc2015
   ENV_QTC_PLATFORM: vs2015_32
   ENV_MSVC_PLATFORM: x86
-  ENV_QTC_VERSION: 4.7.0
+  ENV_QTC_VERSION: 4.7.1
   ENV_QTC_VERSION_SHORT: 4.7
   BUILD_DIR: c:\projects\asn1scc.IDE\build
   DIST_DIR: c:\projects\asn1scc.IDE\dist
