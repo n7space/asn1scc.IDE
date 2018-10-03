@@ -16,7 +16,7 @@ Qt Creator plugin for asn1scc - ASN.1/ACN compiler for embedded systems
  
 ## ASN1SCC requirements
 Most features of plugin depends on properly working [ASN1SCC](https://github.com/ttsiodras/asn1scc) compiler. It is distributed along with plugin itself, or plugin can be configured to use different one. To run compiler system requires:
-  * `mono` package on Linux
+  * `mono` and `fsharp` package on Linux
   * .NET Framework 4.6 on Windows (preinstalled in Windows 10 and newer)
   
 ## Main features
