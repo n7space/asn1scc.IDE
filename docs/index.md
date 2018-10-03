@@ -15,7 +15,7 @@ Plugin was developed by [N7 Space](http://www.n7space.com) and funded by Europea
 
 ## ASN1SCC requirements
 Many features of the plugin depends on [ASN1SCC](https://github.com/ttsiodras/asn1scc) compiler. It is distributed along with the plugin itself. IDE can also be configured to use user-provided compiler version. ASN1SCC is F#/.NET based, so to run it system requires:
-  * `mono` package on Linux
+  * `mono` and `fsharp` package on Linux
   * .NET Framework 4.6 on Windows (preinstalled in Windows 10 and newer)
 
 # Installation
