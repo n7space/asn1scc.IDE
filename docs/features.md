@@ -45,3 +45,8 @@ Plugin is distributed with built-in [PUS-C library](https://github.com/n7space/a
 ![Screen-Import](images/screen-import.png)
 
 *Import from ASN.1 components library...* entry is available in the project's popup menu and in *Tools* -> *ASN.1/ACN* menu entry.
+
+## Additional targets (ICD)
+QMake and CMake projects can be easily used to generate ICD (Interface Control Document) for defined project - build them with `icdFromAsn1` target, and ICD will be generated into `BUILDDIR\asn1sccGenerated\icd` folder.
+
+ICD can be also generated using `Tools` menu, but adding additional build step is recomended as more convinient.
