@@ -7,7 +7,7 @@ Qt Creator plugin for asn1scc - ASN.1/ACN compiler for embedded systems
 ### [Project Home Page](https://n7space.github.io/asn1scc.IDE/)
 
 ## Installation
- 0. Install desired version of [QtCreator](https://www.qt.io/download), if you don't have one already
+ 0. Install desired version of [Qt Creator](https://www.qt.io/download), if you don't have one already
  1. Download plugin [release](https://github.com/n7space/asn1scc.IDE/releases) corresponding to installed QtCreator version (plugin's version is based on compatible QtCreator's version, so, for example, plugin 4.5.0 should work with QtCreator 4.5.1, but for QtCreator 4.6.0 plugin 4.6.x is required)
  2. Unpack release package contents into QtCreator installation directory:
     * `/opt/Qt/Tools/QtCreator/` on Linux  
