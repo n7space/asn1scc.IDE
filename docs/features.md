@@ -3,8 +3,11 @@ Plugin extends existing [Qt Creator's features](http://doc.qt.io/qtcreator/creat
  to support ASN.1 and ACN files and models.
 
 ## Code highlighting
-ASN.1 and ACN syntax is now highlighted in editor.
+ASN.1 and ACN syntax is now highlighted in editor. 
+
 ![Screen-Highlight](images/screen-highlight.png)
+
+Colors can be configured using general Qt Creator's settings in Tools > Options > Text Editor.
 
 ## Code completion
 Code auto-completion (`{} ''` etc.) and basic completion suggestions are available for all ASN.1 and ACN files. 
