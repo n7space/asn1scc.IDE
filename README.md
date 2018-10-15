@@ -24,3 +24,5 @@ Most features of plugin depends on properly working [ASN1SCC](https://github.com
  * Outline view for ASN.1 files
  * ASN.1 Types view for all models in project
  * 'Find Usages' for ASN.1 types
+ 
+See [Qt Creator's User Interface](http://doc.qt.io/qtcreator/creator-quick-tour.html) for introduction to Qt Creator.
