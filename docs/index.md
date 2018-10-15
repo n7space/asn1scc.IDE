@@ -27,6 +27,7 @@ Many features of the plugin depends on [ASN1SCC](https://github.com/ttsiodras/as
 
 # See also
  * [Features](features.html)
- * [Building from source](building.html)
+ * [Qt Creator's User Interface](http://doc.qt.io/qtcreator/creator-quick-tour.html)
  * [Configuration](configuration.html)
  * [Troubleshooting](troubleshooting.html)
+ * [Building from source](building.html)
