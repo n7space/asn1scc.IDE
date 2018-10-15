@@ -1,5 +1,6 @@
 # Features
-Plugin extends existing Qt Creator's features to support ASN.1 and ACN files and models.
+Plugin extends existing [Qt Creator's features](http://doc.qt.io/qtcreator/creator-quick-tour.html)
+ to support ASN.1 and ACN files and models.
 
 ## Code highlighting
 ASN.1 and ACN syntax is now highlighted in editor.
