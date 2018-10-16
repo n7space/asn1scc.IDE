@@ -36,7 +36,7 @@ All models included in the project can be displayed in this single view.
 
 ## Code navigation
 User can easily switch between ASN.1 and ACN files (`F4` by default).
-Type usage can also be easily followed to it's ASN.1 definition (`F2` by default).
+Type usage can also be easily followed to its ASN.1 definition (`F2` by default).
 ![Screen-Follow](images/screen-follow.png)
 
 ## Model usages
