@@ -3,7 +3,7 @@
     \"Version\" : \"4.7.0\",
     \"CompatVersion\" : \"4.7.0\",
     \"Vendor\" : \"N7 Space sp. z o.o.\",
-    \"Copyright\" : \"(C) 2017-2018 N7 Space sp. z o.o.\",
+    \"Copyright\" : \"(C) 2017-2019 N7 Space sp. z o.o.\",
     \"License\" : \"GPL v3.0\",
     \"Description\" : \"Plugin for asn1scc - ASN.1/ACN compiler for embedded systems\",
     \"Url\" : \"http://n7space.com\",
