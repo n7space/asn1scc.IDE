@@ -20,7 +20,7 @@ elif [[ $BUILD_OS_NAME == 'osx' ]]; then
 fi
 
 echo "Downloading asn1scc to distribute with plugin"
-wget -O ${DOWNLOAD_DIR}/asn1scc.7z "https://drive.google.com/uc?export=download&id=1tzZdsXU4CHbppf4TQMrkNx-6p0zsCuEt"
+wget -O ${DOWNLOAD_DIR}/asn1scc.7z "https://n7space-my.sharepoint.com/:u:/p/kgrochowski/EZSwzkHV-C1Mn1nppkUqKIcBjFpzsn67G_N_1RMW2Yr7dQ?download=1"
 mkdir -p ${LIBEXEC_DIST_DIR}
 7zr x -o${LIBEXEC_DIST_DIR} ${DOWNLOAD_DIR}/asn1scc.7z
 
