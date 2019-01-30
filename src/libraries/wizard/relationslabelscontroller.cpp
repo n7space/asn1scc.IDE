@@ -159,5 +159,5 @@ void RelationsLabelsController::fillRelations(const QModelIndex &index,
 
     for (auto i = 0; i < m_model->rowCount(index); ++i)
         for (auto j = 0; j < m_model->columnCount(index); ++j)
-            fillRelations(index.child(i, j), requirements, conflicts);
+            fillRelations(m_model->index(i, j, index), requirements, conflicts);
 }

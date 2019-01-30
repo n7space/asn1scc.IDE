@@ -36,7 +36,7 @@ FileModel::FileModel(QObject *parent)
 Qt::ItemFlags FileModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return 0;
+        return {};
 
     return Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
 }
@@ -93,7 +93,9 @@ void FileModel::setChildrenCheck(const QModelIndex &parent, const QVariant &valu
         }
     }
 
-    emit dataChanged(parent.child(0, 0), parent.child(rowCount(parent), rowCount(parent)));
+    const auto &model = parent.model();
+    emit dataChanged(model->index(0, 0, parent),
+                     model->index(rowCount(parent), rowCount(parent), parent));
 }
 
 void FileModel::setParentCheck(const QModelIndex &index)
@@ -117,10 +119,11 @@ QVariant FileModel::parentState(const QModelIndex &index) const
 {
     const auto checkState = index.data(Qt::CheckStateRole);
     const auto parent = index.parent();
+    const auto &model = index.model();
 
     for (int i = 0; i < rowCount(parent); ++i)
         for (int j = 0; j < columnCount(parent); ++j)
-            if (parent.child(i, j).data(Qt::CheckStateRole) != checkState)
+            if (model->index(i, j, parent).data(Qt::CheckStateRole) != checkState)
                 return Qt::PartiallyChecked;
 
     return checkState;

@@ -73,13 +73,13 @@ static QString correspondingDataOrEncoding(const QString &path)
             return candidateFileInfo.absoluteFilePath();
     }
 
-    return QString::null;
+    return {};
 }
 
 static QString findDataOrEncodingForCurrentDocument()
 {
     const Core::IDocument *currentDocument = Core::EditorManager::currentDocument();
-    QTC_ASSERT(currentDocument, return QString::null);
+    QTC_ASSERT(currentDocument, return {});
     return correspondingDataOrEncoding(currentDocument->filePath().toString());
 }
 

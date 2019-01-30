@@ -55,7 +55,7 @@ QStringList FileComponentSelector::selectedPathsFromModelItem(const QString &par
     QStringList paths;
     for (int i = 0; i < m_model->rowCount(parent); ++i)
         for (int j = 0; j < m_model->columnCount(parent); ++j)
-            paths.append(pathsFromChildIndex(parent.child(i, j)));
+            paths.append(pathsFromChildIndex(m_model->index(i, j, parent)));
 
     return paths;
 }

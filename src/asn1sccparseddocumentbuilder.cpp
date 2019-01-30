@@ -129,6 +129,6 @@ QString Asn1SccParsedDocumentBuilder::getAstXml(const QJsonObject &json)
 {
     const auto files = json[QLatin1Literal("Files")].toArray();
     if (files.size() != 1)
-        return QString::null;
+        return QString();
     return files[0].toObject()[QLatin1Literal("Contents")].toString();
 }

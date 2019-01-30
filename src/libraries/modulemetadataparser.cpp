@@ -40,7 +40,7 @@ namespace {
 template<typename Func>
 void foreachItem(const QJsonValue &value, Func f)
 {
-    for (const auto &item : value.toArray())
+    for (const auto item : value.toArray())
         f(item);
 }
 
@@ -54,7 +54,7 @@ QString readNotEmptyStringField(const QJsonObject &object, const QString &fieldN
 
 QString readOptionalStringField(const QJsonObject &object,
                                 const QString &fieldName,
-                                const QString &defaultValue = QString::null)
+                                const QString &defaultValue = QString())
 {
     const auto value = object[fieldName].toString();
     if (value.isEmpty())
