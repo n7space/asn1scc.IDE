@@ -117,10 +117,9 @@ public:
         , m_optionsPagesFuzzer(fuzzerSettings)
         , m_componentDirectoryWatcher(librariesSettings)
         , m_asn1sccServiceProvider(serviceSettings)
-        , m_kitInformation(new KitInformation)
     {
         ExtensionSystem::PluginManager::addObject(&m_asn1sccServiceProvider);
-        ProjectExplorer::KitManager::registerKitInformation(m_kitInformation);
+        ProjectExplorer::KitManager::registerKitInformation<KitInformation>();
 
         m_asn1sccServiceProvider.start();
     }
@@ -128,7 +127,6 @@ public:
     ~Asn1AcnPluginPrivate()
     {
         ExtensionSystem::PluginManager::removeObject(&m_asn1sccServiceProvider);
-        ProjectExplorer::KitManager::deregisterKitInformation(m_kitInformation);
     }
 
     TreeViews::OutlineWidgetFactory m_outlineWidgetFactory;
@@ -145,8 +143,6 @@ public:
     Libraries::ComponentDirectoryWatcher m_componentDirectoryWatcher;
 
     Asn1SccServiceProvider m_asn1sccServiceProvider;
-
-    KitInformation *m_kitInformation;
 };
 
 Asn1AcnPlugin::Asn1AcnPlugin() {}
