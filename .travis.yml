@@ -23,8 +23,8 @@ sudo: required
 
 env:
   global:
-    - ENV_QTC_VERSION="4.7.1"
-    - ENV_QTC_VERSION_SHORT="4.7"
+    - ENV_QTC_VERSION="4.8.1"
+    - ENV_QTC_VERSION_SHORT="4.8"
     - PUSC_VERSION="1.0.1"
     - FUZZER_VERSION="0.9"
   matrix:
