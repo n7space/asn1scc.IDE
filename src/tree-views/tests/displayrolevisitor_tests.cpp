@@ -93,5 +93,5 @@ void DisplayRoleVisitorTests::test_typeAssignmentUserDefined()
     TypeAssignment typeAssignment("TypeName",
                                   {},
                                   std::make_unique<Data::Types::UserdefinedType>("type", "module"));
-    QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: type.module"));
+    QCOMPARE(typeAssignment.valueFor<DisplayRoleVisitor>(), QString("TypeName: module.type"));
 }
