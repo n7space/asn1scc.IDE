@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <snippets>
-<snippet group="ACN" trigger="integer_encoding" id="acn_integer_encoding">[size $size-value$, encoding $encoding-value$, endianness $endianness-value$]</snippet>
-<snippet group="ACN" trigger="enumerated_encoding" id="acn_enumerated_encoding">[size $size-value$, encoding $encoding-value$, encode-values]</snippet>
-<snippet group="ACN" trigger="definitions" id="acn_definitions">$name$ DEFINITIONS ::= BEGIN
+<snippet group="ACN" trigger="integer_encoding" id="acn_integer_encoding">[size $size$, encoding $encoding$, endianness $endianness$]</snippet>
+<snippet group="ACN" trigger="enumerated_encoding" id="acn_enumerated_encoding">[size $size$, encoding $encoding$, encode-values]</snippet>
+<snippet group="ACN" trigger="definitions" id="acn_definitions">$Name$ DEFINITIONS ::= BEGIN
     $$
 END
 </snippet>

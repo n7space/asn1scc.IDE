@@ -5,7 +5,7 @@
     $$
 }
 </snippet>
-<snippet group="ASN.1" trigger="sequence" id="asn1_sequence_with_assignment" complement="with assignment" >$name$ ::= SEQUENCE
+<snippet group="ASN.1" trigger="sequence" id="asn1_sequence_with_assignment" complement="with assignment" >$Name$ ::= SEQUENCE
 {
     $$
 }
@@ -15,7 +15,7 @@
     $$
 }
 </snippet>
-<snippet group="ASN.1" trigger="enumerated" id="asn1_enumerated_with_assignment" complement="with assignment" >$name$ ::= ENUMERATED
+<snippet group="ASN.1" trigger="enumerated" id="asn1_enumerated_with_assignment" complement="with assignment" >$Name$ ::= ENUMERATED
 {
     $$
 }
@@ -25,7 +25,7 @@
     $$
 }
 </snippet>
-<snippet group="ASN.1" trigger="choice" id="asn1_choice_with_assignment" complement="with assignment" >$name$ ::= CHOICE
+<snippet group="ASN.1" trigger="choice" id="asn1_choice_with_assignment" complement="with assignment" >$Name$ ::= CHOICE
 {
     $$
 }
@@ -35,18 +35,18 @@
     $$
 }
 </snippet>
-<snippet group="ASN.1" trigger="set" id="asn1_set_with_assignment" complement="with assignment" >$name$ ::= SET
+<snippet group="ASN.1" trigger="set" id="asn1_set_with_assignment" complement="with assignment" >$Name$ ::= SET
 {
     $$
 }
 </snippet>
-<snippet group="ASN.1" trigger="setof" id="asn1_setof">SET (SIZE($constraint$)) OF $type$</snippet>
-<snippet group="ASN.1" trigger="setof" id="asn1_setof_with_assignment" complement="with assignment" >$name$ ::= SET (SIZE($constraint$)) OF $type$</snippet>
-<snippet group="ASN.1" trigger="sequenceof" id="asn1_sequenceof">SEQUENCE (SIZE($constraint$)) OF $type$</snippet>
-<snippet group="ASN.1" trigger="sequenceof" id="asn1_sequenceof_with_assignment" complement="with assignment" >$name$ ::= SEQUENCE (SIZE($constraint$)) OF $type$</snippet>
-<snippet group="ASN.1" trigger="definitions" id="asn1_definitions">$name$ DEFINITIONS ::= BEGIN
+<snippet group="ASN.1" trigger="setof" id="asn1_setof">SET (SIZE($constraint$)) OF $Type$</snippet>
+<snippet group="ASN.1" trigger="setof" id="asn1_setof_with_assignment" complement="with assignment" >$name$ ::= SET (SIZE($constraint$)) OF $Type$</snippet>
+<snippet group="ASN.1" trigger="sequenceof" id="asn1_sequenceof">SEQUENCE (SIZE($constraint$)) OF $Type$</snippet>
+<snippet group="ASN.1" trigger="sequenceof" id="asn1_sequenceof_with_assignment" complement="with assignment" >$name$ ::= SEQUENCE (SIZE($constraint$)) OF $Type$</snippet>
+<snippet group="ASN.1" trigger="definitions" id="asn1_definitions">$Name$ DEFINITIONS ::= BEGIN
     $$
 END
 </snippet>
-<snippet group="ASN.1" trigger="imports" id="asn1_imports">IMPORTS $type$ FROM $module$;</snippet>
+<snippet group="ASN.1" trigger="imports" id="asn1_imports">IMPORTS $Type$ FROM $Module$;</snippet>
 </snippets>
