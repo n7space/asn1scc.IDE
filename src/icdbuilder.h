@@ -24,43 +24,22 @@
 ****************************************************************************/
 #pragma once
 
-#include <projectexplorer/abstractprocessstep.h>
-
-#include "asn1acnbuildstep.h"
-#include "asn1acnbuildsteprunner.h"
+#include <projectexplorer/project.h>
+#include <projectexplorer/session.h>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class ICDBuilder : public Asn1AcnBuildStepRunner
+class ICDBuilder
 {
-private:
-    Asn1AcnBuildStep *createStep(ProjectExplorer::BuildStepList *stepList) const override;
-    QString progressLabelText() const override;
-};
-
-class ICDBuildStep : public Asn1AcnBuildStep
-{
-    Q_OBJECT
-
 public:
-    explicit ICDBuildStep(ProjectExplorer::BuildStepList *parent);
+    explicit ICDBuilder();
+    ~ICDBuilder();
 
-    bool init(QList<const BuildStep *> &earlierSteps) override;
+    void run(ProjectExplorer::Project *project = ProjectExplorer::SessionManager::startupProject());
 
 private:
-    bool updateRunParams();
-    bool updateOutputDirectory(const ProjectExplorer::BuildConfiguration *bc);
-    bool updateAsn1SccCommand();
-    bool updateSourcesList();
-
-    QString arguments() const override;
-    QString executablePath() const override;
-
-    QString m_asn1sccCommand;
-    QString m_outputPath;
-    const QString m_outputFilename;
-    Utils::FileNameList m_sources;
+    std::shared_ptr<ProjectExplorer::BuildConfiguration> config(ProjectExplorer::Project *project);
 };
 
 } // namespace Internal
