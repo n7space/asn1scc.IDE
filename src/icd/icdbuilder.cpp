@@ -25,6 +25,7 @@
 
 #include "icdbuilder.h"
 
+#include <QDesktopServices>
 #include <QObject>
 #include <QStringList>
 
@@ -36,14 +37,25 @@
 #include <projectexplorer/projectexplorerconstants.h>
 #include <projectexplorer/target.h>
 
-#include <kitinformation.h>
-
-#include <utils/mimetypes/mimedatabase.h>
-
-#include "asn1acnconstants.h"
-
 using namespace Asn1Acn::Internal::Icd;
 using namespace ProjectExplorer;
+
+namespace {
+
+const QString GENERATED_ICD_PREFIX = "Generated ICD: ";
+
+void openGeneratedIcd(const QString &line)
+{
+    const auto icdHtml = line.mid(GENERATED_ICD_PREFIX.length()).trimmed();
+    QDesktopServices::openUrl(QUrl::fromLocalFile(icdHtml));
+}
+
+bool icdGenerationFinished(const QString &line)
+{
+    return line.startsWith(GENERATED_ICD_PREFIX);
+}
+
+} // namespace
 
 IcdBuilder::IcdBuilder() {}
 IcdBuilder::~IcdBuilder() {}
@@ -76,9 +88,17 @@ void IcdBuilder::run(ProjectExplorer::Project *project)
 
     makeStep->setBuildTarget("icdFromAsn1", true);
 
-    BuildManager::buildList(steps);
-
     QObject::connect(BuildManager::instance(),
                      &BuildManager::buildQueueFinished,
                      [bc](bool) mutable { bc.reset(); });
+    QObject::connect(makeStep,
+                     &MakeStep::addOutput,
+                     [](const QString &string,
+                        BuildStep::OutputFormat,
+                        BuildStep::OutputNewlineSetting) {
+                         if (icdGenerationFinished(string))
+                             openGeneratedIcd(string);
+                     });
+
+    BuildManager::buildList(steps);
 }
