@@ -159,6 +159,8 @@ SOURCES += \
     messages/messageutils.cpp \
     messages/messagemanager.cpp \
     \
+    icd/icdbuilder.cpp \
+    \
     asn1acn.cpp \
     asneditor.cpp \
     asndocument.cpp \
@@ -188,7 +190,6 @@ SOURCES += \
     kitinformation.cpp \
     kitconfigwidget.cpp \
     selectionpositionresolver.cpp \
-    icdbuilder.cpp \
     asn1acnerrorparser.cpp \
     asn1acnstepscache.cpp \
     asn1acnbuildstep.cpp \
@@ -314,6 +315,8 @@ HEADERS += \
     \
     messages/messageutils.h \
     messages/messagemanager.h \
+    \
+    icd/icdbuilder.h \
     \
     asn1acn_global.h \
     asn1acnconstants.h \

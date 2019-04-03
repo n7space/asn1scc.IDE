@@ -65,12 +65,13 @@
 
 #include "fuzzer/fuzzerparamsdialog.h"
 
+#include "icd/icdbuilder.h"
+
 #include "acneditor.h"
 #include "asn1acnconstants.h"
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
 #include "asneditor.h"
-#include "icdbuilder.h"
 #include "kitinformation.h"
 #include "projectmenuimportitemcontroller.h"
 #include "projectwatcher.h"
@@ -232,7 +233,7 @@ void Asn1AcnPlugin::addBuildICDToToolsMenu(ActionContainer *toolsMenu)
 
     connect(action, &QAction::triggered, [this]() {
         if (m_builder == nullptr)
-            m_builder = std::make_shared<ICDBuilder>();
+            m_builder = std::make_shared<Icd::IcdBuilder>();
         m_builder->run();
     });
 
@@ -247,7 +248,7 @@ void Asn1AcnPlugin::addBuildICDToProjectMenu()
 
     connect(action, &QAction::triggered, [this]() {
         if (m_builder == nullptr)
-            m_builder = std::make_shared<ICDBuilder>();
+            m_builder = std::make_shared<Icd::IcdBuilder>();
         m_builder->run(ProjectExplorer::ProjectTree::currentProject());
     });
 

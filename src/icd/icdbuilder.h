@@ -29,12 +29,13 @@
 
 namespace Asn1Acn {
 namespace Internal {
+namespace Icd {
 
-class ICDBuilder
+class IcdBuilder
 {
 public:
-    explicit ICDBuilder();
-    ~ICDBuilder();
+    explicit IcdBuilder();
+    ~IcdBuilder();
 
     void run(ProjectExplorer::Project *project = ProjectExplorer::SessionManager::startupProject());
 
@@ -42,5 +43,6 @@ private:
     std::shared_ptr<ProjectExplorer::BuildConfiguration> config(ProjectExplorer::Project *project);
 };
 
+} // namespace Icd
 } // namespace Internal
 } // namespace Asn1Acn

@@ -42,13 +42,13 @@
 
 #include "asn1acnconstants.h"
 
-using namespace Asn1Acn::Internal;
+using namespace Asn1Acn::Internal::Icd;
 using namespace ProjectExplorer;
 
-ICDBuilder::ICDBuilder() {}
-ICDBuilder::~ICDBuilder() {}
+IcdBuilder::IcdBuilder() {}
+IcdBuilder::~IcdBuilder() {}
 
-std::shared_ptr<BuildConfiguration> ICDBuilder::config(Project *project)
+std::shared_ptr<BuildConfiguration> IcdBuilder::config(Project *project)
 {
     const auto target = project->activeTarget();
     if (!target)
@@ -63,7 +63,7 @@ std::shared_ptr<BuildConfiguration> ICDBuilder::config(Project *project)
     return std::shared_ptr<BuildConfiguration>{factory->clone(target, buildConfig)};
 }
 
-void ICDBuilder::run(ProjectExplorer::Project *project)
+void IcdBuilder::run(ProjectExplorer::Project *project)
 {
     auto bc = config(project);
     if (!bc)
