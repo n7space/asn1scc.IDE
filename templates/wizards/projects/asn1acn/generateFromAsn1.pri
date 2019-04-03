@@ -59,6 +59,8 @@ icdFromAsn1.target += icdFromAsn1
 icdFromAsn1.commands += $$sprintf($$QMAKE_MKDIR_CMD, $$shell_quote($$ASN1SCC_ICD_DIR))
 icdFromAsn1.commands += $$escape_expand(\\n\\t)
 icdFromAsn1.commands += $$ASN1SCC $${ASN1SCC_ICD_OPTIONS} $$shell_quote($${ASN1SCC_ICD_DIR}/$${ASN1SCC_ICD_FILE}) $$ASN1SCCINPUT
+icdFromAsn1.commands += $$escape_expand(\\n\\t)
+icdFromAsn1.commands += echo Generated ICD: $$shell_quote($${ASN1SCC_ICD_DIR}/$${ASN1SCC_ICD_FILE})
 icdFromAsn1.depends += $$ASN1ACNFILES
 
 cleanGenerated.target += cleanGenerated
