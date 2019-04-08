@@ -37,12 +37,15 @@
 #include <projectexplorer/projectexplorerconstants.h>
 #include <projectexplorer/target.h>
 
+#include <cmakeprojectmanager/cmakebuildstep.h>
+
 using namespace Asn1Acn::Internal::Icd;
 using namespace ProjectExplorer;
 
 namespace {
 
 const QString GENERATED_ICD_PREFIX = "Generated ICD: ";
+const QString CMAKE_TARGETS_KEY = "CMakeProjectManager.MakeStep.BuildTargets";
 
 void openGeneratedIcd(const QString &line)
 {
@@ -53,6 +56,36 @@ void openGeneratedIcd(const QString &line)
 bool icdGenerationFinished(const QString &line)
 {
     return line.startsWith(GENERATED_ICD_PREFIX);
+}
+
+BuildStep *modifiedMakeBuildStep(BuildStepList *steps)
+{
+    auto step = steps->firstOfType<MakeStep>();
+    if (!step)
+        return nullptr;
+    step->setBuildTarget("icdFromAsn1", true);
+    return step;
+}
+
+BuildStep *modifiedCMakeBuildStep(BuildStepList *steps)
+{
+    for (auto step : steps->steps()) {
+        auto map = step->toMap();
+        if (map.contains(CMAKE_TARGETS_KEY)) {
+            map[CMAKE_TARGETS_KEY] = "icdFromAsn1";
+            step->fromMap(map);
+            return step;
+        }
+    }
+    return nullptr;
+}
+
+BuildStep *modifiedBuildStep(BuildStepList *steps)
+{
+    auto makeStep = modifiedMakeBuildStep(steps);
+    if (makeStep != nullptr)
+        return makeStep;
+    return modifiedCMakeBuildStep(steps);
 }
 
 } // namespace
@@ -77,22 +110,20 @@ std::shared_ptr<BuildConfiguration> IcdBuilder::config(Project *project)
 
 void IcdBuilder::run(ProjectExplorer::Project *project)
 {
-    auto bc = config(project);
-    if (!bc)
-        return; // TODO ?
+    auto buildConfig = config(project);
+    auto steps = buildConfig
+                     ? buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD))
+                     : nullptr;
+    auto step = steps ? modifiedBuildStep(steps) : nullptr;
 
-    auto steps = bc->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD));
-    auto makeStep = steps ? steps->firstOfType<MakeStep>() : nullptr;
-    if (!makeStep)
+    if (!step)
         return; // TODO
-
-    makeStep->setBuildTarget("icdFromAsn1", true);
 
     QObject::connect(BuildManager::instance(),
                      &BuildManager::buildQueueFinished,
-                     [bc](bool) mutable { bc.reset(); });
-    QObject::connect(makeStep,
-                     &MakeStep::addOutput,
+                     [buildConfig](bool) mutable { buildConfig.reset(); });
+    QObject::connect(step,
+                     &BuildStep::addOutput,
                      [](const QString &string,
                         BuildStep::OutputFormat,
                         BuildStep::OutputNewlineSetting) {

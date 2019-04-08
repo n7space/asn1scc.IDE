@@ -354,7 +354,6 @@ HEADERS += \
     kitinformation.h \
     kitconfigwidget.h \
     selectionpositionresolver.h \
-    icdbuilder.h \
     asn1acnerrorparser.h \
     asn1acnstepscache.h \
     asn1acnbuildstep.h \
