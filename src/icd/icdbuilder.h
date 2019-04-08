@@ -38,9 +38,6 @@ public:
     ~IcdBuilder();
 
     void run(ProjectExplorer::Project *project = ProjectExplorer::SessionManager::startupProject());
-
-private:
-    std::shared_ptr<ProjectExplorer::BuildConfiguration> config(ProjectExplorer::Project *project);
 };
 
 } // namespace Icd

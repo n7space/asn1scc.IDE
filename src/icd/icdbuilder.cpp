@@ -26,8 +26,11 @@
 #include "icdbuilder.h"
 
 #include <QDesktopServices>
+#include <QMessageBox>
 #include <QObject>
 #include <QStringList>
+
+#include <coreplugin/icore.h>
 
 #include <projectexplorer/buildconfiguration.h>
 #include <projectexplorer/buildmanager.h>
@@ -39,13 +42,17 @@
 
 #include <cmakeprojectmanager/cmakebuildstep.h>
 
+#include <asn1acn.h>
+
 using namespace Asn1Acn::Internal::Icd;
+using namespace Asn1Acn::Internal;
 using namespace ProjectExplorer;
 
 namespace {
 
 const QString GENERATED_ICD_PREFIX = "Generated ICD: ";
 const QString CMAKE_TARGETS_KEY = "CMakeProjectManager.MakeStep.BuildTargets";
+const QString ICD_TARGET_NAME = "icdFromAsn1";
 
 void openGeneratedIcd(const QString &line)
 {
@@ -63,7 +70,7 @@ BuildStep *modifiedMakeBuildStep(BuildStepList *steps)
     auto step = steps->firstOfType<MakeStep>();
     if (!step)
         return nullptr;
-    step->setBuildTarget("icdFromAsn1", true);
+    step->setBuildTarget(ICD_TARGET_NAME, true);
     return step;
 }
 
@@ -72,7 +79,7 @@ BuildStep *modifiedCMakeBuildStep(BuildStepList *steps)
     for (auto step : steps->steps()) {
         auto map = step->toMap();
         if (map.contains(CMAKE_TARGETS_KEY)) {
-            map[CMAKE_TARGETS_KEY] = "icdFromAsn1";
+            map[CMAKE_TARGETS_KEY] = ICD_TARGET_NAME;
             step->fromMap(map);
             return step;
         }
@@ -88,12 +95,16 @@ BuildStep *modifiedBuildStep(BuildStepList *steps)
     return modifiedCMakeBuildStep(steps);
 }
 
-} // namespace
+std::shared_ptr<BuildConfiguration> prepareClone(BuildConfiguration *buildConfig)
+{
+    auto result = std::shared_ptr<BuildConfiguration>{buildConfig};
+    QObject::connect(BuildManager::instance(),
+                     &BuildManager::buildQueueFinished,
+                     [result](bool) mutable { result.reset(); });
+    return result;
+}
 
-IcdBuilder::IcdBuilder() {}
-IcdBuilder::~IcdBuilder() {}
-
-std::shared_ptr<BuildConfiguration> IcdBuilder::config(Project *project)
+std::shared_ptr<BuildConfiguration> config(Project *project)
 {
     const auto target = project->activeTarget();
     if (!target)
@@ -105,23 +116,29 @@ std::shared_ptr<BuildConfiguration> IcdBuilder::config(Project *project)
     if (!factory || !buildConfig)
         return nullptr;
 
-    return std::shared_ptr<BuildConfiguration>{factory->clone(target, buildConfig)};
+    return prepareClone(factory->clone(target, buildConfig));
 }
 
-void IcdBuilder::run(ProjectExplorer::Project *project)
+BuildStepList *buildSteps(Project *project)
 {
     auto buildConfig = config(project);
-    auto steps = buildConfig
-                     ? buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD))
-                     : nullptr;
-    auto step = steps ? modifiedBuildStep(steps) : nullptr;
+    if (buildConfig == nullptr)
+        return nullptr;
+    return buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD));
+}
 
-    if (!step)
-        return; // TODO
+void displayWarning()
+{
+    QMessageBox::warning(Core::ICore::dialogParent(),
+                         Asn1AcnPlugin::tr("Build ICD failed"),
+                         Asn1AcnPlugin::tr(
+                             "Incorrect project configuration - command supported only in "
+                             "qmake and cmake project created by plugin."),
+                         QMessageBox::Ok);
+}
 
-    QObject::connect(BuildManager::instance(),
-                     &BuildManager::buildQueueFinished,
-                     [buildConfig](bool) mutable { buildConfig.reset(); });
+void addStepOutputListener(BuildStep *step)
+{
     QObject::connect(step,
                      &BuildStep::addOutput,
                      [](const QString &string,
@@ -130,6 +147,24 @@ void IcdBuilder::run(ProjectExplorer::Project *project)
                          if (icdGenerationFinished(string))
                              openGeneratedIcd(string);
                      });
+}
+
+} // namespace
+
+IcdBuilder::IcdBuilder() {}
+IcdBuilder::~IcdBuilder() {}
+
+void IcdBuilder::run(ProjectExplorer::Project *project)
+{
+    auto steps = buildSteps(project);
+    auto step = (steps != nullptr) ? modifiedBuildStep(steps) : nullptr;
+
+    if (!step) {
+        displayWarning();
+        return;
+    }
+
+    addStepOutputListener(step);
 
     BuildManager::buildList(steps);
 }
