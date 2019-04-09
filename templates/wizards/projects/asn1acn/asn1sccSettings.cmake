@@ -28,12 +28,24 @@ if(NOT ASN1SCC)
   endif()
 endif()
 
-if(NOT ASN1SCC_GENERATION_OPTIONS)
-    set(ASN1SCC_GENERATION_OPTIONS --c-lang --acn-enc --field-prefix AUTO --type-prefix T)
+if(NOT ASN1SCC_COMMON_OPTIONS)
+    set(ASN1SCC_COMMON_OPTIONS --acn-enc --field-prefix AUTO --type-prefix T)
+endif()
+
+if(NOT ASN1SCC_C_OPTIONS)
+    set(ASN1SCC_C_OPTIONS --c-lang ${ASN1SCC_COMMON_OPTIONS})
+endif()
+
+if(NOT ASN1SCC_ADA_OPTIONS)
+    set(ASN1SCC_ADA_OPTIONS --ada-lang ${ASN1SCC_COMMON_OPTIONS})
 endif()
 
 if(NOT ASN1SCC_PRODUCTS_DIR)
-    set(ASN1SCC_PRODUCTS_DIR ${PROJECT_BINARY_DIR}/asn1sccGenerated/src)
+    set(ASN1SCC_PRODUCTS_DIR ${PROJECT_BINARY_DIR}/asn1sccGenerated)
+endif()
+
+if(NOT ASN1SCC_C_DIR)
+    set(ASN1SCC_C_DIR ${ASN1SCC_PRODUCTS_DIR}/src)
 endif()
 
 if(NOT ASN1SCC_ICD_DIR)
@@ -45,5 +57,5 @@ if(NOT ASN1SCC_ICD_FILE)
 endif()
 
 if(NOT ASN1SCC_ICD_OPTIONS)
-    set(ASN1SCC_ICD_OPTIONS --field-prefix AUTO --type-prefix T -icdAcn)
+    set(ASN1SCC_ICD_OPTIONS ${ASN1SCC_COMMON_OPTIONS} -icdAcn)
 endif()

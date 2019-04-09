@@ -14,7 +14,7 @@ set(ASN1ACNSOURCES %{JS: if (%{AddAsnFile} && %{AddAcnFile})
 include(asn1sccSettings.cmake)
 include(createFilesList.cmake)
 
-set(SOURCES ${ASN1ACNSOURCES} ${ASN1SCC_CPP_PRODUCTS})
+set(SOURCES ${ASN1ACNSOURCES} ${ASN1SCC_PRODUCTS})
 
 if(SOURCES)
     set(TARGET_NAME ${PROJECT_NAME})

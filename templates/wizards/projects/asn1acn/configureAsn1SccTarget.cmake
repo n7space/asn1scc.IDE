@@ -22,19 +22,19 @@
 #######################################################################
 
 add_custom_target(
-    codeFromAsn1
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${ASN1SCC_PRODUCTS_DIR}
-    COMMAND ${ASN1SCC} ${ASN1SCC_GENERATION_OPTIONS} -o ${ASN1SCC_PRODUCTS_DIR} ${ASN1ACNSOURCES}
+    cFromAsn1
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${ASN1SCC_C_DIR}
+    COMMAND ${ASN1SCC} ${ASN1SCC_C_OPTIONS} -o ${ASN1SCC_C_DIR} ${ASN1ACNSOURCES}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Generating code using Asn1Scc"
     VERBATIM)
 
 if (TARGET ${TARGET_NAME})
-    add_dependencies(${TARGET_NAME} codeFromAsn1)
+    add_dependencies(${TARGET_NAME} cFromAsn1)
 endif()
 
 set_property(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${ASN1SCC_PRODUCTS_DIR})
-include_directories(${ASN1SCC_PRODUCTS_DIR})
+include_directories(${ASN1SCC_C_DIR})
 
 add_custom_target(
   icdFromAsn1
