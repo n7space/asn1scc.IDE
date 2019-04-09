@@ -1,5 +1,6 @@
 TEMPLATE = lib
 CONFIG -= qt
+CONFIG += generateC
 
 %{JS: if (%{AddAsnFile} && %{AddAcnFile})
         'DISTFILES += \\\\ \n    %{AsnRelativePath}/%{AsnFile} \\\\ \n    %{AcnRelativePath}/%{AcnFile}'

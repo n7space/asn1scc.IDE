@@ -24,11 +24,12 @@
 isEmpty(ASN1SCC): ASN1SCC = $$(ASN1SCC)
 isEmpty(ASN1SCC): ASN1SCC = asn1.exe
 isEmpty(ASN1SCC_PRODUCTS_DIR): ASN1SCC_PRODUCTS_DIR = $$shell_path($${OUT_PWD}/asn1sccGenerated)
-isEmpty(ASN1SCC_SRC_DIR): ASN1SCC_SRC_DIR = $$shell_path($${ASN1SCC_PRODUCTS_DIR}/src)
-isEmpty(ASN1SCC_GENERATION_OPTIONS): ASN1SCC_GENERATION_OPTIONS = --c-lang --acn-enc --field-prefix AUTO --type-prefix T
+isEmpty(ASN1SCC_COMMON_OPTIONS): ASN1SCC_COMMON_OPTIONS = --acn-enc --field-prefix AUTO --type-prefix T
+isEmpty(ASN1SCC_C_OPTIONS): ASN1SCC_C_OPTIONS = --c-lang $${ASN1SCC_COMMON_OPTIONS}
+isEmpty(ASN1SCC_C_DIR): ASN1SCC_C_DIR = $$shell_path($${ASN1SCC_PRODUCTS_DIR}/c)
 isEmpty(ASN1SCC_ICD_DIR): ASN1SCC_ICD_DIR = $$shell_path($${ASN1SCC_PRODUCTS_DIR}/icd)
 isEmpty(ASN1SCC_ICD_FILE): ASN1SCC_ICD_FILE = ICD.html
-isEmpty(ASN1SCC_ICD_OPTIONS): ASN1SCC_ICD_OPTIONS = --field-prefix AUTO --type-prefix T -icdAcn
+isEmpty(ASN1SCC_ICD_OPTIONS): ASN1SCC_ICD_OPTIONS = $${ASN1SCC_COMMON_OPTIONS} -icdAcn
 
 include(updateSourcesList.pri)
 include(generateFromAsn1.pri)

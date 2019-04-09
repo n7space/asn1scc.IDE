@@ -21,7 +21,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #######################################################################
 
-ASN1_MAIN_GENERATED_HEADER = $${ASN1SCC_SRC_DIR}/asn1crt.h
+ASN1_MAIN_GENERATED_HEADER = $$clean_path($${ASN1SCC_C_DIR}/asn1crt.h)
 
 defineReplace(createDependencyOrder) {
   file = $${1}
@@ -29,7 +29,7 @@ defineReplace(createDependencyOrder) {
 
   stripedFile = $$replace(file, " ", "")
 
-  eval($${stripedFile}_custom.target = $${file})
+  eval($${stripedFile}_custom.target = $$relative_path($${file},$${OUT_PWD}))
   eval($${stripedFile}_custom.depends = $${ASN1_MAIN_GENERATED_HEADER})
   eval(export($${stripedFile}_custom.target))
   eval(export($${stripedFile}_custom.depends))
@@ -76,7 +76,7 @@ defineReplace(createGeneratedFilesList) {
     extension = $${2}
 
     for(name, sourcesNames) {
-        source = $$clean_path($${ASN1SCC_SRC_DIR}/$${name}.$${extension})
+        source = $$clean_path($${ASN1SCC_C_DIR}/$${name}.$${extension})
         sources += $$createDependencyOrder($$source, $$name)
     }
 
@@ -86,15 +86,17 @@ defineReplace(createGeneratedFilesList) {
 names = $$createFileNames($$DISTFILES)
 
 !isEmpty(names) {
-    PERSISTENT_HEADERS = $${ASN1_MAIN_GENERATED_HEADER}
-    PERSISTENT_SOURCES = $${ASN1SCC_SRC_DIR}/asn1crt.c $${ASN1SCC_SRC_DIR}/real.c
+    names += asn1crt real
 
-    contains(ASN1SCC_GENERATION_OPTIONS, --acn-enc) {
-        PERSISTENT_SOURCES += $${ASN1SCC_SRC_DIR}/acn.c
+    contains(ASN1SCC_C_OPTIONS, --acn-enc) {
+        names += acn
     }
 }
 
-SOURCES += $$createGeneratedFilesList($$names, "c") $$createEmptyFiles($$PERSISTENT_SOURCES)
-HEADERS += $$createGeneratedFilesList($$names, "h") $$createEmptyFiles($$PERSISTENT_HEADERS)
+generateC {
+    SOURCES += $$createGeneratedFilesList($$names, "c")
+    HEADERS += $$createGeneratedFilesList($$names, "h")
+    HEADERS += $$createEmptyFiles($$ASN1_MAIN_GENERATED_HEADER)
 
-INCLUDEPATH += $$ASN1SCC_SRC_DIR
+    INCLUDEPATH += $$ASN1SCC_C_DIR
+}
