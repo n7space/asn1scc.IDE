@@ -21,6 +21,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #######################################################################
 
+option(ASN1SCC_GENERATE_C "Generate C code from ASN.1" ON)
+option(ASN1SCC_GENERATE_ADA "Generate Ada code from ASN.1" OFF)
+
 if(NOT ASN1SCC)
   set(ASN1SCC $ENV{ASN1SCC})
   if(NOT ASN1SCC)
@@ -45,11 +48,15 @@ if(NOT ASN1SCC_PRODUCTS_DIR)
 endif()
 
 if(NOT ASN1SCC_C_DIR)
-    set(ASN1SCC_C_DIR ${ASN1SCC_PRODUCTS_DIR}/src)
+    set(ASN1SCC_C_DIR ${ASN1SCC_PRODUCTS_DIR}/c)
+endif()
+
+if(NOT ASN1SCC_ADA_DIR)
+    set(ASN1SCC_ADA_DIR ${ASN1SCC_PRODUCTS_DIR}/ada)
 endif()
 
 if(NOT ASN1SCC_ICD_DIR)
-    set(ASN1SCC_ICD_DIR ${PROJECT_BINARY_DIR}/asn1sccGenerated/icd)
+    set(ASN1SCC_ICD_DIR ${ASN1SCC_PRODUCTS_DIR}/icd)
 endif()
 
 if(NOT ASN1SCC_ICD_FILE)

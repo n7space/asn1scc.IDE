@@ -26,15 +26,28 @@ add_custom_target(
     COMMAND ${CMAKE_COMMAND} -E make_directory ${ASN1SCC_C_DIR}
     COMMAND ${ASN1SCC} ${ASN1SCC_C_OPTIONS} -o ${ASN1SCC_C_DIR} ${ASN1ACNSOURCES}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Generating code using Asn1Scc"
+    COMMENT "Generating C code using Asn1Scc"
+    VERBATIM)
+
+add_custom_target(
+    adaFromAsn1
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${ASN1SCC_ADA_DIR}
+    COMMAND ${ASN1SCC} ${ASN1SCC_ADA_OPTIONS} -o ${ASN1SCC_ADA_DIR} ${ASN1ACNSOURCES}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMENT "Generating Ada code using Asn1Scc"
     VERBATIM)
 
 if (TARGET ${TARGET_NAME})
-    add_dependencies(${TARGET_NAME} cFromAsn1)
+    if(ASN1SCC_GENERATE_C)
+        add_dependencies(${TARGET_NAME} cFromAsn1)
+        include_directories(${ASN1SCC_C_DIR})
+    endif()
+    if(ASN1SCC_GENERATE_ADA)
+        add_dependencies(${TARGET_NAME} adaFromAsn1)
+    endif()
 endif()
 
 set_property(DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${ASN1SCC_PRODUCTS_DIR})
-include_directories(${ASN1SCC_C_DIR})
 
 add_custom_target(
   icdFromAsn1
