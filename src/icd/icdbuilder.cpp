@@ -95,7 +95,7 @@ BuildStep *modifiedBuildStep(BuildStepList *steps)
     return modifiedCMakeBuildStep(steps);
 }
 
-std::shared_ptr<BuildConfiguration> prepareClone(BuildConfiguration *buildConfig)
+std::shared_ptr<BuildConfiguration> wrapForProperDeletion(BuildConfiguration *buildConfig)
 {
     auto result = std::shared_ptr<BuildConfiguration>{buildConfig};
     QObject::connect(BuildManager::instance(),
@@ -104,24 +104,24 @@ std::shared_ptr<BuildConfiguration> prepareClone(BuildConfiguration *buildConfig
     return result;
 }
 
-std::shared_ptr<BuildConfiguration> config(Project *project)
+std::shared_ptr<BuildConfiguration> cloneActiveConfiguration(Project *project)
 {
     const auto target = project->activeTarget();
-    if (!target)
+    if (target == nullptr)
         return nullptr;
 
     const auto buildConfig = target->activeBuildConfiguration();
     const auto factory = IBuildConfigurationFactory::find(target);
 
-    if (!factory || !buildConfig)
+    if (factory == nullptr || buildConfig == nullptr)
         return nullptr;
 
-    return prepareClone(factory->clone(target, buildConfig));
+    return wrapForProperDeletion(factory->clone(target, buildConfig));
 }
 
-BuildStepList *buildSteps(Project *project)
+BuildStepList *cloneBuildStepsFrom(Project *project)
 {
-    auto buildConfig = config(project);
+    auto buildConfig = cloneActiveConfiguration(project);
     if (buildConfig == nullptr)
         return nullptr;
     return buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD));
@@ -156,7 +156,7 @@ IcdBuilder::~IcdBuilder() {}
 
 void IcdBuilder::run(ProjectExplorer::Project *project)
 {
-    auto steps = buildSteps(project);
+    auto steps = cloneBuildStepsFrom(project);
     auto step = (steps != nullptr) ? modifiedBuildStep(steps) : nullptr;
 
     if (!step) {
