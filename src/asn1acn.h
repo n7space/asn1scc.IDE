@@ -36,10 +36,12 @@
 #include "fuzzer/fuzzerparamsdialog.h"
 #include "fuzzer/fuzzerparamsprovider.h"
 
-#include "icdbuilder.h"
-
 namespace Asn1Acn {
 namespace Internal {
+
+namespace Icd {
+class IcdBuilder;
+}
 
 class Asn1AcnPlugin : public ExtensionSystem::IPlugin
 {
@@ -93,7 +95,7 @@ private:
 
     QAction *m_findUsagesAction;
 
-    std::shared_ptr<ICDBuilder> m_builder;
+    std::shared_ptr<Icd::IcdBuilder> m_builder;
 
 #ifdef WITH_TESTS
     QList<QObject *> createTestObjects() const override;
