@@ -23,7 +23,7 @@ Errors reported by ASN1SCC are highlighted - both during typing and after compil
 ![Screen-Error](images/screen-error.png)
 
 ## New project type
-QMake and CMake projects with ASN.1/ACN models can be created. During build ASN.1/ACN files included in the project are used to generate and compile C code.
+QMake and CMake projects with ASN.1/ACN models can be created. During build ASN.1/ACN files included in the project are used to generate and compile C or Ada code (QMake - `CONFIG += generateAda`).
 ![Screen-New-Project](images/screen-new-project.png)
 
 ## File outline
