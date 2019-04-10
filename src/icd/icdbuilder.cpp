@@ -68,7 +68,7 @@ bool icdGenerationFinished(const QString &line)
 BuildStep *modifiedMakeBuildStep(BuildStepList *steps)
 {
     auto step = steps->firstOfType<MakeStep>();
-    if (!step)
+    if (step == nullptr)
         return nullptr;
     step->setBuildTarget(ICD_TARGET_NAME, true);
     return step;
@@ -159,7 +159,7 @@ void IcdBuilder::run(ProjectExplorer::Project *project)
     auto steps = cloneBuildStepsFrom(project);
     auto step = (steps != nullptr) ? modifiedBuildStep(steps) : nullptr;
 
-    if (!step) {
+    if (step == nullptr) {
         displayWarning();
         return;
     }
