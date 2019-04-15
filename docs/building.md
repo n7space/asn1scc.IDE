@@ -6,7 +6,7 @@ Below are the instructions for both developers or users that, for any reason, ne
  * Clone of the plugin source `https://github.com/n7space/asn1scc.IDE.git`
  * C++14 compatible compiler
  * Qt 5.12
- * Qt Creator v4.8.1 built from source (instructions [here](https://doc-snapshots.qt.io/qtcreator-extending/getting-and-building.html))
+ * Qt Creator v4.9.0 built from source (instructions [here](https://doc-snapshots.qt.io/qtcreator-extending/getting-and-building.html))
  * [for debugging] Qt Creator built from source with `CONFIG+=debug`
  * [for development] Separate Qt Creator for editing source
  
