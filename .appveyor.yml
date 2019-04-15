@@ -3,13 +3,13 @@
 
 version: 4.9.0.{build}
 
-image: Visual Studio 2015
+image: Visual Studio 2017
 
 clone_folder: c:\projects\asn1scc.IDE\src
 
 environment:
-  QTDIR: C:\Qt\5.11\msvc2015
-  ENV_QTC_PLATFORM: vs2015_32
+  QTDIR: C:\Qt\5.12\msvc2017
+  ENV_QTC_PLATFORM: msvc2017_x86
   ENV_MSVC_PLATFORM: x86
   ENV_QTC_VERSION: 4.9.0
   ENV_QTC_VERSION_SHORT: 4.9
