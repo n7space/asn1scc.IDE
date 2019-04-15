@@ -15,7 +15,6 @@ elif [[ $CI == "true" && "$BUILD_OS_NAME" == "linux" ]]; then
     else
         QT_BIN_LINK="http://download.qt.io/official_releases/qtcreator/${ENV_QTC_VERSION_SHORT}/${ENV_QTC_VERSION}/installer_source/linux_gcc_64_rhel72/qtcreator.7z"
     fi
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 100 --slave /usr/bin/g++ g++ /usr/bin/g++-5
 fi
 
 echo "Getting QtCreator's source..."

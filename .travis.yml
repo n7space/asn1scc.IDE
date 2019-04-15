@@ -18,7 +18,7 @@ matrix:
   - os: osx
   fast_finish: true
 
-dist: trusty
+dist: xenial
 sudo: required
 
 env:
@@ -34,14 +34,11 @@ env:
 addons:
   apt:
     sources:
-    - sourceline: "ppa:beineri/opt-qt-5.10.1-trusty"
-    - ubuntu-toolchain-r-test
+    - sourceline: "ppa:beineri/opt-qt-5.12.2-xenial"
     packages:
-    - g++-5
-    - gcc-5
-    - qt510-meta-minimal
-    - qt510tools
-    - qt510script
+    - qt512-meta-minimal
+    - qt512tools
+    - qt512script
     - p7zip
     - libgl1-mesa-dev
 

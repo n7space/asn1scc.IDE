@@ -3,7 +3,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "${DIR}/setup-env.sh"
 
 if [[ $CI == "true" && $BUILD_OS_NAME == 'linux' ]]; then
-    . /opt/qt510/bin/qt510-env.sh
+    . /opt/qt512/bin/qt512-env.sh
     QMAKE_PARAMS="-spec linux-g++"
 fi
 
@@ -16,6 +16,7 @@ cd "${BUILD_DIR}"
 $CXX --version
 echo "Executing qmake..."
 set -x
+qmake -v
 qmake "${PROJECT_DIR}"/asn1acn.pro -r ${QMAKE_PARAMS} \
       CONFIG+=release \
       ${BUILD_TESTS} \
