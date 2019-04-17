@@ -60,7 +60,7 @@ after_build:
   - cmd: copy /Y %APPVEYOR_BUILD_FOLDER%\LICENSE Asn1Acn-LICENSE
   - cmd: copy /Y %APPVEYOR_BUILD_FOLDER%\README.md Asn1Acn-README.md
   - cmd: mkdir bin
-  - cmd: curl -c sharepointcookie -fsSL "https://n7space-my.sharepoint.com/:u:/p/kgrochowski/EZSwzkHV-C1Mn1nppkUqKIcBjFpzsn67G_N_1RMW2Yr7dQ?download=1" -o %DOWNLOAD_DIR%\asn1scc.7z
+  - cmd: curl -c "%DOWNLOAD_DIR%\sharepointcookie" -fsSL "https://n7space-my.sharepoint.com/:u:/p/kgrochowski/EZSwzkHV-C1Mn1nppkUqKIcBjFpzsn67G_N_1RMW2Yr7dQ?download=1" -o %DOWNLOAD_DIR%\asn1scc.7z
   - cmd: mkdir share\qtcreator\asn1acn\libs\PUS-C
   - cmd: curl -fsSL "https://github.com/n7space/asn1-pusc-lib/releases/download/%PUSC_VERSION%/Asn1Acn-PusC-Library-%PUSC_VERSION%.7z" -o %DOWNLOAD_DIR%/pusc-lib.7z
   - cmd: curl -fsSL "https://github.com/n7space/asn1scc.Fuzzer/releases/download/%FUZZER_VERSION%/asn1scc-Fuzzer-%FUZZER_VERSION%-win.zip" -o %DOWNLOAD_DIR%/fuzzer.zip
