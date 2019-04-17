@@ -37,9 +37,6 @@ class EditorWidget : public TextEditor::TextEditorWidget
 {
     Q_OBJECT
 
-public:
-    virtual void findUsages() = 0;
-
 protected:
     void openFinishedSuccessfully() override;
 
