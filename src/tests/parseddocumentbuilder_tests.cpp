@@ -55,7 +55,7 @@ void ParsedDocumentBuilderTests::test_failed()
 
     builder->run();
 
-    QTest::qWait(200);
+    QTest::qWait(500);
 
     QCOMPARE(spyFailed.count(), 1);
     QCOMPARE(spyErrored.count(), 0);

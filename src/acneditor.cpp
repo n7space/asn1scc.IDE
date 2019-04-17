@@ -59,7 +59,7 @@ AcnEditorFactory::AcnEditorFactory()
     setEditorCreator([]() { return new AcnEditor; });
 
     setCompletionAssistProvider(new Completion::AcnCompletionAssistProvider);
-    setIndenterCreator([]() { return new Indenter; });
+    setIndenterCreator([](QTextDocument *doc) { return new Indenter(doc); });
     setAutoCompleterCreator([]() { return new Completion::AutoCompleter; });
 
     addHoverHandler(new TextEditor::BaseHoverHandler);

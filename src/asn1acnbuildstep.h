@@ -26,9 +26,6 @@
 
 #include <memory>
 
-#include <QFutureInterface>
-#include <QFutureWatcher>
-
 #include <projectexplorer/abstractprocessstep.h>
 
 namespace Asn1Acn {
@@ -43,32 +40,19 @@ public:
                               const char *id,
                               const QString &displayName);
 
-    bool init(QList<const BuildStep *> &earlierSteps) override;
-    void run(QFutureInterface<bool> &) override;
+    bool init() override;
+    void doRun() override;
 
     ProjectExplorer::BuildStepConfigWidget *createConfigWidget() override { return nullptr; }
-
-private slots:
-    void onFinish();
 
 private:
     virtual QString executablePath() const = 0;
     virtual QString arguments() const = 0;
 
-    void updateInput(QFutureInterface<bool> &f);
     void updateProcess(const QString &command, const QString &arg);
     void updateCommand();
 
-    bool finishCommand();
-    void finishInput(bool success);
-
     void updateEnvironment(const ProjectExplorer::BuildConfiguration *bc);
-
-    QFutureWatcher<bool> m_inputWatcher;
-    QFutureInterface<bool> m_inputFuture;
-
-    QFutureWatcher<bool> m_commandWatcher;
-    std::unique_ptr<QFutureInterface<bool>> m_commandFuture;
 };
 
 } // namespace Internal

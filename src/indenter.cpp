@@ -31,7 +31,9 @@
 
 using namespace Asn1Acn::Internal;
 
-Indenter::Indenter() {}
+Indenter::Indenter(QTextDocument *doc)
+    : TextEditor::TextIndenter(doc)
+{}
 
 Indenter::~Indenter() {}
 
@@ -52,7 +54,9 @@ static int adjustForClosingBracket(const QTextBlock &block)
     return 0;
 }
 
-int Indenter::indentFor(const QTextBlock &block, const TextEditor::TabSettings &tabSettings)
+int Indenter::indentFor(const QTextBlock &block,
+                        const TextEditor::TabSettings &tabSettings,
+                        int /*cursorPositionInEditor*/)
 {
     QTextBlock previous = block.previous();
     if (!previous.isValid())

@@ -111,7 +111,7 @@ std::shared_ptr<BuildConfiguration> cloneActiveConfiguration(Project *project)
         return nullptr;
 
     const auto buildConfig = target->activeBuildConfiguration();
-    const auto factory = IBuildConfigurationFactory::find(target);
+    const auto factory = BuildConfigurationFactory::find(target);
 
     if (factory == nullptr || buildConfig == nullptr)
         return nullptr;

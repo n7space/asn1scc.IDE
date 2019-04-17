@@ -41,9 +41,9 @@ IndenterTests::IndenterTests(QObject *parent)
 
 void IndenterTests::initTestCase()
 {
-    m_indenter = new Indenter;
-
     m_document = new QTextDocument;
+    m_indenter = new Indenter(m_document);
+
     m_document->setPlainText(
                 /*  0 */  "    TestingAutocompletion DEFINITIONS ::= BEGIN\n"
                 /*  1 */  "    EXPORTS ALL;\n"
@@ -82,10 +82,8 @@ void IndenterTests::cleanupTestCase()
 
 void IndenterTests::test_curlyBracketsAreElectric()
 {
-    Indenter indenter;
-
-    QVERIFY(indenter.isElectricCharacter(QLatin1Char('{')));
-    QVERIFY(indenter.isElectricCharacter(QLatin1Char('}')));
+    QVERIFY(m_indenter->isElectricCharacter(QLatin1Char('{')));
+    QVERIFY(m_indenter->isElectricCharacter(QLatin1Char('}')));
 }
 
 void IndenterTests::test_firstLine()

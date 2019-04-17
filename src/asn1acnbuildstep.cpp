@@ -39,41 +39,22 @@ Asn1AcnBuildStep::Asn1AcnBuildStep(ProjectExplorer::BuildStepList *parent,
                                    const char *id,
                                    const QString &displayName)
     : AbstractProcessStep(parent, Core::Id(id))
-    , m_commandFuture(nullptr)
 {
     setDefaultDisplayName(displayName);
-
-    connect(&m_inputWatcher, &QFutureWatcher<bool>::canceled, this, [this]() {
-        if (m_commandFuture)
-            m_commandFuture->cancel();
-    });
-
-    connect(&m_commandWatcher, &QFutureWatcher<bool>::finished, this, &Asn1AcnBuildStep::onFinish);
 }
 
-bool Asn1AcnBuildStep::init(QList<const BuildStep *> &earlierSteps)
+bool Asn1AcnBuildStep::init()
 {
-    if (m_commandFuture) {
-        addOutput(tr("Command already running"), BuildStep::OutputFormat::ErrorMessage);
-        return false;
-    }
-
     updateEnvironment(buildConfiguration());
-
     setOutputParser(new Asn1AcnErrorParser);
-
-    return AbstractProcessStep::init(earlierSteps);
+    return AbstractProcessStep::init();
 }
 
-void Asn1AcnBuildStep::run(QFutureInterface<bool> &f)
+void Asn1AcnBuildStep::doRun()
 {
     addOutput(tr("Starting Asn1Scc build step"), BuildStep::OutputFormat::NormalMessage);
-
-    updateInput(f);
     updateProcess(executablePath(), arguments());
-    updateCommand();
-
-    AbstractProcessStep::run(*m_commandFuture);
+    AbstractProcessStep::doRun();
 }
 
 void Asn1AcnBuildStep::updateEnvironment(const ProjectExplorer::BuildConfiguration *bc)
@@ -82,52 +63,10 @@ void Asn1AcnBuildStep::updateEnvironment(const ProjectExplorer::BuildConfigurati
     pp->setEnvironment(bc->environment());
 }
 
-void Asn1AcnBuildStep::updateInput(QFutureInterface<bool> &f)
-{
-    m_inputFuture = f;
-    m_inputFuture.setProgressRange(0, 1);
-    m_inputFuture.setProgressValue(0);
-    m_inputWatcher.setFuture(m_inputFuture.future());
-}
-
 void Asn1AcnBuildStep::updateProcess(const QString &command, const QString &arg)
 {
     auto *pp = processParameters();
     pp->setCommand(command);
     pp->setArguments(arg);
     pp->resolveAll();
-}
-
-void Asn1AcnBuildStep::updateCommand()
-{
-    QTC_ASSERT(!m_commandFuture || m_commandFuture->future().isFinished(), return );
-    m_commandFuture.reset(new QFutureInterface<bool>);
-    m_commandWatcher.setFuture(m_commandFuture->future());
-}
-
-void Asn1AcnBuildStep::onFinish()
-{
-    bool success = finishCommand();
-    finishInput(success);
-}
-
-bool Asn1AcnBuildStep::finishCommand()
-{
-    bool success = false;
-    if (m_commandFuture->isCanceled())
-        addOutput(tr("Asn1Acn build step cancelled"), BuildStep::OutputFormat::ErrorMessage);
-    else if (m_commandFuture->isFinished())
-        success = m_commandFuture->future().result();
-
-    m_commandFuture.reset();
-
-    return success;
-}
-
-void Asn1AcnBuildStep::finishInput(bool success)
-{
-    m_inputFuture.setProgressValue(1);
-    reportRunResult(m_inputFuture, success);
-
-    m_inputFuture = QFutureInterface<bool>();
 }

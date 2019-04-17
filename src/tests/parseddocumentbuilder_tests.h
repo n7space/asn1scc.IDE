@@ -39,7 +39,7 @@ class ParsedDocumentBuilderTests : public QObject
     Q_OBJECT
 
 public:
-    explicit ParsedDocumentBuilderTests(QObject *parent = 0);
+    explicit ParsedDocumentBuilderTests(QObject *parent = nullptr);
     ~ParsedDocumentBuilderTests();
 
 private slots:

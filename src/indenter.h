@@ -25,20 +25,22 @@
 
 #pragma once
 
-#include <texteditor/indenter.h>
+#include <texteditor/textindenter.h>
 
 namespace Asn1Acn {
 namespace Internal {
 
-class Indenter : public TextEditor::Indenter
+class Indenter : public TextEditor::TextIndenter
 {
 public:
-    Indenter();
-    ~Indenter();
+    Indenter(QTextDocument *doc);
+    ~Indenter() override;
 
     bool isElectricCharacter(const QChar &ch) const override;
 
-    int indentFor(const QTextBlock &block, const TextEditor::TabSettings &tabSettings) override;
+    int indentFor(const QTextBlock &block,
+                  const TextEditor::TabSettings &tabSettings,
+                  int cursorPositionInEditor = -1) override;
 };
 
 } // namespace Internal
