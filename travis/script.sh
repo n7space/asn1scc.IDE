@@ -27,10 +27,6 @@ echo "Executing make..."
 make || exit 1
 
 if [[ $ENV_WITH_TESTS == "1" && $BUILD_OS_NAME == 'linux' ]]; then
-    echo "Starting xvfb..."
-    export DISPLAY=:99.0
-    sh -e /etc/init.d/xvfb start
-    sleep 3
     echo "Executing tests..."
     ${QTC_BUILD_DIR}/bin/qtcreator -test "ASN.1/ACN" || exit 1
 fi
