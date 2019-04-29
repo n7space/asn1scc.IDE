@@ -1,7 +1,7 @@
 {
     \"Name\" : \"ASN.1/ACN\",
-    \"Version\" : \"4.9.0\",
-    \"CompatVersion\" : \"4.9.0\",
+    \"Version\" : \"4.9.1\",
+    \"CompatVersion\" : \"4.9.1\",
     \"Vendor\" : \"N7 Space sp. z o.o.\",
     \"Copyright\" : \"(C) 2017-2019 N7 Space sp. z o.o.\",
     \"License\" : \"GPL v3.0\",
