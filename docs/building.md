@@ -35,7 +35,7 @@ Executing tests in "release" mode requires Qt Creator to be built with `CONFIG+=
 ## Updating Travis
 Travis task executes plugin's unit tests, which requires specific build of Qt Creator, which is not distributed.
 Developers need to update Travis environment each time supported Qt Creator version is changed.
- 1. Create Ubuntu 14.04 machine with g++, make and 7z packages
+ 1. Create Ubuntu 16.04 machine with g++, make and 7z packages
  2. Install proper Qt package (recommended - [ppa:beineri](https://launchpad.net/~beineri))
  3. Clone required Qt Creator version and checkout tag
  4. Configure Qt Creator build: `qmake -r ../qtcreator CONFIG+=release BUILD_TESTS=1`
