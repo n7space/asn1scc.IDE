@@ -1,7 +1,7 @@
 # Appveyor project configuration file
 # Build the plugin on Windows environment
 
-version: 4.9.0.{build}
+version: 4.9.2.{build}
 
 image: Visual Studio 2017
 
