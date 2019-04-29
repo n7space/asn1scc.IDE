@@ -30,6 +30,7 @@ class QAction;
 
 namespace ProjectExplorer {
 class Project;
+class Node;
 } // namespace ProjectExplorer
 
 namespace Asn1Acn {
@@ -43,7 +44,7 @@ public:
     ProjectMenuImportItemController(QAction *menuItem, QObject *parent = nullptr);
 
 private slots:
-    void onCurrentProjectChanged(ProjectExplorer::Project *project);
+    void onAboutToShowContextMenu(ProjectExplorer::Project *project, ProjectExplorer::Node *node);
 
 private:
     QAction *m_menuItem;

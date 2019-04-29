@@ -39,19 +39,15 @@ ProjectMenuImportItemController::ProjectMenuImportItemController(QAction *menuIt
     , m_menuItem(menuItem)
 {
     connect(ProjectExplorer::ProjectTree::instance(),
-            &ProjectExplorer::ProjectTree::currentProjectChanged,
+            &ProjectExplorer::ProjectTree::aboutToShowContextMenu,
             this,
-            &ProjectMenuImportItemController::onCurrentProjectChanged);
+            &ProjectMenuImportItemController::onAboutToShowContextMenu);
 }
 
-void ProjectMenuImportItemController::onCurrentProjectChanged(ProjectExplorer::Project *project)
+void ProjectMenuImportItemController::onAboutToShowContextMenu(ProjectExplorer::Project *project,
+                                                               ProjectExplorer::Node *node)
 {
-    if (project == nullptr)
+    if (project == nullptr || node == nullptr)
         return;
-
-    const auto node = project->rootProjectNode();
-    if (node == nullptr)
-        return;
-
     m_menuItem->setEnabled(node->supportsAction(ProjectExplorer::AddExistingFile, node));
 }
