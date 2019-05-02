@@ -24,6 +24,9 @@ Many features of the plugin depends on [ASN1SCC](https://github.com/ttsiodras/as
     * `/opt/Qt/Tools/QtCreator/` on Linux  
     * `C:\Qt\Tools\QtCreator` on Windows   
  3. Run Qt Creator - plugin should be available on plugins list in *Help > About Plugins...* ![Screen-About](images/screen-about.png)
+ 
+# Demo
+ * [Virtual machine](https://n7space-my.sharepoint.com/:u:/p/kgrochowski/Ebp4n72J2BFImwS53Zkt0voB6ypHd910BcwEfMMFtnmeYA?download=1) with preinstalled Qt Creator and plugin on Ubuntu.
 
 # See also
  * [Features](features.html)
