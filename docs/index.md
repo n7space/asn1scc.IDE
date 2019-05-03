@@ -27,7 +27,7 @@ Many features of the plugin depends on [ASN1SCC](https://github.com/ttsiodras/as
  
 # Demo
  * [Virtual machine](https://n7space-my.sharepoint.com/:u:/p/kgrochowski/Ebp4n72J2BFImwS53Zkt0voB6ypHd910BcwEfMMFtnmeYA?download=1) with preinstalled Qt Creator and plugin on Ubuntu.
- * Short introduction [video](https://youtu.be/TheXu3x8I1Y)
+ * Short introduction [video](https://youtu.be/TheXu3x8I1Y).
 
 # See also
  * [Features](features.html)
