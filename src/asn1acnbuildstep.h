@@ -41,9 +41,10 @@ public:
                               const QString &displayName);
 
     bool init() override;
+    void setupOutputFormatter(Utils::OutputFormatter *formatter) override;
     void doRun() override;
 
-    ProjectExplorer::BuildStepConfigWidget *createConfigWidget() override { return nullptr; }
+    QWidget *createConfigWidget() override { return nullptr; }
 
 private:
     virtual QString executablePath() const = 0;

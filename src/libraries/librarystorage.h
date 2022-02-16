@@ -30,6 +30,7 @@
 
 #include <QMutex>
 #include <QString>
+#include <QObject>
 
 #include "metadata/general.h"
 #include "metadata/library.h"

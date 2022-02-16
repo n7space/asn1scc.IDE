@@ -124,7 +124,7 @@ BuildStepList *cloneBuildStepsFrom(Project *project)
     auto buildConfig = cloneActiveConfiguration(project);
     if (buildConfig == nullptr)
         return nullptr;
-    return buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD));
+    return buildConfig->buildSteps();
 }
 
 void displayWarning()

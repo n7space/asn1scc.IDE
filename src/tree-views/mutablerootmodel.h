@@ -36,13 +36,13 @@ class MutableRootModel : public Model
 {
     Q_OBJECT
 protected:
-    explicit MutableRootModel(const Utils::FileName &filePath, QObject *parent = 0);
+    explicit MutableRootModel(const Utils::FilePath &filePath, QObject *parent = 0);
 
 private:
     void onEndResetModel() override;
 
 private:
-    Utils::FileName m_filePath;
+    Utils::FilePath m_filePath;
 };
 
 } // namespace TreeViews

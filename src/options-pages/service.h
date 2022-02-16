@@ -44,7 +44,7 @@ class Service : public Core::IOptionsPage
 public:
     Service(Settings::ServicePtr settings);
 
-    bool matches(const QString &searchKeyWord) const override;
+    bool matches(const QRegularExpression &regexp) const override;
     QWidget *widget() override;
     void apply() override;
     void finish() override;

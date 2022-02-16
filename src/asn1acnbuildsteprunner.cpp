@@ -26,6 +26,7 @@
 
 #include <projectexplorer/buildconfiguration.h>
 #include <projectexplorer/buildmanager.h>
+#include <projectexplorer/buildsteplist.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectexplorerconstants.h>
 #include <projectexplorer/target.h>
@@ -53,7 +54,7 @@ Asn1AcnBuildStep *Asn1AcnBuildStepRunner::newStep(const ProjectExplorer::Project
     if (buildConfig == nullptr)
         return nullptr;
 
-    auto stepsList = buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD));
+    auto stepsList = buildConfig->buildSteps();
     auto step = createStep(stepsList);
 
     m_cache.add(project->displayName(), step);

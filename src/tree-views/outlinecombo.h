@@ -40,7 +40,7 @@ class OutlineCombo : public Utils::TreeViewComboBox
 {
     Q_OBJECT
 public:
-    OutlineCombo(const Utils::FileName &filePath, TextEditor::TextEditorWidget *textEditor);
+    OutlineCombo(const Utils::FilePath &filePath, TextEditor::TextEditorWidget *textEditor);
 
 private slots:
     void modelRootChanged();

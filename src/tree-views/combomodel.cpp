@@ -32,7 +32,7 @@ using namespace Asn1Acn::Internal::TreeViews::ComboVisitors;
 using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
 
-ComboModel::ComboModel(const Utils::FileName &filePath, QObject *parent)
+ComboModel::ComboModel(const Utils::FilePath &filePath, QObject *parent)
     : MutableRootModel(filePath, parent)
 {}
 

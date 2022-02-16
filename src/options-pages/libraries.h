@@ -41,7 +41,7 @@ class Libraries : public Core::IOptionsPage
 public:
     Libraries(Settings::LibrariesPtr settings);
 
-    bool matches(const QString &searchKeyWord) const override;
+    bool matches(const QRegularExpression &regexp) const override;
     QWidget *widget() override;
     void apply() override;
     void finish() override;

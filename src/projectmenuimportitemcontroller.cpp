@@ -44,10 +44,9 @@ ProjectMenuImportItemController::ProjectMenuImportItemController(QAction *menuIt
             &ProjectMenuImportItemController::onAboutToShowContextMenu);
 }
 
-void ProjectMenuImportItemController::onAboutToShowContextMenu(ProjectExplorer::Project *project,
-                                                               ProjectExplorer::Node *node)
+void ProjectMenuImportItemController::onAboutToShowContextMenu(ProjectExplorer::Node *node)
 {
-    if (project == nullptr || node == nullptr)
+    if (node == nullptr)
         return;
     m_menuItem->setEnabled(node->supportsAction(ProjectExplorer::AddExistingFile, node));
 }

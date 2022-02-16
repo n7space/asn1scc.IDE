@@ -96,7 +96,7 @@ private:
     Entry buildEntry(const Data::Node *node)
     {
         const auto icon = node->valueFor<TreeViews::DecorationRoleVisitor>();
-        Entry entry(m_parent, node->name(), qVariantFromValue(node->location()), icon);
+        Entry entry(m_parent, node->name(), QVariant::fromValue(node->location()), icon);
         entry.extraInfo = node->parent()->name();
         return entry;
     }

@@ -61,7 +61,7 @@ protected:
     QModelIndex findIndexInLocation(const QModelIndex &parentIndex,
                                     Data::SourceLocation cursorLocation) const;
     Data::SourceLocation getCurrentLocation() const;
-    Utils::FileName currentFilePath() const;
+    Utils::FilePath currentFilePath() const;
     bool editorEmpty() const;
 
     const ParsedDataStorage *const m_storage;

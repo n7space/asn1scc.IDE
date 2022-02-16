@@ -43,13 +43,13 @@ Libraries::Libraries(Settings::LibrariesPtr settings)
     setCategory(Constants::SETTINGS_CATEGORY);
 }
 
-bool Libraries::matches(const QString &searchKeyWord) const
+bool Libraries::matches(const QRegularExpression &regexp) const
 {
     const QStringList keywords{"asn1", "asn.1", "acn", "libraries", "components"};
     for (const auto &keyword : keywords)
-        if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
+        if (keyword.contains(regexp.pattern(), Qt::CaseInsensitive))
             return true;
-    return Core::IOptionsPage::matches(searchKeyWord);
+    return Core::IOptionsPage::matches(regexp);
 }
 
 QWidget *Libraries::widget()

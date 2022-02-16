@@ -32,14 +32,12 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class Asn1AcnErrorParser : public ProjectExplorer::IOutputParser
+class Asn1AcnErrorParser : public ProjectExplorer::OutputTaskParser
 {
     Q_OBJECT
 
-public:
-    void stdError(const QString &line) override;
-
 private:
+    Result handleLine(const QString &line, Utils::OutputFormat type) override;
     ErrorMessageParser m_parser;
 };
 

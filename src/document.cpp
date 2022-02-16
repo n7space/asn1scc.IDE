@@ -60,7 +60,7 @@ void Document::scheduleProcessDocument()
     m_processorTimer.start();
 }
 
-void Document::onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath)
+void Document::onFilePathChanged(const Utils::FilePath &oldPath, const Utils::FilePath &newPath)
 {
     if (newPath.isEmpty() || newPath == oldPath)
         return;

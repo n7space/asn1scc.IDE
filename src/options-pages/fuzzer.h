@@ -41,7 +41,7 @@ class Fuzzer : public Core::IOptionsPage
 public:
     Fuzzer(Settings::FuzzerPtr settings);
 
-    bool matches(const QString &searchKeyWord) const override;
+    bool matches(const QRegularExpression &regexp) const override;
     QWidget *widget() override;
     void apply() override;
     void finish() override;

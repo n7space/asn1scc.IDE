@@ -44,7 +44,7 @@ QTextCursor SelectionPositionResolverTests::getInitializedCursor(const QByteArra
                                                                  const int position)
 {
     m_doc->setContents(content);
-    m_doc->setFilePath(Utils::FileName::fromString("myPath"));
+    m_doc->setFilePath(Utils::FilePath::fromString("myPath"));
 
     QTextCursor cursor(m_doc->document());
     cursor.setPosition(position);

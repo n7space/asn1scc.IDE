@@ -34,7 +34,7 @@ class OutlineModel : public MutableRootModel
 {
     Q_OBJECT
 public:
-    explicit OutlineModel(const Utils::FileName &filePath, QObject *parent = 0);
+    explicit OutlineModel(const Utils::FilePath &filePath, QObject *parent = 0);
     ~OutlineModel();
 
 private:

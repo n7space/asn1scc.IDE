@@ -95,7 +95,7 @@ void Asn1Acn::Internal::Tools::switchBetweenDataAndEncodingInNextSplit()
     const QString otherFile = findDataOrEncodingForCurrentDocument();
     if (!otherFile.isEmpty())
         Core::EditorManager::openEditor(otherFile,
-                                        Core::Id(),
+                                        Utils::Id(),
                                         Core::EditorManager::OpenInOtherSplit);
 }
 

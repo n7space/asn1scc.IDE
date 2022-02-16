@@ -22,52 +22,37 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "fuzzerparamsprovider.h"
+#pragma once
 
-#include <projectexplorer/target.h>
+#include <projectexplorer/kitmanager.h>
+#include <projectexplorer/task.h>
 
-#include "kitaspect.h"
+namespace Asn1Acn {
+namespace Internal {
 
-using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::Fuzzer;
-
-FuzzerParamsProvider::FuzzerParamsProvider(Settings::FuzzerConstPtr settings)
-    : m_settings(settings)
-{}
-
-void FuzzerParamsProvider::setRootTypeName(const QString &name)
+class KitAspect : public ProjectExplorer::KitAspect
 {
-    m_rootTypeName = name;
-}
+public:
+    using Kit = ProjectExplorer::Kit;
+    using Task = ProjectExplorer::Task;
 
-void FuzzerParamsProvider::setOutputPath(const QString &path)
-{
-    m_outputPath = path;
-}
+    KitAspect();
 
-QString FuzzerParamsProvider::asn1sccPath(const ProjectExplorer::Target *target) const
-{
-    return KitAspect::hasAsn1Exe(target->kit())
-               ? KitAspect::asn1Exe(target->kit()).toString()
-               : QString();
-}
+    static Utils::Id id();
+    static bool hasAsn1Exe(const Kit *k);
+    static Utils::FilePath asn1Exe(const Kit *k);
+    static void setAsn1Exe(Kit *k, const Utils::FilePath &v);
 
-QString FuzzerParamsProvider::fuzzerPath() const
-{
-    return m_settings->path();
-}
+    ProjectExplorer::Tasks validate(const Kit *k) const override;
 
-QString FuzzerParamsProvider::outputPath() const
-{
-    return m_outputPath;
-}
+    ItemList toUserOutput(const Kit *kit) const override;
+    ProjectExplorer::KitAspectWidget *createConfigWidget(Kit *kit) const override;
 
-QString FuzzerParamsProvider::rootTypeName() const
-{
-    return m_rootTypeName;
-}
+    void addToEnvironment(const Kit *k, Utils::Environment &env) const override;
+    void addToMacroExpander(Kit *kit, Utils::MacroExpander *expander) const override;
+private:
+    QVariant defaultValue(const Kit *k) const;
+};
 
-QString FuzzerParamsProvider::asn1acnFiles() const
-{
-    return {};
-}
+} // namespace Internal
+} // namespace Asn1Acn

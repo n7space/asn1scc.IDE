@@ -78,7 +78,7 @@ void ComboModelTests::test_modelWithDummyPopulation()
                                                std::make_unique<Data::Types::Integer>()));
     root->add(std::move(definitions2));
 
-    auto model = new ComboModel(Utils::FileName::fromString(filePath), this);
+    auto model = new ComboModel(Utils::FilePath::fromString(filePath), this);
     model->setRoot(root.get());
 
     ModelTest testNonEmptyModel(model, this);

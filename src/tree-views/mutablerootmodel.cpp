@@ -29,7 +29,7 @@
 
 using namespace Asn1Acn::Internal::TreeViews;
 
-MutableRootModel::MutableRootModel(const Utils::FileName &filePath, QObject *parent)
+MutableRootModel::MutableRootModel(const Utils::FilePath &filePath, QObject *parent)
     : Model(parent)
     , m_filePath(filePath)
 {

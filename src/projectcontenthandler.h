@@ -55,22 +55,22 @@ public:
     void handleProjectAdded(const QString &projectName);
     void handleProjectRemoved(const QString &projectName);
 
-    void handleFileListChanged(const QString &projectName, const Utils::FileNameList &fileList);
-    void handleFileContentChanged(const Utils::FileName &path);
+    void handleFileListChanged(const QString &projectName, const Utils::FilePaths &fileList);
+    void handleFileContentChanged(const Utils::FilePath &path);
 
 private slots:
     void onFilesProcessingFinished(const QString &projectName);
 
 private:
-    void removeStaleFiles(const QString &projectName, const Utils::FileNameList &filePaths);
+    void removeStaleFiles(const QString &projectName, const Utils::FilePaths &filePaths);
 
-    Utils::FileNameList getStaleFilesPaths(const QString &projectName,
-                                           const Utils::FileNameList &filePaths) const;
+    Utils::FilePaths getStaleFilesPaths(const QString &projectName,
+                                           const Utils::FilePaths &filePaths) const;
 
-    void processFiles(const QString &projectName, const Utils::FileNameList &filePaths);
+    void processFiles(const QString &projectName, const Utils::FilePaths &filePaths);
 
     DocumentProcessor *createDocumentProcessor(const QString &projectName,
-                                               const Utils::FileNameList &filePaths) const;
+                                               const Utils::FilePaths &filePaths) const;
     void startProcessing(DocumentProcessor *dp);
     void allProcessingFinished();
 

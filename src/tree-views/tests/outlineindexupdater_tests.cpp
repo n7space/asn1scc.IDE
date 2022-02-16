@@ -83,7 +83,7 @@ ParsedDataStorage *OutlineIndexUpdaterTests::createStorage()
 TextEditor::TextEditorWidget *OutlineIndexUpdaterTests::createEditorWidget()
 {
     TextEditor::TextDocument *document = new TextEditor::TextDocument;
-    Utils::FileName fileName = Utils::FileName::fromString("file1.asn1");
+    Utils::FilePath fileName = Utils::FilePath::fromString("file1.asn1");
     document->setFilePath(fileName);
 
     // clang-format off

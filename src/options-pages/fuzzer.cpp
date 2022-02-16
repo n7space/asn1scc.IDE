@@ -25,6 +25,7 @@
 #include "fuzzer.h"
 
 #include <QWidget>
+#include <QRegularExpression>
 
 #include <tr.h>
 
@@ -43,13 +44,13 @@ Fuzzer::Fuzzer(Settings::FuzzerPtr settings)
     setCategory(Constants::SETTINGS_CATEGORY);
 }
 
-bool Fuzzer::matches(const QString &searchKeyWord) const
+bool Fuzzer::matches(const QRegularExpression &regexp) const
 {
     const QStringList keywords{"asn1", "asn.1", "acn", "test", "fuzzer", "asn1scc"};
     for (const auto &keyword : keywords)
-        if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
+        if (keyword.contains(regexp.pattern(), Qt::CaseInsensitive))
             return true;
-    return Core::IOptionsPage::matches(searchKeyWord);
+    return Core::IOptionsPage::matches(regexp);
 }
 
 QWidget *Fuzzer::widget()

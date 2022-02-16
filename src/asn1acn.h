@@ -59,8 +59,8 @@ public:
 private slots:
     void raiseImportComponentWindow(ProjectExplorer::Project *project);
     void findUsages();
-    void onTaskStarted(Core::Id id);
-    void onTaskFinished(Core::Id id);
+    void onTaskStarted(Utils::Id id);
+    void onTaskFinished(Utils::Id id);
 
 private:
     using ActionContainer = Core::ActionContainer;
@@ -98,7 +98,7 @@ private:
     std::shared_ptr<Icd::IcdBuilder> m_builder;
 
 #ifdef WITH_TESTS
-    QList<QObject *> createTestObjects() const override;
+    QVector<QObject *> createTestObjects() const override;
 #endif
 
     class Asn1AcnPluginPrivate *d = nullptr;

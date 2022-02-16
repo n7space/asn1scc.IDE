@@ -64,6 +64,5 @@ QString decorateMessage(const QString &message, MessageManager::Type type)
 
 void MessageManager::write(const QString &message, MessageManager::Type type)
 {
-    Core::MessageManager::write(decorateMessage(message, type),
-                                Core::MessageManager::PrintToOutputPaneFlag::Silent);
+    Core::MessageManager::writeSilently(decorateMessage(message, type));
 }

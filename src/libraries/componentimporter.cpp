@@ -124,7 +124,7 @@ QStringList ComponentImporter::createUniqueFilesList(const ProjectExplorer::Proj
     const auto projectFiles = project->files(ProjectExplorer::Project::SourceFiles);
 
     for (const auto &file : newFiles)
-        if (!projectFiles.contains(Utils::FileName::fromString(file)))
+        if (!projectFiles.contains(Utils::FilePath::fromString(file)))
             uniqueFiles.append(file);
 
     return uniqueFiles;

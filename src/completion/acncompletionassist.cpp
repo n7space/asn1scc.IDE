@@ -38,7 +38,7 @@ AcnCompletionAssistProcessor::AcnCompletionAssistProcessor()
 std::unique_ptr<ProposalsBuilder> AcnCompletionAssistProcessor::createKeywordsProposalsBuilder() const
 {
     auto provider = std::make_unique<AcnKeywordProposalsBuilder>();
-    return std::move(provider);
+    return provider;
 }
 
 TextEditor::IAssistProcessor *AcnCompletionAssistProvider::createProcessor() const

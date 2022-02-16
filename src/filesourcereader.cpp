@@ -59,7 +59,7 @@ QString FileSourceReader::readFromFile(const QString &fileName) const
 
 QString FileSourceReader::readFromDocumentModel(const QString &fileName) const
 {
-    const auto document = Core::DocumentModel::documentForFilePath(fileName);
+    const auto document = Core::DocumentModel::documentForFilePath(Utils::FilePath::fromString(fileName));
     if (document == nullptr)
         return QString();
 

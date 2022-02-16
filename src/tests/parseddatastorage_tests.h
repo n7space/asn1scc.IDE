@@ -57,9 +57,9 @@ private slots:
 private:
     void addFileToProject(ParsedDataStorage *storage,
                           const QString &project,
-                          const Utils::FileName &filePath);
+                          const Utils::FilePath &filePath);
 
-    Utils::FileName pathFromName(const QString &name);
+    Utils::FilePath pathFromName(const QString &name);
 };
 
 } // namespace Tests

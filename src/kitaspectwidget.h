@@ -22,52 +22,33 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "fuzzerparamsprovider.h"
+#pragma once
 
-#include <projectexplorer/target.h>
+#include <projectexplorer/kitmanager.h>
+#include <utils/pathchooser.h>
 
-#include "kitaspect.h"
+namespace Asn1Acn {
+namespace Internal {
 
-using namespace Asn1Acn::Internal;
-using namespace Asn1Acn::Internal::Fuzzer;
-
-FuzzerParamsProvider::FuzzerParamsProvider(Settings::FuzzerConstPtr settings)
-    : m_settings(settings)
-{}
-
-void FuzzerParamsProvider::setRootTypeName(const QString &name)
+class KitAspectWidget : public ProjectExplorer::KitAspectWidget
 {
-    m_rootTypeName = name;
-}
+    Q_OBJECT
+public:
+    KitAspectWidget(ProjectExplorer::Kit *kit, const ProjectExplorer::KitAspect *ka);
+    ~KitAspectWidget();
 
-void FuzzerParamsProvider::setOutputPath(const QString &path)
-{
-    m_outputPath = path;
-}
+    void makeReadOnly() override;
+    void refresh() override;
 
-QString FuzzerParamsProvider::asn1sccPath(const ProjectExplorer::Target *target) const
-{
-    return KitAspect::hasAsn1Exe(target->kit())
-               ? KitAspect::asn1Exe(target->kit()).toString()
-               : QString();
-}
+    QWidget *mainWidget() const override;
+    QWidget *buttonWidget() const override;
 
-QString FuzzerParamsProvider::fuzzerPath() const
-{
-    return m_settings->path();
-}
+private:
+    void pathWasChanged();
 
-QString FuzzerParamsProvider::outputPath() const
-{
-    return m_outputPath;
-}
+    Utils::PathChooser *m_chooser;
+    bool m_ignoreChange = false;
+};
 
-QString FuzzerParamsProvider::rootTypeName() const
-{
-    return m_rootTypeName;
-}
-
-QString FuzzerParamsProvider::asn1acnFiles() const
-{
-    return {};
-}
+} // namespace Internal
+} // namespace Asn1Acn

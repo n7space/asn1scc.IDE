@@ -58,7 +58,7 @@ TextEditor::IAssistProposal *CompletionAssistProcessor::perform(
 
     Proposals proposals;
 
-    appendProposalsFromUserTypes(proposals, interface->fileName());
+    appendProposalsFromUserTypes(proposals, interface->filePath().toString());
     appendProposalsFromSnippets(proposals);
     appendProposalsFromKeywords(proposals);
 
@@ -76,7 +76,7 @@ void CompletionAssistProcessor::appendProposalsFromUserTypes(Proposals &proposal
 {
     ParsedDataStorage *storage = ParsedDataStorage::instance();
 
-    const auto file = storage->getAnyFileForPath(Utils::FileName::fromString(fileName));
+    const auto file = storage->getAnyFileForPath(Utils::FilePath::fromString(fileName));
     if (file == nullptr)
         return;
 

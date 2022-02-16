@@ -138,7 +138,7 @@ Data::SourceLocation SynchronizedIndexUpdater::getCurrentLocation() const
     return Data::SourceLocation(currentFilePath().toString(), line, column);
 }
 
-Utils::FileName SynchronizedIndexUpdater::currentFilePath() const
+Utils::FilePath SynchronizedIndexUpdater::currentFilePath() const
 {
     return m_editorWidget->textDocument()->filePath();
 }

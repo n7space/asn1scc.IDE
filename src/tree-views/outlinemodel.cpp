@@ -32,7 +32,7 @@ using namespace Asn1Acn::Internal::TreeViews::OutlineVisitors;
 using namespace Asn1Acn::Internal::TreeViews;
 using namespace Asn1Acn::Internal::Data;
 
-OutlineModel::OutlineModel(const Utils::FileName &filePath, QObject *parent)
+OutlineModel::OutlineModel(const Utils::FilePath &filePath, QObject *parent)
     : MutableRootModel(filePath, parent)
 {}
 

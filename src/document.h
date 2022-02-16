@@ -48,7 +48,7 @@ signals:
 private slots:
     void onModelChanged();
     void onFileContentChanged();
-    void onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath);
+    void onFilePathChanged(const Utils::FilePath &oldPath, const Utils::FilePath &newPath);
 
 private:
     void scheduleProcessDocument();

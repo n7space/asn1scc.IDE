@@ -251,9 +251,9 @@ void ProjectContentHandlerTests::fileListChanged(const QString &projectName,
     QCOMPARE(spyAboutToUpdate.count(), 1);
     QCOMPARE(m_guard->isValid(), false);
 
-    Utils::FileNameList nameList;
+    Utils::FilePaths nameList;
     for (const auto &file : files)
-        nameList.append(Utils::FileName::fromString(file));
+        nameList.append(Utils::FilePath::fromString(file));
     pch->handleFileListChanged(projectName, nameList);
 
     QCOMPARE(spyUpdated.count(), 1);
@@ -273,7 +273,7 @@ void ProjectContentHandlerTests::fileContentChanged(const QString &path)
     QCOMPARE(spyAboutToUpdate.count(), 1);
     QCOMPARE(m_guard->isValid(), false);
 
-    pch->handleFileContentChanged(Utils::FileName::fromString(path));
+    pch->handleFileContentChanged(Utils::FilePath::fromString(path));
 
     QCOMPARE(spyUpdated.count(), 1);
     QCOMPARE(m_guard->isValid(), true);
