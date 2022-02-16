@@ -105,10 +105,10 @@ names = $$createFileNames($$DISTFILES)
 generateC {
     cNames = $$names
     !isEmpty(names) {
-        cNames += asn1crt real
+        cNames += asn1crt
 
         contains(ASN1SCC_C_OPTIONS, --acn-enc) {
-            cNames += acn
+            cNames += asn1crt_encoding asn1crt_encoding_acn asn1crt_encoding_uper
         }
     }
 
