@@ -26,10 +26,10 @@
 # Qt Creator linking
 
 IDE_SOURCE_TREE = $$QTC_SOURCE
-isEmpty(IDE_SOURCE_TREE): IDE_SOURCE_TREE = "/home/igor/Desktop/4.15.2/qt-creator-4.15.2"
+isEmpty(IDE_SOURCE_TREE): IDE_SOURCE_TREE = "/opt/qt-creator-dev/qt-creator"
 
 IDE_BUILD_TREE = $$QTC_BUILD
-isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = "/home/igor/Desktop/4.15.2/build"
+isEmpty(IDE_BUILD_TREE): IDE_BUILD_TREE = "/opt/qt-creator-dev/build-debug"
 
 QTC_PLUGIN_NAME = Asn1Acn
 QTC_LIB_DEPENDS += \
@@ -44,9 +44,6 @@ QTC_PLUGIN_RECOMMENDS += \
     # optional plugin dependencies. nothing here at this time
 
 include($$IDE_SOURCE_TREE/src/qtcreatorplugin.pri)
-
-QMAKE_LFLAGS += -L/home/igor/Desktop/4.15.2/qt-creator-4.15.2/lib/qtcreator/plugins
-QMAKE_LFLAGS += -L/home/igor/Desktop/4.15.2/qt-creator-4.15.2/lib/qtcreator
 
 ### Plugin ###
 

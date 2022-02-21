@@ -32,28 +32,26 @@
 
 using namespace Asn1Acn::Internal;
 
-// TODO sprawdzic
 Utils::OutputLineParser::Result Asn1AcnErrorParser::handleLine(const QString &line,
                                                                Utils::OutputFormat type)
 {
-    if (type == Utils::OutputFormat::StdErrFormat) {
-        if (line.isEmpty())
-            return Status::NotHandled;
+    if (type != Utils::OutputFormat::StdErrFormat)
+        return Status::NotHandled;
 
-        const auto error = m_parser.parse(line);
-        if (!error.isValid())
-            return Status::NotHandled;
+    if (line.isEmpty())
+        return Status::NotHandled;
 
-        ProjectExplorer::Task task(ProjectExplorer::Task::Error,
-                                   error.message(),
-                                   Utils::FilePath::fromString(error.location().path()),
-                                   error.location().line(),
-                                   ProjectExplorer::Constants::TASK_CATEGORY_COMPILE);
+    const auto error = m_parser.parse(line);
+    if (!error.isValid())
+        return Status::NotHandled;
 
-        scheduleTask(task, 1);
+    ProjectExplorer::Task task(ProjectExplorer::Task::Error,
+                               error.message(),
+                               Utils::FilePath::fromString(error.location().path()),
+                               error.location().line(),
+                               ProjectExplorer::Constants::TASK_CATEGORY_COMPILE);
 
-        return Status::Done;
-    }
+    scheduleTask(task, 1);
 
-    return Status::NotHandled;
+    return Status::Done;
 }

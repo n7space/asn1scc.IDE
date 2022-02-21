@@ -32,7 +32,7 @@ KitAspectWidget::KitAspectWidget(ProjectExplorer::Kit *kit, const ProjectExplore
     : ProjectExplorer::KitAspectWidget(kit, ka)
     , m_chooser(new Utils::PathChooser)
 {
-    m_chooser->setToolTip("Path to ASN1SCC executable.");
+    m_chooser->setToolTip(tr("Path to ASN1SCC executable."));
     m_chooser->setExpectedKind(Utils::PathChooser::ExistingCommand);
     m_chooser->setHistoryCompleter(QLatin1String("Asn1Acn.Asn1Exe.History"));
     m_chooser->setFilePath(KitAspect::asn1Exe(kit));

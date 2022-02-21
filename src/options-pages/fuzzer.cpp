@@ -48,7 +48,7 @@ bool Fuzzer::matches(const QRegularExpression &regexp) const
 {
     const QStringList keywords{"asn1", "asn.1", "acn", "test", "fuzzer", "asn1scc"};
     for (const auto &keyword : keywords)
-        if (keyword.contains(regexp.pattern(), Qt::CaseInsensitive))
+        if (keyword.contains(regexp))
             return true;
     return Core::IOptionsPage::matches(regexp);
 }

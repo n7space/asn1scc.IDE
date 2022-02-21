@@ -38,12 +38,14 @@ function(tryCreateFiles fileNames)
 endfunction()
 
 function(appendPersistentListC)
-    set(persistentFiles ${ASN1SCC_C_DIR}/asn1crt.c)
+    set(persistentFiles ${ASN1SCC_C_DIR}/asn1crt.c ${ASN1SCC_C_DIR}/asn1crt_encoding.c)
 
     list(FIND ASN1SCC_C_OPTIONS --acn-enc ACN_ENCODING_IDX)
+    list(FIND ASN1SCC_C_OPTIONS --uper-enc UPER_ENCODING_IDX)
     if (NOT ${ACN_ENCODING_IDX} EQUAL -1)
-        set(persistentFiles ${persistentFiles} ${ASN1SCC_C_DIR}/asn1crt_encoding.c
-            ${ASN1SCC_C_DIR}/asn1crt_encoding_acn.c ${ASN1SCC_C_DIR}/asn1crt_encoding_uper.c)
+        set(persistentFiles ${persistentFiles} ${ASN1SCC_C_DIR}/asn1crt_encoding_acn.c)
+    elseif (NOT ${UPER_ENCODING_IDX} EQUAL -1)
+        set(persistentFiles ${persistentFiles} ${ASN1SCC_C_DIR}/asn1crt_encoding_uper.c)
     endif()
 
     tryCreateFiles("${persistentFiles}")

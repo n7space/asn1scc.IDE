@@ -51,7 +51,7 @@ bool Service::matches(const QRegularExpression &regexp) const
 {
     const QStringList keywords{"asn1scc", "daemon", "asn1.exe", "asn1", "asn.1", "acn"};
     for (const auto &keyword : keywords)
-        if (keyword.contains(regexp.pattern(), Qt::CaseInsensitive))
+        if (keyword.contains(regexp))
             return true;
     return Core::IOptionsPage::matches(regexp);
 }

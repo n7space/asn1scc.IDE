@@ -47,7 +47,7 @@ bool Libraries::matches(const QRegularExpression &regexp) const
 {
     const QStringList keywords{"asn1", "asn.1", "acn", "libraries", "components"};
     for (const auto &keyword : keywords)
-        if (keyword.contains(regexp.pattern(), Qt::CaseInsensitive))
+        if (keyword.contains(regexp))
             return true;
     return Core::IOptionsPage::matches(regexp);
 }
