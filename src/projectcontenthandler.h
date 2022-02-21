@@ -65,7 +65,7 @@ private:
     void removeStaleFiles(const QString &projectName, const Utils::FilePaths &filePaths);
 
     Utils::FilePaths getStaleFilesPaths(const QString &projectName,
-                                           const Utils::FilePaths &filePaths) const;
+                                        const Utils::FilePaths &filePaths) const;
 
     void processFiles(const QString &projectName, const Utils::FilePaths &filePaths);
 

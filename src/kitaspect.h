@@ -50,6 +50,7 @@ public:
 
     void addToEnvironment(const Kit *k, Utils::Environment &env) const override;
     void addToMacroExpander(Kit *kit, Utils::MacroExpander *expander) const override;
+
 private:
     QVariant defaultValue(const Kit *k) const;
 };

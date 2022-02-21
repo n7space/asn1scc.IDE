@@ -33,10 +33,10 @@
 using namespace Asn1Acn::Internal;
 
 // TODO sprawdzic
-Utils::OutputLineParser::Result Asn1AcnErrorParser::handleLine(const QString &line, Utils::OutputFormat type)
+Utils::OutputLineParser::Result Asn1AcnErrorParser::handleLine(const QString &line,
+                                                               Utils::OutputFormat type)
 {
-    if (type == Utils::OutputFormat::StdErrFormat)
-    {
+    if (type == Utils::OutputFormat::StdErrFormat) {
         if (line.isEmpty())
             return Status::NotHandled;
 

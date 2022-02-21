@@ -171,7 +171,8 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     initializeMenus(fuzzerSettings);
 
-    Core::JsExpander::registerGlobalObject(QLatin1String("Asn1Acn"), []{return new Asn1AcnJsExtension();});
+    Core::JsExpander::registerGlobalObject(QLatin1String("Asn1Acn"),
+                                           [] { return new Asn1AcnJsExtension(); });
 
     connect(Core::ProgressManager::instance(),
             &Core::ProgressManager::taskStarted,
@@ -456,22 +457,24 @@ void Asn1AcnPlugin::onTaskFinished(Utils::Id id)
 QVector<QObject *> Asn1AcnPlugin::createTestObjects() const
 {
     return QVector<QObject *>() << new Libraries::Tests::ModuleMetadataParserTests
-                              << new Libraries::Tests::GeneralMetadataParserTests
-                              << new Libraries::Tests::MetadataModelTests
-                              << new Libraries::Tests::MetadataCheckStateHandlerTests
-                              << new Libraries::Tests::FileModelTests
-                              << new TreeViews::Tests::DisplayRoleVisitorTests
-                              << new TreeViews::Tests::OutlineIndexUpdaterTests
-                              << new TreeViews::Tests::OutlineModelTests
-                              << new TreeViews::Tests::ComboModelTests
-                              << new TreeViews::Tests::TypesTreeModelTests
-                              << new Tests::AstXmlParserTests << new Tests::ErrorMessageParserTests
-                              << new Tests::ParsedDocumentBuilderTests
-                              << new Tests::DocumentProcessorTests
-                              << new Tests::ProjectContentHandlerTests
-                              << new Tests::ParsedDataStorageTests << new Tests::AutoCompleterTests
-                              << new Tests::LinkCreatorTests << new Tests::IndenterTests
-                              << new Tests::SelectionPositionResolverTests;
+                                << new Libraries::Tests::GeneralMetadataParserTests
+                                << new Libraries::Tests::MetadataModelTests
+                                << new Libraries::Tests::MetadataCheckStateHandlerTests
+                                << new Libraries::Tests::FileModelTests
+                                << new TreeViews::Tests::DisplayRoleVisitorTests
+                                << new TreeViews::Tests::OutlineIndexUpdaterTests
+                                << new TreeViews::Tests::OutlineModelTests
+                                << new TreeViews::Tests::ComboModelTests
+                                << new TreeViews::Tests::TypesTreeModelTests
+                                << new Tests::AstXmlParserTests
+                                << new Tests::ErrorMessageParserTests
+                                << new Tests::ParsedDocumentBuilderTests
+                                << new Tests::DocumentProcessorTests
+                                << new Tests::ProjectContentHandlerTests
+                                << new Tests::ParsedDataStorageTests
+                                << new Tests::AutoCompleterTests << new Tests::LinkCreatorTests
+                                << new Tests::IndenterTests
+                                << new Tests::SelectionPositionResolverTests;
 }
 #endif
 

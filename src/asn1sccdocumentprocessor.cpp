@@ -31,12 +31,12 @@ using namespace Asn1Acn::Internal;
 
 Asn1SccDocumentProcessor *Asn1SccDocumentProcessor::create(const QString &projectName)
 {
-    return new Asn1SccDocumentProcessor(projectName,
-                                        [](const QHash<QString, QString> &documents)
-                                            -> ParsedDocumentBuilder * {
-                                            return Asn1SccParsedDocumentBuilder::create(documents);
-                                        },
-                                        ParsedDataStorage::instance());
+    return new Asn1SccDocumentProcessor(
+        projectName,
+        [](const QHash<QString, QString> &documents) -> ParsedDocumentBuilder * {
+            return Asn1SccParsedDocumentBuilder::create(documents);
+        },
+        ParsedDataStorage::instance());
 }
 
 Asn1SccDocumentProcessor::Asn1SccDocumentProcessor(const QString &projectName,

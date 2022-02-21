@@ -107,14 +107,15 @@ void ProjectContentHandler::removeStaleFiles(const QString &projectName,
         m_storage->removeFileFromProject(projectName, stalePath);
 }
 
-void ProjectContentHandler::processFiles(const QString &projectName, const Utils::FilePaths &filePaths)
+void ProjectContentHandler::processFiles(const QString &projectName,
+                                         const Utils::FilePaths &filePaths)
 {
     DocumentProcessor *dp = createDocumentProcessor(projectName, filePaths);
     startProcessing(dp);
 }
 
 Utils::FilePaths ProjectContentHandler::getStaleFilesPaths(const QString &projectName,
-                                                       const Utils::FilePaths &filePaths) const
+                                                           const Utils::FilePaths &filePaths) const
 {
     const auto staleFileList = m_storage->getFilesPathsFromProject(projectName);
     const auto pathsToRemove = staleFileList.toSet().subtract(filePaths.toSet());

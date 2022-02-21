@@ -29,7 +29,8 @@
 using namespace Asn1Acn::Internal;
 
 KitAspectWidget::KitAspectWidget(ProjectExplorer::Kit *kit, const ProjectExplorer::KitAspect *ka)
-    : ProjectExplorer::KitAspectWidget(kit, ka), m_chooser(new Utils::PathChooser)
+    : ProjectExplorer::KitAspectWidget(kit, ka)
+    , m_chooser(new Utils::PathChooser)
 {
     m_chooser->setToolTip("Path to ASN1SCC executable.");
     m_chooser->setExpectedKind(Utils::PathChooser::ExistingCommand);

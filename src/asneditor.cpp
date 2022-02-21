@@ -81,9 +81,8 @@ AsnEditorFactory::AsnEditorFactory()
 }
 
 AsnEditorWidget::AsnEditorWidget()
-    : m_usagesFinder(new UsagesFinder(ParsedDataStorage::instance(),
-                                      std::make_unique<FileSourceReader>(),
-                                      this))
+    : m_usagesFinder(
+        new UsagesFinder(ParsedDataStorage::instance(), std::make_unique<FileSourceReader>(), this))
 {}
 
 void AsnEditorWidget::findLinkAt(const QTextCursor &cursor,

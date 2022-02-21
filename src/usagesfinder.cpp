@@ -109,7 +109,9 @@ void UsagesFinder::displayResults(SearchResult *search,
 
         SearchResultItem searchResultItem;
         searchResultItem.setFilePath(Utils::FilePath::fromString(result.location().path()));
-        searchResultItem.setMainRange(result.location().line(), result.location().column(), result.name().length());
+        searchResultItem.setMainRange(result.location().line(),
+                                      result.location().column(),
+                                      result.name().length());
         searchResultItem.setLineText(readLine(result.location()));
 
         search->addResult(searchResultItem);
