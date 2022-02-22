@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -55,18 +55,18 @@ public:
     void removeProject(const QString &projectName);
 
     void addFileToProject(const QString &projectName, std::unique_ptr<Data::File> file);
-    void removeFileFromProject(const QString &projectName, const Utils::FileName &filePath);
+    void removeFileFromProject(const QString &projectName, const Utils::FilePath &filePath);
 
-    Data::File *getAnyFileForPath(const Utils::FileName &filePath) const;
-    Data::File *getFileForPathFromProject(const QString &project, const Utils::FileName &path);
+    Data::File *getAnyFileForPath(const Utils::FilePath &filePath) const;
+    Data::File *getFileForPathFromProject(const QString &project, const Utils::FilePath &path);
 
-    const QStringList getProjectsForFile(const Utils::FileName &filePath) const;
-    const Utils::FileNameList getFilesPathsFromProject(const QString &project) const;
+    const QStringList getProjectsForFile(const Utils::FilePath &filePath) const;
+    const Utils::FilePaths getFilesPathsFromProject(const QString &project) const;
 
-    Data::SourceLocation getDefinitionLocation(const Utils::FileName &path,
+    Data::SourceLocation getDefinitionLocation(const Utils::FilePath &path,
                                                const QString &typeAssignmentName,
                                                const QString &definitionsName) const;
-    const Data::TypeAssignment *getTypeAssignment(const Utils::FileName &path,
+    const Data::TypeAssignment *getTypeAssignment(const Utils::FilePath &path,
                                                   const QString &typeAssignmentName,
                                                   const QString &definitionsName) const;
 
@@ -78,11 +78,11 @@ public:
     int getDocumentsCount();
 
 private:
-    const QStringList getProjectsForFileInternal(const Utils::FileName &filePath) const;
-    const Utils::FileNameList getFilesPathsFromProjectInternal(const QString &projectName) const;
-    void removeFileFromProjectInternal(const QString &projectName, const Utils::FileName &filePath);
+    const QStringList getProjectsForFileInternal(const Utils::FilePath &filePath) const;
+    const Utils::FilePaths getFilesPathsFromProjectInternal(const QString &projectName) const;
+    void removeFileFromProjectInternal(const QString &projectName, const Utils::FilePath &filePath);
 
-    Data::File *getFileForPathInternal(const Utils::FileName &filePath) const;
+    Data::File *getFileForPathInternal(const Utils::FilePath &filePath) const;
 
     Data::SourceLocation getLocationFromModule(const Data::Definitions &moduleDefinition,
                                                const QString &typeAssignmentName) const;

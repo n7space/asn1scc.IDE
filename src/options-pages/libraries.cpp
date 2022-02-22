@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -43,13 +43,13 @@ Libraries::Libraries(Settings::LibrariesPtr settings)
     setCategory(Constants::SETTINGS_CATEGORY);
 }
 
-bool Libraries::matches(const QString &searchKeyWord) const
+bool Libraries::matches(const QRegularExpression &regexp) const
 {
     const QStringList keywords{"asn1", "asn.1", "acn", "libraries", "components"};
     for (const auto &keyword : keywords)
-        if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
+        if (keyword.contains(regexp))
             return true;
-    return Core::IOptionsPage::matches(searchKeyWord);
+    return Core::IOptionsPage::matches(regexp);
 }
 
 QWidget *Libraries::widget()

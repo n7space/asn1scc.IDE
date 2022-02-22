@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -72,7 +72,7 @@
 #include "asn1acnjsextension.h"
 #include "asn1sccserviceprovider.h"
 #include "asneditor.h"
-#include "kitinformation.h"
+#include "kitaspect.h"
 #include "projectmenuimportitemcontroller.h"
 #include "projectwatcher.h"
 #include "tools.h"
@@ -120,7 +120,6 @@ public:
         , m_asn1sccServiceProvider(serviceSettings)
     {
         ExtensionSystem::PluginManager::addObject(&m_asn1sccServiceProvider);
-        ProjectExplorer::KitManager::registerKitInformation<KitInformation>();
 
         m_asn1sccServiceProvider.start();
     }
@@ -129,6 +128,8 @@ public:
     {
         ExtensionSystem::PluginManager::removeObject(&m_asn1sccServiceProvider);
     }
+
+    KitAspect m_kitInformation;
 
     TreeViews::OutlineWidgetFactory m_outlineWidgetFactory;
     TreeViews::TypesTreeWidgetFactory m_typesTreeWidgetFactory;
@@ -170,7 +171,8 @@ bool Asn1AcnPlugin::initialize(const QStringList &arguments, QString *errorStrin
 
     initializeMenus(fuzzerSettings);
 
-    Core::JsExpander::registerQObjectForJs(QLatin1String("Asn1Acn"), new Asn1AcnJsExtension);
+    Core::JsExpander::registerGlobalObject(QLatin1String("Asn1Acn"),
+                                           [] { return new Asn1AcnJsExtension(); });
 
     connect(Core::ProgressManager::instance(),
             &Core::ProgressManager::taskStarted,
@@ -437,14 +439,14 @@ void Asn1AcnPlugin::raiseImportComponentWindow(ProjectExplorer::Project *project
     }
 }
 
-void Asn1AcnPlugin::onTaskStarted(Core::Id id)
+void Asn1AcnPlugin::onTaskStarted(Utils::Id id)
 {
     if (id == Constants::TASK_SEARCH) {
         m_findUsagesAction->setEnabled(false);
     }
 }
 
-void Asn1AcnPlugin::onTaskFinished(Core::Id id)
+void Asn1AcnPlugin::onTaskFinished(Utils::Id id)
 {
     if (id == Constants::TASK_SEARCH) {
         m_findUsagesAction->setEnabled(true);
@@ -452,25 +454,27 @@ void Asn1AcnPlugin::onTaskFinished(Core::Id id)
 }
 
 #ifdef WITH_TESTS
-QList<QObject *> Asn1AcnPlugin::createTestObjects() const
+QVector<QObject *> Asn1AcnPlugin::createTestObjects() const
 {
-    return QList<QObject *>() << new Libraries::Tests::ModuleMetadataParserTests
-                              << new Libraries::Tests::GeneralMetadataParserTests
-                              << new Libraries::Tests::MetadataModelTests
-                              << new Libraries::Tests::MetadataCheckStateHandlerTests
-                              << new Libraries::Tests::FileModelTests
-                              << new TreeViews::Tests::DisplayRoleVisitorTests
-                              << new TreeViews::Tests::OutlineIndexUpdaterTests
-                              << new TreeViews::Tests::OutlineModelTests
-                              << new TreeViews::Tests::ComboModelTests
-                              << new TreeViews::Tests::TypesTreeModelTests
-                              << new Tests::AstXmlParserTests << new Tests::ErrorMessageParserTests
-                              << new Tests::ParsedDocumentBuilderTests
-                              << new Tests::DocumentProcessorTests
-                              << new Tests::ProjectContentHandlerTests
-                              << new Tests::ParsedDataStorageTests << new Tests::AutoCompleterTests
-                              << new Tests::LinkCreatorTests << new Tests::IndenterTests
-                              << new Tests::SelectionPositionResolverTests;
+    return QVector<QObject *>() << new Libraries::Tests::ModuleMetadataParserTests
+                                << new Libraries::Tests::GeneralMetadataParserTests
+                                << new Libraries::Tests::MetadataModelTests
+                                << new Libraries::Tests::MetadataCheckStateHandlerTests
+                                << new Libraries::Tests::FileModelTests
+                                << new TreeViews::Tests::DisplayRoleVisitorTests
+                                << new TreeViews::Tests::OutlineIndexUpdaterTests
+                                << new TreeViews::Tests::OutlineModelTests
+                                << new TreeViews::Tests::ComboModelTests
+                                << new TreeViews::Tests::TypesTreeModelTests
+                                << new Tests::AstXmlParserTests
+                                << new Tests::ErrorMessageParserTests
+                                << new Tests::ParsedDocumentBuilderTests
+                                << new Tests::DocumentProcessorTests
+                                << new Tests::ProjectContentHandlerTests
+                                << new Tests::ParsedDataStorageTests
+                                << new Tests::AutoCompleterTests << new Tests::LinkCreatorTests
+                                << new Tests::IndenterTests
+                                << new Tests::SelectionPositionResolverTests;
 }
 #endif
 

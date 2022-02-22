@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -69,7 +69,7 @@ void UsagesFinder::findUsages(const QString &module, const QString &type)
     connect(search, &SearchResult::searchAgainRequested, this, &UsagesFinder::searchAgain);
 
     UsagesFinderParameters params{module, type};
-    search->setUserData(qVariantFromValue(params));
+    search->setUserData(QVariant::fromValue(params));
 
     findAll(search, params);
 }
@@ -106,11 +106,15 @@ void UsagesFinder::displayResults(SearchResult *search,
 {
     for (int index = first; index != last; ++index) {
         auto result = watcher->future().resultAt(index);
-        search->addResult(result.location().path(),
-                          result.location().line(),
-                          readLine(result.location()),
-                          result.location().column(),
-                          result.name().length());
+
+        SearchResultItem searchResultItem;
+        searchResultItem.setFilePath(Utils::FilePath::fromString(result.location().path()));
+        searchResultItem.setMainRange(result.location().line(),
+                                      result.location().column(),
+                                      result.name().length());
+        searchResultItem.setLineText(readLine(result.location()));
+
+        search->addResult(searchResultItem);
     }
 }
 
@@ -144,12 +148,12 @@ void UsagesFinder::createWatcher(const QFuture<TypeReference> &future, SearchRes
 namespace {
 void openEditor(const SearchResultItem &item)
 {
-    if (item.path.size() > 0) {
-        EditorManager::openEditorAt(QDir::fromNativeSeparators(item.path.first()),
-                                    item.mainRange.begin.line,
-                                    item.mainRange.begin.column);
+    if (item.path().size() > 0) {
+        EditorManager::openEditorAt(QDir::fromNativeSeparators(item.path().first()),
+                                    item.mainRange().begin.line,
+                                    item.mainRange().begin.column);
     } else {
-        EditorManager::openEditor(QDir::fromNativeSeparators(item.text));
+        EditorManager::openEditor(QDir::fromNativeSeparators(item.lineText()));
     }
 }
 } // namespace

@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -28,7 +28,7 @@
 #include <QtGlobal>
 
 #if defined(ASN1ACN_LIBRARY)
-#  define ASN1ACNSHARED_EXPORT Q_DECL_EXPORT
+#define ASN1ACNSHARED_EXPORT Q_DECL_EXPORT
 #else
-#  define ASN1ACNSHARED_EXPORT Q_DECL_IMPORT
+#define ASN1ACNSHARED_EXPORT Q_DECL_IMPORT
 #endif

@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2018-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2018-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -32,22 +32,26 @@
 
 using namespace Asn1Acn::Internal;
 
-void Asn1AcnErrorParser::stdError(const QString &line)
+Utils::OutputLineParser::Result Asn1AcnErrorParser::handleLine(const QString &line,
+                                                               Utils::OutputFormat type)
 {
+    if (type != Utils::OutputFormat::StdErrFormat)
+        return Status::NotHandled;
+
     if (line.isEmpty())
-        return;
+        return Status::NotHandled;
 
     const auto error = m_parser.parse(line);
     if (!error.isValid())
-        return;
+        return Status::NotHandled;
 
     ProjectExplorer::Task task(ProjectExplorer::Task::Error,
                                error.message(),
-                               Utils::FileName::fromString(error.location().path()),
+                               Utils::FilePath::fromString(error.location().path()),
                                error.location().line(),
                                ProjectExplorer::Constants::TASK_CATEGORY_COMPILE);
 
-    emit addTask(task, 1);
+    scheduleTask(task, 1);
 
-    IOutputParser::stdError(line);
+    return Status::Done;
 }

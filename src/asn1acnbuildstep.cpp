@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2018-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2018-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -38,7 +38,7 @@ using namespace Asn1Acn::Internal;
 Asn1AcnBuildStep::Asn1AcnBuildStep(ProjectExplorer::BuildStepList *parent,
                                    const char *id,
                                    const QString &displayName)
-    : AbstractProcessStep(parent, Core::Id(id))
+    : AbstractProcessStep(parent, Utils::Id(id))
 {
     setDefaultDisplayName(displayName);
 }
@@ -46,8 +46,13 @@ Asn1AcnBuildStep::Asn1AcnBuildStep(ProjectExplorer::BuildStepList *parent,
 bool Asn1AcnBuildStep::init()
 {
     updateEnvironment(buildConfiguration());
-    setOutputParser(new Asn1AcnErrorParser);
     return AbstractProcessStep::init();
+}
+
+void Asn1AcnBuildStep::setupOutputFormatter(Utils::OutputFormatter *formatter)
+{
+    formatter->addLineParser(new Asn1AcnErrorParser());
+    AbstractProcessStep::setupOutputFormatter(formatter);
 }
 
 void Asn1AcnBuildStep::doRun()
@@ -66,7 +71,7 @@ void Asn1AcnBuildStep::updateEnvironment(const ProjectExplorer::BuildConfigurati
 void Asn1AcnBuildStep::updateProcess(const QString &command, const QString &arg)
 {
     auto *pp = processParameters();
-    pp->setCommand(command);
-    pp->setArguments(arg);
-    pp->resolveAll();
+    Utils::CommandLine commandLine(command);
+    commandLine.addArg(arg);
+    pp->setCommandLine(commandLine);
 }

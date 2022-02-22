@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2018-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2018-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -26,7 +26,7 @@
 
 #include <projectexplorer/target.h>
 
-#include "kitinformation.h"
+#include "kitaspect.h"
 
 using namespace Asn1Acn::Internal;
 using namespace Asn1Acn::Internal::Fuzzer;
@@ -47,8 +47,8 @@ void FuzzerParamsProvider::setOutputPath(const QString &path)
 
 QString FuzzerParamsProvider::asn1sccPath(const ProjectExplorer::Target *target) const
 {
-    return KitInformation::hasAsn1Exe(target->kit())
-               ? KitInformation::asn1Exe(target->kit()).toString()
+    return KitAspect::hasAsn1Exe(target->kit())
+               ? KitAspect::asn1Exe(target->kit()).toString()
                : QString();
 }
 

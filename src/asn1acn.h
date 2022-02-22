@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -59,8 +59,8 @@ public:
 private slots:
     void raiseImportComponentWindow(ProjectExplorer::Project *project);
     void findUsages();
-    void onTaskStarted(Core::Id id);
-    void onTaskFinished(Core::Id id);
+    void onTaskStarted(Utils::Id id);
+    void onTaskFinished(Utils::Id id);
 
 private:
     using ActionContainer = Core::ActionContainer;
@@ -98,7 +98,7 @@ private:
     std::shared_ptr<Icd::IcdBuilder> m_builder;
 
 #ifdef WITH_TESTS
-    QList<QObject *> createTestObjects() const override;
+    QVector<QObject *> createTestObjects() const override;
 #endif
 
     class Asn1AcnPluginPrivate *d = nullptr;

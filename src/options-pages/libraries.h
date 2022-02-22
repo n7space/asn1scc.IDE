@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -41,7 +41,7 @@ class Libraries : public Core::IOptionsPage
 public:
     Libraries(Settings::LibrariesPtr settings);
 
-    bool matches(const QString &searchKeyWord) const override;
+    bool matches(const QRegularExpression &regexp) const override;
     QWidget *widget() override;
     void apply() override;
     void finish() override;

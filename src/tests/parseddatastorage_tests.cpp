@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -233,13 +233,13 @@ void ParsedDataStorageTests::test_getFilesFromNonExistingProject()
 
 void ParsedDataStorageTests::addFileToProject(ParsedDataStorage *storage,
                                               const QString &project,
-                                              const Utils::FileName &filePath)
+                                              const Utils::FilePath &filePath)
 {
     auto document = std::make_unique<Data::File>(filePath.toString());
     storage->addFileToProject(project, std::move(document));
 }
 
-Utils::FileName ParsedDataStorageTests::pathFromName(const QString &name)
+Utils::FilePath ParsedDataStorageTests::pathFromName(const QString &name)
 {
-    return Utils::FileName::fromString("/test/file/path/" + name);
+    return Utils::FilePath::fromString("/test/file/path/" + name);
 }

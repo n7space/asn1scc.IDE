@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2018-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2018-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -44,7 +44,7 @@ public:
     ProjectMenuImportItemController(QAction *menuItem, QObject *parent = nullptr);
 
 private slots:
-    void onAboutToShowContextMenu(ProjectExplorer::Project *project, ProjectExplorer::Node *node);
+    void onAboutToShowContextMenu(ProjectExplorer::Node *node);
 
 private:
     QAction *m_menuItem;

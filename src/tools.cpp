@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -95,7 +95,7 @@ void Asn1Acn::Internal::Tools::switchBetweenDataAndEncodingInNextSplit()
     const QString otherFile = findDataOrEncodingForCurrentDocument();
     if (!otherFile.isEmpty())
         Core::EditorManager::openEditor(otherFile,
-                                        Core::Id(),
+                                        Utils::Id(),
                                         Core::EditorManager::OpenInOtherSplit);
 }
 

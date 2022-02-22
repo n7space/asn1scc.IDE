@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -31,12 +31,12 @@ using namespace Asn1Acn::Internal;
 
 Asn1SccDocumentProcessor *Asn1SccDocumentProcessor::create(const QString &projectName)
 {
-    return new Asn1SccDocumentProcessor(projectName,
-                                        [](const QHash<QString, QString> &documents)
-                                            -> ParsedDocumentBuilder * {
-                                            return Asn1SccParsedDocumentBuilder::create(documents);
-                                        },
-                                        ParsedDataStorage::instance());
+    return new Asn1SccDocumentProcessor(
+        projectName,
+        [](const QHash<QString, QString> &documents) -> ParsedDocumentBuilder * {
+            return Asn1SccParsedDocumentBuilder::create(documents);
+        },
+        ParsedDataStorage::instance());
 }
 
 Asn1SccDocumentProcessor::Asn1SccDocumentProcessor(const QString &projectName,

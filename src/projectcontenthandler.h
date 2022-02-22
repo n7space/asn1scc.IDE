@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -55,22 +55,22 @@ public:
     void handleProjectAdded(const QString &projectName);
     void handleProjectRemoved(const QString &projectName);
 
-    void handleFileListChanged(const QString &projectName, const Utils::FileNameList &fileList);
-    void handleFileContentChanged(const Utils::FileName &path);
+    void handleFileListChanged(const QString &projectName, const Utils::FilePaths &fileList);
+    void handleFileContentChanged(const Utils::FilePath &path);
 
 private slots:
     void onFilesProcessingFinished(const QString &projectName);
 
 private:
-    void removeStaleFiles(const QString &projectName, const Utils::FileNameList &filePaths);
+    void removeStaleFiles(const QString &projectName, const Utils::FilePaths &filePaths);
 
-    Utils::FileNameList getStaleFilesPaths(const QString &projectName,
-                                           const Utils::FileNameList &filePaths) const;
+    Utils::FilePaths getStaleFilesPaths(const QString &projectName,
+                                        const Utils::FilePaths &filePaths) const;
 
-    void processFiles(const QString &projectName, const Utils::FileNameList &filePaths);
+    void processFiles(const QString &projectName, const Utils::FilePaths &filePaths);
 
     DocumentProcessor *createDocumentProcessor(const QString &projectName,
-                                               const Utils::FileNameList &filePaths) const;
+                                               const Utils::FilePaths &filePaths) const;
     void startProcessing(DocumentProcessor *dp);
     void allProcessingFinished();
 

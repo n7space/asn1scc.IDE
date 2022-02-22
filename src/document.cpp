@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -60,7 +60,7 @@ void Document::scheduleProcessDocument()
     m_processorTimer.start();
 }
 
-void Document::onFilePathChanged(const Utils::FileName &oldPath, const Utils::FileName &newPath)
+void Document::onFilePathChanged(const Utils::FilePath &oldPath, const Utils::FilePath &newPath)
 {
     if (newPath.isEmpty() || newPath == oldPath)
         return;

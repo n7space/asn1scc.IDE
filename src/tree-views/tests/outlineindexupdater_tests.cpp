@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -83,7 +83,7 @@ ParsedDataStorage *OutlineIndexUpdaterTests::createStorage()
 TextEditor::TextEditorWidget *OutlineIndexUpdaterTests::createEditorWidget()
 {
     TextEditor::TextDocument *document = new TextEditor::TextDocument;
-    Utils::FileName fileName = Utils::FileName::fromString("file1.asn1");
+    Utils::FilePath fileName = Utils::FilePath::fromString("file1.asn1");
     document->setFilePath(fileName);
 
     // clang-format off

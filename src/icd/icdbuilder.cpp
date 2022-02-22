@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2018-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2018-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -124,7 +124,7 @@ BuildStepList *cloneBuildStepsFrom(Project *project)
     auto buildConfig = cloneActiveConfiguration(project);
     if (buildConfig == nullptr)
         return nullptr;
-    return buildConfig->stepList(Core::Id(ProjectExplorer::Constants::BUILDSTEPS_BUILD));
+    return buildConfig->buildSteps();
 }
 
 void displayWarning()

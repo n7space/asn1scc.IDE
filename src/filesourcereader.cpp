@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -59,7 +59,8 @@ QString FileSourceReader::readFromFile(const QString &fileName) const
 
 QString FileSourceReader::readFromDocumentModel(const QString &fileName) const
 {
-    const auto document = Core::DocumentModel::documentForFilePath(fileName);
+    const auto document = Core::DocumentModel::documentForFilePath(
+        Utils::FilePath::fromString(fileName));
     if (document == nullptr)
         return QString();
 

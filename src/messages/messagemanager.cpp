@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -64,6 +64,5 @@ QString decorateMessage(const QString &message, MessageManager::Type type)
 
 void MessageManager::write(const QString &message, MessageManager::Type type)
 {
-    Core::MessageManager::write(decorateMessage(message, type),
-                                Core::MessageManager::PrintToOutputPaneFlag::Silent);
+    Core::MessageManager::writeSilently(decorateMessage(message, type));
 }

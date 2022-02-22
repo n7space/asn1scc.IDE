@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2018-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2018-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -44,10 +44,9 @@ ProjectMenuImportItemController::ProjectMenuImportItemController(QAction *menuIt
             &ProjectMenuImportItemController::onAboutToShowContextMenu);
 }
 
-void ProjectMenuImportItemController::onAboutToShowContextMenu(ProjectExplorer::Project *project,
-                                                               ProjectExplorer::Node *node)
+void ProjectMenuImportItemController::onAboutToShowContextMenu(ProjectExplorer::Node *node)
 {
-    if (project == nullptr || node == nullptr)
+    if (node == nullptr)
         return;
     m_menuItem->setEnabled(node->supportsAction(ProjectExplorer::AddExistingFile, node));
 }

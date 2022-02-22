@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -61,7 +61,7 @@ protected:
     QModelIndex findIndexInLocation(const QModelIndex &parentIndex,
                                     Data::SourceLocation cursorLocation) const;
     Data::SourceLocation getCurrentLocation() const;
-    Utils::FileName currentFilePath() const;
+    Utils::FilePath currentFilePath() const;
     bool editorEmpty() const;
 
     const ParsedDataStorage *const m_storage;

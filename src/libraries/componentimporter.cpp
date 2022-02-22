@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -124,7 +124,7 @@ QStringList ComponentImporter::createUniqueFilesList(const ProjectExplorer::Proj
     const auto projectFiles = project->files(ProjectExplorer::Project::SourceFiles);
 
     for (const auto &file : newFiles)
-        if (!projectFiles.contains(Utils::FileName::fromString(file)))
+        if (!projectFiles.contains(Utils::FilePath::fromString(file)))
             uniqueFiles.append(file);
 
     return uniqueFiles;

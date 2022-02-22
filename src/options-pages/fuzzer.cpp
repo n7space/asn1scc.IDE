@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -25,6 +25,7 @@
 #include "fuzzer.h"
 
 #include <QWidget>
+#include <QRegularExpression>
 
 #include <tr.h>
 
@@ -43,13 +44,13 @@ Fuzzer::Fuzzer(Settings::FuzzerPtr settings)
     setCategory(Constants::SETTINGS_CATEGORY);
 }
 
-bool Fuzzer::matches(const QString &searchKeyWord) const
+bool Fuzzer::matches(const QRegularExpression &regexp) const
 {
     const QStringList keywords{"asn1", "asn.1", "acn", "test", "fuzzer", "asn1scc"};
     for (const auto &keyword : keywords)
-        if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
+        if (keyword.contains(regexp))
             return true;
-    return Core::IOptionsPage::matches(searchKeyWord);
+    return Core::IOptionsPage::matches(regexp);
 }
 
 QWidget *Fuzzer::widget()

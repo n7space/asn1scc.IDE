@@ -1,6 +1,6 @@
 ######################################################################
-# Copyright (C) 2017-2019 N7 Space sp. z o. o.
-# Contact: http://n7space.com
+# Copyright (C) 2017-2022 N7 Space sp. z o. o.
+# Contact: https://n7space.com
 #
 # This file is part of ASN.1/ACN Plugin for QtCreator.
 #
@@ -38,11 +38,14 @@ function(tryCreateFiles fileNames)
 endfunction()
 
 function(appendPersistentListC)
-    set(persistentFiles ${ASN1SCC_C_DIR}/asn1crt.c ${ASN1SCC_C_DIR}/real.c)
+    set(persistentFiles ${ASN1SCC_C_DIR}/asn1crt.c ${ASN1SCC_C_DIR}/asn1crt_encoding.c)
 
     list(FIND ASN1SCC_C_OPTIONS --acn-enc ACN_ENCODING_IDX)
+    list(FIND ASN1SCC_C_OPTIONS --uper-enc UPER_ENCODING_IDX)
     if (NOT ${ACN_ENCODING_IDX} EQUAL -1)
-        set(persistentFiles ${persistentFiles} ${ASN1SCC_C_DIR}/acn.c)
+        set(persistentFiles ${persistentFiles} ${ASN1SCC_C_DIR}/asn1crt_encoding_acn.c)
+    elseif (NOT ${UPER_ENCODING_IDX} EQUAL -1)
+        set(persistentFiles ${persistentFiles} ${ASN1SCC_C_DIR}/asn1crt_encoding_uper.c)
     endif()
 
     tryCreateFiles("${persistentFiles}")

@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2018-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2018-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -41,9 +41,10 @@ public:
                               const QString &displayName);
 
     bool init() override;
+    void setupOutputFormatter(Utils::OutputFormatter *formatter) override;
     void doRun() override;
 
-    ProjectExplorer::BuildStepConfigWidget *createConfigWidget() override { return nullptr; }
+    QWidget *createConfigWidget() override { return nullptr; }
 
 private:
     virtual QString executablePath() const = 0;

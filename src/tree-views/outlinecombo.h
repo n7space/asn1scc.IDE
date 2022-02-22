@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -40,7 +40,7 @@ class OutlineCombo : public Utils::TreeViewComboBox
 {
     Q_OBJECT
 public:
-    OutlineCombo(const Utils::FileName &filePath, TextEditor::TextEditorWidget *textEditor);
+    OutlineCombo(const Utils::FilePath &filePath, TextEditor::TextEditorWidget *textEditor);
 
 private slots:
     void modelRootChanged();

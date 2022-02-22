@@ -1,7 +1,7 @@
 #############################################################################
 ##
-## Copyright (C) 2017-2019 N7 Space sp. z o. o.
-## Contact: http://n7space.com
+## Copyright (C) 2017-2022 N7 Space sp. z o. o.
+## Contact: https://n7space.com
 ##
 ## This file is part of ASN.1/ACN Plugin for QtCreator.
 ##
@@ -187,8 +187,8 @@ SOURCES += \
     usagesfinder.cpp \
     toolsmenuimportitemcontroller.cpp \
     projectmenuimportitemcontroller.cpp\
-    kitinformation.cpp \
-    kitconfigwidget.cpp \
+    kitaspect.cpp \
+    kitaspectwidget.cpp \
     selectionpositionresolver.cpp \
     asn1acnerrorparser.cpp \
     asn1acnstepscache.cpp \
@@ -351,8 +351,8 @@ HEADERS += \
     usagesfinder.h \
     toolsmenuimportitemcontroller.h \
     projectmenuimportitemcontroller.h \
-    kitinformation.h \
-    kitconfigwidget.h \
+    kitaspect.h \
+    kitaspectwidget.h \
     selectionpositionresolver.h \
     asn1acnerrorparser.h \
     asn1acnstepscache.h \

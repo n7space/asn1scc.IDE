@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -36,7 +36,7 @@ using namespace Asn1Acn::Internal::TreeViews;
 static const int MINIMUM_COMBO_CONTENTS_LENGHT = 22;
 static const int MAXIMUM_COMBO_VISIBLE_ITEMS = 40;
 
-OutlineCombo::OutlineCombo(const Utils::FileName &filePath, TextEditor::TextEditorWidget *textEditor)
+OutlineCombo::OutlineCombo(const Utils::FilePath &filePath, TextEditor::TextEditorWidget *textEditor)
 {
     auto model = new ComboModel(filePath, this);
 

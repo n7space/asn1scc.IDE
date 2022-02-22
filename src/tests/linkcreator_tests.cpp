@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -56,7 +56,7 @@ std::unique_ptr<TextEditor::TextDocument> createDocument(const QString &path,
                                                          const QByteArray &content)
 {
     auto doc = std::make_unique<TextEditor::TextDocument>();
-    doc->setFilePath(Utils::FileName::fromString(path));
+    doc->setFilePath(Utils::FilePath::fromString(path));
     doc->setContents(content);
 
     return doc;
@@ -126,7 +126,7 @@ void LinkCreatorTests::test_createHighlight()
     QCOMPARE(link.linkTextEnd, 13);
     QCOMPARE(link.targetFileName, m_path);
 
-    m_storage->removeFileFromProject(m_project, Utils::FileName::fromString(m_path));
+    m_storage->removeFileFromProject(m_project, Utils::FilePath::fromString(m_path));
 }
 
 void LinkCreatorTests::test_createTarget()
@@ -161,5 +161,5 @@ void LinkCreatorTests::test_createTarget()
     QCOMPARE(link.targetLine, 1);
     QCOMPARE(link.targetFileName, m_path);
 
-    m_storage->removeFileFromProject(m_project, Utils::FileName::fromString(m_path));
+    m_storage->removeFileFromProject(m_project, Utils::FilePath::fromString(m_path));
 }

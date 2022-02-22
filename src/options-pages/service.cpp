@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -47,13 +47,13 @@ Service::Service(Settings::ServicePtr settings)
                     Utils::Icon::Tint));
 }
 
-bool Service::matches(const QString &searchKeyWord) const
+bool Service::matches(const QRegularExpression &regexp) const
 {
     const QStringList keywords{"asn1scc", "daemon", "asn1.exe", "asn1", "asn.1", "acn"};
     for (const auto &keyword : keywords)
-        if (keyword.contains(searchKeyWord, Qt::CaseInsensitive))
+        if (keyword.contains(regexp))
             return true;
-    return Core::IOptionsPage::matches(searchKeyWord);
+    return Core::IOptionsPage::matches(regexp);
 }
 
 QWidget *Service::widget()

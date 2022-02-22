@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -58,7 +58,7 @@ TextEditor::IAssistProposal *CompletionAssistProcessor::perform(
 
     Proposals proposals;
 
-    appendProposalsFromUserTypes(proposals, interface->fileName());
+    appendProposalsFromUserTypes(proposals, interface->filePath().toString());
     appendProposalsFromSnippets(proposals);
     appendProposalsFromKeywords(proposals);
 
@@ -76,7 +76,7 @@ void CompletionAssistProcessor::appendProposalsFromUserTypes(Proposals &proposal
 {
     ParsedDataStorage *storage = ParsedDataStorage::instance();
 
-    const auto file = storage->getAnyFileForPath(Utils::FileName::fromString(fileName));
+    const auto file = storage->getAnyFileForPath(Utils::FilePath::fromString(fileName));
     if (file == nullptr)
         return;
 

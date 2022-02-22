@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -44,7 +44,7 @@ QTextCursor SelectionPositionResolverTests::getInitializedCursor(const QByteArra
                                                                  const int position)
 {
     m_doc->setContents(content);
-    m_doc->setFilePath(Utils::FileName::fromString("myPath"));
+    m_doc->setFilePath(Utils::FilePath::fromString("myPath"));
 
     QTextCursor cursor(m_doc->document());
     cursor.setPosition(position);

@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -77,7 +77,7 @@ void OutlineModelTests::test_modelWithDummyPopulation()
                                                std::make_unique<Data::Types::Integer>()));
     root->add(std::move(definitions2));
 
-    auto model = new OutlineModel(Utils::FileName::fromString(filePath), this);
+    auto model = new OutlineModel(Utils::FilePath::fromString(filePath), this);
     model->setRoot(root.get());
 
     ModelTest testNonEmptyModel(model, this);

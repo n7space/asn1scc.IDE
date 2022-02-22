@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2017-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2017-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -29,7 +29,7 @@
 
 using namespace Asn1Acn::Internal::TreeViews;
 
-MutableRootModel::MutableRootModel(const Utils::FileName &filePath, QObject *parent)
+MutableRootModel::MutableRootModel(const Utils::FilePath &filePath, QObject *parent)
     : Model(parent)
     , m_filePath(filePath)
 {

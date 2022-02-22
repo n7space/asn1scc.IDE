@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2018-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2018-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -32,14 +32,12 @@
 namespace Asn1Acn {
 namespace Internal {
 
-class Asn1AcnErrorParser : public ProjectExplorer::IOutputParser
+class Asn1AcnErrorParser : public ProjectExplorer::OutputTaskParser
 {
     Q_OBJECT
 
-public:
-    void stdError(const QString &line) override;
-
 private:
+    Result handleLine(const QString &line, Utils::OutputFormat type) override;
     ErrorMessageParser m_parser;
 };
 

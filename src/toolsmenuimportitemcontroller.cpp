@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2018-2019 N7 Space sp. z o. o.
-** Contact: http://n7space.com
+** Copyright (C) 2018-2022 N7 Space sp. z o. o.
+** Contact: https://n7space.com
 **
 ** This file is part of ASN.1/ACN Plugin for QtCreator.
 **
@@ -31,6 +31,7 @@
 #include <projectexplorer/projectexplorer.h>
 #include <projectexplorer/projectnodes.h>
 #include <projectexplorer/session.h>
+#include <projectexplorer/target.h>
 
 #include <utils/parameteraction.h>
 
@@ -66,7 +67,7 @@ void ToolsMenuImportItemController::onActiveProjectChanged(ProjectExplorer::Proj
     const auto projectNode = m_currentProject->rootProjectNode();
     if (projectNode == nullptr)
         connect(project,
-                &ProjectExplorer::Project::parsingFinished,
+                &ProjectExplorer::Project::anyParsingFinished,
                 this,
                 &ToolsMenuImportItemController::onProjectLoadingFinished);
 
@@ -88,7 +89,7 @@ void ToolsMenuImportItemController::refreshCurrentProject(ProjectExplorer::Proje
 {
     if (m_currentProject != nullptr) {
         disconnect(m_currentProject,
-                   &ProjectExplorer::Project::parsingFinished,
+                   &ProjectExplorer::Project::anyParsingFinished,
                    this,
                    &ToolsMenuImportItemController::onProjectLoadingFinished);
         m_menuItem->setEnabled(false);

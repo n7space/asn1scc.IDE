@@ -1,6 +1,6 @@
 ######################################################################
-# Copyright (C) 2017-2019 N7 Space sp. z o. o.
-# Contact: http://n7space.com
+# Copyright (C) 2017-2022 N7 Space sp. z o. o.
+# Contact: https://n7space.com
 #
 # This file is part of ASN.1/ACN Plugin for QtCreator.
 #
@@ -105,10 +105,13 @@ names = $$createFileNames($$DISTFILES)
 generateC {
     cNames = $$names
     !isEmpty(names) {
-        cNames += asn1crt real
+        cNames += asn1crt asn1crt_encoding
 
         contains(ASN1SCC_C_OPTIONS, --acn-enc) {
-            cNames += acn
+            cNames += asn1crt_encoding_acn
+        }
+        contains(ASN1SCC_C_OPTIONS, --uper-enc) {
+            cNames += asn1crt_encoding_uper
         }
     }
 
