@@ -27,6 +27,10 @@
 #include <projectexplorer/kitmanager.h>
 #include <utils/pathchooser.h>
 
+namespace Utils {
+class LayoutBuilder;
+}
+
 namespace Asn1Acn {
 namespace Internal {
 
@@ -40,11 +44,9 @@ public:
     void makeReadOnly() override;
     void refresh() override;
 
-    QWidget *mainWidget() const override;
-    QWidget *buttonWidget() const override;
-
 private:
     void pathWasChanged();
+    void addToLayout(Utils::LayoutBuilder &builder) override;
 
     Utils::PathChooser *m_chooser;
     bool m_ignoreChange = false;

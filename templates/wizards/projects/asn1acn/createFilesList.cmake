@@ -53,7 +53,15 @@ function(appendPersistentListC)
 endfunction()
 
 function(appendPersistentListAda)
-    set(persistentFiles ${ASN1SCC_ADA_DIR}/adaasn1rtl.adb)
+    set(persistentFiles ${ASN1SCC_ADA_DIR}/adaasn1rtl.adb ${ASN1SCC_ADA_DIR}/adaasn1rtl-encoding.adb)
+
+    list(FIND ASN1SCC_ADA_OPTIONS --acn-enc ACN_ENCODING_IDX)
+    list(FIND ASN1SCC_ADA_OPTIONS --uper-enc UPER_ENCODING_IDX)
+    if (NOT ${ACN_ENCODING_IDX} EQUAL -1)
+        set(persistentFiles ${persistentFiles} ${ASN1SCC_ADA_DIR}/adaasn1rtl-encoding-acn.adb)
+    elseif (NOT ${UPER_ENCODING_IDX} EQUAL -1)
+        set(persistentFiles ${persistentFiles} ${ASN1SCC_ADA_DIR}/adaasn1rtl-encoding-uper.adb)
+    endif()
 
     tryCreateFiles("${persistentFiles}")
     set(ASN1SCC_PRODUCTS ${ASN1SCC_PRODUCTS} ${persistentFiles} PARENT_SCOPE)

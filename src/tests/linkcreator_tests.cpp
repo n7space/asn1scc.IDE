@@ -75,12 +75,12 @@ void LinkCreatorTests::test_createLinksInEmptyDocument()
     const auto highlightLink = linkCreator.createHighlightLink(cursor);
     QVERIFY(!highlightLink.hasValidLinkText());
     QVERIFY(highlightLink.hasValidTarget());
-    QCOMPARE(highlightLink.targetFileName, m_path);
+    QCOMPARE(highlightLink.targetFilePath, Utils::FilePath::fromString(m_path));
 
     const auto targetLink = linkCreator.createTargetLink(cursor);
     QVERIFY(!targetLink.hasValidLinkText());
     QVERIFY(!targetLink.hasValidTarget());
-    QCOMPARE(targetLink.targetFileName, QString());
+    QCOMPARE(targetLink.targetFilePath, Utils::FilePath());
 }
 
 void LinkCreatorTests::test_createLinksFromEmptyStorage()
@@ -95,12 +95,12 @@ void LinkCreatorTests::test_createLinksFromEmptyStorage()
     const auto highlightLink = linkCreator.createHighlightLink(cursor);
     QVERIFY(!highlightLink.hasValidLinkText());
     QVERIFY(highlightLink.hasValidTarget());
-    QCOMPARE(highlightLink.targetFileName, m_path);
+    QCOMPARE(highlightLink.targetFilePath, Utils::FilePath::fromString(m_path));
 
     const auto targetLink = linkCreator.createTargetLink(cursor);
     QVERIFY(!targetLink.hasValidLinkText());
     QVERIFY(!targetLink.hasValidTarget());
-    QCOMPARE(targetLink.targetFileName, QString());
+    QCOMPARE(targetLink.targetFilePath, Utils::FilePath());
 }
 
 void LinkCreatorTests::test_createHighlight()
@@ -124,7 +124,7 @@ void LinkCreatorTests::test_createHighlight()
     QVERIFY(link.hasValidLinkText());
     QCOMPARE(link.linkTextStart, 5);
     QCOMPARE(link.linkTextEnd, 13);
-    QCOMPARE(link.targetFileName, m_path);
+    QCOMPARE(link.targetFilePath, Utils::FilePath::fromString(m_path));
 
     m_storage->removeFileFromProject(m_project, Utils::FilePath::fromString(m_path));
 }
@@ -159,7 +159,7 @@ void LinkCreatorTests::test_createTarget()
     QVERIFY(link.hasValidTarget());
     QCOMPARE(link.targetColumn, 15);
     QCOMPARE(link.targetLine, 1);
-    QCOMPARE(link.targetFileName, m_path);
+    QCOMPARE(link.targetFilePath, Utils::FilePath::fromString(m_path));
 
     m_storage->removeFileFromProject(m_project, Utils::FilePath::fromString(m_path));
 }

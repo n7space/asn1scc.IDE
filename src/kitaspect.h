@@ -43,12 +43,13 @@ public:
     static Utils::FilePath asn1Exe(const Kit *k);
     static void setAsn1Exe(Kit *k, const Utils::FilePath &v);
 
+    void setup(Kit *k) override;
     ProjectExplorer::Tasks validate(const Kit *k) const override;
 
     ItemList toUserOutput(const Kit *kit) const override;
     ProjectExplorer::KitAspectWidget *createConfigWidget(Kit *kit) const override;
 
-    void addToEnvironment(const Kit *k, Utils::Environment &env) const override;
+    void addToBuildEnvironment(const Kit *k, Utils::Environment &env) const override;
     void addToMacroExpander(Kit *kit, Utils::MacroExpander *expander) const override;
 
 private:

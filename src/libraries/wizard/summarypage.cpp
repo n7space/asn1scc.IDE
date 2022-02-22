@@ -68,7 +68,7 @@ void SummaryPage::fillFilesList()
 {
     QString filesText;
     for (auto it = m_importer.sourceFiles().begin(); it != m_importer.sourceFiles().end(); it++) {
-        filesText += *it;
+        filesText += it->path();
         if (it + 1 != m_importer.sourceFiles().end())
             filesText += QLatin1String(",\n");
     }

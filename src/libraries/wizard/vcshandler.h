@@ -26,6 +26,7 @@
 
 #include <QList>
 #include <QObject>
+#include <utils/fileutils.h>
 
 namespace Core {
 class IVersionControl;
@@ -47,7 +48,7 @@ public:
 
     void setCurrentIndex(int index);
 
-    void addToVcs(const QStringList &files);
+    void addToVcs(const Utils::FilePaths &files);
 
 private slots:
     void onConfigChanged();
