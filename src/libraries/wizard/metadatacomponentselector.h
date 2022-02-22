@@ -41,15 +41,15 @@ class MetadaComponentSelector : public ComponentSelector
 public:
     MetadaComponentSelector(MetadataModel *model, const QString &path, QObject *parent = nullptr);
 
-    QStringList pathsToImport() override;
+    Utils::FilePaths pathsToImport() override;
 
 private slots:
     void onConflictOccured(const QString &first, const QString &second) const;
 
 private:
     QStringList fileNamesFromSelectedItems() const;
-    QStringList pathsFromNames(const QStringList &names) const;
-    QStringList insertAcnFiles(const QStringList &asnFiles) const;
+    Utils::FilePaths pathsFromNames(const QStringList &names) const;
+    Utils::FilePaths insertAcnFiles(const Utils::FilePaths &asnFiles) const;
 
     MetadataModel *m_model;
     QString m_path;

@@ -22,15 +22,16 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-#include "kitaspectwidget.h"
+#include <utils/layoutbuilder.h>
 
 #include "kitaspect.h"
+#include "kitaspectwidget.h"
 
 using namespace Asn1Acn::Internal;
 
 KitAspectWidget::KitAspectWidget(ProjectExplorer::Kit *kit, const ProjectExplorer::KitAspect *ka)
     : ProjectExplorer::KitAspectWidget(kit, ka)
-    , m_chooser(new Utils::PathChooser)
+    , m_chooser(createSubWidget<Utils::PathChooser>())
 {
     m_chooser->setToolTip(tr("Path to ASN1SCC executable."));
     m_chooser->setExpectedKind(Utils::PathChooser::ExistingCommand);
@@ -62,12 +63,8 @@ void KitAspectWidget::makeReadOnly()
     m_chooser->setReadOnly(true);
 }
 
-QWidget *KitAspectWidget::mainWidget() const
+void KitAspectWidget::addToLayout(Utils::LayoutBuilder &builder)
 {
-    return m_chooser->lineEdit();
-}
-
-QWidget *KitAspectWidget::buttonWidget() const
-{
-    return m_chooser->buttonAtIndex(0);
+    addMutableAction(m_chooser);
+    builder.addItem(Utils::Layouting::Span(2, m_chooser));
 }

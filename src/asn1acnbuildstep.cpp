@@ -72,6 +72,6 @@ void Asn1AcnBuildStep::updateProcess(const QString &command, const QString &arg)
 {
     auto *pp = processParameters();
     Utils::CommandLine commandLine(command);
-    commandLine.addArg(arg);
+    commandLine.addArgs(arg, Utils::CommandLine::Raw);
     pp->setCommandLine(commandLine);
 }

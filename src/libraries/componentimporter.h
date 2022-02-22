@@ -27,7 +27,8 @@
 
 #include <QDir>
 #include <QString>
-#include <QStringList>
+
+#include <utils/fileutils.h>
 
 namespace ProjectExplorer {
 class Project;
@@ -43,25 +44,25 @@ public:
     ComponentImporter(ProjectExplorer::Project *project);
 
     void setDirectory(const QString &path);
-    void setFiles(const QStringList &files);
+    void setFiles(const Utils::FilePaths &files);
     void setProject(ProjectExplorer::Project *project);
 
-    const QStringList &sourceFiles() const;
-    const QStringList &importedFiles() const;
+    const Utils::FilePaths &sourceFiles() const;
+    const Utils::FilePaths &importedFiles() const;
 
     void import();
 
 private:
-    QStringList copyFilesToProject();
+    Utils::FilePaths copyFilesToProject();
     void createTargetDir(QDir &parent, const QString &path);
     QString targetFileName(const QString &file);
-    void addFilesToProject(const QStringList &files);
+    void addFilesToProject(const Utils::FilePaths &files);
     void copyFile(const QString &source, const QString &target);
-    QStringList createUniqueFilesList(const ProjectExplorer::Project *project,
-                                      const QStringList &newFiles);
+    Utils::FilePaths createUniqueFilesList(const ProjectExplorer::Project *project,
+                                           const Utils::FilePaths &newFiles);
 
-    QStringList m_sourceFiles;
-    QStringList m_importedFiles;
+    Utils::FilePaths m_sourceFiles;
+    Utils::FilePaths m_importedFiles;
 
     QDir m_sourceDir;
     QDir m_targetDir;

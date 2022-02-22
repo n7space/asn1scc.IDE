@@ -40,19 +40,19 @@ FileComponentSelector::FileComponentSelector(FileModel *model,
     , m_nameFilter(nameFilter)
 {}
 
-QStringList FileComponentSelector::pathsToImport()
+Utils::FilePaths FileComponentSelector::pathsToImport()
 {
     return selectedPathsFromModelItem(m_model->rootPath());
 }
 
-QStringList FileComponentSelector::selectedPathsFromModelItem(const QString &parentPath) const
+Utils::FilePaths FileComponentSelector::selectedPathsFromModelItem(const QString &parentPath) const
 {
     const auto parent = m_model->index(parentPath);
 
     if (!parent.isValid())
         return {};
 
-    QStringList paths;
+    Utils::FilePaths paths;
     for (int i = 0; i < m_model->rowCount(parent); ++i)
         for (int j = 0; j < m_model->columnCount(parent); ++j)
             paths.append(pathsFromChildIndex(m_model->index(i, j, parent)));
@@ -60,7 +60,7 @@ QStringList FileComponentSelector::selectedPathsFromModelItem(const QString &par
     return paths;
 }
 
-QStringList FileComponentSelector::pathsFromChildIndex(const QModelIndex &child) const
+Utils::FilePaths FileComponentSelector::pathsFromChildIndex(const QModelIndex &child) const
 {
     const auto state = child.data(Qt::CheckStateRole);
     if (state == Qt::Unchecked)
@@ -73,16 +73,16 @@ QStringList FileComponentSelector::pathsFromChildIndex(const QModelIndex &child)
 
     QTC_ASSERT(state == Qt::Checked, return {});
 
-    return {m_model->filePath(child)};
+    return {Utils::FilePath::fromString(m_model->filePath(child))};
 }
 
-QStringList FileComponentSelector::selectedPathsFromFilesystemItem(const QString &path) const
+Utils::FilePaths FileComponentSelector::selectedPathsFromFilesystemItem(const QString &path) const
 {
     QDirIterator it(path, m_nameFilter, QDir::Files, QDirIterator::Subdirectories);
 
-    QStringList paths;
+    Utils::FilePaths paths;
     while (it.hasNext())
-        paths.append(it.next());
+        paths.append(Utils::FilePath::fromString(it.next()));
 
     return paths;
 }

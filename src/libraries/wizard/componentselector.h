@@ -26,8 +26,8 @@
 #pragma once
 
 #include <QModelIndex>
-#include <QStringList>
 #include <QTreeView>
+#include <utils/fileutils.h>
 
 namespace Asn1Acn {
 namespace Internal {
@@ -44,7 +44,7 @@ protected:
     {}
 
 public:
-    virtual QStringList pathsToImport() = 0;
+    virtual Utils::FilePaths pathsToImport() = 0;
 };
 
 } // namespace Wizard
