@@ -22,7 +22,7 @@
 #######################################################################
 
 isEmpty(ASN1SCC): ASN1SCC = $$(ASN1SCC)
-isEmpty(ASN1SCC): ASN1SCC = asn1scc
+isEmpty(ASN1SCC): ASN1SCC = asn1.exe
 isEmpty(ASN1SCC_PRODUCTS_DIR): ASN1SCC_PRODUCTS_DIR = $$shell_path($${OUT_PWD}/asn1sccGenerated)
 isEmpty(ASN1SCC_COMMON_OPTIONS): ASN1SCC_COMMON_OPTIONS = --acn-enc --field-prefix AUTO --type-prefix T
 isEmpty(ASN1SCC_C_OPTIONS): ASN1SCC_C_OPTIONS = --c-lang $${ASN1SCC_COMMON_OPTIONS}
