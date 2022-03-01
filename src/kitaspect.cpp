@@ -72,7 +72,7 @@ void KitAspect::setAsn1Exe(Kit *k, const Utils::FilePath &v)
 QVariant KitAspect::defaultValue(const Kit *k) const
 {
     Q_UNUSED(k);
-    const QString path = Core::ICore::libexecPath().toString() + QLatin1String("/asn1scc/asn1scc");
+    const QString path = Core::ICore::libexecPath().toString() + QLatin1String("/asn1scc/asn1.exe");
     return path;
 }
 

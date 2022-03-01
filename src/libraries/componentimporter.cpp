@@ -79,7 +79,7 @@ Utils::FilePaths ComponentImporter::copyFilesToProject()
 
     for (const auto &file : m_sourceFiles) {
         const QString filePath = file.path();
-        QString target = targetFileName(filePath);
+        const QString target = targetFileName(filePath);
 
         createTargetDir(m_targetDir, QFileInfo(target).absolutePath());
         copyFile(filePath, target);
