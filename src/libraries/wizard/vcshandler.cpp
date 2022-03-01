@@ -61,7 +61,7 @@ void VcsHandler::setCurrentIndex(int index)
     m_index = index;
 }
 
-void VcsHandler::addToVcs(const QStringList &files)
+void VcsHandler::addToVcs(const Utils::FilePaths &files)
 {
     if (m_index < 0)
         return;
@@ -80,10 +80,13 @@ void VcsHandler::addToVcs(const QStringList &files)
     }
 
     QTC_ASSERT(vcs->supportsOperation(Core::IVersionControl::AddOperation), return );
-    for (const auto &file : files)
-        if (!vcs->vcsAdd(file))
-            throw std::runtime_error("Failed to add \'" + file.toStdString()
+    for (const auto &file : files) {
+        const auto filePath = file.path();
+        if (!vcs->vcsAdd(filePath))
+            throw std::runtime_error("Failed to add \'" + filePath.toStdString()
                                      + "\' to version control system");
+    }
+
 }
 
 void VcsHandler::onConfigChanged()

@@ -47,7 +47,7 @@ void Fuzzer::saveOptionsTo(QSettings *s) const
 
 static QString defaultFuzzerPath()
 {
-    const QString path = Core::ICore::libexecPath()
+    const QString path = Core::ICore::libexecPath().toString()
                          + QLatin1String("/asn1scc-Fuzzer/asn1scc-fuzzer");
     if (Utils::HostOsInfo::isWindowsHost())
         return path + QLatin1String(".exe");

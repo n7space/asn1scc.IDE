@@ -40,7 +40,7 @@ KitAspect::KitAspect()
 {
     setObjectName(QLatin1String("Asn1SccKitAspect"));
     setId(KitAspect::id());
-    setDisplayName(tr("ASN1SCC:"));
+    setDisplayName(tr("ASN1SCC"));
     setPriority(12000);
 }
 
@@ -72,8 +72,17 @@ void KitAspect::setAsn1Exe(Kit *k, const Utils::FilePath &v)
 QVariant KitAspect::defaultValue(const Kit *k) const
 {
     Q_UNUSED(k);
-    const QString path = Core::ICore::libexecPath() + QLatin1String("/asn1scc/asn1.exe");
+    const QString path = Core::ICore::libexecPath().toString() + QLatin1String("/asn1scc/asn1.exe");
     return path;
+}
+
+void KitAspect::setup(Kit *k)
+{
+    if (!k)
+        return;
+
+    if (!k->hasValue(id()))
+        k->setValue(id(), defaultValue(k));
 }
 
 ProjectExplorer::Tasks KitAspect::validate(const Kit *k) const
@@ -113,14 +122,12 @@ ProjectExplorer::KitAspectWidget *KitAspect::createConfigWidget(Kit *kit) const
     return new KitAspectWidget(kit, this);
 }
 
-void KitAspect::addToEnvironment(const Kit *k, Utils::Environment &env) const
+void KitAspect::addToBuildEnvironment(const Kit *k, Utils::Environment &env) const
 {
     env.set(QLatin1String("ASN1SCC"), asn1Exe(k).toUserOutput());
 }
 
 void KitAspect::addToMacroExpander(Kit *kit, Utils::MacroExpander *expander) const
 {
-    expander->registerFileVariables("Asn1Scc", tr("ASN1SCC Path"), [kit]() -> QString {
-        return asn1Exe(kit).toString();
-    });
+    expander->registerFileVariables("Asn1Scc", tr("ASN1SCC Path"), [kit] { return asn1Exe(kit); });
 }

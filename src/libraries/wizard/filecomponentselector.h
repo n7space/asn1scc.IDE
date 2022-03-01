@@ -41,13 +41,13 @@ class FileComponentSelector : public ComponentSelector
 public:
     FileComponentSelector(FileModel *model, const QStringList nameFilter, QObject *parent = nullptr);
 
-    QStringList pathsToImport() override;
+    Utils::FilePaths pathsToImport() override;
 
 private:
-    QStringList selectedPathsFromModelItem(const QString &parentPath) const;
-    QStringList pathsFromChildIndex(const QModelIndex &child) const;
+    Utils::FilePaths selectedPathsFromModelItem(const QString &parentPath) const;
+    Utils::FilePaths pathsFromChildIndex(const QModelIndex &child) const;
 
-    QStringList selectedPathsFromFilesystemItem(const QString &path) const;
+    Utils::FilePaths selectedPathsFromFilesystemItem(const QString &path) const;
 
     FileModel *m_model;
     const QStringList m_nameFilter;

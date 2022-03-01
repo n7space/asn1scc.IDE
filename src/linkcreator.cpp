@@ -57,7 +57,7 @@ Utils::Link LinkCreator::createTargetLink(const QTextCursor &cursor) const
 Utils::Link LinkCreator::getSymbolLink(const Data::TypeReference &symbolSource,
                                        const QTextCursor &cursor) const
 {
-    Utils::Link symbol(m_textDocument.filePath().toString());
+    Utils::Link symbol(m_textDocument.filePath());
 
     QTextCursor selection = Utils::Text::selectAt(cursor,
                                                   symbolSource.location().line(),
@@ -81,7 +81,7 @@ Utils::Link LinkCreator::getTargetSymbolLink(const Data::TypeReference &symbolSo
 
     if (!targetLocation.isValid()) {
         targetLocation = getTargetLocation(symbolSource.name(), symbolSource.module());
-        target.targetFileName = targetLocation.path();
+        target.targetFilePath = Utils::FilePath::fromString(targetLocation.path());
     }
 
     target.targetLine = targetLocation.line();

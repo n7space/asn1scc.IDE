@@ -37,12 +37,12 @@ namespace {
 
 QString globalLibRootDir()
 {
-    return Core::ICore::resourcePath() + RELATIVE_ASN1LIB_PATH;
+    return Core::ICore::resourcePath().toString() + RELATIVE_ASN1LIB_PATH;
 }
 
 QString userLibRootDir()
 {
-    return Core::ICore::userResourcePath() + RELATIVE_ASN1LIB_PATH;
+    return Core::ICore::userResourcePath().toString() + RELATIVE_ASN1LIB_PATH;
 }
 
 QStringList listLibs(const QString &path)

@@ -109,8 +109,7 @@ generateC {
 
         contains(ASN1SCC_C_OPTIONS, --acn-enc) {
             cNames += asn1crt_encoding_acn
-        }
-        contains(ASN1SCC_C_OPTIONS, --uper-enc) {
+        } else:contains(ASN1SCC_C_OPTIONS, --uper-enc) {
             cNames += asn1crt_encoding_uper
         }
     }
@@ -127,7 +126,13 @@ generateC {
 generateAda {
     adaNames = $$lower($$names)
     !isEmpty(names) {
-        adaNames += adaasn1rtl
+        adaNames += adaasn1rtl adaasn1rtl-encoding
+
+        contains(ASN1SCC_ADA_OPTIONS, --acn-enc) {
+            adaNames += adaasn1rtl-encoding-acn
+        } else:contains(ASN1SCC_ADA_OPTIONS, --uper-enc) {
+            cNames += adaasn1rtl-encoding-uper
+        }
     }
 
     SOURCES += $$createGeneratedFilesListAda($$adaNames, "adb")

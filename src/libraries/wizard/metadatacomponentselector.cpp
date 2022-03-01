@@ -55,15 +55,13 @@ void MetadaComponentSelector::onConflictOccured(const QString &first, const QStr
     msgBox.exec();
 }
 
-QStringList MetadaComponentSelector::pathsToImport()
+Utils::FilePaths MetadaComponentSelector::pathsToImport()
 {
     auto files = fileNamesFromSelectedItems();
 
     files.removeDuplicates();
 
-    files = pathsFromNames(files);
-
-    return insertAcnFiles(files);
+    return insertAcnFiles(pathsFromNames(files));
 }
 
 QStringList MetadaComponentSelector::fileNamesFromSelectedItems() const
@@ -82,36 +80,37 @@ QStringList MetadaComponentSelector::fileNamesFromSelectedItems() const
     return fileNames;
 }
 
-QStringList MetadaComponentSelector::insertAcnFiles(const QStringList &asnFiles) const
+Utils::FilePaths MetadaComponentSelector::insertAcnFiles(const Utils::FilePaths &asnFiles) const
 {
-    QStringList allFiles = asnFiles;
+    Utils::FilePaths allFiles = asnFiles;
 
     static const QRegularExpression re("\\.asn1?$");
 
     for (auto file : asnFiles) {
-        const auto match = re.match(file);
+        QString filePath = file.path();
+        const auto match = re.match(filePath);
         if (!match.hasMatch())
             continue;
 
-        file.replace(match.capturedStart(), match.capturedLength(), ".acn");
+        filePath.replace(match.capturedStart(), match.capturedLength(), ".acn");
 
-        if (QFileInfo::exists(file))
-            allFiles << file;
+        if (QFileInfo::exists(filePath))
+            allFiles << Utils::FilePath::fromString(filePath);
     }
 
     return allFiles;
 }
 
-QStringList MetadaComponentSelector::pathsFromNames(const QStringList &names) const
+Utils::FilePaths MetadaComponentSelector::pathsFromNames(const QStringList &names) const
 {
     if (names.empty())
         return {};
 
     QDirIterator it(m_path, names, QDir::NoFilter, QDirIterator::Subdirectories);
 
-    QStringList paths;
+    Utils::FilePaths paths;
     while (it.hasNext())
-        paths.append(it.next());
+        paths.append(Utils::FilePath::fromString(it.next()));
 
     return paths;
 }

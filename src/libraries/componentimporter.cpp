@@ -39,7 +39,7 @@ ComponentImporter::ComponentImporter(ProjectExplorer::Project *project)
     : m_project(project)
 {}
 
-void ComponentImporter::setFiles(const QStringList &files)
+void ComponentImporter::setFiles(const Utils::FilePaths &files)
 {
     m_sourceFiles = files;
 }
@@ -49,12 +49,12 @@ void ComponentImporter::setProject(ProjectExplorer::Project *project)
     m_project = project;
 }
 
-const QStringList &ComponentImporter::sourceFiles() const
+const Utils::FilePaths &ComponentImporter::sourceFiles() const
 {
     return m_sourceFiles;
 }
 
-const QStringList &ComponentImporter::importedFiles() const
+const Utils::FilePaths &ComponentImporter::importedFiles() const
 {
     return m_importedFiles;
 }
@@ -73,16 +73,17 @@ void ComponentImporter::import()
     addFilesToProject(copied);
 }
 
-QStringList ComponentImporter::copyFilesToProject()
+Utils::FilePaths ComponentImporter::copyFilesToProject()
 {
-    QStringList copiedFiles;
+    Utils::FilePaths copiedFiles;
 
     for (const auto &file : m_sourceFiles) {
-        QString target = targetFileName(file);
+        const QString filePath = file.path();
+        const QString target = targetFileName(filePath);
 
         createTargetDir(m_targetDir, QFileInfo(target).absolutePath());
-        copyFile(file, target);
-        copiedFiles.append(target);
+        copyFile(filePath, target);
+        copiedFiles.append(Utils::FilePath::fromString(target));
     }
 
     return copiedFiles;
@@ -111,20 +112,20 @@ QString ComponentImporter::targetFileName(const QString &file)
     return m_targetDir.filePath(relativeSrcPath);
 }
 
-void ComponentImporter::addFilesToProject(const QStringList &files)
+void ComponentImporter::addFilesToProject(const Utils::FilePaths &files)
 {
     m_importedFiles = createUniqueFilesList(m_project, files);
     m_project->rootProjectNode()->addFiles(m_importedFiles);
 }
 
-QStringList ComponentImporter::createUniqueFilesList(const ProjectExplorer::Project *project,
-                                                     const QStringList &newFiles)
+Utils::FilePaths ComponentImporter::createUniqueFilesList(const ProjectExplorer::Project *project,
+                                                          const Utils::FilePaths &newFiles)
 {
-    QStringList uniqueFiles;
+    Utils::FilePaths uniqueFiles;
     const auto projectFiles = project->files(ProjectExplorer::Project::SourceFiles);
 
     for (const auto &file : newFiles)
-        if (!projectFiles.contains(Utils::FilePath::fromString(file)))
+        if (!projectFiles.contains(file))
             uniqueFiles.append(file);
 
     return uniqueFiles;
