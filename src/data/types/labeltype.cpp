@@ -38,16 +38,16 @@ QString LabelType::name() const
 
 QString LabelType::label() const
 {
-    return QString();
+    return {};
 }
 
 Utils::FilePath LabelType::baseIconFile() const
 {
-    return Utils::FilePath();
+    return {};
 }
 
 QIcon LabelType::createIcon(Utils::Theme::Color color) const
 {
     Q_UNUSED(color);
-    return QIcon();
+    return {};
 }
