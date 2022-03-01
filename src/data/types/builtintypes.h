@@ -49,9 +49,9 @@ public:
     QString name() const override { return QLatin1String("BOOLEAN"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/boolean.png");
+        return ":/asn1acn/images/outline/boolean.png";
     }
 };
 
@@ -61,9 +61,9 @@ public:
     QString name() const override { return QLatin1String("NULL"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/null.png");
+        return ":/asn1acn/images/outline/null.png";
     }
 };
 
@@ -73,9 +73,9 @@ public:
     QString name() const override { return QLatin1String("INTEGER"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/integer.png");
+        return ":/asn1acn/images/outline/integer.png";
     }
 };
 
@@ -85,9 +85,9 @@ public:
     QString name() const override { return QLatin1String("REAL"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/real.png");
+        return ":/asn1acn/images/outline/real.png";
     }
 };
 
@@ -97,9 +97,9 @@ public:
     QString name() const override { return QLatin1String("BIT STRING"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/bitstring.png");
+        return ":/asn1acn/images/outline/bitstring.png";
     }
 };
 
@@ -109,9 +109,9 @@ public:
     QString name() const override { return QLatin1String("OCTET STRING"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/octetstring.png");
+        return ":/asn1acn/images/outline/octetstring.png";
     }
 };
 
@@ -121,9 +121,9 @@ public:
     QString name() const override { return QLatin1String("IA5String"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/ia5string.png");
+        return ":/asn1acn/images/outline/ia5string.png";
     }
 };
 
@@ -133,9 +133,9 @@ public:
     QString name() const override { return QLatin1String("NumericString"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/numericstring.png");
+        return ":/asn1acn/images/outline/numericstring.png";
     }
 };
 
@@ -145,9 +145,9 @@ public:
     QString name() const override { return QLatin1String("ENUMERATED"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/enumerated.png");
+        return ":/asn1acn/images/outline/enumerated.png";
     }
 };
 
@@ -157,9 +157,9 @@ public:
     QString name() const override { return QLatin1String("CHOICE"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/choice.png");
+        return ":/asn1acn/images/outline/choice.png";
     }
 };
 
@@ -169,9 +169,9 @@ public:
     QString name() const override { return QLatin1String("SEQUENCE"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/sequence.png");
+        return ":/asn1acn/images/outline/sequence.png";
     }
 };
 
@@ -181,9 +181,9 @@ public:
     QString name() const override { return QLatin1String("SEQUENCE OF"); }
 
 private:
-    QString baseIconFile() const override
+    Utils::FilePath baseIconFile() const override
     {
-        return QStringLiteral(":/asn1acn/images/outline/sequenceof.png");
+        return ":/asn1acn/images/outline/sequenceof.png";
     }
 };
 

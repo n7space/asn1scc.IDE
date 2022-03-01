@@ -73,17 +73,16 @@ void VcsHandler::addToVcs(const Utils::FilePaths &files)
                    return );
 
         const auto projectPath
-            = ProjectExplorer::SessionManager::startupProject()->projectDirectory().toString();
+            = ProjectExplorer::SessionManager::startupProject()->projectDirectory();
         if (!vcs->vcsCreateRepository(projectPath))
-            throw std::runtime_error("Could not create repository in \'" + projectPath.toStdString()
+            throw std::runtime_error("Could not create repository in \'" + projectPath.toString().toStdString()
                                      + "\'");
     }
 
     QTC_ASSERT(vcs->supportsOperation(Core::IVersionControl::AddOperation), return );
     for (const auto &file : files) {
-        const auto filePath = file.path();
-        if (!vcs->vcsAdd(filePath))
-            throw std::runtime_error("Failed to add \'" + filePath.toStdString()
+        if (!vcs->vcsAdd(file))
+            throw std::runtime_error("Failed to add \'" + file.toString().toStdString()
                                      + "\' to version control system");
     }
 
@@ -99,7 +98,7 @@ namespace {
 Core::IVersionControl *vcsForCurrentProject()
 {
     const auto projectDir
-        = ProjectExplorer::SessionManager::startupProject()->projectDirectory().toString();
+        = ProjectExplorer::SessionManager::startupProject()->projectDirectory();
     return Core::VcsManager::findVersionControlForDirectory(projectDir);
 }
 } // namespace

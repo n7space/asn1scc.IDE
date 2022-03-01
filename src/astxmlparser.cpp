@@ -274,7 +274,7 @@ std::unique_ptr<Data::Types::Type> AstXmlParser::readTypeDetails(const Data::Sou
     return type;
 }
 
-void AstXmlParser::readTypeContents(const QStringRef &name)
+void AstXmlParser::readTypeContents(const QStringView &name)
 {
     if (name == QStringLiteral("SEQUENCE"))
         readSequence();
@@ -287,7 +287,7 @@ void AstXmlParser::readTypeContents(const QStringRef &name)
 }
 
 std::unique_ptr<Data::Types::Type> AstXmlParser::buildTypeFromName(
-    const Data::SourceLocation &location, const QStringRef &name)
+    const Data::SourceLocation &location, const QStringView &name)
 {
     if (name == QStringLiteral("REFERENCE_TYPE"))
         return readReferenceType(location);

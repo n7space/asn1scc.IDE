@@ -62,7 +62,7 @@ void ComponentLibraryProcessor::process()
             library->addModule(std::move(module));
         } catch (const ModuleMetadataParser::Error &err) {
             using Messages::MessageManager;
-            MessageManager::write(QLatin1Literal("Parsing failed - ") + err.what(),
+            MessageManager::write(QLatin1String("Parsing failed - ") + err.what(),
                                   MessageManager::Type::Metadata);
             continue;
         }

@@ -1,16 +1,16 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.21)
 
 project(%{JS: '%{ProjectName}'})
 
-set(ASN1ACNSOURCES DISTFILES += \\
-                       @if %{AddAsnFile} && %{AddAcnFile}
-                           %{AsnRelativePath}/%{AsnFile} \\
-                           %{AcnRelativePath}/%{AcnFile}
-                       @elsif %{AddAsnFile}
-                           %{AsnRelativePath}/%{AsnFile}
-                       @elsif %{AddAcnFile}
-                           %{AcnRelativePath}/%{AcnFile}
-                       @endif)
+set(
+    ASN1ACNSOURCES
+    %{JS: if (%{AddAsnFile} && %{AddAcnFile})
+        '%{AsnRelativePath}/%{AsnFile}\\\n    %{AcnRelativePath}/%{AcnFile}'
+    else if (%{AddAsnFile})
+        '%{AsnRelativePath}/%{AsnFile}'
+    else if (%{AddAcnFile})
+        '%{AcnRelativePath}/%{AcnFile}'
+        })
 
 include(asn1sccSettings.cmake)
 include(createFilesList.cmake)

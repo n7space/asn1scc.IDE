@@ -71,7 +71,8 @@ void Asn1AcnBuildStep::updateEnvironment(const ProjectExplorer::BuildConfigurati
 void Asn1AcnBuildStep::updateProcess(const QString &command, const QString &arg)
 {
     auto *pp = processParameters();
-    Utils::CommandLine commandLine(command);
-    commandLine.addArgs(arg, Utils::CommandLine::Raw);
+    Utils::CommandLine commandLine(Utils::FilePath::fromUserInput(command),
+                                   arg,
+                                   Utils::CommandLine::Raw);
     pp->setCommandLine(commandLine);
 }

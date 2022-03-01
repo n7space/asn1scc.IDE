@@ -41,9 +41,9 @@ QString LabelType::label() const
     return QString();
 }
 
-QString LabelType::baseIconFile() const
+Utils::FilePath LabelType::baseIconFile() const
 {
-    return QString();
+    return Utils::FilePath();
 }
 
 QIcon LabelType::createIcon(Utils::Theme::Color color) const

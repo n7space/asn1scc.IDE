@@ -40,7 +40,8 @@ std::unique_ptr<ProposalsBuilder> AsnCompletionAssistProcessor::createKeywordsPr
     return provider;
 }
 
-TextEditor::IAssistProcessor *AsnCompletionAssistProvider::createProcessor() const
+TextEditor::IAssistProcessor *AsnCompletionAssistProvider::createProcessor(const TextEditor::AssistInterface *assistInterface) const
 {
+    Q_UNUSED(assistInterface);
     return new AsnCompletionAssistProcessor;
 }

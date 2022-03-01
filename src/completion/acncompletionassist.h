@@ -46,7 +46,7 @@ class AcnCompletionAssistProvider : public CompletionAssistProvider
     Q_OBJECT
 
 public:
-    TextEditor::IAssistProcessor *createProcessor() const override;
+    TextEditor::IAssistProcessor *createProcessor(const TextEditor::AssistInterface *assistInterface) const override;
 };
 
 } /* nameapsce Completion */

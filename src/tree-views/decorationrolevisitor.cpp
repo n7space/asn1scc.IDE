@@ -44,7 +44,7 @@ DecorationRoleVisitor::~DecorationRoleVisitor() {}
 QIcon DecorationRoleVisitor::valueFor(const Definitions &defs) const
 {
     Q_UNUSED(defs);
-    const static QIcon icon(Utils::Icon({{QLatin1String(":/utils/images/namespace.png"),
+    const static QIcon icon(Utils::Icon({{":/utils/images/namespace.png",
                                           Utils::Theme::IconsCodeModelKeywordColor}},
                                         Utils::Icon::Tint)
                                 .icon());

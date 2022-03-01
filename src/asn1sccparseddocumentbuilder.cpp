@@ -112,13 +112,13 @@ std::vector<std::unique_ptr<Data::File>> Asn1SccParsedDocumentBuilder::takeDocum
 
 bool Asn1SccParsedDocumentBuilder::responseContainsAst(const QJsonObject &json)
 {
-    return json[QLatin1Literal("ErrorCode")].toInt(-1) == 0;
+    return json[QLatin1String("ErrorCode")].toInt(-1) == 0;
 }
 
 void Asn1SccParsedDocumentBuilder::storeErrorMessages(const QJsonObject &json)
 {
     const auto parser = ErrorMessageParser();
-    for (const auto message : json[QLatin1Literal("Messages")].toArray()) {
+    for (const auto message : json[QLatin1String("Messages")].toArray()) {
         const auto msg = parser.parse(message.toString());
         if (msg.isValid())
             m_errorMessages.push_back(msg);
@@ -127,8 +127,8 @@ void Asn1SccParsedDocumentBuilder::storeErrorMessages(const QJsonObject &json)
 
 QString Asn1SccParsedDocumentBuilder::getAstXml(const QJsonObject &json)
 {
-    const auto files = json[QLatin1Literal("Files")].toArray();
+    const auto files = json[QLatin1String("Files")].toArray();
     if (files.size() != 1)
         return QString();
-    return files[0].toObject()[QLatin1Literal("Contents")].toString();
+    return files[0].toObject()[QLatin1String("Contents")].toString();
 }

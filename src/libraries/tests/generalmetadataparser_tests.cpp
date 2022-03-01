@@ -37,8 +37,8 @@ void GeneralMetadataParserTests::test_empty()
 {
     parse("", "/some/path/with/LibName");
 
-    QCOMPARE(m_parsedData.name(), QLatin1Literal("LibName"));
-    QCOMPARE(m_parsedData.path(), QLatin1Literal("/some/path/with/LibName"));
+    QCOMPARE(m_parsedData.name(), QLatin1String("LibName"));
+    QCOMPARE(m_parsedData.path(), QLatin1String("/some/path/with/LibName"));
     QVERIFY(m_parsedData.license().isEmpty());
     QVERIFY(m_parsedData.version().isEmpty());
     QVERIFY(m_parsedData.description().isEmpty());
@@ -48,9 +48,9 @@ void GeneralMetadataParserTests::test_partiallyFilled()
 {
     parse(R"({"name": "InnerName", "license": "GPL"})", "/some/path/with/LibName");
 
-    QCOMPARE(m_parsedData.name(), QLatin1Literal("InnerName"));
-    QCOMPARE(m_parsedData.path(), QLatin1Literal("/some/path/with/LibName"));
-    QCOMPARE(m_parsedData.license(), QLatin1Literal("GPL"));
+    QCOMPARE(m_parsedData.name(), QLatin1String("InnerName"));
+    QCOMPARE(m_parsedData.path(), QLatin1String("/some/path/with/LibName"));
+    QCOMPARE(m_parsedData.license(), QLatin1String("GPL"));
     QVERIFY(m_parsedData.version().isEmpty());
     QVERIFY(m_parsedData.description().isEmpty());
 }
@@ -65,12 +65,12 @@ void GeneralMetadataParserTests::test_complete()
           R"("license": "GPL"})",
           "/some/path/with/LibName");
 
-    QCOMPARE(m_parsedData.name(), QLatin1Literal("InnerName"));
-    QCOMPARE(m_parsedData.path(), QLatin1Literal("/some/path/with/LibName"));
-    QCOMPARE(m_parsedData.license(), QLatin1Literal("GPL"));
-    QCOMPARE(m_parsedData.version(), QLatin1Literal("SomeVersion"));
-    QCOMPARE(m_parsedData.description(), QLatin1Literal("SomeDescription"));
-    QCOMPARE(m_parsedData.vendor(), QLatin1Literal("MyVendor"));
+    QCOMPARE(m_parsedData.name(), QLatin1String("InnerName"));
+    QCOMPARE(m_parsedData.path(), QLatin1String("/some/path/with/LibName"));
+    QCOMPARE(m_parsedData.license(), QLatin1String("GPL"));
+    QCOMPARE(m_parsedData.version(), QLatin1String("SomeVersion"));
+    QCOMPARE(m_parsedData.description(), QLatin1String("SomeDescription"));
+    QCOMPARE(m_parsedData.vendor(), QLatin1String("MyVendor"));
 }
 
 void GeneralMetadataParserTests::parse(const QString &jsonData, const QString &path)
