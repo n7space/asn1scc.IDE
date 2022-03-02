@@ -78,9 +78,9 @@ private:
     std::unique_ptr<Data::Types::Type> readTypeDetails(const Data::SourceLocation &location);
     std::unique_ptr<Data::Types::Type> readReferenceType(const Data::SourceLocation &location);
     std::unique_ptr<Data::Types::Type> buildTypeFromName(const Data::SourceLocation &location,
-                                                         const QStringRef &name);
+                                                         const QStringView &name);
 
-    void readTypeContents(const QStringRef &name);
+    void readTypeContents(const QStringView &name);
     void readSequence();
     void readSequenceOf();
     void readChoice();

@@ -72,7 +72,7 @@ void ImportComponentWizard::accept()
 void ImportComponentWizard::raiseErrorWindow(const QString &message)
 {
     QMessageBox msgBox;
-    msgBox.setWindowTitle(QLatin1Literal("Operation failed"));
+    msgBox.setWindowTitle(QLatin1String("Operation failed"));
     msgBox.setText(message);
     msgBox.exec();
 }

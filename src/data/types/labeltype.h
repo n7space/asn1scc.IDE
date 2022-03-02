@@ -43,7 +43,7 @@ public:
     QString label() const override;
 
 private:
-    QString baseIconFile() const override;
+    Utils::FilePath baseIconFile() const override;
     QIcon createIcon(Utils::Theme::Color color) const override;
 
     QString m_name;

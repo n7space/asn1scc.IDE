@@ -117,8 +117,11 @@ void ProjectContentHandler::processFiles(const QString &projectName,
 Utils::FilePaths ProjectContentHandler::getStaleFilesPaths(const QString &projectName,
                                                            const Utils::FilePaths &filePaths) const
 {
+    const auto filePathsSet = QSet<Utils::FilePath>(filePaths.begin(), filePaths.end());
     const auto staleFileList = m_storage->getFilesPathsFromProject(projectName);
-    const auto pathsToRemove = staleFileList.toSet().subtract(filePaths.toSet());
+    auto staleFileSet = QSet<Utils::FilePath>(staleFileList.begin(), staleFileList.end());
+    const auto pathsToRemove = staleFileSet.subtract(filePathsSet);
+
     return pathsToRemove.values();
 }
 

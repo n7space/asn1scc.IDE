@@ -43,7 +43,7 @@ KeywordProposalsBuilder::KeywordProposalsBuilder(const QStringList &keywords,
 
 static QIcon buildIcon(Utils::Theme::Color theme)
 {
-    return Utils::Icon({{QLatin1String(":/codemodel/images/keyword.png"), theme}}, Utils::Icon::Tint)
+    return Utils::Icon({{":/codemodel/images/keyword.png", theme}}, Utils::Icon::Tint)
         .icon();
 }
 

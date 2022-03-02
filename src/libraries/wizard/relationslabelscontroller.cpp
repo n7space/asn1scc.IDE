@@ -50,7 +50,7 @@ RelationsLabelsController::~RelationsLabelsController()
 
 namespace {
 void appendElementItems(const QList<Metadata::Reference> &references,
-                        QHash<QString, QTreeWidgetItem *> &parents)
+                        QMultiHash<QString, QTreeWidgetItem *> &parents)
 {
     QHash<QString, QTreeWidgetItem *> elements;
     for (const auto &ref : references) {
@@ -77,7 +77,7 @@ void appendElementItems(const QList<Metadata::Reference> &references,
 void appendSubmoduleItems(const QList<Metadata::Reference> &references,
                           QHash<QString, QTreeWidgetItem *> &parents)
 {
-    QHash<QString, QTreeWidgetItem *> submoduleItems;
+    QMultiHash<QString, QTreeWidgetItem *> submoduleItems;
     for (const auto &ref : references) {
         const auto name = ref.submodule();
 

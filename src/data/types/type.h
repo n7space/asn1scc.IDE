@@ -26,6 +26,7 @@
 
 #include <QIcon>
 #include <QString>
+#include <utils/filepath.h>
 
 #include <utils/theme/theme.h>
 
@@ -47,7 +48,7 @@ public:
 
 private:
     virtual QIcon createIcon(Utils::Theme::Color color) const;
-    virtual QString baseIconFile() const = 0;
+    virtual Utils::FilePath baseIconFile() const = 0;
 };
 
 } // namespace Types

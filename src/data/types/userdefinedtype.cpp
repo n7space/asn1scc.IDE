@@ -42,7 +42,7 @@ QString UserdefinedType::label() const
     return ": " + m_module + "." + name();
 }
 
-QString UserdefinedType::baseIconFile() const
+Utils::FilePath UserdefinedType::baseIconFile() const
 {
-    return QStringLiteral(":/asn1acn/images/outline/userdefined.png");
+    return ":/asn1acn/images/outline/userdefined.png";
 }
