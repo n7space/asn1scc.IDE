@@ -1,7 +1,7 @@
 # asn1scc.IDE
 Qt Creator plugin for asn1scc - ASN.1/ACN compiler for embedded systems
 
-[![Build Status](https://github.com/n7space/asn1scc.IDE/actions/workflows/build_cmake.yml/badge.svg?branch=master)](https://github.com/n7space/asn1scc.IDE/actions/workflows/build_cmake.yml)
+[![Build asn1scc.IDE](https://github.com/n7space/asn1scc.IDE/actions/workflows/build_cmake.yml/badge.svg?branch=master)](https://github.com/n7space/asn1scc.IDE/actions/workflows/build_cmake.yml)
 
 ### [Project Home Page](https://n7space.github.io/asn1scc.IDE/)
 
